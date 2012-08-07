@@ -5,4 +5,4 @@
 /*                                                    */
 /******************************************************/
 
-void readpnezd(string fname,bool overwrite=false);
+int readpnezd(string fname,bool overwrite=false);

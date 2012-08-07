@@ -66,7 +66,8 @@ int main(int argc, char *argv[])
  //lozenge(100);
  //rotate(30);
  set_length_unit(SURVEYFOOT);
- readpnezd("../topo0.asc");
+ if (readpnezd("topo0.asc")<0)
+   readpnezd("../topo0.asc");
  rotate(2);
  /*for (i=0;i<9;i++)
      for (j=0;j<=i;j++)
