@@ -44,6 +44,9 @@ void testintegertrig()
   printf("total sine error=%e\n",totsinerror);
   printf("total cosine error=%e\n",totcoserror);
   printf("total cis error=%e\n",totciserror);
+  assert(totsinerror+totcoserror+totciserror<1e-29);
+  //On Linux, the total error is 6e-39 and the M_PIl makes a big difference.
+  //On DragonFly BSD, the total error is 5e-30 and M_PIl is absent.
 }
 
 int main(int argc, char *argv[])
