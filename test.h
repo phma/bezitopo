@@ -26,6 +26,7 @@
    will be flipped many times.
    */
 
+void dumppoints();
 void aster(int n);
 void ring(int n);
 void ellipse(int n);

@@ -11,6 +11,7 @@
 #define sign(x) ((x>0)-(x<0))
 
 extern int debugdel;
+extern FILE *randfil;
 
 double area3(xy a,xy b,xy c);
 xy intersection (xy a,xy c,xy b,xy d);

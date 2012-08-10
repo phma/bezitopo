@@ -12,6 +12,7 @@
 using namespace std;
 
 int debugdel;
+FILE *randfil;
 
 char intstable[3][3][3][3]=
 /* 0  don't intersect

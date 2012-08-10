@@ -9,6 +9,7 @@
 #include <cmath>
 #include <string.h>
 #include "tin.h"
+#include "pointlist.h"
 
 xy::xy(double e,double n)
 {x=e;

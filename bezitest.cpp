@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* bezitopo.cpp - main program                        */
+/* bezitest.cpp - test program                        */
 /*                                                    */
 /******************************************************/
 
@@ -24,18 +24,16 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {int i,j,itype;
- randfil=fopen("/dev/urandom","rb");
- set_length_unit(SURVEYFOOT);
- if (readpnezd("topo0.asc")<0)
-   readpnezd("../topo0.asc");
- rotate(2);
- /*for (i=0;i<9;i++)
-     for (j=0;j<=i;j++)
-         {itype=intersection_type(points[i],points[i+1],points[j],points[j+1]);
-          e=intersection(points[i],points[i+1],points[j],points[j+1]);
-          printf("i=%d j=%d Intersection type %d\nIntersection is (%f,%f)\n",i,j,itype,e.east(),e.north());
-          }*/
- maketin();
+ xy a(0,0),b(4,0),c(0,3),d(4,4),e;
+ //printf("Area is %7.3f\n",area3(c,a,b));
+ //lozenge(100);
+ //rotate(30);
+ printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
+ for (i=0;i<128;i++)
+     {printf("sin(%8x)=%a sin(%8x)=%a\n",i<<24,sin(i<<24),(i+128)<<24,sin((i+128)<<24));
+      printf("cos(%8x)=%a cos(%8x)=%a\n",i<<24,cos(i<<24),(i+128)<<24,cos((i+128)<<24));
+      printf("abs(cis(%8x))=%a\n",i<<24,hypot(cos(i<<24),sin((i+128)<<24)));
+      }
  fclose(randfil);
  return EXIT_SUCCESS;
  }

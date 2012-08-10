@@ -7,8 +7,17 @@
 #include <cmath>
 #include "bezitopo.h"
 #include "test.h"
+#include "pointlist.h"
 
 using std::map;
+
+void dumppoints()
+{map<int,point>::iterator i;
+ printf("dumppoints\n");
+ for (i=points.begin();i!=points.end();i++)
+     i->second.dump();
+ printf("end dump\n");
+ }
 
 double rugae(xy pnt)
 {double z;

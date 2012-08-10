@@ -9,6 +9,7 @@
 #include "bezitopo.h"
 #include "pnezd.h"
 #include "measure.h"
+#include "pointlist.h"
 using namespace std;
 
 int readpnezd(string fname,bool overwrite)

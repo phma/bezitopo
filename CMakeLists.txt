@@ -1,6 +1,7 @@
 project(bezitopo)
 cmake_minimum_required(VERSION 2.8)
-add_executable(bezitopo angle.cpp arc.cpp bezier.cpp bezitopo.cpp cogo.cpp contour.cpp measure.cpp pnezd.cpp point.cpp polyline.cpp ps.cpp qindex.cpp test.cpp tin.cpp)
+add_executable(bezitopo angle.cpp arc.cpp bezier.cpp bezitopo.cpp cogo.cpp contour.cpp measure.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp test.cpp tin.cpp)
+add_executable(bezitest angle.cpp arc.cpp bezier.cpp bezitest.cpp cogo.cpp contour.cpp measure.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp test.cpp tin.cpp)
 
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 #find_package(LibXML++ REQUIRED)

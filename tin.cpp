@@ -10,6 +10,7 @@
 #include "bezitopo.h"
 #include "tin.h"
 #include "ps.h"
+#include "pointlist.h"
 
 #define THR 16777216
 //for goodcenter
