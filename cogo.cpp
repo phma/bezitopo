@@ -38,7 +38,7 @@ char intstable[3][3][3][3]=
   };
 
 double area3(xy a,xy b,xy c)
-{int i;
+{int i,j;
  double surface,area[6];
  bool cont;
  area[0]=a.east()*b.north();
