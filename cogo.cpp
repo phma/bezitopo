@@ -56,6 +56,13 @@ double area3(xy a,xy b,xy c)
              cont=true;
              }
      } while (cont);
+ for (j=5;j>0;j-=2) // Make signs of equal-absolute-value areas alternate.
+   for (i=0;i+j<6;i++)
+     if (area[i]+area[i+j]==0 && (area[i]<0 ^ (i&1)))
+     {
+       area[i]=-area[i];
+       area[i+j]=-area[i+j];
+     }
  for (surface=i=0;i<6;i++)
      surface+=area[i];
  surface/=2;

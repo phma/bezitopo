@@ -82,7 +82,7 @@ void testintersection()
   test1intersection(f,d,c,b,d,3);
   test1intersection(a,b,c,a,a,4);
   test1intersection(b,c,a,b,b,4);
-  //test1intersection(c,a,b,c,c,4);
+  test1intersection(c,a,b,c,c,4);
   //test1intersection(a,c,b,b,o,5);
 }
   
