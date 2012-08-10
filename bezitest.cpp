@@ -53,14 +53,16 @@ void test1intersection(xy a,xy c,xy b,xy d,xy inte,int type)
 {
   xy inters;
   int itype;
+  bool noint;
   inters=intersection(a,c,b,d);
   itype=intersection_type(a,c,b,d);
-  if ((itype && inters!=inte) || itype!=type)
+  noint=itype==0 || itype==5 || itype==6;
+  if ((!noint && inters!=inte) || itype!=type)
   {
     printf("intersection is %f,%f, should be %f,%f\n",inters.east(),inters.north(),inte.east(),inte.north());
     printf("intersection type is %d, should be %d\n",itype,type);
   }
-  assert(itype==0 || inters==inte);
+  assert(noint || inters==inte);
   assert(itype==type);
 }
 
@@ -68,12 +70,12 @@ void testintersection()
 {
   xy a(1,0),b(-0.5,0.866),c(-0.5,-0.866),d(-0.5,0),e(0.25,-0.433),f(0.25,0.433),o(0,0);
   int intype;
-  test1intersection(a,d,b,e,o,1);
-  test1intersection(b,e,c,f,o,1);
-  test1intersection(c,f,a,d,o,1);
   test1intersection(a,b,d,e,o,0);
   test1intersection(b,c,e,f,o,0);
   test1intersection(c,a,f,d,o,0);
+  test1intersection(a,d,b,e,o,1);
+  test1intersection(b,e,c,f,o,1);
+  test1intersection(c,f,a,d,o,1);
   test1intersection(a,c,b,e,e,2);
   test1intersection(b,a,c,f,f,2);
   test1intersection(c,b,a,d,d,2);
@@ -83,7 +85,12 @@ void testintersection()
   test1intersection(a,b,c,a,a,4);
   test1intersection(b,c,a,b,b,4);
   test1intersection(c,a,b,c,c,4);
-  //test1intersection(a,c,b,b,o,5);
+  test1intersection(a,c,b,b,o,5);
+  test1intersection(b,a,c,c,o,5);
+  test1intersection(c,b,a,a,o,5);
+  test1intersection(b,c,d,b,c,6);
+  test1intersection(c,a,e,c,a,6);
+  test1intersection(a,b,f,a,b,6);
 }
   
 int main(int argc, char *argv[])
