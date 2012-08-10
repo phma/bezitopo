@@ -89,6 +89,7 @@ int intersection_type(xy a,xy c,xy b,xy d)
     fprintf(stderr,"Intersection type 9\n(%e,%e)=(%e,%e) × (%e,%e)=(%e,%e)\n(%a,%a)=(%a,%a) × (%a,%a)=(%a,%a)\n",
             a.east(),a.north(),c.east(),c.north(),b.east(),b.north(),d.east(),d.north(),
             a.east(),a.north(),c.east(),c.north(),b.east(),b.north(),d.east(),d.north());
+ assert(itype!=9);
  return itype;
  }
 

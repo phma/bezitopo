@@ -66,6 +66,16 @@ xy operator/=(xy &l,double r)
  return l;
  }
 
+bool operator!=(const xy &l,const xy &r)
+{
+  return l.x!=r.x || l.y!=r.y;
+}
+
+bool operator==(const xy &l,const xy &r)
+{
+  return l.x==r.x && l.y==r.y;
+}
+
 xy turn90(xy a)
 {return xy(-a.y,a.x);
  }

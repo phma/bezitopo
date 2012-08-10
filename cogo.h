@@ -17,6 +17,15 @@ double area3(xy a,xy b,xy c);
 xy intersection (xy a,xy c,xy b,xy d);
 //Intersection of lines ab and cd.
 int intersection_type(xy a,xy c,xy b,xy d);
+/* 0  don't intersect
+   1  intersection is in the midst of both AC and BD
+   2  one end of BD is in the midst of AC
+   3  one end of AC is in the midst of BD
+   4  one end of AC is one end of BD
+   5  A=C or B=D
+   6  all four points are collinear
+   9  impossible, probably caused by roundoff error
+   */
 double pldist(xy a,xy b,xy c);
 // Signed distance from a to the line bc.
 bool delaunay(xy a,xy c,xy b,xy d);

@@ -49,6 +49,28 @@ void testintegertrig()
   //On DragonFly BSD, the total error is 5e-30 and M_PIl is absent.
 }
 
+void test1intersection(xy a,xy c,xy b,xy d,xy inte,int type)
+{
+  xy inters;
+  int itype;
+  inters=intersection(a,c,b,d);
+  itype=intersection_type(a,c,b,d);
+  if (inters!=inte || itype!=type)
+  {
+    printf("intersection is %f,%f, should be %f,%f\n",inters.east(),inters.north(),inte.east(),inte.north());
+    printf("intersection type is %d, should be %d\n",itype,type);
+  }
+  assert(inters==inte);
+  assert(itype==type);
+}
+
+void testintersection()
+{
+  xy a(1,0),b(-0.5,0.866),c(-0.5,-0.866),d(-0.5,0),e(0.25,-0.433),f(0.25,0.433);
+  int intype;
+  test1intersection(a,d,b,e,xy(0,0),1);
+}
+  
 int main(int argc, char *argv[])
 {int i,j,itype;
  randfil=fopen("/dev/urandom","rb");

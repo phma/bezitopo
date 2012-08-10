@@ -28,6 +28,8 @@ class xy
  friend xy operator*(const xy &l,double r);
  friend xy operator/(const xy &l,double r);
  friend xy operator/=(xy &l,double r);
+ friend bool operator!=(const xy &l,const xy &r);
+ friend bool operator==(const xy &l,const xy &r);
  friend xy turn90(xy a);
  friend double dist(xy a,xy b);
  friend double dir(xy a,xy b);
