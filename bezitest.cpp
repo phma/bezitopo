@@ -19,6 +19,7 @@
 #include "measure.h"
 #include "pnezd.h"
 #include "angle.h"
+#include "pointlist.h"
 
 using namespace std;
 
@@ -95,9 +96,9 @@ void testintersection()
 
 void testcopytopopoints()
 {
-  stringlist strings;
+  criteria crit;
   surveypoints.clear();
-  copytopopoints(strings);
+  copytopopoints(crit);
   assert(topopoints.points.size()==0);
 }
 

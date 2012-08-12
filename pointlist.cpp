@@ -9,10 +9,15 @@
 
 using namespace std;
 
-map<int,point> points;
-map<point*,int> revpoints;
+pointlist surveypoints,topopoints;
 
-void addpoint(int numb,point pnt,bool overwrite)
+void pointlist::clear()
+{
+  points.clear();
+  revpoints.clear();
+}
+
+void pointlist::addpoint(int numb,point pnt,bool overwrite)
 // If numb<0, it's a point added by bezitopo.
 {int a;
  if (points.count(numb))
@@ -35,3 +40,7 @@ void addpoint(int numb,point pnt,bool overwrite)
     points[a=numb]=pnt;
  revpoints[&(points[a])]=a;
  }
+
+void copytopopoints(criteria crit)
+{
+}

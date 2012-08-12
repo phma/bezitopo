@@ -41,7 +41,7 @@ point* edge::otherend(point* end)
  }
 
 void edge::dump()
-{printf("addr=%p a=%d b=%d nexta=%p nextb=%p\n",this,revpoints[a],revpoints[b],nexta,nextb);
+{printf("addr=%p a=%d b=%d nexta=%p nextb=%p\n",this,topopoints.revpoints[a],topopoints.revpoints[b],nexta,nextb);
  }
 
 void edge::flip()
@@ -50,7 +50,7 @@ void edge::flip()
    */
 {edge *temp1,*temp2;
  int i,size;
- size=points.size();
+ size=topopoints.points.size();
  for (i=0;i<size && a->line->next(a)!=this;i++)
     a->line=a->line->next(a);
  assert(i<size); //If this assertion fails, the nexta and nextb pointers are messed up.
@@ -198,21 +198,21 @@ void maketin()
  bool fail;
  double maxdist,mindist,idist,minx,miny,maxx,maxy;
  xy A,B,C,farthest;
- if (points.size()<3)
+ if (topopoints.points.size()<3)
     throw notri;
  startpnt=xy(0,0);
- for (i=points.begin();i!=points.end();i++)
+ for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
      startpnt+=i->second;
- startpnt/=points.size();
+ startpnt/=topopoints.points.size();
  edgelist.clear();
- edgelist.reserve(maxedges=3*points.size()-6); //must reserve space to avoid moving, since edges point to each other
+ edgelist.reserve(maxedges=3*topopoints.points.size()-6); //must reserve space to avoid moving, since edges point to each other
  //FIXME: points will be added for min/max/saddle, and each point will add three more edges.
  //How many extrema can there be, given the number of shot points?
  //startpnt has to be
  //within or out the side of the triangle formed by the three nearest points.
  //In a 100-point asteraceous pattern, the centroid is out one corner, and
  //the first triangle is drawn negative, with point 0 connected wrong.
- startpnt=points.begin()->second;
+ startpnt=topopoints.points.begin()->second;
  psopen("bezitopo.ps");
  psprolog();
  for (m2=0,fail=true;m2<100 && fail;m2++)
@@ -220,7 +220,7 @@ void maketin()
       convexhull.clear();
       for (m=0;m<100;m++)
           {outward.clear();
-           for (i=points.begin();i!=points.end();i++)
+           for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
                outward.insert(ipoint(dist(startpnt,i->second),&i->second));
            for (j=outward.begin(),n=0;j!=outward.end();j++,n++)
                {if (n==0)
@@ -239,7 +239,7 @@ void maketin()
       printf("startpnt=(%f,%f)\n",startpnt.east(),startpnt.north());
       miny=maxy=startpnt.north();
       minx=maxx=startpnt.east();
-      for (i=points.begin();i!=points.end();i++)
+      for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
           {if (i->second.east()>maxx)
               maxx=i->second.east();
            if (i->second.east()<minx)
@@ -254,7 +254,7 @@ void maketin()
       setcolor(0,0,1);
       dot(startpnt);
       setcolor(1,.5,0);
-      for (i=points.begin();i!=points.end();i++)
+      for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
           dot(i->second);
       endpage();
       j=outward.begin();
@@ -425,7 +425,7 @@ void maketin()
      endpage();
      //debugdel=1;
      passcount++;
-     } while (m && passcount*3<=points.size());
+     } while (m && passcount*3<=topopoints.points.size());
  printf("Total %d edges flipped in %d passes\n",flipcount,passcount);
  startpage();
  dumpedges_ps();
@@ -446,10 +446,10 @@ void makegrad(double corr)
  double zdiff,zxtrap,zthere;
  xy gradthere,diff;
  double sum1,sumx,sumy,sumz,sumxx,sumxy,sumxz,sumzz,sumyy,sumyz;
- for (i=points.begin();i!=points.end();i++)
+ for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
      i->second.gradient=xy(0,0);
  for (n=0;n<10;n++)
-     {for (i=points.begin();i!=points.end();i++)
+     {for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
           {i->second.gradient=xy(0,0);
            sum1=sumx=sumy=sumz=sumxx=sumxy=sumxz=sumzz=sumyy=sumyz=0;
            for (m=0,e=i->second.line;m==0 || e!=i->second.line;m++,e=e->next(&i->second))
@@ -496,7 +496,7 @@ void makegrad(double corr)
            else
               fprintf(stderr,"Warning: point at address %p has no edges that don't cross breaklines\n",&i->second);
            }
-      for (i=points.begin();i!=points.end();i++)
+      for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
           {i->second.oldgradient=i->second.gradient;
            i->second.gradient=i->second.newgradient;
            }

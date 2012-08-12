@@ -14,7 +14,7 @@ using std::map;
 void dumppoints()
 {map<int,point>::iterator i;
  printf("dumppoints\n");
- for (i=points.begin();i!=points.end();i++)
+ for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
      i->second.dump();
  printf("end dump\n");
  }
@@ -35,7 +35,7 @@ void aster(int n)
  xy pnt;
  for (i=0;i<n;i++)
      {pnt=xy(cos(angle*i)*sqrt(i+0.5),sin(angle*i)*sqrt(i+0.5));
-      addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+      topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
       }
  }
 
@@ -46,7 +46,7 @@ void ring(int n)
  xy pnt;
  for (i=0;i<n;i++)
      {pnt=xy(cos(angle*i)*sqrt(n+0.5),sin(angle*i)*sqrt(n+0.5));
-      addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+      topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
       }
  }
 
@@ -57,7 +57,7 @@ void ellipse(int n)
  xy pnt;
  for (i=0;i<n;i++)
      {pnt=xy(cos(angle*i)*sqrt(n+0.5)*0.99,sin(angle*i)*sqrt(n+0.5)*1.01);
-      addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+      topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
       }
  }
 
@@ -69,19 +69,19 @@ void lozenge(int n)
  for (i=0;i<n;i++)
      {angle=(2.0*i/(n-1)-1)*M_PI/6;
       pnt=xy(0,sqrt(n)*tan(angle));
-      addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+      topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
       }
  pnt=xy(-sqrt(n),0);
- addpoint(n+1,point(pnt,testsurface(pnt),"test"));
+ topopoints.addpoint(n+1,point(pnt,testsurface(pnt),"test"));
  pnt=xy(sqrt(n),0);
- addpoint(n+2,point(pnt,testsurface(pnt),"test"));
+ topopoints.addpoint(n+2,point(pnt,testsurface(pnt),"test"));
  }
 
 void rotate(int n)
 {int i;
  double tmpx,tmpy;
  map<int,point>::iterator j;
- for (j=points.begin();j!=points.end();j++)
+ for (j=topopoints.points.begin();j!=topopoints.points.end();j++)
      for (i=0;i<n;i++)
          {tmpx=j->second.x*0.6-j->second.y*0.8;
           tmpy=j->second.y*0.6+j->second.x*0.8;

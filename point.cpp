@@ -157,7 +157,7 @@ const point& point::operator=(const point &rhs)
  }
 
 void point::dump()
-{printf("address=%p\nnum=%d\n(%f,%f,%f)\nline=%p\n",this,revpoints[this],x,y,z,line);
+{printf("address=%p\nnum=%d\n(%f,%f,%f)\nline=%p\n",this,topopoints.revpoints[this],x,y,z,line);
  }
 
 /*void point::setedge(point *oend)
