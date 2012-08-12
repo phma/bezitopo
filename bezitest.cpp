@@ -97,9 +97,28 @@ void testintersection()
 void testcopytopopoints()
 {
   criteria crit;
+  criterion crit1;
   surveypoints.clear();
   copytopopoints(crit);
   assert(topopoints.points.size()==0);
+  surveypoints.addpoint(1,point(0,0,0,"eip"));
+  surveypoints.addpoint(1,point(25,0,0,"eip"));
+  surveypoints.addpoint(1,point(25,40,0,"eip"));
+  surveypoints.addpoint(1,point(0,40,0,"eip"));
+  surveypoints.addpoint(1,point(5,10,0,"house"));
+  surveypoints.addpoint(1,point(20,10,0,"house"));
+  surveypoints.addpoint(1,point(20,20,0,"house"));
+  surveypoints.addpoint(1,point(5,20,0,"house"));
+  surveypoints.addpoint(1,point(3,-5,0,"pipe"));
+  surveypoints.addpoint(1,point(3,41,0,"pipe"));
+  surveypoints.addpoint(1,point(2,22,0,"topo"));
+  surveypoints.addpoint(1,point(23,22,0,"topo"));
+  surveypoints.addpoint(1,point(12.5,38,0,"topo"));
+  crit1.str="topo";
+  crit1.istopo=true;
+  crit.push_back(crit1);
+  copytopopoints(crit);
+  assert(topopoints.points.size()==3);
 }
 
 int main(int argc, char *argv[])
@@ -108,6 +127,7 @@ int main(int argc, char *argv[])
  xy a(0,0),b(4,0),c(0,3),d(4,4),e;
  assert(area3(c,a,b)==6);
  testintersection();
+ testcopytopopoints();
  lozenge(100);
  rotate(30);
  printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
