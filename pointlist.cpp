@@ -43,4 +43,17 @@ void pointlist::addpoint(int numb,point pnt,bool overwrite)
 
 void copytopopoints(criteria crit)
 {
+  ptlist::iterator i;
+  topopoints.clear();
+  int j;
+  bool include;
+  for (i=surveypoints.points.begin();i!=surveypoints.points.end();i++)
+  {
+    include=false;
+    for (j=0;j<crit.size();j++)
+      if (i->second.note.find(crit[j].str)!=string::npos)
+	include=crit[j].istopo;
+    if (include)
+      topopoints.addpoint(1,i->second);
+  }
 }
