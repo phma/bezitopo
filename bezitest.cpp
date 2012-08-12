@@ -92,7 +92,15 @@ void testintersection()
   test1intersection(c,a,e,c,a,6);
   test1intersection(a,b,f,a,b,6);
 }
-  
+
+void testcopytopopoints()
+{
+  stringlist strings;
+  surveypoints.clear();
+  copytopopoints(strings);
+  assert(topopoints.points.size()==0);
+}
+
 int main(int argc, char *argv[])
 {int i,j,itype;
  randfil=fopen("/dev/urandom","rb");
