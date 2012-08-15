@@ -121,6 +121,25 @@ void testcopytopopoints()
   assert(topopoints.points.size()==3);
 }
 
+void testinvalidintersection()
+{
+  int i,j,k,l,m,itype;
+  topopoints.clear();
+  lozenge(7);
+  for (i=0;i<6561;i++)
+  {
+    movesideways(cos((double)i)/16);
+    rotate(1);
+    for (j=1;j<=9;j++)
+      for (k=1;k<=9;k++)
+	for (l=1;l<=9;l++)
+	  for (m=1;m<=9;m++)
+	    itype=intersection_type(topopoints.points[j],topopoints.points[k],
+				    topopoints.points[l],topopoints.points[m]);
+	    assert(itype<9);
+  }
+}
+
 int main(int argc, char *argv[])
 {int i,j,itype;
  randfil=fopen("/dev/urandom","rb");
@@ -128,6 +147,7 @@ int main(int argc, char *argv[])
  assert(area3(c,a,b)==6);
  testintersection();
  testcopytopopoints();
+ testinvalidintersection();
  lozenge(100);
  rotate(30);
  printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
