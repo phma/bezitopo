@@ -89,3 +89,12 @@ void rotate(int n)
           j->second.y=tmpy;
           }
  }
+
+void movesideways(double sw)
+{
+  int i;
+  double tmpx,tmpy;
+  map<int,point>::iterator j;
+  for (j=topopoints.points.begin();j!=topopoints.points.end();j++)
+    j->second.x+=sw;
+}

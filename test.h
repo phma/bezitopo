@@ -32,3 +32,4 @@ void ring(int n);
 void ellipse(int n);
 void lozenge(int n);
 void rotate(int n);
+void movesideways(double sw);

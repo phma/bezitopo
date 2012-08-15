@@ -134,9 +134,11 @@ void testinvalidintersection()
       for (k=1;k<=9;k++)
 	for (l=1;l<=9;l++)
 	  for (m=1;m<=9;m++)
+	  {
+	    printf("%d %d %d %d\n",j,k,l,m);
 	    itype=intersection_type(topopoints.points[j],topopoints.points[k],
 				    topopoints.points[l],topopoints.points[m]);
-	    assert(itype<9);
+	  }
   }
 }
 
