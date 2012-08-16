@@ -121,7 +121,7 @@ void testcopytopopoints()
   assert(topopoints.points.size()==3);
 }
 
-void testinvalidintersection()
+void testinvalidintersectionlozenge()
 {
   int i,j,k,l,m,itype;
   char rightanswers[9][9][9][9];
@@ -137,7 +137,6 @@ void testinvalidintersection()
           rightanswers[j-1][k-1][l-1][m-1]=itype;
 	  assert(itype>=0 && itype<=9);
 	}
-  printf("testinvalidintersection\n");
   for (i=0;i<81;i++)
   {
     movesideways(cos((double)i)/16);
@@ -155,6 +154,39 @@ void testinvalidintersection()
   }
 }
 
+void testinvalidintersectionaster()
+{
+  int i,j,k,l,m,itype;
+  char rightanswers[9][9][9][9];
+  topopoints.clear();
+  aster(9);
+  for (j=1;j<=9;j++)
+    for (k=1;k<=9;k++)
+      for (l=1;l<=9;l++)
+        for (m=1;m<=9;m++)
+	{
+	  itype=intersection_type(topopoints.points[j],topopoints.points[k],
+			          topopoints.points[l],topopoints.points[m]);
+          rightanswers[j-1][k-1][l-1][m-1]=itype;
+	  assert(itype>=0 && itype<=9);
+	}
+  for (i=0;i<81;i++)
+  {
+    movesideways(cos((double)i)*3e7);
+    rotate(1);
+    for (j=1;j<=9;j++)
+      for (k=1;k<=9;k++)
+	for (l=1;l<=9;l++)
+	  for (m=1;m<=9;m++)
+	  {
+	    itype=intersection_type(topopoints.points[j],topopoints.points[k],
+				    topopoints.points[l],topopoints.points[m]);
+	    if (itype!=rightanswers[j-1][k-1][l-1][m-1])
+	      printf("Iter %i, %d %d %d %d, %d should be %d\n",i,j,k,l,m,itype,rightanswers[j-1][k-1][l-1][m-1]);
+	  }
+  }
+}
+
 int main(int argc, char *argv[])
 {int i,j,itype;
  randfil=fopen("/dev/urandom","rb");
@@ -162,7 +194,8 @@ int main(int argc, char *argv[])
  assert(area3(c,a,b)==6);
  testintersection();
  testcopytopopoints();
- testinvalidintersection();
+ testinvalidintersectionlozenge();
+ testinvalidintersectionaster();
  lozenge(100);
  rotate(30);
  printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
