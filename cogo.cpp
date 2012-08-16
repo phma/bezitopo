@@ -79,26 +79,45 @@ xy intersection (xy a,xy c,xy b,xy d)
  return ((a*A+c*C)+(b*B+d*D))/((A+C)+(B+D));
  }
 
-int intstype (xy a,xy c,xy b,xy d)
+#define setmaxabs(a,b) a=(fabs(b)>a)?fabs(b):a
+
+int intstype (xy a,xy c,xy b,xy d,double &maxarea,double &maxcoord)
 //Intersection type - one of 81 numbers, not all possible.
 {double A,B,C,D;
  A=area3(b,c,d);
  B=area3(c,d,a);
  C=area3(d,a,b);
  D=area3(a,b,c);
+ maxarea=maxcoord=0;
+ setmaxabs(maxarea,A);
+ setmaxabs(maxarea,B);
+ setmaxabs(maxarea,C);
+ setmaxabs(maxarea,B);
+ setmaxabs(maxcoord,a.east());
+ setmaxabs(maxcoord,a.north());
+ setmaxabs(maxcoord,b.east());
+ setmaxabs(maxcoord,b.north());
+ setmaxabs(maxcoord,c.east());
+ setmaxabs(maxcoord,c.north());
+ setmaxabs(maxcoord,d.east());
+ setmaxabs(maxcoord,d.north());
  return (27*sign(A)+9*sign(C)+3*sign(B)+sign(D));
  }
 
 int intersection_type(xy a,xy c,xy b,xy d)
-{int itype=intstype(a,c,b,d)+40;
- itype=intstable[itype/27][itype%27/9][itype%9/3][itype%3];
- if (itype==9)
+{
+  double maxarea,maxcoord;
+  int itype=intstype(a,c,b,d,maxarea,maxcoord)+40;
+  itype=intstable[itype/27][itype%27/9][itype%9/3][itype%3];
+  if (itype==9 && maxarea<maxcoord*maxcoord*1e-12)
+    itype=6;
+  if (itype==9)
     fprintf(stderr,"Intersection type 9\n(%e,%e)=(%e,%e) × (%e,%e)=(%e,%e)\n(%a,%a)=(%a,%a) × (%a,%a)=(%a,%a)\n",
             a.east(),a.north(),c.east(),c.north(),b.east(),b.north(),d.east(),d.north(),
             a.east(),a.north(),c.east(),c.north(),b.east(),b.north(),d.east(),d.north());
- assert(itype!=9);
- return itype;
- }
+  //assert(itype!=9);
+  return itype;
+}
 
 double pldist(xy a,xy b,xy c)
 /* Signed distance from a to the line bc. */
