@@ -15,31 +15,31 @@ int debugdel;
 FILE *randfil;
 
 char intstable[3][3][3][3]=
-/* 0  don't intersect
-   1  intersection is in the midst of both AC and BD
-   2  one end of BD is in the midst of AC
-   3  one end of AC is in the midst of BD
-   4  one end of AC is one end of BD
-   5  A=C or B=D
-   6  all four points are collinear
-   9  impossible, probably caused by roundoff error
+/* NOINT  don't intersect
+   ACXBD  intersection is in the midst of both AC and BD
+   BDTAC  one end of BD is in the midst of AC
+   ACTBD  one end of AC is in the midst of BD
+   ACVBD  one end of AC is one end of BD
+   COINC  A=C or B=D
+   COLIN  all four points are collinear
+   IMPOS  impossible, probably caused by roundoff error
    */
-//- - - 0 0 0 + + + B
-//- 0 + - 0 + - 0 + D   A C
-{ 1,2,0,2,9,9,0,9,9, // - -
-  3,4,0,4,9,9,0,9,9, // - 0
-  0,0,0,0,5,0,0,0,0, // - +
-  3,4,0,4,9,9,0,9,9, // 0 -
-  9,9,5,9,6,9,5,9,9, // 0 0
-  9,9,0,9,9,4,0,4,3, // 0 +
-  0,0,0,0,5,0,0,0,0, // + -
-  9,9,0,9,9,4,0,4,3, // + 0
-  9,9,0,9,9,2,0,2,1  // + +
+//  -     -     -     0     0     0     +     +     +   B
+//  -     0     +     -     0     +     -     0     +   D   A C
+{ ACXBD,BDTAC,NOINT,BDTAC,IMPOS,IMPOS,NOINT,IMPOS,IMPOS, // - -
+  ACTBD,ACVBD,NOINT,ACVBD,IMPOS,IMPOS,NOINT,IMPOS,IMPOS, // - 0
+  NOINT,NOINT,NOINT,NOINT,COINC,NOINT,NOINT,NOINT,NOINT, // - +
+  ACTBD,ACVBD,NOINT,ACVBD,IMPOS,IMPOS,NOINT,IMPOS,IMPOS, // 0 -
+  IMPOS,IMPOS,COINC,IMPOS,COLIN,IMPOS,COINC,IMPOS,IMPOS, // 0 0
+  IMPOS,IMPOS,NOINT,IMPOS,IMPOS,ACVBD,NOINT,ACVBD,ACTBD, // 0 +
+  NOINT,NOINT,NOINT,NOINT,COINC,NOINT,NOINT,NOINT,NOINT, // + -
+  IMPOS,IMPOS,NOINT,IMPOS,IMPOS,ACVBD,NOINT,ACVBD,ACTBD, // + 0
+  IMPOS,IMPOS,NOINT,IMPOS,IMPOS,BDTAC,NOINT,BDTAC,ACXBD  // + +
   };
 
 double area3(xy a,xy b,xy c)
 {int i,j;
- double surface,area[6];
+ double surface,area[COLIN];
  bool cont;
  area[0]=a.east()*b.north();
  area[1]=-b.east()*a.north();
@@ -109,8 +109,8 @@ int intersection_type(xy a,xy c,xy b,xy d)
   double maxarea,maxcoord;
   int itype=intstype(a,c,b,d,maxarea,maxcoord)+40;
   itype=intstable[itype/27][itype%27/9][itype%9/3][itype%3];
-  if (itype==9 && maxarea<maxcoord*maxcoord*1e-12)
-    itype=6;
+  if (itype==IMPOS && maxarea<maxcoord*maxcoord*1e-12)
+    itype=COLIN;
   if (itype==9)
     fprintf(stderr,"Intersection type 9\n(%e,%e)=(%e,%e) × (%e,%e)=(%e,%e)\n(%a,%a)=(%a,%a) × (%a,%a)=(%a,%a)\n",
             a.east(),a.north(),c.east(),c.north(),b.east(),b.north(),d.east(),d.north(),
