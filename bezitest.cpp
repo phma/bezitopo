@@ -121,6 +121,15 @@ void testcopytopopoints()
   assert(topopoints.points.size()==3);
 }
 
+void checkimpos(int itype,xy a,xy c,xy b,xy d)
+{
+  if (itype==IMPOS)
+    fprintf(stderr,"Impossible intersection type\n(%e,%e)=(%e,%e) × (%e,%e)=(%e,%e)\n(%a,%a)=(%a,%a) × (%a,%a)=(%a,%a)\n",
+            a.east(),a.north(),c.east(),c.north(),b.east(),b.north(),d.east(),d.north(),
+            a.east(),a.north(),c.east(),c.north(),b.east(),b.north(),d.east(),d.north());
+  assert(itype!=IMPOS);
+}
+
 void testinvalidintersectionlozenge()
 {
   int i,j,k,l,m,itype;
@@ -135,7 +144,6 @@ void testinvalidintersectionlozenge()
 	  itype=intersection_type(topopoints.points[j],topopoints.points[k],
 			          topopoints.points[l],topopoints.points[m]);
           rightanswers[j-1][k-1][l-1][m-1]=itype;
-	  assert(itype>=0 && itype<=9);
 	}
   for (i=0;i<81;i++)
   {
@@ -148,6 +156,8 @@ void testinvalidintersectionlozenge()
 	  {
 	    itype=intersection_type(topopoints.points[j],topopoints.points[k],
 				    topopoints.points[l],topopoints.points[m]);
+	    checkimpos(itype,topopoints.points[j],topopoints.points[k],
+		       topopoints.points[l],topopoints.points[m]);
 	    /*if (itype!=rightanswers[j-1][k-1][l-1][m-1])
 	      printf("Iter %i, %d %d %d %d, %d should be %d\n",i,j,k,l,m,itype,rightanswers[j-1][k-1][l-1][m-1]);*/
 	  }
@@ -156,8 +166,9 @@ void testinvalidintersectionlozenge()
 
 void testinvalidintersectionaster()
 {
-  int i,j,k,l,m,itype;
+  int i,j,k,l,m,itype,nmisses;
   char rightanswers[9][9][9][9];
+  double shift;
   topopoints.clear();
   aster(9);
   for (j=1;j<=9;j++)
@@ -168,11 +179,12 @@ void testinvalidintersectionaster()
 	  itype=intersection_type(topopoints.points[j],topopoints.points[k],
 			          topopoints.points[l],topopoints.points[m]);
           rightanswers[j-1][k-1][l-1][m-1]=itype;
-	  assert(itype>=0 && itype<=9);
 	}
-  for (i=0;i<81;i++)
+  for (i=0,shift=2e7;i<81;i++)
   {
-    movesideways(cos((double)i)*3e7);
+    nmisses=0;
+    shift=shift*31/24;
+    movesideways(cos((double)i)*shift);
     rotate(1);
     for (j=1;j<=9;j++)
       for (k=1;k<=9;k++)
@@ -182,7 +194,10 @@ void testinvalidintersectionaster()
 	    itype=intersection_type(topopoints.points[j],topopoints.points[k],
 				    topopoints.points[l],topopoints.points[m]);
 	    if (itype!=rightanswers[j-1][k-1][l-1][m-1])
-	      printf("Iter %i, %d %d %d %d, %d should be %d\n",i,j,k,l,m,itype,rightanswers[j-1][k-1][l-1][m-1]);
+	      //printf("Iter %i, %d %d %d %d, %d should be %d\n",i,j,k,l,m,itype,rightanswers[j-1][k-1][l-1][m-1]);
+	      nmisses++;
+	    checkimpos(itype,topopoints.points[j],topopoints.points[k],
+		       topopoints.points[l],topopoints.points[m]);
 	  }
   }
 }

@@ -109,13 +109,8 @@ int intersection_type(xy a,xy c,xy b,xy d)
   double maxarea,maxcoord;
   int itype=intstype(a,c,b,d,maxarea,maxcoord)+40;
   itype=intstable[itype/27][itype%27/9][itype%9/3][itype%3];
-  if (itype==IMPOS && maxarea<maxcoord*maxcoord*1e-12)
+  if (itype==IMPOS && maxarea<maxcoord*maxcoord*1e-15)
     itype=COLIN;
-  if (itype==9)
-    fprintf(stderr,"Intersection type 9\n(%e,%e)=(%e,%e) × (%e,%e)=(%e,%e)\n(%a,%a)=(%a,%a) × (%a,%a)=(%a,%a)\n",
-            a.east(),a.north(),c.east(),c.north(),b.east(),b.north(),d.east(),d.north(),
-            a.east(),a.north(),c.east(),c.north(),b.east(),b.north(),d.east(),d.north());
-  //assert(itype!=9);
   return itype;
 }
 
