@@ -8,6 +8,7 @@
 #define TIN_H
 #include <exception>
 #include <map>
+#include <vector>
 #include "cogo.h"
 #include "bezitopo.h"
 
@@ -30,7 +31,10 @@ class edge
  bool isinterior();
  bool delaunay();
  void dump();
+ double length();
  };
+
+extern std::vector<edge> edgelist;
 
 typedef std::pair<double,point*> ipoint;
 /*
@@ -50,4 +54,4 @@ class samepoints: public exception
 #define samepnts 2
 #endif
 
-void maketin();
+void maketin(bool print=false);

@@ -5,15 +5,16 @@
 /******************************************************/
 
 #include <map>
-#include <vector>
 #include <cmath>
 #include "bezitopo.h"
 #include "tin.h"
 #include "ps.h"
+#include "point.h"
 #include "pointlist.h"
 
 #define THR 16777216
-//for goodcenter
+//threshold for goodcenter to determine if a point is sufficiently
+//on the good side of a side of a triangle
 
 using std::map;
 using std::multimap;
@@ -148,6 +149,14 @@ void dumphull_ps()
  widen(0.2);
  }
 
+double edge::length()
+{
+  xy c,d;
+  c=*a;
+  d=*b;
+  return dist(c,d);
+}
+
 bool goodcenter(xy a,xy b,xy c,xy d)
 /* a is the proposed starting point; b, c, and d are the three closest
    points to a. a has to be on the same side of at least two sides as the
@@ -186,7 +195,7 @@ bool goodcenter(xy a,xy b,xy c,xy d)
  return n>1;
  }
 
-void maketin()
+void maketin(bool print)
 /* Makes a triangulated irregular network. If <3 points, throws notri without altering
    the existing TIN. If two points are equal, or close enough to likely cause problems,
    throws samepnts; the TIN is partially constructed and will have to be destroyed.
@@ -213,8 +222,11 @@ void maketin()
  //In a 100-point asteraceous pattern, the centroid is out one corner, and
  //the first triangle is drawn negative, with point 0 connected wrong.
  startpnt=topopoints.points.begin()->second;
- psopen("bezitopo.ps");
- psprolog();
+ if (print)
+ {
+   psopen("bezitopo.ps");
+   psprolog();
+ }
  for (m2=0,fail=true;m2<100 && fail;m2++)
      {edgelist.clear();
       convexhull.clear();
@@ -250,13 +262,16 @@ void maketin()
               miny=i->second.north();
            }
       setscale(minx,miny,maxx,maxy);
-      startpage();
-      setcolor(0,0,1);
-      dot(startpnt);
-      setcolor(1,.5,0);
-      for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
-          dot(i->second);
-      endpage();
+      if (print)
+      {
+        startpage();
+        setcolor(0,0,1);
+        dot(startpnt);
+        setcolor(1,.5,0);
+        for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+            dot(i->second);
+        endpage();
+      }
       j=outward.begin();
       printf("edgelist %d\n",edgelist.size());
       edgelist.resize(1);
@@ -390,10 +405,13 @@ void maketin()
            //dumpedges();
            }
       }
- startpage();
- dumpedges_ps();
- dot(startpnt);
- endpage();
+ if (print)
+ {
+   startpage();
+   dumpedges_ps();
+   dot(startpnt);
+   endpage();
+ }
  flipcount=passcount=0;
  //debugdel=1;
  /* The flipping algorithm can take quadratic time, but usually does not
@@ -420,20 +438,25 @@ void maketin()
              //debugdel=1;
              }
      debugdel=0;
-     startpage();
-     dumpedges_ps();
-     endpage();
+     if (print)
+     {
+       startpage();
+       dumpedges_ps();
+       endpage();
+     }
      //debugdel=1;
      passcount++;
      } while (m && passcount*3<=topopoints.points.size());
  printf("Total %d edges flipped in %d passes\n",flipcount,passcount);
- startpage();
- dumpedges_ps();
- dot(startpnt);
- endpage();
- //edgelist[3].flip();
- pstrailer();
- psclose();
+ if (print)
+ {
+   startpage();
+   dumpedges_ps();
+   dot(startpnt);
+   endpage();
+   pstrailer();
+   psclose();
+ }
  }
 
 void makegrad(double corr)

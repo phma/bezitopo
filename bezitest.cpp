@@ -202,6 +202,19 @@ void testinvalidintersectionaster()
   }
 }
 
+void testmaketinaster()
+{
+  double totallength;
+  int i;
+  topopoints.clear();
+  aster(100);
+  maketin();
+  assert(edgelist.size()==284);
+  for (totallength=i=0;i<edgelist.size();i++)
+    totallength+=edgelist[i].length();
+  assert(fabs(totallength-600.689)<0.001);
+}
+
 int main(int argc, char *argv[])
 {int i,j,itype;
  randfil=fopen("/dev/urandom","rb");
@@ -211,6 +224,7 @@ int main(int argc, char *argv[])
  testcopytopopoints();
  testinvalidintersectionlozenge();
  testinvalidintersectionaster();
+ testmaketinaster();
  lozenge(100);
  rotate(30);
  printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
