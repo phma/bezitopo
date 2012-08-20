@@ -20,6 +20,7 @@
 #include "pnezd.h"
 #include "angle.h"
 #include "pointlist.h"
+#include "vcurve.h"
 
 using namespace std;
 
@@ -215,6 +216,11 @@ void testmaketinaster()
   assert(fabs(totallength-600.689)<0.001);
 }
 
+void testvcurve()
+{
+  assert(vcurve(0,0,0,0,0)==0);
+}
+
 int main(int argc, char *argv[])
 {int i,j,itype;
  randfil=fopen("/dev/urandom","rb");
@@ -225,6 +231,7 @@ int main(int argc, char *argv[])
  testinvalidintersectionlozenge();
  testinvalidintersectionaster();
  testmaketinaster();
+ testvcurve();
  lozenge(100);
  rotate(30);
  printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));

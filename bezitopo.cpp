@@ -20,6 +20,7 @@
 #include "pnezd.h"
 #include "angle.h"
 #include "pointlist.h"
+#include "vcurve.h"
 
 using namespace std;
 
