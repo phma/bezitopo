@@ -1,6 +1,7 @@
 /********************************************************/
 /*                                                      */
-/* bezier.cpp - computes functions of a Bezier triangle */
+/* bezier.cpp - computes functions of a Bézier triangle */
+/* For Bézier functions of one variable, see vcurve.cpp.*/
 /*                                                      */
 /********************************************************/
 #include "bezier.h"

@@ -219,6 +219,14 @@ void testmaketinaster()
 void testvcurve()
 {
   assert(vcurve(0,0,0,0,0)==0);
+  assert(vcurve(0,1,2,3,0.5)==1.5);
+  assert(vcurve(0,4,4,0,0.5)==3);
+  assert(vcurve(0,1,-1,0,0.5)==0);
+  assert(vcurve(0,0,0,64,0)==0);
+  assert(vcurve(0,0,0,64,0.25)==1);
+  assert(vcurve(0,0,0,64,0.5)==8);
+  assert(vcurve(0,0,0,64,0.75)==27);
+  assert(vcurve(0,0,0,64,1)==64);
 }
 
 int main(int argc, char *argv[])
