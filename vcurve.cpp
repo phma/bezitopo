@@ -19,3 +19,12 @@ double vcurve(double a,double b,double c,double d,double p)
   result=a*q*q*q+3*b*p*q*q+3*c*p*p*q+d*p*p*p;
   return result;
 }
+
+double vslope(double a,double b,double c,double d,double p)
+{
+  double q=1-p;
+  double offset,result;
+  p=1-q;
+  result=-3*a*q*q+3*b*(q-2*p)*q-3*c*p*(p-2*q)+3*d*p*p;
+  return result;
+}
