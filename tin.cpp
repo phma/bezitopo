@@ -244,7 +244,7 @@ void maketin(bool print)
                 farthest=*(j->second);
                 }
            printf("m=%d startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
-           if (m>3 && goodcenter(startpnt,A,B,C))
+           if (/*m>3 && */goodcenter(startpnt,A,B,C))
               break;
            startpnt=rand2p(startpnt,farthest);
            }
