@@ -237,6 +237,16 @@ void testvcurve()
   assert(vslope(0,0,0,64,0.5)==48);
   assert(vslope(0,0,0,64,0.75)==108);
   assert(vslope(0,0,0,64,1)==192);
+  assert(vaccel(0,0,0,0,0)==0);
+  assert(vaccel(0,1,2,3,0.5)==0);
+  assert(vaccel(0,1,2,3,0.25)==0);
+  assert(vaccel(0,4,4,0,0.5)==-24);
+  assert(vaccel(0,4,4,0,0)==-24);
+  assert(vaccel(0,0,0,64,0)==0);
+  assert(vaccel(0,0,0,64,0.25)==96);
+  assert(vaccel(0,0,0,64,0.5)==192);
+  assert(vaccel(0,0,0,64,0.75)==288);
+  assert(vaccel(0,0,0,64,1)==384);
 }
 
 int main(int argc, char *argv[])

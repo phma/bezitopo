@@ -28,3 +28,12 @@ double vslope(double a,double b,double c,double d,double p)
   result=-3*a*q*q+3*b*(q-2*p)*q-3*c*p*(p-2*q)+3*d*p*p;
   return result;
 }
+
+double vaccel(double a,double b,double c,double d,double p)
+{
+  double q=1-p;
+  double offset,result;
+  p=1-q;
+  result=6*a*q-6*b*(2*q-p)-6*c*(2*p-q)+6*d*p;
+  return result;
+}
