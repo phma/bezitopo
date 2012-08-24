@@ -21,6 +21,7 @@
 #include "angle.h"
 #include "pointlist.h"
 #include "vcurve.h"
+#include "segment.h"
 
 using namespace std;
 
@@ -249,6 +250,13 @@ void testvcurve()
   assert(vaccel(0,0,0,64,1)==384);
 }
 
+void testsegment()
+{
+  xyz beg(0,0,3),end(300,400,7);
+  segment a(beg,end);
+  assert(a.length()==500);
+}
+
 int main(int argc, char *argv[])
 {int i,j,itype;
  randfil=fopen("/dev/urandom","rb");
@@ -260,6 +268,7 @@ int main(int argc, char *argv[])
  testinvalidintersectionaster();
  testmaketinaster();
  testvcurve();
+ testsegment();
  lozenge(100);
  rotate(30);
  printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
