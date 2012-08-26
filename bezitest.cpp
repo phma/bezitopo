@@ -219,6 +219,7 @@ void testmaketinaster()
 
 void testvcurve()
 {
+  double result;
   assert(vcurve(0,0,0,0,0)==0);
   assert(vcurve(0,1,2,3,0.5)==1.5);
   assert(vcurve(0,4,4,0,0.5)==3);
@@ -248,6 +249,10 @@ void testvcurve()
   assert(vaccel(0,0,0,64,0.5)==192);
   assert(vaccel(0,0,0,64,0.75)==288);
   assert(vaccel(0,0,0,64,1)==384);
+  assert(fabs(vlength(0,1,2,3,7.2)-7.8)<1e-6);
+  result=vlength(0,10,0,20,200);
+  printf("vertical curve length=%f\n",result);
+  assert(result>201 && result<204.427);
 }
 
 void testsegment()
