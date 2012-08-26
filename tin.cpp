@@ -6,6 +6,7 @@
 
 #include <map>
 #include <cmath>
+#include <iostream>
 #include "bezitopo.h"
 #include "tin.h"
 #include "ps.h"
@@ -94,6 +95,11 @@ bool edge::isinterior()
 
 bool edge::delaunay()
 {point *tempa,*tempb;
+ if (nexta==NULL || nextb==NULL)
+ {
+   std::cerr<<"null next edge in delaunay\n";
+   return true;
+ }
  tempa=nexta->otherend(a);
  tempb=nextb->otherend(b);
  return (!isinterior()) || ::delaunay(*a,*b,*tempa,*tempb);
@@ -244,11 +250,13 @@ void maketin(bool print)
                 farthest=*(j->second);
                 }
            printf("m=%d startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
-           if (/*m>3 && */goodcenter(startpnt,A,B,C))
+           if (m>0 && goodcenter(startpnt,A,B,C))
               break;
            startpnt=rand2p(startpnt,farthest);
            }
-      printf("startpnt=(%f,%f)\n",startpnt.east(),startpnt.north());
+      // The point (-7.8578111411563043,-4.6782453265676276) came up in a run and caused the program to crash.
+      //startpnt=xy(-7.8578111411563043,-4.6782453265676276);
+      printf("Took %d tries to choose startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
       miny=maxy=startpnt.north();
       minx=maxx=startpnt.east();
       for (i=topopoints.points.begin();i!=topopoints.points.end();i++)

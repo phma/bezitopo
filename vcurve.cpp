@@ -10,6 +10,7 @@
  * any quadratic can be expressed as a cubic with the cube term zero.
  */
 #include <cmath>
+#include <cstdio>
 #include "vcurve.h"
 
 double vcurve(double a,double b,double c,double d,double p)
@@ -56,13 +57,15 @@ double vlength_estimate(double a,double b,double c,double d,double hlength,int n
 double vlength(double a,double b,double c,double d,double hlength)
 {
   int n,prevn=0;
-  double currestimate,prevestimate,currextrapolate=-1,prevextrapolate=-2;
-  for (n=1;n>0 && fabs(currextrapolate-prevextrapolate)*16777216<(currextrapolate+prevextrapolate);n+=n+1)
+  double currestimate=-1,prevestimate=-2,currextrapolate=-1,prevextrapolate=-2;
+  for (n=1;n>0 && fabs(currestimate-prevestimate)*16777216>(currestimate+prevestimate);n+=n+1)
   {
-    currestimate=vlength_estimate(a,b,c,d,hlength,n);
-    currextrapolate=(currestimate*n*n-prevestimate*prevn*prevn)/(n*n-prevn*prevn);
     prevestimate=currestimate;
     prevextrapolate=currextrapolate;
+    currestimate=vlength_estimate(a,b,c,d,hlength,n);
+    currextrapolate=(currestimate*n*n-prevestimate*prevn*prevn)/(n*n-prevn*prevn);
+    //printf("%d %17.13f %17.13f\n",n,currestimate,currextrapolate);
+    prevn=n;
   }
   return currextrapolate;
 }
