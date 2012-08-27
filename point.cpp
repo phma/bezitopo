@@ -114,6 +114,11 @@ xyz::xyz()
 {x=y=z=0;
  }
 
+bool operator==(const xyz &l,const xyz &r)
+{
+  return l.x==r.x && l.y==r.y && l.z==r.z;
+}
+
 point::point()
 {x=y=z=0;
  line=NULL;

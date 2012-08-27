@@ -6,6 +6,8 @@
 /******************************************************/
 
 #include "point.h"
+#define START 1
+#define END 2
 
 class segment
 {
@@ -16,4 +18,8 @@ public:
   segment();
   segment(xyz kra,xyz fam);
   double length();
+  void setslope(int which,double s);
+  double elev(double along);
+  double slope(double along);
+  xyz station(double along);
 };

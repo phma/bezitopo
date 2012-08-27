@@ -257,9 +257,16 @@ void testvcurve()
 
 void testsegment()
 {
-  xyz beg(0,0,3),end(300,400,7);
+  xyz beg(0,0,3),end(300,400,7),sta;
   segment a(beg,end);
   assert(a.length()==500);
+  a.setslope(START,0.3);
+  a.setslope(END,-0.1);
+  assert(fabs(a.elev(1)-3.3)<0.05);
+  assert(fabs(a.slope(250)+0.042)<0.001);
+  sta=a.station(200);
+  //printf("sta.x=%.17f sta.y=%.17f sta.z=%.17f \n",sta.east(),sta.north(),sta.elev());
+  assert(sta==xyz(120,160,31));
 }
 
 int main(int argc, char *argv[])
