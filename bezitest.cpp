@@ -219,7 +219,8 @@ void testmaketinaster()
 
 void testvcurve()
 {
-  double result;
+  double result,b1,c1,a2,b2,c2;
+  vector<double> extrema;
   assert(vcurve(0,0,0,0,0)==0);
   assert(vcurve(0,1,2,3,0.5)==1.5);
   assert(vcurve(0,4,4,0,0.5)==3);
@@ -253,6 +254,20 @@ void testvcurve()
   result=vlength(0,10,0,20,200);
   printf("vertical curve length=%f\n",result);
   assert(result>201 && result<204.427);
+  extrema=vextrema(0,1,2,3);
+  assert(extrema.size()==0);
+  extrema=vextrema(0,4,4,0);
+  assert(extrema.size()==1);
+  printf("0,4,4,0: extrema[0]=%f\n",extrema[0]);
+  assert(extrema[0]==0.5);
+  extrema=vextrema(2,4,0,2);
+  assert(extrema.size()==2);
+  printf("2,4,0,2: extrema[0]=%f, extrema[1]=%f\n",extrema[0],extrema[1]);
+  assert(vslope(2,4,0,2,extrema[0])<0.001);
+  extrema=vextrema(0,4,3,0);
+  assert(extrema.size()==1);
+  printf("0,4,3,0: extrema[0]=%f\n",extrema[0]);
+  assert(vslope(0,4,3,0,extrema[0])<0.001);
 }
 
 void testsegment()
