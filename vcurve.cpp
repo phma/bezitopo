@@ -109,3 +109,16 @@ vector<double> vextrema(double a,double b,double c,double d)
   } 
   return ext;
 }
+
+void vsplit(double a,double b,double c,double d,double p,
+	    double &b1,double &c1,double &d1a2,double &b2,double &c2)
+{
+  double q=1-p;
+  double s=vslope(a,b,c,d,p);
+  p=1-q;
+  b1=a+(b-a)*p;
+  d1a2=vcurve(a,b,c,d,p);
+  c1=d1a2-p*s/3;
+  b2=d1a2+q*s/3;
+  c2=d+(c-d)*q;
+}

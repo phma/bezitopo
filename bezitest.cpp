@@ -264,7 +264,7 @@ void testmaketinellipse()
 
 void testvcurve()
 {
-  double result,b1,c1,a2,b2,c2;
+  double result,b1,c1,d1a2,b2,c2;
   vector<double> extrema;
   assert(vcurve(0,0,0,0,0)==0);
   assert(vcurve(0,1,2,3,0.5)==1.5);
@@ -313,6 +313,11 @@ void testvcurve()
   assert(extrema.size()==1);
   printf("0,4,3,0: extrema[0]=%f\n",extrema[0]);
   assert(vslope(0,4,3,0,extrema[0])<0.001);
+  vsplit(1,2,2,1,4./8,b1,c1,d1a2,b2,c2);
+  assert(vcurve(1,2,2,1,3./8)==vcurve(1,b1,c1,d1a2,3./4));
+  assert(vcurve(1,2,2,1,5./8)==vcurve(d1a2,b2,c2,1,1./4));
+  vsplit(0,1,2,0,3./8,b1,c1,d1a2,b2,c2);
+  assert(vcurve(0,1,2,0,15./64)==vcurve(0,b1,c1,d1a2,5./8));
 }
 
 void testsegment()
