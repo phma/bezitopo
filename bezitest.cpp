@@ -217,6 +217,50 @@ void testmaketinaster()
   assert(fabs(totallength-600.689)<0.001);
 }
 
+void testmaketinlozenge()
+{
+  double totallength;
+  int i;
+  topopoints.clear();
+  lozenge(100);
+  rotate(30);
+  maketin();
+  assert(edgelist.size()==299);
+  for (totallength=i=0;i<edgelist.size();i++)
+    totallength+=edgelist[i].length();
+  printf("lozenge %ld edges total length %f\n",edgelist.size(),totallength);
+  assert(fabs(totallength-2111.8775)<0.001);
+}
+
+void testmaketinring()
+{
+  double totallength;
+  int i;
+  topopoints.clear();
+  ring(100);
+  rotate(30);
+  maketin();
+  assert(edgelist.size()==197);
+  for (totallength=i=0;i<edgelist.size();i++)
+    totallength+=edgelist[i].length();
+  printf("ring edges total length %f\n",totallength);
+  //Don't assert the total length. There are over 10^56 (2^189) right answers to that.
+}
+
+void testmaketinellipse()
+{
+  double totallength;
+  int i;
+  topopoints.clear();
+  ellipse(100);
+  maketin();
+  assert(edgelist.size()==197);
+  for (totallength=i=0;i<edgelist.size();i++)
+    totallength+=edgelist[i].length();
+  printf("ellipse edges total length %f\n",totallength);
+  assert(fabs(totallength-1329.4675)<0.001);
+}
+
 void testvcurve()
 {
   double result,b1,c1,a2,b2,c2;
@@ -294,10 +338,11 @@ int main(int argc, char *argv[])
  testinvalidintersectionlozenge();
  testinvalidintersectionaster();
  testmaketinaster();
+ testmaketinlozenge();
+ testmaketinring();
+ testmaketinellipse();
  testvcurve();
  testsegment();
- lozenge(100);
- rotate(30);
  printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
  testintegertrig();
  fclose(randfil);

@@ -40,7 +40,9 @@ void aster(int n)
  }
 
 void ring(int n)
-/* Points in a circle, for most ambiguous case of the Delaunay algorithm. */
+/* Points in a circle, for most ambiguous case of the Delaunay algorithm.
+ * The number of different ways to make the TIN is a Catalan number.
+ */
 {int i;
  double angle=(sqrt(5)-1)*M_PI;
  xy pnt;
