@@ -5,7 +5,7 @@
 /******************************************************/
 
 #include "point.h"
-#include <malloc.h>
+#include <cstdlib>
 #include <cmath>
 #include <string.h>
 #include "tin.h"
