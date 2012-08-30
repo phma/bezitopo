@@ -7,6 +7,7 @@
 
 #include "segment.h"
 #include "vcurve.h"
+#include <cmath>
 
 segment::segment()
 {
@@ -57,4 +58,14 @@ xyz segment::station(double along)
   gnola=len-along;
   return xyz((start.east()*gnola+end.east()*along)/len,(start.north()*gnola+end.north()*along)/len,
 	     elev(along));
+}
+
+xyz segment::midpoint()
+{
+  return station(length()/2);
+}
+
+xy segment::center()
+{
+  return xy(nan(""),nan(""));
 }

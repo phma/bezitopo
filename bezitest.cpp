@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <csignal>
 #include "point.h"
 #include "cogo.h"
 #include "bezitopo.h"
@@ -319,6 +320,7 @@ void testsegment()
   xyz beg(0,0,3),end(300,400,7),sta;
   segment a(beg,end);
   assert(a.length()==500);
+  assert(a.chord()==500);
   a.setslope(START,0.3);
   a.setslope(END,-0.1);
   assert(fabs(a.elev(1)-3.3)<0.05);
@@ -326,25 +328,29 @@ void testsegment()
   sta=a.station(200);
   //printf("sta.x=%.17f sta.y=%.17f sta.z=%.17f \n",sta.east(),sta.north(),sta.elev());
   assert(sta==xyz(120,160,31));
+  assert(isinf(a.radius(0)));
+  assert(a.curvature(0)==0);
+  assert(!isfinite(a.center().east()));
 }
 
 int main(int argc, char *argv[])
-{int i,j,itype;
- randfil=fopen("/dev/urandom","rb");
- xy a(0,0),b(4,0),c(0,3),d(4,4),e;
- assert(area3(c,a,b)==6);
- testintersection();
- testcopytopopoints();
- testinvalidintersectionlozenge();
- testinvalidintersectionaster();
- testmaketinaster();
- testmaketinlozenge();
- testmaketinring();
- testmaketinellipse();
- testvcurve();
- testsegment();
- printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
- testintegertrig();
- fclose(randfil);
- return EXIT_SUCCESS;
- }
+{
+  int i,j,itype;
+  randfil=fopen("/dev/urandom","rb");
+  xy a(0,0),b(4,0),c(0,3),d(4,4),e;
+  assert(area3(c,a,b)==6);
+  testintersection();
+  testcopytopopoints();
+  testinvalidintersectionlozenge();
+  testinvalidintersectionaster();
+  testmaketinaster();
+  testmaketinlozenge();
+  testmaketinring();
+  testmaketinellipse();
+  testvcurve();
+  testsegment();
+  printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
+  testintegertrig();
+  fclose(randfil);
+  return EXIT_SUCCESS;
+}

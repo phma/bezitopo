@@ -5,6 +5,7 @@
 /*                                                    */
 /******************************************************/
 
+#include <cstdlib>
 #include "point.h"
 #define START 1
 #define END 2
@@ -22,4 +23,18 @@ public:
   double elev(double along);
   double slope(double along);
   xyz station(double along);
+  double chord()
+  {
+    return dist(xy(start),xy(end));
+  }
+  double radius(double along)
+  {
+    return strtod("inf",NULL);
+  }
+  double curvature(double along)
+  {
+    return 0;
+  }
+  xy center();
+  xyz midpoint();
 };
