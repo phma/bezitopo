@@ -12,7 +12,7 @@
 
 class segment
 {
-private:
+protected:
   xyz start,end;
   double control1,control2;
 public:
@@ -37,4 +37,5 @@ public:
   }
   xy center();
   xyz midpoint();
+  void split(double along,segment &a,segment &b);
 };

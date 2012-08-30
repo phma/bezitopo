@@ -119,6 +119,10 @@ bool operator==(const xyz &l,const xyz &r)
   return l.x==r.x && l.y==r.y && l.z==r.z;
 }
 
+double dist(xyz a,xyz b)
+{return hypot(hypot(a.x-b.x,a.y-b.y),a.z-b.z);
+ }
+
 point::point()
 {x=y=z=0;
  line=NULL;

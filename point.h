@@ -57,6 +57,7 @@ class xyz
  double elev();
  friend class xy;
  friend class triangle;
+ friend double dist(xyz a,xyz b);
  friend bool operator==(const xyz &l,const xyz &r);
  protected:
  double x,y,z;

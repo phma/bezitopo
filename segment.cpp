@@ -69,3 +69,13 @@ xy segment::center()
 {
   return xy(nan(""),nan(""));
 }
+
+void segment::split(double along,segment &a,segment &b)
+{
+  double dummy;
+  xyz splitpoint=station(along);
+  a=segment(start,splitpoint);
+  b=segment(splitpoint,end);
+  vsplit(start.elev(),control1,control2,end.elev(),along/length(),a.control1,a.control2,dummy,b.control1,b.control2);
+}
+

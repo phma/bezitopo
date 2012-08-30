@@ -172,6 +172,7 @@ void testinvalidintersectionaster()
   int i,j,k,l,m,itype,nmisses;
   char rightanswers[9][9][9][9];
   double shift;
+  cout<<"Checking for invalid intersections";
   topopoints.clear();
   aster(9);
   for (j=1;j<=9;j++)
@@ -189,6 +190,11 @@ void testinvalidintersectionaster()
     shift=shift*31/24;
     movesideways(cos((double)i)*shift);
     rotate(1);
+    if (!(i&7))
+    {
+      cout<<".";
+      cout.flush();
+    }
     for (j=1;j<=9;j++)
       for (k=1;k<=9;k++)
 	for (l=1;l<=9;l++)
@@ -203,6 +209,7 @@ void testinvalidintersectionaster()
 		       topopoints.points[l],topopoints.points[m]);
 	  }
   }
+  cout<<endl;
 }
 
 void testmaketinaster()
@@ -323,7 +330,7 @@ void testvcurve()
 void testsegment()
 {
   xyz beg(0,0,3),end(300,400,7),sta;
-  segment a(beg,end);
+  segment a(beg,end),b,c;
   assert(a.length()==500);
   assert(a.chord()==500);
   a.setslope(START,0.3);
@@ -336,6 +343,9 @@ void testsegment()
   assert(isinf(a.radius(0)));
   assert(a.curvature(0)==0);
   assert(!isfinite(a.center().east()));
+  a.split(200,b,c);
+  assert(dist(b.station(123),a.station(123))<0.001);
+  assert(dist(c.station(200),a.station(400))<0.001);
 }
 
 int main(int argc, char *argv[])
