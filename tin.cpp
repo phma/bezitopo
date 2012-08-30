@@ -249,14 +249,14 @@ void maketin(bool print)
                    C=*(j->second);
                 farthest=*(j->second);
                 }
-           printf("m=%d startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
+           //printf("m=%d startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
            if (m>0 && goodcenter(startpnt,A,B,C))
               break;
            startpnt=rand2p(startpnt,farthest);
            }
       // The point (-7.8578111411563043,-4.6782453265676276) came up in a run and caused the program to crash.
       //startpnt=xy(-7.8578111411563043,-4.6782453265676276);
-      printf("Took %d tries to choose startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
+      //printf("Took %d tries to choose startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
       miny=maxy=startpnt.north();
       minx=maxx=startpnt.east();
       for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
@@ -269,9 +269,9 @@ void maketin(bool print)
            if (i->second.north()<miny)
               miny=i->second.north();
            }
-      setscale(minx,miny,maxx,maxy);
       if (print)
       {
+        setscale(minx,miny,maxx,maxy);
         startpage();
         setcolor(0,0,1);
         dot(startpnt);
@@ -281,7 +281,7 @@ void maketin(bool print)
         endpage();
       }
       j=outward.begin();
-      printf("edgelist %d\n",edgelist.size());
+      //printf("edgelist %d\n",edgelist.size());
       edgelist.resize(1);
       edgelist[0].a=j->second;
       j->second->line=&(edgelist[0]);
@@ -291,7 +291,7 @@ void maketin(bool print)
       j->second->line=&(edgelist[0]);
       edgelist[0].nexta=edgelist[0].nextb=&(edgelist[0]);
       convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
-      printf("edgelist %d\n",edgelist.size());
+      //printf("edgelist %d\n",edgelist.size());
       /* Before:
          A-----B
          |    /|
@@ -455,7 +455,7 @@ void maketin(bool print)
      //debugdel=1;
      passcount++;
      } while (m && passcount*3<=topopoints.points.size());
- printf("Total %d edges flipped in %d passes\n",flipcount,passcount);
+ //printf("Total %d edges flipped in %d passes\n",flipcount,passcount);
  if (print)
  {
    startpage();
