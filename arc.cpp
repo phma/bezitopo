@@ -7,12 +7,13 @@
 #include "arc.h"
 
 xy arc::center()
-{return ((start+end)/2+turn90((end-start)/2*tanhalf(delta)));
- }
+{
+  return ((xy(start)+xy(end))/2+turn90((xy(end)-xy(start))/2*tanhalf(delta)));
+}
 
-xy arc::midpoint()
-{return ((start+end)/2+turn90((end-start)*2*tanquarter(delta)));
- }
+/*xy arc::midpoint()
+{return ((xy(start)+xy(end))/2+turn90((xy(end)-xy(start))*2*tanquarter(delta)));
+ }*/
 
 /* To find the nearest point on the arc to a point:
    If delta is less than 0x1000000 (2°48'45") in absolute value, use linear
