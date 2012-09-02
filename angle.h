@@ -25,6 +25,13 @@ double cosquarter(int angle);
 double tanquarter(int angle);
 int atan2i(double y,double x);
 
+double bintorot(int angle);
+double bintogon(int angle);
+double bintodeg(int angle);
+double bintomin(int angle);
+double bintosec(int angle);
+double bintorad(int angle);
+
 #define DEGREE 0x0038ed00
 #define GON 0x00383000
 #define SEXAG0 0x20

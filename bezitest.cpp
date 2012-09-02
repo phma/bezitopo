@@ -51,6 +51,12 @@ void testintegertrig()
   assert(totsinerror+totcoserror+totciserror<1e-29);
   //On Linux, the total error is 6e-39 and the M_PIl makes a big difference.
   //On DragonFly BSD, the total error is 5e-30 and M_PIl is absent.
+  assert(bintodeg(0)==0);
+  assert(fabs(bintodeg(0x15555555)-60)<0.0000001);
+  assert(fabs(bintomin(0x08000000)==1350));
+  assert(fabs(bintosec(0x12345678)-184320)<0.001);
+  assert(fabs(bintogon(0x1999999a)-80)<0.0000001);
+  assert(fabs(bintorad(0x4f1bbcdd)-3.88322208)<0.00000001);
 }
 
 void test1intersection(xy a,xy c,xy b,xy d,xy inte,int type)
