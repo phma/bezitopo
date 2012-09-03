@@ -67,3 +67,39 @@ double bintorad(int angle)
 {
   return bintorot(angle)*M_PIl*2;
 }
+
+int rottobin(double angle)
+{
+  double iprt,fprt;
+  fprt=2*modf(angle/2,&iprt);
+  if (fprt>=1)
+    fprt-=2;
+  if (fprt<-1)
+    fprt+=2;
+  return lrint(2147483648.*fprt);
+}
+
+int degtobin(double angle)
+{
+  return rottobin(angle/360);
+}
+
+int mintobin(double angle)
+{
+  return rottobin(angle/21600);
+}
+
+int sectobin(double angle)
+{
+  return rottobin(angle/1296000);
+}
+
+int gontobin(double angle)
+{
+  return rottobin(angle/400);
+}
+
+int radtobin(double angle)
+{
+  return rottobin(angle/M_PIl/2);
+}

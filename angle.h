@@ -31,6 +31,12 @@ double bintodeg(int angle);
 double bintomin(int angle);
 double bintosec(int angle);
 double bintorad(int angle);
+int rottobin(double angle);
+int degtobin(double angle);
+int mintobin(double angle);
+int sectobin(double angle);
+int gontobin(double angle);
+int radtobin(double angle);
 
 #define DEGREE 0x0038ed00
 #define GON 0x00383000

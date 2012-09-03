@@ -10,6 +10,7 @@
 #endif
 
 #include <iostream>
+#include <iomanip>
 #include <cstdlib>
 #include <csignal>
 #include "point.h"
@@ -23,6 +24,7 @@
 #include "pointlist.h"
 #include "vcurve.h"
 #include "segment.h"
+#include "random.h"
 
 using namespace std;
 
@@ -30,6 +32,7 @@ void testintegertrig()
 {
   double sinerror,coserror,ciserror,totsinerror,totcoserror,totciserror;
   int i;
+  char bs=8;
   for (totsinerror=totcoserror=totciserror=i=0;i<128;i++)
   {
     sinerror=sin(i<<24)+sin((i+128)<<24);
@@ -57,6 +60,16 @@ void testintegertrig()
   assert(fabs(bintosec(0x12345678)-184320)<0.001);
   assert(fabs(bintogon(0x1999999a)-80)<0.0000001);
   assert(fabs(bintorad(0x4f1bbcdd)-3.88322208)<0.00000001);
+  for (i=-2147400000;i<2147400000;i+=rng.usrandom()+18000)
+  {
+    cout<<setw(11)<<i<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs;
+    cout.flush();
+    assert(degtobin(bintodeg(i))==i);
+    assert(mintobin(bintomin(i))==i);
+    assert(sectobin(bintosec(i))==i);
+    assert(gontobin(bintogon(i))==i);
+    assert(radtobin(bintorad(i))==i);
+  }
 }
 
 void test1intersection(xy a,xy c,xy b,xy d,xy inte,int type)
