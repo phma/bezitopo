@@ -24,6 +24,7 @@
 #include "pointlist.h"
 #include "vcurve.h"
 #include "segment.h"
+#include "arc.h"
 #include "random.h"
 
 using namespace std;
@@ -35,14 +36,14 @@ void testintegertrig()
   char bs=8;
   for (totsinerror=totcoserror=totciserror=i=0;i<128;i++)
   {
-    sinerror=sin(i<<24)+sin((i+128)<<24);
-    coserror=cos(i<<24)+cos((i+128)<<24);
-    ciserror=hypot(cos(i<<24),sin((i+128)<<24))-1;
+    sinerror=sin(i<<24)+sin((i+64)<<24);
+    coserror=cos(i<<24)+cos((i+64)<<24);
+    ciserror=hypot(cos(i<<24),sin(i<<24))-1;
     if (sinerror>0.04 || coserror>0.04 || ciserror>0.04)
     {
-      printf("sin(%8x)=%a sin(%8x)=%a\n",i<<24,sin(i<<24),(i+128)<<24,sin((i+128)<<24));
-      printf("cos(%8x)=%a cos(%8x)=%a\n",i<<24,cos(i<<24),(i+128)<<24,cos((i+128)<<24));
-      printf("abs(cis(%8x))=%a\n",i<<24,hypot(cos(i<<24),sin((i+128)<<24)));
+      printf("sin(%8x)=%a sin(%8x)=%a\n",i<<24,sin(i<<24),(i+64)<<24,sin((i+64)<<24));
+      printf("cos(%8x)=%a cos(%8x)=%a\n",i<<24,cos(i<<24),(i+64)<<24,cos((i+64)<<24));
+      printf("abs(cis(%8x))=%a\n",i<<24,hypot(cos(i<<24),sin(i<<24)));
     }
     totsinerror+=sinerror*sinerror;
     totcoserror+=coserror*coserror;
@@ -371,6 +372,36 @@ void testsegment()
   assert(dist(c.station(200),a.station(400))<0.001);
 }
 
+void testarc()
+{
+  xyz beg(0,0,3),end(300,400,7),sta;
+  xy ctr;
+  arc a(beg,end),b,c;
+  assert(fabs(a.length()-500)<0.001);
+  assert(a.chord()==500);
+  a.setdelta(degtobin(60));
+  printf("arc length %f\n",a.length());
+  assert(fabs(a.length()-523.599)<0.001);
+  assert(a.chord()==500);
+  a.setslope(START,0.3);
+  a.setslope(END,-0.1);
+  assert(fabs(a.elev(1)-3.3)<0.05);
+  assert(fabs(a.slope(250)+0.042)<0.001);
+  sta=a.station(200);
+  //printf("sta.x=%.17f sta.y=%.17f sta.z=%.17f \n",sta.east(),sta.north(),sta.elev());
+  assert(sta==xyz(120,160,31));
+  printf("arc radius %f\n",a.radius(1));
+  assert(fabs(a.radius(0)-500)<0.001);
+  assert(fabs(a.curvature(0)-0.002)<0.000001);
+  printf("arc center %f,%f\n",a.center().east(),a.center().north());
+  ctr=a.center();
+  assert(fabs(ctr.east()+196.410)<0.001);
+  assert(fabs(ctr.north()-459.8075)<0.001);
+  a.split(200,b,c);
+  assert(dist(b.station(123),a.station(123))<0.001);
+  assert(dist(c.station(200),a.station(400))<0.001);
+}
+
 int main(int argc, char *argv[])
 {
   int i,j,itype;
@@ -385,8 +416,9 @@ int main(int argc, char *argv[])
   testmaketinring();
   testmaketinellipse();
   testvcurve();
-  testsegment();
-  printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   testintegertrig();
+  testsegment();
+  testarc();
+  printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }

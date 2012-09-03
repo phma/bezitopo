@@ -10,24 +10,25 @@
 
 class arc: public segment
 {
-public:
+private:
   int delta; // angle subtended - "delta" is a surveying term
+public:
+  arc();
+  arc(xyz kra,xyz fam);
+  void setdelta(int d);
   double chord()
   {
-    return dist(start,end);
+    return dist(xy(start),xy(end));
   }
   double radius(double along)
   {
-    return chord()/sinhalf(delta);
+    return chord()/sinhalf(delta)/2;
   }
   double curvature(double along)
   {
-    return sinhalf(delta)/chord();
+    return 2*sinhalf(delta)/chord();
   }
-  double length()
-  {
-    return chord()/cosquarter(delta);
-  }
+  double length();
   xy center();
   //xyz midpoint();
   };

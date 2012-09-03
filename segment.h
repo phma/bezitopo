@@ -5,6 +5,8 @@
 /*                                                    */
 /******************************************************/
 
+#ifndef SEGMENT_H
+#define SEGMENT_H
 #include <cstdlib>
 #include "point.h"
 #define START 1
@@ -39,3 +41,4 @@ public:
   xyz midpoint();
   void split(double along,segment &a,segment &b);
 };
+#endif

@@ -4,11 +4,41 @@
 /*                                                    */
 /******************************************************/
 
+#include <cstdio>
 #include "arc.h"
+
+arc::arc()
+{
+  start=end=xyz(0,0,0);
+  control1=control2=delta=0;
+}
+
+arc::arc(xyz kra,xyz fam)
+{
+  start=kra;
+  end=fam;
+  delta=0;
+  control1=(2*start.elev()+end.elev())/3;
+  control2=(start.elev()+2*end.elev())/3;
+}
+
+void arc::setdelta(int d)
+{
+  delta=d;
+}
 
 xy arc::center()
 {
-  return ((xy(start)+xy(end))/2+turn90((xy(end)-xy(start))/2*tanhalf(delta)));
+  return ((xy(start)+xy(end))/2+turn90((xy(end)-xy(start))/2/tanhalf(delta)));
+}
+
+double arc::length()
+{
+  printf("sinhalf(%d)=%f\n",delta,sinhalf(delta));
+  if (delta)
+    return chord()*bintorad(delta)/sinhalf(delta)/2;
+  else
+    return chord();
 }
 
 /*xy arc::midpoint()
