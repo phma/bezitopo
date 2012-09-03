@@ -29,7 +29,6 @@ int main(int argc, char *argv[])
   int i,j,itype;
   criteria crit;
   criterion crit1;
-  randfil=fopen("/dev/urandom","rb");
   set_length_unit(SURVEYFOOT);
   if (readpnezd("topo0.asc")<0)
     readpnezd("../topo0.asc");
@@ -39,6 +38,5 @@ int main(int argc, char *argv[])
   copytopopoints(crit);
   rotate(2);
   maketin();
-  fclose(randfil);
   return EXIT_SUCCESS;
 }

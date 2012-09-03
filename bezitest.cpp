@@ -357,7 +357,6 @@ void testsegment()
 int main(int argc, char *argv[])
 {
   int i,j,itype;
-  randfil=fopen("/dev/urandom","rb");
   xy a(0,0),b(4,0),c(0,3),d(4,4),e;
   assert(area3(c,a,b)==6);
   testintersection();
@@ -372,6 +371,5 @@ int main(int argc, char *argv[])
   testsegment();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   testintegertrig();
-  fclose(randfil);
   return EXIT_SUCCESS;
 }

@@ -6,13 +6,13 @@
 
 #include "cogo.h"
 #include "bezitopo.h"
+#include "random.h"
 #include <stdarg.h>
 #include <stdlib.h>
 #include <cmath>
 using namespace std;
 
 int debugdel;
-FILE *randfil;
 
 char intstable[3][3][3][3]=
 /* NOINT  don't intersect
@@ -125,7 +125,7 @@ xy rand2p(xy a,xy b)
  unsigned short n;
  xy pnt;
  double angle=(sqrt(5)-1)*M_PI;
- fread(&n,1,2,randfil);
+ n=rng.usrandom();
  pnt=xy(cos(angle*n)*sqrt(n+0.5)/256,sin(angle*n)*sqrt(n+0.5)/256);
  pnt=pnt*dist(mid,a)+mid;
  return pnt;
