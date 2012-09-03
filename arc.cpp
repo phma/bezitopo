@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/*                                                    */
+/* arc.cpp - horizontal circular arcs                 */
 /*                                                    */
 /******************************************************/
 
@@ -34,11 +34,19 @@ xy arc::center()
 
 double arc::length()
 {
-  printf("sinhalf(%d)=%f\n",delta,sinhalf(delta));
   if (delta)
-    return chord()*bintorad(delta)/sinhalf(delta)/2;
+    return chordlength()*bintorad(delta)/sinhalf(delta)/2;
   else
-    return chord();
+    return chordlength();
+}
+
+xyz arc::station(double along)
+{
+  double gnola,len;
+  len=length();
+  gnola=len-along;
+  return xyz((start.east()*gnola+end.east()*along)/len,(start.north()*gnola+end.north()*along)/len,
+	     elev(along));
 }
 
 /*xy arc::midpoint()

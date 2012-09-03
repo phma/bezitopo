@@ -9,6 +9,7 @@
 #define SEGMENT_H
 #include <cstdlib>
 #include "point.h"
+#include "angle.h"
 #define START 1
 #define END 2
 
@@ -20,14 +21,18 @@ protected:
 public:
   segment();
   segment(xyz kra,xyz fam);
-  double length();
+  virtual double length();
   void setslope(int which,double s);
   double elev(double along);
   double slope(double along);
-  xyz station(double along);
-  double chord()
+  virtual xyz station(double along);
+  double chordlength()
   {
     return dist(xy(start),xy(end));
+  }
+  int chordbearing()
+  {
+    return atan2i(xy(end)-xy(start));
   }
   double radius(double along)
   {

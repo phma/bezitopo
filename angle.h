@@ -11,6 +11,7 @@
 #define ANGLE_H
 #include <cmath>
 #include "measure.h"
+#include "point.h"
 
 #ifndef M_PIl
 #define M_PIl M_PI
@@ -24,6 +25,7 @@ double tanhalf(int angle);
 double cosquarter(int angle);
 double tanquarter(int angle);
 int atan2i(double y,double x);
+int atan2i(xy vect);
 
 double bintorot(int angle);
 double bintogon(int angle);

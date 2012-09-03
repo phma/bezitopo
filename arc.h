@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/*                                                    */
+/* arc.h - horizontal circular arcs                   */
 /*                                                    */
 /******************************************************/
 
@@ -16,19 +16,16 @@ public:
   arc();
   arc(xyz kra,xyz fam);
   void setdelta(int d);
-  double chord()
-  {
-    return dist(xy(start),xy(end));
-  }
   double radius(double along)
   {
-    return chord()/sinhalf(delta)/2;
+    return chordlength()/sinhalf(delta)/2;
   }
   double curvature(double along)
   {
-    return 2*sinhalf(delta)/chord();
+    return 2*sinhalf(delta)/chordlength();
   }
   double length();
+  virtual xyz station(double along);
   xy center();
   //xyz midpoint();
   };

@@ -38,6 +38,11 @@ int atan2i(double y,double x)
 {return rint(atan2(y,x)/M_PIl*1073741824.);
  }
 
+int atan2i(xy vect)
+{
+  return atan2i(vect.north(),vect.east());
+}
+
 double bintorot(int angle)
 {
   return angle/2147483648.;
