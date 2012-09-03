@@ -70,6 +70,10 @@ void testintegertrig()
     assert(gontobin(bintogon(i))==i);
     assert(radtobin(bintorad(i))==i);
   }
+  assert(sectobin(1295999.9999)==-2147483648);
+  assert(sectobin(1296000.0001)==-2147483648);
+  assert(sectobin(-1295999.9999)==-2147483648);
+  assert(sectobin(-1296000.0001)==-2147483648);
 }
 
 void test1intersection(xy a,xy c,xy b,xy d,xy inte,int type)
