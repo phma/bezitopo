@@ -34,6 +34,14 @@ public:
   {
     return atan2i(xy(end)-xy(start));
   }
+  virtual int startbearing()
+  {
+    return chordbearing();
+  }
+  virtual int endbearing()
+  {
+    return chordbearing();
+  }
   double radius(double along)
   {
     return strtod("inf",NULL);

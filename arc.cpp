@@ -6,6 +6,7 @@
 
 #include <cstdio>
 #include "arc.h"
+#include "vcurve.h"
 
 arc::arc()
 {
@@ -18,6 +19,15 @@ arc::arc(xyz kra,xyz fam)
   start=kra;
   end=fam;
   delta=0;
+  control1=(2*start.elev()+end.elev())/3;
+  control2=(start.elev()+2*end.elev())/3;
+}
+
+arc::arc(xyz kra,xyz fam,int d)
+{
+  start=kra;
+  end=fam;
+  delta=d;
   control1=(2*start.elev()+end.elev())/3;
   control2=(start.elev()+2*end.elev())/3;
 }
@@ -43,10 +53,26 @@ double arc::length()
 xyz arc::station(double along)
 {
   double gnola,len;
+  int angalong;
   len=length();
+  angalong=lrint(along/len*delta);
   gnola=len-along;
-  return xyz((start.east()*gnola+end.east()*along)/len,(start.north()*gnola+end.north()*along)/len,
+  //printf("arc::station angalong=%f startbearing=%f\n",bintodeg(angalong),bintodeg(startbearing()));
+  return xyz(xy(start)+cossinhalf(angalong+2*startbearing())*sinhalf(angalong)*radius(0)*2,
 	     elev(along));
+}
+
+void arc::split(double along,arc &a,arc &b)
+{
+  double dummy;
+  int deltaa,deltab;
+  xyz splitpoint=station(along);
+  deltaa=lrint(delta*along/length());
+  deltab=delta-deltaa;
+  a=arc(start,splitpoint,deltaa);
+  b=arc(splitpoint,end,deltab);
+  vsplit(start.elev(),control1,control2,end.elev(),along/length(),a.control1,a.control2,dummy,b.control1,b.control2);
+  printf("split: %f,%f\n",a.end.east(),a.end.north());
 }
 
 /*xy arc::midpoint()

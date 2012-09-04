@@ -43,6 +43,16 @@ int atan2i(xy vect)
   return atan2i(vect.north(),vect.east());
 }
 
+xy cossin(int angle)
+{
+  return xy(cos(angle),sin(angle));
+}
+
+xy cossinhalf(int angle)
+{
+  return xy(coshalf(angle),sinhalf(angle));
+}
+
 double bintorot(int angle)
 {
   return angle/2147483648.;

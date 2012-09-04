@@ -35,6 +35,7 @@ class xy
  friend double dir(xy a,xy b);
  friend double dot(xy a,xy b);
  friend class point;
+ friend class xyz;
  friend class qindex;
  protected:
  double x,y;
@@ -52,6 +53,7 @@ class xyz
 {public:
  xyz(double e,double n,double h);
  xyz();
+ xyz(xy en,double h);
  double east();
  double north();
  double elev();

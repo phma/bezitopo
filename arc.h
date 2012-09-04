@@ -15,6 +15,7 @@ private:
 public:
   arc();
   arc(xyz kra,xyz fam);
+  arc(xyz kra,xyz fam,int d);
   void setdelta(int d);
   double radius(double along)
   {
@@ -24,8 +25,17 @@ public:
   {
     return 2*sinhalf(delta)/chordlength();
   }
+  int startbearing()
+  {
+    return chordbearing()-delta/2;
+  }
+  int endbearing()
+  {
+    return chordbearing()+delta/2;
+  }
   double length();
   virtual xyz station(double along);
   xy center();
+  void split(double along,arc &a,arc &b);
   //xyz midpoint();
   };

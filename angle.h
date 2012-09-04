@@ -26,6 +26,8 @@ double cosquarter(int angle);
 double tanquarter(int angle);
 int atan2i(double y,double x);
 int atan2i(xy vect);
+xy cossin(int angle);
+xy cossinhalf(int angle);
 
 double bintorot(int angle);
 double bintogon(int angle);

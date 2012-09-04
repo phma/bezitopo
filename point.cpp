@@ -98,6 +98,12 @@ xyz::xyz(double e,double n,double h)
  z=h;
  }
 
+xyz::xyz(xy en,double h)
+{x=en.x;
+ y=en.y;
+ z=h;
+ }
+
 double xyz::east()
 {return x;
  }
