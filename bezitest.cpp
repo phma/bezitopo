@@ -413,11 +413,16 @@ void testarc()
 void testspiral()
 {
   xy a,b,c;
+  int i;
+  double t;
   a=cornu(0);
-  //b=cornu(sqrt(M_PIl));
-  b=cornu(19);
   assert(a==xy(0,0));
-  printf("spiral %f,%f\n",b.east(),b.north());
+  //b=cornu(sqrt(M_PIl));
+  for (i=0;i<121;i++)
+  {
+    b=cornu(t=i/20.);
+    printf("spiral %f %f,%f\n",t,b.east(),b.north());
+  }
 }
 
 int main(int argc, char *argv[])
