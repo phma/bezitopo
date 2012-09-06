@@ -25,6 +25,7 @@
 #include "vcurve.h"
 #include "segment.h"
 #include "arc.h"
+#include "spiral.h"
 #include "random.h"
 
 using namespace std;
@@ -409,6 +410,16 @@ void testarc()
   assert(dist(c.station(200),a.station(400))<0.001);
 }
 
+void testspiral()
+{
+  xy a,b,c;
+  a=cornu(0);
+  //b=cornu(sqrt(M_PIl));
+  b=cornu(19);
+  assert(a==xy(0,0));
+  printf("spiral %f,%f\n",b.east(),b.north());
+}
+
 int main(int argc, char *argv[])
 {
   int i,j,itype;
@@ -426,6 +437,7 @@ int main(int argc, char *argv[])
   testintegertrig();
   testsegment();
   testarc();
+  testspiral();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }
