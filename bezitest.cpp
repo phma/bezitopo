@@ -27,6 +27,7 @@
 #include "arc.h"
 #include "spiral.h"
 #include "random.h"
+#include "ps.h"
 
 using namespace std;
 
@@ -418,11 +419,23 @@ void testspiral()
   a=cornu(0);
   assert(a==xy(0,0));
   //b=cornu(sqrt(M_PIl));
-  for (i=0;i<121;i++)
+  psopen("spiral.ps");
+  psprolog();
+  startpage();
+  setscale(-1,-1,1,1);
+  for (i=-120;i<121;i++)
   {
     b=cornu(t=i/20.);
+    if (i*i==14400)
+      dot(b);
+    else
+      if (i>-119)
+	line2p(c,b);
     printf("spiral %f %f,%f\n",t,b.east(),b.north());
+    c=b;
   }
+  pstrailer();
+  psclose();
 }
 
 int main(int argc, char *argv[])

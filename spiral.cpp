@@ -50,6 +50,6 @@ xy cornu(double t)
   precision=nextafterl(bigpart,2*bigpart)-bigpart;
   //printf("precision %e\n",precision);
   if (precision>1e-6)
-    rsum=isum=2/M_PI*(t/fabs(t));
+    rsum=isum=sqrt(M_PI/8)*(t/fabs(t));
   return xy(rsum,isum);
 }
