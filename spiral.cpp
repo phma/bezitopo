@@ -19,7 +19,7 @@ using namespace std;
 
 xy cornu(double t)
 /* If |t|>=6, it returns the limit points rather than a value with no precision.
- * The largest t useful in surveying is about 1.5.
+ * The largest t useful in surveying is 1.430067.
  */
 {
   vector<long double> realparts,imagparts;

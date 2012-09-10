@@ -32,7 +32,7 @@ class xy
  friend bool operator==(const xy &l,const xy &r);
  friend xy turn90(xy a);
  friend double dist(xy a,xy b);
- friend double dir(xy a,xy b);
+ friend int dir(xy a,xy b);
  friend double dot(xy a,xy b);
  friend class point;
  friend class xyz;

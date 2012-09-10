@@ -411,10 +411,15 @@ void testarc()
   assert(dist(c.station(200),a.station(400))<0.001);
 }
 
+double sqr(double x)
+{
+  return x*x;
+}
+
 void testspiral()
 {
-  xy a,b,c;
-  int i;
+  xy a,b,c,limitpoint;
+  int i,bearing,lastbearing;
   double t;
   a=cornu(0);
   assert(a==xy(0,0));
@@ -427,15 +432,30 @@ void testspiral()
   {
     b=cornu(t=i/20.);
     if (i*i==14400)
+    {
+      limitpoint=b;
       dot(b);
+    }
     else
       if (i>-119)
 	line2p(c,b);
-    printf("spiral %f %f,%f\n",t,b.east(),b.north());
+    //printf("spiral %f %f,%f %f\n",t,b.east(),b.north(),1/sqr(dist(b,limitpoint)));
     c=b;
   }
+  for (bearing=i=0,lastbearing=1;i<100 && bearing!=lastbearing;i++)
+  {
+    t=bintorad(bearing);
+    a=cornu(-sqrt(t));
+    b=cornu(sqrt(t+M_PI/2));
+    lastbearing=bearing;
+    bearing=dir(a,b);
+  }
+  setcolor(0,0,1);
+  line2p(a,b);
   pstrailer();
   psclose();
+  assert(bearing==162105696);
+  printf("Maximum useful t of spiral is %f\n",sqrt(t+M_PI/2));
 }
 
 int main(int argc, char *argv[])

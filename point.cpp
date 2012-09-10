@@ -10,6 +10,7 @@
 #include <string.h>
 #include "tin.h"
 #include "pointlist.h"
+#include "angle.h"
 
 xy::xy(double e,double n)
 {x=e;
@@ -84,8 +85,8 @@ double dist(xy a,xy b)
 {return hypot(a.x-b.x,a.y-b.y);
  }
 
-double dir(xy a,xy b)
-{return atan2(a.y-b.y,a.x-b.x);
+int dir(xy a,xy b)
+{return atan2i(b-a);
  }
 
 double dot(xy a,xy b)
