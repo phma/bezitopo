@@ -15,6 +15,7 @@
 #include <cmath>
 #include <cstdio>
 #include "spiral.h"
+#include "angle.h"
 using namespace std;
 
 xy cornu(double t)
@@ -53,3 +54,14 @@ xy cornu(double t)
     rsum=isum=sqrt(M_PI/8)*(t/fabs(t));
   return xy(rsum,isum);
 }
+
+double spiralbearing(double t)
+{
+  return t*t;
+}
+
+int ispiralbearing(double t)
+{
+  return radtobin(t*t);
+}
+

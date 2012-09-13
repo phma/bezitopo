@@ -419,11 +419,11 @@ double sqr(double x)
 void testspiral()
 {
   xy a,b,c,limitpoint;
-  int i,bearing,lastbearing;
+  int i,bearing,lastbearing,curvebearing,diff;
   double t;
+  vector<xy> spoints;
   a=cornu(0);
   assert(a==xy(0,0));
-  //b=cornu(sqrt(M_PIl));
   psopen("spiral.ps");
   psprolog();
   startpage();
@@ -440,7 +440,18 @@ void testspiral()
       if (i>-119)
 	line2p(c,b);
     //printf("spiral %f %f,%f %f\n",t,b.east(),b.north(),1/sqr(dist(b,limitpoint)));
+    if (i>=0)
+      spoints.push_back(b);
     c=b;
+  }
+  for (i=1;i<119;i++)
+  {
+    curvebearing=ispiralbearing(i/20.);
+    bearing=dir(spoints[i-1],spoints[i+1]); // compute the difference between a chord of the spiral
+    diff=(curvebearing-bearing)&0x7fffffff; // and a tangent in the middle of the arc
+    diff|=(diff&0x40000000)<<1; // diff could be near 0° or 360°; this bit manipulation puts it near 0°
+    //printf("%3d diff=%d (%f')\n",i,diff,bintomin(diff));
+    assert(diff>-300000 && diff<-250000); // diff is between -3'00" and -2'30" when the increment is 1/20
   }
   for (bearing=i=0,lastbearing=1;i<100 && bearing!=lastbearing;i++)
   {
