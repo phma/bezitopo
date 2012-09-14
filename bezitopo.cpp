@@ -37,6 +37,6 @@ int main(int argc, char *argv[])
   crit.push_back(crit1);
   copytopopoints(crit);
   rotate(2);
-  maketin();
+  maketin("bezitopo.ps");
   return EXIT_SUCCESS;
 }

@@ -244,7 +244,7 @@ void testmaketinaster()
   int i;
   topopoints.clear();
   aster(100);
-  maketin();
+  maketin("aster.ps");
   assert(edgelist.size()==284);
   for (totallength=i=0;i<edgelist.size();i++)
     totallength+=edgelist[i].length();
@@ -258,7 +258,7 @@ void testmaketinlozenge()
   topopoints.clear();
   lozenge(100);
   rotate(30);
-  maketin();
+  maketin("lozenge.ps");
   assert(edgelist.size()==299);
   for (totallength=i=0;i<edgelist.size();i++)
     totallength+=edgelist[i].length();
@@ -273,7 +273,7 @@ void testmaketinring()
   topopoints.clear();
   ring(100);
   rotate(30);
-  maketin();
+  maketin("ring.ps");
   assert(edgelist.size()==197);
   for (totallength=i=0;i<edgelist.size();i++)
     totallength+=edgelist[i].length();
@@ -287,7 +287,7 @@ void testmaketinellipse()
   int i;
   topopoints.clear();
   ellipse(100);
-  maketin();
+  maketin("ellipse.ps");
   assert(edgelist.size()==197);
   for (totallength=i=0;i<edgelist.size();i++)
     totallength+=edgelist[i].length();

@@ -9,6 +9,7 @@
 #include <exception>
 #include <map>
 #include <vector>
+#include <string>
 #include "cogo.h"
 #include "bezitopo.h"
 
@@ -54,4 +55,4 @@ class samepoints: public exception
 #define samepnts 2
 #endif
 
-void maketin(bool print=false);
+void maketin(string filename="");

@@ -12,7 +12,7 @@ void endpage();
 void dot(xy pnt);
 void line(edge lin,int num);
 void pstrailer();
-void psopen(char * psfname);
+void psopen(const char * psfname);
 void psclose();
 void line2p(xy pnt1,xy pnt2);
 void widen(double factor);

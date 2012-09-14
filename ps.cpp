@@ -43,7 +43,7 @@ void setcolor(double r,double g,double b)
 {fprintf(psfile,"%f %f %f setrgbcolor\n",r,g,b);
  }
 
-void psopen(char * psfname)
+void psopen(const char * psfname)
 {psfile=fopen(psfname,"w");
  }
 

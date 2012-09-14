@@ -77,7 +77,7 @@ class point: public xyz
  //void setedge(point *oend);
  void dump();
  friend class edge;
- friend void maketin();
+ friend void maketin(string filename);
  friend void rotate(int n);
  friend void movesideways(double sw);
  short flags;

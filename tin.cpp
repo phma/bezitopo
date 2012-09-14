@@ -201,7 +201,7 @@ bool goodcenter(xy a,xy b,xy c,xy d)
  return n>1;
  }
 
-void maketin(bool print)
+void maketin(string filename)
 /* Makes a triangulated irregular network. If <3 points, throws notri without altering
    the existing TIN. If two points are equal, or close enough to likely cause problems,
    throws samepnts; the TIN is partially constructed and will have to be destroyed.
@@ -228,9 +228,9 @@ void maketin(bool print)
  //In a 100-point asteraceous pattern, the centroid is out one corner, and
  //the first triangle is drawn negative, with point 0 connected wrong.
  startpnt=topopoints.points.begin()->second;
- if (print)
+ if (filename.length())
  {
-   psopen("bezitopo.ps");
+   psopen(filename.c_str());
    psprolog();
  }
  for (m2=0,fail=true;m2<100 && fail;m2++)
@@ -269,7 +269,7 @@ void maketin(bool print)
            if (i->second.north()<miny)
               miny=i->second.north();
            }
-      if (print)
+      if (filename.length())
       {
         setscale(minx,miny,maxx,maxy);
         startpage();
@@ -413,7 +413,7 @@ void maketin(bool print)
            //dumpedges();
            }
       }
- if (print)
+ if (filename.length())
  {
    startpage();
    dumpedges_ps();
@@ -446,7 +446,7 @@ void maketin(bool print)
              //debugdel=1;
              }
      debugdel=0;
-     if (print)
+     if (filename.length())
      {
        startpage();
        dumpedges_ps();
@@ -456,7 +456,7 @@ void maketin(bool print)
      passcount++;
      } while (m && passcount*3<=topopoints.points.size());
  //printf("Total %d edges flipped in %d passes\n",flipcount,passcount);
- if (print)
+ if (filename.length())
  {
    startpage();
    dumpedges_ps();
