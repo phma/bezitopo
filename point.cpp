@@ -176,6 +176,15 @@ void point::dump()
 {printf("address=%p\nnum=%d\n(%f,%f,%f)\nline=%p\n",this,topopoints.revpoints[this],x,y,z,line);
  }
 
+int point::valence()
+{
+  int i;
+  edge *oldline;
+  for (i=0,oldline=line;(!i || oldline!=line);i++)
+    line=line->next(this);
+  return i;
+}
+
 /*void point::setedge(point *oend)
 {int i;
  edge *oldline;

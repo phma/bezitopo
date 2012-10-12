@@ -19,6 +19,15 @@ void dumppoints()
  printf("end dump\n");
  }
 
+void dumppointsvalence()
+{
+  map<int,point>::iterator i;
+  printf("dumppoints\n");
+  for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+    printf("%d %d\n",i->first,i->second.valence());
+  printf("end dump\n");
+}
+
 double rugae(xy pnt)
 {double z;
  z=sin(pnt.east())+pnt.north()/50;

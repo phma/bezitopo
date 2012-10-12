@@ -55,4 +55,4 @@ class samepoints: public exception
 #define samepnts 2
 #endif
 
-void maketin(string filename="");
+void maketin(string filename="",bool colorfibaster=false);

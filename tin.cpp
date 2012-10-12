@@ -129,11 +129,11 @@ void dumpedges()
  printf("end dump\n");
  }
 
-void dumpedges_ps()
+void dumpedges_ps(bool colorfibaster)
 {vector<edge>::iterator i;
  int n;
  for (i=edgelist.begin(),n=0;i!=edgelist.end();i++,n++)
-     line(*i,n);
+     line(*i,n,colorfibaster);
  }
 
 void dumphull_ps()
@@ -201,7 +201,7 @@ bool goodcenter(xy a,xy b,xy c,xy d)
  return n>1;
  }
 
-void maketin(string filename)
+void maketin(string filename,bool colorfibaster)
 /* Makes a triangulated irregular network. If <3 points, throws notri without altering
    the existing TIN. If two points are equal, or close enough to likely cause problems,
    throws samepnts; the TIN is partially constructed and will have to be destroyed.
@@ -408,7 +408,7 @@ void maketin(string filename)
            //dumphull();
            dot(startpnt);
            dumphull_ps();
-           dumpedges_ps();
+           dumpedges_ps(colorfibaster);
            endpage();*/
            //dumpedges();
            }
@@ -416,7 +416,7 @@ void maketin(string filename)
  if (filename.length())
  {
    startpage();
-   dumpedges_ps();
+   dumpedges_ps(colorfibaster);
    dot(startpnt);
    endpage();
  }
@@ -440,7 +440,7 @@ void maketin(string filename)
              //debugdel=0;
              if (n>680 && n<680)
                 {startpage();
-                 dumpedges_ps();
+                 dumpedges_ps(colorfibaster);
                  endpage();
                  }
              //debugdel=1;
@@ -449,7 +449,7 @@ void maketin(string filename)
      if (filename.length())
      {
        startpage();
-       dumpedges_ps();
+       dumpedges_ps(colorfibaster);
        endpage();
      }
      //debugdel=1;
@@ -459,7 +459,7 @@ void maketin(string filename)
  if (filename.length())
  {
    startpage();
-   dumpedges_ps();
+   dumpedges_ps(colorfibaster);
    dot(startpnt);
    endpage();
    pstrailer();

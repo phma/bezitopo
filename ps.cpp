@@ -13,6 +13,7 @@
 #include <cstring>
 #include "point.h"
 #include "tin.h"
+#include "pointlist.h"
 
 FILE *psfile;
 int pages;
@@ -106,16 +107,46 @@ void dot(xy pnt)
         xscale(pnt.east()),yscale(pnt.north()));
  }
 
-void line(edge lin,int num)
-{xy mid;
- if (lin.delaunay())
-    fputs("0 0 1 setrgbcolor\n",psfile);
- else
-    fputs("0 0 0 setrgbcolor\n",psfile);
- fprintf(psfile,"%7.3f %7.3f %7.3f %7.3f -\n",
-        xscale(lin.a->east()),yscale(lin.a->north()),xscale(lin.b->east()),yscale(lin.b->north()));
- mid=((xy)*lin.a+*lin.b)/2;
- //fprintf(psfile,"%7.3f %7.3f moveto (%d) show\n",xscale(mid.east()),yscale(mid.north()),num);
+int fibmod3(int n)
+{
+  int i,a,b;
+  for (i=a=0,b=1;a<n;i++)
+  {
+    b+=a;
+    a=b-a;
+  }
+  return (a==n)?(i%3):-1;
+}
+
+void line(edge lin,int num,bool colorfibaster)
+{
+  xy mid;
+  char *rgb;
+  if (lin.delaunay())
+    if (colorfibaster)
+      switch (fibmod3(abs(topopoints.revpoints[lin.a]-topopoints.revpoints[lin.b])))
+      {
+	case -1:
+	  rgb=".3 .3 .3";
+	  break;
+	case 0:
+	  rgb="1 .3 .3";
+	  break;
+	case 1:
+	  rgb="0 1 0";
+	  break;
+	case 2:
+	  rgb=".3 .3 1";
+	  break;
+      }
+    else
+      rgb="0 0 1";
+  else
+    rgb="0 0 0";
+  fprintf(psfile,"%s setrgbcolor %7.3f %7.3f %7.3f %7.3f -\n",
+          rgb,xscale(lin.a->east()),yscale(lin.a->north()),xscale(lin.b->east()),yscale(lin.b->north()));
+  mid=((xy)*lin.a+*lin.b)/2;
+  //fprintf(psfile,"%7.3f %7.3f moveto (%d) show\n",xscale(mid.east()),yscale(mid.north()),num);
  }
 
 void line2p(xy pnt1,xy pnt2)

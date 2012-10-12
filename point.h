@@ -92,5 +92,6 @@ class point: public xyz
  edge *line; // a line incident on this point in the TIN. Used to arrange the lines in order around their endpoints.
  public:
  xy newgradient,gradient,oldgradient; // may be redone later, but for now a point has one gradient, and type 0 breaklines merely force edges to be in the TIN.
+ int valence();
  };
 #endif

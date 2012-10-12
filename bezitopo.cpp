@@ -21,6 +21,7 @@
 #include "angle.h"
 #include "pointlist.h"
 #include "vcurve.h"
+#include "ps.h"
 
 using namespace std;
 

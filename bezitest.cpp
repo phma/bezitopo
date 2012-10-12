@@ -244,11 +244,34 @@ void testmaketinaster()
   int i;
   topopoints.clear();
   aster(100);
-  maketin("aster.ps");
+  maketin("aster.ps",true);
   assert(edgelist.size()==284);
   for (totallength=i=0;i<edgelist.size();i++)
     totallength+=edgelist[i].length();
   assert(fabs(totallength-600.689)<0.001);
+}
+
+void testmaketinbigaster()
+{
+  double totallength;
+  int i;
+  topopoints.clear();
+  aster(5972);
+  maketin("bigaster.ps",true);
+  //assert(edgelist.size()==284);
+  for (totallength=i=0;i<edgelist.size();i++)
+    totallength+=edgelist[i].length();
+  //dumppointsvalence();
+  //assert(fabs(totallength-600.689)<0.001);
+  /* Flip zones:
+   * 34-46 55-67
+   * 102-122 136-156
+   * 290-323 345-378
+   * 801-855 890-944
+   * 2166-2254 2310-2398
+   * 5784-5927 6017-6160
+   * 15328-15390 15561-?
+   */
 }
 
 void testmaketinlozenge()
@@ -469,16 +492,22 @@ void testspiral()
   printf("Maximum useful t of spiral is %f\n",sqrt(t+M_PI/2));
 }
 
-int main(int argc, char *argv[])
+void testarea3()
 {
   int i,j,itype;
   xy a(0,0),b(4,0),c(0,3),d(4,4),e;
   assert(area3(c,a,b)==6);
+}
+
+int main(int argc, char *argv[])
+{
+  testarea3();
   testintersection();
   testcopytopopoints();
   testinvalidintersectionlozenge();
   testinvalidintersectionaster();
   testmaketinaster();
+  testmaketinbigaster();
   testmaketinlozenge();
   testmaketinring();
   testmaketinellipse();

@@ -27,6 +27,7 @@
    */
 
 void dumppoints();
+void dumppointsvalence();
 void aster(int n);
 void ring(int n);
 void ellipse(int n);
