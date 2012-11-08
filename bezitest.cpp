@@ -238,6 +238,47 @@ void testinvalidintersectionaster()
   cout<<endl;
 }
 
+void testmaketin123()
+{
+  int i;
+  topopoints.clear();
+  aster(1);
+  i=0;
+  try
+  {
+    maketin();
+  }
+  catch(int e)
+  {
+    i=e;
+  }
+  assert(i==notri);
+  topopoints.clear();
+  aster(2);
+  i=0;
+  try
+  {
+    maketin();
+  }
+  catch(int e)
+  {
+    i=e;
+  }
+  assert(i==notri);
+  topopoints.clear();
+  aster(3);
+  i=0;
+  try
+  {
+    maketin();
+  }
+  catch(int e)
+  {
+    i=e;
+  }
+  assert(i==0);
+}
+
 void testmaketinaster()
 {
   double totallength;
@@ -506,6 +547,7 @@ int main(int argc, char *argv[])
   testcopytopopoints();
   testinvalidintersectionlozenge();
   testinvalidintersectionaster();
+  testmaketin123();
   testmaketinaster();
   testmaketinbigaster();
   testmaketinlozenge();
