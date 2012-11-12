@@ -14,6 +14,7 @@
 #include "point.h"
 #include "tin.h"
 #include "pointlist.h"
+#include "plot.h"
 
 FILE *psfile;
 int pages;

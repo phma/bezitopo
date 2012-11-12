@@ -1,11 +1,11 @@
 project(bezitopo)
 cmake_minimum_required(VERSION 2.8)
 add_executable(bezitopo angle.cpp arc.cpp bezier.cpp bezitopo.cpp
-               cogo.cpp contour.cpp measure.cpp pnezd.cpp point.cpp
+               cogo.cpp contour.cpp measure.cpp plot.cpp pnezd.cpp point.cpp
                pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
                spiral.cpp test.cpp segment.cpp tin.cpp vcurve.cpp)
 add_executable(bezitest angle.cpp arc.cpp bezier.cpp bezitest.cpp
-               cogo.cpp contour.cpp measure.cpp pnezd.cpp point.cpp
+               cogo.cpp contour.cpp measure.cpp plot.cpp pnezd.cpp point.cpp
                pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
                spiral.cpp test.cpp segment.cpp tin.cpp vcurve.cpp)
 
