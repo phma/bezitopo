@@ -315,6 +315,39 @@ void testmaketinbigaster()
    */
 }
 
+void testmaketinstraightrow()
+{
+  double totallength;
+  int i;
+  topopoints.clear();
+  straightrow(100);
+  rotate(30);
+  try
+  {
+    maketin();
+  }
+  catch(int e)
+  {
+    i=e;
+  }
+  assert(i==flattri);
+}
+
+void testmaketinlongandthin()
+{
+  double totallength;
+  int i;
+  topopoints.clear();
+  longandthin(100);
+  rotate(30);
+  maketin("longandthin.ps");
+  assert(edgelist.size()==197);
+  for (totallength=i=0;i<edgelist.size();i++)
+    totallength+=edgelist[i].length();
+  printf("longandthin %ld edges total length %f\n",edgelist.size(),totallength);
+  assert(fabs(totallength-123.499)<0.001);
+}
+
 void testmaketinlozenge()
 {
   double totallength;
@@ -550,6 +583,8 @@ int main(int argc, char *argv[])
   testmaketin123();
   testmaketinaster();
   testmaketinbigaster();
+  testmaketinstraightrow();
+  testmaketinlongandthin();
   testmaketinlozenge();
   testmaketinring();
   testmaketinellipse();

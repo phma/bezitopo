@@ -53,6 +53,7 @@ class samepoints: public exception
 */
 #define notri 1
 #define samepnts 2
-#endif
+#define flattri 3
 
 void maketin(string filename="",bool colorfibaster=false);
+#endif

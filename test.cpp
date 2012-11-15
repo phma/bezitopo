@@ -48,45 +48,62 @@ void aster(int n)
       }
  }
 
+void _ellipse(int n,double skewness)
+/* Skewness is not eccentricity. When skewness=0.01, eccentricity=0.14072. */
+{
+  int i;
+  double angle=(sqrt(5)-1)*M_PI;
+  xy pnt;
+  for (i=0;i<n;i++)
+  {
+    pnt=xy(cos(angle*i)*sqrt(n+0.5)*(1-skewness),sin(angle*i)*sqrt(n+0.5)*(1+skewness));
+    topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+  }
+}
+
 void ring(int n)
 /* Points in a circle, for most ambiguous case of the Delaunay algorithm.
  * The number of different ways to make the TIN is a Catalan number.
  */
-{int i;
- double angle=(sqrt(5)-1)*M_PI;
- xy pnt;
- for (i=0;i<n;i++)
-     {pnt=xy(cos(angle*i)*sqrt(n+0.5),sin(angle*i)*sqrt(n+0.5));
-      topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
-      }
- }
+{
+  _ellipse(n,0);
+}
 
 void ellipse(int n)
 /* Points in an ellipse, for worst case of the Delaunay algorithm. */
-{int i;
- double angle=(sqrt(5)-1)*M_PI;
- xy pnt;
- for (i=0;i<n;i++)
-     {pnt=xy(cos(angle*i)*sqrt(n+0.5)*0.99,sin(angle*i)*sqrt(n+0.5)*1.01);
-      topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
-      }
- }
+{
+  _ellipse(n,0.01);
+}
+
+void longandthin(int n)
+{
+  _ellipse(n,0.999);
+}
+
+void straightrow(int n)
+// Add points in a straight line.
+{
+  int i;
+  double angle;
+  xy pnt;
+  for (i=0;i<n;i++)
+  {
+    angle=(2.0*i/(n-1)-1)*M_PI/6;
+    pnt=xy(0,sqrt(n)*tan(angle));
+    topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+  }
+}
 
 void lozenge(int n)
 // Add points on the short diagonal of a rhombus, then add the two other points.
-{int i;
- double angle;
- xy pnt;
- for (i=0;i<n;i++)
-     {angle=(2.0*i/(n-1)-1)*M_PI/6;
-      pnt=xy(0,sqrt(n)*tan(angle));
-      topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
-      }
- pnt=xy(-sqrt(n),0);
- topopoints.addpoint(n+1,point(pnt,testsurface(pnt),"test"));
- pnt=xy(sqrt(n),0);
- topopoints.addpoint(n+2,point(pnt,testsurface(pnt),"test"));
- }
+{
+  xy pnt;
+  straightrow(n);
+  pnt=xy(-sqrt(n),0);
+  topopoints.addpoint(n+1,point(pnt,testsurface(pnt),"test"));
+  pnt=xy(sqrt(n),0);
+  topopoints.addpoint(n+2,point(pnt,testsurface(pnt),"test"));
+}
 
 void rotate(int n)
 {int i;

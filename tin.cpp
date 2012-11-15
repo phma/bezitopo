@@ -251,8 +251,14 @@ void maketin(string filename,bool colorfibaster)
                 }
            //printf("m=%d startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
            if (m>0 && goodcenter(startpnt,A,B,C))
-              break;
-           startpnt=rand2p(startpnt,farthest);
+	   {
+	     printf("m=%d found good center\n",m);
+             break;
+	   }
+           if (m&4)
+	     startpnt=rand2p(startpnt,farthest);
+	   else
+	     startpnt=rand2p(startpnt,C);
            }
       // The point (-7.8578111411563043,-4.6782453265676276) came up in a run and caused the program to crash.
       //startpnt=xy(-7.8578111411563043,-4.6782453265676276);
@@ -398,9 +404,10 @@ void maketin(string filename,bool colorfibaster)
                if (edgelist[n].nexta==NULL)
                   fail=true;
            if (fail)
-              {dumpedges();
-               break;
-               }
+	   {
+	     //dumpedges();
+             break;
+           }
            //dumpedges();
            j->second->line=&edgelist[edgeoff];
            visible[val-1]->line=&edgelist[edgeoff+val-1];
@@ -413,6 +420,8 @@ void maketin(string filename,bool colorfibaster)
            //dumpedges();
            }
       }
+ if (fail)
+   throw flattri; // Failing to make a proper TIN, after trying a hundred start points, normally means that all triangles are flat.
  if (filename.length())
  {
    startpage();

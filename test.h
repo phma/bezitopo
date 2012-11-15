@@ -8,12 +8,13 @@
    1. Asteraceous pattern. r=sqrt(n+0.5), θ=2πφn.
    2. Square root spiral.
    3. Square lattice.
-   4. All points except two lie on one line; the last two are on opposite sides
+   4. A row of points on one line.
+   5. All points except two lie on one line; the last two are on opposite sides
       of the line. This tests that the triangulator works properly when it cannot
       make any triangles until the last two points.
-   5. Hexagonal lattice. The Delaunay triangulation is ambiguous.
-   6. Points on a circle. Ditto.
-   7. Points on a slightly eccentric ellipse. This usually takes O(n²) flips.
+   6. Hexagonal lattice. The Delaunay triangulation is ambiguous.
+   7. Points on a circle. Ditto.
+   8. Points on a slightly eccentric ellipse. This usually takes O(n²) flips.
    Test operations:
    1. Rotate points by (0.6,0.8) n times. This introduces LSB errors
       to test numerical stability.
@@ -31,6 +32,8 @@ void dumppointsvalence();
 void aster(int n);
 void ring(int n);
 void ellipse(int n);
+void longandthin(int n);
+void straightrow(int n);
 void lozenge(int n);
 void rotate(int n);
 void movesideways(double sw);
