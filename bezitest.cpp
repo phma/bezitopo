@@ -29,6 +29,9 @@
 #include "random.h"
 #include "ps.h"
 
+#define psoutput false
+// affects only maketin
+
 using namespace std;
 
 void testintegertrig()
@@ -285,7 +288,7 @@ void testmaketinaster()
   int i;
   topopoints.clear();
   aster(100);
-  maketin("aster.ps",true);
+  maketin(psoutput?"aster.ps":"",true);
   assert(edgelist.size()==284);
   for (totallength=i=0;i<edgelist.size();i++)
     totallength+=edgelist[i].length();
@@ -298,7 +301,7 @@ void testmaketinbigaster()
   int i;
   topopoints.clear();
   aster(5972);
-  maketin("bigaster.ps",true);
+  maketin(psoutput?"bigaster.ps":"",true);
   //assert(edgelist.size()==284);
   for (totallength=i=0;i<edgelist.size();i++)
     totallength+=edgelist[i].length();
@@ -340,7 +343,7 @@ void testmaketinlongandthin()
   topopoints.clear();
   longandthin(100);
   rotate(30);
-  maketin("longandthin.ps");
+  maketin(psoutput?"longandthin.ps":"");
   assert(edgelist.size()==197);
   for (totallength=i=0;i<edgelist.size();i++)
     totallength+=edgelist[i].length();
@@ -355,7 +358,7 @@ void testmaketinlozenge()
   topopoints.clear();
   lozenge(100);
   rotate(30);
-  maketin("lozenge.ps");
+  maketin(psoutput?"lozenge.ps":"");
   assert(edgelist.size()==299);
   for (totallength=i=0;i<edgelist.size();i++)
     totallength+=edgelist[i].length();
@@ -370,7 +373,7 @@ void testmaketinring()
   topopoints.clear();
   ring(100);
   rotate(30);
-  maketin("ring.ps");
+  maketin(psoutput?"ring.ps":"");
   assert(edgelist.size()==197);
   for (totallength=i=0;i<edgelist.size();i++)
     totallength+=edgelist[i].length();
@@ -384,7 +387,7 @@ void testmaketinellipse()
   int i;
   topopoints.clear();
   ellipse(100);
-  maketin("ellipse.ps");
+  maketin(psoutput?"ellipse.ps":"");
   assert(edgelist.size()==197);
   for (totallength=i=0;i<edgelist.size();i++)
     totallength+=edgelist[i].length();
@@ -582,7 +585,7 @@ int main(int argc, char *argv[])
   testinvalidintersectionaster();
   testmaketin123();
   testmaketinaster();
-  testmaketinbigaster();
+  //testmaketinbigaster();
   testmaketinstraightrow();
   testmaketinlongandthin();
   testmaketinlozenge();

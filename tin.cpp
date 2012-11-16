@@ -252,7 +252,7 @@ void maketin(string filename,bool colorfibaster)
            //printf("m=%d startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
            if (m>0 && goodcenter(startpnt,A,B,C))
 	   {
-	     printf("m=%d found good center\n",m);
+	     //printf("m=%d found good center\n",m);
              break;
 	   }
            if (m&4)
