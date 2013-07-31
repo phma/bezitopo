@@ -7,6 +7,9 @@
 #ifndef BEZIER_H
 #define BEZIER_H
 #include "cogo.h"
+#define M_SQRT_3_4 0.86602540378443864676372317
+#define M_SQRT_3 1.73205080756887729352744634
+#define M_SQRT_1_3 0.5773502691896257645091487805
 
 class triangle
 /* A triangle has three corners and seven other control points, arranged as follows:
@@ -32,17 +35,19 @@ class triangle
    
    Point 3 is not stored, but is computed from the other control points.
    */
-{public:
- point *a,*b,*c; //corners
- double ctrl[7]; //There are 10 control points; the corners are three, and these are the elevations of the others.
- triangle *aneigh,*bneigh,*cneigh;
- double elevation(xy pnt);
- //xy gradient(xy pnt);
- bool in(xy pnt);
- triangle *nexttoward(xy pnt);
- double area();
- xy centroid();
- //void setctrl(bool flat);
- };
+{
+public:
+  point *a,*b,*c; //corners
+  double ctrl[7]; //There are 10 control points; the corners are three, and these are the elevations of the others.
+  triangle *aneigh,*bneigh,*cneigh;
+  double elevation(xy pnt);
+  //xy gradient(xy pnt);
+  bool in(xy pnt);
+  triangle *nexttoward(xy pnt);
+  double area();
+  xy centroid();
+  void setcentercp();
+  //void setctrl(bool flat);
+};
 
 #endif

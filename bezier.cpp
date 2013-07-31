@@ -31,6 +31,11 @@ xy triangle::centroid()
 {return (xy(*a)+xy(*b)+xy(*c))/3; //FIXME: check if this affects numerical stability
  }
 
+void triangle::setcentercp()
+{
+  ctrl[3]=((ctrl[0]+ctrl[1]+ctrl[2]+ctrl[4]+ctrl[5]+ctrl[6])*3-(a->z+b->z+c->z)*2)/12;
+}
+
 triangle *triangle::nexttoward(xy pnt)
 // If the point is in the triangle, return the same triangle.
 // Else return which triangle to look in next.

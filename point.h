@@ -57,6 +57,10 @@ class xyz
  double east();
  double north();
  double elev();
+ void setelev(double h)
+ {
+   z=h;
+ }
  friend class xy;
  friend class triangle;
  friend double dist(xyz a,xyz b);

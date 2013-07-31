@@ -16,6 +16,7 @@
 #include "point.h"
 #include "cogo.h"
 #include "bezitopo.h"
+#include "bezier.h"
 #include "test.h"
 #include "tin.h"
 #include "measure.h"
@@ -576,10 +577,65 @@ void testarea3()
   assert(area3(c,a,b)==6);
 }
 
+void testtriangle()
+{
+  int i;
+  triangle tri;
+  double elev,elevd,elevg,eleva;
+  xy o(0,0),a(1,0),d(-0.5,0),g(0.5,0);
+  surveypoints.clear();
+  // Start with an identically 0 surface. The elevation at the center should be 0.
+  surveypoints.addpoint(1,point(1,0,0,"eip"));
+  surveypoints.addpoint(1,point(-0.5,M_SQRT_3_4,0,"eip"));
+  surveypoints.addpoint(1,point(-0.5,-M_SQRT_3_4,0,"eip"));
+  tri.a=&surveypoints.points[1];
+  tri.b=&surveypoints.points[2];
+  tri.c=&surveypoints.points[3];
+  for (i=0;i<7;i++)
+    tri.ctrl[i]=0;
+  elev=tri.elevation(o);
+  printf("elevation=%f\n",elev);
+  assert(elev==0);
+  // Now make a constant surface at elevation 1.
+  surveypoints.points[1].setelev(1);
+  surveypoints.points[2].setelev(1);
+  surveypoints.points[3].setelev(1);
+  for (i=0;i<7;i++)
+    tri.ctrl[i]=1;
+  elev=tri.elevation(o);
+  printf("elevation=%f\n",elev);
+  assert(elev==1);
+  // Now make a linear surface.
+  surveypoints.points[1].setelev(1);
+  surveypoints.points[2].setelev(0);
+  surveypoints.points[3].setelev(0);
+  tri.ctrl[0]=tri.ctrl[1]=2/3.;
+  tri.ctrl[2]=tri.ctrl[4]=1/3.;
+  tri.ctrl[5]=tri.ctrl[6]=0;
+  tri.setcentercp();
+  elev=tri.elevation(o);
+  printf("ctrl[3]=%f elevation=%f\n",tri.ctrl[3],elev);
+  assert(elev*3-1<1e-7);
+  // Now make a quadratic surface. It is a paraboloid z=r². Check that the cubic component is 0.
+  surveypoints.points[1].setelev(1);
+  surveypoints.points[2].setelev(1);
+  surveypoints.points[3].setelev(1);
+  for (i=0;i<7;i++)
+    tri.ctrl[i]=0;
+  tri.setcentercp();
+  elev=tri.elevation(o);
+  elevd=tri.elevation(d);
+  elevg=tri.elevation(g);
+  eleva=tri.elevation(a);
+  printf("ctrl[3]=%f elevation=%f %f %f %f\n",tri.ctrl[3],elevd,elev,elevg,eleva);
+  assert(elevd-elev*3+elevg*3-eleva<1e-7);
+}
+
 int main(int argc, char *argv[])
 {
   testarea3();
   testintersection();
+  testtriangle();
   testcopytopopoints();
   testinvalidintersectionlozenge();
   testinvalidintersectionaster();
