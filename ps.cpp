@@ -11,6 +11,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
+#include <unistd.h>
 #include "point.h"
 #include "tin.h"
 #include "pointlist.h"
