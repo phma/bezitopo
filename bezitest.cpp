@@ -27,6 +27,7 @@
 #include "segment.h"
 #include "arc.h"
 #include "spiral.h"
+#include "qindex.h"
 #include "random.h"
 #include "ps.h"
 
@@ -631,6 +632,18 @@ void testtriangle()
   assert(elevd-elev*3+elevg*3-eleva<1e-7);
 }
 
+void testqindex()
+{
+  qindex qinx;
+  vector<xy> plist;
+  plist.push_back(xy(0.3,0.3));
+  plist.push_back(xy(0.6,0.8));
+  plist.push_back(xy(0.8,0.6));
+  qinx.sizefit(plist);
+  printf("side=%f x=%f y=%f\n",qinx.side,qinx.x,qinx.y);
+  assert(qinx.side==1);
+}
+
 int main(int argc, char *argv[])
 {
   testarea3();
@@ -652,6 +665,7 @@ int main(int argc, char *argv[])
   testsegment();
   testarc();
   testspiral();
+  testqindex();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }

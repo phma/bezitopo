@@ -4,6 +4,7 @@
 /*                                                    */
 /******************************************************/
 
+#include <cmath>
 #include "qindex.h"
 
 /* The index enables quickly finding a triangle containing a given point.
@@ -27,6 +28,7 @@
    leaf square the triangle containing its center, proceeding in
    Hilbert-curve order.
    */
+using namespace std;
 
 xy qindex::middle()
 {return xy(x+side/2,y+side/2);
@@ -48,3 +50,38 @@ triangle *qindex::findt(xy pnt)
  else 
     return sub[i]->findt(pnt);
  }
+
+void qindex::sizefit(vector<xy> pnts)
+/* Computes size, x, and y such that size is a power of 2, x and y are multiples
+ * of size/16, and all points are in the resulting square.
+ */
+{
+  double minx=HUGE_VAL,miny=HUGE_VAL,maxx=-HUGE_VAL,maxy=-HUGE_VAL;
+  int i;
+  for (i=0;i<pnts.size();i++)
+  {
+    if (pnts[i].east()>maxx)
+      maxx=pnts[i].east();
+    if (pnts[i].east()<minx)
+      minx=pnts[i].east();
+    if (pnts[i].north()>maxy)
+      maxy=pnts[i].north();
+    if (pnts[i].north()<miny)
+      miny=pnts[i].north();
+  }
+  if (maxy<=miny && maxx<=minx)
+    side=0;
+  else
+  {
+    side=(maxx+maxy-minx-miny)/2;
+    side/=significand(side);
+    x=minx-side;
+    y=miny-side;
+    while (x+side<maxx || y+side<maxy)
+    {
+      side*=2;
+      x=floor(minx/side*16)*side/16;
+      y=floor(miny/side*16)*side/16;
+    }
+  }
+}
