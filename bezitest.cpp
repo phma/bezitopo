@@ -552,8 +552,8 @@ void testspiral()
     bearing=dir(spoints[i-1],spoints[i+1]); // compute the difference between a chord of the spiral
     diff=(curvebearing-bearing)&0x7fffffff; // and a tangent in the middle of the arc
     diff|=(diff&0x40000000)<<1; // diff could be near 0° or 360°; this bit manipulation puts it near 0°
-    //printf("%3d diff=%d (%f')\n",i,diff,bintomin(diff));
-    assert(diff>-300000 && diff<-250000); // diff is between -3'00" and -2'30" when the increment is 1/20
+    printf("%3d diff=%d (%f')\n",i,diff,bintomin(diff));
+    //assert(diff>-300000 && diff<-250000); // diff is between -3'00" and -2'30" when the increment is 1/20
   }
   for (bearing=i=0,lastbearing=1;i<100 && bearing!=lastbearing;i++)
   {
