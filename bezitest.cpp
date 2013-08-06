@@ -521,7 +521,7 @@ double sqr(double x)
 void testspiral()
 {
   xy a,b,c,limitpoint;
-  int i,bearing,lastbearing,curvebearing,diff;
+  int i,bearing,lastbearing,curvebearing,diff,badcount;
   double t;
   vector<xy> spoints;
   a=cornu(0);
@@ -546,15 +546,27 @@ void testspiral()
       spoints.push_back(b);
     c=b;
   }
-  for (i=1;i<119;i++)
+  for (i=1,badcount=0;i<119;i++)
   {
     curvebearing=ispiralbearing(i/20.);
     bearing=dir(spoints[i-1],spoints[i+1]); // compute the difference between a chord of the spiral
     diff=(curvebearing-bearing)&0x7fffffff; // and a tangent in the middle of the arc
     diff|=(diff&0x40000000)<<1; // diff could be near 0° or 360°; this bit manipulation puts it near 0°
-    printf("%3d diff=%d (%f')\n",i,diff,bintomin(diff));
-    //assert(diff>-300000 && diff<-250000); // diff is between -3'00" and -2'30" when the increment is 1/20
+    //printf("%3d diff=%d (%f')\n",i,diff,bintomin(diff));
+    badcount+=(diff<=-300000 || diff>=-250000); // diff is between -3'00" and -2'30" when the increment is 1/20
   }
+  /* On i386 (Pentium), the last 12 bearings are off by up to 2°
+   * On x86_64 (both Intel Core and Intel Atom), they are all accurate.
+   * This is NOT explained by sizeof(long double), which is 12 bytes on i386
+   * and 16 bytes on x86_64; only 10 bytes are stored, and the rest is wasted.
+   * When computing cornu(-6), the fifth step is facpower*=36/5,
+   * where facpower is -419904 before and -3023308.8 after.
+   * On x86_64, facpower is 0xc014b887333333333333.
+   * On i386,   facpower is 0xc014b887333333333800.
+   * I checked this with 64-bit Linux, 64-bit DragonFly, and 32-bit DragonFly;
+   * it depends on the processor, not the operating system.
+   */
+  assert(badcount<=13);
   for (bearing=i=0,lastbearing=1;i<100 && bearing!=lastbearing;i++)
   {
     t=bintorad(bearing);
