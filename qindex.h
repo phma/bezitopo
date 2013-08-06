@@ -19,4 +19,7 @@ public:
   triangle *findt(xy pnt);
   xy middle();
   void sizefit(std::vector<xy> pnts);
+  void clear();
+  qindex();
+  ~qindex();
 };

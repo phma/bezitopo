@@ -566,6 +566,7 @@ void testspiral()
    * I checked this with 64-bit Linux, 64-bit DragonFly, and 32-bit DragonFly;
    * it depends on the processor, not the operating system.
    */
+  printf("%d bad bearings out of 118\n",badcount);
   assert(badcount<=13);
   for (bearing=i=0,lastbearing=1;i<100 && bearing!=lastbearing;i++)
   {
@@ -654,6 +655,7 @@ void testqindex()
   qinx.sizefit(plist);
   printf("side=%f x=%f y=%f\n",qinx.side,qinx.x,qinx.y);
   assert(qinx.side==1);
+  qinx.clear();
 }
 
 int main(int argc, char *argv[])

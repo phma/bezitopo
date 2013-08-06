@@ -30,6 +30,19 @@
    */
 using namespace std;
 
+qindex::qindex()
+{
+  int i;
+  x=y=side=0;
+  for (i=0;i<4;i++)
+    sub[i]=0;
+}
+
+qindex::~qindex()
+{
+  clear();
+}
+
 xy qindex::middle()
 {return xy(x+side/2,y+side/2);
  }
@@ -84,4 +97,15 @@ void qindex::sizefit(vector<xy> pnts)
       y=floor(miny/side*16)*side/16;
     }
   }
+}
+
+void qindex::clear()
+{
+  int i;
+  if (sub[3])
+    for (i=0;i<4;i++)
+    {
+      delete(sub[i]);
+      sub[i]=NULL;
+    }
 }
