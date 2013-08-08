@@ -251,7 +251,7 @@ void testmaketin123()
   i=0;
   try
   {
-    maketin();
+    topopoints.maketin();
   }
   catch(int e)
   {
@@ -263,7 +263,7 @@ void testmaketin123()
   i=0;
   try
   {
-    maketin();
+    topopoints.maketin();
   }
   catch(int e)
   {
@@ -275,7 +275,7 @@ void testmaketin123()
   i=0;
   try
   {
-    maketin();
+    topopoints.maketin();
   }
   catch(int e)
   {
@@ -290,10 +290,10 @@ void testmaketinaster()
   int i;
   topopoints.clear();
   aster(100);
-  maketin(psoutput?"aster.ps":"",true);
-  assert(edgelist.size()==284);
-  for (totallength=i=0;i<edgelist.size();i++)
-    totallength+=edgelist[i].length();
+  topopoints.maketin(psoutput?"aster.ps":"",true);
+  assert(topopoints.edgelist.size()==284);
+  for (totallength=i=0;i<topopoints.edgelist.size();i++)
+    totallength+=topopoints.edgelist[i].length();
   assert(fabs(totallength-600.689)<0.001);
 }
 
@@ -303,10 +303,10 @@ void testmaketinbigaster()
   int i;
   topopoints.clear();
   aster(5972);
-  maketin(psoutput?"bigaster.ps":"",true);
-  //assert(edgelist.size()==284);
-  for (totallength=i=0;i<edgelist.size();i++)
-    totallength+=edgelist[i].length();
+  topopoints.maketin(psoutput?"bigaster.ps":"",true);
+  //assert(topopoints.edgelist.size()==284);
+  for (totallength=i=0;i<topopoints.edgelist.size();i++)
+    totallength+=topopoints.edgelist[i].length();
   //dumppointsvalence();
   //assert(fabs(totallength-600.689)<0.001);
   /* Flip zones:
@@ -329,7 +329,7 @@ void testmaketinstraightrow()
   rotate(30);
   try
   {
-    maketin();
+    topopoints.maketin();
   }
   catch(int e)
   {
@@ -345,11 +345,11 @@ void testmaketinlongandthin()
   topopoints.clear();
   longandthin(100);
   rotate(30);
-  maketin(psoutput?"longandthin.ps":"");
-  assert(edgelist.size()==197);
-  for (totallength=i=0;i<edgelist.size();i++)
-    totallength+=edgelist[i].length();
-  printf("longandthin %ld edges total length %f\n",edgelist.size(),totallength);
+  topopoints.maketin(psoutput?"longandthin.ps":"");
+  assert(topopoints.edgelist.size()==197);
+  for (totallength=i=0;i<topopoints.edgelist.size();i++)
+    totallength+=topopoints.edgelist[i].length();
+  printf("longandthin %ld edges total length %f\n",topopoints.edgelist.size(),totallength);
   assert(fabs(totallength-123.499)<0.001);
 }
 
@@ -360,11 +360,11 @@ void testmaketinlozenge()
   topopoints.clear();
   lozenge(100);
   rotate(30);
-  maketin(psoutput?"lozenge.ps":"");
-  assert(edgelist.size()==299);
-  for (totallength=i=0;i<edgelist.size();i++)
-    totallength+=edgelist[i].length();
-  printf("lozenge %ld edges total length %f\n",edgelist.size(),totallength);
+  topopoints.maketin(psoutput?"lozenge.ps":"");
+  assert(topopoints.edgelist.size()==299);
+  for (totallength=i=0;i<topopoints.edgelist.size();i++)
+    totallength+=topopoints.edgelist[i].length();
+  printf("lozenge %ld edges total length %f\n",topopoints.edgelist.size(),totallength);
   assert(fabs(totallength-2111.8775)<0.001);
 }
 
@@ -375,10 +375,10 @@ void testmaketinring()
   topopoints.clear();
   ring(100);
   rotate(30);
-  maketin(psoutput?"ring.ps":"");
-  assert(edgelist.size()==197);
-  for (totallength=i=0;i<edgelist.size();i++)
-    totallength+=edgelist[i].length();
+  topopoints.maketin(psoutput?"ring.ps":"");
+  assert(topopoints.edgelist.size()==197);
+  for (totallength=i=0;i<topopoints.edgelist.size();i++)
+    totallength+=topopoints.edgelist[i].length();
   printf("ring edges total length %f\n",totallength);
   //Don't assert the total length. There are over 10^56 (2^189) right answers to that.
 }
@@ -389,10 +389,10 @@ void testmaketinellipse()
   int i;
   topopoints.clear();
   ellipse(100);
-  maketin(psoutput?"ellipse.ps":"");
-  assert(edgelist.size()==197);
-  for (totallength=i=0;i<edgelist.size();i++)
-    totallength+=edgelist[i].length();
+  topopoints.maketin(psoutput?"ellipse.ps":"");
+  assert(topopoints.edgelist.size()==197);
+  for (totallength=i=0;i<topopoints.edgelist.size();i++)
+    totallength+=topopoints.edgelist[i].length();
   printf("ellipse edges total length %f\n",totallength);
   assert(fabs(totallength-1329.4675)<0.001);
 }

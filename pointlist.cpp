@@ -4,7 +4,6 @@
 /*                                                    */
 /******************************************************/
 
-#include "point.h"
 #include "pointlist.h"
 
 using namespace std;

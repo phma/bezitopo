@@ -42,17 +42,17 @@ point* edge::otherend(point* end)
     return a;
  }
 
-void edge::dump()
-{printf("addr=%p a=%d b=%d nexta=%p nextb=%p\n",this,topopoints.revpoints[a],topopoints.revpoints[b],nexta,nextb);
+void edge::dump(pointlist *topopoints)
+{printf("addr=%p a=%d b=%d nexta=%p nextb=%p\n",this,topopoints->revpoints[a],topopoints->revpoints[b],nexta,nextb);
  }
 
-void edge::flip()
+void edge::flip(pointlist *topopoints)
 /* Given an edge which is a diagonal of a quadrilateral,
    sets it to the other diagonal.
    */
 {edge *temp1,*temp2;
  int i,size;
- size=topopoints.points.size();
+ size=topopoints->points.size();
  for (i=0;i<size && a->line->next(a)!=this;i++)
     a->line=a->line->next(a);
  assert(i<size); //If this assertion fails, the nexta and nextb pointers are messed up.
@@ -110,7 +110,6 @@ multimap<double,point*> convexhull;
 xy startpnt;
 multimap<double,point*> outward;
 // The points are ordered by their distance from the starting point.
-vector<edge> edgelist;
 
 void dumphull()
 {multimap<double,point*>::iterator i;
@@ -121,15 +120,15 @@ void dumphull()
  printf("end dump\n");
  }
 
-void dumpedges()
+void pointlist::dumpedges()
 {vector<edge>::iterator i;
  printf("dump edges:\n");
  for (i=edgelist.begin();i!=edgelist.end();i++)
-     i->dump();
+     i->dump(this);
  printf("end dump\n");
  }
 
-void dumpedges_ps(bool colorfibaster)
+void pointlist::dumpedges_ps(bool colorfibaster)
 {vector<edge>::iterator i;
  int n;
  for (i=edgelist.begin(),n=0;i!=edgelist.end();i++,n++)
@@ -201,7 +200,7 @@ bool goodcenter(xy a,xy b,xy c,xy d)
  return n>1;
  }
 
-void maketin(string filename,bool colorfibaster)
+void pointlist::maketin(string filename,bool colorfibaster)
 /* Makes a triangulated irregular network. If <3 points, throws notri without altering
    the existing TIN. If two points are equal, or close enough to likely cause problems,
    throws samepnts; the TIN is partially constructed and will have to be destroyed.
@@ -213,21 +212,21 @@ void maketin(string filename,bool colorfibaster)
  bool fail;
  double maxdist,mindist,idist,minx,miny,maxx,maxy;
  xy A,B,C,farthest;
- if (topopoints.points.size()<3)
+ if (points.size()<3)
     throw notri;
  startpnt=xy(0,0);
- for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+ for (i=points.begin();i!=points.end();i++)
      startpnt+=i->second;
- startpnt/=topopoints.points.size();
+ startpnt/=points.size();
  edgelist.clear();
- edgelist.reserve(maxedges=3*topopoints.points.size()-6); //must reserve space to avoid moving, since edges point to each other
+ edgelist.reserve(maxedges=3*points.size()-6); //must reserve space to avoid moving, since edges point to each other
  //FIXME: points will be added for min/max/saddle, and each point will add three more edges.
  //How many extrema can there be, given the number of shot points?
  //startpnt has to be
  //within or out the side of the triangle formed by the three nearest points.
  //In a 100-point asteraceous pattern, the centroid is out one corner, and
  //the first triangle is drawn negative, with point 0 connected wrong.
- startpnt=topopoints.points.begin()->second;
+ startpnt=points.begin()->second;
  if (filename.length())
  {
    psopen(filename.c_str());
@@ -238,7 +237,7 @@ void maketin(string filename,bool colorfibaster)
       convexhull.clear();
       for (m=0;m<100;m++)
           {outward.clear();
-           for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+           for (i=points.begin();i!=points.end();i++)
                outward.insert(ipoint(dist(startpnt,i->second),&i->second));
            for (j=outward.begin(),n=0;j!=outward.end();j++,n++)
                {if (n==0)
@@ -265,7 +264,7 @@ void maketin(string filename,bool colorfibaster)
       //printf("Took %d tries to choose startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
       miny=maxy=startpnt.north();
       minx=maxx=startpnt.east();
-      for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+      for (i=points.begin();i!=points.end();i++)
           {if (i->second.east()>maxx)
               maxx=i->second.east();
            if (i->second.east()<minx)
@@ -282,7 +281,7 @@ void maketin(string filename,bool colorfibaster)
         setcolor(0,0,1);
         dot(startpnt);
         setcolor(1,.5,0);
-        for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+        for (i=points.begin();i!=points.end();i++)
             dot(i->second);
         endpage();
       }
@@ -443,7 +442,7 @@ void maketin(string filename,bool colorfibaster)
  do {for (m=n=0;n<edgelist.size();n++)
          if (!edgelist[n].delaunay())
             {//printf("Flipping edge %d\n",n);
-             edgelist[n].flip();
+             edgelist[n].flip(&topopoints);
              m++;
              flipcount++;
              //debugdel=0;
@@ -463,7 +462,7 @@ void maketin(string filename,bool colorfibaster)
      }
      //debugdel=1;
      passcount++;
-     } while (m && passcount*3<=topopoints.points.size());
+     } while (m && passcount*3<=points.size());
  //printf("Total %d edges flipped in %d passes\n",flipcount,passcount);
  if (filename.length())
  {
@@ -476,7 +475,7 @@ void maketin(string filename,bool colorfibaster)
  }
  }
 
-void makegrad(double corr)
+void pointlist::makegrad(double corr)
 // Compute the gradient at each point.
 // corr is a correlation factor which is how much the slope
 // at one end of an edge affects the slope at the other.
@@ -486,10 +485,10 @@ void makegrad(double corr)
  double zdiff,zxtrap,zthere;
  xy gradthere,diff;
  double sum1,sumx,sumy,sumz,sumxx,sumxy,sumxz,sumzz,sumyy,sumyz;
- for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+ for (i=points.begin();i!=points.end();i++)
      i->second.gradient=xy(0,0);
  for (n=0;n<10;n++)
-     {for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+     {for (i=points.begin();i!=points.end();i++)
           {i->second.gradient=xy(0,0);
            sum1=sumx=sumy=sumz=sumxx=sumxy=sumxz=sumzz=sumyy=sumyz=0;
            for (m=0,e=i->second.line;m==0 || e!=i->second.line;m++,e=e->next(&i->second))
@@ -536,7 +535,7 @@ void makegrad(double corr)
            else
               fprintf(stderr,"Warning: point at address %p has no edges that don't cross breaklines\n",&i->second);
            }
-      for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+      for (i=points.begin();i!=points.end();i++)
           {i->second.oldgradient=i->second.gradient;
            i->second.gradient=i->second.newgradient;
            }

@@ -12,8 +12,10 @@
 #include <string>
 #include "cogo.h"
 #include "bezitopo.h"
+#include "pointlist.h"
 
 using std::exception;
+class pointlist;
 
 class edge
 {public:
@@ -25,17 +27,15 @@ class edge
     crosses the contour. Keep the flags set when you go to the next
     contour of the same elevation. When you go to the next elevation,
     clear the flags. */
- void flip();
+ void flip(pointlist *topopoints);
  point* otherend(point* end);
  edge* next(point* end);
  void setnext(point* end,edge* enext);
  bool isinterior();
  bool delaunay();
- void dump();
+ void dump(pointlist *topopoints);
  double length();
  };
-
-extern std::vector<edge> edgelist;
 
 typedef std::pair<double,point*> ipoint;
 /*
@@ -55,5 +55,5 @@ class samepoints: public exception
 #define samepnts 2
 #define flattri 3
 
-void maketin(string filename="",bool colorfibaster=false);
+//void maketin(string filename="",bool colorfibaster=false);
 #endif
