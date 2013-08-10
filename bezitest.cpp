@@ -648,6 +648,7 @@ void testtriangle()
 void testqindex()
 {
   qindex qinx;
+  int i,qs;
   vector<xy> plist;
   plist.push_back(xy(0.3,0.3));
   plist.push_back(xy(0.6,0.8));
@@ -656,6 +657,29 @@ void testqindex()
   printf("side=%f x=%f y=%f\n",qinx.side,qinx.x,qinx.y);
   assert(qinx.side==1);
   qinx.clear();
+  topopoints.clear();
+  plist.clear();
+  psopen("qindex.ps");
+  psprolog();
+  startpage();
+  setscale(-15,-15,15,15);
+  aster(100);
+  topopoints.maketin();
+  for (i=0;i<100;i++)
+  {
+    dot(topopoints.points[i+1]);
+    plist.push_back(topopoints.points[i+1]);
+  }
+  qinx.sizefit(plist);
+  qinx.split(plist);
+  printf("%d nodes\n",qs=qinx.size());
+  qinx.draw();
+  pstrailer();
+  psclose();
+  qs--;
+  qs=qs*3/4; // convert to number of leaves of the tree (undivided squares in the drawing)
+  qs++;
+  assert(qs>=100 && qs<=110);
 }
 
 int main(int argc, char *argv[])

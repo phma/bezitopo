@@ -17,9 +17,13 @@ public:
     triangle *tri;  // or tri alone is set, or they're all NULL.
   };
   triangle *findt(xy pnt);
+  int quarter(xy pnt);
   xy middle();
   void sizefit(std::vector<xy> pnts);
+  void split(std::vector<xy> pnts);
   void clear();
+  void draw(bool root=true);
   qindex();
   ~qindex();
+  int size(); // This returns the total number of nodes, which is 4n+1. The number of leaves is 3n+1.
 };
