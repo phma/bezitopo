@@ -650,6 +650,7 @@ void testqindex()
   qindex qinx;
   int i,qs;
   vector<xy> plist;
+  xy offset(16,8);
   plist.push_back(xy(0.3,0.3));
   plist.push_back(xy(0.6,0.8));
   plist.push_back(xy(0.8,0.6));
@@ -662,24 +663,26 @@ void testqindex()
   psopen("qindex.ps");
   psprolog();
   startpage();
-  setscale(-15,-15,15,15);
+  setscale(1,-7,31,23);
   aster(100);
   topopoints.maketin();
+  enlarge(pow(2,(rng.usrandom()-32767.5)/65536));
   for (i=0;i<100;i++)
   {
-    dot(topopoints.points[i+1]);
-    plist.push_back(topopoints.points[i+1]);
+    dot(topopoints.points[i+1]+offset);
+    plist.push_back(topopoints.points[i+1]+offset);
   }
   qinx.sizefit(plist);
   qinx.split(plist);
-  printf("%d nodes\n",qs=qinx.size());
-  qinx.draw();
-  pstrailer();
-  psclose();
+  printf("%d nodes, ",qs=qinx.size());
   qs--;
   qs=qs*3/4; // convert to number of leaves of the tree (undivided squares in the drawing)
   qs++;
-  assert(qs>=100 && qs<=110);
+  printf("%d leaves\n",qs);
+  qinx.draw();
+  pstrailer();
+  psclose();
+  assert(qs>=79 && qs<=130);
 }
 
 int main(int argc, char *argv[])

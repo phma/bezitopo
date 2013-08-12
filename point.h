@@ -84,6 +84,7 @@ class point: public xyz
  friend void maketin(string filename);
  friend void rotate(int n);
  friend void movesideways(double sw);
+ friend void enlarge(double sw);
  short flags;
  /* 0: a normal point from the input file
     1: a point resulting from merging several points

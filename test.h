@@ -37,3 +37,4 @@ void straightrow(int n);
 void lozenge(int n);
 void rotate(int n);
 void movesideways(double sw);
+void enlarge(double sc);

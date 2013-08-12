@@ -110,8 +110,8 @@ void qindex::sizefit(vector<xy> pnts)
     while (x+side<maxx || y+side<maxy)
     {
       side*=2;
-      x=floor(minx/side*16)*side/16;
-      y=floor(miny/side*16)*side/16;
+      x=(rint((minx+maxx)/side*8)-8)*side/16;
+      y=(rint((miny+maxy)/side*8)-8)*side/16;
     }
   }
 }

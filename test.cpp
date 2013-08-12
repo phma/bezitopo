@@ -126,3 +126,15 @@ void movesideways(double sw)
   for (j=topopoints.points.begin();j!=topopoints.points.end();j++)
     j->second.x+=sw;
 }
+
+void enlarge(double sc)
+{
+  int i;
+  double tmpx,tmpy;
+  map<int,point>::iterator j;
+  for (j=topopoints.points.begin();j!=topopoints.points.end();j++)
+  {
+    j->second.x*=sc;
+    j->second.y*=sc;
+  }
+}
