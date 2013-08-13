@@ -171,3 +171,33 @@ void qindex::draw(bool root)
     line2p(xy(x+side/2,y),xy(x+side/2,y+side));
   }
 }
+
+vector<qindex*> qindex::traverse(int dir)
+/* 0 0231 1002 569a
+ * 1 0132 0113 478b
+ * 2 3201 3220 32dc
+ * 3 3102 2331 01ef
+ */
+{
+  vector<qindex*> chain,subchain;
+  int i,j,subdirs[4],parts[4];
+  if (sub[3])
+  {
+    subdirs[0]=dir^1;
+    subdirs[1]=subdirs[2]=dir&3;
+    subdirs[3]=dir^2;
+    parts[0]=(dir&2)*3/2;
+    parts[1]=2-(dir&1);
+    parts[2]=3-parts[0];
+    parts[3]=3-parts[1];
+    for (i=0;i<4;i++)
+    {
+      subchain=sub[parts[i]]->traverse(subdirs[i]);
+      for (j=0;j<subchain.size();j++)
+	chain.push_back(subchain[j]);
+    }
+  }
+  else
+    chain.push_back(this);
+  return chain;
+}

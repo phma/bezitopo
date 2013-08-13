@@ -23,6 +23,7 @@ public:
   void split(std::vector<xy> pnts);
   void clear();
   void draw(bool root=true);
+  std::vector<qindex*> traverse(int dir=0);
   qindex();
   ~qindex();
   int size(); // This returns the total number of nodes, which is 4n+1. The number of leaves is 3n+1.

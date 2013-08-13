@@ -651,6 +651,8 @@ void testqindex()
   int i,qs,ntri;
   triangle *ptri;
   vector<xy> plist;
+  double pathlength;
+  vector<qindex*> hilbertpath;
   xy offset(16,8),bone1(3,4),bone2(-3,-4);
   plist.push_back(xy(0.3,0.3));
   plist.push_back(xy(0.6,0.8));
@@ -682,6 +684,20 @@ void testqindex()
   printf("%d leaves\n",qs);
   assert(qs>=79 && qs<=133);
   qinx.draw();
+  endpage();
+  startpage();
+  hilbertpath=qinx.traverse();
+  assert(hilbertpath.size()==qs);
+  setscale(1,-7,31,23);
+  qinx.draw();
+  setcolor(0,0,1);
+  for (i=1,pathlength=0;i<hilbertpath.size();i++)
+  {
+    line2p(hilbertpath[i-1]->middle(),hilbertpath[i]->middle());
+    pathlength+=dist(hilbertpath[i-1]->middle(),hilbertpath[i]->middle());
+  }
+  printf("pathlength %f\n",pathlength);
+  assert(pathlength>100 && pathlength<400);
   endpage();
   startpage();
   setscale(-15,-15,15,15);
