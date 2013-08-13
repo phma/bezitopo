@@ -10,7 +10,7 @@ void psprolog();
 void startpage();
 void endpage();
 void dot(xy pnt);
-void line(edge lin,int num,bool colorfibaster);
+void line(edge lin,int num,bool colorfibaster,bool directed=false);
 void pstrailer();
 void psopen(const char * psfname);
 void psclose();

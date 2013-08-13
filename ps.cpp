@@ -120,9 +120,9 @@ int fibmod3(int n)
   return (a==n)?(i%3):-1;
 }
 
-void line(edge lin,int num,bool colorfibaster)
+void line(edge lin,int num,bool colorfibaster,bool directed)
 {
-  xy mid;
+  xy mid,disp,base,ab1,ab2;
   char *rgb;
   if (lin.delaunay())
     if (colorfibaster)
@@ -145,8 +145,18 @@ void line(edge lin,int num,bool colorfibaster)
       rgb="0 0 1";
   else
     rgb="0 0 0";
-  fprintf(psfile,"%s setrgbcolor %7.3f %7.3f %7.3f %7.3f -\n",
-          rgb,xscale(lin.a->east()),yscale(lin.a->north()),xscale(lin.b->east()),yscale(lin.b->north()));
+  if (directed)
+  {
+    disp=xy(*lin.b)-xy(*lin.a);
+    base=xy(disp.north()/40,disp.east()/-40);
+    ab1=*lin.a+base;
+    ab2=*lin.a-base;
+    fprintf(psfile,"%s setrgbcolor newpath %7.3f %7.3f moveto %7.3f %7.3f lineto %7.3f %7.3f lineto closepath fill\n",
+	    rgb,xscale(lin.b->east()),yscale(lin.b->north()),xscale(ab1.east()),yscale(ab1.north()),xscale(ab2.east()),yscale(ab2.north()));
+  }
+  else
+    fprintf(psfile,"%s setrgbcolor %7.3f %7.3f %7.3f %7.3f -\n",
+            rgb,xscale(lin.a->east()),yscale(lin.a->north()),xscale(lin.b->east()),yscale(lin.b->north()));
   mid=((xy)*lin.a+*lin.b)/2;
   //fprintf(psfile,"%7.3f %7.3f moveto (%d) show\n",xscale(mid.east()),yscale(mid.north()),num);
  }

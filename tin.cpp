@@ -28,6 +28,13 @@ edge* edge::next(point* end)
     return nextb;
  }
 
+triangle* edge::tri(point* end)
+{if (end==a)
+    return tria;
+ else
+    return trib;
+ }
+
 void edge::setnext(point* end,edge* enext)
 {if (end==a)
     nexta=enext;
@@ -36,11 +43,18 @@ void edge::setnext(point* end,edge* enext)
  }
 
 point* edge::otherend(point* end)
-{if (end==a)
+{
+  assert(end==a || end==b);
+  if (end==a)
     return b;
- else
+  else
     return a;
- }
+}
+
+xy edge::midpoint()
+{
+  return (xy(*a)+xy(*b))/2;
+}
 
 void edge::dump(pointlist *topopoints)
 {printf("addr=%p a=%d b=%d nexta=%p nextb=%p\n",this,topopoints->revpoints[a],topopoints->revpoints[b],nexta,nextb);
@@ -123,7 +137,7 @@ void dumphull()
 void pointlist::dumpedges()
 {vector<edge>::iterator i;
  printf("dump edges:\n");
- for (i=edgelist.begin();i!=edgelist.end();i++)
+ for (i=edges.begin();i!=edges.end();i++)
      i->dump(this);
  printf("end dump\n");
  }
@@ -131,9 +145,22 @@ void pointlist::dumpedges()
 void pointlist::dumpedges_ps(bool colorfibaster)
 {vector<edge>::iterator i;
  int n;
- for (i=edgelist.begin(),n=0;i!=edgelist.end();i++,n++)
+ for (i=edges.begin(),n=0;i!=edges.end();i++,n++)
      line(*i,n,colorfibaster);
  }
+
+void pointlist::dumpnext_ps()
+{
+  vector<edge>::iterator i;
+  setcolor(0,0.7,0);
+  for (i=edges.begin();i!=edges.end();i++)
+  {
+    if (i->nexta)
+      line2p(i->midpoint(),i->nexta->midpoint());
+    if (i->nextb)
+      line2p(i->midpoint(),i->nextb->midpoint());
+  }
+}
 
 void dumphull_ps()
 {multimap<double,point*>::iterator i;
@@ -218,8 +245,8 @@ void pointlist::maketin(string filename,bool colorfibaster)
  for (i=points.begin();i!=points.end();i++)
      startpnt+=i->second;
  startpnt/=points.size();
- edgelist.clear();
- edgelist.reserve(maxedges=3*points.size()-6); //must reserve space to avoid moving, since edges point to each other
+ edges.clear();
+ edges.reserve(maxedges=3*points.size()-6); //must reserve space to avoid moving, since edges point to each other
  //FIXME: points will be added for min/max/saddle, and each point will add three more edges.
  //How many extrema can there be, given the number of shot points?
  //startpnt has to be
@@ -233,7 +260,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
    psprolog();
  }
  for (m2=0,fail=true;m2<100 && fail;m2++)
-     {edgelist.clear();
+     {edges.clear();
       convexhull.clear();
       for (m=0;m<100;m++)
           {outward.clear();
@@ -286,17 +313,17 @@ void pointlist::maketin(string filename,bool colorfibaster)
         endpage();
       }
       j=outward.begin();
-      //printf("edgelist %d\n",edgelist.size());
-      edgelist.resize(1);
-      edgelist[0].a=j->second;
-      j->second->line=&(edgelist[0]);
+      //printf("edges %d\n",edges.size());
+      edges.resize(1);
+      edges[0].a=j->second;
+      j->second->line=&(edges[0]);
       convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
       j++;
-      edgelist[0].b=j->second;
-      j->second->line=&(edgelist[0]);
-      edgelist[0].nexta=edgelist[0].nextb=&(edgelist[0]);
+      edges[0].b=j->second;
+      j->second->line=&(edges[0]);
+      edges[0].nexta=edges[0].nextb=&(edges[0]);
       convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
-      //printf("edgelist %d\n",edgelist.size());
+      //printf("edges %d\n",edges.size());
       /* Before:
          A-----B
          |    /|
@@ -308,9 +335,9 @@ void pointlist::maketin(string filename,bool colorfibaster)
          
                   E
          outward=(D,C,B,A,E)
-         edgelist=(DC,BD,BC,AB,AC)
+         edges=(DC,BD,BC,AB,AC)
          After:
-         edgelist=(DC,BD,BC,AB,AC,EC,ED,EB)
+         edges=(DC,BD,BC,AB,AC,EC,ED,EB)
          */
       for (j++;j!=outward.end();j++)
           {//printf("\nSTART LOOP\n");
@@ -373,15 +400,15 @@ void pointlist::maketin(string filename,bool colorfibaster)
               right=convexhull.begin();*/
            // Now make a list of the visible points. There are 3 on average.
            visible.clear();
-           edgeoff=edgelist.size();
+           edgeoff=edges.size();
            for (k=left,n=0,m=1;m;k++,n++,m++)
                {if (k==convexhull.end())
                    k=convexhull.begin();
                 if (k!=inspos) // skip the point just added - don't join it to itself
                    {visible.push_back(k->second);
-                    edgelist.resize(edgelist.size()+1);
-                    edgelist[edgelist.size()-1].a=j->second;
-                    edgelist[edgelist.size()-1].b=k->second;
+                    edges.resize(edges.size()+1);
+                    edges[edges.size()-1].a=j->second;
+                    edges[edges.size()-1].b=k->second;
                     //printf("Adding edge from %p to %p\n",j->second,k->second);
                     }
                 if (k==right || n==maxedges) m=-1;
@@ -395,12 +422,12 @@ void pointlist::maketin(string filename,bool colorfibaster)
            //dumppoints();
            //dumpedges();
            for (n=0;n<val;n++)
-               {edgelist[(n+1)%val+edgeoff].nexta=&edgelist[n+edgeoff];
-                edgelist[n+edgeoff].nextb=visible[n]->line->next(visible[n]);
-                visible[n]->line->setnext(visible[n],&edgelist[n+edgeoff]);
+               {edges[(n+1)%val+edgeoff].nexta=&edges[n+edgeoff];
+                edges[n+edgeoff].nextb=visible[n]->line->next(visible[n]);
+                visible[n]->line->setnext(visible[n],&edges[n+edgeoff]);
                 }
-           for (fail=false,n=edgeoff;n<edgelist.size();n++)
-               if (edgelist[n].nexta==NULL)
+           for (fail=false,n=edgeoff;n<edges.size();n++)
+               if (edges[n].nexta==NULL)
                   fail=true;
            if (fail)
 	   {
@@ -408,8 +435,8 @@ void pointlist::maketin(string filename,bool colorfibaster)
              break;
            }
            //dumpedges();
-           j->second->line=&edgelist[edgeoff];
-           visible[val-1]->line=&edgelist[edgeoff+val-1];
+           j->second->line=&edges[edgeoff];
+           visible[val-1]->line=&edges[edgeoff+val-1];
            /*startpage();
            //dumphull();
            dot(startpnt);
@@ -425,6 +452,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
  {
    startpage();
    dumpedges_ps(colorfibaster);
+   //dumpnext_ps();
    dot(startpnt);
    endpage();
  }
@@ -439,10 +467,10 @@ void pointlist::maketin(string filename,bool colorfibaster)
     280 passes for 1000 points. I think that a cap of 1 pass per 3 points is
     reasonable.
     */
- do {for (m=n=0;n<edgelist.size();n++)
-         if (!edgelist[n].delaunay())
+ do {for (m=n=0;n<edges.size();n++)
+         if (!edges[n].delaunay())
             {//printf("Flipping edge %d\n",n);
-             edgelist[n].flip(&topopoints);
+             edges[n].flip(&topopoints);
              m++;
              flipcount++;
              //debugdel=0;
@@ -458,6 +486,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
      {
        startpage();
        dumpedges_ps(colorfibaster);
+       //dumpnext_ps();
        endpage();
      }
      //debugdel=1;
@@ -541,3 +570,56 @@ void pointlist::makegrad(double corr)
            }
       }
  }
+
+void pointlist::maketriangles()
+{
+  int i,j;
+  point *a,*b,*c,*d;
+  edge *e;
+  triangle cib,*t;
+  triangles.clear();
+  triangles.reserve(edges.capacity()*3/2);
+  for (i=0;i<edges.size();i++)
+  {
+    a=edges[i].a;
+    b=edges[i].b;
+    e=edges[i].next(b);
+    c=e->otherend(b);
+    d=e->next(c)->otherend(c);
+    if (a<b && a<c && a==d)
+    {
+      cib.a=c;
+      cib.b=b;
+      cib.c=a;
+      triangles.push_back(cib);
+      edges[i].tria=&triangles[triangles.size()-1];
+    }
+    a=edges[i].b;
+    b=edges[i].a;
+    e=edges[i].next(b);
+    c=e->otherend(b);
+    d=e->next(c)->otherend(c);
+    if (a<b && a<c && a==d)
+    {
+      cib.a=c;
+      cib.b=b;
+      cib.c=a;
+      triangles.push_back(cib);
+      edges[i].trib=&triangles[triangles.size()-1];
+    }
+  }
+  for (i=0;i<edges.size()*2;i++)
+  {
+    j=i%edges.size();
+    if (!edges[j].tria)
+      edges[j].tria=edges[j].nextb->tri(edges[j].b);
+    if (!edges[j].trib)
+      edges[j].trib=edges[j].nexta->tri(edges[j].a);
+  }
+  for (i=0;i<edges.size();i++)
+    if (edges[i].tria && edges[i].trib)
+    {
+      edges[i].tria->setneighbor(edges[i].trib);
+      edges[i].trib->setneighbor(edges[i].tria);
+    }
+}

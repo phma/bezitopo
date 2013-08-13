@@ -290,10 +290,10 @@ void testmaketinaster()
   int i;
   topopoints.clear();
   aster(100);
-  topopoints.maketin(psoutput?"aster.ps":"",true);
-  assert(topopoints.edgelist.size()==284);
-  for (totallength=i=0;i<topopoints.edgelist.size();i++)
-    totallength+=topopoints.edgelist[i].length();
+  topopoints.maketin(psoutput?"aster.ps":"",false);
+  assert(topopoints.edges.size()==284);
+  for (totallength=i=0;i<topopoints.edges.size();i++)
+    totallength+=topopoints.edges[i].length();
   assert(fabs(totallength-600.689)<0.001);
 }
 
@@ -304,9 +304,9 @@ void testmaketinbigaster()
   topopoints.clear();
   aster(5972);
   topopoints.maketin(psoutput?"bigaster.ps":"",true);
-  //assert(topopoints.edgelist.size()==284);
-  for (totallength=i=0;i<topopoints.edgelist.size();i++)
-    totallength+=topopoints.edgelist[i].length();
+  //assert(topopoints.edges.size()==284);
+  for (totallength=i=0;i<topopoints.edges.size();i++)
+    totallength+=topopoints.edges[i].length();
   //dumppointsvalence();
   //assert(fabs(totallength-600.689)<0.001);
   /* Flip zones:
@@ -346,10 +346,10 @@ void testmaketinlongandthin()
   longandthin(100);
   rotate(30);
   topopoints.maketin(psoutput?"longandthin.ps":"");
-  assert(topopoints.edgelist.size()==197);
-  for (totallength=i=0;i<topopoints.edgelist.size();i++)
-    totallength+=topopoints.edgelist[i].length();
-  printf("longandthin %ld edges total length %f\n",topopoints.edgelist.size(),totallength);
+  assert(topopoints.edges.size()==197);
+  for (totallength=i=0;i<topopoints.edges.size();i++)
+    totallength+=topopoints.edges[i].length();
+  printf("longandthin %ld edges total length %f\n",topopoints.edges.size(),totallength);
   assert(fabs(totallength-123.499)<0.001);
 }
 
@@ -361,10 +361,10 @@ void testmaketinlozenge()
   lozenge(100);
   rotate(30);
   topopoints.maketin(psoutput?"lozenge.ps":"");
-  assert(topopoints.edgelist.size()==299);
-  for (totallength=i=0;i<topopoints.edgelist.size();i++)
-    totallength+=topopoints.edgelist[i].length();
-  printf("lozenge %ld edges total length %f\n",topopoints.edgelist.size(),totallength);
+  assert(topopoints.edges.size()==299);
+  for (totallength=i=0;i<topopoints.edges.size();i++)
+    totallength+=topopoints.edges[i].length();
+  printf("lozenge %ld edges total length %f\n",topopoints.edges.size(),totallength);
   assert(fabs(totallength-2111.8775)<0.001);
 }
 
@@ -376,9 +376,9 @@ void testmaketinring()
   ring(100);
   rotate(30);
   topopoints.maketin(psoutput?"ring.ps":"");
-  assert(topopoints.edgelist.size()==197);
-  for (totallength=i=0;i<topopoints.edgelist.size();i++)
-    totallength+=topopoints.edgelist[i].length();
+  assert(topopoints.edges.size()==197);
+  for (totallength=i=0;i<topopoints.edges.size();i++)
+    totallength+=topopoints.edges[i].length();
   printf("ring edges total length %f\n",totallength);
   //Don't assert the total length. There are over 10^56 (2^189) right answers to that.
 }
@@ -390,9 +390,9 @@ void testmaketinellipse()
   topopoints.clear();
   ellipse(100);
   topopoints.maketin(psoutput?"ellipse.ps":"");
-  assert(topopoints.edgelist.size()==197);
-  for (totallength=i=0;i<topopoints.edgelist.size();i++)
-    totallength+=topopoints.edgelist[i].length();
+  assert(topopoints.edges.size()==197);
+  for (totallength=i=0;i<topopoints.edges.size();i++)
+    totallength+=topopoints.edges[i].length();
   printf("ellipse edges total length %f\n",totallength);
   assert(fabs(totallength-1329.4675)<0.001);
 }
@@ -648,9 +648,10 @@ void testtriangle()
 void testqindex()
 {
   qindex qinx;
-  int i,qs;
+  int i,qs,ntri;
+  triangle *ptri;
   vector<xy> plist;
-  xy offset(16,8);
+  xy offset(16,8),bone1(3,4),bone2(-3,-4);
   plist.push_back(xy(0.3,0.3));
   plist.push_back(xy(0.6,0.8));
   plist.push_back(xy(0.8,0.6));
@@ -679,10 +680,46 @@ void testqindex()
   qs=qs*3/4; // convert to number of leaves of the tree (undivided squares in the drawing)
   qs++;
   printf("%d leaves\n",qs);
+  assert(qs>=79 && qs<=133);
   qinx.draw();
+  endpage();
+  startpage();
+  setscale(-15,-15,15,15);
+  topopoints.maketin();
+  topopoints.maketriangles();
+  for (i=ntri=0;i<topopoints.edges.size();i++)
+  {
+    ntri+=topopoints.edges[i].tria!=NULL;
+    ntri+=topopoints.edges[i].trib!=NULL;
+    line(topopoints.edges[i],i,false,true);
+    setcolor(0.6,0.4,0);
+    if (topopoints.edges[i].tria)
+      line2p(topopoints.edges[i].midpoint(),topopoints.edges[i].tria->centroid());
+    setcolor(0,0.4,0.6);
+    if (topopoints.edges[i].trib)
+      line2p(topopoints.edges[i].midpoint(),topopoints.edges[i].trib->centroid());
+  }
+  printf("%d edges ntri=%d\n",i,ntri);
+  assert(ntri>i/2);
+  setcolor(1,0,0);
+  for (i=0;i<topopoints.triangles.size();i++)
+  {
+    assert(topopoints.triangles[i].area()>0);
+    //printf("tri %d area %f\n",i,topopoints.triangles[i].area());
+    dot(topopoints.triangles[i].centroid());
+  }
+  printf("%d triangles\n",i);
+  assert(ntri==i*3); // ntri is the number of sides of edges which are linked to a triangle
+  endpage();
+  ptri=&topopoints.triangles[0];
+  ptri=ptri->findt(bone1);
+  assert(ptri->in(bone1));
+  assert(!ptri->in(bone2));
+  ptri=ptri->findt(bone2);
+  assert(ptri->in(bone2));
+  assert(!ptri->in(bone1));
   pstrailer();
   psclose();
-  assert(qs>=79 && qs<=130);
 }
 
 int main(int argc, char *argv[])
@@ -695,7 +732,7 @@ int main(int argc, char *argv[])
   testinvalidintersectionaster();
   testmaketin123();
   testmaketinaster();
-  //testmaketinbigaster();
+  testmaketinbigaster();
   testmaketinstraightrow();
   testmaketinlongandthin();
   testmaketinlozenge();

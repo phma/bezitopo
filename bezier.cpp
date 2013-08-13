@@ -36,6 +36,25 @@ void triangle::setcentercp()
   ctrl[3]=((ctrl[0]+ctrl[1]+ctrl[2]+ctrl[4]+ctrl[5]+ctrl[6])*3-(a->z+b->z+c->z)*2)/12;
 }
 
+bool triangle::iscorner(point *v)
+{
+  return (a==v)||(b==v)||(c==v);
+}
+
+void triangle::setneighbor(triangle *neigh)
+{
+  bool sha,shb,shc;
+  sha=neigh->iscorner(a);
+  shb=neigh->iscorner(b);
+  shc=neigh->iscorner(c);
+  if (sha&&shb)
+    cneigh=neigh;
+  if (shb&&shc)
+    aneigh=neigh;
+  if (shc&&sha)
+    bneigh=neigh;
+}
+
 triangle *triangle::nexttoward(xy pnt)
 // If the point is in the triangle, return the same triangle.
 // Else return which triangle to look in next.
@@ -53,3 +72,12 @@ triangle *triangle::nexttoward(xy pnt)
  else
     return cneigh;
  }
+
+triangle *triangle::findt(xy pnt)
+{
+  triangle *here;
+  here=this;
+  while (here && !here->in(pnt))
+    here=here->nexttoward(pnt);
+  return here;
+}

@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include "cogo.h"
+#include "bezier.h"
 #include "bezitopo.h"
 #include "pointlist.h"
 
@@ -21,6 +22,7 @@ class edge
 {public:
  point *a,*b;
  edge *nexta,*nextb;
+ triangle *tria,*trib;
  bool broken; //true if a breakline crosses this edge
  bool contour;
  /* When drawing a contour, set edge::contour to true for each edge that
@@ -30,6 +32,8 @@ class edge
  void flip(pointlist *topopoints);
  point* otherend(point* end);
  edge* next(point* end);
+ triangle* tri(point* end);
+ xy midpoint();
  void setnext(point* end,edge* enext);
  bool isinterior();
  bool delaunay();
@@ -55,5 +59,4 @@ class samepoints: public exception
 #define samepnts 2
 #define flattri 3
 
-//void maketin(string filename="",bool colorfibaster=false);
 #endif
