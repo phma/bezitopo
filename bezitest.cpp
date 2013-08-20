@@ -565,6 +565,8 @@ void testspiral()
    * On i386,   facpower is 0xc014b887333333333800.
    * I checked this with 64-bit Linux, 64-bit DragonFly, and 32-bit DragonFly;
    * it depends on the processor, not the operating system.
+   * The ARM on a Raspberry Pi does not have a distinct long double type
+   * and fails this test. The Pi is not suitable to run this program.
    */
   printf("%d bad bearings out of 118\n",badcount);
   assert(badcount<=13);
@@ -653,7 +655,7 @@ void testqindex()
   vector<xy> plist;
   double pathlength;
   vector<qindex*> hilbertpath;
-  xy offset(16,8),bone1(3,4),bone2(-3,-4);
+  xy offset(16,8),bone1(3,4),bone2(-3,-4),bone3(49,-64);
   plist.push_back(xy(0.3,0.3));
   plist.push_back(xy(0.6,0.8));
   plist.push_back(xy(0.8,0.6));
@@ -734,6 +736,37 @@ void testqindex()
   ptri=ptri->findt(bone2);
   assert(ptri->in(bone2));
   assert(!ptri->in(bone1));
+  assert(ptri->findt(bone3,true));
+  assert(!ptri->findt(bone3,false));
+  startpage();
+  setscale(-15,-15,15,15);
+  plist.clear();
+  for (i=0;i<100;i++)
+    plist.push_back(topopoints.points[i+1]);
+  qinx.sizefit(plist);
+  qinx.split(plist);
+  qinx.draw();
+  qinx.settri(&topopoints.triangles[0]);
+  for (i=ntri=0;i<topopoints.edges.size();i++)
+    line(topopoints.edges[i],i,false);
+  setcolor(1,0,0);
+  hilbertpath=qinx.traverse();
+  for (i=pathlength=0;i<hilbertpath.size();i++)
+  {
+    line2p(hilbertpath[i]->tri->centroid(),hilbertpath[i]->middle());
+    pathlength+=dist(hilbertpath[i]->tri->centroid(),hilbertpath[i]->middle());
+  }
+  printf("settri: pathlength=%f\n",pathlength);
+  assert(pathlength>50 && pathlength<250);
+  endpage();
+  ptri=qinx.findt(bone1);
+  assert(ptri->in(bone1));
+  assert(!ptri->in(bone2));
+  ptri=qinx.findt(bone2);
+  assert(ptri->in(bone2));
+  assert(!ptri->in(bone1));
+  assert(qinx.findt(bone3,true));
+  assert(!qinx.findt(bone3,false));
   pstrailer();
   psclose();
 }

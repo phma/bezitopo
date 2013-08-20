@@ -56,29 +56,30 @@ xy qindex::middle()
 {return xy(x+side/2,y+side/2);
  }
 
-int qindex::quarter(xy pnt)
+int qindex::quarter(xy pnt,bool clip)
 {
   int xbit,ybit,i;
   xbit=pnt.x>=x+side/2;
-  if (pnt.x>=x+side || pnt.x<x)
+  if ((!clip) && (pnt.x>=x+side || pnt.x<x))
     xbit=-1;
   ybit=pnt.y>=y+side/2;
-  if (pnt.y>=y+side || pnt.y<y)
+  if ((!clip) && (pnt.y>=y+side || pnt.y<y))
     ybit=-1;
   i=(ybit<<1)|xbit;
   return i;
 }
 
-triangle *qindex::findt(xy pnt)
+triangle *qindex::findt(xy pnt,bool clip)
 {
   int i;
-  i=quarter(pnt);
+  xy inpnt=pnt;
+  i=quarter(pnt,clip);
   if (i<0)
     return NULL; // point is outside square
   else if (!sub[3])
-    return tri; // square is undivided
+    return tri->findt(pnt,clip); // square is undivided
   else 
-    return sub[i]->findt(pnt);
+    return sub[i]->findt(pnt,clip);
 }
 
 void qindex::sizefit(vector<xy> pnts)
@@ -200,4 +201,18 @@ vector<qindex*> qindex::traverse(int dir)
   else
     chain.push_back(this);
   return chain;
+}
+
+void qindex::settri(triangle *starttri)
+{
+  int i,j;
+  triangle *thistri;
+  vector<qindex*> chain;
+  chain=traverse();
+  thistri=starttri;
+  for (i=0;i<chain.size();i++)
+  {
+    thistri=thistri->findt(chain[i]->middle(),true);
+    chain[i]->tri=thistri;
+  }
 }

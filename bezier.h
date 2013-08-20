@@ -40,13 +40,14 @@ public:
   point *a,*b,*c; //corners
   double ctrl[7]; //There are 10 control points; the corners are three, and these are the elevations of the others.
   triangle *aneigh,*bneigh,*cneigh;
+  triangle();
   void setneighbor(triangle *neigh);
   double elevation(xy pnt);
   //xy gradient(xy pnt);
   bool in(xy pnt);
   bool iscorner(point *v);
   triangle *nexttoward(xy pnt);
-  triangle *findt(xy pnt);
+  triangle *findt(xy pnt,bool clip=false);
   double area();
   xy centroid();
   void setcentercp();

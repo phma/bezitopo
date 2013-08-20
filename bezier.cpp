@@ -4,7 +4,15 @@
 /* For Bézier functions of one variable, see vcurve.cpp.*/
 /*                                                      */
 /********************************************************/
+#include <cstring>
 #include "bezier.h"
+
+triangle::triangle()
+{
+  a=b=c=NULL;
+  aneigh=bneigh=cneigh=NULL;
+  memset(ctrl,0,sizeof(ctrl));
+}
 
 double triangle::area()
 {return area3(*a,*b,*c);
@@ -73,11 +81,15 @@ triangle *triangle::nexttoward(xy pnt)
     return cneigh;
  }
 
-triangle *triangle::findt(xy pnt)
+triangle *triangle::findt(xy pnt,bool clip)
 {
-  triangle *here;
-  here=this;
+  triangle *here,*there;
+  here=there=this;
   while (here && !here->in(pnt))
+  {
     here=here->nexttoward(pnt);
-  return here;
+    if (here)
+      there=here;
+  }
+  return clip?there:here;
 }
