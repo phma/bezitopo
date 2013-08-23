@@ -631,7 +631,7 @@ void testtriangle()
   tri.setcentercp();
   elev=tri.elevation(o);
   printf("ctrl[3]=%f elevation=%f\n",tri.ctrl[3],elev);
-  assert(elev*3-1<1e-7);
+  assert(abs(elev*3-1)<1e-7);
   // Now make a quadratic surface. It is a paraboloid z=r². Check that the cubic component is 0.
   surveypoints.points[1].setelev(1);
   surveypoints.points[2].setelev(1);
@@ -644,7 +644,22 @@ void testtriangle()
   elevg=tri.elevation(g);
   eleva=tri.elevation(a);
   printf("ctrl[3]=%f elevation=%f %f %f %f\n",tri.ctrl[3],elevd,elev,elevg,eleva);
-  assert(elevd-elev*3+elevg*3-eleva<1e-7);
+  assert(abs(elevd-elev*3+elevg*3-eleva)<1e-7);
+  // Now turn the quadratic surface upside-down, using setgradient.
+  surveypoints.points[1].setelev(0);
+  surveypoints.points[2].setelev(0);
+  surveypoints.points[3].setelev(0);
+  tri.setgradient(surveypoints.points[1],(xy)surveypoints.points[1]*-2);
+  tri.setgradient(surveypoints.points[2],(xy)surveypoints.points[2]*-2);
+  tri.setgradient(surveypoints.points[3],(xy)surveypoints.points[3]*-2);
+  tri.setcentercp();
+  elev=tri.elevation(o);
+  elevd=tri.elevation(d);
+  elevg=tri.elevation(g);
+  eleva=tri.elevation(a);
+  printf("ctrl[3]=%f elevation=%f %f %f %f\n",tri.ctrl[3],elevd,elev,elevg,eleva);
+  assert(abs(elevd-elev*3+elevg*3-eleva)<1e-7);
+  assert(abs(elev-1)<1e-7);
 }
 
 void testqindex()

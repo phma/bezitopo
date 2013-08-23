@@ -43,6 +43,7 @@ public:
   triangle();
   void setneighbor(triangle *neigh);
   double elevation(xy pnt);
+  void setgradient(xy pnt,xy grad);
   //xy gradient(xy pnt);
   bool in(xy pnt);
   bool iscorner(point *v);

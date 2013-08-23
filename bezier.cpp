@@ -49,6 +49,31 @@ bool triangle::iscorner(point *v)
   return (a==v)||(b==v)||(c==v);
 }
 
+void triangle::setgradient(xy pnt,xy grad)
+// Sets the gradient at corner pnt to grad. If pnt is not a corner,
+// either sets the nearest corner or does nothing.
+{
+  int which;
+  double crit;
+  crit=1/2.0*(1/dist(xy(*a),xy(*b))+1/dist(xy(*c),xy(*a))+1/dist(xy(*b),xy(*c)));
+  grad/=3; // control points are 1/3 of the way along sides
+  if (dist(pnt,*a)<crit)
+  {
+    ctrl[0]=a->z+dot(grad,xy(*b)-xy(*a));
+    ctrl[1]=a->z+dot(grad,xy(*c)-xy(*a));
+  }
+  if (dist(pnt,*b)<crit)
+  {
+    ctrl[5]=b->z+dot(grad,xy(*c)-xy(*b));
+    ctrl[2]=b->z+dot(grad,xy(*a)-xy(*b));
+  }
+  if (dist(pnt,*c)<crit)
+  {
+    ctrl[4]=c->z+dot(grad,xy(*a)-xy(*c));
+    ctrl[6]=c->z+dot(grad,xy(*b)-xy(*c));
+  }
+}
+
 void triangle::setneighbor(triangle *neigh)
 {
   bool sha,shb,shc;
