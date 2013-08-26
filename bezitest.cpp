@@ -513,11 +513,6 @@ void testarc()
   assert(dist(c.station(200),a.station(400))<0.001);
 }
 
-double sqr(double x)
-{
-  return x*x;
-}
-
 void testspiral()
 {
   xy a,b,c,limitpoint;
@@ -786,6 +781,33 @@ void testqindex()
   psclose();
 }
 
+void drawgrad(double scale)
+{
+  ptlist::iterator i;
+  for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+  {
+    dot(i->second);
+    line2p(i->second,xy(i->second)+i->second.gradient*scale);
+  }
+}
+
+void testmakegrad()
+{
+  topopoints.clear();
+  setsurface(HYPAR);
+  aster(100);
+  psopen("gradient.ps");
+  psprolog();
+  startpage();
+  topopoints.maketin();
+  topopoints.makegrad(0.9);
+  printf("testmakegrad\n");
+  drawgrad(3);
+  endpage();
+  pstrailer();
+  psclose();
+}
+
 int main(int argc, char *argv[])
 {
   testarea3();
@@ -808,6 +830,7 @@ int main(int argc, char *argv[])
   testarc();
   testspiral();
   testqindex();
+  testmakegrad();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }

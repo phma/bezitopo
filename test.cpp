@@ -11,6 +11,11 @@
 
 using std::map;
 
+double sqr(double x)
+{
+  return x*x;
+}
+
 void dumppoints()
 {map<int,point>::iterator i;
  printf("dumppoints\n");
@@ -29,12 +34,43 @@ void dumppointsvalence()
 }
 
 double rugae(xy pnt)
-{double z;
- z=sin(pnt.east())+pnt.north()/50;
- return z;
- }
+{
+  double z;
+  z=sin(pnt.east())+pnt.north()/50;
+  return z;
+}
+
+double hypar(xy pnt)
+{
+  double z;
+  z=(sqr(pnt.east())-sqr(pnt.north()))/50;
+  return z;
+}
+
+double cirpar(xy pnt)
+{
+  double z;
+  z=(sqr(pnt.east())+sqr(pnt.north()))/50;
+  return z;
+}
 
 double (*testsurface)(xy pnt)=rugae;
+
+void setsurface(int surf)
+{
+  switch (surf)
+  {
+    case RUGAE:
+      testsurface=rugae;
+      break;
+    case HYPAR:
+      testsurface=hypar;
+      break;
+    case CIRPAR:
+      testsurface=cirpar;
+      break;
+  }
+}
 
 void aster(int n)
 /* Fill points with asteraceous pattern. Pattern invented by H. Vogel in 1979

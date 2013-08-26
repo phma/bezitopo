@@ -27,6 +27,11 @@
    will be flipped many times.
    */
 
+#define RUGAE 0
+#define HYPAR 1
+#define CIRPAR 2
+void setsurface(int surf);
+double sqr(double x);
 void dumppoints();
 void dumppointsvalence();
 void aster(int n);
