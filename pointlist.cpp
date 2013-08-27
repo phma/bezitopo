@@ -4,6 +4,7 @@
 /*                                                    */
 /******************************************************/
 
+#include <cmath>
 #include "pointlist.h"
 
 using namespace std;
@@ -54,5 +55,39 @@ void copytopopoints(criteria crit)
 	include=crit[j].istopo;
     if (include)
       topopoints.addpoint(1,i->second);
+  }
+}
+
+void pointlist::makeqindex()
+{
+  vector<xy> plist;
+  ptlist::iterator i;
+  qinx.clear();
+  for (i=points.begin();i!=points.end();i++)
+    plist.push_back(i->second);
+  qinx.sizefit(plist);
+  qinx.split(plist);
+  qinx.settri(&triangles[0]);
+}
+
+double pointlist::elevation(xy location)
+{
+  triangle *t;
+  t=qinx.findt(location);
+  if (t)
+    return t->elevation(location);
+  else
+    return nan("");
+}
+
+void pointlist::setgradient()
+{
+  int i;
+  for (i=0;i<triangles.size();i++)
+  {
+    triangles[i].setgradient(*triangles[i].a,triangles[i].a->gradient);
+    triangles[i].setgradient(*triangles[i].b,triangles[i].b->gradient);
+    triangles[i].setgradient(*triangles[i].c,triangles[i].c->gradient);
+    triangles[i].setcentercp();
   }
 }

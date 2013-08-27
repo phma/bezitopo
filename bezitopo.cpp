@@ -21,6 +21,7 @@
 #include "angle.h"
 #include "pointlist.h"
 #include "vcurve.h"
+#include "raster.h"
 #include "ps.h"
 
 using namespace std;
@@ -39,5 +40,10 @@ int main(int argc, char *argv[])
   copytopopoints(crit);
   rotate(2);
   topopoints.maketin("bezitopo.ps");
+  topopoints.makegrad(0.15);
+  topopoints.maketriangles();
+  topopoints.setgradient();
+  topopoints.makeqindex();
+  rasterdraw(topopoints,xy(0,0),30,30,10,0,10,"bezitopo.ppm");
   return EXIT_SUCCESS;
 }

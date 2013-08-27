@@ -30,6 +30,7 @@
 #include "qindex.h"
 #include "random.h"
 #include "ps.h"
+#include "raster.h"
 
 #define psoutput false
 // affects only maketin
@@ -841,6 +842,19 @@ void testmakegrad()
   psclose();
 }
 
+void testrasterdraw()
+{
+  topopoints.clear();
+  setsurface(HYPAR);
+  aster(100);
+  topopoints.maketin();
+  topopoints.makegrad(0.);
+  topopoints.maketriangles();
+  topopoints.setgradient();
+  topopoints.makeqindex();
+  rasterdraw(topopoints,xy(0,0),30,30,30,0,10,"raster.ppm");
+}
+
 int main(int argc, char *argv[])
 {
   testarea3();
@@ -864,6 +878,7 @@ int main(int argc, char *argv[])
   testspiral();
   testqindex();
   testmakegrad();
+  testrasterdraw();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }

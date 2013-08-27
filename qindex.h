@@ -4,6 +4,8 @@
 /*                                                    */
 /******************************************************/
 
+#ifndef QINDEX_H
+#define QINDEX_H
 #include <vector>
 #include "bezier.h"
 #include "point.h"
@@ -29,3 +31,4 @@ public:
   ~qindex();
   int size(); // This returns the total number of nodes, which is 4n+1. The number of leaves is 3n+1.
 };
+#endif
