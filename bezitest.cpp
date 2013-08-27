@@ -813,12 +813,21 @@ void checkgrad(double &avgerror,double &maxerror)
 void testmakegrad()
 {
   double avgerror,maxerror,corr;
+  xy grad63,grad63half;
   topopoints.clear();
   setsurface(HYPAR);
   aster(100);
+  topopoints.maketin();
+  topopoints.makegrad(0.15);
+  grad63=topopoints.points[63].gradient;
+  enlarge(2); // affects x and y but not z, so gradient should be halved
+  topopoints.makegrad(0.15);
+  grad63half=topopoints.points[63].gradient;
+  printf("grad63 %f %f grad63half %f %f\n",grad63.east(),grad63.north(),grad63half.east(),grad63half.north());
+  assert(grad63==grad63half*2);
+  enlarge(0.5);
   psopen("gradient.ps");
   psprolog();
-  topopoints.maketin();
   for (corr=0;corr<=1;corr+=0.1)
   {
     startpage();

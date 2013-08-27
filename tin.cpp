@@ -560,7 +560,9 @@ void pointlist::makegrad(double corr)
                   (xx xy)   (gradx)
                   (     ) × (     ) = (xz yz)
                   (xy yy)   (grady) */
-               i->second.newgradient=xy(sumxz/sqrt(sumxx),sumyz/sqrt(sumyy));
+               i->second.newgradient=xy(sumxz/sumxx,sumyz/sumyy);
+	       /*if (i->first==63)
+		 printf("sumxz %f sumxx %f sumyz %f sumyy %f\n",sumxz,sumxx,sumyz,sumyy);*/
                }
            else
               fprintf(stderr,"Warning: point at address %p has no edges that don't cross breaklines\n",&i->second);
