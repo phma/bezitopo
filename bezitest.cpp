@@ -786,24 +786,48 @@ void drawgrad(double scale)
   ptlist::iterator i;
   for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
   {
+    setcolor(0,1,0);
+    line2p(i->second,xy(i->second)+testsurfacegrad(i->second)*scale);
+    setcolor(0,0,0);
     dot(i->second);
     line2p(i->second,xy(i->second)+i->second.gradient*scale);
   }
 }
 
+void checkgrad(double &avgerror,double &maxerror)
+{
+  ptlist::iterator i;
+  double error;
+  int n;
+  avgerror=maxerror=0;
+  for (n=0,i=topopoints.points.begin();i!=topopoints.points.end();i++,n++)
+  {
+    error=dist(i->second.gradient,testsurfacegrad(i->second));
+    avgerror+=error*error;
+    if (error>maxerror)
+      maxerror=error;
+  }
+  avgerror=sqrt(error/n);
+}
+
 void testmakegrad()
 {
+  double avgerror,maxerror,corr;
   topopoints.clear();
   setsurface(HYPAR);
   aster(100);
   psopen("gradient.ps");
   psprolog();
-  startpage();
   topopoints.maketin();
-  topopoints.makegrad(0.9);
-  printf("testmakegrad\n");
-  drawgrad(3);
-  endpage();
+  for (corr=0;corr<=1;corr+=0.1)
+  {
+    startpage();
+    topopoints.makegrad(corr);
+    checkgrad(avgerror,maxerror);
+    printf("testmakegrad: corr=%f avgerror=%f maxerror=%f\n",corr,avgerror,maxerror);
+    drawgrad(3);
+    endpage();
+  }
   pstrailer();
   psclose();
 }

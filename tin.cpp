@@ -530,14 +530,15 @@ void pointlist::makegrad(double corr)
                    sum1+=1;
                    sumx+=diff.east();
                    sumy+=diff.north();
-                   sumz+=zdiff;
+                   sumz+=zthere;
                    sumxx+=diff.east()*diff.east();
                    sumyy+=diff.north()*diff.north();
-                   sumzz+=zdiff*zdiff;
+                   sumzz+=zthere*zthere;
                    sumxy+=diff.east()*diff.north();
-                   sumxz+=diff.east()*zdiff;
-                   sumyz+=diff.north()*zdiff;
+                   sumxz+=diff.east()*zthere;
+                   sumyz+=diff.north()*zthere;
                    }
+           //printf("point %d sum1=%f zdiff=%f zthere=%f\n",i->first,sum1,zdiff,zthere);
            if (sum1)
               {sum1++; //add the point i to the set
                sumx/=sum1;

@@ -40,11 +40,21 @@ double rugae(xy pnt)
   return z;
 }
 
+xy rugaegrad(xy pnt)
+{
+  return xy(cos(pnt.east()),0.02);
+}
+
 double hypar(xy pnt)
 {
   double z;
   z=(sqr(pnt.east())-sqr(pnt.north()))/50;
   return z;
+}
+
+xy hypargrad(xy pnt)
+{
+  return xy(pnt.east()/25,-pnt.north()/25);
 }
 
 double cirpar(xy pnt)
@@ -54,7 +64,13 @@ double cirpar(xy pnt)
   return z;
 }
 
+xy cirpargrad(xy pnt)
+{
+  return xy(pnt.east()/25,pnt.north()/25);
+}
+
 double (*testsurface)(xy pnt)=rugae;
+xy (*testsurfacegrad)(xy pnt)=rugaegrad;
 
 void setsurface(int surf)
 {
@@ -62,12 +78,15 @@ void setsurface(int surf)
   {
     case RUGAE:
       testsurface=rugae;
+      testsurfacegrad=rugaegrad;
       break;
     case HYPAR:
       testsurface=hypar;
+      testsurfacegrad=hypargrad;
       break;
     case CIRPAR:
       testsurface=cirpar;
+      testsurfacegrad=cirpargrad;
       break;
   }
 }
