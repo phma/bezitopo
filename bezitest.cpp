@@ -857,6 +857,23 @@ void testrasterdraw()
   rasterdraw(topopoints,xy(0,0),30,30,30,0,3,"rasterflat.ppm");
 }
 
+void testdirbound()
+{
+  double bound;
+  int i;
+  topopoints.clear();
+  aster(100);
+  bound=topopoints.dirbound(degtobin(0));
+  for (i=1;i<=100;i++)
+    if (bound==topopoints.points[i].east())
+      printf("westernmost point is %d\n",i);
+  assert(bound==topopoints.points[94].east());
+  bound=topopoints.dirbound(degtobin(90));
+  for (i=1;i<=100;i++)
+    if (bound==topopoints.points[i].north())
+      printf("southernmost point is %d\n",i);
+}
+
 int main(int argc, char *argv[])
 {
   testarea3();
@@ -881,6 +898,7 @@ int main(int argc, char *argv[])
   testqindex();
   testmakegrad();
   testrasterdraw();
+  testdirbound();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }

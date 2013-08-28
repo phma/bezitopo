@@ -5,6 +5,7 @@
 /******************************************************/
 
 #include <cmath>
+#include "angle.h"
 #include "pointlist.h"
 
 using namespace std;
@@ -93,4 +94,22 @@ void pointlist::setgradient(bool flat)
       triangles[i].setgradient(*triangles[i].c,triangles[i].c->gradient);
       triangles[i].setcentercp();
     }
+}
+
+double pointlist::dirbound(int angle)
+/* angle=0x00000000: returns least easting.
+ * angle=0x20000000: returns least northing.
+ * angle=0x40000000: returns negative of greatest easting.
+ */
+{
+  ptlist::iterator i;
+  double bound=HUGE_VAL,turncoord;
+  double s=sin(angle),c=cos(angle);
+  for (i=points.begin();i!=points.end();i++)
+  {
+    turncoord=i->second.east()*c+i->second.north()*s;
+    if (turncoord<bound)
+      bound=turncoord;
+  }
+  return bound;
 }

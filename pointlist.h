@@ -33,6 +33,7 @@ public:
   void maketriangles();
   void makeqindex();
   double elevation(xy location);
+  double dirbound(int angle);
 };
 struct criterion
 {
