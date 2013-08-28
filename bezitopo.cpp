@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
   topopoints.maketin("bezitopo.ps");
   topopoints.makegrad(0.15);
   topopoints.maketriangles();
-  topopoints.setgradient();
+  topopoints.setgradient(false);
   topopoints.makeqindex();
   rasterdraw(topopoints,xy(0,0),30,30,10,0,10,"bezitopo.ppm");
   return EXIT_SUCCESS;

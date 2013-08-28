@@ -29,7 +29,7 @@ private:
 public:
   void maketin(string filename="",bool colorfibaster=false);
   void makegrad(double corr);
-  void setgradient();
+  void setgradient(bool flat=false);
   void maketriangles();
   void makeqindex();
   double elevation(xy location);

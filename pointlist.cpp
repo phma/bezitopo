@@ -80,14 +80,17 @@ double pointlist::elevation(xy location)
     return nan("");
 }
 
-void pointlist::setgradient()
+void pointlist::setgradient(bool flat)
 {
   int i;
   for (i=0;i<triangles.size();i++)
-  {
-    triangles[i].setgradient(*triangles[i].a,triangles[i].a->gradient);
-    triangles[i].setgradient(*triangles[i].b,triangles[i].b->gradient);
-    triangles[i].setgradient(*triangles[i].c,triangles[i].c->gradient);
-    triangles[i].setcentercp();
-  }
+    if (flat)
+      triangles[i].flatten();
+    else
+    {
+      triangles[i].setgradient(*triangles[i].a,triangles[i].a->gradient);
+      triangles[i].setgradient(*triangles[i].b,triangles[i].b->gradient);
+      triangles[i].setgradient(*triangles[i].c,triangles[i].c->gradient);
+      triangles[i].setcentercp();
+    }
 }

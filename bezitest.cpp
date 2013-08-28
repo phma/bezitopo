@@ -852,7 +852,9 @@ void testrasterdraw()
   topopoints.maketriangles();
   topopoints.setgradient();
   topopoints.makeqindex();
-  rasterdraw(topopoints,xy(0,0),30,30,30,0,10,"raster.ppm");
+  rasterdraw(topopoints,xy(0,0),30,30,30,0,3,"raster.ppm");
+  topopoints.setgradient(true);
+  rasterdraw(topopoints,xy(0,0),30,30,30,0,3,"rasterflat.ppm");
 }
 
 int main(int argc, char *argv[])
