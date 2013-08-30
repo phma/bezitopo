@@ -79,7 +79,7 @@ void rasterdraw(pointlist &pts,xy center,double width,double height,
     for (j=0;j<pwidth;j++)
     {
       pnt=xy(j-pwidth/2.,pheight/2.-i);
-      z=pts.elevation(pnt/scale);
+      z=pts.elevation(center+pnt/scale);
       pixel=color(z/zscale);
       rfile<<pixel;
     }

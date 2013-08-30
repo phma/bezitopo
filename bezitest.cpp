@@ -872,6 +872,7 @@ void testdirbound()
   for (i=1;i<=100;i++)
     if (bound==topopoints.points[i].north())
       printf("southernmost point is %d\n",i);
+  assert(bound==topopoints.points[96].north());
 }
 
 int main(int argc, char *argv[])
