@@ -32,7 +32,7 @@
 #include "ps.h"
 #include "raster.h"
 
-#define psoutput false
+#define psoutput true
 // affects only maketin
 
 using namespace std;

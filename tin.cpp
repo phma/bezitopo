@@ -409,7 +409,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
                     edges.resize(edges.size()+1);
                     edges[edges.size()-1].a=j->second;
                     edges[edges.size()-1].b=k->second;
-                    //printf("Adding edge from %p to %p\n",j->second,k->second);
+                    printf("Adding edge from %p to %p\n",j->second,k->second);
                     }
                 if (k==right || n==maxedges) m=-1;
                 }
