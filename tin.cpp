@@ -135,30 +135,32 @@ void dumphull()
  }
 
 void pointlist::dumpedges()
-{vector<edge>::iterator i;
- printf("dump edges:\n");
- for (i=edges.begin();i!=edges.end();i++)
-     i->dump(this);
- printf("end dump\n");
- }
+{
+  map<int,edge>::iterator i;
+  printf("dump edges:\n");
+  for (i=edges.begin();i!=edges.end();i++)
+     i->second.dump(this);
+  printf("end dump\n");
+}
 
 void pointlist::dumpedges_ps(bool colorfibaster)
-{vector<edge>::iterator i;
- int n;
- for (i=edges.begin(),n=0;i!=edges.end();i++,n++)
-     line(*i,n,colorfibaster);
- }
+{
+  map<int,edge>::iterator i;
+  int n;
+  for (i=edges.begin(),n=0;i!=edges.end();i++,n++)
+     line(i->second,n,colorfibaster);
+}
 
 void pointlist::dumpnext_ps()
 {
-  vector<edge>::iterator i;
+  map<int,edge>::iterator i;
   setcolor(0,0.7,0);
   for (i=edges.begin();i!=edges.end();i++)
   {
-    if (i->nexta)
-      line2p(i->midpoint(),i->nexta->midpoint());
-    if (i->nextb)
-      line2p(i->midpoint(),i->nextb->midpoint());
+    if (i->second.nexta)
+      line2p(i->second.midpoint(),i->second.nexta->midpoint());
+    if (i->second.nextb)
+      line2p(i->second.midpoint(),i->second.nextb->midpoint());
   }
 }
 
@@ -246,7 +248,8 @@ void pointlist::maketin(string filename,bool colorfibaster)
      startpnt+=i->second;
  startpnt/=points.size();
  edges.clear();
- edges.reserve(maxedges=3*points.size()-6); //must reserve space to avoid moving, since edges point to each other
+ maxedges=3*points.size()-6;
+ //edges.reserve(maxedges=3*points.size()-6); //must reserve space to avoid moving, since edges point to each other
  //FIXME: points will be added for min/max/saddle, and each point will add three more edges.
  //How many extrema can there be, given the number of shot points?
  //startpnt has to be
@@ -314,7 +317,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
       }
       j=outward.begin();
       //printf("edges %d\n",edges.size());
-      edges.resize(1);
+      //edges.resize(1);
       edges[0].a=j->second;
       j->second->line=&(edges[0]);
       convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
@@ -406,8 +409,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
                    k=convexhull.begin();
                 if (k!=inspos) // skip the point just added - don't join it to itself
                    {visible.push_back(k->second);
-                    edges.resize(edges.size()+1);
-                    edges[edges.size()-1].a=j->second;
+                    edges[edges.size()].a=j->second; // this adds one element, hence -1 in next line
                     edges[edges.size()-1].b=k->second;
                     printf("Adding edge from %p to %p\n",j->second,k->second);
                     }
@@ -582,7 +584,7 @@ void pointlist::maketriangles()
   edge *e;
   triangle cib,*t;
   triangles.clear();
-  triangles.reserve(edges.capacity()*3/2);
+  triangles.reserve(edges.size()*3/2);
   for (i=0;i<edges.size();i++)
   {
     a=edges[i].a;

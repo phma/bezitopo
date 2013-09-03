@@ -16,7 +16,7 @@ class pointlist
 public:
   ptlist points;
   revptlist revpoints;
-  std::vector<edge> edges;
+  std::map<int,edge> edges;
   std::vector<triangle> triangles;
   qindex qinx;
   void addpoint(int numb,point pnt,bool overwrite=false);
