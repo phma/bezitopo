@@ -411,7 +411,8 @@ void pointlist::maketin(string filename,bool colorfibaster)
                     edges[edges.size()-1].b=k->second;
                     printf("Adding edge from %p to %p\n",j->second,k->second);
                     }
-                if (k==right || n==maxedges) m=-1;
+                if (k==right || n==maxedges)
+		  m=-1;
                 }
            val=--n; //subtract one for the point itself
            //printf("%d points visible\n",n);
