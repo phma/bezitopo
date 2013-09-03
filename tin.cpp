@@ -249,9 +249,6 @@ void pointlist::maketin(string filename,bool colorfibaster)
  startpnt/=points.size();
  edges.clear();
  maxedges=3*points.size()-6;
- //edges.reserve(maxedges=3*points.size()-6); //must reserve space to avoid moving, since edges point to each other
- //FIXME: points will be added for min/max/saddle, and each point will add three more edges.
- //How many extrema can there be, given the number of shot points?
  //startpnt has to be
  //within or out the side of the triangle formed by the three nearest points.
  //In a 100-point asteraceous pattern, the centroid is out one corner, and
@@ -317,7 +314,6 @@ void pointlist::maketin(string filename,bool colorfibaster)
       }
       j=outward.begin();
       //printf("edges %d\n",edges.size());
-      //edges.resize(1);
       edges[0].a=j->second;
       j->second->line=&(edges[0]);
       convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
@@ -397,10 +393,6 @@ void pointlist::maketin(string filename,bool colorfibaster)
                 }
            right--;
            //putchar('\n');
-           /*if (left==convexhull.begin())
-              left=convexhull.end();
-           if (right==convexhull.end())
-              right=convexhull.begin();*/
            // Now make a list of the visible points. There are 3 on average.
            visible.clear();
            edgeoff=edges.size();
