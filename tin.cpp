@@ -248,6 +248,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
      startpnt+=i->second;
  startpnt/=points.size();
  edges.clear();
+ maxedges=3*points.size()-6;
  //edges.reserve(maxedges=3*points.size()-6); //must reserve space to avoid moving, since edges point to each other
  //FIXME: points will be added for min/max/saddle, and each point will add three more edges.
  //How many extrema can there be, given the number of shot points?
