@@ -411,7 +411,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
                    {visible.push_back(k->second);
                     edges[edges.size()].a=j->second; // this adds one element, hence -1 in next line
                     edges[edges.size()-1].b=k->second;
-                    printf("Adding edge from %p to %p\n",j->second,k->second);
+                    //printf("Adding edge from %p to %p\n",j->second,k->second);
                     }
                 if (k==right || n==maxedges)
 		  m=-1;
