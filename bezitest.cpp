@@ -668,12 +668,19 @@ void testqindex()
   double pathlength;
   vector<qindex*> hilbertpath;
   xy offset(16,8),bone1(3,4),bone2(-3,-4),bone3(49,-64);
-  plist.push_back(xy(0.3,0.3));
-  plist.push_back(xy(0.6,0.8));
-  plist.push_back(xy(0.8,0.6));
+  topopoints.clear();
+  plist.clear();
+  topopoints.addpoint(1,point(0.3,0.3,0,""));
+  topopoints.addpoint(1,point(0.6,0.8,0,""));
+  topopoints.addpoint(1,point(0.8,0.6,0,""));
+  for (i=0;i<3;i++)
+    plist.push_back(topopoints.points[i+1]+offset);
   qinx.sizefit(plist);
   printf("side=%f x=%f y=%f\n",qinx.side,qinx.x,qinx.y);
   assert(qinx.side==1);
+  topopoints.maketin();
+  topopoints.maketriangles();
+  assert(topopoints.triangles.size()==1);
   qinx.clear();
   topopoints.clear();
   plist.clear();
@@ -915,7 +922,7 @@ int main(int argc, char *argv[])
   testmakegrad();
   testrasterdraw();
   testdirbound();
-  teststl();
+  //teststl();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }
