@@ -17,7 +17,7 @@ public:
   ptlist points;
   revptlist revpoints;
   std::map<int,edge> edges;
-  std::vector<triangle> triangles;
+  std::map<int,triangle> triangles;
   qindex qinx;
   void addpoint(int numb,point pnt,bool overwrite=false);
   void clear();
