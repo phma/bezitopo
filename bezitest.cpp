@@ -680,6 +680,7 @@ void testqindex()
   assert(qinx.side==1);
   topopoints.maketin();
   topopoints.maketriangles();
+  printf("%d triangle, should be 1\n",topopoints.triangles.size());
   assert(topopoints.triangles.size()==1);
   qinx.clear();
   topopoints.clear();
