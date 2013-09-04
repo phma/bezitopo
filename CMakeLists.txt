@@ -14,8 +14,19 @@ add_executable(bezitest angle.cpp arc.cpp bezier.cpp bezitest.cpp
 #include_directories(${LibXML++_INCLUDE_DIRS})
 #set(LIBS ${LIBS} ${LibXML++_LIBRARIES})
 #target_link_libraries(foncvrate ${LIBS})
+include(TestBigEndian)
+include(CheckTypeSize)
 
 install(TARGETS bezitopo DESTINATION bin)
+
+test_big_endian(BIGENDIAN)
+check_type_size("unsigned long int" UNSIGNED_LONG_INT)
+if(UNSIGNED_LONG_INT EQUAL 8)
+  set(__ISAAC64 1)
+elseif(UNSIGNED_LONG_INT EQUAL 4)
+else()
+  message(SEND_ERROR "unsigned long int doesn't have right size for ISAAC")
+endif()
 
 set(BEZITOPO_MAJOR_VERSION 0)
 set(BEZITOPO_MINOR_VERSION 1)
