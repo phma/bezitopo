@@ -31,6 +31,7 @@
 #include "random.h"
 #include "ps.h"
 #include "raster.h"
+#include "stl.h"
 
 #define psoutput false
 // affects only maketin
@@ -857,6 +858,20 @@ void testrasterdraw()
   rasterdraw(topopoints,xy(0,0),30,30,30,0,3,"rasterflat.ppm");
 }
 
+void teststl()
+{
+  stltriangle stltri;
+  topopoints.clear();
+  setsurface(HYPAR);
+  aster(3);
+  topopoints.maketin();
+  topopoints.makegrad(0.);
+  topopoints.maketriangles();
+  topopoints.setgradient();
+  topopoints.makeqindex();
+  stltri=stltriangle(topopoints.points[1],topopoints.points[3],topopoints.points[3]);
+}
+
 void testdirbound()
 {
   double bound;
@@ -900,6 +915,7 @@ int main(int argc, char *argv[])
   testmakegrad();
   testrasterdraw();
   testdirbound();
+  teststl();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }
