@@ -589,8 +589,10 @@ void pointlist::maketriangles()
       cib.b=b;
       cib.c=a;
       if (cib.area()>=0)
+      {
         triangles[triangles.size()]=cib;
-      edges[i].tria=&triangles[triangles.size()-1];
+        edges[i].tria=&triangles[triangles.size()-1];
+      }
     }
     a=edges[i].b;
     b=edges[i].a;
@@ -603,8 +605,10 @@ void pointlist::maketriangles()
       cib.b=b;
       cib.c=a;
       if (cib.area()>=0)
+      {
         triangles[triangles.size()]=cib;
-      edges[i].trib=&triangles[triangles.size()-1];
+        edges[i].trib=&triangles[triangles.size()-1];
+      }
     }
   }
   for (i=0;i<edges.size()*2;i++)

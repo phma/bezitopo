@@ -923,7 +923,7 @@ int main(int argc, char *argv[])
   testmakegrad();
   testrasterdraw();
   testdirbound();
-  //teststl();
+  teststl();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }
