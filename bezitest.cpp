@@ -954,6 +954,7 @@ void testbtreverse(unsigned long long n)
 void testhalton()
 {
   unsigned int i;
+  halton h;
   initbtreverse();
   for (i=0;i<30;i++)
     printf("%7d ",btreversetable[i]);
@@ -975,6 +976,8 @@ void testhalton()
   testbtreverse(65536);
   testbtreverse(3869835264);
   testbtreverse(588235294117647);
+  for (i=0;i<56;i++)
+    printf("%9.7f ",h.scalar(1));
 }
 
 int main(int argc, char *argv[])

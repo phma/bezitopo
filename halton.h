@@ -17,8 +17,21 @@
  */
 
 #include <vector>
+#include "point.h"
 
 extern unsigned short btreversetable[62208];
 void initbtreverse();
 std::vector<unsigned short> splithalton(unsigned long long n);
 unsigned long long btreverselong(unsigned long long n);
+
+class halton
+{
+private:
+  unsigned long long n;
+  halton& operator++();
+public:
+  xy _pnt();
+  xy pnt();
+  double _scalar(double x);
+  double scalar(double x); // this can return 1 because of roundoff
+};

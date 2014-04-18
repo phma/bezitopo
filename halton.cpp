@@ -127,3 +127,44 @@ unsigned long long btreverselong(unsigned long long n)
   tr=treversetable[tf%59049]*59049+treversetable[tf/59049];
   return assemblelong(br,tr);
 }
+
+unsigned breverse(unsigned n)
+{
+  return (breversetable[n&65535]<<16)|breversetable[n>>16];
+}
+
+unsigned treverse(unsigned n)
+{
+  return treversetable[n%59049]*59049+treversetable[n/59049];
+}
+
+halton& halton::operator++()
+{
+  ++n;
+  if (n>=14975624970497949696)
+    n-=14975624970497949696;
+  return *this;
+}
+
+xy halton::_pnt()
+{
+  return xy(breverse(n&4294967295)/4294967296.,treverse(n%3486784401)/3486784401.);
+}
+
+xy halton::pnt()
+{
+  operator++();
+  return _pnt();
+}
+
+double halton::_scalar(double x)
+{
+  return btreverselong(n)*x/14975624970497949696.;
+}
+
+double halton::scalar(double x)
+{
+  operator++();
+  return _scalar(x);
+}
+
