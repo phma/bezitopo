@@ -4,12 +4,12 @@ add_executable(bezitopo angle.cpp arc.cpp bezier.cpp bezitopo.cpp
                cogo.cpp contour.cpp measure.cpp plot.cpp pnezd.cpp point.cpp
                pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
                raster.cpp spiral.cpp stl.cpp test.cpp segment.cpp tin.cpp
-               vcurve.cpp)
+               vcurve.cpp halton.cpp)
 add_executable(bezitest angle.cpp arc.cpp bezier.cpp bezitest.cpp
                cogo.cpp contour.cpp measure.cpp plot.cpp pnezd.cpp point.cpp
                pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
                raster.cpp spiral.cpp stl.cpp test.cpp segment.cpp tin.cpp
-               vcurve.cpp)
+               vcurve.cpp halton.cpp)
 
 #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 #find_package(LibXML++ REQUIRED)

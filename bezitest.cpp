@@ -32,6 +32,7 @@
 #include "ps.h"
 #include "raster.h"
 #include "stl.h"
+#include "halton.h"
 
 #define psoutput false
 // affects only maketin
@@ -680,7 +681,7 @@ void testqindex()
   assert(qinx.side==1);
   topopoints.maketin();
   topopoints.maketriangles();
-  printf("%d triangle, should be 1\n",topopoints.triangles.size());
+  printf("%d triangle, should be 1\n",(int)topopoints.triangles.size());
   assert(topopoints.triangles.size()==1);
   qinx.clear();
   topopoints.clear();
@@ -898,6 +899,84 @@ void testdirbound()
   assert(bound==topopoints.points[96].north());
 }
 
+void print16_9(unsigned long long n,int size)
+/* size=1: outputs n%256 in base 16 and n%243 in base 9.
+ * size=2: outputs n%65536 in base 16 and n%59049 in base 9.
+ * size=4: outputs n%4294967296 in base 16 and n%3486784401 in base 9.
+ * size=8: outputs n in base 16 and n%(3^20) in base 9.
+ */
+{
+  vector<char> hex,non;
+  int i;
+  for (i=0;i<size*2;i++)
+    hex.push_back((n>>(i*4))&15);
+  for (i=0;i<(size*5)/2;i++)
+  {
+    non.push_back(n%9);
+    n/=9;
+  }
+  if (size&1)
+    non.push_back(n%3);
+  for (i=hex.size()-1;i>=0;i--)
+    printf("%x",hex[i]);
+  printf(" ");
+  for (i=non.size()-1;i>=0;i--)
+    printf("%x",non[i]);
+}
+
+void testsplithalton(unsigned long long n)
+{
+  vector<unsigned short> splitnum;
+  unsigned int i;
+  cout<<n<<endl;
+  print16_9(n,4);
+  putchar('\n');
+  splitnum=splithalton(n);
+  for (i=0;i<4;i++)
+  {
+    print16_9(splitnum[i],1);
+    putchar(' ');
+  }
+  putchar('\n');
+}
+
+void testbtreverse(unsigned long long n)
+{
+  unsigned long long nr;
+  nr=btreverselong(n);
+  cout<<n<<" "<<nr<<endl;
+  print16_9(n,4);
+  putchar(' ');
+  print16_9(nr,4);
+  putchar('\n');
+}
+
+void testhalton()
+{
+  unsigned int i;
+  initbtreverse();
+  for (i=0;i<30;i++)
+    printf("%7d ",btreversetable[i]);
+  assert(btreversetable[13]==37296);
+  /* 13 is 00001101 (2) and 00111 (3).
+   * 37296%256=176
+   * 37296%243=117
+   * 176 is 10110000 (2); 117 is 11100 (3).
+   */
+  for (i=0;i<62208;i++)
+    assert(btreversetable[btreversetable[i]]==i);
+  print16_9(4294967296,8);
+  putchar('\n');
+  print16_9(3486784401,8);
+  putchar('\n');
+  testbtreverse(62208);
+  testbtreverse(256);
+  testbtreverse(243);
+  testbtreverse(65536);
+  testbtreverse(3869835264);
+  testbtreverse(588235294117647);
+}
+
 int main(int argc, char *argv[])
 {
   testarea3();
@@ -924,6 +1003,7 @@ int main(int argc, char *argv[])
   testrasterdraw();
   testdirbound();
   teststl();
+  testhalton();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }
