@@ -21,6 +21,7 @@ public:
   qindex qinx;
   void addpoint(int numb,point pnt,bool overwrite=false);
   void clear();
+  void setgradient(bool flat=false);
   // the following methods are in tin.cpp
 private:
   void dumpedges();
@@ -29,7 +30,6 @@ private:
 public:
   void maketin(string filename="",bool colorfibaster=false);
   void makegrad(double corr);
-  void setgradient(bool flat=false);
   void maketriangles();
   void makeqindex();
   double elevation(xy location);

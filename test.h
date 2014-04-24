@@ -13,8 +13,9 @@
       of the line. This tests that the triangulator works properly when it cannot
       make any triangles until the last two points.
    6. Hexagonal lattice. The Delaunay triangulation is ambiguous.
-   7. Points on a circle. Ditto.
+   7. Points on a circle, angles are multiples of 2πφ. Ditto.
    8. Points on a slightly eccentric ellipse. This usually takes O(n²) flips.
+   9. Points on a circle, equally spaced. 
    Test operations:
    1. Rotate points by (0.6,0.8) n times. This introduces LSB errors
       to test numerical stability.
@@ -36,6 +37,7 @@ void dumppoints();
 void dumppointsvalence();
 void aster(int n);
 void ring(int n);
+void regpolygon(int n);
 void ellipse(int n);
 void longandthin(int n);
 void straightrow(int n);

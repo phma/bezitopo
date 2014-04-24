@@ -116,6 +116,18 @@ void _ellipse(int n,double skewness)
   }
 }
 
+void regpolygon(int n)
+{
+  int i;
+  double angle=2*M_PI/n;
+  xy pnt;
+  for (i=0;i<n;i++)
+  {
+    pnt=xy(cos(angle*i)*sqrt(n+0.5),sin(angle*i)*sqrt(n+0.5));
+    topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+  }
+}
+
 void ring(int n)
 /* Points in a circle, for most ambiguous case of the Delaunay algorithm.
  * The number of different ways to make the TIN is a Catalan number.

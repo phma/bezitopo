@@ -867,6 +867,21 @@ void testrasterdraw()
   rasterdraw(topopoints,xy(0,0),30,30,30,0,3,"rasterflat.ppm");
 }
 
+void trianglecontours()
+{
+  int i;
+  topopoints.clear();
+  regpolygon(3);
+  enlarge(10);
+  topopoints.maketin();
+  for (i=0;i<3;i++)
+    topopoints.points[i].gradient=xy(0,0);
+  topopoints.maketriangles();
+  topopoints.setgradient();
+  topopoints.makeqindex();
+  rasterdraw(topopoints,xy(5,0),30,40,30,0,0.1,"triangle.ppm");
+}
+
 void teststl()
 {
   stltriangle stltri;
@@ -1003,6 +1018,7 @@ int main(int argc, char *argv[])
   testspiral();
   testqindex();
   testmakegrad();
+  trianglecontours();
   testrasterdraw();
   testdirbound();
   teststl();
