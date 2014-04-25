@@ -24,4 +24,11 @@ unsigned short randm::usrandom()
   return n;
 }
 
+unsigned char randm::ucrandom()
+{
+  unsigned char n;
+  fread(&n,1,1,randfil);
+  return n;
+}
+
 randm rng;

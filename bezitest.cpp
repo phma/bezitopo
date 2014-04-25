@@ -37,6 +37,8 @@
 #define psoutput false
 // affects only maketin
 
+char hexdig[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+
 using namespace std;
 
 void testintegertrig()
@@ -868,18 +870,46 @@ void testrasterdraw()
 }
 
 void trianglecontours()
+/* Pick elevations and gradients at the corners at random and draw color maps
+ * of the elevations, to see what combinations of min, max, and saddle can arise.
+ * 
+ * Hypothesis to attack the minimax problem:
+ * Every surface in a Bézier triangle can be stretched linearly and rotated
+ * into the form ax³+bx²+cx+d+(ex+f)y². That is, there is an axis A such that
+ * all lines parallel to A are parabolas (or straight lines), whose vertices
+ * lie on an axis B, which is a cubic (or less). At most two extrema, which are
+ * not both maxima or minima, lie on axis B, and the other two, if any, are
+ * saddle points and lie on the axis A which is a straight line.
+ */
 {
-  int i;
+  int i,j;
+  unsigned char bytes[9];
+  string fname;
   topopoints.clear();
   regpolygon(3);
   enlarge(10);
   topopoints.maketin();
-  for (i=0;i<3;i++)
-    topopoints.points[i].gradient=xy(0,0);
-  topopoints.maketriangles();
-  topopoints.setgradient();
-  topopoints.makeqindex();
-  rasterdraw(topopoints,xy(5,0),30,40,30,0,0.1,"triangle.ppm");
+  for (i=0;i<10;i++)
+  {
+    fname="tri";
+    for (j=0;j<9;j++)
+    {
+      bytes[j]=rng.ucrandom();
+      fname+=hexdig[bytes[j]>>4];
+      fname+=hexdig[bytes[j]&15];
+    }
+    fname+=".ppm";
+    for (j=0;j<3;j++)
+    {
+      topopoints.points[j].setelev((bytes[j]-127.5)/100);
+      topopoints.points[j].gradient=xy((bytes[j+3]-127.5)/1000,(bytes[j+6]-127.5)/1000);
+    }
+    topopoints.maketriangles();
+    topopoints.setgradient();
+    topopoints.makeqindex();
+    rasterdraw(topopoints,xy(5,0),30,40,30,0,1,fname);
+    cout<<fname<<endl;
+  }
 }
 
 void teststl()
