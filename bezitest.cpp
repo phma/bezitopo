@@ -889,7 +889,7 @@ void trianglecontours()
   regpolygon(3);
   enlarge(10);
   topopoints.maketin();
-  for (i=0;i<10;i++)
+  for (i=0;i<1;i++)
   {
     fname="tri";
     for (j=0;j<9;j++)
@@ -910,6 +910,39 @@ void trianglecontours()
     rasterdraw(topopoints,xy(5,0),30,40,30,0,1,fname);
     cout<<fname<<endl;
   }
+}
+
+void testderivs()
+{
+  double i;
+  vector<double> con,lin,quad,cub;
+  for (i=-1.5;i<2;i+=1)
+  {
+    con.push_back(1);
+    lin.push_back(i);
+    quad.push_back(i*i);
+    cub.push_back(i*i*i);
+  }
+  assert(deriv3(con)==0);
+  assert(deriv3(lin)==0);
+  assert(deriv3(quad)==0);
+  assert(deriv3(cub)==6);
+  assert(deriv2(con)==0);
+  assert(deriv2(lin)==0);
+  assert(deriv2(quad)==2);
+  assert(deriv2(cub)==0);
+  assert(deriv1(con)==0);
+  assert(deriv1(lin)==1);
+  assert(deriv1(quad)==0);
+  assert(deriv1(cub)==0);
+  assert(deriv0(con)==1);
+  assert(deriv0(lin)==0);
+  assert(deriv0(quad)==0);
+  assert(deriv0(cub)==0);
+  cout<<"Zeroth derivative of constant "<<deriv0(con)<<endl;
+  cout<<"First derivative of line "<<deriv1(lin)<<endl;
+  cout<<"Second derivative of square "<<deriv2(quad)<<endl;
+  cout<<"Third derivative of cube "<<deriv3(cub)<<endl;
 }
 
 void teststl()
@@ -1048,6 +1081,7 @@ int main(int argc, char *argv[])
   testspiral();
   testqindex();
   testmakegrad();
+  testderivs();
   trianglecontours();
   testrasterdraw();
   testdirbound();

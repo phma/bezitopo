@@ -6,6 +6,8 @@
 /********************************************************/
 #include <cstring>
 #include "bezier.h"
+#include "angle.h"
+using namespace std;
 
 triangle::triangle()
 {
@@ -17,6 +19,11 @@ triangle::triangle()
 double triangle::area()
 {return area3(*a,*b,*c);
  }
+
+double triangle::perimeter()
+{
+  return dist(xy(*a),xy(*b))+dist(xy(*c),xy(*a))+dist(xy(*b),xy(*c));
+}
 
 double triangle::elevation(xy pnt)
 /* Computes the elevation of triangle tri at the point x,y. */
@@ -128,4 +135,43 @@ triangle *triangle::findt(xy pnt,bool clip)
       there=here;
   }
   return clip?there:here;
+}
+
+vector<double> triangle::xsect(int angle,double offset)
+/* Where s is the semiperimeter, samples the surface at four points,
+ * -3s/2, -s/2, s/2, 3s/2, relative to the centroid, offset by offset.
+ * offset is multplied by the semiperimeter and ranges from -1.5 to 1.5.
+ */
+{
+  double s;
+  int i;
+  vector<double> ret;
+  xy along,across,cen;
+  s=peri/2;
+  cen=centroid();
+  along=cossin(angle)*s;
+  across=cossin(angle+536870912)*s;
+  for (i=-3;i<5;i+=2)
+    ret.push_back(elevation(cen+across*offset+along*i*0.5));
+  return ret;
+}
+
+double deriv0(vector<double> xsect)
+{
+  return (-xsect[3]+9*xsect[2]+9*xsect[1]-xsect[0])/16;
+}
+
+double deriv1(vector<double> xsect)
+{
+  return (xsect[0]-27*xsect[1]+27*xsect[2]-xsect[3])/24;
+}
+
+double deriv2(vector<double> xsect)
+{
+  return (xsect[3]-xsect[2]-xsect[1]+xsect[0])/2;
+}
+
+double deriv3(vector<double> xsect)
+{
+  return xsect[3]-3*xsect[2]+3*xsect[1]-xsect[0];
 }

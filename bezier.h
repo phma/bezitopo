@@ -6,6 +6,7 @@
 
 #ifndef BEZIER_H
 #define BEZIER_H
+#include <vector>
 #include "cogo.h"
 #define M_SQRT_3_4 0.86602540378443864676372317
 #define M_SQRT_3 1.73205080756887729352744634
@@ -39,6 +40,7 @@ class triangle
 public:
   point *a,*b,*c; //corners
   double ctrl[7]; //There are 10 control points; the corners are three, and these are the elevations of the others.
+  double peri;
   triangle *aneigh,*bneigh,*cneigh;
   triangle();
   void setneighbor(triangle *neigh);
@@ -51,9 +53,16 @@ public:
   triangle *nexttoward(xy pnt);
   triangle *findt(xy pnt,bool clip=false);
   double area();
+  double perimeter();
   xy centroid();
   void setcentercp();
+  std::vector<double> xsect(int angle,double offset);
   //void setctrl(bool flat);
 };
+
+double deriv0(std::vector<double> xsect);
+double deriv1(std::vector<double> xsect);
+double deriv2(std::vector<double> xsect);
+double deriv3(std::vector<double> xsect);
 
 #endif
