@@ -42,6 +42,8 @@ public:
   double ctrl[7]; //There are 10 control points; the corners are three, and these are the elevations of the others.
   double peri;
   triangle *aneigh,*bneigh,*cneigh;
+  int nocubedir; // set to MAXINT if critpoints have not been looked for
+  std::vector<xy> critpoints;
   triangle();
   void setneighbor(triangle *neigh);
   double elevation(xy pnt);
@@ -57,6 +59,7 @@ public:
   xy centroid();
   void setcentercp();
   std::vector<double> xsect(int angle,double offset);
+  int findnocubedir();
   //void setctrl(bool flat);
 };
 

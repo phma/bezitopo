@@ -14,6 +14,7 @@ triangle::triangle()
   a=b=c=NULL;
   aneigh=bneigh=cneigh=NULL;
   memset(ctrl,0,sizeof(ctrl));
+  nocubedir=MAXINT;
 }
 
 double triangle::area()
@@ -90,6 +91,7 @@ void triangle::setgradient(xy pnt,xy grad)
     ctrl[4]=c->z+dot(grad,xy(*a)-xy(*c));
     ctrl[6]=c->z+dot(grad,xy(*b)-xy(*c));
   }
+  nocubedir=MAXINT;
 }
 
 void triangle::setneighbor(triangle *neigh)
@@ -174,4 +176,23 @@ double deriv2(vector<double> xsect)
 double deriv3(vector<double> xsect)
 {
   return xsect[3]-3*xsect[2]+3*xsect[1]-xsect[0];
+}
+
+int triangle::findnocubedir()
+/* The range of atan2i is [-0x20000000,0x20000000] ([-180°,180°]).
+ * nocubedir is found by adding 0xaaaaaab (60°) and 0x15555555 (120°)
+ * to atan2i (direction of 1st harmonic of 3rd derivative) and searching
+ * between them. It is therefore in [-0x15555555,0x35555555] and cannot
+ * be 0x7fffffff, hence nocubedir is set to 0x7fffffff (MAXINT) to
+ * indicate that it has not been computed.
+ * 
+ * The 3rd derivative as a function of angle has the form a×sin(θ-b)+c×sin(3θ-d).
+ * 1. Find b.
+ * 2. Compute 3rd deriv at b+60° and b+120°. These add up to 0. Normally they
+ * will be opposite in sign, in which case you can look for the zero between them.
+ * But if they have the same sign, try b+30 and b+90° If those still have
+ * the same sign, try b+90° and b+150. If even those have the same sign,
+ * the 3d deriv is identically 0 and you're seeing roundoff error; return b+90°.
+ */
+{
 }
