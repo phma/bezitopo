@@ -33,6 +33,7 @@
 #include "raster.h"
 #include "stl.h"
 #include "halton.h"
+#include "polyline.h"
 
 #define psoutput false
 // affects only maketin
@@ -1058,6 +1059,17 @@ void testhalton()
     printf("%9.7f ",h.scalar(1));
 }
 
+void testpolyline()
+{
+  polyline p;
+  p.insert(xy(0,0));
+  p.insert(xy(3,0));
+  p.insert(xy(3,4));
+  p.setlengths();
+  assert(p.length()==12);
+  cout<<p.length()<<endl;
+}
+
 int main(int argc, char *argv[])
 {
   testarea3();
@@ -1087,6 +1099,7 @@ int main(int argc, char *argv[])
   testdirbound();
   teststl();
   testhalton();
+  testpolyline();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }

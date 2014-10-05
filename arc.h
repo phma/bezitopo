@@ -4,6 +4,8 @@
 /*                                                    */
 /******************************************************/
 
+#ifndef ARC_H
+#define ARC_H
 #include "segment.h"
 #include "angle.h"
 #include "point.h"
@@ -39,3 +41,5 @@ public:
   void split(double along,arc &a,arc &b);
   //xyz midpoint();
   };
+
+#endif

@@ -5,6 +5,7 @@
 /*                                                      */
 /********************************************************/
 #include <cstring>
+#include <climits>
 #include "bezier.h"
 #include "angle.h"
 using namespace std;
@@ -14,7 +15,7 @@ triangle::triangle()
   a=b=c=NULL;
   aneigh=bneigh=cneigh=NULL;
   memset(ctrl,0,sizeof(ctrl));
-  nocubedir=MAXINT;
+  nocubedir=INT_MAX;
 }
 
 double triangle::area()
@@ -91,7 +92,7 @@ void triangle::setgradient(xy pnt,xy grad)
     ctrl[4]=c->z+dot(grad,xy(*a)-xy(*c));
     ctrl[6]=c->z+dot(grad,xy(*b)-xy(*c));
   }
-  nocubedir=MAXINT;
+  nocubedir=INT_MAX;
 }
 
 void triangle::setneighbor(triangle *neigh)
