@@ -10,6 +10,7 @@
 #endif
 
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <cstdlib>
 #include <csignal>
@@ -873,6 +874,7 @@ void testrasterdraw()
 void trianglecontours()
 /* Pick elevations and gradients at the corners at random and draw color maps
  * of the elevations, to see what combinations of min, max, and saddle can arise.
+ * The most that has arisen is one min or max and one saddle.
  * 
  * Hypothesis to attack the minimax problem:
  * Every surface in a Bézier triangle can be stretched linearly and rotated
@@ -883,9 +885,10 @@ void trianglecontours()
  * saddle points and lie on the axis A which is a straight line.
  */
 {
-  int i,j;
+  int i,j,cubedir;
   unsigned char bytes[9];
-  string fname;
+  string fname,tfname;
+  fstream ofile;
   topopoints.clear();
   regpolygon(3);
   enlarge(10);
@@ -899,6 +902,7 @@ void trianglecontours()
       fname+=hexdig[bytes[j]>>4];
       fname+=hexdig[bytes[j]&15];
     }
+    tfname=fname+".txt";
     fname+=".ppm";
     for (j=0;j<3;j++)
     {
@@ -909,6 +913,9 @@ void trianglecontours()
     topopoints.setgradient();
     topopoints.makeqindex();
     rasterdraw(topopoints,xy(5,0),30,40,30,0,1,fname);
+    ofile.open(tfname.c_str(),ios_base::out);
+    cubedir=topopoints.triangles[0].findnocubedir();
+    ofile<<"Max cube dir "<<cubedir<<' '<<bintodeg(cubedir)<<"°"<<endl;
     cout<<fname<<endl;
   }
 }
@@ -1105,7 +1112,7 @@ int main(int argc, char *argv[])
   testqindex();
   testmakegrad();
   testderivs();
-  //trianglecontours();
+  trianglecontours();
   testrasterdraw();
   testdirbound();
   teststl();

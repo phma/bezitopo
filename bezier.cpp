@@ -196,4 +196,10 @@ int triangle::findnocubedir()
  * the 3d deriv is identically 0 and you're seeing roundoff error; return b+90°.
  */
 {
+  int d3a45[4],i,b,d;
+  for (i=0;i<4;i++)
+    d3a45[i]=deriv3(xsect(i<<27,0)); // every 45°
+  b=atan2i(d3a45[2]+M_SQRT1_2*(d3a45[1]+d3a45[3]),d3a45[0]-M_SQRT1_2*(d3a45[3]-d3a45[1]));
+  d=atan2i(d3a45[2]-M_SQRT1_2*(d3a45[1]+d3a45[3]),d3a45[0]-M_SQRT1_2*(d3a45[1]-d3a45[3]));
+  return b;
 }

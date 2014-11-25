@@ -590,6 +590,7 @@ void pointlist::maketriangles()
       cib.c=a;
       if (cib.area()>=0)
       {
+        cib.peri=cib.perimeter();
         triangles[triangles.size()]=cib;
         edges[i].tria=&triangles[triangles.size()-1];
       }
@@ -606,6 +607,7 @@ void pointlist::maketriangles()
       cib.c=a;
       if (cib.area()>=0)
       {
+	cib.peri=cib.perimeter();
         triangles[triangles.size()]=cib;
         edges[i].trib=&triangles[triangles.size()-1];
       }
