@@ -61,6 +61,11 @@ void polyline::setlengths()
     lengths[i]=getarc(i).length();
 }
 
+void polyline::setdelta(int i,int delta)
+{
+  deltas[i%deltas.size()]=delta;
+}
+
 double polyline::length()
 {
   int i;
@@ -68,4 +73,16 @@ double polyline::length()
   for (len=i=0;i<lengths.size();i++)
     len+=lengths[i];
   return len;
+}
+
+void polyline::open()
+{
+  deltas.resize(endpoints.size()-1);
+  lengths.resize(endpoints.size()-1);
+}
+
+void polyline::close()
+{
+  deltas.resize(endpoints.size());
+  lengths.resize(endpoints.size());
 }

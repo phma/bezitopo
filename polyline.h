@@ -25,6 +25,9 @@ public:
   arc getarc(int i);
   void insert(xy newpoint,int pos=-1);
   void setlengths();
+  void setdelta(int i,int delta);
+  void open();
+  void close();
   double length();
 };
 

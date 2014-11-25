@@ -1067,6 +1067,17 @@ void testpolyline()
   p.insert(xy(3,4));
   p.setlengths();
   assert(p.length()==12);
+  p.open();
+  assert(p.length()==7);
+  p.close();
+  p.setlengths();
+  assert(p.length()==12);
+  p.setdelta(0,439875013);
+  p.setdelta(1,633866811);
+  p.setdelta(2,1073741824);
+  p.setlengths();
+  assert(fabs(p.length()-M_PI*5)<0.0005);
+  cout<<p.getarc(0).center().north()<<endl;
   cout<<p.length()<<endl;
 }
 
@@ -1094,7 +1105,7 @@ int main(int argc, char *argv[])
   testqindex();
   testmakegrad();
   testderivs();
-  trianglecontours();
+  //trianglecontours();
   testrasterdraw();
   testdirbound();
   teststl();
