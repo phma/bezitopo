@@ -6,6 +6,7 @@
 
 /* The Cornu spiral is a complex-valued function of a real argument,
  * the graph in the complex plane of integral(cis(t²) dt).
+ * The curvature at t equals 2t.
  * Evaluating the function in its curly tails should not be necessary
  * in surveying, but if it is, methods of evaluating the
  * normal distribution function in its tail may be relevant.
@@ -61,6 +62,8 @@ xy cornu(double t,double curvature,double clothance)
  * 1+(cl×t²+cu×t)i-(cl×t²+cu×t)²/2-(cl×t²+cu×t)³i/6+(cl×t²+cu×t)⁴/24+...
  * 1+cl×t²×i  +cu×t×i   -cl²×t⁴/2  -cl×cu×t³×2/2  -cu²×t²/2  -cl³×t⁶×i/6  -cl²×cu×t⁵×3i/6  -cl×cu²×t⁴×3i/6  -cu³×t³i/6  +cl⁴×t⁸/24  +cl³×cu×t⁷×4/24  +cl²×cu²×t⁶6/24  +cl×cu³×t⁵×4/24  +cu⁴×t⁴/24+...
  * t+cl×t³×i/3+cu×t²×i/2-cl²×t⁵/5/2-cl×cu×t⁴×2/4/2-cu²×t³/3/2-cl³×t⁷×i/7/6-cl³×cu×t⁶×3i/6/6-cl×cu²×t⁵×3i/5/6-cu³×t⁴i/4/6+cl⁴×t⁹/9/24+cl³×cu×t⁸×4/8/24+cl²×cu²×t⁷6/7/24+cl×cu³×t⁶×4/6/24+cu⁴×t⁵/5/24+...
+ * If clothance=0, you get a circle of radius 1/curvature.
+ * If curvature=0 and clothance=1, you get cornu(t).
  */
 {
   vector<long double> realparts,imagparts,cupower,clpower;
@@ -115,7 +118,7 @@ xy cornu(double t,double curvature,double clothance)
   precision=nextafterl(bigpart,2*bigpart)-bigpart;
   //printf("precision %e\n",precision);
   if (precision>1e-6)
-    rsum=isum=sqrt(M_PI/8)*(t/fabs(t));
+    rsum=isum=nan("cornu");
   return xy(rsum,isum);
 }
 

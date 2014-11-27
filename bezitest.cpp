@@ -587,19 +587,50 @@ void testspiral()
   startpage();
   for (j=-3;j<=3;j++)
   {
+    switch ((j+99)%3)
+    {
+      case 0:
+	setcolor(1,0,0);
+	break;
+      case 1:
+	setcolor(0,0.4,0);
+	break;
+      case 2:
+	setcolor(0,0,1);
+	break;
+    }
     for (i=-20;i<21;i++)
     {
       b=cornu(t=i/20.,2*j,1);
       if (i>-20)
       {
 	line2p(c,b);
-	cout<<dist(c,b)<<' ';
+	//cout<<dist(c,b)<<' ';
       }
       c=b;
     }
-    cout<<endl;
+    //cout<<endl;
   }
   endpage();
+  //startpage();
+  a=cornu(sqrt(M_PI*2));
+  for (i=-20;i<21;i++)
+  {
+    b=cornu(i/20.,0,1);
+    c=cornu(i/20.);
+    //cout<<i<<' '<<dist(b,c)<<endl;
+    assert(dist(b,c)<1e-12); // it's less than 6e-17 on 64-bit Linux
+    b=cornu(i/20.,sqrt(M_PI*8),1);
+    c=cornu(i/20.+sqrt(M_PI*2))-a;
+    //cout<<i<<' '<<dist(b,c)<<endl;
+    assert(dist(b,c)<1e-12); // it's less than 1.1e-15 on 64-bit Linux
+    //line2p(b,c);
+    b=cornu(i/20.,1,0);
+    c=xy(0,1);
+    //cout<<i<<' '<<dist(b,c)-1<<endl;
+    assert(fabs(dist(b,c)-1)<1e-12); // it's 0 or -1.11e-16 on 64-bit Linux
+  }
+  //endpage();
   pstrailer();
   psclose();
   assert(bearing==162105696);
