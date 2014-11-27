@@ -523,7 +523,7 @@ void testarc()
 void testspiral()
 {
   xy a,b,c,limitpoint;
-  int i,bearing,lastbearing,curvebearing,diff,badcount;
+  int i,j,bearing,lastbearing,curvebearing,diff,badcount;
   double t;
   vector<xy> spoints;
   a=cornu(0);
@@ -582,6 +582,23 @@ void testspiral()
   }
   setcolor(0,0,1);
   line2p(a,b);
+  endpage();
+  startpage();
+  for (j=-3;j<=3;j++)
+  {
+    for (i=-20;i<21;i++)
+    {
+      b=cornu(t=i/20.,j,1);
+      if (i>-20)
+      {
+	line2p(c,b);
+	cout<<dist(c,b)<<' ';
+      }
+      c=b;
+    }
+    cout<<endl;
+  }
+  endpage();
   pstrailer();
   psclose();
   assert(bearing==162105696);

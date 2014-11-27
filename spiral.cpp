@@ -64,26 +64,49 @@ xy cornu(double t,double curvature,double clothance)
 {
   vector<long double> realparts,imagparts,cupower,clpower;
   int i,j;
-  long double facpower,rsum,isum,t2,bigpart;
+  long double facpower,rsum,isum,t2,bigpart,binom,clotht,term,bigterm;
   double precision;
   t2=t*t;
-  for (i=0,facpower=t;0.9+facpower!=0.9 || !i;i++)
+  clotht=clothance*t;
+  cupower.push_back(1);
+  clpower.push_back(1);
+  for (i=0,facpower=t;0.9+bigterm!=0.9 || !i;i++)
   {
-    realparts.push_back(facpower/(8*i+1));
-    facpower*=t2/(4*i+1);
-    imagparts.push_back(facpower/(8*i+3));
-    facpower*=t2/(4*i+2);
-    realparts.push_back(-facpower/(8*i+5));
-    facpower*=t2/(4*i+3);
-    imagparts.push_back(-facpower/(8*i+7));
-    facpower*=t2/(4*i+4);
+    for (bigterm=j=0,binom=1;j<=i;j++)
+    {
+      term=cupower[j]*clpower[i-j]*binom*facpower/(i+j+1);
+      if (fabsl(term)>bigterm)
+	bigterm=fabsl(term);
+      switch (i&3)
+      {
+	case 0:
+	  realparts.push_back(term);
+	  break;
+	case 1:
+	  imagparts.push_back(term);
+	  break;
+	case 2:
+	  realparts.push_back(-term);
+	  break;
+	case 3:
+	  imagparts.push_back(-term);
+	  break;
+      }
+      binom=binom*(i-j)/(j+1);
+    }
+    cupower.push_back(cupower.back()*curvature);
+    clpower.push_back(clpower.back()*clotht);
+    facpower*=t/(i+1);
   }
-  for (i=realparts.size()-1,rsum=isum=bigpart=0;i>=0;i--)
+  for (i=realparts.size()-1,rsum=bigpart=0;i>=0;i--)
   {
     rsum+=realparts[i];
-    isum+=imagparts[i];
     if (fabsl(realparts[i])>bigpart)
       bigpart=fabsl(realparts[i]);
+  }
+  for (i=imagparts.size()-1,isum=0;i>=0;i--)
+  {
+    isum+=imagparts[i];
     if (fabsl(imagparts[i])>bigpart)
       bigpart=fabsl(imagparts[i]);
   }
