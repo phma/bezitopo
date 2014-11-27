@@ -583,12 +583,13 @@ void testspiral()
   setcolor(0,0,1);
   line2p(a,b);
   endpage();
+  //b=cornu(1,1,1);
   startpage();
   for (j=-3;j<=3;j++)
   {
     for (i=-20;i<21;i++)
     {
-      b=cornu(t=i/20.,j,1);
+      b=cornu(t=i/20.,2*j,1);
       if (i>-20)
       {
 	line2p(c,b);

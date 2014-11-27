@@ -14,6 +14,7 @@
 #include <vector>
 #include <cmath>
 #include <cstdio>
+#include <iostream>
 #include "spiral.h"
 #include "angle.h"
 using namespace std;
@@ -74,7 +75,8 @@ xy cornu(double t,double curvature,double clothance)
   {
     for (bigterm=j=0,binom=1;j<=i;j++)
     {
-      term=cupower[j]*clpower[i-j]*binom*facpower/(i+j+1);
+      term=clpower[j]*cupower[i-j]*binom*facpower/(i+j+1);
+      //cout<<"i="<<i<<" j="<<j<<" term="<<cupower[j]<<'*'<<clpower[i-j]<<'*'<<binom<<'*'<<facpower<<'/'<<i+j+1<<'='<<term<<endl;
       if (fabsl(term)>bigterm)
 	bigterm=fabsl(term);
       switch (i&3)
