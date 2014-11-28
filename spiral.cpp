@@ -122,13 +122,21 @@ xy cornu(double t,double curvature,double clothance)
   return xy(rsum,isum);
 }
 
-double spiralbearing(double t)
+/* It should be possible to fit a spiral to be tangent to two given circular
+ * or straight curves by successive approximation using these functions.
+ */
+
+double spiralbearing(double t,double curvature=0,double clothance=1)
 {
-  return t*t;
+  return t*t*clothance+t*curvature;
 }
 
-int ispiralbearing(double t)
+int ispiralbearing(double t,double curvature=0,double clothance=1)
 {
-  return radtobin(t*t);
+  return radtobin(t*t*clothance+t*curvature);
 }
 
+double spiralcurvature(double t,double curvature=0,double clothance=1)
+{
+  return 2*t*clothance+curvature;
+}
