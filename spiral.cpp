@@ -8,8 +8,8 @@
  * the graph in the complex plane of integral(cis(t²) dt).
  * The curvature at t equals 2t.
  * Evaluating the function in its curly tails should not be necessary
- * in surveying, but if it is, methods of evaluating the
- * normal distribution function in its tail may be relevant.
+ * in surveying, but if it is, use the three-argument
+ * cornu() function.
  */
 
 #include <vector>

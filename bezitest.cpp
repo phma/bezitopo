@@ -619,16 +619,16 @@ void testspiral()
     b=cornu(i/20.,0,1);
     c=cornu(i/20.);
     //cout<<i<<' '<<dist(b,c)<<endl;
-    assert(dist(b,c)<1e-12); // it's less than 6e-17 on 64-bit Linux
+    assert(dist(b,c)<1e-12); // it's less than 6e-17 on 64-bit
     b=cornu(i/20.,sqrt(M_PI*8),1);
     c=cornu(i/20.+sqrt(M_PI*2))-a;
     //cout<<i<<' '<<dist(b,c)<<endl;
-    assert(dist(b,c)<1e-12); // it's less than 1.1e-15 on 64-bit Linux
+    assert(dist(b,c)<1e-12); // it's less than 1.1e-15 on 64-bit
     //line2p(b,c);
     b=cornu(i/20.,1,0);
     c=xy(0,1);
     //cout<<i<<' '<<dist(b,c)-1<<endl;
-    assert(fabs(dist(b,c)-1)<1e-12); // it's 0 or -1.11e-16 on 64-bit Linux
+    assert(fabs(dist(b,c)-1)<1e-12); // it's 0 or -1.11e-16 on 64-bit
   }
   //endpage();
   pstrailer();
