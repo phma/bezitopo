@@ -78,8 +78,17 @@ bool operator==(const xy &l,const xy &r)
 }
 
 xy turn90(xy a)
-{return xy(-a.y,a.x);
- }
+{
+  return xy(-a.y,a.x);
+}
+
+xy turn(xy a,int angle)
+{
+  double s,c;
+  s=sin(angle);
+  c=cos(angle);
+  return xy(c*a.x-s*a.y,s*a.x+c*a.y);
+}
 
 double dist(xy a,xy b)
 {return hypot(a.x-b.x,a.y-b.y);

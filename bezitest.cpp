@@ -531,7 +531,8 @@ void testspiral()
   psopen("spiral.ps");
   psprolog();
   startpage();
-  setscale(-1,-1,1,1);
+  setscale(-1,-1,1,1,degtobin(0));
+  //widen(10);
   for (i=-120;i<121;i++)
   {
     b=cornu(t=i/20.);
@@ -550,7 +551,7 @@ void testspiral()
   }
   for (i=1,badcount=0;i<119;i++)
   {
-    curvebearing=ispiralbearing(i/20.);
+    curvebearing=ispiralbearing(i/20.,0,1);
     bearing=dir(spoints[i-1],spoints[i+1]); // compute the difference between a chord of the spiral
     diff=(curvebearing-bearing)&0x7fffffff; // and a tangent in the middle of the arc
     diff|=(diff&0x40000000)<<1; // diff could be near 0° or 360°; this bit manipulation puts it near 0°
@@ -605,6 +606,7 @@ void testspiral()
       if (i>-20)
       {
 	line2p(c,b);
+	assert(dist(c,b)>0.049 && dist(c,b)<=0.05);
 	//cout<<dist(c,b)<<' ';
       }
       c=b;

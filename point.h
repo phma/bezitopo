@@ -16,30 +16,32 @@ class edge;
 using std::string;
 
 class xy
-{public:
- xy(double e,double n);
- xy(xyz point);
- xy();
- double east();
- double north();
- friend xy operator+(const xy &l,const xy &r);
- friend xy operator+=(xy &l,const xy &r);
- friend xy operator-(const xy &l,const xy &r);
- friend xy operator*(const xy &l,double r);
- friend xy operator/(const xy &l,double r);
- friend xy operator/=(xy &l,double r);
- friend bool operator!=(const xy &l,const xy &r);
- friend bool operator==(const xy &l,const xy &r);
- friend xy turn90(xy a);
- friend double dist(xy a,xy b);
- friend int dir(xy a,xy b);
- friend double dot(xy a,xy b);
- friend class point;
- friend class xyz;
- friend class qindex;
- protected:
- double x,y;
- };
+{
+public:
+  xy(double e,double n);
+  xy(xyz point);
+  xy();
+  double east();
+  double north();
+  friend xy operator+(const xy &l,const xy &r);
+  friend xy operator+=(xy &l,const xy &r);
+  friend xy operator-(const xy &l,const xy &r);
+  friend xy operator*(const xy &l,double r);
+  friend xy operator/(const xy &l,double r);
+  friend xy operator/=(xy &l,double r);
+  friend bool operator!=(const xy &l,const xy &r);
+  friend bool operator==(const xy &l,const xy &r);
+  friend xy turn90(xy a);
+  friend xy turn(xy a,int angle);
+  friend double dist(xy a,xy b);
+  friend int dir(xy a,xy b);
+  friend double dot(xy a,xy b);
+  friend class point;
+  friend class xyz;
+  friend class qindex;
+protected:
+  double x,y;
+};
 
 /*class farna: public xy
 {

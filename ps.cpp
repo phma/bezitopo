@@ -20,13 +20,14 @@
 FILE *psfile;
 int pages;
 double scale=1; // paper size is in millimeters, but model space is in meters
-int orientation;
+int orientation=0;
 xy paper(210,297),modelcenter;
 char rscales[]={10,12,15,20,25,30,40,50,60,80};
 
-void setscale(double minx,double miny,double maxx,double maxy)
+void setscale(double minx,double miny,double maxx,double maxy,int ori)
 {double xsize,ysize;
  int i;
+ orientation=ori;
  modelcenter=xy(minx+maxx,miny+maxy)/2;
  xsize=fabs(minx-maxx);
  ysize=fabs(miny-maxy);
@@ -104,9 +105,11 @@ void endpage()
  }
 
 void dot(xy pnt)
-{double r,g,b;
- fprintf(psfile,"%7.3f %7.3f .\n",
-        xscale(pnt.east()),yscale(pnt.north()));
+{
+  double r,g,b;
+  pnt=turn(pnt,orientation);
+  fprintf(psfile,"%7.3f %7.3f .\n",
+         xscale(pnt.east()),yscale(pnt.north()));
  }
 
 int fibmod3(int n)
@@ -122,8 +125,12 @@ int fibmod3(int n)
 
 void line(edge lin,int num,bool colorfibaster,bool directed)
 {
-  xy mid,disp,base,ab1,ab2;
+  xy mid,disp,base,ab1,ab2,a,b;
   char *rgb;
+  a=*lin.a;
+  b=*lin.b;
+  a=turn(a,orientation);
+  b=turn(b,orientation);
   if (lin.delaunay())
     if (colorfibaster)
       switch (fibmod3(abs(topopoints.revpoints[lin.a]-topopoints.revpoints[lin.b])))
@@ -147,21 +154,24 @@ void line(edge lin,int num,bool colorfibaster,bool directed)
     rgb="0 0 0";
   if (directed)
   {
-    disp=xy(*lin.b)-xy(*lin.a);
+    disp=b-a;
     base=xy(disp.north()/40,disp.east()/-40);
-    ab1=*lin.a+base;
-    ab2=*lin.a-base;
+    ab1=a+base;
+    ab2=a-base;
     fprintf(psfile,"%s setrgbcolor newpath %7.3f %7.3f moveto %7.3f %7.3f lineto %7.3f %7.3f lineto closepath fill\n",
-	    rgb,xscale(lin.b->east()),yscale(lin.b->north()),xscale(ab1.east()),yscale(ab1.north()),xscale(ab2.east()),yscale(ab2.north()));
+	    rgb,xscale(b.east()),yscale(b.north()),xscale(ab1.east()),yscale(ab1.north()),xscale(ab2.east()),yscale(ab2.north()));
   }
   else
     fprintf(psfile,"%s setrgbcolor %7.3f %7.3f %7.3f %7.3f -\n",
-            rgb,xscale(lin.a->east()),yscale(lin.a->north()),xscale(lin.b->east()),yscale(lin.b->north()));
-  mid=((xy)*lin.a+*lin.b)/2;
+            rgb,xscale(a.east()),yscale(a.north()),xscale(b.east()),yscale(b.north()));
+  mid=(a+b)/2;
   //fprintf(psfile,"%7.3f %7.3f moveto (%d) show\n",xscale(mid.east()),yscale(mid.north()),num);
- }
+}
 
 void line2p(xy pnt1,xy pnt2)
-{fprintf(psfile,"%7.3f %7.3f %7.3f %7.3f -\n",
-        xscale(pnt1.east()),yscale(pnt1.north()),xscale(pnt2.east()),yscale(pnt2.north()));
- }
+{
+  pnt1=turn(pnt1,orientation);
+  pnt2=turn(pnt2,orientation);
+  fprintf(psfile,"%7.3f %7.3f %7.3f %7.3f -\n",
+         xscale(pnt1.east()),yscale(pnt1.north()),xscale(pnt2.east()),yscale(pnt2.north()));
+}
