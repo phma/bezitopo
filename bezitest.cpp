@@ -35,6 +35,7 @@
 #include "stl.h"
 #include "halton.h"
 #include "polyline.h"
+#include "bezier3d.h"
 
 #define psoutput false
 // affects only maketin
@@ -1139,6 +1140,11 @@ void testpolyline()
   cout<<p.length()<<endl;
 }
 
+void testbezier3d()
+{
+  bezier3d a(xyz(0,0,0),xyz(1,1,1),xyz(2,4,8),xyz(3,9,27));
+}
+
 int main(int argc, char *argv[])
 {
   testarea3();
@@ -1169,6 +1175,7 @@ int main(int argc, char *argv[])
   teststl();
   testhalton();
   testpolyline();
+  testbezier3d();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }
