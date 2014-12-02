@@ -1142,7 +1142,12 @@ void testpolyline()
 
 void testbezier3d()
 {
-  bezier3d a(xyz(0,0,0),xyz(1,1,1),xyz(2,4,8),xyz(3,9,27));
+  bezier3d a(xyz(0,0,0),xyz(1,0,0),xyz(2,3,0),xyz(3,9,27)),b;
+  xyz pt,pt1;
+  pt=a.station(0.4);
+  pt1=xyz(1.2,1.44,1.728);
+  cout<<pt.east()<<' '<<pt.north()<<' '<<pt.elev()<<endl;
+  assert(dist(pt,pt1)<1e-6);
 }
 
 int main(int argc, char *argv[])

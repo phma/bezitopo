@@ -135,6 +135,21 @@ bool operator==(const xyz &l,const xyz &r)
   return l.x==r.x && l.y==r.y && l.z==r.z;
 }
 
+xyz operator*(const xyz &l,const double r)
+{
+  return xyz(l.x*r,l.y*r,l.z*r);
+}
+
+xyz operator*(const double l,const xyz &r)
+{
+  return xyz(l*r.x,l*r.y,l*r.z);
+}
+
+xyz operator+(const xyz &l,const xyz &r)
+{
+  return xyz(l.x+r.x,l.y+r.y,l.z+r.z);
+}
+
 double dist(xyz a,xyz b)
 {return hypot(hypot(a.x-b.x,a.y-b.y),a.z-b.z);
  }
