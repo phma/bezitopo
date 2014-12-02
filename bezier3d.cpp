@@ -3,7 +3,9 @@
  * Of course the 3d approximation of a vertical curve is exact.
  */
 #include <cmath>
+#include <stdexcept>
 #include "bezier3d.h"
+using namespace std;
 
 bezier3d::bezier3d(xyz kra,xyz con1,xyz con2,xyz fam)
 {
@@ -18,12 +20,21 @@ bezier3d::bezier3d()
   controlpoints.push_back(xyz(0,0,0));
 }
 
+int bezier3d::size()
+{
+  return controlpoints.size()/3;
+}
+
 xyz bezier3d::station(double along)
 {
   int segment;
   double p,q;
   xyz result;
   segment=floor(along);
+  if (segment==size())
+    segment--;
+  if (segment<0 || segment>=size())
+    throw(range_error("bezier3d::station: along out of range"));
   p=along-segment;
   q=1-p;
   p=1-q;

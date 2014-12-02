@@ -1144,10 +1144,13 @@ void testbezier3d()
 {
   bezier3d a(xyz(0,0,0),xyz(1,0,0),xyz(2,3,0),xyz(3,9,27)),b;
   xyz pt,pt1;
+  assert(a.size()==1);
   pt=a.station(0.4);
   pt1=xyz(1.2,1.44,1.728);
-  cout<<pt.east()<<' '<<pt.north()<<' '<<pt.elev()<<endl;
   assert(dist(pt,pt1)<1e-6);
+  pt=a.station(1);
+  pt1=xyz(3,9,27);
+  cout<<pt.east()<<' '<<pt.north()<<' '<<pt.elev()<<endl;
 }
 
 int main(int argc, char *argv[])

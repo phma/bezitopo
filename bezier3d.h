@@ -10,6 +10,7 @@ private:
 public:
   bezier3d(xyz kra,xyz con1,xyz con2,xyz fam);
   bezier3d();
+  int size(); // number of Bézier segments
   xyz station(double along);
   //friend bezier3d operator*(const bezier3d &l,const bezier3d &r); // concatenates, not multiplies
   friend bezier3d operator+(const bezier3d &l,const bezier3d &r);
