@@ -1142,6 +1142,11 @@ void testpolyline()
 
 void testbezier3d()
 {
+  xyz startpoint,endpoint;
+  int startbearing,endbearing;
+  double curvature,clothance;
+  int i;
+  xy spipts[21],bezpts[21];
   bezier3d a(xyz(0,0,0),xyz(1,0,0),xyz(2,3,0),xyz(3,9,27)),b;
   xyz pt,pt1;
   assert(a.size()==1);
@@ -1151,6 +1156,34 @@ void testbezier3d()
   pt=a.station(1);
   pt1=xyz(3,9,27);
   cout<<pt.east()<<' '<<pt.north()<<' '<<pt.elev()<<endl;
+  assert(dist(pt,pt1)<1e-6);
+  psopen("bezier3d.ps");
+  psprolog();
+  for (curvature=-1;curvature<1.1;curvature+=0.125)
+    for (clothance=-1;clothance<1.1;clothance+=0.125)
+    {
+      startpage();
+      setscale(-0.2,-0.5,0.2,0.5,degtobin(90));
+      startpoint=xyz(cornu(-0.5,curvature,clothance),0);
+      endpoint=xyz(cornu(0.5,curvature,clothance),0);
+      startbearing=ispiralbearing(-0.5,curvature,clothance);
+      endbearing=ispiralbearing(0.5,curvature,clothance);
+      a=bezier3d(startpoint,startbearing,0,0,endbearing,endpoint);
+      for (i=-10;i<=10;i++)
+      {
+	spipts[i+10]=cornu(i/20.,curvature,clothance);
+	bezpts[i+10]=a.station((i+10)/20.);
+      }
+      setcolor(0,0,0);
+      for (i=-10;i<10;i++)
+        line2p(spipts[i+10],spipts[i+11]);
+      setcolor(0,0,1);
+      for (i=-10;i<10;i++)
+        line2p(bezpts[i+10],bezpts[i+11]);
+      endpage();
+    }
+  pstrailer();
+  psclose();
 }
 
 int main(int argc, char *argv[])

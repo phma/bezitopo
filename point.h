@@ -70,6 +70,7 @@ class xyz
  friend xyz operator*(const xyz &l,const double r);
  friend xyz operator*(const double l,const xyz &r);
  friend xyz operator+(const xyz &l,const xyz &r);
+ friend xyz operator-(const xyz &l,const xyz &r);
  protected:
  double x,y,z;
  };
