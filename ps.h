@@ -3,6 +3,7 @@
 /* ps.h - PostScript output                           */
 /*                                                    */
 /******************************************************/
+#include <string>
 
 extern FILE *psfile;
 extern int orientation;
@@ -18,3 +19,4 @@ void line2p(xy pnt1,xy pnt2);
 void widen(double factor);
 void setcolor(double r,double g,double b);
 void setscale(double minx,double miny,double maxx,double maxy,int ori=0);
+void pswrite(xy pnt,std::string text);

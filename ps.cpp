@@ -11,6 +11,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
+#include <string>
 #include <unistd.h>
 #include "point.h"
 #include "tin.h"
@@ -174,4 +175,10 @@ void line2p(xy pnt1,xy pnt2)
   pnt2=turn(pnt2,orientation);
   fprintf(psfile,"%7.3f %7.3f %7.3f %7.3f -\n",
          xscale(pnt1.east()),yscale(pnt1.north()),xscale(pnt2.east()),yscale(pnt2.north()));
+}
+
+void pswrite(xy pnt,string text)
+{
+  pnt=turn(pnt,orientation);
+  fprintf(psfile,"%7.3f %7.3f moveto (%s) show\n",xscale(pnt.east()),yscale(pnt.north()),text.c_str());
 }

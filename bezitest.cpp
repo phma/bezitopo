@@ -1140,13 +1140,27 @@ void testpolyline()
   cout<<p.length()<<endl;
 }
 
+bool before(xy a1,xy a2,xy a3,xy b1,xy b2,xy b3)
+/* Returns true if a2 is nearer along than b2.
+ * They are on different curves, so this isn't totally well-defined,
+ * but one curve is an approximation to the other.
+ */
+{
+  int adir,bdir,avgdir,xdir;
+  adir=dir(a1,a3);
+  bdir=dir(b1,b3);
+  avgdir=adir+(bdir-adir)/2;
+  xdir=dir(a2,b2);
+  return cos(xdir-avgdir)>0;
+}
+
 void testbezier3d()
 {
   xyz startpoint,endpoint;
   int startbearing,endbearing;
   double curvature,clothance;
-  int i;
-  xy spipts[21],bezpts[21];
+  int i,j;
+  xy spipts[21],bezpts[21],lastpt,thispt;
   bezier3d a(xyz(0,0,0),xyz(1,0,0),xyz(2,3,0),xyz(3,9,27)),b;
   xyz pt,pt1;
   assert(a.size()==1);
@@ -1160,7 +1174,7 @@ void testbezier3d()
   psopen("bezier3d.ps");
   psprolog();
   for (curvature=-1;curvature<1.1;curvature+=0.125)
-    for (clothance=-1;clothance<1.1;clothance+=0.125)
+    for (clothance=-3;clothance<3.1;clothance+=0.375)
     {
       startpage();
       setscale(-0.2,-0.5,0.2,0.5,degtobin(90));
@@ -1175,11 +1189,34 @@ void testbezier3d()
 	bezpts[i+10]=a.station((i+10)/20.);
       }
       setcolor(0,0,0);
+      pswrite(xy(0,0.1),"aoeu");
+      setcolor(1,.5,0);
       for (i=-10;i<10;i++)
         line2p(spipts[i+10],spipts[i+11]);
-      setcolor(0,0,1);
+      setcolor(0,.5,1);
       for (i=-10;i<10;i++)
         line2p(bezpts[i+10],bezpts[i+11]);
+      setcolor(0,0,0);
+      for (i=j=0,thispt=startpoint;i<20 && j<20;)
+      {
+	lastpt=thispt;
+	if (i==0 && j==0)
+	  if (before(spipts[0],spipts[1],spipts[2],bezpts[0],bezpts[1],bezpts[2]))
+	    thispt=spipts[i++];
+	  else
+	    thispt=bezpts[j++];
+	else if ((i==0) ^ (j==0))
+	  if (j)
+	    thispt=spipts[i++];
+	  else
+	    thispt=bezpts[j++];
+	else
+	  if (before(spipts[i-1],spipts[i],spipts[i+1],bezpts[j-1],bezpts[j],bezpts[j+1]))
+	    thispt=spipts[i++];
+	  else
+	    thispt=bezpts[j++];
+	line2p(lastpt,thispt);
+      }
       endpage();
     }
   pstrailer();
