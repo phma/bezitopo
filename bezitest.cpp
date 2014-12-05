@@ -1154,12 +1154,25 @@ bool before(xy a1,xy a2,xy a3,xy b1,xy b2,xy b3)
   return cos(xdir-avgdir)>0;
 }
 
+double sepdist(xy a1,xy a2,xy a3,xy b1,xy b2,xy b3)
+/* Separation distance from one curve to the other.
+ */
+{
+  int adir,bdir,avgdir;
+  adir=dir(a1,a3);
+  bdir=dir(b1,b3);
+  avgdir=adir+(bdir-adir)/2;
+  return pldist(a2,b2,b2+cossin(avgdir));
+}
+
 void testbezier3d()
 {
   xyz startpoint,endpoint;
   int startbearing,endbearing;
-  double curvature,clothance;
-  int i,j;
+  double curvature,clothance,totaldist,avgdist;
+  int i,j,numdist;
+  char buf[32];
+  map<double,double> dists;
   xy spipts[21],bezpts[21],lastpt,thispt;
   bezier3d a(xyz(0,0,0),xyz(1,0,0),xyz(2,3,0),xyz(3,9,27)),b;
   xyz pt,pt1;
@@ -1189,7 +1202,8 @@ void testbezier3d()
 	bezpts[i+10]=a.station((i+10)/20.);
       }
       setcolor(0,0,0);
-      pswrite(xy(0,0.1),"aoeu");
+      sprintf(buf,"cur=%5.3f clo=%5.3f",curvature,clothance);
+      pswrite(xy(0,0.2),buf);
       setcolor(1,.5,0);
       for (i=-10;i<10;i++)
         line2p(spipts[i+10],spipts[i+11]);
@@ -1197,7 +1211,7 @@ void testbezier3d()
       for (i=-10;i<10;i++)
         line2p(bezpts[i+10],bezpts[i+11]);
       setcolor(0,0,0);
-      for (i=j=0,thispt=startpoint;i<20 && j<20;)
+      for (totaldist=numdist=i=j=0,thispt=startpoint;i<20 && j<20;)
       {
 	lastpt=thispt;
 	if (i==0 && j==0)
@@ -1211,14 +1225,30 @@ void testbezier3d()
 	  else
 	    thispt=bezpts[j++];
 	else
+	{
+	  totaldist+=sqr(sepdist(spipts[i-1],spipts[i],spipts[i+1],bezpts[j-1],bezpts[j],bezpts[j+1]));
+	  numdist++;
 	  if (before(spipts[i-1],spipts[i],spipts[i+1],bezpts[j-1],bezpts[j],bezpts[j+1]))
 	    thispt=spipts[i++];
 	  else
 	    thispt=bezpts[j++];
+	}
 	line2p(lastpt,thispt);
       }
+      avgdist=sqrt(totaldist/numdist);
+      dists[clothance*M_PI+curvature]=avgdist;
+      setcolor(0,0,0);
+      sprintf(buf,"dist=%5.7f",avgdist);
+      pswrite(xy(0,-0.2),buf);
       endpage();
+      cout<<avgdist<<endl;
     }
+  startpage();
+  setscale(-1,-1,1,1,0);
+  for (curvature=-1;curvature<1.1;curvature+=0.125)
+    for (clothance=-3;clothance<3.1;clothance+=0.375)
+      circle(xy(curvature,clothance/3),sqrt(dists[clothance*M_PI+curvature]));
+  endpage();
   pstrailer();
   psclose();
 }

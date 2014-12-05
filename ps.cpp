@@ -107,11 +107,17 @@ void endpage()
 
 void dot(xy pnt)
 {
-  double r,g,b;
   pnt=turn(pnt,orientation);
   fprintf(psfile,"%7.3f %7.3f .\n",
          xscale(pnt.east()),yscale(pnt.north()));
- }
+}
+
+void circle(xy pnt,double radius)
+{
+  pnt=turn(pnt,orientation);
+  fprintf(psfile,"%7.3f %7.3f newpath %.3f 0 360 arc fill\n",
+         xscale(pnt.east()),yscale(pnt.north()),scale*radius);
+}
 
 int fibmod3(int n)
 {
