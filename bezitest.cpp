@@ -1204,10 +1204,10 @@ void testbezier3d()
       setcolor(0,0,0);
       sprintf(buf,"cur=%5.3f clo=%5.3f",curvature,clothance);
       pswrite(xy(0,0.2),buf);
-      setcolor(1,.5,0);
+      setcolor(1,.5,0); // red is the spiral
       for (i=-10;i<10;i++)
         line2p(spipts[i+10],spipts[i+11]);
-      setcolor(0,.5,1);
+      setcolor(0,.5,1); // blue is the Bézier I'm approximating it with
       for (i=-10;i<10;i++)
         line2p(bezpts[i+10],bezpts[i+11]);
       setcolor(0,0,0);
