@@ -7,14 +7,10 @@
 #include <cmath>
 #include "bezitopo.h"
 #include "test.h"
+#include "angle.h"
 #include "pointlist.h"
 
 using std::map;
-
-double sqr(double x)
-{
-  return x*x;
-}
 
 void dumppoints()
 {map<int,point>::iterator i;

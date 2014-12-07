@@ -36,7 +36,7 @@ void setscale(double minx,double miny,double maxx,double maxy,int ori)
  for (;scale*xsize/80>paper.east()*0.9 || scale*ysize/80>paper.north()*0.9;scale/=10);
  for (i=0;i<9 && (scale*xsize/rscales[i]>paper.east()*0.9 || scale*ysize/rscales[i]>paper.north()*0.9);i++);
  scale/=rscales[i];
- printf("scale=%f\n",scale);
+ //printf("scale=%f\n",scale);
  //sleep(3);
  }
 
@@ -53,10 +53,11 @@ void psopen(const char * psfname)
  }
 
 void psclose()
-{fclose(psfile);
- printf("scale=%f\n",scale);
- sleep(3);
- }
+{
+  fclose(psfile);
+  //printf("scale=%f\n",scale);
+  //sleep(3);
+}
 
 void psprolog()
 {fprintf(psfile,"%%!PS-Adobe-3.0\n\
@@ -115,8 +116,8 @@ void dot(xy pnt)
 void circle(xy pnt,double radius)
 {
   pnt=turn(pnt,orientation);
-  fprintf(psfile,"%7.3f %7.3f newpath %.3f 0 360 arc fill\n",
-         xscale(pnt.east()),yscale(pnt.north()),scale*radius);
+  fprintf(psfile,"%7.3f %7.3f newpath %.3f 0 360 arc fill %%%f\n",
+         xscale(pnt.east()),yscale(pnt.north()),scale*radius,radius*radius);
 }
 
 int fibmod3(int n)

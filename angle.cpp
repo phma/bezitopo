@@ -6,6 +6,11 @@
 
 #include "angle.h"
 
+double sqr(double x)
+{
+  return x*x;
+}
+
 double sin(int angle)
 {return sinl(angle*M_PIl/1073741824.);
  }

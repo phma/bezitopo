@@ -17,6 +17,8 @@
 #define M_PIl M_PI
 #endif
 
+double sqr(double x);
+
 double sin(int angle);
 double cos(int angle);
 double sinhalf(int angle);

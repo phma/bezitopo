@@ -59,3 +59,19 @@ xyz bezier3d::station(double along)
   result=controlpoints[3*segment]*q*q*q+3*controlpoints[3*segment+1]*p*q*q+3*controlpoints[3*segment+2]*p*p*q+controlpoints[3*segment+3]*p*p*p;
   return result;
 }
+
+double bez3destimate(xy kra,int bear0,double len,int bear1,xy fam)
+/* This should be used only when bear0-direc, bear1-direc, and bear0+bear1-2*direc
+ * are all less than 30°. If any of them is greater, split the curve.
+ * len is the horizontal distance along the curve, not the displacement
+ * as in the constructor. This module has no way to know the length.
+ */
+{
+  double corr0,corr1,corr2;
+  int direc;
+  direc=dir(xy(kra),xy(fam));
+  corr0=1-cos(bear0-direc);
+  corr1=1-cos(bear1-direc);
+  corr2=1-cos(bear0+bear1-2*direc); //this is 0 for circular curves
+  return ((sqr(corr0)+sqr(corr1))/20+pow(corr2,1.5)/30+sqrt(corr2)/3000)*len;
+}

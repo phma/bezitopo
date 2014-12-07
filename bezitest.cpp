@@ -1172,7 +1172,7 @@ void testbezier3d()
   double curvature,clothance,totaldist,avgdist;
   int i,j,numdist;
   char buf[32];
-  map<double,double> dists;
+  map<double,double> dists,ests;
   xy spipts[21],bezpts[21],lastpt,thispt;
   bezier3d a(xyz(0,0,0),xyz(1,0,0),xyz(2,3,0),xyz(3,9,27)),b;
   xyz pt,pt1;
@@ -1187,7 +1187,7 @@ void testbezier3d()
   psopen("bezier3d.ps");
   psprolog();
   for (curvature=-1;curvature<1.1;curvature+=0.125)
-    for (clothance=-3;clothance<3.1;clothance+=0.375)
+    for (clothance=-3;clothance<3.1;clothance+=(clothance>-0.38 && clothance<0.37)?0.125:0.375)
     {
       startpage();
       setscale(-0.2,-0.5,0.2,0.5,degtobin(90));
@@ -1237,17 +1237,28 @@ void testbezier3d()
       }
       avgdist=sqrt(totaldist/numdist);
       dists[clothance*M_PI+curvature]=avgdist;
+      ests[clothance*M_PI+curvature]=bez3destimate(startpoint,startbearing,1,endbearing,endpoint);
       setcolor(0,0,0);
       sprintf(buf,"dist=%5.7f",avgdist);
       pswrite(xy(0,-0.2),buf);
       endpage();
-      cout<<avgdist<<endl;
+      //cout<<avgdist<<endl;
     }
   startpage();
   setscale(-1,-1,1,1,0);
+  setcolor(0.5,0.5,1);
   for (curvature=-1;curvature<1.1;curvature+=0.125)
-    for (clothance=-3;clothance<3.1;clothance+=0.375)
+    for (clothance=-3;clothance<3.1;clothance+=(clothance>-0.38 && clothance<0.37)?0.125:0.375)
+      circle(xy(curvature,clothance/3),sqrt(ests[clothance*M_PI+curvature]));
+  setcolor(0,0,0);
+  for (curvature=-1;curvature<1.1;curvature+=0.125)
+    for (clothance=-3;clothance<3.1;clothance+=(clothance>-0.38 && clothance<0.37)?0.125:0.375)
+    {
       circle(xy(curvature,clothance/3),sqrt(dists[clothance*M_PI+curvature]));
+      if (dists[clothance*M_PI+curvature]>ests[clothance*M_PI+curvature])
+	cout<<"estimate too small crv="<<curvature<<" clo="<<clothance<<endl;
+      assert(dists[clothance*M_PI+curvature]<=ests[clothance*M_PI+curvature]);
+    }
   endpage();
   pstrailer();
   psclose();
