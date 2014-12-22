@@ -953,7 +953,7 @@ void trianglecontours()
     fname="tri";
     for (j=0;j<9;j++)
     {
-      //bytes[j]=rng.ucrandom();
+      bytes[j]=rng.ucrandom();
       fname+=hexdig[bytes[j]>>4];
       fname+=hexdig[bytes[j]&15];
     }
@@ -988,7 +988,7 @@ void trianglecontours()
 void testderivs()
 {
   double i;
-  vector<double> con,lin,quad,cub;
+  vector<double> con,lin,quad,cub,para1;
   for (i=-1.5;i<2;i+=1)
   {
     con.push_back(1);
@@ -1016,6 +1016,12 @@ void testderivs()
   cout<<"First derivative of line "<<deriv1(lin)<<endl;
   cout<<"Second derivative of square "<<deriv2(quad)<<endl;
   cout<<"Third derivative of cube "<<deriv3(cub)<<endl;
+  para1.push_back(4);
+  para1.push_back(1);
+  para1.push_back(0);
+  para1.push_back(1);
+  cout<<"Vertex "<<paravertex(para1)<<endl;
+  assert(paravertex(para1)==0.5);
 }
 
 void teststl()
