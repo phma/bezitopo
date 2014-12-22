@@ -38,7 +38,7 @@ bezier3d::bezier3d()
   controlpoints.push_back(xyz(0,0,0));
 }
 
-int bezier3d::size()
+int bezier3d::size() const
 {
   return controlpoints.size()/3;
 }
@@ -58,6 +58,22 @@ xyz bezier3d::station(double along)
   p=1-q;
   result=controlpoints[3*segment]*q*q*q+3*controlpoints[3*segment+1]*p*q*q+3*controlpoints[3*segment+2]*p*p*q+controlpoints[3*segment+3]*p*p*p;
   return result;
+}
+
+bezier3d operator+(const bezier3d &l,const bezier3d &r)
+/* The arguments should both be open, and the last point of l should be the first point of r.
+ * Adding the empty bezier3d to something has no effect.
+ */
+{
+  int i;
+  bezier3d ret(l);
+  if (ret.controlpoints.size()==1)
+    ret.controlpoints[0]=r.controlpoints[0];
+  if (ret.controlpoints.size()%3==1 && r.size())
+    ret.controlpoints.back()=(ret.controlpoints.back()+r.controlpoints[0])/2;
+  for (i=ret.controlpoints.size()%3;i<r.controlpoints.size();i++)
+    ret.controlpoints.push_back(r.controlpoints[i]);
+  return ret;
 }
 
 double bez3destimate(xy kra,int bear0,double len,int bear1,xy fam)

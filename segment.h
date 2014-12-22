@@ -50,6 +50,10 @@ public:
   {
     return 0;
   }
+  virtual double clothance(double along)
+  {
+    return 0;
+  }
   xy center();
   xyz midpoint();
   void split(double along,segment &a,segment &b);

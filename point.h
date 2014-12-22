@@ -67,6 +67,7 @@ class xyz
  friend class triangle;
  friend double dist(xyz a,xyz b);
  friend bool operator==(const xyz &l,const xyz &r);
+ friend xyz operator/(const xyz &l,const double r);
  friend xyz operator*(const xyz &l,const double r);
  friend xyz operator*(const double l,const xyz &r);
  friend xyz operator+(const xyz &l,const xyz &r);

@@ -67,5 +67,6 @@ double deriv0(std::vector<double> xsect);
 double deriv1(std::vector<double> xsect);
 double deriv2(std::vector<double> xsect);
 double deriv3(std::vector<double> xsect);
+double paravertex(std::vector<double> xsect);
 
 #endif

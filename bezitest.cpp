@@ -938,7 +938,10 @@ void trianglecontours()
  */
 {
   int i,j,cubedir;
-  unsigned char bytes[9];
+  unsigned char bytes[9]={'\006','\372','\271','\022','|','\243','\n','\256','\277'};
+  // 06fab9 127ca3 0aaebf produces a triangle whose nocubedir is computed wrong
+  double vertex,offset;
+  vector<double> xs;
   string fname,tfname;
   fstream ofile;
   topopoints.clear();
@@ -950,7 +953,7 @@ void trianglecontours()
     fname="tri";
     for (j=0;j<9;j++)
     {
-      bytes[j]=rng.ucrandom();
+      //bytes[j]=rng.ucrandom();
       fname+=hexdig[bytes[j]>>4];
       fname+=hexdig[bytes[j]&15];
     }
@@ -967,7 +970,17 @@ void trianglecontours()
     rasterdraw(topopoints,xy(5,0),30,40,30,0,1,fname);
     ofile.open(tfname.c_str(),ios_base::out);
     cubedir=topopoints.triangles[0].findnocubedir();
-    ofile<<"Max cube dir "<<cubedir<<' '<<bintodeg(cubedir)<<"°"<<endl;
+    ofile<<"Zero cube dir "<<cubedir<<' '<<bintodeg(cubedir)<<"°"<<endl;
+    for (j=30;j>=-30;j--)
+    {
+      offset=j/20.;
+      xs=topopoints.triangles[0].xsect(cubedir,offset);
+      vertex=paravertex(xs);
+      ofile<<fixed<<setprecision(3)<<setw(7)<<offset<<' '<<setw(7)<<deriv3(xs)<<' '<<setw(7)<<vertex;
+      if (vertex<=1.5 && vertex>=-1.5)
+	ofile<<string(rint((vertex+1.5)*20),' ')<<'*';
+      ofile<<endl;
+    }
     cout<<fname<<endl;
   }
 }
@@ -1174,7 +1187,8 @@ void testbezier3d()
   char buf[32];
   map<double,double> dists,ests;
   xy spipts[21],bezpts[21],lastpt,thispt;
-  bezier3d a(xyz(0,0,0),xyz(1,0,0),xyz(2,3,0),xyz(3,9,27)),b;
+  bezier3d a(xyz(0,0,0),xyz(1,0,0),xyz(2,3,0),xyz(3,9,27)),
+  b(xyz(3,9,27),xyz(4,15,54),xyz(7,11,13),xyz(2,3,5)),c;
   xyz pt,pt1;
   assert(a.size()==1);
   pt=a.station(0.4);
@@ -1182,8 +1196,12 @@ void testbezier3d()
   assert(dist(pt,pt1)<1e-6);
   pt=a.station(1);
   pt1=xyz(3,9,27);
-  cout<<pt.east()<<' '<<pt.north()<<' '<<pt.elev()<<endl;
   assert(dist(pt,pt1)<1e-6);
+  c=a+b;
+  pt=c.station(1.5);
+  pt1=b.station(.5);
+  cout<<pt.east()<<' '<<pt.north()<<' '<<pt.elev()<<endl;
+  assert(pt==pt1);
   psopen("bezier3d.ps");
   psprolog();
   for (curvature=-1;curvature<1.1;curvature+=0.125)

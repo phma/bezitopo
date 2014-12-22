@@ -180,6 +180,15 @@ double deriv3(vector<double> xsect)
   return xsect[3]-3*xsect[2]+3*xsect[1]-xsect[0];
 }
 
+double paravertex(vector<double> xsect)
+// Finds the vertex of the parabola, assuming that it is a parabola (no cubic component).
+{
+  double d1,d2;
+  d1=deriv1(xsect);
+  d2=deriv2(xsect);
+  return -d1/d2;
+}
+
 int triangle::findnocubedir()
 /* The range of atan2i is [-0x40000000,0x40000000] ([-180°,180°]).
  * nocubedir is found by adding 0x15555555 (60°) and 0x2aaaaaab (120°)
@@ -234,7 +243,7 @@ int triangle::findnocubedir()
   while (end-beg>1)
   {
     if (abs(endderiv)>=10*abs(begderiv) || abs(begderiv)>=10*abs(endderiv) || end-beg<10)
-      mid=(beg+end)/2;
+      mid=beg+(end-beg)/2;
     else
       mid=lrint((beg*endderiv-end*begderiv)/(endderiv-begderiv));
     midderiv=deriv3(xsect(mid,0));
@@ -251,7 +260,8 @@ int triangle::findnocubedir()
     }
   }
   if (abs(begderiv)>abs(endderiv))
-    return end;
+    nocubedir=end;
   else
-    return beg;
+    nocubedir=beg;
+  return nocubedir;
 }
