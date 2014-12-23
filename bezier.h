@@ -60,6 +60,7 @@ public:
   void setcentercp();
   std::vector<double> xsect(int angle,double offset);
   int findnocubedir();
+  double flatoffset();
   //void setctrl(bool flat);
 };
 

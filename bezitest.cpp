@@ -926,15 +926,18 @@ void testrasterdraw()
 void trianglecontours()
 /* Pick elevations and gradients at the corners at random and draw color maps
  * of the elevations, to see what combinations of min, max, and saddle can arise.
- * The most that has arisen is one min or max and one saddle.
+ * The most that has arisen is one min or max and one saddle. There can be three
+ * critical points just outside the triangle.
  * 
  * Hypothesis to attack the minimax problem:
  * Every surface in a Bézier triangle can be stretched linearly and rotated
  * into the form ax³+bx²+cx+d+(ex+f)y². That is, there is an axis A such that
  * all lines parallel to A are parabolas (or straight lines), whose vertices
- * lie on an axis B, which is a cubic (or less). At most two extrema, which are
- * not both maxima or minima, lie on axis B, and the other two, if any, are
- * saddle points and lie on the axis A which is a straight line.
+ * lie on a curve B, which is a hyperbola (possibly degenerate) asymptotic to A.
+ * All of the up to four extrema lie on curve B, two on one side of A and two
+ * on the other. To find them, split from -1.5 to A in geometric progression,
+ * and from 1.5 to A in geometric progression, and look for maxima and minima
+ * of the height of vertices on each side.
  */
 {
   int i,j,cubedir;
@@ -971,6 +974,7 @@ void trianglecontours()
     ofile.open(tfname.c_str(),ios_base::out);
     cubedir=topopoints.triangles[0].findnocubedir();
     ofile<<"Zero cube dir "<<cubedir<<' '<<bintodeg(cubedir)<<"°"<<endl;
+    ofile<<"Zero quad offset "<<topopoints.triangles[0].flatoffset()<<endl;
     for (j=30;j>=-30;j--)
     {
       offset=j/20.;

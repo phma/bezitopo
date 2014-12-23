@@ -265,3 +265,20 @@ int triangle::findnocubedir()
     nocubedir=beg;
   return nocubedir;
 }
+
+double triangle::flatoffset()
+/* The offset at which the cross-section in the nocubedir direction has zero quadratic component.
+ * If it's in the range [-1.5,1.5], it is valid. If outside this range, it may be made up.
+ */
+{
+  double minusquad,plusquad,offset;
+  if (nocubedir==INT_MAX)
+    findnocubedir();
+  minusquad=deriv2(xsect(nocubedir,-1.5));
+  plusquad=deriv2(xsect(nocubedir,1.5));
+  offset=1.5*(minusquad+plusquad)/(minusquad-plusquad);
+  if (!isfinite(offset))
+    offset=-1048576;
+  return offset;
+}
+
