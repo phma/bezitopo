@@ -160,6 +160,21 @@ vector<double> triangle::xsect(int angle,double offset)
   return ret;
 }
 
+double triangle::spelevation(int angle,double x,double y)
+/* Where s is the semiperimeter, samples the surface at a point
+ * x along the line in the direction angle offset by y.
+ * x and y are multplied by the semiperimeter.
+ */
+{
+  double s;
+  xy along,across,cen;
+  s=peri/2;
+  cen=centroid();
+  along=cossin(angle)*s;
+  across=cossin(angle+536870912)*s;
+  return elevation(cen+across*y+along*x);
+}
+
 double deriv0(vector<double> xsect)
 {
   return (-xsect[3]+9*xsect[2]+9*xsect[1]-xsect[0])/16;
@@ -282,3 +297,28 @@ double triangle::flatoffset()
   return offset;
 }
 
+vector<xyz> triangle::slices(bool side)
+/* The xyz's are in semiperimeter coordinates rotated to nocubedir.
+ * side=true for the positive offset side.
+ */
+{
+  int i;
+  vector<xyz> tranches;
+  double off,vtx,z,flat;
+  bool stop=false;
+  flat=flatoffset();
+  for (i=0,off=side?1.7:-1.7;!stop;i++,off=(off*16+flat)/17)
+  {
+    vtx=paravertex(xsect(nocubedir,off));
+    z=spelevation(nocubedir,off,vtx);
+    tranches.push_back(xyz(vtx,off,z));
+    if (i)
+    {
+      if (abs(off-flat)<1e-6)
+	stop=true;
+      if (abs(tranches[i].x)>abs(tranches[i-1].x) && abs(tranches[i-1].x)>1.5 && (tranches[i].x>0)==(tranches[i].x>0))
+	stop=true;
+    }
+  }
+  return tranches;
+}

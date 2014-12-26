@@ -940,11 +940,11 @@ void trianglecontours()
  * of the height of vertices on each side.
  */
 {
-  int i,j,cubedir;
-  unsigned char bytes[9]={'\006','\372','\271','\022','|','\243','\n','\256','\277'};
-  // 06fab9 127ca3 0aaebf produces a triangle whose nocubedir is computed wrong
+  int i,j,side,cubedir;
+  unsigned char bytes[9];
   double vertex,offset;
   vector<double> xs;
+  vector<xyz> slice;
   string fname,tfname;
   fstream ofile;
   topopoints.clear();
@@ -984,6 +984,14 @@ void trianglecontours()
       if (vertex<=1.5 && vertex>=-1.5)
 	ofile<<string(rint((vertex+1.5)*20),' ')<<'*';
       ofile<<endl;
+    }
+    for (side=0;side<2;side++)
+    {
+      ofile<<"Side "<<side<<endl;
+      slice=topopoints.triangles[0].slices(side);
+      for (j=0;j<slice.size();j++)
+	ofile<<fixed<<setprecision(3)<<setw(7)<<slice[j].east()<<setw(7)<<
+	slice[j].north()<<setw(7)<<slice[j].elev()<<endl;
     }
     cout<<fname<<endl;
   }

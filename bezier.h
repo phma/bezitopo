@@ -59,8 +59,10 @@ public:
   xy centroid();
   void setcentercp();
   std::vector<double> xsect(int angle,double offset);
+  double spelevation(int angle,double x,double y);
   int findnocubedir();
   double flatoffset();
+  std::vector<xyz> slices(bool side);
   //void setctrl(bool flat);
 };
 
