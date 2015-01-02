@@ -64,6 +64,10 @@ public:
   double flatoffset();
   std::vector<xyz> slices(bool side);
   //void setctrl(bool flat);
+  xy critical_point(double start,double startz,double end,double endz);
+private:
+  xy spcoord(double x,double y);
+  double vtxeloff(double off);
 };
 
 double deriv0(std::vector<double> xsect);

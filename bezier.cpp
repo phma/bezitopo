@@ -141,6 +141,17 @@ triangle *triangle::findt(xy pnt,bool clip)
   return clip?there:here;
 }
 
+xy triangle::spcoord(double x,double y)
+{
+  double s;
+  xy along,across,cen;
+  s=peri/2;
+  cen=centroid();
+  along=cossin(nocubedir)*s;
+  across=cossin(nocubedir+536870912)*s;
+  return cen+across*y+along*x;
+}
+
 vector<double> triangle::xsect(int angle,double offset)
 /* Where s is the semiperimeter, samples the surface at four points,
  * -3s/2, -s/2, s/2, 3s/2, relative to the centroid, offset by offset.
@@ -297,6 +308,13 @@ double triangle::flatoffset()
   return offset;
 }
 
+double triangle::vtxeloff(double off)
+{
+  double vtx;
+  vtx=paravertex(xsect(nocubedir,off));
+  return spelevation(nocubedir,off,vtx);
+}
+
 vector<xyz> triangle::slices(bool side)
 /* The xyz's are in semiperimeter coordinates rotated to nocubedir.
  * side=true for the positive offset side.
@@ -322,3 +340,94 @@ vector<xyz> triangle::slices(bool side)
   }
   return tranches;
 }
+
+/* Four-point successive parabolic interpolation is done using the paravertex function as follows:
+ * x a     b     c     d   -> e     f     a     b
+ *   a  x  b     c     d   ->             a e f b
+ *   a     b  x  c     d   ->                   b e f c
+ *   a     b     c  x  d   ->                         c e f d
+ *   a     b     c     d x ->                         c     d     e     f
+ */
+
+xy triangle::critical_point(double start,double startz,double end,double endz)
+// start and end are offsets perpendicular to nocubedir
+{
+  int lw=0;
+  double flw,vtx;
+  vector<double> y(4),z(4); // x and y are semiperimeter coordinates
+  y[3]=1;
+  y[1]=start;
+  y[2]=end;
+  z[1]=startz;
+  z[2]=endz;
+  while (fabs(y[3]-y[0])*peri>1e-6 && fabs(deriv2(z))>1e-9)
+  {
+    switch (lw)
+    {
+      case -2:
+	y[3]=y[1];
+	y[2]=y[0];
+	z[3]=z[1];
+	z[2]=z[0];
+	break;
+      case -1:
+	y[3]=y[1];
+	z[3]=z[1];
+	break;
+      case 0:
+	y[3]=y[2];
+	y[0]=y[1];
+	z[3]=z[2];
+	z[0]=z[1];
+	break;
+      case 1:
+	y[0]=y[2];
+	z[0]=z[2];
+	break;
+      case 2:
+	y[0]=y[2];
+	y[1]=y[3];
+	z[0]=z[2];
+	z[1]=z[3];
+	break;
+    }
+    switch (lw)
+    {
+      case -2:
+	y[1]=2*y[2]-y[3];
+	y[0]=2*y[1]-y[2];
+	z[1]=vtxeloff(y[1]);
+	z[0]=vtxeloff(y[0]);
+	break;
+      case -1:
+      case 0:
+      case 1:
+	y[1]=(2*y[0]+y[3])/3;
+	y[2]=(2*y[3]+y[0])/3;
+	z[1]=vtxeloff(y[1]);
+	z[2]=vtxeloff(y[0]);
+	break;
+      case 2:
+	y[2]=2*y[1]-y[0];
+	y[3]=2*y[2]-y[1];
+	z[3]=vtxeloff(y[3]);
+	z[2]=vtxeloff(y[2]);
+	break;
+    }
+    flw=rint(paravertex(z));
+    if (isfinite(flw))
+    {
+      lw=flw;
+      if (lw>2)
+	lw=2;
+      if (lw<-2)
+	lw=-2;
+    }
+    else
+      lw=256;
+  }
+  vtx=paravertex(xsect(nocubedir,(y[0]+y[3])/2));
+  return spcoord(vtx,(y[0]+y[3])/2);
+}
+
+//vector<xyz> triangle::criticalpts_side(bool side)
