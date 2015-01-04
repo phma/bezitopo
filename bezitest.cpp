@@ -945,7 +945,8 @@ void trianglecontours()
   double vertex,offset;
   vector<double> xs;
   vector<xyz> slice;
-  string fname,tfname;
+  vector<xy> crits;
+  string fname,tfname,psfname;
   fstream ofile;
   topopoints.clear();
   regpolygon(3);
@@ -961,6 +962,7 @@ void trianglecontours()
       fname+=hexdig[bytes[j]&15];
     }
     tfname=fname+".txt";
+    psfname=fname+".ps";
     fname+=".ppm";
     for (j=0;j<3;j++)
     {
@@ -972,6 +974,12 @@ void trianglecontours()
     topopoints.makeqindex();
     rasterdraw(topopoints,xy(5,0),30,40,30,0,1,fname);
     ofile.open(tfname.c_str(),ios_base::out);
+    psopen(psfname.c_str());
+    psprolog();
+    startpage();
+    setscale(-17,-17,17,17);
+    for (j=0;j<topopoints.edges.size();j++)
+      line(topopoints.edges[j],j,false);
     cubedir=topopoints.triangles[0].findnocubedir();
     ofile<<"Zero cube dir "<<cubedir<<' '<<bintodeg(cubedir)<<"°"<<endl;
     ofile<<"Zero quad offset "<<topopoints.triangles[0].flatoffset()<<endl;
@@ -990,9 +998,22 @@ void trianglecontours()
       ofile<<"Side "<<side<<endl;
       slice=topopoints.triangles[0].slices(side);
       for (j=0;j<slice.size();j++)
+      {
 	ofile<<fixed<<setprecision(3)<<setw(7)<<slice[j].east()<<setw(7)<<
 	slice[j].north()<<setw(7)<<slice[j].elev()<<endl;
+	if (j>0)
+	  line2p(topopoints.triangles[0].spcoord(slice[j-1].east(),slice[j-1].north()),
+		 topopoints.triangles[0].spcoord(slice[j].east(),slice[j].north()));
+      }
+      crits=topopoints.triangles[0].criticalpts_side(side);
+      for (j=0;j<crits.size();j++)
+      {
+	ofile<<fixed<<setprecision(3)<<setw(7)<<crits[j].east()<<setw(7)<<crits[j].north()<<endl;
+	dot(crits[j]);
+      }
     }
+    endpage();
+    psclose();
     cout<<fname<<endl;
   }
 }

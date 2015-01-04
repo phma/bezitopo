@@ -65,8 +65,9 @@ public:
   std::vector<xyz> slices(bool side);
   //void setctrl(bool flat);
   xy critical_point(double start,double startz,double end,double endz);
-private:
+  std::vector<xy> criticalpts_side(bool side);
   xy spcoord(double x,double y);
+private:
   double vtxeloff(double off);
 };
 

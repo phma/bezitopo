@@ -142,6 +142,9 @@ triangle *triangle::findt(xy pnt,bool clip)
 }
 
 xy triangle::spcoord(double x,double y)
+/* Given semiperimeter coordinates rotated to nocubedir,
+ * returns coordinates in the global coordinate system.
+ */
 {
   double s;
   xy along,across,cen;
@@ -353,7 +356,7 @@ xy triangle::critical_point(double start,double startz,double end,double endz)
 // start and end are offsets perpendicular to nocubedir
 {
   int lw=0;
-  double flw,vtx;
+  double flw,vtx,p;
   vector<double> y(4),z(4); // x and y are semiperimeter coordinates
   y[3]=1;
   y[1]=start;
@@ -405,7 +408,7 @@ xy triangle::critical_point(double start,double startz,double end,double endz)
 	y[1]=(2*y[0]+y[3])/3;
 	y[2]=(2*y[3]+y[0])/3;
 	z[1]=vtxeloff(y[1]);
-	z[2]=vtxeloff(y[0]);
+	z[2]=vtxeloff(y[2]);
 	break;
       case 2:
 	y[2]=2*y[1]-y[0];
@@ -414,7 +417,7 @@ xy triangle::critical_point(double start,double startz,double end,double endz)
 	z[2]=vtxeloff(y[2]);
 	break;
     }
-    flw=rint(paravertex(z));
+    flw=rint(p=paravertex(z));
     if (isfinite(flw))
     {
       lw=flw;
@@ -426,8 +429,18 @@ xy triangle::critical_point(double start,double startz,double end,double endz)
     else
       lw=256;
   }
-  vtx=paravertex(xsect(nocubedir,(y[0]+y[3])/2));
-  return spcoord(vtx,(y[0]+y[3])/2);
+  vtx=paravertex(xsect(nocubedir,(y[0]*(1.5-p)+y[3]*(1.5+p))/3));
+  return spcoord(vtx,(y[0]*(1.5-p)+y[3]*(1.5+p))/3);
 }
 
-//vector<xyz> triangle::criticalpts_side(bool side)
+vector<xy> triangle::criticalpts_side(bool side)
+{
+  vector<xyz> tranches;
+  vector<xy> critpts;
+  int i;
+  tranches=slices(side);
+  for (i=1;i<tranches.size()-1;i++)
+    if ((tranches[i-1].elev()<tranches[i].elev())^(tranches[i].elev()<tranches[i+1].elev()))
+      critpts.push_back(critical_point(tranches[i-1].north(),tranches[i-1].elev(),tranches[i+1].north(),tranches[i+1].elev()));
+  return critpts;
+}
