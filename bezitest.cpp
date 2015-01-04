@@ -993,6 +993,8 @@ void trianglecontours()
 	ofile<<string(rint((vertex+1.5)*20),' ')<<'*';
       ofile<<endl;
     }
+    line2p(topopoints.triangles[0].spcoord(1.5,-1.5),topopoints.triangles[0].spcoord(-1.5,-1.5));
+    line2p(topopoints.triangles[0].spcoord(-1.5,-1.5),topopoints.triangles[0].spcoord(-1.5,1.5));
     for (side=0;side<2;side++)
     {
       ofile<<"Side "<<side<<endl;
@@ -1002,8 +1004,14 @@ void trianglecontours()
 	ofile<<fixed<<setprecision(3)<<setw(7)<<slice[j].east()<<setw(7)<<
 	slice[j].north()<<setw(7)<<slice[j].elev()<<endl;
 	if (j>0)
+	{
+	  if (slice[j-1].elev()>slice[j].elev())
+	    setcolor(0,.7,0);
+	  else
+	    setcolor(1,0,1);
 	  line2p(topopoints.triangles[0].spcoord(slice[j-1].east(),slice[j-1].north()),
 		 topopoints.triangles[0].spcoord(slice[j].east(),slice[j].north()));
+	}
       }
       crits=topopoints.triangles[0].criticalpts_side(side);
       for (j=0;j<crits.size();j++)

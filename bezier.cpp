@@ -315,7 +315,7 @@ double triangle::vtxeloff(double off)
 {
   double vtx;
   vtx=paravertex(xsect(nocubedir,off));
-  return spelevation(nocubedir,off,vtx);
+  return spelevation(nocubedir,vtx,off);
 }
 
 vector<xyz> triangle::slices(bool side)
@@ -331,7 +331,7 @@ vector<xyz> triangle::slices(bool side)
   for (i=0,off=side?1.7:-1.7;!stop;i++,off=(off*16+flat)/17)
   {
     vtx=paravertex(xsect(nocubedir,off));
-    z=spelevation(nocubedir,off,vtx);
+    z=spelevation(nocubedir,vtx,off);
     tranches.push_back(xyz(vtx,off,z));
     if (i)
     {
