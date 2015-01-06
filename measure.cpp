@@ -168,9 +168,6 @@ int is_int(double a)
 {return fequal(a,rint(a));
  }
 
-#define compatible_units(unitp1,unitp2) (((unitp1)&0xffff0000)==((unitp2)&0xffff0000))
-#define same_unit(unitp1,unitp2) (((unitp1)&0xffffff00)==((unitp2)&0xffffff00))
-
 double cfactor(int unitp)
 {int i;
  for (i=0;i<nunits;i++)

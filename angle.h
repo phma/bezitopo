@@ -10,6 +10,7 @@
 #ifndef ANGLE_H
 #define ANGLE_H
 #include <cmath>
+#include <string>
 #include "measure.h"
 #include "point.h"
 
@@ -44,9 +45,30 @@ int sectobin(double angle);
 int gontobin(double angle);
 int radtobin(double angle);
 
+/* Angles, azimuths, and bearings are expressed in text as follows:
+ * Hex integer  Angle, deg  Angle, gon  Azimuth, deg  Azimuth, gon  Bearing, deg  Bearing, gon
+ * 0x00000000   0°00′00″    0.0000      90°00′00″     100.0000      N90°00′00″E   N100.0000E
+ * 0x0aaaaaaa   30°00′00″   33.3333     60°00′00″     66.6667       N60°00′00″E   N066.6667E
+ * 0x15555555   60°00′00″   66.6667     30°00′00″     33.3333       N30°00′00″E   N033.3333E
+ * 0x80000000   -360°00′00″ -400.0000   90°00′00″     100.0000      N90°00′00″E   N100.0000E
+ * Internally, angles are measured counterclockwise, and azimuths/bearings are
+ * counterclockwise from east. For I/O, angles can be measured either way and
+ * azimuths/bearings are measured from north.
+ * As azimuths or bearings, 0x80000000 and 0x00000000 are equivalent; as angles they are not.
+ */
+
+std::string bintoangle(int angle,int unitp);
+
 #define DEGREE 0x0038ed00
 #define GON 0x00383000
+#define RADIAN 0x00381000
 #define SEXAG0 0x20
 #define SEXAG1 0x21
 #define SEXAG2 0x22
+#define SEXAG0P1 0x24
+#define SEXAG1P1 0x25
+#define SEXAG2P1 0x26
+#define SEXAG0P2 0x28
+#define SEXAG1P2 0x29
+#define SEXAG2P2 0x2a
 #endif

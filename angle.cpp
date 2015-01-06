@@ -4,6 +4,8 @@
 /*                                                    */
 /******************************************************/
 
+#include <cstring>
+#include <cstdio>
 #include "angle.h"
 
 double sqr(double x)
@@ -122,4 +124,66 @@ int gontobin(double angle)
 int radtobin(double angle)
 {
   return rottobin(angle/M_PIl/2);
+}
+
+string bintoangle(int angle,int unitp)
+{
+  double angmult,prec;
+  string ret;
+  char digit[8];
+  int i,base,sign,dig;
+  if (!compatible_units(unitp,ANGLE))
+    throw badunits;
+  base=unitp&0xf0;
+  switch (base)
+  {
+    case 0:
+      base=10;
+      break;
+    case 16:
+      base=2;
+      break;
+    case 32:
+      base=60;
+      break;
+    default:
+      base=0;
+  }
+  switch (unitp&0xffffff00)
+  {
+    case DEGREE:
+      angmult=bintodeg(angle);
+      break;
+    case GON:
+      angmult=bintogon(angle);
+      break;
+    case RADIAN:
+      angmult=bintorad(angle);
+      break;
+    default:
+      throw badunits;
+  }
+  angmult=rint((prec=precision(unitp))*angmult);
+  sign=1;
+  if (angmult<0)
+  {
+    angmult=-angmult;
+    sign=-1;
+  }
+  for (;prec>1;prec/=base)
+  {
+    dig=angmult-base*trunc(angmult/base);
+    angmult=trunc(angmult/base);
+    sprintf(digit,(base>10)?"%02d":"%01d",dig);
+    if (base>10)
+      strcat(digit,(prec>60)?"″":"′");
+    ret=digit+ret;
+  }
+  if (base>10)
+    ret="°"+ret;
+  else
+    ret="."+ret+"°";
+  sprintf(digit,"%.0f",angmult);
+  ret=digit+ret;
+  return ret;
 }

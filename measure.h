@@ -51,6 +51,7 @@
 #define MASS2 0x0002fd00
 #define LENGTH1 0x0001fe00
 #define LENGTH2 0x0001fd00
+#define ANGLE 0x00380000
 /* These are precision codes. DEC3 = 3 digits after the decimal point. */
 #define DEC0 0x00
 #define DEC1 0x01
@@ -64,6 +65,13 @@
 #define EIGHTH 0x13
 #define SIXTEENTH 0x14
 #define THIRTYSECOND 0x15
+
+#define compatible_units(unitp1,unitp2) (((unitp1)&0xffff0000)==((unitp2)&0xffff0000))
+#define same_unit(unitp1,unitp2) (((unitp1)&0xffffff00)==((unitp2)&0xffffff00))
+
+#define badunits 4
+// error thrown by conversion routine
+
 int is_exact(double measurement, unsigned int unitp,int is_toler);
 /* Checks whether the given measurement is exact in that unit.
    If the measurement is a tolerance and is divisible by 127, returns false;
@@ -78,5 +86,6 @@ char *trim(char *str);
 void switch_system();
 /* Switches between measuring systems. */
 void set_length_unit(int unitp);
+double precision(int unitp);
 double parse_length(const char *meas);
 #endif

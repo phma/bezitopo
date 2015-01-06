@@ -1329,6 +1329,22 @@ void testbezier3d()
   psclose();
 }
 
+void testangleconv()
+{
+  string strang,straz,strbear;
+  int angle;
+  strang=bintoangle(0,DEGREE+SEXAG2);
+  cout<<strang<<endl;
+  assert(strang=="0°00′00″");
+  strang=bintoangle(degtobin(90),DEGREE+SEXAG2);
+  cout<<strang<<endl;
+  assert(strang=="90°00′00″");
+  strang=bintoangle(atan2i(2,1),DEGREE+SEXAG2);
+  cout<<strang<<endl;
+  //strang=bintoangle(atan2i(2,1),DEGREE+SEXAG2P2);
+  //cout<<strang<<endl;
+}
+
 int main(int argc, char *argv[])
 {
   testarea3();
@@ -1360,6 +1376,7 @@ int main(int argc, char *argv[])
   testhalton();
   testpolyline();
   testbezier3d();
+  testangleconv();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   return EXIT_SUCCESS;
 }
