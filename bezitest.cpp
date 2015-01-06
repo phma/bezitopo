@@ -1343,6 +1343,20 @@ void testangleconv()
   cout<<strang<<endl;
   strang=bintoangle(atan2i(2,1),DEGREE+SEXAG2P2);
   cout<<strang<<endl;
+  strang=bintoangle(atan2i(2,1),GON+DEC4);
+  cout<<strang<<endl;
+  angle=parseangle("63°26′05.82″",DEGREE);
+  cout<<hex<<angle<<dec<<endl;
+  angle=parsebearing("S77°W",DEGREE);
+  cout<<hex<<angle<<dec<<endl;
+  angle=parsebearing("S5°W",DEGREE);
+  cout<<hex<<angle<<dec<<endl;
+  angle=parsebearing("S67°E",DEGREE);
+  cout<<hex<<angle<<dec<<endl;
+  angle=parsebearing("N41°E",DEGREE);
+  cout<<hex<<angle<<dec<<endl;
+  angle=parsebearing("N31°W",DEGREE);
+  cout<<hex<<angle<<dec<<endl;
 }
 
 int main(int argc, char *argv[])

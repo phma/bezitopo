@@ -129,7 +129,7 @@ int radtobin(double angle)
 string bintoangle(int angle,int unitp)
 {
   double angmult,prec;
-  string ret;
+  string ret,unitsign;
   char digit[8];
   int i,base,sign,dig;
   if (!compatible_units(unitp,ANGLE))
@@ -153,6 +153,7 @@ string bintoangle(int angle,int unitp)
   {
     case DEGREE:
       angmult=bintodeg(angle);
+      unitsign="°";
       break;
     case GON:
       angmult=bintogon(angle);
@@ -192,10 +193,106 @@ string bintoangle(int angle,int unitp)
     ret=digit+ret;
   }
   if (base>10)
-    ret="°"+ret;
+    ret=unitsign+ret;
   else
-    ret="."+ret+"°";
+    ret="."+ret+unitsign;
   sprintf(digit,"%.0f",angmult);
   ret=digit+ret;
   return ret;
 }
+
+int parseangle(string angstr,int unitp)
+{
+  double angmult,prec;
+  int i,ulen,angle;
+  bool point,six;
+  string uchar;
+  for (point=six=i=0,prec=1;i<angstr.length();i++)
+    switch (angstr[i]&0xc0)
+    {
+      case 0: // digits, point, and hyphen
+	if (angstr[i]=='-' || angstr[i]=='\'' || angstr[i]=='"')
+	{
+	  point=six=true;
+	  unitp=DEGREE;
+	}
+	if (angstr[i]=='.')
+	  point=true;
+	if (isdigit(angstr[i]))
+	{
+	  angmult=angmult*(six?6:10)+angstr[i]-'0';
+	  if (point)
+	    prec*=six?6:10;
+	  six=false;
+	}
+	break;
+      case 0x40: // letters
+	if (tolower(angstr[i])=='g')
+	  unitp=GON;
+	break;
+      case 0x80: // subsequent bytes of UTF-8: ignore
+	break;
+      case 0xc0: // first byte of UTF-8: check for degree sign
+	ulen=angstr[i]&0xff;
+	ulen=(ulen>=0x80)+(ulen>=0xc0)+(ulen>=0xe0)+(ulen>=0xf0)+(ulen>=0xf8)+(ulen>=0xfc);
+	uchar=angstr.substr(i,ulen);
+	if (uchar=="°" || uchar=="′" || uchar=="″")
+	{
+	  point=six=true;
+	  unitp=DEGREE;
+	}
+	break;
+    }
+  switch (unitp&0xffffff00)
+  {
+    case DEGREE:
+      angle=degtobin(angmult/prec);
+      break;
+    case GON:
+      angle=gontobin(angmult/prec);
+      break;
+    case RADIAN:
+      angle=radtobin(angmult/prec);
+      break;
+    default:
+      throw badunits;
+  }
+  return angle;
+}
+
+int parseazimuth(string angstr,int unitp)
+{
+  return 0x20000000-parseangle(angstr,unitp);
+}
+
+int parsebearing(string angstr,int unitp)
+{
+  int ns,ew,quadrant,angle;
+  ns=tolower(angstr[0]);
+  angstr.erase(0,1);
+  ew=tolower(angstr[angstr.length()-1]);
+  angstr.erase(angstr.length()-1,1);
+  if (ns=='n' && ew=='e')
+    quadrant=1;
+  if (ns=='s' && ew=='e')
+    quadrant=2;
+  if (ns=='s' && ew=='w')
+    quadrant=3;
+  if (ns=='n' && ew=='w')
+    quadrant=4;
+  angle=parseazimuth(angstr,unitp);
+  switch (quadrant)
+  {
+    case 2:
+      angle=-angle;
+      break;
+    case 3:
+      angle-=0x40000000;
+      break;
+    case 4:
+      angle=0x40000000-angle;
+      break;
+  }
+  return angle;
+}
+

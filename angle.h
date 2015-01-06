@@ -50,14 +50,23 @@ int radtobin(double angle);
  * 0x00000000   0°00′00″    0.0000      90°00′00″     100.0000      N90°00′00″E   N100.0000E
  * 0x0aaaaaaa   30°00′00″   33.3333     60°00′00″     66.6667       N60°00′00″E   N066.6667E
  * 0x15555555   60°00′00″   66.6667     30°00′00″     33.3333       N30°00′00″E   N033.3333E
+ * 0x168dfd71   63°26′06″   70.4833	27°33′54″     29.5167       N27°33′54″E   N029.5167E
  * 0x80000000   -360°00′00″ -400.0000   90°00′00″     100.0000      N90°00′00″E   N100.0000E
  * Internally, angles are measured counterclockwise, and azimuths/bearings are
  * counterclockwise from east. For I/O, angles can be measured either way and
  * azimuths/bearings are measured from north.
- * As azimuths or bearings, 0x80000000 and 0x00000000 are equivalent; as angles they are not.
+ * As azimuths or bearings, 0x80000000 and 0x00000000 are equivalent; as deltas they are not.
  */
 
 std::string bintoangle(int angle,int unitp);
+int parseangle(std::string angstr,int unitp);
+/* If parseangle is passed a string containing a degree or minus sign, it interprets
+ * the string as degrees even if unitp is GON. If the string contains 'g',
+ * it interprets it as gons.
+ */
+int parseazimuth(std::string angstr,int unitp);
+int parsebearing(std::string angstr,int unitp);
+
 
 #define DEGREE 0x0038ed00
 #define GON 0x00383000
