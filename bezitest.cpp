@@ -1341,8 +1341,8 @@ void testangleconv()
   assert(strang=="90°00′00″");
   strang=bintoangle(atan2i(2,1),DEGREE+SEXAG2);
   cout<<strang<<endl;
-  //strang=bintoangle(atan2i(2,1),DEGREE+SEXAG2P2);
-  //cout<<strang<<endl;
+  strang=bintoangle(atan2i(2,1),DEGREE+SEXAG2P2);
+  cout<<strang<<endl;
 }
 
 int main(int argc, char *argv[])

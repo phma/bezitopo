@@ -249,32 +249,46 @@ double precision(int unitp)
    20 1
    21 60
    22 3600
+   22 216000
+   23 10
+   24 600   e.g. 63°26.1′
+   25 36000
    ...
-   2f 470184984576000000000000000
+   2f 216000000
    30-3f Used for mixed units.
    40-ff Undefined.
    */
-{double base,p;
- int exp,basecode,i;
- exp=unitp&0xf;
- basecode=unitp&0xf0;
- switch (basecode)
-    {case 0:
-     base=10;
-     break;
-     case 16:
-     base=2;
-     break;
-     case 32:
-     base=60;
-     break;
-     default:
-     base=0;
-     }
- for (p=1,i=0;i<exp;i++)
-     p*=base;
- return p;
- }
+{
+  double base,p;
+  int exp,basecode,i;
+  exp=unitp&0xf;
+  basecode=unitp&0xf0;
+  switch (basecode)
+  {
+    case 0:
+      base=10;
+      break;
+    case 16:
+      base=2;
+      break;
+    case 32:
+      base=60;
+      break;
+    default:
+      base=0;
+  }
+  if (base==60)
+  {
+    for (p=1,i=0;i<(exp&3);i++)
+      p*=base;
+    for (i=0;i<(exp&12);i+=4)
+      p*=10;
+  }
+  else
+    for (p=1,i=0;i<exp;i++)
+      p*=base;
+  return p;
+}
 
 int moreprecise(int unitp1,int unitp2)
 /* Given two unitp codes, returns the more precise. If one of them has no
