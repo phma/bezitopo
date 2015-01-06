@@ -36,6 +36,7 @@
 #include "halton.h"
 #include "polyline.h"
 #include "bezier3d.h"
+#include "closure.h"
 
 #define psoutput false
 // affects only maketin
@@ -1392,5 +1393,6 @@ int main(int argc, char *argv[])
   testbezier3d();
   testangleconv();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
+  closure_i();
   return EXIT_SUCCESS;
 }

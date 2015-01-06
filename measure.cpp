@@ -21,6 +21,7 @@ const struct cf
  MILLIMETER,	0.001,			// mm
  MICROMETER,	0.000001,		// μm
  KILOMETER,	1000,			// km
+ METER,		1,			// m
  INCH,		0.0254,			// in
  FOOT,		0.3048,			// ft
  SURVEYFOOT,	0.3048006096012192,	// 

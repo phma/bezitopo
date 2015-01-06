@@ -78,7 +78,7 @@ int is_exact(double measurement, unsigned int unitp,int is_toler);
    this means that a tolerance in inches is being checked in millimeters. */
 char *format_meas(double measurement, unsigned int unitp);
 char *format_meas_unit(double measurement, unsigned int unitp);
-double parse_meas(const char *meas, int unitp,int *found_unit);
+double parse_meas(char *meas, int unitp,int *found_unit);
 /* Given a string representing a measurement, in the unit unitp unless specified otherwise,
    returns its value in the program's internal unit. */
 char *trim(char *str);
