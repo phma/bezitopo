@@ -965,7 +965,7 @@ void trianglecontours()
     tfname=fname+".txt";
     psfname=fname+".ps";
     fname+=".ppm";
-    for (j=0;j<3;j++)
+    for (j=0;j<3;j++) //FIXME: why is the lower left corner always horizontal?
     {
       topopoints.points[j].setelev((bytes[j]-127.5)/100);
       topopoints.points[j].gradient=xy((bytes[j+3]-127.5)/1000,(bytes[j+6]-127.5)/1000);
@@ -1393,6 +1393,6 @@ int main(int argc, char *argv[])
   testbezier3d();
   testangleconv();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
-  closure_i();
+  //closure_i();
   return EXIT_SUCCESS;
 }

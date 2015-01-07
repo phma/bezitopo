@@ -10,18 +10,20 @@
 #include <cstdlib>
 #include "closure.h"
 #include "point.h"
+#include "cogo.h"
 #include "angle.h"
 using namespace std;
 
 void closure_i()
 {
-  xy displacement,vector;
-  double perimeter;
+  xy displacement,vector,origin(0,0);
+  double perimeter,area,misclosure;
   size_t chpos;
   int bearing,unitp;
   double distance;
   char *distcpy=NULL;
   string input,bearingstr,distancestr;
+  perimeter=area=0;
   do
   {
     cout<<"cl> ";
@@ -38,10 +40,16 @@ void closure_i()
       strcpy(distcpy,distancestr.c_str());
       distance=parse_meas(distcpy,METER,&unitp);
       vector=cossin(bearing)*distance;
+      area+=area3(origin,displacement,displacement+vector);
+      perimeter+=vector.length();
       displacement+=vector;
-      cout<<displacement.east()<<' '<<displacement.north()<<endl;
+      cout<<displacement.east()<<' '<<displacement.north()<<' '<<bintoangle(atan2i(displacement),DEGREE+SEXAG1)<<' '<<displacement.length()<<endl;
     }
   }
   while (input.length());
+  cout<<"Misclosure: "<<displacement.length()<<endl;
+  cout<<"Perimeter: "<<perimeter<<endl;
+  cout<<"Area: "<<area<<endl;
+  cout<<"Ratio of precision: 1:"<<perimeter/displacement.length()<<endl;
   free(distcpy);
 }

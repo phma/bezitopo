@@ -35,6 +35,11 @@ double xy::north()
 {return y;
  }
 
+double xy::length()
+{
+  return hypot(x,y);
+}
+
 xy operator+(const xy &l,const xy &r)
 {xy sum(l.x+r.x,l.y+r.y);
  return sum;

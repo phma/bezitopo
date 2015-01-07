@@ -23,6 +23,7 @@ public:
   xy();
   double east();
   double north();
+  double length();
   friend xy operator+(const xy &l,const xy &r);
   friend xy operator+=(xy &l,const xy &r);
   friend xy operator-(const xy &l,const xy &r);
