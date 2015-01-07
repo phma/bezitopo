@@ -965,10 +965,10 @@ void trianglecontours()
     tfname=fname+".txt";
     psfname=fname+".ps";
     fname+=".ppm";
-    for (j=0;j<3;j++) //FIXME: why is the lower left corner always horizontal?
+    for (j=0;j<3;j++)
     {
-      topopoints.points[j].setelev((bytes[j]-127.5)/100);
-      topopoints.points[j].gradient=xy((bytes[j+3]-127.5)/1000,(bytes[j+6]-127.5)/1000);
+      topopoints.points[j+1].setelev((bytes[j]-127.5)/100);
+      topopoints.points[j+1].gradient=xy((bytes[j+3]-127.5)/1000,(bytes[j+6]-127.5)/1000);
     }
     topopoints.maketriangles();
     topopoints.setgradient();
