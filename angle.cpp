@@ -198,6 +198,8 @@ string bintoangle(int angle,int unitp)
     ret="."+ret+unitsign;
   sprintf(digit,"%.0f",angmult);
   ret=digit+ret;
+  if (sign<0)
+    ret="-"+ret;
   return ret;
 }
 
