@@ -67,6 +67,7 @@ public:
   xy critical_point(double start,double startz,double end,double endz);
   std::vector<xy> criticalpts_side(bool side);
   xy spcoord(double x,double y);
+  std::vector<xy> criticalpts_axis();
 private:
   double vtxeloff(double off);
 };

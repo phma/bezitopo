@@ -444,3 +444,39 @@ vector<xy> triangle::criticalpts_side(bool side)
       critpts.push_back(critical_point(tranches[i-1].north(),tranches[i-1].elev(),tranches[i+1].north(),tranches[i+1].elev()));
   return critpts;
 }
+
+vector<xy> triangle::criticalpts_axis()
+/* Finds critical points on the flat axis.
+ * There are at most two, which are necessarily saddle points.
+ * If there is one, it's a monkey saddle point or chair point, and may be hard to recognize.
+ */
+{
+  vector<xy> critpts;
+  vector<double> pside,mside,diff,along;
+  double flat,pvertex,mvertex,a,b,c,disc;
+  int i;
+  flat=flatoffset();
+  pside=xsect(nocubedir,flat+3e-06);
+  mside=xsect(nocubedir,flat-3e-06);
+  for (i=0;i<4;i++)
+    diff.push_back(pside[i]-mside[i]);
+  pvertex=paravertex(pside);
+  mvertex=paravertex(mside);
+  if (fabs(pvertex)<1.5 && fabs(mvertex)<1.5)
+  {
+    c=deriv0(diff);
+    b=deriv1(diff);
+    a=deriv2(diff)/2;
+    disc=b*b-4*a*c;
+    if (disc==0)
+      along.push_back(-b/(2*a));
+    if (disc>0)
+    {
+      along.push_back((-b+sqrt(disc))/(2*a));
+      along.push_back((-b-sqrt(disc))/(2*a));
+    }
+  }
+  for (i=0;i<along.size();i++)
+    critpts.push_back(spcoord(along[i],flat));
+  return critpts;
+}

@@ -924,7 +924,7 @@ void testrasterdraw()
   rasterdraw(topopoints,xy(0,0),30,30,30,0,3,"rasterflat.ppm");
 }
 
-void test1tri(string triname)
+void test1tri(string triname,int excrits)
 {
   vector<double> xs;
   vector<xyz> slice;
@@ -987,6 +987,13 @@ void test1tri(string triname)
       dot(crits[j]);
     }
   }
+  crits=topopoints.triangles[0].criticalpts_axis();
+  ofile<<endl;
+  for (j=0;j<crits.size();j++)
+  {
+    ofile<<fixed<<setprecision(3)<<setw(7)<<crits[j].east()<<setw(7)<<crits[j].north()<<endl;
+    dot(crits[j]);
+  }
   endpage();
   psclose();
   cout<<fname<<endl;
@@ -1012,6 +1019,7 @@ void trianglecontours()
   int i,j;
   unsigned char bytes[9];
   string fname;
+  xy tilt;
   topopoints.clear();
   regpolygon(3);
   enlarge(10);
@@ -1028,14 +1036,37 @@ void trianglecontours()
     topopoints.points[j+1].setelev((bytes[j]-127.5)/100);
     topopoints.points[j+1].gradient=xy((bytes[j+3]-127.5)/1000,(bytes[j+6]-127.5)/1000);
   }
-  test1tri(fname);
+  test1tri(fname,-1);
   fname="monkeysaddle";
   for (j=0;j<3;j++)
   {
     topopoints.points[j+1].setelev(0);
     topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10;
   }
-  test1tri(fname);
+  test1tri(fname,1);
+  fname="tilted";
+  tilt=(xy(topopoints.points[1])-xy(topopoints.points[3]))/1000;
+  /* This triangle has two saddle points on a horizontal line in the no-cube direction.
+   * The triangle has three equally spaced nocubedirs; the program picks the one
+   * passing through points[2].
+   */
+  for (j=0;j<3;j++)
+  {
+    topopoints.points[j+1].setelev(dot(tilt,xy(topopoints.points[j+1])));
+    topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10+tilt;;
+  }
+  test1tri(fname,2);
+  fname="tolted";
+  tilt=(xy(topopoints.points[3])-xy(topopoints.points[2]))/1000;
+  /* This is the same as above, except for tilting in a different direction
+   * perpendicular to a different no-cube direction.
+   */
+  for (j=0;j<3;j++)
+  {
+    topopoints.points[j+1].setelev(dot(tilt,xy(topopoints.points[j+1])));
+    topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10+tilt;;
+  }
+  test1tri(fname,2);
 }
 
 void testderivs()
