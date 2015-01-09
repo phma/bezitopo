@@ -924,6 +924,74 @@ void testrasterdraw()
   rasterdraw(topopoints,xy(0,0),30,30,30,0,3,"rasterflat.ppm");
 }
 
+void test1tri(string triname)
+{
+  vector<double> xs;
+  vector<xyz> slice;
+  vector<xy> crits;
+  int j,side,cubedir;
+  double vertex,offset;
+  string fname,tfname,psfname;
+  fstream ofile;
+  fname=triname+".ppm";
+  tfname=triname+".txt";
+  psfname=triname+".ps";
+  topopoints.maketriangles();
+  topopoints.setgradient();
+  topopoints.makeqindex();
+  rasterdraw(topopoints,xy(5,0),30,40,30,0,1,fname);
+  ofile.open(tfname.c_str(),ios_base::out);
+  psopen(psfname.c_str());
+  psprolog();
+  startpage();
+  setscale(-17,-17,17,17);
+  for (j=0;j<topopoints.edges.size();j++)
+    line(topopoints.edges[j],j,false);
+  cubedir=topopoints.triangles[0].findnocubedir();
+  ofile<<"Zero cube dir "<<cubedir<<' '<<bintodeg(cubedir)<<"°"<<endl;
+  ofile<<"Zero quad offset "<<topopoints.triangles[0].flatoffset()<<endl;
+  for (j=30;j>=-30;j--)
+  {
+    offset=j/20.;
+    xs=topopoints.triangles[0].xsect(cubedir,offset);
+    vertex=paravertex(xs);
+    ofile<<fixed<<setprecision(3)<<setw(7)<<offset<<' '<<setw(7)<<deriv3(xs)<<' '<<setw(7)<<vertex;
+    if (vertex<=1.5 && vertex>=-1.5)
+      ofile<<string(rint((vertex+1.5)*20),' ')<<'*';
+    ofile<<endl;
+  }
+  line2p(topopoints.triangles[0].spcoord(1.5,-1.5),topopoints.triangles[0].spcoord(-1.5,-1.5));
+  line2p(topopoints.triangles[0].spcoord(-1.5,-1.5),topopoints.triangles[0].spcoord(-1.5,1.5));
+  for (side=0;side<2;side++)
+  {
+    ofile<<"Side "<<side<<endl;
+    slice=topopoints.triangles[0].slices(side);
+    for (j=0;j<slice.size();j++)
+    {
+      ofile<<fixed<<setprecision(3)<<setw(7)<<slice[j].east()<<setw(7)<<
+      slice[j].north()<<setw(7)<<slice[j].elev()<<endl;
+      if (j>0)
+      {
+	if (slice[j-1].elev()>slice[j].elev())
+	  setcolor(0,.7,0);
+	else
+	  setcolor(1,0,1);
+	line2p(topopoints.triangles[0].spcoord(slice[j-1].east(),slice[j-1].north()),
+		topopoints.triangles[0].spcoord(slice[j].east(),slice[j].north()));
+      }
+    }
+    crits=topopoints.triangles[0].criticalpts_side(side);
+    for (j=0;j<crits.size();j++)
+    {
+      ofile<<fixed<<setprecision(3)<<setw(7)<<crits[j].east()<<setw(7)<<crits[j].north()<<endl;
+      dot(crits[j]);
+    }
+  }
+  endpage();
+  psclose();
+  cout<<fname<<endl;
+}
+
 void trianglecontours()
 /* Pick elevations and gradients at the corners at random and draw color maps
  * of the elevations, to see what combinations of min, max, and saddle can arise.
@@ -941,90 +1009,33 @@ void trianglecontours()
  * of the height of vertices on each side.
  */
 {
-  int i,j,side,cubedir;
+  int i,j;
   unsigned char bytes[9];
-  double vertex,offset;
-  vector<double> xs;
-  vector<xyz> slice;
-  vector<xy> crits;
-  string fname,tfname,psfname;
-  fstream ofile;
+  string fname;
   topopoints.clear();
   regpolygon(3);
   enlarge(10);
   topopoints.maketin();
-  for (i=0;i<1;i++)
+  fname="tri";
+  for (j=0;j<9;j++)
   {
-    fname="tri";
-    for (j=0;j<9;j++)
-    {
-      bytes[j]=rng.ucrandom();
-      fname+=hexdig[bytes[j]>>4];
-      fname+=hexdig[bytes[j]&15];
-    }
-    tfname=fname+".txt";
-    psfname=fname+".ps";
-    fname+=".ppm";
-    for (j=0;j<3;j++)
-    {
-      topopoints.points[j+1].setelev((bytes[j]-127.5)/100);
-      topopoints.points[j+1].gradient=xy((bytes[j+3]-127.5)/1000,(bytes[j+6]-127.5)/1000);
-    }
-    topopoints.maketriangles();
-    topopoints.setgradient();
-    topopoints.makeqindex();
-    rasterdraw(topopoints,xy(5,0),30,40,30,0,1,fname);
-    ofile.open(tfname.c_str(),ios_base::out);
-    psopen(psfname.c_str());
-    psprolog();
-    startpage();
-    setscale(-17,-17,17,17);
-    for (j=0;j<topopoints.edges.size();j++)
-      line(topopoints.edges[j],j,false);
-    cubedir=topopoints.triangles[0].findnocubedir();
-    ofile<<"Zero cube dir "<<cubedir<<' '<<bintodeg(cubedir)<<"°"<<endl;
-    ofile<<"Zero quad offset "<<topopoints.triangles[0].flatoffset()<<endl;
-    for (j=30;j>=-30;j--)
-    {
-      offset=j/20.;
-      xs=topopoints.triangles[0].xsect(cubedir,offset);
-      vertex=paravertex(xs);
-      ofile<<fixed<<setprecision(3)<<setw(7)<<offset<<' '<<setw(7)<<deriv3(xs)<<' '<<setw(7)<<vertex;
-      if (vertex<=1.5 && vertex>=-1.5)
-	ofile<<string(rint((vertex+1.5)*20),' ')<<'*';
-      ofile<<endl;
-    }
-    line2p(topopoints.triangles[0].spcoord(1.5,-1.5),topopoints.triangles[0].spcoord(-1.5,-1.5));
-    line2p(topopoints.triangles[0].spcoord(-1.5,-1.5),topopoints.triangles[0].spcoord(-1.5,1.5));
-    for (side=0;side<2;side++)
-    {
-      ofile<<"Side "<<side<<endl;
-      slice=topopoints.triangles[0].slices(side);
-      for (j=0;j<slice.size();j++)
-      {
-	ofile<<fixed<<setprecision(3)<<setw(7)<<slice[j].east()<<setw(7)<<
-	slice[j].north()<<setw(7)<<slice[j].elev()<<endl;
-	if (j>0)
-	{
-	  if (slice[j-1].elev()>slice[j].elev())
-	    setcolor(0,.7,0);
-	  else
-	    setcolor(1,0,1);
-	  line2p(topopoints.triangles[0].spcoord(slice[j-1].east(),slice[j-1].north()),
-		 topopoints.triangles[0].spcoord(slice[j].east(),slice[j].north()));
-	}
-      }
-      crits=topopoints.triangles[0].criticalpts_side(side);
-      for (j=0;j<crits.size();j++)
-      {
-	ofile<<fixed<<setprecision(3)<<setw(7)<<crits[j].east()<<setw(7)<<crits[j].north()<<endl;
-	dot(crits[j]);
-      }
-    }
-    endpage();
-    psclose();
-    cout<<fname<<endl;
+    bytes[j]=rng.ucrandom();
+    fname+=hexdig[bytes[j]>>4];
+    fname+=hexdig[bytes[j]&15];
   }
+  for (j=0;j<3;j++)
+  {
+    topopoints.points[j+1].setelev((bytes[j]-127.5)/100);
+    topopoints.points[j+1].gradient=xy((bytes[j+3]-127.5)/1000,(bytes[j+6]-127.5)/1000);
+  }
+  test1tri(fname);
+  fname="monkeysaddle";
+  for (j=0;j<3;j++)
+  {
+    topopoints.points[j+1].setelev(0);
+    topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10;
+  }
+  test1tri(fname);
 }
 
 void testderivs()

@@ -335,7 +335,7 @@ vector<xyz> triangle::slices(bool side)
     tranches.push_back(xyz(vtx,off,z));
     if (i)
     {
-      if (abs(off-flat)<1e-6)
+      if (abs(off-flat)<3e-6)
 	stop=true;
       if (abs(tranches[i].x)>abs(tranches[i-1].x) && abs(tranches[i-1].x)>1.5 && (tranches[i].x>0)==(tranches[i].x>0))
 	stop=true;
