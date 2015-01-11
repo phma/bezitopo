@@ -277,7 +277,10 @@ int triangle::findnocubedir()
       mid=lrint((beg*endderiv-end*begderiv)/(endderiv-begderiv));
     midderiv=deriv3(xsect(mid,0));
     //cout<<beg<<' '<<begderiv<<' '<<mid<<' '<<midderiv<<' '<<end<<' '<<endderiv<<endl;
-    if ((crit=midderiv/(endderiv-begderiv))>=0)
+    crit=midderiv/(endderiv-begderiv);
+    if (isnan(crit))
+      crit=0;
+    if (crit>=0)
     {
       end=mid;
       endderiv=midderiv;
@@ -355,7 +358,7 @@ vector<xyz> triangle::slices(bool side)
 xy triangle::critical_point(double start,double startz,double end,double endz)
 // start and end are offsets perpendicular to nocubedir
 {
-  int lw=0;
+  int lw=0,lastlw=0;
   double flw,vtx,p;
   vector<double> y(4),z(4); // x and y are semiperimeter coordinates
   y[3]=1;
@@ -363,7 +366,7 @@ xy triangle::critical_point(double start,double startz,double end,double endz)
   y[2]=end;
   z[1]=startz;
   z[2]=endz;
-  while (fabs(y[3]-y[0])*peri>1e-6 && fabs(deriv2(z))>1e-9)
+  while (fabs(y[3]-y[0])*peri>1e-6 && lw*lastlw>-4 && lw<100 && fabs(deriv2(z))>1e-9)
   {
     switch (lw)
     {
@@ -417,6 +420,7 @@ xy triangle::critical_point(double start,double startz,double end,double endz)
 	z[2]=vtxeloff(y[2]);
 	break;
     }
+    lastlw=lw; // detect 2 followed by -2, which is an infinite loop that can happen with flat triangles
     flw=rint(p=paravertex(z));
     if (isfinite(flw))
     {

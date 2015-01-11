@@ -1037,6 +1037,11 @@ void trianglecontours()
     topopoints.points[j+1].gradient=xy((bytes[j+3]-127.5)/1000,(bytes[j+6]-127.5)/1000);
   }
   test1tri(fname,-1);
+  fname=fname.substr(0,9)+"flat";
+  topopoints.setgradient(true);
+  for (j=0;j<3;j++)
+    topopoints.points[j+1].gradient=xy(topopoints.elevation(xy(1,0))-topopoints.elevation(xy(0,0)),topopoints.elevation(xy(0,1))-topopoints.elevation(xy(0,0)));
+  test1tri(fname,0);
   fname="monkeysaddle";
   for (j=0;j<3;j++)
   {
@@ -1053,7 +1058,7 @@ void trianglecontours()
   for (j=0;j<3;j++)
   {
     topopoints.points[j+1].setelev(dot(tilt,xy(topopoints.points[j+1])));
-    topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10+tilt;;
+    topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10+tilt;
   }
   test1tri(fname,2);
   fname="tolted";
@@ -1064,9 +1069,23 @@ void trianglecontours()
   for (j=0;j<3;j++)
   {
     topopoints.points[j+1].setelev(dot(tilt,xy(topopoints.points[j+1])));
-    topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10+tilt;;
+    topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10+tilt;
   }
   test1tri(fname,2);
+  fname="table";
+  for (j=0;j<3;j++)
+  {
+    topopoints.points[j+1].setelev(M_PI);
+    topopoints.points[j+1].gradient=xy(0,0);
+  }
+  test1tri(fname,0);
+  fname="floor";
+  for (j=0;j<3;j++)
+  {
+    topopoints.points[j+1].setelev(0);
+    topopoints.points[j+1].gradient=xy(0,0);
+  }
+  test1tri(fname,0);
 }
 
 void testderivs()
