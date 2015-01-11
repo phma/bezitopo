@@ -453,8 +453,8 @@ vector<xy> triangle::criticalpts_axis()
 {
   vector<xy> critpts;
   vector<double> pside,mside,diff,along;
-  double flat,pvertex,mvertex,a,b,c,disc;
-  int i;
+  double flat,pvertex,mvertex,dvertex,a,b,c,disc,velev,around[8];
+  int i,signflips;
   flat=flatoffset();
   pside=xsect(nocubedir,flat+3e-06);
   mside=xsect(nocubedir,flat-3e-06);
@@ -474,6 +474,26 @@ vector<xy> triangle::criticalpts_axis()
     {
       along.push_back((-b+sqrt(disc))/(2*a));
       along.push_back((-b-sqrt(disc))/(2*a));
+    }
+    /* If no points found, check for a saddle point (which must be a monkey
+    * saddle point) at the vertex.
+    */
+    if (!along.size())
+    {
+      dvertex=paravertex(diff);
+      velev=spelevation(nocubedir,dvertex,flat);
+      around[0]=spelevation(nocubedir,dvertex+0.000070,flat+0.000169)-velev;
+      around[1]=spelevation(nocubedir,dvertex+0.000169,flat+0.000070)-velev;
+      around[2]=spelevation(nocubedir,dvertex+0.000169,flat-0.000070)-velev;
+      around[3]=spelevation(nocubedir,dvertex+0.000070,flat-0.000169)-velev;
+      around[4]=spelevation(nocubedir,dvertex-0.000070,flat-0.000169)-velev;
+      around[5]=spelevation(nocubedir,dvertex-0.000169,flat-0.000070)-velev;
+      around[6]=spelevation(nocubedir,dvertex-0.000160,flat+0.000070)-velev;
+      around[7]=spelevation(nocubedir,dvertex-0.000070,flat+0.000169)-velev;
+      for (i=signflips=0;i<8;i++)
+	signflips+=around[i]*around[(i+1)&7]<0;
+      if (signflips>=3)
+	along.push_back(dvertex);
     }
   }
   for (i=0;i<along.size();i++)
