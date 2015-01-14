@@ -12,6 +12,17 @@
 #define M_SQRT_3 1.73205080756887729352744634
 #define M_SQRT_1_3 0.5773502691896257645091487805
 
+#ifndef NDEBUG
+class testfunc
+{
+public:
+  double coeff[4];
+  testfunc(double cub,double quad,double lin,double con);
+  double operator()(double x);
+};
+double parabinter(testfunc func,double start,double startz,double end,double endz);
+#endif
+
 class triangle
 /* A triangle has three corners and seven other control points, arranged as follows:
          a

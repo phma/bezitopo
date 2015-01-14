@@ -7,9 +7,27 @@
 #include <cstring>
 #include <climits>
 #include <iostream>
+#include <iomanip>
 #include "bezier.h"
 #include "angle.h"
 using namespace std;
+
+#ifndef NDEBUG
+
+testfunc::testfunc(double cub,double quad,double lin,double con)
+{
+  coeff[3]=cub;
+  coeff[2]=quad;
+  coeff[1]=lin;
+  coeff[0]=con;
+}
+
+double testfunc::operator()(double x)
+{
+  return (((coeff[3])*x+coeff[2])*x+coeff[1])*x+coeff[0];
+}
+
+#endif
 
 triangle::triangle()
 {
@@ -339,7 +357,7 @@ vector<xyz> triangle::slices(bool side)
  * side=true for the positive offset side.
  */
 {
-  int i;
+  int i,signch=0;
   vector<xyz> tranches;
   double off,vtx,z,flat;
   bool stop=false;
@@ -353,7 +371,12 @@ vector<xyz> triangle::slices(bool side)
     {
       if (abs(off-flat)<3e-6)
 	stop=true;
-      if (abs(tranches[i].x)>abs(tranches[i-1].x) && abs(tranches[i-1].x)>1.5 && (tranches[i].x>0)==(tranches[i].x>0))
+      if (abs(off)>2)
+	stop=true; // flat is not in (-1.5,1.5)
+      signch+=(tranches[i].x>0)^(tranches[i-1].x>0);
+      if (signch>2)
+	stop=true;
+      if (abs(tranches[i].x)>abs(tranches[i-1].x) && abs(tranches[i-1].x)>1.5 && (tranches[i].x>0)==(tranches[i-1].x>0))
 	stop=true;
     }
   }
@@ -371,7 +394,7 @@ vector<xyz> triangle::slices(bool side)
 xy triangle::critical_point(double start,double startz,double end,double endz)
 // start and end are offsets perpendicular to nocubedir
 {
-  int lw=0,lastlw=0;
+  int lw=0,lastlw=0,i=0;
   double flw,vtx,p;
   vector<double> y(4),z(4); // x and y are semiperimeter coordinates
   y[3]=1;
@@ -379,7 +402,7 @@ xy triangle::critical_point(double start,double startz,double end,double endz)
   y[2]=end;
   z[1]=startz;
   z[2]=endz;
-  while (fabs(y[3]-y[0])*peri>1e-6 && lw*lastlw>-4 && lw<100 && fabs(deriv2(z))>1e-9)
+  while (fabs(y[3]-y[0])*peri>1e-6 && abs(lw*lastlw)<4 && lw<100 && (i<10 || fabs(deriv2(z))>1e-9))
   {
     switch (lw)
     {
@@ -445,10 +468,109 @@ xy triangle::critical_point(double start,double startz,double end,double endz)
     }
     else
       lw=256;
+    i++;
   }
-  vtx=paravertex(xsect(nocubedir,(y[0]*(1.5-p)+y[3]*(1.5+p))/3));
-  return spcoord(vtx,(y[0]*(1.5-p)+y[3]*(1.5+p))/3);
+  if (abs(lw*lastlw)<4)
+  {
+    vtx=paravertex(xsect(nocubedir,(y[0]*(1.5-p)+y[3]*(1.5+p))/3));
+    return spcoord(vtx,(y[0]*(1.5-p)+y[3]*(1.5+p))/3);
+  }
+  else
+  {
+    vtx=nan("");
+    return xy(vtx,vtx);
+  }
 }
+
+#ifndef NDEBUG
+
+double parabinter(testfunc func,double start,double startz,double end,double endz)
+{
+  int lw=0,lastlw=0,i;
+  double flw,p;
+  vector<double> y(4),z(4);
+  y[3]=1;
+  y[1]=start;
+  y[2]=end;
+  z[1]=startz;
+  z[2]=endz;
+  while (fabs(y[3]-y[0])>1e-6 && abs(lw*lastlw)<4 && lw<100 && (fabs(y[3]-y[0])>1e-3 || fabs(deriv2(z))>1e-9))
+  {
+    switch (lw)
+    {
+      case -2:
+	y[3]=y[1];
+	y[2]=y[0];
+	z[3]=z[1];
+	z[2]=z[0];
+	break;
+      case -1:
+	y[3]=y[1];
+	z[3]=z[1];
+	break;
+      case 0:
+	y[3]=y[2];
+	y[0]=y[1];
+	z[3]=z[2];
+	z[0]=z[1];
+	break;
+      case 1:
+	y[0]=y[2];
+	z[0]=z[2];
+	break;
+      case 2:
+	y[0]=y[2];
+	y[1]=y[3];
+	z[0]=z[2];
+	z[1]=z[3];
+	break;
+    }
+    switch (lw)
+    {
+      case -2:
+	y[1]=2*y[2]-y[3];
+	y[0]=2*y[1]-y[2];
+	z[1]=func(y[1]);
+	z[0]=func(y[0]);
+	break;
+      case -1:
+      case 0:
+      case 1:
+	y[1]=(2*y[0]+y[3])/3;
+	y[2]=(2*y[3]+y[0])/3;
+	z[1]=func(y[1]);
+	z[2]=func(y[2]);
+	break;
+      case 2:
+	y[2]=2*y[1]-y[0];
+	y[3]=2*y[2]-y[1];
+	z[3]=func(y[3]);
+	z[2]=func(y[2]);
+	break;
+    }
+    lastlw=lw; // detect 2 followed by -2, which is an infinite loop that can happen with flat triangles
+    flw=rint(p=paravertex(z));
+    if (isfinite(flw))
+    {
+      lw=flw;
+      if (lw>2)
+	lw=2;
+      if (lw<-2)
+	lw=-2;
+    }
+    else
+      lw=256;
+    for (i=0;i<4;i++)
+      cout<<setw(9)<<setprecision(5)<<y[i];
+    cout<<endl;
+    for (i=0;i<4;i++)
+      cout<<setw(9)<<setprecision(5)<<z[i];
+    cout<<endl<<lw<<endl;
+  }
+  return (y[0]*(1.5-p)+y[3]*(1.5+p))/3;
+}
+
+#endif
 
 vector<xy> triangle::criticalpts_side(bool side)
 {

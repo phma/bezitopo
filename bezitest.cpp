@@ -1092,6 +1092,20 @@ void trianglecontours()
   test1tri(fname,0);
 }
 
+#ifndef NDEBUG
+
+void testparabinter()
+{
+  double y0=-0.9,y1=1.1,z0,z1;
+  testfunc func(1,0,-1,0);
+  z0=func(y0);
+  z1=func(y1);
+  cout<<z0<<' '<<func((y0+y1)/2)<<' '<<z1<<endl;
+  parabinter(func,y0,z0,y1,z1);
+}
+
+#endif
+
 void testderivs()
 {
   double i;
@@ -1453,6 +1467,9 @@ int main(int argc, char *argv[])
   testmakegrad();
   testderivs();
   trianglecontours();
+#ifndef NDEBUG
+  testparabinter();
+#endif
   testrasterdraw();
   testdirbound();
   teststl();
