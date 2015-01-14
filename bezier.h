@@ -49,6 +49,7 @@ public:
   double elevation(xy pnt);
   void setgradient(xy pnt,xy grad);
   void flatten();
+  xyz gradient3(xy pnt);
   //xy gradient(xy pnt);
   bool in(xy pnt);
   bool iscorner(point *v);
@@ -68,6 +69,7 @@ public:
   std::vector<xy> criticalpts_side(bool side);
   xy spcoord(double x,double y);
   std::vector<xy> criticalpts_axis();
+  std::vector<xy> criticalpts();
 private:
   double vtxeloff(double off);
 };

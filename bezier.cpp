@@ -41,6 +41,19 @@ double triangle::elevation(xy pnt)
         p*p*p*a->z+3*p*p*r*ctrl[1]+3*p*r*r*ctrl[4]+r*r*r*c->z;
  }
 
+xyz triangle::gradient3(xy pnt)
+{
+  double p,q,r,s,gp,gq,gr;
+  s=area();
+  p=area3(pnt,*b,*c)/s;
+  q=area3(*a,pnt,*c)/s;
+  r=area3(*a,*b,pnt)/s;
+  gp=3*q*q*ctrl[2]+6*q*r*ctrl[3]+6*p*q*ctrl[0]+3*p*p*a->z+6*p*r*ctrl[1]+3*r*r*ctrl[4];
+  gq=3*q*q*b->z+6*q*r*ctrl[5]+6*p*q*ctrl[2]+3*r*r*ctrl[6]+6*p*r*ctrl[3]+3*p*p*ctrl[0];
+  gr=3*q*q*ctrl[5]+6*q*r*ctrl[6]+6*p*q*ctrl[3]+3*p*p*ctrl[1]+6*p*r*ctrl[4]+3*r*r*c->z;
+  return xyz(gp,gq,gr);
+}
+
 bool triangle::in(xy pnt)
 {return area3(pnt,*b,*c)>=0 && area3(*a,pnt,*c)>=0 && area3(*a,*b,pnt)>=0;
  }
@@ -472,6 +485,8 @@ vector<xy> triangle::criticalpts_axis()
     b=deriv1(diff);
     a=deriv2(diff)/2;
     disc=b*b-4*a*c;
+    if (disc>0 && fabs(sqrt(disc)/a)<1e-5) // sometimes in monkey, the two points are just over 3e-6 apart
+      disc=0; // but it's really only one saddle point of multiplicity 2
     if (disc==0)
       along.push_back(-b/(2*a));
     if (disc>0)
@@ -503,4 +518,23 @@ vector<xy> triangle::criticalpts_axis()
   for (i=0;i<along.size();i++)
     critpts.push_back(spcoord(along[i],flat));
   return critpts;
+}
+
+vector<xy> triangle::criticalpts()
+{
+  vector<xy> critpts,ret;
+  int i;
+  critpts=criticalpts_side(false);
+  for (i=0;i<critpts.size();i++)
+    if (in(critpts[i]))
+      ret.push_back(critpts[i]);
+  critpts=criticalpts_side(true);
+  for (i=0;i<critpts.size();i++)
+    if (in(critpts[i]))
+      ret.push_back(critpts[i]);
+  critpts=criticalpts_axis();
+  for (i=0;i<critpts.size();i++)
+    if (in(critpts[i]))
+      ret.push_back(critpts[i]);
+  return ret;
 }

@@ -994,9 +994,13 @@ void test1tri(string triname,int excrits)
     ofile<<fixed<<setprecision(3)<<setw(7)<<crits[j].east()<<setw(7)<<crits[j].north()<<endl;
     dot(crits[j]);
   }
+  crits=topopoints.triangles[0].criticalpts();
   endpage();
   psclose();
   cout<<fname<<endl;
+  if (crits.size()!=excrits && excrits>=0)
+    cout<<crits.size()<<" critical points found, "<<excrits<<" expected"<<endl;
+  assert(crits.size()==excrits || excrits<0);
 }
 
 void trianglecontours()
