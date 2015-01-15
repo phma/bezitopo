@@ -660,3 +660,69 @@ vector<xy> triangle::criticalpts()
       ret.push_back(critpts[i]);
   return ret;
 }
+
+int triangle::pointtype(xy pnt)
+/* Given a point, returns its type by counting the zero-crossings around it:
+ * 0: maximum, minimum, or flat point
+ * 2: slope point (it cannot tell a slope point from a chair point, which is rare)
+ * 4: saddle point
+ * 6: monkey saddle point
+ * >6: grass point, actually a flat point of a nonzero table surface because of roundoff error.
+ */
+{
+  int i,zerocrossings,positives,negatives;
+  double velev,around[255],last;
+  velev=elevation(pnt);
+  for (i=0;i<255;i++)
+    around[(i*2)%255]=elevation(pnt+cossin(i*0x01010101)*0.000183)-velev;
+  for (i=254;i>=0 && around[i]==0;i++);
+  if (i>=0)
+    last=around[i];
+  else
+    last=0;
+  for (i=zerocrossings=positives=negatives=0;i<255;i++)
+  {
+    if (around[i]>0)
+    {
+      positives++;
+      if (last<0)
+      {
+	zerocrossings++;
+	last=around[i];
+      }
+    }
+    if (around[i]<0)
+    {
+      negatives++;
+      if (last>0)
+      {
+	zerocrossings++;
+	last=around[i];
+      }
+    }
+  }
+  switch (zerocrossings)
+  {
+    case 0:
+      if (positives)
+	i=PT_MIN;
+      else if (negatives)
+	i=PT_MAX;
+      else
+	i=PT_FLAT;
+      break;
+    case 2:
+      i=PT_SLOPE;
+      break;
+    case 4:
+      i=PT_SADDLE;
+      break;
+    case 6:
+      i=PT_MONKEY;
+      break;
+    default:
+      i=PT_GRASS;
+  }
+  return i;
+}
+

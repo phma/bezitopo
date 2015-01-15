@@ -929,7 +929,7 @@ void test1tri(string triname,int excrits)
   vector<double> xs;
   vector<xyz> slice;
   vector<xy> crits;
-  int j,side,cubedir;
+  int j,side,cubedir,ptype;
   double vertex,offset;
   string fname,tfname,psfname;
   fstream ofile;
@@ -995,6 +995,13 @@ void test1tri(string triname,int excrits)
     dot(crits[j]);
   }
   crits=topopoints.triangles[0].criticalpts();
+  for (j=0;j<crits.size();j++)
+  {
+    ptype=topopoints.triangles[0].pointtype(crits[j]);
+    cout<<crits[j].east()<<','<<crits[j].north()<<" type="<<ptype<<endl;
+    ofile<<crits[j].east()<<','<<crits[j].north()<<" type="<<ptype<<endl;
+    assert(ptype!=PT_SLOPE && ptype!=PT_GRASS);
+  }
   endpage();
   psclose();
   cout<<fname<<endl;
@@ -1006,8 +1013,10 @@ void test1tri(string triname,int excrits)
 void trianglecontours()
 /* Pick elevations and gradients at the corners at random and draw color maps
  * of the elevations, to see what combinations of min, max, and saddle can arise.
- * The most that has arisen is one min or max and one saddle. There can be three
- * critical points just outside the triangle.
+ * trid306edc96e91f8adcc has three critical points inside the triangle:
+ * 7.95533,14.1356,-1.270 minimum
+ * -7.83778,-12.9386,1.227 maximum
+ * 10.9596,-3.169,0.403 saddle.
  * 
  * Hypothesis to attack the minimax problem:
  * Every surface in a Bézier triangle can be stretched linearly and rotated
@@ -1083,6 +1092,7 @@ void trianglecontours()
     topopoints.points[j+1].gradient=xy(0,0);
   }
   test1tri(fname,0);
+  i=topopoints.triangles[0].pointtype(xy(0,0));
   fname="floor";
   for (j=0;j<3;j++)
   {

@@ -11,6 +11,13 @@
 #define M_SQRT_3_4 0.86602540378443864676372317
 #define M_SQRT_3 1.73205080756887729352744634
 #define M_SQRT_1_3 0.5773502691896257645091487805
+#define PT_MIN 0
+#define PT_FLAT 1
+#define PT_MAX 2
+#define PT_SLOPE 3
+#define PT_SADDLE 4
+#define PT_MONKEY 5
+#define PT_GRASS 6
 
 #ifndef NDEBUG
 class testfunc
@@ -81,6 +88,7 @@ public:
   xy spcoord(double x,double y);
   std::vector<xy> criticalpts_axis();
   std::vector<xy> criticalpts();
+  int pointtype(xy pnt);
 private:
   double vtxeloff(double off);
 };
