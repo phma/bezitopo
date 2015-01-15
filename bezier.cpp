@@ -48,16 +48,15 @@ double triangle::perimeter()
 
 double triangle::elevation(xy pnt)
 /* Computes the elevation of triangle tri at the point x,y. */
-{double p,q,r, // Fraction of distance from a side to opposite corner. p+q+r=1.
-        s;   // Area of triangle.
- s=area();
- p=area3(pnt,*b,*c)/s;
- q=area3(*a,pnt,*c)/s;
- r=area3(*a,*b,pnt)/s;
- return q*q*q*b->z+3*q*q*r*ctrl[5]+3*p*q*q*ctrl[2]+
-        3*q*r*r*ctrl[6]+6*p*q*r*ctrl[3]+3*p*p*q*ctrl[0]+
-        p*p*p*a->z+3*p*p*r*ctrl[1]+3*p*r*r*ctrl[4]+r*r*r*c->z;
- }
+{
+  double p,q,r; // Fraction of distance from a side to opposite corner. p+q+r=1.
+  p=area3(pnt,*b,*c)/sarea;
+  q=area3(*a,pnt,*c)/sarea;
+  r=area3(*a,*b,pnt)/sarea;
+  return q*q*q*b->z+3*q*q*r*ctrl[5]+3*p*q*q*ctrl[2]+
+         3*q*r*r*ctrl[6]+6*p*q*r*ctrl[3]+3*p*p*q*ctrl[0]+
+         p*p*p*a->z+3*p*p*r*ctrl[1]+3*p*r*r*ctrl[4]+r*r*r*c->z;
+}
 
 xyz triangle::gradient3(xy pnt)
 {
@@ -99,6 +98,8 @@ void triangle::flatten()
   ctrl[4]=(2*c->z+a->z)/3;
   ctrl[5]=(2*b->z+c->z)/3;
   ctrl[6]=(2*c->z+b->z)/3;
+  nocubedir=INT_MAX;
+  sarea=area();
 }
 
 void triangle::setgradient(xy pnt,xy grad)
@@ -125,6 +126,7 @@ void triangle::setgradient(xy pnt,xy grad)
     ctrl[6]=c->z+dot(grad,xy(*b)-xy(*c));
   }
   nocubedir=INT_MAX;
+  sarea=area();
 }
 
 void triangle::setneighbor(triangle *neigh)

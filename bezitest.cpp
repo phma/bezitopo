@@ -662,6 +662,7 @@ void testtriangle()
   tri.a=&surveypoints.points[1];
   tri.b=&surveypoints.points[2];
   tri.c=&surveypoints.points[3];
+  tri.flatten(); // sets area, needed for computing elevations
   for (i=0;i<7;i++)
     tri.ctrl[i]=0;
   elev=tri.elevation(o);

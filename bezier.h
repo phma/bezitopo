@@ -58,7 +58,7 @@ class triangle
 public:
   point *a,*b,*c; //corners
   double ctrl[7]; //There are 10 control points; the corners are three, and these are the elevations of the others.
-  double peri;
+  double peri,sarea;
   triangle *aneigh,*bneigh,*cneigh;
   int nocubedir; // set to MAXINT if critpoints have not been looked for
   std::vector<xy> critpoints;
