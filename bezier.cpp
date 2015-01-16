@@ -728,3 +728,13 @@ int triangle::pointtype(xy pnt)
   return i;
 }
 
+/* To subdivide a triangle:
+ * 1. Find all critical points in the interior and on the edges.
+ * 2. Connect each corner to the critical points on the opposite edge.
+ * 3. Connect each interior critical point to all corners and edge critical points.
+ * 4. Sort all these segments by their numbers of extrema and by length.
+ * 5. Of any two segments that intersect in ACXBD, ACTBD, or BDTAC manner,
+ *    remove the one with more extrema.
+ *    If they have the same number of extrema, remove the longer.
+ */
+
