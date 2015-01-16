@@ -644,7 +644,7 @@ vector<xy> triangle::criticalpts_axis()
   return critpts;
 }
 
-vector<xy> triangle::criticalpts()
+void triangle::findcriticalpts()
 {
   vector<xy> critpts,ret;
   int i;
@@ -660,7 +660,7 @@ vector<xy> triangle::criticalpts()
   for (i=0;i<critpts.size();i++)
     if (in(critpts[i]))
       ret.push_back(critpts[i]);
-  return ret;
+  critpoints=ret;
 }
 
 int triangle::pointtype(xy pnt)

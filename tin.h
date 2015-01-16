@@ -23,6 +23,7 @@ class edge
  point *a,*b;
  edge *nexta,*nextb;
  triangle *tria,*trib;
+ std::vector<xy> critpoints;
  bool broken; //true if a breakline crosses this edge
  bool contour;
  /* When drawing a contour, set edge::contour to true for each edge that

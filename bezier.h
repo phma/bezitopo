@@ -87,7 +87,7 @@ public:
   std::vector<xy> criticalpts_side(bool side);
   xy spcoord(double x,double y);
   std::vector<xy> criticalpts_axis();
-  std::vector<xy> criticalpts();
+  void findcriticalpts();
   int pointtype(xy pnt);
 private:
   double vtxeloff(double off);

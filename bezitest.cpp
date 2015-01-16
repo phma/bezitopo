@@ -995,7 +995,8 @@ void test1tri(string triname,int excrits)
     ofile<<fixed<<setprecision(3)<<setw(7)<<crits[j].east()<<setw(7)<<crits[j].north()<<endl;
     dot(crits[j]);
   }
-  crits=topopoints.triangles[0].criticalpts();
+  topopoints.triangles[0].findcriticalpts();
+  crits=topopoints.triangles[0].critpoints;
   for (j=0;j<crits.size();j++)
   {
     ptype=topopoints.triangles[0].pointtype(crits[j]);
