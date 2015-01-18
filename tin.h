@@ -19,28 +19,34 @@ using std::exception;
 class pointlist;
 
 class edge
-{public:
- point *a,*b;
- edge *nexta,*nextb;
- triangle *tria,*trib;
- std::vector<xy> critpoints;
- bool broken; //true if a breakline crosses this edge
- bool contour;
- /* When drawing a contour, set edge::contour to true for each edge that
-    crosses the contour. Keep the flags set when you go to the next
-    contour of the same elevation. When you go to the next elevation,
-    clear the flags. */
- void flip(pointlist *topopoints);
- point* otherend(point* end);
- edge* next(point* end);
- triangle* tri(point* end);
- xy midpoint();
- void setnext(point* end,edge* enext);
- bool isinterior();
- bool delaunay();
- void dump(pointlist *topopoints);
- double length();
- };
+{
+public:
+  point *a,*b;
+  edge *nexta,*nextb;
+  triangle *tria,*trib;
+  std::vector<xy> critpoints;
+  bool broken; //true if a breakline crosses this edge
+  char contour;
+  /* When drawing a contour, set one of the low 3 bits of edge::contour to true
+   * for each edge that crosses the contour. Keep the flags set when you go to
+   * the next contour of the same elevation. When you go to the next elevation,
+   * clear the flags.
+   */
+  char stlsplit;
+  /* Log base 2 of the number of pieces this edge is split into
+   * when writing an STL file.
+   */
+  void flip(pointlist *topopoints);
+  point* otherend(point* end);
+  edge* next(point* end);
+  triangle* tri(point* end);
+  xy midpoint();
+  void setnext(point* end,edge* enext);
+  bool isinterior();
+  bool delaunay();
+  void dump(pointlist *topopoints);
+  double length();
+};
 
 typedef std::pair<double,point*> ipoint;
 /*
