@@ -1012,6 +1012,22 @@ void test1tri(string triname,int excrits)
   assert(crits.size()==excrits || excrits<0);
 }
 
+void test1grad()
+{
+  xyz grad3;
+  xy pt;
+  map<int,triangle>::iterator i;
+  topopoints.maketriangles();
+  topopoints.setgradient();
+  topopoints.makeqindex();
+  for (i=topopoints.triangles.begin();i!=topopoints.triangles.end();i++)
+  {
+    pt=(*i->second.a+*i->second.b*2+*i->second.c*3)/6;
+    grad3=i->second.gradient3(pt);
+    cout<<grad3.east()<<' '<<grad3.north()<<' '<<grad3.elev()<<endl;
+  }
+}
+
 void trianglecontours()
 /* Pick elevations and gradients at the corners at random and draw color maps
  * of the elevations, to see what combinations of min, max, and saddle can arise.
@@ -1102,6 +1118,22 @@ void trianglecontours()
     topopoints.points[j+1].gradient=xy(0,0);
   }
   test1tri(fname,0);
+}
+
+void testgrad()
+{
+  int j;
+  topopoints.clear();
+  regpolygon(3);
+  enlarge(10);
+  topopoints.maketin();
+  cout<<"testgrad"<<endl;
+  for (j=0;j<3;j++)
+  {
+    topopoints.points[j+1].setelev(M_PI);
+    topopoints.points[j+1].gradient=xy(0,0);
+  }
+  test1grad();
 }
 
 #ifndef NDEBUG
@@ -1489,6 +1521,7 @@ int main(int argc, char *argv[])
   testpolyline();
   testbezier3d();
   testangleconv();
+  testgrad();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //closure_i();
   return EXIT_SUCCESS;
