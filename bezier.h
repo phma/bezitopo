@@ -61,6 +61,7 @@ public:
   double peri,sarea;
   triangle *aneigh,*bneigh,*cneigh;
   int nocubedir; // set to MAXINT if critpoints have not been looked for
+  double gradmat[2][3]; // to compute gradient from three partial gradients
   std::vector<xy> critpoints;
   triangle();
   void setneighbor(triangle *neigh);
@@ -68,7 +69,7 @@ public:
   void setgradient(xy pnt,xy grad);
   void flatten();
   xyz gradient3(xy pnt);
-  //xy gradient(xy pnt);
+  xy gradient(xy pnt);
   bool in(xy pnt);
   bool iscorner(point *v);
   triangle *nexttoward(xy pnt);

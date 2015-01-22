@@ -1015,8 +1015,10 @@ void test1tri(string triname,int excrits)
 void test1grad()
 {
   xyz grad3;
-  xy pt;
+  xy pt,grad2;
   map<int,triangle>::iterator i;
+  int j;
+  vector<double> xsect,ysect;
   topopoints.maketriangles();
   topopoints.setgradient();
   topopoints.makeqindex();
@@ -1024,7 +1026,17 @@ void test1grad()
   {
     pt=(*i->second.a+*i->second.b*2+*i->second.c*3)/6;
     grad3=i->second.gradient3(pt);
+    grad2=i->second.gradient(pt);
     cout<<grad3.east()<<' '<<grad3.north()<<' '<<grad3.elev()<<endl;
+    cout<<"Computed gradient: "<<grad2.east()<<' '<<grad2.north()<<endl;
+    xsect.clear();
+    ysect.clear();
+    for (j=-3;j<4;j+=2)
+    {
+      xsect.push_back(i->second.elevation(pt+xy(j*0.5,0)));
+      ysect.push_back(i->second.elevation(pt+xy(0,j*0.5)));
+    }
+    cout<<"Actual gradient: "<<deriv1(xsect)<<','<<deriv1(ysect)<<endl;
   }
 }
 
@@ -1124,10 +1136,12 @@ void testgrad()
 {
   int j;
   topopoints.clear();
+  setsurface(FLATSLOPE);
   regpolygon(3);
-  enlarge(10);
   topopoints.maketin();
+  topopoints.makegrad(0);
   cout<<"testgrad"<<endl;
+  test1grad();
   for (j=0;j<3;j++)
   {
     topopoints.points[j+1].setelev(M_PI);

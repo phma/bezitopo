@@ -29,6 +29,18 @@ void dumppointsvalence()
   printf("end dump\n");
 }
 
+double flatslope(xy pnt)
+{
+  double z;
+  z=pnt.east()/7+pnt.north()/17;
+  return z;
+}
+
+xy flatslopegrad(xy pnt)
+{
+  return xy(1/7.,1/17.);
+}
+
 double rugae(xy pnt)
 {
   double z;
@@ -83,6 +95,10 @@ void setsurface(int surf)
     case CIRPAR:
       testsurface=cirpar;
       testsurfacegrad=cirpargrad;
+      break;
+    case FLATSLOPE:
+      testsurface=flatslope;
+      testsurfacegrad=flatslopegrad;
       break;
   }
 }

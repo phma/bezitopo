@@ -71,6 +71,16 @@ xyz triangle::gradient3(xy pnt)
   return xyz(gp,gq,gr);
 }
 
+xy triangle::gradient(xy pnt)
+{
+  xyz g3;
+  double g2[2];
+  g3=gradient3(pnt);
+  g2[0]=g3.x*gradmat[0][0]+g3.x*gradmat[0][1]+g3.x*gradmat[0][2];
+  g2[1]=g3.x*gradmat[1][0]+g3.x*gradmat[1][1]+g3.x*gradmat[1][2];
+  return xy(g2[0],g2[1]);
+}
+
 bool triangle::in(xy pnt)
 {return area3(pnt,*b,*c)>=0 && area3(*a,pnt,*c)>=0 && area3(*a,*b,pnt)>=0;
  }
