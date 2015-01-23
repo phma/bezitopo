@@ -78,6 +78,7 @@ public:
   double perimeter();
   xy centroid();
   void setcentercp();
+  void setgradmat();
   std::vector<double> xsect(int angle,double offset);
   double spelevation(int angle,double x,double y);
   int findnocubedir();

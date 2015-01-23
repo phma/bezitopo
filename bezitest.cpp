@@ -1025,6 +1025,7 @@ void test1grad()
   for (i=topopoints.triangles.begin();i!=topopoints.triangles.end();i++)
   {
     pt=(*i->second.a+*i->second.b*2+*i->second.c*3)/6;
+    i->second.setgradmat();
     grad3=i->second.gradient3(pt);
     grad2=i->second.gradient(pt);
     cout<<grad3.east()<<' '<<grad3.north()<<' '<<grad3.elev()<<endl;

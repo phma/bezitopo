@@ -76,9 +76,23 @@ xy triangle::gradient(xy pnt)
   xyz g3;
   double g2[2];
   g3=gradient3(pnt);
-  g2[0]=g3.x*gradmat[0][0]+g3.x*gradmat[0][1]+g3.x*gradmat[0][2];
-  g2[1]=g3.x*gradmat[1][0]+g3.x*gradmat[1][1]+g3.x*gradmat[1][2];
+  g2[0]=g3.x*gradmat[0][0]+g3.y*gradmat[0][1]+g3.z*gradmat[0][2];
+  g2[1]=g3.x*gradmat[1][0]+g3.y*gradmat[1][1]+g3.z*gradmat[1][2];
   return xy(g2[0],g2[1]);
+}
+
+void triangle::setgradmat()
+{
+  xy scalt;
+  scalt=turn90(xy(*c-*b))/sarea/2;
+  gradmat[0][0]=scalt.x;
+  gradmat[1][0]=scalt.y;
+  scalt=turn90(xy(*a-*c))/sarea/2;
+  gradmat[0][1]=scalt.x;
+  gradmat[1][1]=scalt.y;
+  scalt=turn90(xy(*b-*a))/sarea/2;
+  gradmat[0][2]=scalt.x;
+  gradmat[1][2]=scalt.y;
 }
 
 bool triangle::in(xy pnt)

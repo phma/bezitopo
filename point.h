@@ -37,6 +37,7 @@ public:
   friend double dist(xy a,xy b);
   friend int dir(xy a,xy b);
   friend double dot(xy a,xy b);
+  friend class triangle;
   friend class point;
   friend class xyz;
   friend class qindex;
