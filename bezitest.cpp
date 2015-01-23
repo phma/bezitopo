@@ -1028,8 +1028,8 @@ void test1grad()
     i->second.setgradmat();
     grad3=i->second.gradient3(pt);
     grad2=i->second.gradient(pt);
-    cout<<grad3.east()<<' '<<grad3.north()<<' '<<grad3.elev()<<endl;
-    cout<<"Computed gradient: "<<grad2.east()<<' '<<grad2.north()<<endl;
+    //cout<<grad3.east()<<' '<<grad3.north()<<' '<<grad3.elev()<<endl;
+    cout<<"Computed gradient: "<<grad2.east()<<','<<grad2.north()<<' ';
     xsect.clear();
     ysect.clear();
     for (j=-3;j<4;j+=2)
@@ -1038,6 +1038,7 @@ void test1grad()
       ysect.push_back(i->second.elevation(pt+xy(0,j*0.5)));
     }
     cout<<"Actual gradient: "<<deriv1(xsect)<<','<<deriv1(ysect)<<endl;
+    assert(dist(xy(deriv1(xsect),deriv1(ysect)),grad2)<1e-6);
   }
 }
 
@@ -1148,6 +1149,12 @@ void testgrad()
     topopoints.points[j+1].setelev(M_PI);
     topopoints.points[j+1].gradient=xy(0,0);
   }
+  test1grad();
+  topopoints.clear();
+  setsurface(HYPAR);
+  aster(20);
+  topopoints.maketin();
+  topopoints.makegrad(0);
   test1grad();
 }
 
