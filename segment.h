@@ -8,6 +8,7 @@
 #ifndef SEGMENT_H
 #define SEGMENT_H
 #include <cstdlib>
+#include <vector>
 #include "point.h"
 #include "angle.h"
 #define START 1
@@ -22,10 +23,15 @@ public:
   segment();
   segment(xyz kra,xyz fam);
   virtual double length();
+  std::vector<double> vextrema(bool withends);
   void setslope(int which,double s);
   double elev(double along);
   double slope(double along);
   virtual xyz station(double along);
+  double avgslope()
+  {
+    return (end.elev()-start.elev())/length();
+  }
   double chordlength()
   {
     return dist(xy(start),xy(end));

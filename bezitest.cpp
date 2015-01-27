@@ -91,6 +91,7 @@ void testintegertrig()
   assert(sectobin(1296000.0001)==-2147483648);
   assert(sectobin(-1295999.9999)==-2147483648);
   assert(sectobin(-1296000.0001)==-2147483648);
+  cout<<"           "<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs;
 }
 
 void test1intersection(xy a,xy c,xy b,xy d,xy inte,int type)
@@ -474,13 +475,15 @@ void testvcurve()
 
 void testsegment()
 {
+  int i;
+  vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),sta;
   segment a(beg,end),b,c;
   assert(a.length()==500);
   assert(a.chordlength()==500);
   assert(a.chordbearing()==316933406);
-  a.setslope(START,0.3);
-  a.setslope(END,-0.1);
+  a.setslope(START,0.3+a.avgslope());
+  a.setslope(END,-0.1+a.avgslope());
   assert(fabs(a.elev(1)-3.3)<0.05);
   assert(fabs(a.slope(250)+0.042)<0.001);
   sta=a.station(200);
@@ -491,10 +494,18 @@ void testsegment()
   a.split(200,b,c);
   assert(dist(b.station(123),a.station(123))<0.001);
   assert(dist(c.station(200),a.station(400))<0.001);
+  a.setslope(START,0);
+  extrema=a.vextrema(true);
+  cout<<extrema.size()<<" extrema"<<endl;
+  assert(extrema.size()==2);
+  extrema=a.vextrema(false);
+  assert(extrema.size()==1);
 }
 
 void testarc()
 {
+  int i;
+  vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),sta;
   xy ctr;
   arc a(beg,end),b,c;
@@ -503,8 +514,8 @@ void testarc()
   a.setdelta(degtobin(60));
   assert(fabs(a.length()-523.599)<0.001);
   assert(a.chordlength()==500);
-  a.setslope(START,0.3);
-  a.setslope(END,-0.1);
+  a.setslope(START,0.3+a.avgslope());
+  a.setslope(END,-0.1+a.avgslope());
   //printf("slope(250) %f\n",a.slope(250));
   //printf("slope(261.8) %f\n",a.slope(261.8));
   assert(fabs(a.elev(1)-3.3)<0.05);
@@ -528,6 +539,15 @@ void testarc()
   printf("b.station %f,%f,%f %f\n",sta.east(),sta.north(),sta.elev(),b.length());
   assert(dist(b.station(123),a.station(123))<0.001);
   assert(dist(c.station(200),a.station(400))<0.001);
+  a.setslope(START,0);
+  a.setslope(END,0);
+  extrema=a.vextrema(true);
+  assert(extrema.size()==2);
+  for (i=0;i<extrema.size();i++)
+    cout<<"extrema["<<i<<"]="<<extrema[i]<<endl;
+  assert(extrema[1]>523 && extrema[1]<524);
+  extrema=a.vextrema(false);
+  assert(extrema.size()==0);
 }
 
 void testspiral()

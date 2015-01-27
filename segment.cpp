@@ -9,6 +9,8 @@
 #include "vcurve.h"
 #include <cmath>
 
+using namespace std;
+
 segment::segment()
 {
   start=end=xyz(0,0,0);
@@ -33,10 +35,10 @@ void segment::setslope(int which,double s)
   switch(which)
   {
     case START:
-      control1=(2*start.elev()+end.elev()+s*length())/3;
+      control1=(3*start.elev()+s*length())/3;
       break;
     case END:
-      control2=(start.elev()+2*end.elev()-s*length())/3;
+      control2=(3*end.elev()-s*length())/3;
       break;
   }
 }
@@ -58,6 +60,22 @@ xyz segment::station(double along)
   gnola=len-along;
   return xyz((start.east()*gnola+end.east()*along)/len,(start.north()*gnola+end.north()*along)/len,
 	     elev(along));
+}
+
+vector<double> segment::vextrema(bool withends)
+{
+  double len;
+  int i;
+  vector<double> ret;
+  ret=::vextrema(start.elev(),control1,control2,end.elev());
+  for (i=ret.size()-1;i>=0 && !withends;i--)
+    if (ret[i]==0 || ret[i]==1)
+      ret.erase(ret.begin()+i);
+  if (ret.size())
+    len=length();
+  for (i=0;i<ret.size();i++)
+    ret[i]*=len;
+  return ret;
 }
 
 xyz segment::midpoint()
