@@ -409,8 +409,9 @@ void testmaketinellipse()
 
 void testvcurve()
 {
-  double result,b1,c1,d1a2,b2,c2;
-  vector<double> extrema;
+  double result,b1,c1,d1a2,b2,c2,epsilon;
+  int i;
+  vector<double> extrema,xs;
   assert(vcurve(0,0,0,0,0)==0);
   assert(vcurve(0,1,2,3,0.5)==1.5);
   assert(vcurve(0,4,4,0,0.5)==3);
@@ -466,6 +467,17 @@ void testvcurve()
   assert(extrema.size()==2);
   printf("π,π,e,3: extrema[0]=%f,%f\n",extrema[0],extrema[1]);
   assert(extrema[0]==0);
+  for (epsilon=1/128.;epsilon>1e-7;epsilon*=0.5)
+  {
+    extrema=vextrema(0,1-epsilon,1+epsilon,0);
+    //assert(extrema.size()==1);
+    printf("0,1-ε,1+ε,0 ε=%.3e: extrema[0]-0.5=%f*ε\n",epsilon,(extrema[0]-0.5)/epsilon);
+    xs.clear();
+    for (i=-3;i<4;i+=2)
+      xs.push_back(vcurve(0,1-epsilon,1+epsilon,0,(1-i*epsilon)/2));
+    printf("vertex=%f*ε deriv3=%f\n",paravertex(xs),deriv3(xs));
+    //assert(extrema[0]==0.5);
+  }
   vsplit(1,2,2,1,4./8,b1,c1,d1a2,b2,c2);
   assert(vcurve(1,2,2,1,3./8)==vcurve(1,b1,c1,d1a2,3./4));
   assert(vcurve(1,2,2,1,5./8)==vcurve(d1a2,b2,c2,1,1./4));
