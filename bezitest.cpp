@@ -467,15 +467,16 @@ void testvcurve()
   assert(extrema.size()==2);
   printf("π,π,e,3: extrema[0]=%f,%f\n",extrema[0],extrema[1]);
   assert(extrema[0]==0);
-  for (epsilon=1/128.;epsilon>1e-7;epsilon*=0.5)
+  for (epsilon=1/128.;epsilon>1e-15;epsilon*=0.5)
   {
     extrema=vextrema(0,1-epsilon,1+epsilon,0);
-    //assert(extrema.size()==1);
+    assert(extrema.size()==1);
     printf("0,1-ε,1+ε,0 ε=%.3e: extrema[0]-0.5=%f*ε\n",epsilon,(extrema[0]-0.5)/epsilon);
+    assert(fabs((extrema[0]-0.5)/epsilon-0.25)<0.001);
     xs.clear();
     for (i=-3;i<4;i+=2)
       xs.push_back(vcurve(0,1-epsilon,1+epsilon,0,(1-i*epsilon)/2));
-    printf("vertex=%f*ε deriv3=%f\n",paravertex(xs),deriv3(xs));
+    //printf("vertex=%f*ε deriv3=%f\n",paravertex(xs),deriv3(xs));
     //assert(extrema[0]==0.5);
   }
   vsplit(1,2,2,1,4./8,b1,c1,d1a2,b2,c2);

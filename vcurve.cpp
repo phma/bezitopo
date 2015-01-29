@@ -81,7 +81,7 @@ vector<double> vextrema(double a,double b,double c,double d)
  * at the endpoints must therefore be placed exactly at the endpoints.
  */
 {
-  double slopes[3],quad,vertex,minslope,root,discriminant;
+  double slopes[3],quad,vertex,minslope,root,otherroot,discriminant;
   vector<double> ext;
   slopes[0]=vslope(a,b,c,d,0);
   slopes[1]=vslope(a,b,c,d,0.5);
@@ -92,7 +92,7 @@ vector<double> vextrema(double a,double b,double c,double d)
     minslope=fabs(slopes[1]);
   if (minslope>fabs(slopes[2]))
     minslope=fabs(slopes[2]);
-  if (quad) //TODO: improve numerical stability in the case that one root is in [0,1] and the other is far away
+  if (quad)
   {
     if (minslope==0 && slopes[1]!=0)
     {
@@ -122,7 +122,19 @@ vector<double> vextrema(double a,double b,double c,double d)
     {
       vertex=0.5-(slopes[2]-slopes[0])*0.25/quad;
       discriminant=-vslope(a,b,c,d,vertex)/quad/2;
-      if (discriminant>=0)
+      if (fabs(vertex-0.5)>1000 && ((slopes[0]>0)^(slopes[2]>0)))
+      {
+	if (vertex>0.5)
+	  otherroot=vertex+sqrt(discriminant);
+	else
+	  otherroot=vertex-sqrt(discriminant);
+	slopes[0]/=otherroot;
+	slopes[1]/=otherroot-0.5;
+	slopes[2]/=otherroot-1;
+	root=(slopes[0]+slopes[1]+slopes[2])/(slopes[0]-slopes[2])/3.+0.5;
+	ext.push_back(root);
+      }
+      else if (discriminant>=0)
       {
         root=vertex-sqrt(discriminant);
 	if (root>=0 && root<=1)
