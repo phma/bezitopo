@@ -22,6 +22,7 @@ public:
   void addpoint(int numb,point pnt,bool overwrite=false);
   void clear();
   void setgradient(bool flat=false);
+  void findcriticalpts();
   // the following methods are in tin.cpp
 private:
   void dumpedges();

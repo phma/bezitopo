@@ -191,6 +191,38 @@ double edge::length()
   return dist(c,d);
 }
 
+segment edge::getsegment()
+{
+  segment ret(*a,*b);
+  triangle *tri;
+  if (tria)
+    tri=tria;
+  else
+    tri=trib;
+  ret.setctrl(START,tri->ctrlpt(*a,*b));
+  ret.setctrl(END,tri->ctrlpt(*b,*a));
+  return ret;
+}
+
+void edge::findextrema()
+{
+  int i;
+  vector<double> ext;
+  ext=getsegment().vextrema(false);
+  for (i=0;i<2;i++)
+    if (i>=ext.size())
+      extrema[i]=nan("");
+    else
+      extrema[i]=ext[i];
+}
+
+xy edge::critpoint(int i)
+{
+  double l;
+  l=length();
+  return (xy(*a)*(l-extrema[i])+xy(*b)*extrema[i])/l;
+}
+
 bool goodcenter(xy a,xy b,xy c,xy d)
 /* a is the proposed starting point; b, c, and d are the three closest
    points to a. a has to be on the same side of at least two sides as the

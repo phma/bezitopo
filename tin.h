@@ -14,6 +14,7 @@
 #include "bezier.h"
 #include "bezitopo.h"
 #include "pointlist.h"
+#include "segment.h"
 
 using std::exception;
 class pointlist;
@@ -25,7 +26,6 @@ public:
   edge *nexta,*nextb;
   triangle *tria,*trib;
   double extrema[2];
-  //xy critpoint(int i);
   bool broken; //true if a breakline crosses this edge
   char contour;
   /* When drawing a contour, set one of the low 3 bits of edge::contour to true
@@ -47,6 +47,9 @@ public:
   bool delaunay();
   void dump(pointlist *topopoints);
   double length();
+  segment getsegment();
+  xy critpoint(int i);
+  void findextrema();
 };
 
 typedef std::pair<double,point*> ipoint;

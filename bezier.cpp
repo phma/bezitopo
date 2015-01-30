@@ -12,6 +12,14 @@
 #include "angle.h"
 using namespace std;
 
+const char ctrlpttab[16]=
+{
+  3, 3, 3, 3,
+  3, 3, 2, 4,
+  3, 0, 3, 6,
+  3, 1, 5, 3
+};
+
 #ifndef NDEBUG
 
 testfunc::testfunc(double cub,double quad,double lin,double con)
@@ -151,6 +159,19 @@ void triangle::setgradient(xy pnt,xy grad)
   }
   nocubedir=INT_MAX;
   sarea=area();
+}
+
+double triangle::ctrlpt(xy pnt1,xy pnt2)
+/* Returns the elevation of the critical point 1/3 of the way from pnt1 to pnt2.
+ * If they aren't different corners of the triangle, returns the one in the middle.
+ */
+{
+  int which;
+  double crit;
+  crit=1/2.0*(1/dist(xy(*a),xy(*b))+1/dist(xy(*c),xy(*a))+1/dist(xy(*b),xy(*c)));
+  which=(dist(pnt1,*a)<crit)+2*(dist(pnt1,*b)<crit)+3*(dist(pnt1,*c)<crit)
+       +4*(dist(pnt2,*a)<crit)+8*(dist(pnt2,*b)<crit)+12*(dist(pnt2,*c)<crit);
+  return ctrl[ctrlpttab[which]];
 }
 
 void triangle::setneighbor(triangle *neigh)

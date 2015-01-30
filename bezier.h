@@ -67,6 +67,7 @@ public:
   void setneighbor(triangle *neigh);
   double elevation(xy pnt);
   void setgradient(xy pnt,xy grad);
+  double ctrlpt(xy pnt1,xy pnt2);
   void flatten();
   xyz gradient3(xy pnt);
   xy gradient(xy pnt);

@@ -971,7 +971,7 @@ void test1tri(string triname,int excrits)
   vector<double> xs;
   vector<xyz> slice;
   vector<xy> crits;
-  int j,side,cubedir,ptype;
+  int i,j,side,cubedir,ptype;
   double vertex,offset;
   string fname,tfname,psfname;
   fstream ofile;
@@ -1044,6 +1044,13 @@ void test1tri(string triname,int excrits)
     cout<<crits[j].east()<<','<<crits[j].north()<<" type="<<ptype<<endl;
     ofile<<crits[j].east()<<','<<crits[j].north()<<" type="<<ptype<<endl;
     assert(ptype!=PT_SLOPE && ptype!=PT_GRASS);
+  }
+  for (j=0;j<3;j++)
+  {
+    topopoints.edges[j].findextrema();
+    for (i=0;i<2;i++)
+      if (isfinite(topopoints.edges[j].extrema[i]))
+	dot(topopoints.edges[j].critpoint(i));
   }
   endpage();
   psclose();

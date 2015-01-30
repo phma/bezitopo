@@ -25,6 +25,14 @@ segment::segment(xyz kra,xyz fam)
   control2=(start.elev()+2*end.elev())/3;
 }
 
+segment::segment(xyz kra,double c1,double c2,xyz fam)
+{
+  start=kra;
+  end=fam;
+  control1=c1;
+  control2=c2;
+}
+
 double segment::length()
 {
   return dist(xy(start),xy(end));
@@ -39,6 +47,19 @@ void segment::setslope(int which,double s)
       break;
     case END:
       control2=(3*end.elev()-s*length())/3;
+      break;
+  }
+}
+
+void segment::setctrl(int which,double el)
+{
+  switch(which)
+  {
+    case START:
+      control1=el;
+      break;
+    case END:
+      control2=el;
       break;
   }
 }
