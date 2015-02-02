@@ -8,3 +8,8 @@ Before 0.1.0 (first public release):
  *length and start and end curvatures;
  *start and end points and curvatures;
  *start and end points and directions.
+
+For later:
+*Find the volume of a surface in a boundary, using a quadtree of Halton generators. The test surface is a hemisphere; its boundary is a circle.
+*Output an STL file.
+*Approximate a spiral arc by at least two circular arcs.
