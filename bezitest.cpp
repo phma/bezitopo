@@ -563,6 +563,17 @@ void testarc()
   assert(extrema.size()==0);
 }
 
+void testspiralarc()
+{
+  int i;
+  vector<double> extrema;
+  xyz beg(0,0,3),end(300,400,7),sta;
+  xy ctr;
+  spiralarc a(beg,end),b,c;
+  assert(fabs(a.length()-500)<0.001);
+  assert(a.chordlength()==500);
+}
+
 void testspiral()
 {
   xy a,b,c,limitpoint;
@@ -1577,6 +1588,7 @@ int main(int argc, char *argv[])
   testsegment();
   testarc();
   testspiral();
+  testspiralarc();
   testqindex();
   testmakegrad();
   testderivs();

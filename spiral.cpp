@@ -140,3 +140,23 @@ double spiralcurvature(double t,double curvature=0,double clothance=1)
 {
   return 2*t*clothance+curvature;
 }
+
+spiralarc::spiralarc()
+{
+  mid=start=end=xyz(0,0,0);
+  control1=control2=0;
+  cur=clo=len=0;
+  midbear=0;
+}
+
+spiralarc::spiralarc(xyz kra,xyz fam)
+{
+  start=kra;
+  end=fam;
+  control1=(2*start.elev()+end.elev())/3;
+  control2=(start.elev()+2*end.elev())/3;
+  mid=(start+end)/2;
+  len=dist(xy(start),xy(end));
+  cur=clo=0;
+  midbear=atan2i(xy(end-start));
+}
