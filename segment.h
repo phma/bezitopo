@@ -27,6 +27,9 @@ public:
   std::vector<double> vextrema(bool withends);
   void setslope(int which,double s);
   void setctrl(int which,double el);
+  virtual void setdelta(int d,int s=0)
+  {
+  }
   double elev(double along);
   double slope(double along);
   virtual xyz station(double along);
@@ -47,6 +50,10 @@ public:
     return chordbearing();
   }
   virtual int endbearing()
+  {
+    return chordbearing();
+  }
+  virtual int bearing(double along)
   {
     return chordbearing();
   }

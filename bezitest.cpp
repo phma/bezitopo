@@ -572,6 +572,10 @@ void testspiralarc()
   spiralarc a(beg,end),b,c;
   assert(fabs(a.length()-500)<0.001);
   assert(a.chordlength()==500);
+  a._setdelta(degtobin(60),degtobin(60));
+  cout<<"chord bearing "<<bintodeg(a.chordbearing())<<endl;
+  cout<<"bearing at beg "<<bintodeg(a.bearing(0))<<endl;
+  cout<<"bearing at end "<<bintodeg(a.bearing(500))<<endl;
 }
 
 void testspiral()

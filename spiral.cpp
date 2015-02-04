@@ -160,3 +160,9 @@ spiralarc::spiralarc(xyz kra,xyz fam)
   cur=clo=0;
   midbear=atan2i(xy(end-start));
 }
+
+void spiralarc::_setdelta(int d,int s)
+{
+  cur=bintorad(d)/len;
+  clo=2*bintorad(s)/len/len;
+}

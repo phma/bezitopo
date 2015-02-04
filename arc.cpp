@@ -32,7 +32,7 @@ arc::arc(xyz kra,xyz fam,int d)
   control2=(start.elev()+2*end.elev())/3;
 }
 
-void arc::setdelta(int d)
+void arc::setdelta(int d,int s) // s is for spirals and is ignored for circular arcs
 {
   delta=d;
 }
@@ -60,6 +60,14 @@ xyz arc::station(double along)
   //printf("arc::station angalong=%f startbearing=%f\n",bintodeg(angalong),bintodeg(startbearing()));
   return xyz(xy(start)+cossinhalf(angalong+2*startbearing())*sinhalf(angalong)*radius(0)*2,
 	     elev(along));
+}
+
+int arc::bearing(double along)
+{
+  double len;
+  int angalong;
+  angalong=lrint((along/len-0.5)*delta);
+  return chordbearing()+angalong;
 }
 
 void arc::split(double along,arc &a,arc &b)
