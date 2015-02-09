@@ -993,7 +993,9 @@ void test1tri(string triname,int excrits)
   fname=triname+".ppm";
   tfname=triname+".txt";
   psfname=triname+".ps";
+  cout<<"Triangle is at "<<&topopoints.triangles[0]<<endl;
   topopoints.maketriangles();
+  cout<<"Triangle is at "<<&topopoints.triangles[0]<<endl;
   topopoints.setgradient();
   topopoints.makeqindex();
   rasterdraw(topopoints,xy(5,0),30,40,30,0,1,fname);
@@ -1060,13 +1062,16 @@ void test1tri(string triname,int excrits)
     ofile<<crits[j].east()<<','<<crits[j].north()<<" type="<<ptype<<endl;
     assert(ptype!=PT_SLOPE && ptype!=PT_GRASS);
   }
-  // this ratio is sqrt(3/4)/18 or about 0.048
-  arearatio=topopoints.triangles[0].sarea/topopoints.triangles[0].peri/topopoints.triangles[0].peri;
-  cout<<arearatio<<endl;
-  if (!(arearatio>0.045 && arearatio<0.05))
-    cerr<<arearatio<<" arearatio CRASH IMMINENT"<<endl;
   for (j=0;j<3;j++)
   {
+    // this ratio is sqrt(3/4)/18 or about 0.048
+    arearatio=topopoints.triangles[0].sarea/topopoints.triangles[0].peri/topopoints.triangles[0].peri;
+    cout<<arearatio<<endl;
+    if (!(arearatio>0.045 && arearatio<0.05))
+      cerr<<arearatio<<" arearatio CRASH IMMINENT"<<endl;
+    cout<<"tria "<<topopoints.edges[j].tria<<" trib "<<topopoints.edges[j].trib<<endl;
+    if (topopoints.edges[j].tria!=&topopoints.triangles[0] && topopoints.edges[j].trib!=&topopoints.triangles[0])
+      cerr<<"Edge pointer wrong"<<endl;
     topopoints.edges[j].findextrema();
     for (i=0;i<2;i++)
       if (isfinite(topopoints.edges[j].extrema[i]))
@@ -1150,10 +1155,13 @@ void trianglecontours()
     topopoints.points[j+1].gradient=xy((bytes[j+3]-127.5)/1000,(bytes[j+6]-127.5)/1000);
   }
   test1tri(fname,-1);
+  cout<<"Triangle is at "<<&topopoints.triangles[0]<<endl;
   fname=fname.substr(0,9)+"flat";
   topopoints.setgradient(true);
+  cout<<"Triangle is at "<<&topopoints.triangles[0]<<endl;
   for (j=0;j<3;j++)
     topopoints.points[j+1].gradient=xy(topopoints.elevation(xy(1,0))-topopoints.elevation(xy(0,0)),topopoints.elevation(xy(0,1))-topopoints.elevation(xy(0,0)));
+  cout<<"Triangle is at "<<&topopoints.triangles[0]<<endl;
   test1tri(fname,0);
   fname="monkeysaddle";
   for (j=0;j<3;j++)
