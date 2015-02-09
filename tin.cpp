@@ -613,6 +613,7 @@ void pointlist::maketriangles()
     a=edges[i].a;
     b=edges[i].b;
     e=edges[i].next(b);
+    edges[i].tria=edges[i].trib=NULL; // otherwise they may point to a triangle that no longer exist, causing a crash
     c=e->otherend(b);
     d=e->next(c)->otherend(c);
     if (a<b && a<c && a==d)
