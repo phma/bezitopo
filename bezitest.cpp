@@ -609,7 +609,7 @@ void testspiral()
   }
   for (i=1,badcount=0;i<119;i++)
   {
-    curvebearing=ispiralbearing(i/20.,0,1);
+    curvebearing=ispiralbearing(i/20.,0,2);
     bearing=dir(spoints[i-1],spoints[i+1]); // compute the difference between a chord of the spiral
     diff=(curvebearing-bearing)&0x7fffffff; // and a tangent in the middle of the arc
     diff|=(diff&0x40000000)<<1; // diff could be near 0° or 360°; this bit manipulation puts it near 0°
@@ -660,7 +660,7 @@ void testspiral()
     }
     for (i=-20;i<21;i++)
     {
-      b=cornu(t=i/20.,2*j,1);
+      b=cornu(t=i/20.,2*j,2);
       if (i>-20)
       {
 	line2p(c,b);
@@ -676,11 +676,11 @@ void testspiral()
   a=cornu(sqrt(M_PI*2));
   for (i=-20;i<21;i++)
   {
-    b=cornu(i/20.,0,1);
+    b=cornu(i/20.,0,2);
     c=cornu(i/20.);
     //cout<<i<<' '<<dist(b,c)<<endl;
     assert(dist(b,c)<1e-12); // it's less than 6e-17 on 64-bit
-    b=cornu(i/20.,sqrt(M_PI*8),1);
+    b=cornu(i/20.,sqrt(M_PI*8),2);
     c=cornu(i/20.+sqrt(M_PI*2))-a;
     //cout<<i<<' '<<dist(b,c)<<endl;
     assert(dist(b,c)<1e-12); // it's less than 1.1e-15 on 64-bit
@@ -987,7 +987,7 @@ void test1tri(string triname,int excrits)
   vector<xyz> slice;
   vector<xy> crits;
   int i,j,side,cubedir,ptype;
-  double vertex,offset;
+  double vertex,offset,arearatio;
   string fname,tfname,psfname;
   fstream ofile;
   fname=triname+".ppm";
@@ -1060,6 +1060,11 @@ void test1tri(string triname,int excrits)
     ofile<<crits[j].east()<<','<<crits[j].north()<<" type="<<ptype<<endl;
     assert(ptype!=PT_SLOPE && ptype!=PT_GRASS);
   }
+  // this ratio is sqrt(3/4)/18 or about 0.048
+  arearatio=topopoints.triangles[0].sarea/topopoints.triangles[0].peri/topopoints.triangles[0].peri;
+  cout<<arearatio<<endl;
+  if (!(arearatio>0.045 && arearatio<0.05))
+    cerr<<arearatio<<" arearatio CRASH IMMINENT"<<endl;
   for (j=0;j<3;j++)
   {
     topopoints.edges[j].findextrema();
@@ -1461,7 +1466,7 @@ void testbezier3d()
   psopen("bezier3d.ps");
   psprolog();
   for (curvature=-1;curvature<1.1;curvature+=0.125)
-    for (clothance=-3;clothance<3.1;clothance+=(clothance>-0.38 && clothance<0.37)?0.125:0.375)
+    for (clothance=-6;clothance<6.1;clothance+=(clothance>-0.76 && clothance<0.74)?0.25:0.75)
     {
       startpage();
       setscale(-0.2,-0.5,0.2,0.5,degtobin(90));
@@ -1522,13 +1527,13 @@ void testbezier3d()
   setscale(-1,-1,1,1,0);
   setcolor(0.5,0.5,1);
   for (curvature=-1;curvature<1.1;curvature+=0.125)
-    for (clothance=-3;clothance<3.1;clothance+=(clothance>-0.38 && clothance<0.37)?0.125:0.375)
-      circle(xy(curvature,clothance/3),sqrt(ests[clothance*M_PI+curvature]));
+    for (clothance=-6;clothance<6.1;clothance+=(clothance>-0.76 && clothance<0.74)?0.25:0.75)
+      circle(xy(curvature,clothance/6),sqrt(ests[clothance*M_PI+curvature]));
   setcolor(0,0,0);
   for (curvature=-1;curvature<1.1;curvature+=0.125)
-    for (clothance=-3;clothance<3.1;clothance+=(clothance>-0.38 && clothance<0.37)?0.125:0.375)
+    for (clothance=-6;clothance<6.1;clothance+=(clothance>-0.76 && clothance<0.74)?0.25:0.75)
     {
-      circle(xy(curvature,clothance/3),sqrt(dists[clothance*M_PI+curvature]));
+      circle(xy(curvature,clothance/6),sqrt(dists[clothance*M_PI+curvature]));
       if (dists[clothance*M_PI+curvature]>ests[clothance*M_PI+curvature])
 	cout<<"estimate too small crv="<<curvature<<" clo="<<clothance<<endl;
       assert(dists[clothance*M_PI+curvature]<=ests[clothance*M_PI+curvature]);

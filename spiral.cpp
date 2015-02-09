@@ -7,9 +7,15 @@
 /* The Cornu spiral is a complex-valued function of a real argument,
  * the graph in the complex plane of integral(cis(t²) dt).
  * The curvature at t equals 2t.
- * Evaluating the function in its curly tails should not be necessary
- * in surveying, but if it is, use the three-argument
- * cornu() function.
+ * 
+ * Traditionally spirals have been used mostly for transitions between
+ * a straight section and a circular arc, i.e. at one end of every spiral
+ * arc, t=0. Parkways, though, require a greater variety of spirals.
+ * See http://www.fhwa.dot.gov/publications/publicroads/01septoct/spiral.cfm .
+ * 
+ * I originally wrote the one-argument cornu() function for spiral arcs
+ * with one end straight, then wrote the three-argument cornu() function
+ * for more general spiral arcs.
  */
 
 #include <vector>
@@ -58,12 +64,12 @@ xy cornu(double t)
 }
 
 xy cornu(double t,double curvature,double clothance)
-/* Evaluates the integral of cis(clothance×t²+curvature×t).
- * 1+(cl×t²+cu×t)i-(cl×t²+cu×t)²/2-(cl×t²+cu×t)³i/6+(cl×t²+cu×t)⁴/24+...
- * 1+cl×t²×i  +cu×t×i   -cl²×t⁴/2  -cl×cu×t³×2/2  -cu²×t²/2  -cl³×t⁶×i/6  -cl²×cu×t⁵×3i/6  -cl×cu²×t⁴×3i/6  -cu³×t³i/6  +cl⁴×t⁸/24  +cl³×cu×t⁷×4/24  +cl²×cu²×t⁶6/24  +cl×cu³×t⁵×4/24  +cu⁴×t⁴/24+...
- * t+cl×t³×i/3+cu×t²×i/2-cl²×t⁵/5/2-cl×cu×t⁴×2/4/2-cu²×t³/3/2-cl³×t⁷×i/7/6-cl³×cu×t⁶×3i/6/6-cl×cu²×t⁵×3i/5/6-cu³×t⁴i/4/6+cl⁴×t⁹/9/24+cl³×cu×t⁸×4/8/24+cl²×cu²×t⁷6/7/24+cl×cu³×t⁶×4/6/24+cu⁴×t⁵/5/24+...
+/* Evaluates the integral of cis(clothance×t²/2+curvature×t).
+ * 1+(cl×t²/2+cu×t)i-(cl×t²/2+cu×t)²/2-(cl×t²/2+cu×t)³i/6+(cl×t²/2+cu×t)⁴/24+...
+ * 1+cl×t²×i/2  +cu×t×i   -cl²×t⁴/8  -cl×cu×t³×2/4  -cu²×t²/2  -cl³×t⁶×i/6/8  -cl²×cu×t⁵×3i/6/4  -cl×cu²×t⁴×3i/6/2  -cu³×t³i/6  +cl⁴×t⁸/24/16  +cl³×cu×t⁷×4/24/8  +cl²×cu²×t⁶6/24/4  +cl×cu³×t⁵×4/24/2  +cu⁴×t⁴/24+...
+ * t+cl×t³×i/3/2+cu×t²×i/2-cl²×t⁵/5/8-cl×cu×t⁴×2/4/4-cu²×t³/3/2-cl³×t⁷×i/7/6/8-cl³×cu×t⁶×3i/6/6/4-cl×cu²×t⁵×3i/5/6/2-cu³×t⁴i/4/6+cl⁴×t⁹/9/24/16+cl³×cu×t⁸×4/8/24/8+cl²×cu²×t⁷6/7/24/4+cl×cu³×t⁶×4/6/24/2+cu⁴×t⁵/5/24+...
  * If clothance=0, you get a circle of radius 1/curvature.
- * If curvature=0 and clothance=1, you get cornu(t).
+ * If curvature=0 and clothance=2, you get cornu(t).
  */
 {
   vector<long double> realparts,imagparts,cupower,clpower;
@@ -71,7 +77,7 @@ xy cornu(double t,double curvature,double clothance)
   long double facpower,rsum,isum,t2,bigpart,binom,clotht,term,bigterm;
   double precision;
   t2=t*t;
-  clotht=clothance*t;
+  clotht=clothance*t/2;
   cupower.push_back(1);
   clpower.push_back(1);
   for (i=0,facpower=t;0.9+bigterm!=0.9 || !i;i++)
@@ -128,17 +134,17 @@ xy cornu(double t,double curvature,double clothance)
 
 double spiralbearing(double t,double curvature=0,double clothance=1)
 {
-  return t*t*clothance+t*curvature;
+  return t*t*clothance/2+t*curvature;
 }
 
 int ispiralbearing(double t,double curvature=0,double clothance=1)
 {
-  return radtobin(t*t*clothance+t*curvature);
+  return radtobin(t*t*clothance/2+t*curvature);
 }
 
 double spiralcurvature(double t,double curvature=0,double clothance=1)
 {
-  return 2*t*clothance+curvature;
+  return t*clothance+curvature;
 }
 
 spiralarc::spiralarc()

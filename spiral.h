@@ -7,7 +7,10 @@
 #include "point.h"
 #include "segment.h"
 
-xy cornu(double t);
+/* Clothance is the derivative of curvature with respect to distance
+ * along the curve.
+ */
+xy cornu(double t); //clothance=2
 xy cornu(double t,double curvature,double clothance);
 double spiralbearing(double t,double curvature,double clothance);
 int ispiralbearing(double t,double curvature,double clothance);
@@ -39,5 +42,12 @@ public:
   {
     return midbear+ispiralbearing(along-len/2,cur,clo);
   }
+  //double sthrow();
+  /* "throw" is a reserved word.
+   * The throw is the minimum distance between the circles (one of which may be a line)
+   * that osculate the ends of the spiral arc. It is also called the offset, but
+   * offset() will create a segment or arc that is parallel to the given one.
+   * Trying to offset a spiral arc will throw an error.
+   */
   void _setdelta(int d,int s=0);
 };
