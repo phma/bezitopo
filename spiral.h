@@ -42,6 +42,7 @@ public:
   {
     return midbear+ispiralbearing(along-len/2,cur,clo);
   }
+  virtual xyz station(double along);
   //double sthrow();
   /* "throw" is a reserved word.
    * The throw is the minimum distance between the circles (one of which may be a line)
@@ -50,4 +51,5 @@ public:
    * Trying to offset a spiral arc will throw an error.
    */
   void _setdelta(int d,int s=0);
+  void _fixends();
 };

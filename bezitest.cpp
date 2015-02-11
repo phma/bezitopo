@@ -566,6 +566,7 @@ void testarc()
 void testspiralarc()
 {
   int i;
+  double bear[3];
   vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),sta;
   xy ctr;
@@ -574,8 +575,10 @@ void testspiralarc()
   assert(a.chordlength()==500);
   a._setdelta(degtobin(60),degtobin(60));
   cout<<"chord bearing "<<bintodeg(a.chordbearing())<<endl;
-  cout<<"bearing at beg "<<bintodeg(a.bearing(0))<<endl;
-  cout<<"bearing at end "<<bintodeg(a.bearing(500))<<endl;
+  cout<<"bearing at beg "<<(bear[0]=bintodeg(a.bearing(0)))<<endl;
+  cout<<"bearing at mid "<<(bear[1]=bintodeg(a.bearing(250)))<<endl;
+  cout<<"bearing at end "<<(bear[2]=bintodeg(a.bearing(500)))<<endl;
+  cout<<"delta "<<bear[2]-bear[0]<<" skew "<<bear[0]+bear[2]-2*bear[1]<<endl;
 }
 
 void testspiral()

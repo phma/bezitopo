@@ -167,8 +167,37 @@ spiralarc::spiralarc(xyz kra,xyz fam)
   midbear=atan2i(xy(end-start));
 }
 
+xyz spiralarc::station(double along)
+{
+  double midlong;
+  xy relpos;
+  midlong=along-len/2;
+  relpos=cornu(midlong,cur,clo);
+  return xyz(turn(relpos,midbear)+mid,elev(along));
+}
+
 void spiralarc::_setdelta(int d,int s)
 {
   cur=bintorad(d)/len;
-  clo=2*bintorad(s)/len/len;
+  clo=4*bintorad(s)/len/len;
+}
+
+void spiralarc::_fixends()
+{
+  xy kra,fam;
+  int turnangle;
+  double scale;
+  kra=station(0);
+  fam=station(len);
+  turnangle=atan2i(end-start)-atan2i(fam-kra);
+  if (((unsigned)turnangle>>30)%3)
+    turnangle^=0x80000000; // don't turn by more than 180° either way
+  midbear+=turnangle;
+  scale=dist(xy(end),xy(start))/dist(fam,kra);
+  len*=scale;
+  cur/=scale;
+  clo/=scale*scale;
+  kra=station(0);
+  fam=station(len);
+  mid+=((end-fam)+(start-kra))/2;
 }
