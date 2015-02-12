@@ -201,3 +201,22 @@ void spiralarc::_fixends()
   fam=station(len);
   mid+=((end-fam)+(start-kra))/2;
 }
+
+void spiralarc::setdelta(int d,int s)
+{
+  int lastmidbear,chordbear,rot,i;
+  xy lastmid;
+  chordbear=chordbearing();
+  i=0;
+  do
+  {
+    rot=2*(chordbear-midbear);
+    lastmidbear=midbear;
+    lastmid=mid;
+    _setdelta(d,s+rot);
+    _fixends();
+    i++;
+    //cout<<"iter "<<i<<" midbear "<<midbear<<endl;
+  }
+  while (abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6);
+}

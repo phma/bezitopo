@@ -566,7 +566,7 @@ void testarc()
 void testspiralarc()
 {
   int i;
-  double bear[3];
+  double bear[3],len;
   vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),sta;
   xy ctr;
@@ -578,6 +578,18 @@ void testspiralarc()
   cout<<"bearing at beg "<<(bear[0]=bintodeg(a.bearing(0)))<<endl;
   cout<<"bearing at mid "<<(bear[1]=bintodeg(a.bearing(250)))<<endl;
   cout<<"bearing at end "<<(bear[2]=bintodeg(a.bearing(500)))<<endl;
+  cout<<"delta "<<bear[2]-bear[0]<<" skew "<<bear[0]+bear[2]-2*bear[1]<<endl;
+  a._fixends();
+  cout<<"new length "<<(len=a.length())<<endl;
+  cout<<"bearing at beg "<<(bear[0]=bintodeg(a.bearing(0)))<<endl;
+  cout<<"bearing at mid "<<(bear[1]=bintodeg(a.bearing(len/2)))<<endl;
+  cout<<"bearing at end "<<(bear[2]=bintodeg(a.bearing(len)))<<endl;
+  cout<<"delta "<<bear[2]-bear[0]<<" skew "<<bear[0]+bear[2]-2*bear[1]<<endl;
+  a.setdelta(degtobin(60),degtobin(60));
+  cout<<"new length "<<(len=a.length())<<endl;
+  cout<<"bearing at beg "<<(bear[0]=bintodeg(a.bearing(0)))<<endl;
+  cout<<"bearing at mid "<<(bear[1]=bintodeg(a.bearing(len/2)))<<endl;
+  cout<<"bearing at end "<<(bear[2]=bintodeg(a.bearing(len)))<<endl;
   cout<<"delta "<<bear[2]-bear[0]<<" skew "<<bear[0]+bear[2]-2*bear[1]<<endl;
 }
 

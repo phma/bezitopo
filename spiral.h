@@ -52,4 +52,5 @@ public:
    */
   void _setdelta(int d,int s=0);
   void _fixends();
+  void setdelta(int d,int s=0);
 };
