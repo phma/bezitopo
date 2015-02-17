@@ -585,12 +585,17 @@ void testspiralarc()
   cout<<"bearing at mid "<<(bear[1]=bintodeg(a.bearing(len/2)))<<endl;
   cout<<"bearing at end "<<(bear[2]=bintodeg(a.bearing(len)))<<endl;
   cout<<"delta "<<bear[2]-bear[0]<<" skew "<<bear[0]+bear[2]-2*bear[1]<<endl;
-  a.setdelta(degtobin(60),degtobin(60));
+  a.setdelta(degtobin(26),degtobin(8));
   cout<<"new length "<<(len=a.length())<<endl;
   cout<<"bearing at beg "<<(bear[0]=bintodeg(a.bearing(0)))<<endl;
   cout<<"bearing at mid "<<(bear[1]=bintodeg(a.bearing(len/2)))<<endl;
   cout<<"bearing at end "<<(bear[2]=bintodeg(a.bearing(len)))<<endl;
   cout<<"delta "<<bear[2]-bear[0]<<" skew "<<bear[0]+bear[2]-2*bear[1]<<endl;
+  assert(fabs(bear[2]-bear[0]-26)<1e-5);
+  assert(fabs(bear[0]+bear[2]-2*bintodeg(a.chordbearing())-8)<1e-5);
+  cout<<"curvature at beg "<<a.curvature(0)<<endl;
+  cout<<"curvature at end "<<a.curvature(len)<<endl;
+  
 }
 
 void testspiral()

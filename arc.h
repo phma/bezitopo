@@ -23,7 +23,7 @@ public:
   {
     return chordlength()/sinhalf(delta)/2;
   }
-  double curvature(double along)
+  virtual double curvature(double along)
   {
     return 2*sinhalf(delta)/chordlength();
   }

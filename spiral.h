@@ -42,6 +42,10 @@ public:
   {
     return midbear+ispiralbearing(along-len/2,cur,clo);
   }
+  virtual double curvature(double along)
+  {
+    return cur+clo*(along-len/2);
+  }
   virtual xyz station(double along);
   //double sthrow();
   /* "throw" is a reserved word.

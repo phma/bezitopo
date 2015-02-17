@@ -61,7 +61,7 @@ public:
   {
     return strtod("inf",NULL);
   }
-  double curvature(double along)
+  virtual double curvature(double along)
   {
     return 0;
   }
