@@ -165,7 +165,7 @@ double triangle::ctrlpt(xy pnt1,xy pnt2)
 /* Returns the elevation of the critical point 1/3 of the way from pnt1 to pnt2.
  * If they aren't different corners of the triangle, returns the one in the middle.
  */
-{ //FIXME program crashes here when this looks valid but *this is set to all 0xff
+{
   int which;
   double crit;
   crit=1/2.0*(1/dist(xy(*a),xy(*b))+1/dist(xy(*c),xy(*a))+1/dist(xy(*b),xy(*c)));
