@@ -1,5 +1,8 @@
 /* bezier3d.h
  */
+
+#ifndef BEZIER3D_H
+#define BEZIER3D_H
 #include <vector>
 #include "point.h"
 
@@ -17,3 +20,4 @@ public:
 };
 
 double bez3destimate(xy kra,int bear0,double len,int bear1,xy fam);
+#endif

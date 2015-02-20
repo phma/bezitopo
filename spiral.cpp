@@ -24,6 +24,7 @@
 #include <iostream>
 #include "spiral.h"
 #include "angle.h"
+#include "vcurve.h"
 using namespace std;
 
 xy cornu(double t)
@@ -200,6 +201,35 @@ void spiralarc::_fixends()
   kra=station(0);
   fam=station(len);
   mid+=((end-fam)+(start-kra))/2;
+}
+
+void spiralarc::split(double along,spiralarc &a,spiralarc &b)
+{
+  double dummy;
+  xyz mida,midb;
+  int midbeara,midbearb;
+  double cura,curb;
+  xyz splitpoint=station(along);
+  mida=station(along/2);
+  midb=station((along+len)/2);
+  midbeara=bearing(along/2);
+  midbearb=bearing((along+len)/2);
+  cura=curvature(along/2);
+  curb=curvature((along+len)/2);
+  a.mid=mida;
+  a.midbear=midbeara;
+  a.cur=cura;
+  a.len=along;
+  a.start=start;
+  b.mid=midb;
+  b.midbear=midbearb;
+  b.cur=curb;
+  b.len=len-along;
+  b.end=end;
+  a.clo=b.clo=clo;
+  a.end=b.start=splitpoint;
+  vsplit(start.elev(),control1,control2,end.elev(),along/length(),a.control1,a.control2,dummy,b.control1,b.control2);
+  printf("split: %f,%f\n",a.end.east(),a.end.north());
 }
 
 void spiralarc::setdelta(int d,int s)

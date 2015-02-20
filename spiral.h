@@ -56,5 +56,6 @@ public:
    */
   void _setdelta(int d,int s=0);
   void _fixends();
+  void split(double along,spiralarc &a,spiralarc &b);
   void setdelta(int d,int s=0);
 };

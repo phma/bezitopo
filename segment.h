@@ -11,6 +11,7 @@
 #include <vector>
 #include "point.h"
 #include "angle.h"
+#include "bezier3d.h"
 #define START 1
 #define END 2
 
@@ -71,6 +72,7 @@ public:
   }
   xy center();
   xyz midpoint();
-  void split(double along,segment &a,segment &b);
+  virtual void split(double along,segment &a,segment &b);
+  bezier3d approx3d(double precision);
 };
 #endif

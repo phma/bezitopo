@@ -118,3 +118,12 @@ void segment::split(double along,segment &a,segment &b)
   vsplit(start.elev(),control1,control2,end.elev(),along/length(),a.control1,a.control2,dummy,b.control1,b.control2);
 }
 
+bezier3d segment::approx3d(double precision)
+/* Returns a chain of bezier3d splines which approximate the segment within precision.
+ * Of course, for a segment, only one spline is needed and it is exact,
+ * but for arcs and spiralarcs, more may be needed. Since startbearing, endbearing,
+ * and length are virtual, this doesn't need to be overridden in the derived classes,
+ * but it needs to construct two arcs or spiralarcs if it needs to split them.
+ */
+{
+}

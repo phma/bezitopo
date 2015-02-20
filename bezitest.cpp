@@ -595,6 +595,13 @@ void testspiralarc()
   assert(fabs(bear[0]+bear[2]-2*bintodeg(a.chordbearing())-8)<1e-5);
   cout<<"curvature at beg "<<a.curvature(0)<<endl;
   cout<<"curvature at end "<<a.curvature(len)<<endl;
+  a.split(200,b,c);
+  sta=a.station(123);
+  printf("a.station %f,%f,%f\n",sta.east(),sta.north(),sta.elev());
+  sta=b.station(123);
+  printf("b.station %f,%f,%f %f\n",sta.east(),sta.north(),sta.elev(),b.length());
+  assert(dist(b.station(123),a.station(123))<0.001);
+  assert(dist(c.station(200),a.station(400))<0.001);
   
 }
 
