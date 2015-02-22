@@ -17,6 +17,7 @@ private:
 public:
   arc();
   arc(xyz kra,xyz fam);
+  arc(xyz kra,xyz mij,xyz fam);
   arc(xyz kra,xyz fam,int d);
   void setdelta(int d,int s=0);
   double radius(double along)

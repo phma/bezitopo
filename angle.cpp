@@ -60,6 +60,13 @@ xy cossinhalf(int angle)
   return xy(coshalf(angle),sinhalf(angle));
 }
 
+int foldangle(int angle)
+{
+  if (((unsigned)angle>>30)%3)
+    angle^=0x80000000;
+  return angle;
+}
+
 double bintorot(int angle)
 {
   return angle/2147483648.;

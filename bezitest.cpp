@@ -519,7 +519,7 @@ void testarc()
 {
   int i;
   vector<double> extrema;
-  xyz beg(0,0,3),end(300,400,7),sta;
+  xyz beg(0,0,3),end(300,400,7),sta,sta2;
   xy ctr;
   arc a(beg,end),b,c;
   assert(fabs(a.length()-500)<0.001);
@@ -561,6 +561,22 @@ void testarc()
   assert(extrema[1]>523 && extrema[1]<524);
   extrema=a.vextrema(false);
   assert(extrema.size()==0);
+  sta=xyz(150,200,5);
+  b=arc(beg,sta,end);
+  sta2=b.station(250);
+  cout<<"arc3 "<<sta2.elev()<<endl;
+  assert(sta2.elev()==5);
+  sta=xyz(150,200,10);
+  b=arc(beg,sta,end);
+  sta2=b.station(250);
+  cout<<"arc3 "<<sta2.elev()<<endl;
+  assert(sta2.elev()==10);
+  sta=xyz(200,150,10);
+  b=arc(beg,sta,end);
+  sta2=b.station(252.905);
+  cout<<"arc3 "<<sta2.east()<<' '<<sta2.north()<<' '<<sta2.elev()<<endl;
+  //cout<<dist(sta,sta2)<<endl;
+  assert(dist(sta,sta2)<0.001);
 }
 
 void testspiralarc()

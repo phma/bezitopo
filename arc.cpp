@@ -23,6 +23,22 @@ arc::arc(xyz kra,xyz fam)
   control2=(start.elev()+2*end.elev())/3;
 }
 
+arc::arc(xyz kra,xyz mij,xyz fam)
+{
+  double p,q,r;
+  start=kra;
+  end=fam;
+  delta=2*(atan2i(fam-mij)-atan2i(mij-kra));
+  if (delta)
+    p=(double)(2*(atan2i(fam-mij)-atan2i(fam-kra)))/delta;
+  else
+    p=dist(xy(kra),xy(mij))/dist(xy(kra),xy(fam));
+  q=1-p;
+  r=(mij.elev()-start.elev()-p*(end.elev()-start.elev()))/(p*q)/3;
+  control1=(2*start.elev()+end.elev())/3+r;
+  control2=(start.elev()+2*end.elev())/3+r;
+}
+
 arc::arc(xyz kra,xyz fam,int d)
 {
   start=kra;

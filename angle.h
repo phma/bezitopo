@@ -32,6 +32,8 @@ int atan2i(xy vect); // range is [-536870912,536870912]
 xy cossin(int angle);
 xy cossinhalf(int angle);
 
+int foldangle(int angle); // if angle is outside [-180°,180°), adds 360°
+
 double bintorot(int angle);
 double bintogon(int angle);
 double bintodeg(int angle);

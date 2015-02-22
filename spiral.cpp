@@ -190,9 +190,7 @@ void spiralarc::_fixends()
   double scale;
   kra=station(0);
   fam=station(len);
-  turnangle=atan2i(end-start)-atan2i(fam-kra);
-  if (((unsigned)turnangle>>30)%3)
-    turnangle^=0x80000000; // don't turn by more than 180° either way
+  turnangle=foldangle(atan2i(end-start)-atan2i(fam-kra)); // don't turn by more than 180° either way
   midbear+=turnangle;
   scale=dist(xy(end),xy(start))/dist(fam,kra);
   len*=scale;
