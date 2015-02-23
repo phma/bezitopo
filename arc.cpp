@@ -96,7 +96,7 @@ void arc::split(double along,arc &a,arc &b)
   a=arc(start,splitpoint,deltaa);
   b=arc(splitpoint,end,deltab);
   vsplit(start.elev(),control1,control2,end.elev(),along/length(),a.control1,a.control2,dummy,b.control1,b.control2);
-  printf("split: %f,%f\n",a.end.east(),a.end.north());
+  //printf("split: %f,%f\n",a.end.east(),a.end.north());
 }
 
 /*xy arc::midpoint()

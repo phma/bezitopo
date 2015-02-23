@@ -1,16 +1,17 @@
 Before 0.1.0 (first public release):
-*Read the sample data file topo0.asc and output a PostScript file of contours, drawn with arcs.
-*Produce a 3D Bézier spline of all vertical and horizontal curves, for display purposes.
-*Quickly find the triangle any point is in and return its elevation. ✓
-*Compute spirals of arbitrary curvature and clothance. ✓
-*Create spiral objects (in 3D, so they also have specified start and end elevations)
+•Read the sample data file topo0.asc and output a PostScript file of contours, drawn with arcs.
+•Produce a 3D Bézier spline of all vertical and horizontal curves, for display purposes.
+•Quickly find the triangle any point is in and return its elevation. ✓
+•Compute spirals of arbitrary curvature and clothance. ✓
+•Create spiral objects (in 3D, so they also have specified start and end elevations)
  with specified
- *length and start and end curvatures;
- *start and end points and curvatures;
- *start and end points and directions. ✓
+ •length and start and end curvatures;
+ •start and end points and curvatures;
+ •start and end points and directions. ✓
 
 For later:
-*Find the volume of a surface in a boundary, using a quadtree of Halton generators. The test surface is a hemisphere; its boundary is a circle.
-*Output an STL file.
-*Approximate a spiral arc by at least two circular arcs.
-*Implement cross-sections and interpolate between them.
+•Find the volume of a surface in a boundary, using a quadtree of Halton generators. The test surface is a hemisphere; its boundary is a circle.
+•Output an STL file.
+•Approximate a spiral arc by at least two circular arcs.
+•Implement cross-sections and interpolate between them.
+•Add a vector (or map indexed by integer) of segments, and one of arcs (but not spiralarcs), to serve as lot boundary lines, and a lot class, whose boundary is a vector of pointers to segments, some of which may be backward.

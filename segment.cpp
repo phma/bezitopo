@@ -5,9 +5,13 @@
 /*                                                    */
 /******************************************************/
 
-#include "segment.h"
-#include "vcurve.h"
 #include <cmath>
+#include <typeinfo>
+#include <iostream>
+#include "segment.h"
+#include "arc.h"
+#include "spiral.h"
+#include "vcurve.h"
 
 using namespace std;
 
@@ -74,6 +78,16 @@ double segment::slope(double along)
   return vslope(start.elev(),control1,control2,end.elev(),along/length())/length();
 }
 
+double segment::startslope()
+{
+  return (control1-start.elev())*3/length();
+}
+
+double segment::endslope()
+{
+  return (end.elev()-control2)*3/length();
+}
+
 xyz segment::station(double along)
 {
   double gnola,len;
@@ -126,4 +140,35 @@ bezier3d segment::approx3d(double precision)
  * but it needs to construct two arcs or spiralarcs if it needs to split them.
  */
 {
+  segment *a,*b;
+  int sb,eb;
+  double est;
+  bezier3d ret;
+  sb=startbearing();
+  eb=endbearing();
+  est=bez3destimate(start,sb,length(),eb,end);
+  //cout<<"sb "<<bintodeg(sb)<<" eb "<<bintodeg(eb)<<" est "<<est<<endl;
+  if (est<=precision)
+    ret=bezier3d(start,sb,startslope(),endslope(),eb,end);
+  else
+  {
+    if (typeid(*this)==typeid(spiralarc))
+    {
+      a=new spiralarc;
+      b=new spiralarc;
+      ((spiralarc *)this)->split(length()/2,*(spiralarc *)a,*(spiralarc *)b);
+    }
+    else
+    {
+      a=new arc;
+      b=new arc;
+      ((arc *)this)->split(length()/2,*(arc *)a,*(arc *)b);
+    }
+    //cout<<"{"<<endl;
+    ret=a->approx3d(precision)+b->approx3d(precision);
+    //cout<<"}"<<endl;
+    delete a;
+    delete b;
+  }
+  return ret;
 }

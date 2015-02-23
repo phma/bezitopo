@@ -1483,6 +1483,8 @@ void testbezier3d()
   int startbearing,endbearing;
   double curvature,clothance,totaldist,avgdist;
   int i,j,numdist;
+  arc arc0(xyz(-50,0,0),xyz(50,0,0));
+  spiralarc spiralarc0(xyz(-50,0,0),xyz(50,0,0));
   char buf[32];
   map<double,double> dists,ests;
   xy spipts[21],bezpts[21],lastpt,thispt;
@@ -1579,6 +1581,14 @@ void testbezier3d()
   endpage();
   pstrailer();
   psclose();
+  for (i=-300;i<330;i+=60)
+  {
+    arc0.setdelta(degtobin(i));
+    c=arc0.approx3d(1);
+    cout<<i<<"° delta 1 m approx "<<c.size();
+    c=arc0.approx3d(0.001);
+    cout<<" splines; 1 mm approx "<<c.size()<<" splines"<<endl;
+  }
 }
 
 void testangleconv()

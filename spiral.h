@@ -42,6 +42,14 @@ public:
   {
     return midbear+ispiralbearing(along-len/2,cur,clo);
   }
+  int startbearing()
+  {
+    return midbear+ispiralbearing(-len/2,cur,clo);
+  }
+  int endbearing()
+  {
+    return midbear+ispiralbearing(len/2,cur,clo);
+  }
   virtual double curvature(double along)
   {
     return cur+clo*(along-len/2);

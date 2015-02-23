@@ -33,6 +33,8 @@ public:
   }
   double elev(double along);
   double slope(double along);
+  double startslope();
+  double endslope();
   virtual xyz station(double along);
   double avgslope()
   {
