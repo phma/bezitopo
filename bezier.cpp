@@ -162,7 +162,7 @@ void triangle::setgradient(xy pnt,xy grad)
 }
 
 double triangle::ctrlpt(xy pnt1,xy pnt2)
-/* Returns the elevation of the critical point 1/3 of the way from pnt1 to pnt2.
+/* Returns the elevation of the control point 1/3 of the way from pnt1 to pnt2.
  * If they aren't different corners of the triangle, returns the one in the middle.
  */
 {
