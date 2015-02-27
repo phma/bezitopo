@@ -23,10 +23,13 @@
 #include "vcurve.h"
 #include "raster.h"
 #include "ps.h"
+#include "closure.h"
 
 using namespace std;
 
-int main(int argc, char *argv[])
+bool cont=true;
+
+void indpark()
 {
   int i,j,itype;
   double w,e,s,n;
@@ -52,8 +55,62 @@ int main(int argc, char *argv[])
   s=topopoints.dirbound(degtobin(90));
   e=-topopoints.dirbound(degtobin(180));
   n=-topopoints.dirbound(degtobin(270));
+  cout<<"Writing topo with curved triangles"<<endl;
   rasterdraw(topopoints,xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark.ppm");
   topopoints.setgradient(true);
+  cout<<"Writing topo with flat triangles"<<endl;
   rasterdraw(topopoints,xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark-flat.ppm");
+}
+
+struct command
+{
+  string word;
+  void (*fun)();
+  string desc;
+  command(string w,void (*f)(),string d)
+  {
+    word=w;
+    fun=f;
+    desc=d;
+  }
+};
+
+vector<command> commands;
+
+void help()
+{
+  int i;
+  for (i=0;i<commands.size();i++)
+  {
+    cout<<commands[i].word<<"  "<<commands[i].desc<<endl;
+  }
+}
+
+void exit()
+{
+  cont=false;
+}
+
+int main(int argc, char *argv[])
+{
+  int i,cmd;
+  string cmdline;
+  commands.push_back(command("indpark",indpark,"Process the Independence Park topo (topo0.asc)"));
+  commands.push_back(command("closure",closure_i,"Check closure of a lot"));
+  commands.push_back(command("help",help,"List commands"));
+  commands.push_back(command("exit",exit,"Exit the program"));
+  while (cont)
+  {
+    cout<<"? ";
+    cout.flush();
+    getline(cin,cmdline);
+    for (cmd=-1,i=0;i<commands.size();i++)
+      if (commands[i].word==cmdline)
+	cmd=i;
+    if (cmd>=0)
+      commands[cmd].fun();
+    else
+      cout<<"Unrecognized command, type \"help\" for a list of commands"<<endl;
+  }
   return EXIT_SUCCESS;
 }
