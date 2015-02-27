@@ -141,12 +141,16 @@ bezier3d segment::approx3d(double precision)
  */
 {
   segment *a,*b;
-  int sb,eb;
+  int sb,eb,cb;
   double est;
   bezier3d ret;
   sb=startbearing();
   eb=endbearing();
-  est=bez3destimate(start,sb,length(),eb,end);
+  cb=chordbearing();
+  if (abs(foldangle(sb-cb))<DEG30 && abs(foldangle(eb-cb))<DEG30 && abs(foldangle(sb+eb-2*cb))<DEG30)
+    est=bez3destimate(start,sb,length(),eb,end);
+  else
+    est=fabs(precision*2)+1;
   //cout<<"sb "<<bintodeg(sb)<<" eb "<<bintodeg(eb)<<" est "<<est<<endl;
   if (est<=precision)
     ret=bezier3d(start,sb,startslope(),endslope(),eb,end);

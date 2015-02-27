@@ -50,7 +50,7 @@ int radtobin(double angle);
 /* Angles, azimuths, and bearings are expressed in text as follows:
  * Hex integer  Angle, deg  Angle, gon  Azimuth, deg  Azimuth, gon  Bearing, deg  Bearing, gon
  * 0x00000000   0°00′00″    0.0000      90°00′00″     100.0000      N90°00′00″E   N100.0000E
- * 0x0aaaaaaa   30°00′00″   33.3333     60°00′00″     66.6667       N60°00′00″E   N066.6667E
+ * 0x0aaaaaab   30°00′00″   33.3333     60°00′00″     66.6667       N60°00′00″E   N066.6667E
  * 0x15555555   60°00′00″   66.6667     30°00′00″     33.3333       N30°00′00″E   N033.3333E
  * 0x168dfd71   63°26′06″   70.4833	27°33′54″     29.5167       N27°33′54″E   N029.5167E
  * 0x80000000   -360°00′00″ -400.0000   90°00′00″     100.0000      N90°00′00″E   N100.0000E
@@ -59,6 +59,9 @@ int radtobin(double angle);
  * azimuths/bearings are measured from north.
  * As azimuths or bearings, 0x80000000 and 0x00000000 are equivalent; as deltas they are not.
  */
+
+#define DEG30 0x0aaaaaab
+#define DEG60 0x15555555
 
 std::string bintoangle(int angle,int unitp);
 int parseangle(std::string angstr,int unitp);

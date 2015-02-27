@@ -71,11 +71,16 @@ xyz arc::station(double along)
   double gnola,len;
   int angalong;
   len=length();
-  angalong=lrint(along/len*delta);
-  gnola=len-along;
-  //printf("arc::station angalong=%f startbearing=%f\n",bintodeg(angalong),bintodeg(startbearing()));
-  return xyz(xy(start)+cossinhalf(angalong+2*startbearing())*sinhalf(angalong)*radius(0)*2,
-	     elev(along));
+  if (delta) // FIXME if delta is less than 1 second or so, this isn't accurate
+  {
+    angalong=lrint(along/len*delta);
+    gnola=len-along;
+    //printf("arc::station angalong=%f startbearing=%f\n",bintodeg(angalong),bintodeg(startbearing()));
+    return xyz(xy(start)+cossinhalf(angalong+2*startbearing())*sinhalf(angalong)*radius(0)*2,
+	      elev(along));
+  }
+  else
+    return segment::station(along);
 }
 
 int arc::bearing(double along)

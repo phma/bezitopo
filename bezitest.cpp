@@ -1483,15 +1483,19 @@ void testbezier3d()
   xyz startpoint,endpoint;
   int startbearing,endbearing;
   double curvature,clothance,totaldist,avgdist;
-  int i,j,numdist,ngood;
-  arc arc0(xyz(-50,0,0),xyz(50,0,0));
-  spiralarc spiralarc0(xyz(-50,0,0),xyz(50,0,0));
+  int i,j,numdist,ngood,nclose;
+  arc arc0(xyz(-50,0,0),xyz(50,0,61));
+  spiralarc spiralarc0(xyz(-50,0,0),xyz(50,0,61));
   char buf[32];
   map<double,double> dists,ests;
   xy spipts[21],bezpts[21],lastpt,thispt;
   bezier3d a(xyz(0,0,0),xyz(1,0,0),xyz(2,3,0),xyz(3,9,27)),
   b(xyz(3,9,27),xyz(4,15,54),xyz(7,11,13),xyz(2,3,5)),c;
   xyz pt,pt1;
+  arc0.setslope(START,-0.1);
+  arc0.setslope(END,0.2);
+  spiralarc0.setslope(START,-0.1);
+  spiralarc0.setslope(END,0.2);
   assert(a.size()==1);
   pt=a.station(0.4);
   pt1=xyz(1.2,1.44,1.728);
@@ -1582,13 +1586,17 @@ void testbezier3d()
   endpage();
   startpage();
   setscale(-100,-180,100,180,degtobin(0));
-  for (i=-300;i<330;i+=60)
+  for (i=-300,nclose=0;i<330;i+=60)
   {
     arc0.setdelta(degtobin(i));
     c=arc0.approx3d(1);
     cout<<i<<"° delta 1 m approx "<<c.size();
     c=arc0.approx3d(0.001);
     cout<<" splines; 1 mm approx "<<c.size()<<" splines"<<endl;
+    pt=arc0.station(arc0.length()/3);
+    pt1=c.station(c.size()/3.);
+    //cout<<"distance "<<dist(pt,pt1)<<endl;
+    nclose+=(dist(pt,pt1)<1);
     spline(c);
   }
   endpage();
@@ -1603,6 +1611,11 @@ void testbezier3d()
       if (spiralarc0.valid())
       {
 	c=spiralarc0.approx3d(1);
+	pt=spiralarc0.station(spiralarc0.length()/3);
+	pt1=c.station(c.size()/3.);
+	// Most of these aren't close, because the splitting is not uniform, but enough are.
+	//cout<<"distance "<<dist(pt,pt1)<<endl;
+	nclose+=(dist(pt,pt1)<1);
 	spline(c);
 	ngood++;
       }
@@ -1612,7 +1625,9 @@ void testbezier3d()
   pstrailer();
   psclose();
   cout<<ngood<<" good spirals"<<endl;
+  cout<<nclose<<" with 1/3 point close"<<endl;
   assert(ngood>=107);
+  assert(nclose>=30);
 }
 
 void testangleconv()
