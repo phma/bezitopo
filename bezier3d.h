@@ -15,6 +15,7 @@ public:
   bezier3d(xyz kra,int bear0,double slp0,double slp1,int bear1,xyz fam);
   bezier3d();
   int size() const; // number of Bézier segments
+  std::vector<xyz> operator[](int n);
   xyz station(double along);
   friend bezier3d operator+(const bezier3d &l,const bezier3d &r); // concatenates, not adds
 };

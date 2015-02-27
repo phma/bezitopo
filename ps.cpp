@@ -187,6 +187,27 @@ void line2p(xy pnt1,xy pnt2)
            xscale(pnt1.east()),yscale(pnt1.north()),xscale(pnt2.east()),yscale(pnt2.north()));
 }
 
+void spline(bezier3d spl)
+{
+  int i,j,n;
+  vector<xyz> seg;
+  xy pnt;
+  n=spl.size();
+  pnt=turn(xy(spl[0][0]),orientation);
+  fprintf(psfile,"%7.3f %7.3f moveto\n",xscale(pnt.east()),yscale(pnt.north()));
+  for (i=0;i<n;i++)
+  {
+    seg=spl[i];
+    for (j=1;j<4;j++)
+    {
+      pnt=turn(xy(seg[j]),orientation);
+      fprintf(psfile,"%7.3f %7.3f ",xscale(pnt.east()),yscale(pnt.north()));
+    }
+    fprintf(psfile,"curveto\n");
+  }
+  fprintf(psfile,"stroke\n");
+}
+  
 void pswrite(xy pnt,string text)
 {
   pnt=turn(pnt,orientation);

@@ -43,6 +43,15 @@ int bezier3d::size() const
   return controlpoints.size()/3;
 }
 
+vector<xyz> bezier3d::operator[](int n)
+{
+  vector<xyz> ret;
+  int i;
+  for (i=0;i<4;i++)
+    ret.push_back(controlpoints[3*n+i]);
+  return ret;
+}
+
 xyz bezier3d::station(double along)
 {
   int segment;

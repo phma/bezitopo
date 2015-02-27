@@ -11,11 +11,6 @@ add_executable(bezitest angle.cpp arc.cpp bezier.cpp bezitest.cpp
                raster.cpp spiral.cpp stl.cpp test.cpp segment.cpp tin.cpp
                vcurve.cpp halton.cpp bezier3d.cpp closure.cpp)
 
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-#find_package(LibXML++ REQUIRED)
-#include_directories(${LibXML++_INCLUDE_DIRS})
-#set(LIBS ${LIBS} ${LibXML++_LIBRARIES})
-#target_link_libraries(foncvrate ${LIBS})
 include(TestBigEndian)
 include(CheckTypeSize)
 

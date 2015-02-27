@@ -595,12 +595,13 @@ void testspiralarc()
   cout<<"bearing at mid "<<(bear[1]=bintodeg(a.bearing(250)))<<endl;
   cout<<"bearing at end "<<(bear[2]=bintodeg(a.bearing(500)))<<endl;
   cout<<"delta "<<bear[2]-bear[0]<<" skew "<<bear[0]+bear[2]-2*bear[1]<<endl;
-  a._fixends();
+  a._fixends(1);
   cout<<"new length "<<(len=a.length())<<endl;
   cout<<"bearing at beg "<<(bear[0]=bintodeg(a.bearing(0)))<<endl;
   cout<<"bearing at mid "<<(bear[1]=bintodeg(a.bearing(len/2)))<<endl;
   cout<<"bearing at end "<<(bear[2]=bintodeg(a.bearing(len)))<<endl;
   cout<<"delta "<<bear[2]-bear[0]<<" skew "<<bear[0]+bear[2]-2*bear[1]<<endl;
+  a.setdelta(0,degtobin(254)); // this barely fails
   a.setdelta(degtobin(26),degtobin(8));
   cout<<"new length "<<(len=a.length())<<endl;
   cout<<"bearing at beg "<<(bear[0]=bintodeg(a.bearing(0)))<<endl;
@@ -1482,7 +1483,7 @@ void testbezier3d()
   xyz startpoint,endpoint;
   int startbearing,endbearing;
   double curvature,clothance,totaldist,avgdist;
-  int i,j,numdist;
+  int i,j,numdist,ngood;
   arc arc0(xyz(-50,0,0),xyz(50,0,0));
   spiralarc spiralarc0(xyz(-50,0,0),xyz(50,0,0));
   char buf[32];
@@ -1579,8 +1580,8 @@ void testbezier3d()
       assert(dists[clothance*M_PI+curvature]<=ests[clothance*M_PI+curvature]);
     }
   endpage();
-  pstrailer();
-  psclose();
+  startpage();
+  setscale(-100,-180,100,180,degtobin(0));
   for (i=-300;i<330;i+=60)
   {
     arc0.setdelta(degtobin(i));
@@ -1588,7 +1589,30 @@ void testbezier3d()
     cout<<i<<"° delta 1 m approx "<<c.size();
     c=arc0.approx3d(0.001);
     cout<<" splines; 1 mm approx "<<c.size()<<" splines"<<endl;
+    spline(c);
   }
+  endpage();
+  for (i=-300,ngood=0;i<330;i+=60)
+  {
+    startpage();
+    setscale(-100,-180,100,180,degtobin(0));
+    for (j=-300;j<330;j+=60)
+    {
+      //cout<<j<<"° delta "<<i<<"° skew"<<endl;
+      spiralarc0.setdelta(degtobin(j),degtobin(i));
+      if (spiralarc0.valid())
+      {
+	c=spiralarc0.approx3d(1);
+	spline(c);
+	ngood++;
+      }
+    }
+    endpage();
+  }
+  pstrailer();
+  psclose();
+  cout<<ngood<<" good spirals"<<endl;
+  assert(ngood>=107);
 }
 
 void testangleconv()

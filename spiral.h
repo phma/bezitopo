@@ -4,6 +4,7 @@
 /*                                                    */
 /******************************************************/
 
+#include <cmath>
 #include "point.h"
 #include "segment.h"
 
@@ -63,7 +64,11 @@ public:
    * Trying to offset a spiral arc will throw an error.
    */
   void _setdelta(int d,int s=0);
-  void _fixends();
+  void _fixends(double p);
   void split(double along,spiralarc &a,spiralarc &b);
   void setdelta(int d,int s=0);
+  bool valid()
+  {
+    return (std::isfinite(cur) && std::isfinite(clo) && std::isfinite(len));
+  }
 };

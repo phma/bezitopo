@@ -19,7 +19,6 @@
  */
 
 #include <vector>
-#include <cmath>
 #include <cstdio>
 #include <iostream>
 #include "spiral.h"
@@ -183,7 +182,7 @@ void spiralarc::_setdelta(int d,int s)
   clo=4*bintorad(s)/len/len;
 }
 
-void spiralarc::_fixends()
+void spiralarc::_fixends(double p)
 {
   xy kra,fam;
   int turnangle;
@@ -191,7 +190,7 @@ void spiralarc::_fixends()
   kra=station(0);
   fam=station(len);
   turnangle=foldangle(atan2i(end-start)-atan2i(fam-kra)); // don't turn by more than 180° either way
-  midbear+=turnangle;
+  midbear+=rint(turnangle*p);
   scale=dist(xy(end),xy(start))/dist(fam,kra);
   len*=scale;
   cur/=scale;
@@ -227,14 +226,23 @@ void spiralarc::split(double along,spiralarc &a,spiralarc &b)
   a.clo=b.clo=clo;
   a.end=b.start=splitpoint;
   vsplit(start.elev(),control1,control2,end.elev(),along/length(),a.control1,a.control2,dummy,b.control1,b.control2);
-  printf("split: %f,%f\n",a.end.east(),a.end.north());
+  //printf("split: %f,%f\n",a.end.east(),a.end.north());
 }
 
 void spiralarc::setdelta(int d,int s)
+/* Works as long as |d|<=300° and |s|<=253°.
+ * For s outside that range, an arithmetic overflow of the expression
+ * s+rot may result.
+ */
 {
   int lastmidbear,chordbear,rot,i;
   xy lastmid;
   chordbear=chordbearing();
+  if (!valid())
+  {
+    cur=clo=0;
+    len=segment::length();
+  }
   i=0;
   do
   {
@@ -242,9 +250,11 @@ void spiralarc::setdelta(int d,int s)
     lastmidbear=midbear;
     lastmid=mid;
     _setdelta(d,s+rot);
-    _fixends();
+    _fixends(1-i/257.);
     i++;
-    //cout<<"iter "<<i<<" midbear "<<midbear<<endl;
+    //cout<<"iter "<<i<<" midbear "<<midbear<<" cur "<<cur<<" clo "<<clo<<endl;
   }
-  while (abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6);
+  while ((abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6) && i<256);
+  if (abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6)
+    cur=clo=len=NAN;
 }
