@@ -46,7 +46,7 @@ void closure_i(string args)
     }
   }
   while (input.length());
-  cout<<"Misclosure: "<<displacement.length()<<endl;
+  cout<<"Misclosure: "<<format_meas_unit(displacement.length(),METER+DEC3)<<endl;
   cout<<"Perimeter: "<<perimeter<<endl;
   cout<<"Area: "<<area<<endl;
   cout<<"Ratio of precision: 1:"<<perimeter/displacement.length()<<endl;

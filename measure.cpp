@@ -84,6 +84,7 @@ symbol symbols[]=
   MICROMETER,	"um",
   FOOT,		"ft",
   FOOT,		"'",
+  METER,	"m",
   GRAM,		"g",
   KILOGRAM,	"kg",
   POUND,	"lb",

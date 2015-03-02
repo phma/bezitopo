@@ -100,6 +100,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("indpark",indpark,"Process the Independence Park topo (topo0.asc)"));
   commands.push_back(command("closure",closure_i,"Check closure of a lot"));
   commands.push_back(command("setfoot",setfoot_i,"Set foot unit: int'l, US, Indian"));
+  commands.push_back(command("setlunit",setlengthunit_i,"Set length unit: m, ft, ch"));
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
   while (cont)

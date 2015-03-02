@@ -28,7 +28,6 @@ string trim(string word)
 void setfoot_i(string args)
 {
   args=trim(args);
-  cout<<'<'<<args<<'>'<<endl;
   if (args=="int'l")
     setfoot(INTERNATIONAL);
   else if (args=="US")
@@ -38,3 +37,17 @@ void setfoot_i(string args)
   else
     cout<<"I don't recognize that foot"<<endl;
 }
+
+void setlengthunit_i(string args)
+{
+  args=trim(args);
+  if (args=="m")
+    set_length_unit(METER+DEC3);
+  else if (args=="ft")
+    set_length_unit(FOOT+DEC2);
+  else if (args=="ch")
+    set_length_unit(CHAIN+DEC2);
+  else
+    cout<<"I don't recognize that length unit"<<endl;
+}
+
