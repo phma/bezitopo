@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* closure.cpp - closure and ratio of precision       */
+/* icommon.h - common interactive routines            */
 /*                                                    */
 /******************************************************/
 
 #include <string>
 
-void closure_i(std::string args);
+void setfoot_i(std::string args);

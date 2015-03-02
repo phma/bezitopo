@@ -6,24 +6,29 @@
 
 #ifndef MEASURE_H
 #define MEASURE_H
-/* These are unit codes. Codes pertaining to angles are defined in angle.h. */
+/* These are unit codes. Codes pertaining to angles are defined in angle.h.
+ * This file has two codes for the foot: one for the international foot, and
+ * one whose conversion factor can be switched.
+ * 
+ * This module follows http://phma.optus.nu/Metric/unit-codes.html, except
+ * for having some units with variable conversion factors. All such units
+ * are non-metric units based on the foot and have codes of the form
+ * 0x****f***. They may or may not be equal to other unit codes' conversion
+ * factors.
+ */
 #define METER 0x00011000
 #define MILLIMETER 0x00010d00
 #define MICROMETER 0x00010c00
 #define KILOMETER 0x00011300
 #define MEGAMETER 0x00011400
-#define INCH 0x0001ec00
-#define FOOT 0x0001ea00
-#define SURVEYFOOT 0x0001f000
-#define CHAIN 0x0001f100
-#define SURVEYCHAIN 0x0001f200
-#define MIL 0x0001e500
+#define INTFOOT 0x0001ea00
+#define FOOT 0x0001f000
+#define INTCHAIN 0x0001f100
+#define CHAIN 0x0001f200
 #define GRAM 0x00021000
 #define KILOGRAM 0x00021300
 #define POUND 0x0002ed00
 #define MILLIPOUND 0x0002f000
-#define OUNCE 0x0002ee00
-#define TROYOUNCE 0x0002e900
 #define HOUR 0x0003ee00
 #define KGPERL 0x00801400
 #define LBPERIN3 0x0080ef00
@@ -66,6 +71,10 @@
 #define SIXTEENTH 0x14
 #define THIRTYSECOND 0x15
 
+#define INTERNATIONAL 0
+#define USSURVEY 1
+#define INSURVEY 2
+
 #define compatible_units(unitp1,unitp2) (((unitp1)&0xffff0000)==((unitp2)&0xffff0000))
 #define same_unit(unitp1,unitp2) (((unitp1)&0xffffff00)==((unitp2)&0xffffff00))
 
@@ -83,8 +92,8 @@ double parse_meas(char *meas, int unitp,int *found_unit);
    returns its value in the program's internal unit. */
 char *trim(char *str);
 /* Removes spaces from both ends of a string in place. */
-void switch_system();
-/* Switches between measuring systems. */
+void setfoot(int f);
+/* Switches between international and survey feet. */
 void set_length_unit(int unitp);
 double precision(int unitp);
 double parse_length(const char *meas);

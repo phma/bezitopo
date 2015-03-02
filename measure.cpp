@@ -3,7 +3,18 @@
 /* measure.cpp - measuring units                      */
 /*                                                    */
 /******************************************************/
-
+/* The unit of length can be the foot, chain, or meter. Independently
+ * of this, the foot can be selected from the international foot,
+ * the US survey foot, or maybe the Indian survey foot. Selecting
+ * one of these feet affects the following units:
+ * Length: foot, chain, mile.
+ * Area: square foot, acre.
+ * Volume: cubic foot, cubic yard, acre-foot. The gallon is unaffected.
+ * The scale (see ps.cpp) depends on whether the unit is the foot,
+ * but does not depend on which foot is in use. 1"=30' is 1:360, even
+ * if the foot is the survey foot (it is not 1 international inch
+ * = 1 survey foot).
+ */
 
 #include <cstring>
 #include <cmath>
@@ -13,150 +24,79 @@
 #include "measure.h"
 using namespace std;
 
-const struct cf
-  {int unitp;
-   double factor;
-   } cfactors[]=
-{0,		1,			// unknown unit
- MILLIMETER,	0.001,			// mm
- MICROMETER,	0.000001,		// μm
- KILOMETER,	1000,			// km
- METER,		1,			// m
- INCH,		0.0254,			// in
- FOOT,		0.3048,			// ft
- SURVEYFOOT,	0.3048006096012192,	// 
- GRAM,		0.001,			// g
- KILOGRAM,	1.0,			// kg
- POUND,		0.45359237,		// lb
- MILLIPOUND,	0.00045359237,		// pound per thousand
- OUNCE,		0.028349523125,		// oz
- TROYOUNCE,	0.0311034768,		// troy ounce
- HOUR,		3600,			// hour
- KGPERL,	1000.0,			// kg/l
- LBPERIN3,	27679.90471020312,	// lb/in3
- PERKG,		1.0,			// $/kg
- PERPOUND,	2.2046226218487759,	// $/lb
- PERMETER,	1.0,			// $/m
- PERFOOT,	3.2808398950131233,	// $/ft
- PERLITER,	1000,			// /L
- EACH,		1,			// $/piece
- PERHUNDRED,	0.01,			// $/hundred pieces
- PERTHOUSAND,	0.001,			// $/thousand pieces
- PERLOT,	1,			// $/lot
- PERSET,	1,			// $/set
- ITEM,		1,
- THOUSAND,	1000,
- LOT,		1,
- SET,		1,
- PERMONTH,	0.38026486208173715e-6,
- PERYEAR,	31.688738506811427e-9,
- PERHOUR,	0.00027777777777777777,	// $/hour
- MILLILITER,	0.000001,
- IN3,		0.000016387064,
- };
+struct cf
+{
+  int unitp;
+  double factor;
+};
+
+cf cfactors[]=
+{
+  FOOT,		0.3048006096012192,	// ft (any of three)
+  CHAIN,	20.11684023368046736,	// ch
+  INTFOOT,	0.3048,			// 
+  INTCHAIN,	20.1168,		//
+  0,		1,			// unknown unit
+  MILLIMETER,	0.001,			// mm
+  MICROMETER,	0.000001,		// μm
+  KILOMETER,	1000,			// km
+  METER,	1,			// m
+  GRAM,		0.001,			// g
+  KILOGRAM,	1.0,			// kg
+  POUND,	0.45359237,		// lb
+  MILLIPOUND,	0.00045359237,		// pound per thousand
+  HOUR,		3600,			// hour
+  KGPERL,	1000.0,			// kg/l
+  LBPERIN3,	27679.90471020312,	// lb/in3
+  PERKG,	1.0,			// $/kg
+  PERPOUND,	2.2046226218487759,	// $/lb
+  PERMETER,	1.0,			// $/m
+  PERFOOT,	3.2808398950131233,	// $/ft
+  PERLITER,	1000,			// /L
+  EACH,		1,			// $/piece
+  PERHUNDRED,	0.01,			// $/hundred pieces
+  PERTHOUSAND,	0.001,			// $/thousand pieces
+  PERLOT,	1,			// $/lot
+  PERSET,	1,			// $/set
+  ITEM,		1,
+  THOUSAND,	1000,
+  LOT,		1,
+  SET,		1,
+  PERMONTH,	0.38026486208173715e-6,
+  PERYEAR,	31.688738506811427e-9,
+  PERHOUR,	0.00027777777777777777,	// $/hour
+  MILLILITER,	0.000001,
+  IN3,		0.000016387064,
+};
 #define nunits (sizeof(cfactors)/sizeof(struct cf))
 struct symbol
-  {int unitp;
-   char symb[12];
-   } symbols[]=
+{
+  int unitp;
+  char symb[12];
+};
+
+symbol symbols[]=
 /* The first symbol is the canonical one, if there is one. */
-{MILLIMETER,	"mm",
- MICROMETER,	"µm", //0000b5 00006d
- MICROMETER,	"μm", //0003bc 00006d
- MICROMETER,	"um",
- INCH,		"in",
- INCH,		"\"",
- INCH,		"INCHES",
- INCH,		"IN.",
- FOOT,		"ft",
- FOOT,		"'",
- FOOT,		"FEET", /* occurs in QUANT.FIL */
- FOOT,		"FT.",
- FOOT,		"FT",
- FOOT,		"FT. LGTHS",
- FOOT,		"FT. LGTHS.",
- FOOT,		"FT. LGTH.",
- FOOT,		"FT. LGTH",
- GRAM,		"g",
- KILOGRAM,	"kg",
- POUND,		"lb",
- POUND,		"LB",
- POUND,		"LB.",
- POUND,		"Pound",
- POUND,		"Pounds",
- POUND,		"#",
- MILLIPOUND,	"lb/1000",
- KGPERL,	"kg/l",
- KGPERL,	"kg/L",
- KGPERL,	"g/ml",
- KGPERL,	"g/mL",
- LBPERIN3,      "lb/in³",
- EACH,		"ea",
- EACH,		"ea.",
- EACH,		"EACH",
- EACH,		"EA.",
- EACH,		"EEA.",
- EACH,		"EA.*",
- EACH,		"EA..",
- EACH,		"EA*",
- EACH,		"EA.^",
- EACH,		"EA. *",
- EACH,		"EA",
- PERHUNDRED,	"/C",
- PERTHOUSAND,	"/M",
- PERLOT,	"/LOT",
- PERLOT,	"/LT",
- PERLOT,	"/LO",
- PERSET,	"/SET",
- PERSET,	"/SE",
- PERPOUND,	"/lb",
- PERPOUND,	"/LB.",
- PERPOUND,	"/LB",
- MILLILITER,	"ml",
- IN3,		"in³",
- PERLITER,	"/L", /* placeholder for chopped-off /LB or /LOT */
- LOT,		"LOT",
- LOT,		"Lot",
- LOT,		"Lots",
- SET,		"SET",
- SET,		"SETS",
- ITEM,		"",
- ITEM,		"PCS",
- ITEM,		"PCS.",
- ITEM,		"Piece",
- ITEM,		"Pieces",
- ITEM,		"PARTS",
- THOUSAND,	"M", /* will be changed to k in history program */
- THOUSAND,	"M PARTS",
- };
+{
+  MILLIMETER,	"mm",
+  MICROMETER,	"µm", //0000b5 00006d
+  MICROMETER,	"μm", //0003bc 00006d
+  MICROMETER,	"um",
+  FOOT,		"ft",
+  FOOT,		"'",
+  GRAM,		"g",
+  KILOGRAM,	"kg",
+  POUND,	"lb",
+  KGPERL,	"kg/l",
+  KGPERL,	"kg/L",
+  KGPERL,	"g/ml",
+  KGPERL,	"g/mL",
+  LBPERIN3,      "lb/in³",
+  MILLILITER,	"ml",
+  IN3,		"in³",
+};
 #define nsymbols (sizeof(symbols)/sizeof(struct symbol))
 
-int msystem=1; /* 0 or 1: metric. 2 or 3: US customary. 1 or 3: or as entered. */
-int substtable_met_small[]=
-{MILLIMETER+DEC3,
- GRAM+DEC3,
- KGPERL+DEC3,
- MILLILITER+DEC3,
- ITEM+DEC3};
-int substtable_met_big[]=
-{METER+DEC3,
- KILOGRAM+DEC3,
- KGPERL+DEC3,
- MILLILITER+DEC0,
- ITEM+DEC3};
-int substtable_usc_small[]=
-{INCH+DEC3,
- MILLIPOUND+DEC3,
- LBPERIN3+DEC3,
- IN3+DEC3,
- ITEM+DEC3};
-int substtable_usc_big[]=
-{FOOT+DEC3,
- POUND+DEC3,
- LBPERIN3+DEC3,
- IN3+DEC1,
- ITEM+DEC3};
-#define substtable_size (sizeof(substtable_met_big)/sizeof(int))
 int length_unit=METER;
 double length_factor=1;
 
@@ -175,7 +115,7 @@ double cfactor(int unitp)
      if (same_unit(unitp,cfactors[i].unitp))
         return cfactors[i].factor;
  //fprintf(stdout,"Conversion factor for %x missing!\n",unitp);
- return 0/0;
+ return NAN;
  }
 
 void set_length_unit(int unitp)
@@ -304,38 +244,28 @@ int moreprecise(int unitp1,int unitp2)
     return unitp2;
  }
 
-void switch_system()
-{msystem=(msystem+1)%4;
- }
-
-int subst_unit(int unitp)
-/* Substitutes a unit from substtable, depending on the currently selected measuring system. */
-{int *table,i;
- if (((msystem&1)==0 || isnan(cfactor(unitp))) && (unitp&0xff00)<0xfd00)
-    unitp=(unitp&0xffff0000)|0xfe00;
- if (msystem&2)
-    if ((unitp&0xff00)==0xfd00)
-       table=substtable_usc_big;
-    else
-       table=substtable_usc_small;
- else
-    if ((unitp&0xff00)==0xfd00)
-       table=substtable_met_big;
-    else
-       table=substtable_met_small;
- if (isnan(cfactor(unitp)))
-    for (i=0;i<substtable_size;i++)
-        if (compatible_units(unitp,table[i]))
-           unitp=table[i];
- return unitp;
- }
+void setfoot(int f)
+{
+  switch (f)
+  {
+    case (INTERNATIONAL):
+      cfactors[0].factor=0.3048;
+      break;
+    case (USSURVEY):
+      cfactors[0].factor=12e2/3937;
+      break;
+    case (INSURVEY):
+      cfactors[0].factor=0.3047996;
+  }
+  cfactors[1].factor=cfactors[0].factor*66;
+}
 
 char *format_meas(double measurement, unsigned int unitp)
 {static char output[80],format[80];
  unsigned int base,exp,i;
  double factor,division,m,m2;
  int sign;
- unitp=subst_unit(unitp);
+ //unitp=subst_unit(unitp);
  base=10;
  exp=unitp&31;
  if (exp>15)
@@ -381,7 +311,7 @@ char *format_meas(double measurement, unsigned int unitp)
 
 char *format_meas_unit(double measurement, unsigned int unitp)
 {char *output;
- unitp=subst_unit(unitp);
+ //unitp=subst_unit(unitp);
  output=format_meas(measurement,unitp);
  strcat(output," "); /* I can do this because it's static */
  strcat(output,symbol(unitp));

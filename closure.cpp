@@ -4,7 +4,6 @@
 /*                                                    */
 /******************************************************/
 
-#include <string>
 #include <cstring>
 #include <iostream>
 #include <cstdlib>
@@ -14,7 +13,7 @@
 #include "angle.h"
 using namespace std;
 
-void closure_i()
+void closure_i(string args)
 {
   xy displacement,vector,origin(0,0);
   double perimeter,area,misclosure;
@@ -38,7 +37,7 @@ void closure_i()
       bearing=parsebearing(bearingstr,DEGREE);
       distcpy=(char *)realloc(distcpy,distancestr.length()+1);
       strcpy(distcpy,distancestr.c_str());
-      distance=parse_meas(distcpy,METER,&unitp);
+      distance=parse_length(distcpy);
       vector=cossin(bearing)*distance;
       area+=area3(origin,displacement,displacement+vector);
       perimeter+=vector.length();

@@ -23,19 +23,20 @@
 #include "vcurve.h"
 #include "raster.h"
 #include "ps.h"
+#include "icommon.h"
 #include "closure.h"
 
 using namespace std;
 
 bool cont=true;
 
-void indpark()
+void indpark(string args)
 {
   int i,j,itype;
   double w,e,s,n;
   criteria crit;
   criterion crit1;
-  set_length_unit(SURVEYFOOT);
+  set_length_unit(FOOT);
   if (readpnezd("topo0.asc")<0)
     readpnezd("../topo0.asc");
   crit1.str="";
@@ -65,9 +66,9 @@ void indpark()
 struct command
 {
   string word;
-  void (*fun)();
+  void (*fun)(string args);
   string desc;
-  command(string w,void (*f)(),string d)
+  command(string w,void (*f)(string args),string d)
   {
     word=w;
     fun=f;
@@ -77,7 +78,7 @@ struct command
 
 vector<command> commands;
 
-void help()
+void help(string args)
 {
   int i;
   for (i=0;i<commands.size();i++)
@@ -86,7 +87,7 @@ void help()
   }
 }
 
-void exit()
+void exit(string args)
 {
   cont=false;
 }
@@ -94,9 +95,11 @@ void exit()
 int main(int argc, char *argv[])
 {
   int i,cmd;
-  string cmdline;
+  size_t chpos;
+  string cmdline,cmdword,cmdargs;
   commands.push_back(command("indpark",indpark,"Process the Independence Park topo (topo0.asc)"));
   commands.push_back(command("closure",closure_i,"Check closure of a lot"));
+  commands.push_back(command("setfoot",setfoot_i,"Set foot unit: int'l, US, Indian"));
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
   while (cont)
@@ -104,11 +107,16 @@ int main(int argc, char *argv[])
     cout<<"? ";
     cout.flush();
     getline(cin,cmdline);
+    chpos=cmdline.find_first_of(' '); // split the string at the first space
+    if (chpos>cmdline.length())
+      chpos=cmdline.length();
+    cmdword=cmdline.substr(0,chpos);
+    cmdargs=cmdline.substr(chpos);
     for (cmd=-1,i=0;i<commands.size();i++)
-      if (commands[i].word==cmdline)
+      if (commands[i].word==cmdword)
 	cmd=i;
     if (cmd>=0)
-      commands[cmd].fun();
+      commands[cmd].fun(cmdargs);
     else
       cout<<"Unrecognized command, type \"help\" for a list of commands"<<endl;
   }
