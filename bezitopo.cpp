@@ -24,6 +24,7 @@
 #include "raster.h"
 #include "ps.h"
 #include "icommon.h"
+#include "mkpoint.h"
 #include "closure.h"
 
 using namespace std;
@@ -63,19 +64,6 @@ void indpark(string args)
   rasterdraw(topopoints,xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark-flat.ppm");
 }
 
-struct command
-{
-  string word;
-  void (*fun)(string args);
-  string desc;
-  command(string w,void (*f)(string args),string d)
-  {
-    word=w;
-    fun=f;
-    desc=d;
-  }
-};
-
 vector<command> commands;
 
 void help(string args)
@@ -99,6 +87,7 @@ int main(int argc, char *argv[])
   string cmdline,cmdword,cmdargs;
   commands.push_back(command("indpark",indpark,"Process the Independence Park topo (topo0.asc)"));
   commands.push_back(command("closure",closure_i,"Check closure of a lot"));
+  commands.push_back(command("mkpoint",mkpoint_i,"Make new points"));
   commands.push_back(command("setfoot",setfoot_i,"Set foot unit: int'l, US, Indian"));
   commands.push_back(command("setlunit",setlengthunit_i,"Set length unit: m, ft, ch"));
   commands.push_back(command("help",help,"List commands"));

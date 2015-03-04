@@ -9,6 +9,8 @@
 #include "measure.h"
 using namespace std;
 
+bool subcont;
+
 string trim(string word)
 {
   size_t pos;
@@ -51,3 +53,52 @@ void setlengthunit_i(string args)
     cout<<"I don't recognize that length unit"<<endl;
 }
 
+arangle parsearangle(string angstr,int unitp)
+/* 13, angle to the right, relative
+ * -13, angle to the left, relative
+ * d13, deflection angle, same as 193, relative
+ * n13e, bearing, absolute
+ */
+{
+  arangle ret;
+  int def=0;
+  if (tolower(angstr[0])=='d' || !isalpha(angstr[0]))
+  {
+    ret.rel=true;
+    if (tolower(angstr[0])=='d')
+    {
+      angstr.erase(0,1);
+      def=DEG180;
+    }
+    ret.ang=-parsesignedangle(angstr,unitp);
+  }
+  else
+  {
+    ret.rel=false;
+    ret.ang=parsebearing(angstr,unitp);
+  }
+  return ret;
+}
+
+xy parsexy(string xystr)
+{
+  size_t pos;
+  string xstr,ystr;
+  xy ret;
+  int dummy;
+  pos=xystr.find(',');
+  if (pos==string::npos)
+    ret=xy(NAN,NAN);
+  else
+  {
+    xstr=xystr.substr(0,pos);
+    ystr=xystr.substr(pos+1);
+    ret=xy(parse_length(xstr),parse_length(ystr));
+  }
+  return ret;
+}
+
+void subexit(string args)
+{
+  subcont=false;
+}

@@ -271,7 +271,18 @@ int parseangle(string angstr,int unitp)
 
 int parseazimuth(string angstr,int unitp)
 {
-  return 0x20000000-parseangle(angstr,unitp);
+  return DEG90-parseangle(angstr,unitp);
+}
+
+int parsesignedangle(string angstr,int unitp)
+{
+  int sign=1;
+  if (angstr[0]=='-')
+  {
+    angstr.erase(0,1);
+    sign=-1;
+  }
+  return parseangle(angstr,unitp)*sign;
 }
 
 int parsebearing(string angstr,int unitp)

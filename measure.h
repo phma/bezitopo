@@ -6,6 +6,9 @@
 
 #ifndef MEASURE_H
 #define MEASURE_H
+
+#include <string>
+
 /* These are unit codes. Codes pertaining to angles are defined in angle.h.
  * This file has two codes for the foot: one for the international foot, and
  * one whose conversion factor can be switched.
@@ -97,4 +100,5 @@ void setfoot(int f);
 void set_length_unit(int unitp);
 double precision(int unitp);
 double parse_length(const char *meas);
+double parse_length(std::string meas);
 #endif

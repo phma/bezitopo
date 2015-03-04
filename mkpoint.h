@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* closure.h - closure and ratio of precision         */
+/* mkpoint.h - make new points                        */
 /*                                                    */
 /******************************************************/
 
 #include <string>
 
-void closure_i(std::string args);
+void mkpoint_i(std::string args);

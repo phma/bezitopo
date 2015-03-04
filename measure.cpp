@@ -408,3 +408,15 @@ double parse_length(const char *meas)
  free(meascpy);
  return num;
  }
+
+double parse_length(string meas)
+{
+  int found_unit;
+  double num;
+  char *meascpy;
+  meascpy=(char *)malloc(meas.length()+1);
+  strcpy(meascpy,meas.c_str());
+  num=parse_meas(meascpy,length_unit,&found_unit);
+  free(meascpy);
+  return num;
+}

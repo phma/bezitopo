@@ -62,6 +62,8 @@ int radtobin(double angle);
 
 #define DEG30 0x0aaaaaab
 #define DEG60 0x15555555
+#define DEG90 0x20000000
+#define DEG180 0x40000000
 
 std::string bintoangle(int angle,int unitp);
 int parseangle(std::string angstr,int unitp);
@@ -69,6 +71,7 @@ int parseangle(std::string angstr,int unitp);
  * the string as degrees even if unitp is GON. If the string contains 'g',
  * it interprets it as gons.
  */
+int parsesignedangle(std::string angstr,int unitp);
 int parseazimuth(std::string angstr,int unitp);
 int parsebearing(std::string angstr,int unitp);
 
