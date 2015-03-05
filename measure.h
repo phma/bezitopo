@@ -101,4 +101,6 @@ void set_length_unit(int unitp);
 double precision(int unitp);
 double parse_length(const char *meas);
 double parse_length(std::string meas);
+std::string format_length(double measurement);
+std::string format_length_unit(double measurement);
 #endif

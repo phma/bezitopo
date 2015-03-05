@@ -37,7 +37,8 @@ void indpark(string args)
   double w,e,s,n;
   criteria crit;
   criterion crit1;
-  set_length_unit(FOOT);
+  setfoot(USSURVEY);
+  set_length_unit(FOOT+DEC2);
   if (readpnezd("topo0.asc")<0)
     readpnezd("../topo0.asc");
   crit1.str="";

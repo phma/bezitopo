@@ -420,3 +420,13 @@ double parse_length(string meas)
   free(meascpy);
   return num;
 }
+
+std::string format_length(double measurement)
+{
+  return format_meas(measurement,length_unit);
+}
+
+std::string format_length_unit(double measurement)
+{
+  return format_meas_unit(measurement,length_unit);
+}

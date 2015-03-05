@@ -28,6 +28,7 @@
 #include "cogo.h"
 #include "angle.h"
 #include "icommon.h"
+#include "pointlist.h"
 
 using namespace std;
 
@@ -45,6 +46,23 @@ void help_mk(string args)
   }
 }
 
+void outpnt(point pnt)
+{
+  cout<<format_length(pnt.east())<<','<<format_length(pnt.north())<<',';
+  cout<<format_length(pnt.elev())<<' '<<pnt.note;
+}
+
+void listpoints(string args)
+{
+  ptlist::iterator i;
+  for (i=surveypoints.points.begin();i!=surveypoints.points.end();i++)
+  {
+    cout<<i->first<<' ';
+    outpnt(i->second);
+    cout<<endl;
+  }
+}
+
 void mkpoint_i(string args)
 {
   xy displacement,vector,origin(0,0);
@@ -56,6 +74,7 @@ void mkpoint_i(string args)
   mkcommands.clear();
   mkcommands.push_back(command("help",help_mk,"List commands"));
   mkcommands.push_back(command("x",subexit,"Exit the mkpoint command"));
+  mkcommands.push_back(command("ls",listpoints,"List the points"));
   perimeter=area=0;
   subcont=true;
   do
