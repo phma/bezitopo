@@ -142,7 +142,7 @@ bool delaunay(xy a,xy c,xy b,xy d)
  ints=intersection(a,c,b,d);
  distac=dist(a,c);
  distbd=dist(b,d);
- if (isnan(ints.north()))
+ if (std::isnan(ints.north()))
     {//printf("delaunay:No intersection, distac=%a, distbd=%a\n",distac,distbd);
      return distac<=distbd;
      }

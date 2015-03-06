@@ -501,7 +501,7 @@ void testsegment()
   assert(fabs(a.slope(250)+0.042)<0.001);
   sta=a.station(200);
   assert(sta==xyz(120,160,31));
-  assert(isinf(a.radius(0)));
+  assert(std::isinf(a.radius(0)));
   assert(a.curvature(0)==0);
   assert(!isfinite(a.center().east()));
   a.split(200,b,c);

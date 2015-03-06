@@ -356,7 +356,7 @@ int triangle::findnocubedir()
     midderiv=deriv3(xsect(mid,0));
     //cout<<beg<<' '<<begderiv<<' '<<mid<<' '<<midderiv<<' '<<end<<' '<<endderiv<<endl;
     crit=midderiv/(endderiv-begderiv);
-    if (isnan(crit))
+    if (std::isnan(crit))
       crit=0;
     if (crit>=0)
     {

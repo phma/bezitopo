@@ -16,6 +16,7 @@ add_executable(bezitest angle.cpp arc.cpp bezier3d.cpp bezier.cpp bezitest.cpp
 include(TestBigEndian)
 include(CheckTypeSize)
 
+set(CMAKE_CXX_FLAGS "-std=c++11")
 install(TARGETS bezitopo DESTINATION bin)
 
 test_big_endian(BIGENDIAN)

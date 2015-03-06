@@ -51,7 +51,7 @@ void mkpt_mk(string args)
 {
   xy pointxy;
   pointxy=parsexy(args);
-  if (isnan(pointxy.east()))
+  if (std::isnan(pointxy.east()))
     cout<<"Not a valid point"<<endl;
   else
     surveypoints.addpoint(1,point(pointxy,0,label));
