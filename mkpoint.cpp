@@ -36,6 +36,7 @@ int backsight_angle;
 bool have_position,have_backsight;
 xy position;
 vector<command> mkcommands;
+string label;
 
 void help_mk(string args)
 {
@@ -44,6 +45,21 @@ void help_mk(string args)
   {
     cout<<mkcommands[i].word<<"  "<<mkcommands[i].desc<<endl;
   }
+}
+
+void mkpt_mk(string args)
+{
+  xy pointxy;
+  pointxy=parsexy(args);
+  if (isnan(pointxy.east()))
+    cout<<"Not a valid point"<<endl;
+  else
+    surveypoints.addpoint(1,point(pointxy,0,label));
+}
+
+void label_mk(string args)
+{
+  label=trim(args);
 }
 
 void outpnt(point pnt)
@@ -72,9 +88,11 @@ void mkpoint_i(string args)
   double distance;
   string input,cmdstr,argstr;
   mkcommands.clear();
+  mkcommands.push_back(command("l",label_mk,"Set the point label"));
+  mkcommands.push_back(command("m",mkpt_mk,"Make point: e,n"));
+  mkcommands.push_back(command("ls",listpoints,"List the points"));
   mkcommands.push_back(command("help",help_mk,"List commands"));
   mkcommands.push_back(command("x",subexit,"Exit the mkpoint command"));
-  mkcommands.push_back(command("ls",listpoints,"List the points"));
   perimeter=area=0;
   subcont=true;
   do
