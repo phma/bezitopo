@@ -67,6 +67,12 @@ void indpark(string args)
 
 vector<command> commands;
 
+void readpoints(string args)
+// just pnezd for now
+{
+  readpnezd(trim(args),false);
+}
+
 void help(string args)
 {
   int i;
@@ -91,6 +97,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("mkpoint",mkpoint_i,"Make new points"));
   commands.push_back(command("setfoot",setfoot_i,"Set foot unit: int'l, US, Indian"));
   commands.push_back(command("setlunit",setlengthunit_i,"Set length unit: m, ft, ch"));
+  commands.push_back(command("read",readpoints,"Read coordinate file in PNEZD format: filename"));
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
   while (cont)

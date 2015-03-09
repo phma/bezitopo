@@ -1663,6 +1663,19 @@ void testangleconv()
   cout<<hex<<angle<<dec<<endl;
 }
 
+void testcsvline()
+{
+  vector<string> words;
+  words=csvline("");
+  assert(words.size()==0);
+  words=csvline("\"\"");
+  assert(words.size()==1);
+  words=csvline("\"pote\"\"mkin\"");
+  assert(words[0].length()==9);
+  words=csvline("\"3,4\",\"5,12\"");
+  assert(words.size()==2);
+}
+
 int main(int argc, char *argv[])
 {
   testarea3();
@@ -1700,6 +1713,7 @@ int main(int argc, char *argv[])
   testbezier3d();
   testangleconv();
   testgrad();
+  testcsvline();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //closure_i();
   return EXIT_SUCCESS;
