@@ -1156,6 +1156,8 @@ void trianglecontours()
  * 7.95533,14.1356,-1.270 minimum
  * -7.83778,-12.9386,1.227 maximum
  * 10.9596,-3.169,0.403 saddle.
+ * tri93db9159a54b09a0fc has two critical points in the triangle, both saddles,
+ * two critical points on two sides, and one critical point on the third side.
  * 
  * Hypothesis to attack the minimax problem:
  * Every surface in a Bézier triangle can be stretched linearly and rotated

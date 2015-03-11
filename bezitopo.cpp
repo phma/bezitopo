@@ -73,6 +73,53 @@ void readpoints(string args)
   readpnezd(trim(args),false);
 }
 
+void maketin_i(string args)
+{
+  int error=0;
+  criteria crit;
+  criterion crit1;
+  crit1.str="";
+  crit1.istopo=true;
+  crit.push_back(crit1); // will later make a point-selection command
+  copytopopoints(crit);
+  try
+  {
+    topopoints.maketin("");
+  }
+  catch(int e)
+  {
+    error=e;
+  }
+  switch (error)
+  {
+    case notri:
+      cout<<"Less than three points selected.\nPlease load a coordinate file or make points."<<endl;
+      break;
+    case samepnts:
+      cout<<"Two points have the same x and y coordinates. Deselect one."<<endl;
+      break;
+    case flattri:
+      cout<<"Couldn't make a TIN. Looks like all the points are collinear."<<endl;
+      break;
+    default:
+      cout<<"Successfully made TIN."<<endl;
+      topopoints.makegrad(0.15);
+      topopoints.maketriangles();
+      topopoints.setgradient(false);
+      topopoints.makeqindex();
+  }
+}
+
+void rasterdraw_i(string args)
+{
+  double w,e,s,n;
+  w=topopoints.dirbound(degtobin(0));
+  s=topopoints.dirbound(degtobin(90));
+  e=-topopoints.dirbound(degtobin(180));
+  n=-topopoints.dirbound(degtobin(270));
+  rasterdraw(topopoints,xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,trim(args));
+}
+
 void help(string args)
 {
   int i;
@@ -98,6 +145,8 @@ int main(int argc, char *argv[])
   commands.push_back(command("setfoot",setfoot_i,"Set foot unit: int'l, US, Indian"));
   commands.push_back(command("setlunit",setlengthunit_i,"Set length unit: m, ft, ch"));
   commands.push_back(command("read",readpoints,"Read coordinate file in PNEZD format: filename"));
+  commands.push_back(command("maketin",maketin_i,"Make triangulated irregular network"));
+  commands.push_back(command("raster",rasterdraw_i,"Draw raster topo: filename.ppm"));
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
   while (cont)

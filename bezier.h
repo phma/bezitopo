@@ -8,6 +8,7 @@
 #define BEZIER_H
 #include <vector>
 #include "cogo.h"
+#include "segment.h"
 #define M_SQRT_3_4 0.86602540378443864676372317
 #define M_SQRT_3 1.73205080756887729352744634
 #define M_SQRT_1_3 0.5773502691896257645091487805
@@ -63,6 +64,7 @@ public:
   int nocubedir; // set to MAXINT if critpoints have not been looked for
   double gradmat[2][3]; // to compute gradient from three partial gradients
   std::vector<xy> critpoints;
+  std::vector<segment> subdiv;
   triangle();
   void setneighbor(triangle *neigh);
   double elevation(xy pnt);
