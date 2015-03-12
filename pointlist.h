@@ -26,9 +26,9 @@ public:
   // the following methods are in tin.cpp
 private:
   void dumpedges();
-  void dumpedges_ps(bool colorfibaster);
   void dumpnext_ps();
 public:
+  void dumpedges_ps(bool colorfibaster);
   void maketin(string filename="",bool colorfibaster=false);
   void makegrad(double corr);
   void maketriangles();

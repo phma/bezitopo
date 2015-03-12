@@ -110,6 +110,28 @@ void maketin_i(string args)
   }
 }
 
+void drawtin_i(string args)
+{
+  double w,e,s,n;
+  if (topopoints.edges.size())
+  {
+    w=topopoints.dirbound(degtobin(0));
+    s=topopoints.dirbound(degtobin(90));
+    e=-topopoints.dirbound(degtobin(180));
+    n=-topopoints.dirbound(degtobin(270));
+    psopen(trim(args).c_str());
+    psprolog();
+    setscale(w,s,n,e);
+    startpage();
+    topopoints.dumpedges_ps(false);
+    endpage();
+    pstrailer();
+    psclose();
+  }
+  else
+    cout<<"No TIN present. Please make a TIN first."<<endl;
+}
+
 void rasterdraw_i(string args)
 {
   double w,e,s,n;
@@ -146,6 +168,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("setlunit",setlengthunit_i,"Set length unit: m, ft, ch"));
   commands.push_back(command("read",readpoints,"Read coordinate file in PNEZD format: filename"));
   commands.push_back(command("maketin",maketin_i,"Make triangulated irregular network"));
+  commands.push_back(command("drawtin",drawtin_i,"Draw TIN: filename.ps"));
   commands.push_back(command("raster",rasterdraw_i,"Draw raster topo: filename.ppm"));
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
