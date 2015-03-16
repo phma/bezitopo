@@ -224,6 +224,19 @@ int point::valence()
   return i;
 }
 
+edge *point::edg(triangle *tri)
+{
+  int i;
+  edge *oldline,*ret;
+  for (i=0,oldline=line,ret=NULL;!ret && (!i || oldline!=line);i++)
+  {
+    if (line->tri(this)==tri)
+      ret=line;
+    line=line->next(this);
+  }
+  return ret;
+}
+
 /*void point::setedge(point *oend)
 {int i;
  edge *oldline;

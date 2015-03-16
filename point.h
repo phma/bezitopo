@@ -12,6 +12,7 @@
 class xyz;
 class point;
 class edge;
+class triangle;
 
 using std::string;
 
@@ -104,6 +105,8 @@ class point: public xyz
     */
  string note;
  edge *line; // a line incident on this point in the TIN. Used to arrange the lines in order around their endpoints.
+ edge *edg(triangle *tri);
+ // tri.a->edg(tri) is the side opposite tri.b
  public:
  xy newgradient,gradient,oldgradient; // may be redone later, but for now a point has one gradient, and type 0 breaklines merely force edges to be in the TIN.
  int valence();

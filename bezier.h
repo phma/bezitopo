@@ -94,6 +94,7 @@ public:
   std::vector<xy> criticalpts_axis();
   void findcriticalpts();
   int pointtype(xy pnt);
+  void subdivide();
 private:
   double vtxeloff(double off);
 };

@@ -253,6 +253,28 @@ void testinvalidintersectionaster()
   cout<<endl;
 }
 
+void testpointedg()
+/* Tests the method point::edg for every triangle in the TIN.
+ * When passed the three corners of a triangle, it should return the three sides.
+ */
+{
+  int i;
+  edge *sa,*sb,*sc;
+  for (i=0;i<topopoints.triangles.size();i++)
+  {
+    sa=topopoints.triangles[i].a->edg(&topopoints.triangles[i]);
+    sb=topopoints.triangles[i].b->edg(&topopoints.triangles[i]);
+    sc=topopoints.triangles[i].c->edg(&topopoints.triangles[i]);
+    if (sa==sb || sb==sc || sc==sa)
+      cout<<"Two sides of triangle "<<i<<" are the same"<<endl;
+    if (sa==NULL || sb==NULL || sc==NULL)
+      cout<<"A side of triangle "<<i<<" is NULL"<<endl;
+    assert(sa!=sb && sb!=sc && sc !=sa && sa!=NULL && sb!=NULL && sc!=NULL);
+    if (sa->a==topopoints.triangles[i].b || sa->b==topopoints.triangles[i].b)
+      cout<<"sa is not opposite b"<<endl;
+  }
+}
+
 void testmaketin123()
 {
   int i;
@@ -1023,6 +1045,7 @@ void testrasterdraw()
   rasterdraw(topopoints,xy(0,0),30,30,30,0,3,"raster.ppm");
   topopoints.setgradient(true);
   rasterdraw(topopoints,xy(0,0),30,30,30,0,3,"rasterflat.ppm");
+  testpointedg();
 }
 
 void test1tri(string triname,int excrits)
@@ -1117,6 +1140,7 @@ void test1tri(string triname,int excrits)
   if (crits.size()!=excrits && excrits>=0)
     cout<<crits.size()<<" critical points found, "<<excrits<<" expected"<<endl;
   assert(crits.size()==excrits || excrits<0);
+  testpointedg();
 }
 
 void test1grad()

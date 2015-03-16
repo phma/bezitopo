@@ -783,3 +783,11 @@ int triangle::pointtype(xy pnt)
  *    If they have the same number of extrema, remove the longer.
  */
 
+void triangle::subdivide()
+{
+  int i,j,n1c,n2c;
+  subdiv.clear();
+  for (i=0;i<critpoints.size();i++)
+    for (j=0;j<i;j++)
+      subdiv.push_back(segment(xyz(critpoints[i],elevation(critpoints[i])),xyz(critpoints[j],elevation(critpoints[j]))));
+}
