@@ -16,6 +16,14 @@
  * I originally wrote the one-argument cornu() function for spiral arcs
  * with one end straight, then wrote the three-argument cornu() function
  * for more general spiral arcs.
+ * 
+ * A spiral arc takes 6 numbers to specify: x, y, and bearing at each end.
+ * Two spiral arcs osculating end-to-end take 8. Given two circles which
+ * are not concentric and do not intersect, there are two spiral arcs that
+ * connect them and osculate them at the ends; they are mirror images in the
+ * line joining the centers. Two circles which do intersect, or which are
+ * traveled in opposite directions, can be joined by two spiral arcs,
+ * specifying the point where they abut osculating.
  */
 
 #include <vector>
