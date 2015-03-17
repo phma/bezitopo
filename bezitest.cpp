@@ -1134,6 +1134,9 @@ void test1tri(string triname,int excrits)
       if (isfinite(topopoints.edges[j].extrema[i]))
 	dot(topopoints.edges[j].critpoint(i));
   }
+  topopoints.triangles[0].subdivide();
+  for (j=0;j<topopoints.triangles[0].subdiv.size();j++)
+    spline(topopoints.triangles[0].subdiv[j].approx3d(1));
   endpage();
   psclose();
   cout<<fname<<endl;

@@ -10,6 +10,7 @@
 #include <iomanip>
 #include "bezier.h"
 #include "angle.h"
+#include "tin.h"
 using namespace std;
 
 const char ctrlpttab[16]=
@@ -775,10 +776,12 @@ int triangle::pointtype(xy pnt)
 
 /* To subdivide a triangle:
  * 1. Find all critical points in the interior and on the edges.
- * 2. Connect each corner to the critical points on the opposite edge.
+ * 2. Connect the interior critical points to each other.
  * 3. Connect each interior critical point to all corners and edge critical points.
- * 4. Sort all these segments by their numbers of extrema and by length.
- * 5. Of any two segments that intersect in ACXBD, ACTBD, or BDTAC manner,
+ * 4. Connect the edge critical points to each other.
+ * 5. Connect each corner to the critical points on the opposite edge.
+ * 6. Sort all these segments by their numbers of extrema and by length.
+ * 7. Of any two segments that intersect in ACXBD, ACTBD, or BDTAC manner,
  *    remove the one with more extrema.
  *    If they have the same number of extrema, remove the longer.
  */
@@ -786,8 +789,56 @@ int triangle::pointtype(xy pnt)
 void triangle::subdivide()
 {
   int i,j,n1c,n2c;
+  xyz cr;
+  edge *sid;
+  vector<xyz> sidea,sideb,sidec;
   subdiv.clear();
+  sid=a->edg(this);
+  for (i=0;i<2;i++)
+    if (isfinite(sid->extrema[i]))
+      sideb.push_back(sid->critpoint(i));
+  sid=b->edg(this);
+  for (i=0;i<2;i++)
+    if (isfinite(sid->extrema[i]))
+      sidec.push_back(sid->critpoint(i));
+  sid=c->edg(this);
+  for (i=0;i<2;i++)
+    if (isfinite(sid->extrema[i]))
+      sidea.push_back(sid->critpoint(i));
   for (i=0;i<critpoints.size();i++)
     for (j=0;j<i;j++)
       subdiv.push_back(segment(xyz(critpoints[i],elevation(critpoints[i])),xyz(critpoints[j],elevation(critpoints[j]))));
+  n2c=subdiv.size();
+  for (i=0;i<critpoints.size();i++)
+  {
+    cr=xyz(critpoints[i],elevation(critpoints[i]));
+    for (j=0;j<sidea.size();j++)
+      subdiv.push_back(segment(cr,sidea[j]));
+    for (j=0;j<sideb.size();j++)
+      subdiv.push_back(segment(cr,sideb[j]));
+    for (j=0;j<sidec.size();j++)
+      subdiv.push_back(segment(cr,sidec[j]));
+    subdiv.push_back(segment(cr,*a));
+    subdiv.push_back(segment(cr,*b));
+    subdiv.push_back(segment(cr,*c));
+  }
+  n1c=subdiv.size();
+  for (i=0;i<sidea.size();i++)
+  {
+    subdiv.push_back(segment(*a,sidea[i]));
+    for (j=0;j<sideb.size();j++)
+      subdiv.push_back(segment(sidea[i],sideb[j]));
+  }
+  for (i=0;i<sideb.size();i++)
+  {
+    subdiv.push_back(segment(*b,sideb[i]));
+    for (j=0;j<sidec.size();j++)
+      subdiv.push_back(segment(sideb[i],sidec[j]));
+  }
+  for (i=0;i<sidec.size();i++)
+  {
+    subdiv.push_back(segment(*c,sidec[i]));
+    for (j=0;j<sidea.size();j++)
+      subdiv.push_back(segment(sidec[i],sidea[j]));
+  }
 }
