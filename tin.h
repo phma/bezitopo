@@ -48,7 +48,7 @@ public:
   void dump(pointlist *topopoints);
   double length();
   segment getsegment();
-  xy critpoint(int i);
+  xyz critpoint(int i);
   void findextrema();
 };
 

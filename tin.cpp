@@ -216,11 +216,9 @@ void edge::findextrema()
       extrema[i]=ext[i];
 }
 
-xy edge::critpoint(int i)
+xyz edge::critpoint(int i)
 {
-  double l;
-  l=length();
-  return (xy(*a)*(l-extrema[i])+xy(*b)*extrema[i])/l;
+  return getsegment().station(extrema[i]);
 }
 
 bool goodcenter(xy a,xy b,xy c,xy d)
