@@ -27,6 +27,11 @@ segment::segment(xyz kra,xyz fam)
   end=fam;
   control1=(2*start.elev()+end.elev())/3;
   control2=(start.elev()+2*end.elev())/3;
+  /* This can result in slight parabolicity.
+   * start=end=        2.916666666666667
+   * control1=control2=2.9166666666666665
+   * setslope(which,0) will fix it.
+   */
 }
 
 segment::segment(xyz kra,double c1,double c2,xyz fam)
@@ -47,10 +52,10 @@ void segment::setslope(int which,double s)
   switch(which)
   {
     case START:
-      control1=(3*start.elev()+s*length())/3;
+      control1=start.elev()+s*length()/3;
       break;
     case END:
-      control2=(3*end.elev()-s*length())/3;
+      control2=end.elev()-s*length()/3;
       break;
   }
 }
@@ -104,7 +109,7 @@ vector<double> segment::vextrema(bool withends)
   vector<double> ret;
   ret=::vextrema(start.elev(),control1,control2,end.elev());
   for (i=ret.size()-1;i>=0 && !withends;i--)
-    if (ret[i]==0 || ret[i]==1)
+    if (ret[i]==0 || ret[i]==1 || ::isnan(ret[i]))
       ret.erase(ret.begin()+i);
   if (ret.size())
     len=length();

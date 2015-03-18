@@ -24,6 +24,14 @@ public:
   segment();
   segment(xyz kra,xyz fam);
   segment(xyz kra,double c1,double c2,xyz fam);
+  xyz getstart()
+  {
+    return start;
+  }
+  xyz getend()
+  {
+    return end;
+  }
   virtual double length();
   std::vector<double> vextrema(bool withends);
   void setslope(int which,double s);

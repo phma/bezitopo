@@ -133,6 +133,7 @@ void triangle::flatten()
   ctrl[6]=(2*c->z+b->z)/3;
   nocubedir=INT_MAX;
   sarea=area();
+  setgradmat();
 }
 
 void triangle::setgradient(xy pnt,xy grad)
@@ -160,6 +161,7 @@ void triangle::setgradient(xy pnt,xy grad)
   }
   nocubedir=INT_MAX;
   sarea=area();
+  setgradmat();
 }
 
 double triangle::ctrlpt(xy pnt1,xy pnt2)
@@ -790,8 +792,11 @@ void triangle::subdivide()
 {
   int i,j,n1c,n2c;
   xyz cr;
+  xy dir;
   edge *sid;
   vector<xyz> sidea,sideb,sidec;
+  vector<int> next;
+  vector<double> lens;
   subdiv.clear();
   sid=a->edg(this);
   for (i=0;i<2;i++)
@@ -840,5 +845,20 @@ void triangle::subdivide()
     subdiv.push_back(segment(*c,sidec[i]));
     for (j=0;j<sidea.size();j++)
       subdiv.push_back(segment(sidec[i],sidea[j]));
+  }
+  for (i=0;i<subdiv.size();i++)
+  {
+    dir=cossin(subdiv[i].chordbearing());
+    if (i<n2c)
+      subdiv[i].setslope(START,0);
+    else
+      subdiv[i].setslope(START,dot(gradient(subdiv[i].getstart()),dir));
+    if (i<n1c)
+      subdiv[i].setslope(END,0);
+    else
+      subdiv[i].setslope(END,dot(gradient(subdiv[i].getend()),dir));
+    next.push_back(subdiv[i].vextrema(false).size());
+    lens.push_back(subdiv[i].length());
+    cout<<i<<' '<<(i<n2c)<<' '<<(i<n1c)<<' '<<next[i]<<' '<<lens[i]<<endl;
   }
 }
