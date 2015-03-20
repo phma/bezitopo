@@ -790,7 +790,7 @@ int triangle::pointtype(xy pnt)
 
 void triangle::subdivide()
 {
-  int i,j,n1c,n2c;
+  int h,i,j,n1c,n2c;
   xyz cr;
   xy dir;
   edge *sid;
@@ -859,6 +859,15 @@ void triangle::subdivide()
       subdiv[i].setslope(END,dot(gradient(subdiv[i].getend()),dir));
     next.push_back(subdiv[i].vextrema(false).size());
     lens.push_back(subdiv[i].length());
-    cout<<i<<' '<<(i<n2c)<<' '<<(i<n1c)<<' '<<next[i]<<' '<<lens[i]<<endl;
   }
+  for (h=31;h;h/=2) // Shell sort. The maximum possible number of lines is 60.
+    for (i=h;i<subdiv.size();i++)
+      for (j=i-h;j>=0 && (next[j]>next[j+h] || (next[j]==next[j+h] && lens[j]>lens[j+h]));j-=h)
+      {
+	swap(lens[j],lens[j+h]);
+	swap(next[j],next[j+h]);
+	swap(subdiv[j],subdiv[j+h]);
+      }
+  for (i=0;i<subdiv.size();i++)
+    cout<<i<<' '<<next[i]<<' '<<lens[i]<<endl;
 }
