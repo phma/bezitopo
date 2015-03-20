@@ -17,7 +17,7 @@ extern FILE *randfil;
 double area3(xy a,xy b,xy c);
 xy intersection (xy a,xy c,xy b,xy d);
 //Intersection of lines ab and cd.
-int intersection_type(xy a,xy c,xy b,xy d);
+inttype intersection_type(xy a,xy c,xy b,xy d);
 /* NOINT  don't intersect
    ACXBD  intersection is in the midst of both AC and BD
    BDTAC  one end of BD is in the midst of AC

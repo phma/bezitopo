@@ -104,14 +104,14 @@ int intstype (xy a,xy c,xy b,xy d,double &maxarea,double &maxcoord)
  return (27*sign(A)+9*sign(C)+3*sign(B)+sign(D));
  }
 
-int intersection_type(xy a,xy c,xy b,xy d)
+inttype intersection_type(xy a,xy c,xy b,xy d)
 {
   double maxarea,maxcoord;
   int itype=intstype(a,c,b,d,maxarea,maxcoord)+40;
   itype=intstable[itype/27][itype%27/9][itype%9/3][itype%3];
   if (itype==IMPOS && maxarea<maxcoord*maxcoord*1e-15)
     itype=COLIN;
-  return itype;
+  return (inttype)itype;
 }
 
 double pldist(xy a,xy b,xy c)

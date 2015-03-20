@@ -181,3 +181,16 @@ bezier3d segment::approx3d(double precision)
   }
   return ret;
 }
+
+xy intersection (segment seg1,segment seg2)
+/* This might should return a vector of xyz,
+ * and will need versions for arc and maybe spiralarc.
+ */
+{
+  return intersection(seg1.start,seg1.end,seg2.start,seg2.end);
+}
+
+inttype intersection_type(segment seg1,segment seg2)
+{
+  return intersection_type(seg1.start,seg1.end,seg2.start,seg2.end);
+}

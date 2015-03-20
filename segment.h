@@ -12,6 +12,7 @@
 #include "point.h"
 #include "angle.h"
 #include "bezier3d.h"
+#include "cogo.h"
 #define START 1
 #define END 2
 
@@ -84,5 +85,8 @@ public:
   xyz midpoint();
   virtual void split(double along,segment &a,segment &b);
   bezier3d approx3d(double precision);
+  friend xy intersection (segment seg1,segment seg2);
+  friend inttype intersection_type(segment seg1,segment seg2);
 };
+
 #endif

@@ -791,6 +791,8 @@ int triangle::pointtype(xy pnt)
 void triangle::subdivide()
 {
   int h,i,j,n1c,n2c;
+  inttype itype;
+  bool del;
   xyz cr;
   xy dir;
   edge *sid;
@@ -868,6 +870,34 @@ void triangle::subdivide()
 	swap(next[j],next[j+h]);
 	swap(subdiv[j],subdiv[j+h]);
       }
+  for (i=0;i<subdiv.size();i++)
+    cout<<i<<' '<<next[i]<<' '<<lens[i]<<endl;
+  for (i=subdiv.size()-1;i>0;i--)
+    for (del=j=0;j<i && !del;j++)
+    {
+      itype=intersection_type(subdiv[i],subdiv[j]);
+      switch (itype)
+      {
+	case NOINT:
+	case COINC: // can't happen
+	case COLIN: // may need special treatment
+	case IMPOS:
+	case ACVBD:
+	  break;
+	case ACTBD: // This case is unusual and would require deleting subdiv[j].
+	  break;    // I'm ignoring it for now.
+	case BDTAC:
+	case ACXBD:
+	  del=true;
+	  break;
+      }
+      if (del)
+      {
+	subdiv.erase(subdiv.begin()+i);
+	next.erase(next.begin()+i);
+	lens.erase(lens.begin()+i);
+      }
+    }
   for (i=0;i<subdiv.size();i++)
     cout<<i<<' '<<next[i]<<' '<<lens[i]<<endl;
 }
