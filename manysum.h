@@ -21,6 +21,7 @@ private:
   std::map<int,double> bucket;
 public:
   void clear();
+  void prune();
   double total();
   void dump();
   manysum& operator+=(double x);

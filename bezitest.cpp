@@ -14,6 +14,7 @@
 #include <iomanip>
 #include <cstdlib>
 #include <csignal>
+#include <cfloat>
 #include "point.h"
 #include "cogo.h"
 #include "bezitopo.h"
@@ -435,6 +436,7 @@ void testmanysum()
   manysum ms;
   int i,j;
   double x,naiveforwardsum,forwardsum,naivebackwardsum,backwardsum;
+  cout<<"manysum"<<endl;
   ms.clear();
   for (naiveforwardsum=i=0;i>-7;i--)
   {
@@ -445,8 +447,8 @@ void testmanysum()
       ms+=x;
     }
   }
+  ms.prune();
   forwardsum=ms.total();
-  ms.dump();
   ms.clear();
   for (naivebackwardsum=0,i=-6;i<1;i++)
   {
@@ -457,9 +459,30 @@ void testmanysum()
       ms+=x;
     }
   }
+  ms.prune();
   backwardsum=ms.total();
-  ms.dump();
   cout<<setprecision(18)<<naiveforwardsum<<' '<<forwardsum<<' '<<naivebackwardsum<<' '<<backwardsum<<endl;
+  assert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
+  ms.clear();
+  for (naiveforwardsum=i=0;i>-0x360000;i--)
+  {
+    x=exp(i/65536.);
+    naiveforwardsum+=x;
+    ms+=x;
+  }
+  ms.prune();
+  forwardsum=ms.total();
+  ms.clear();
+  for (naivebackwardsum=0,i=-0x35ffff;i<1;i++)
+  {
+    x=exp(i/65536.);
+    naivebackwardsum+=x;
+    ms+=x;
+  }
+  ms.prune();
+  backwardsum=ms.total();
+  cout<<setprecision(18)<<naiveforwardsum<<' '<<forwardsum<<' '<<naivebackwardsum<<' '<<backwardsum<<endl;
+  assert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
 }
 
 void testvcurve()
