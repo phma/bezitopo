@@ -14,3 +14,14 @@
  * which does not happen when computing volumes, as positive and negative
  * volumes are added separately so that compaction of dirt can be computed.
  */
+
+class manysum
+{
+private:
+  std::map<int,double> bucket;
+public:
+  void clear();
+  double total();
+  void dump();
+  manysum& operator+=(double x);
+};

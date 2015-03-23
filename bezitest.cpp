@@ -37,6 +37,7 @@
 #include "polyline.h"
 #include "bezier3d.h"
 #include "closure.h"
+#include "manysum.h"
 
 #define psoutput false
 // affects only maketin
@@ -427,6 +428,38 @@ void testmaketinellipse()
     totallength+=topopoints.edges[i].length();
   printf("ellipse edges total length %f\n",totallength);
   assert(fabs(totallength-1329.4675)<0.001);
+}
+
+void testmanysum()
+{
+  manysum ms;
+  int i,j;
+  double x,naiveforwardsum,forwardsum,naivebackwardsum,backwardsum;
+  ms.clear();
+  for (naiveforwardsum=i=0;i>-7;i--)
+  {
+    x=pow(1000,i);
+    for (j=0;j<1000000;j++)
+    {
+      naiveforwardsum+=x;
+      ms+=x;
+    }
+  }
+  forwardsum=ms.total();
+  ms.dump();
+  ms.clear();
+  for (naivebackwardsum=0,i=-6;i<1;i++)
+  {
+    x=pow(1000,i);
+    for (j=0;j<1000000;j++)
+    {
+      naivebackwardsum+=x;
+      ms+=x;
+    }
+  }
+  backwardsum=ms.total();
+  ms.dump();
+  cout<<setprecision(18)<<naiveforwardsum<<' '<<forwardsum<<' '<<naivebackwardsum<<' '<<backwardsum<<endl;
 }
 
 void testvcurve()
@@ -1721,6 +1754,7 @@ int main(int argc, char *argv[])
   testmaketinlozenge();
   testmaketinring();
   testmaketinellipse();
+  testmanysum();
   testvcurve();
   testintegertrig();
   testsegment();
