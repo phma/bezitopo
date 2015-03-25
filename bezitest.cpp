@@ -1254,7 +1254,8 @@ void trianglecontours()
  */
 {
   int i,j;
-  unsigned char bytes[9];
+  unsigned char bytes[9]=
+  {0xd3,0x06,0xed,0xc9,0x6e,0x91,0xf8,0xad,0xcc};
   string fname;
   xy tilt;
   topopoints.clear();
@@ -1264,7 +1265,7 @@ void trianglecontours()
   fname="tri";
   for (j=0;j<9;j++)
   {
-    bytes[j]=rng.ucrandom();
+    //bytes[j]=rng.ucrandom();
     fname+=hexdig[bytes[j]>>4];
     fname+=hexdig[bytes[j]&15];
   }

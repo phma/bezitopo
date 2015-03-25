@@ -851,11 +851,11 @@ void triangle::subdivide()
   for (i=0;i<subdiv.size();i++)
   {
     dir=cossin(subdiv[i].chordbearing());
-    if (i<n2c)
+    if (i<n1c)
       subdiv[i].setslope(START,0);
     else
       subdiv[i].setslope(START,dot(gradient(subdiv[i].getstart()),dir));
-    if (i<n1c)
+    if (i<n2c)
       subdiv[i].setslope(END,0);
     else
       subdiv[i].setslope(END,dot(gradient(subdiv[i].getend()),dir));
@@ -871,7 +871,7 @@ void triangle::subdivide()
 	swap(subdiv[j],subdiv[j+h]);
       }
   for (i=0;i<subdiv.size();i++)
-    cout<<i<<' '<<next[i]<<' '<<lens[i]<<endl;
+    cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
   for (i=subdiv.size()-1;i>0;i--)
     for (del=j=0;j<i && !del;j++)
     {
@@ -899,5 +899,5 @@ void triangle::subdivide()
       }
     }
   for (i=0;i<subdiv.size();i++)
-    cout<<i<<' '<<next[i]<<' '<<lens[i]<<endl;
+    cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
 }
