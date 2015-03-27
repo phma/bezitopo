@@ -33,6 +33,7 @@ public:
   {
     return end;
   }
+  virtual bool operator==(const segment b) const;
   virtual double length();
   std::vector<double> vextrema(bool withends);
   void setslope(int which,double s);

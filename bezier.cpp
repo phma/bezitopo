@@ -799,6 +799,7 @@ void triangle::subdivide()
   vector<xyz> sidea,sideb,sidec;
   vector<int> next;
   vector<double> lens;
+  vector<segment> subdivcopy;
   subdiv.clear();
   sid=a->edg(this);
   for (i=0;i<2;i++)
@@ -872,10 +873,12 @@ void triangle::subdivide()
       }
   for (i=0;i<subdiv.size();i++)
     cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
+  subdivcopy=subdiv;
   for (i=subdiv.size()-1;i>0;i--)
     for (del=j=0;j<i && !del;j++)
     {
       itype=intersection_type(subdiv[i],subdiv[j]);
+      cout<<i<<' '<<j<<' '<<inttype_str(itype)<<endl;
       switch (itype)
       {
 	case NOINT:
@@ -898,6 +901,21 @@ void triangle::subdivide()
 	lens.erase(lens.begin()+i);
       }
     }
+  for (i=0;i<subdivcopy.size();i++)
+  {
+    for (j=0;j<subdiv.size();j++)
+    {
+      itype=intersection_type(subdivcopy[i],subdiv[j]);
+      if (itype==ACXBD || (subdivcopy[i]==subdiv[j]))
+	j=2*subdivcopy.size();
+    }
+    if (j==subdiv.size())
+    {
+      subdiv.push_back(subdivcopy[i]);
+      next.push_back(subdivcopy[i].vextrema(false).size());
+      lens.push_back(subdivcopy[i].length());
+    }
+  }
   for (i=0;i<subdiv.size();i++)
     cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
 }

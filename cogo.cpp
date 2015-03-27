@@ -161,3 +161,10 @@ bool delaunay(xy a,xy c,xy b,xy d)
         return dista*distc<=distb*distd;
      }
  }
+
+char inttstr[]="NOINT\0ACXBD\0BDTAC\0ACTBD\0ACVBD\0COINC\0COLIN\0IMPOS";
+
+char *inttype_str(inttype i)
+{
+  return inttstr+6*i;
+}

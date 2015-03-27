@@ -34,5 +34,6 @@ bool delaunay(xy a,xy c,xy b,xy d);
 //If false, the edge should be flipped to bd.
 xy rand2p(xy a,xy b);
 /* A random point in the circle with diameter ab. */
+char *inttype_str(inttype i);
 
 #endif

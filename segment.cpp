@@ -42,6 +42,11 @@ segment::segment(xyz kra,double c1,double c2,xyz fam)
   control2=c2;
 }
 
+bool segment::operator==(const segment b) const
+{
+  return start==b.start && end==b.end && control1==b.control1 && control2==b.control2;
+}
+
 double segment::length()
 {
   return dist(xy(start),xy(end));
