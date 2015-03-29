@@ -799,7 +799,12 @@ void triangle::subdivide()
   vector<xyz> sidea,sideb,sidec;
   vector<int> next;
   vector<double> lens;
+  vector<xy> morecritpoints;
+  vector<int> critdir;
   vector<segment> subdivcopy;
+  morecritpoints=critpoints;
+  for (i=0;i<critpoints.size();i++)
+    critdir.push_back(INT_MAX);
   subdiv.clear();
   sid=a->edg(this);
   for (i=0;i<2;i++)
@@ -852,11 +857,17 @@ void triangle::subdivide()
   for (i=0;i<subdiv.size();i++)
   {
     dir=cossin(subdiv[i].chordbearing());
-    if (i<n1c)
+    for (j=0;j<morecritpoints.size();j++)
+      if (xy(subdiv[i].getstart())==morecritpoints[j])
+	break;
+    if (j<morecritpoints.size() && (critdir[j]==INT_MAX || ((critdir[j]-subdiv[i].chordbearing()+1)&(DEG180-1))<3))
       subdiv[i].setslope(START,0);
     else
       subdiv[i].setslope(START,dot(gradient(subdiv[i].getstart()),dir));
-    if (i<n2c)
+    for (j=0;j<morecritpoints.size();j++)
+      if (xy(subdiv[i].getend())==morecritpoints[j])
+	break;
+    if (j<morecritpoints.size() && (critdir[j]==INT_MAX || ((critdir[j]-subdiv[i].chordbearing()+1)&(DEG180-1))<3))
       subdiv[i].setslope(END,0);
     else
       subdiv[i].setslope(END,dot(gradient(subdiv[i].getend()),dir));
