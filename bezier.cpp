@@ -790,143 +790,215 @@ int triangle::pointtype(xy pnt)
 
 void triangle::subdivide()
 {
-  int h,i,j,n1c,n2c;
+  int h,i,j,n,newcrit,round;
   inttype itype;
   bool del;
   xyz cr;
   xy dir;
   edge *sid;
+  segment newseg0,newseg1;
   vector<xyz> sidea,sideb,sidec;
   vector<int> next;
-  vector<double> lens;
+  vector<double> lens,vex;
   vector<xy> morecritpoints;
   vector<int> critdir;
   vector<segment> subdivcopy;
   morecritpoints=critpoints;
   for (i=0;i<critpoints.size();i++)
     critdir.push_back(INT_MAX);
-  subdiv.clear();
-  sid=a->edg(this);
-  for (i=0;i<2;i++)
-    if (isfinite(sid->extrema[i]))
-      sideb.push_back(sid->critpoint(i));
-  sid=b->edg(this);
-  for (i=0;i<2;i++)
-    if (isfinite(sid->extrema[i]))
-      sidec.push_back(sid->critpoint(i));
-  sid=c->edg(this);
-  for (i=0;i<2;i++)
-    if (isfinite(sid->extrema[i]))
-      sidea.push_back(sid->critpoint(i));
-  for (i=0;i<critpoints.size();i++)
-    for (j=0;j<i;j++)
-      subdiv.push_back(segment(xyz(critpoints[i],elevation(critpoints[i])),xyz(critpoints[j],elevation(critpoints[j]))));
-  n2c=subdiv.size();
-  for (i=0;i<critpoints.size();i++)
+  round=0;
+  do
   {
-    cr=xyz(critpoints[i],elevation(critpoints[i]));
-    for (j=0;j<sidea.size();j++)
-      subdiv.push_back(segment(cr,sidea[j]));
-    for (j=0;j<sideb.size();j++)
-      subdiv.push_back(segment(cr,sideb[j]));
-    for (j=0;j<sidec.size();j++)
-      subdiv.push_back(segment(cr,sidec[j]));
-    subdiv.push_back(segment(cr,*a));
-    subdiv.push_back(segment(cr,*b));
-    subdiv.push_back(segment(cr,*c));
-  }
-  n1c=subdiv.size();
-  for (i=0;i<sidea.size();i++)
-  {
-    subdiv.push_back(segment(*a,sidea[i]));
-    for (j=0;j<sideb.size();j++)
-      subdiv.push_back(segment(sidea[i],sideb[j]));
-  }
-  for (i=0;i<sideb.size();i++)
-  {
-    subdiv.push_back(segment(*b,sideb[i]));
-    for (j=0;j<sidec.size();j++)
-      subdiv.push_back(segment(sideb[i],sidec[j]));
-  }
-  for (i=0;i<sidec.size();i++)
-  {
-    subdiv.push_back(segment(*c,sidec[i]));
-    for (j=0;j<sidea.size();j++)
-      subdiv.push_back(segment(sidec[i],sidea[j]));
-  }
-  for (i=0;i<subdiv.size();i++)
-  {
-    dir=cossin(subdiv[i].chordbearing());
-    for (j=0;j<morecritpoints.size();j++)
-      if (xy(subdiv[i].getstart())==morecritpoints[j])
-	break;
-    if (j<morecritpoints.size() && (critdir[j]==INT_MAX || ((critdir[j]-subdiv[i].chordbearing()+1)&(DEG180-1))<3))
-      subdiv[i].setslope(START,0);
-    else
-      subdiv[i].setslope(START,dot(gradient(subdiv[i].getstart()),dir));
-    for (j=0;j<morecritpoints.size();j++)
-      if (xy(subdiv[i].getend())==morecritpoints[j])
-	break;
-    if (j<morecritpoints.size() && (critdir[j]==INT_MAX || ((critdir[j]-subdiv[i].chordbearing()+1)&(DEG180-1))<3))
-      subdiv[i].setslope(END,0);
-    else
-      subdiv[i].setslope(END,dot(gradient(subdiv[i].getend()),dir));
-    next.push_back(subdiv[i].vextrema(false).size());
-    lens.push_back(subdiv[i].length());
-  }
-  for (h=31;h;h/=2) // Shell sort. The maximum possible number of lines is 60.
-    for (i=h;i<subdiv.size();i++)
-      for (j=i-h;j>=0 && (next[j]>next[j+h] || (next[j]==next[j+h] && lens[j]>lens[j+h]));j-=h)
-      {
-	swap(lens[j],lens[j+h]);
-	swap(next[j],next[j+h]);
-	swap(subdiv[j],subdiv[j+h]);
-      }
-  for (i=0;i<subdiv.size();i++)
-    cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
-  subdivcopy=subdiv;
-  for (i=subdiv.size()-1;i>0;i--)
-    for (del=j=0;j<i && !del;j++)
+    subdiv.clear();
+    sid=a->edg(this);
+    for (i=0;i<2;i++)
+      if (isfinite(sid->extrema[i]))
+	sideb.push_back(sid->critpoint(i));
+    sid=b->edg(this);
+    for (i=0;i<2;i++)
+      if (isfinite(sid->extrema[i]))
+	sidec.push_back(sid->critpoint(i));
+    sid=c->edg(this);
+    for (i=0;i<2;i++)
+      if (isfinite(sid->extrema[i]))
+	sidea.push_back(sid->critpoint(i));
+    for (i=0;i<morecritpoints.size();i++)
+      for (j=0;j<i;j++)
+	subdiv.push_back(segment(xyz(morecritpoints[i],elevation(morecritpoints[i])),xyz(morecritpoints[j],elevation(morecritpoints[j]))));
+    for (i=0;i<morecritpoints.size();i++)
     {
-      itype=intersection_type(subdiv[i],subdiv[j]);
-      cout<<i<<' '<<j<<' '<<inttype_str(itype)<<endl;
-      switch (itype)
-      {
-	case NOINT:
-	case COINC: // can't happen
-	case COLIN: // may need special treatment
-	case IMPOS:
-	case ACVBD:
+      cr=xyz(morecritpoints[i],elevation(morecritpoints[i]));
+      for (j=0;j<sidea.size();j++)
+	subdiv.push_back(segment(cr,sidea[j]));
+      for (j=0;j<sideb.size();j++)
+	subdiv.push_back(segment(cr,sideb[j]));
+      for (j=0;j<sidec.size();j++)
+	subdiv.push_back(segment(cr,sidec[j]));
+      subdiv.push_back(segment(cr,*a));
+      subdiv.push_back(segment(cr,*b));
+      subdiv.push_back(segment(cr,*c));
+    }
+    for (i=0;i<sidea.size();i++)
+    {
+      subdiv.push_back(segment(*a,sidea[i]));
+      for (j=0;j<sideb.size();j++)
+	subdiv.push_back(segment(sidea[i],sideb[j]));
+    }
+    for (i=0;i<sideb.size();i++)
+    {
+      subdiv.push_back(segment(*b,sideb[i]));
+      for (j=0;j<sidec.size();j++)
+	subdiv.push_back(segment(sideb[i],sidec[j]));
+    }
+    for (i=0;i<sidec.size();i++)
+    {
+      subdiv.push_back(segment(*c,sidec[i]));
+      for (j=0;j<sidea.size();j++)
+	subdiv.push_back(segment(sidec[i],sidea[j]));
+    }
+    for (i=0;i<subdiv.size();i++)
+    {
+      dir=cossin(subdiv[i].chordbearing());
+      for (j=0;j<morecritpoints.size();j++)
+	if (xy(subdiv[i].getstart())==morecritpoints[j])
 	  break;
-	case ACTBD: // This case is unusual and would require deleting subdiv[j].
-	  break;    // I'm ignoring it for now.
-	case BDTAC:
-	case ACXBD:
-	  del=true;
+      if (j<morecritpoints.size() && (critdir[j]==INT_MAX || ((critdir[j]-subdiv[i].chordbearing()+1)&(DEG180-1))<3))
+	subdiv[i].setslope(START,0);
+      else
+	subdiv[i].setslope(START,dot(gradient(subdiv[i].getstart()),dir));
+      for (j=0;j<morecritpoints.size();j++)
+	if (xy(subdiv[i].getend())==morecritpoints[j])
 	  break;
-      }
-      if (del)
+      if (j<morecritpoints.size() && (critdir[j]==INT_MAX || ((critdir[j]-subdiv[i].chordbearing()+1)&(DEG180-1))<3))
+	subdiv[i].setslope(END,0);
+      else
+	subdiv[i].setslope(END,dot(gradient(subdiv[i].getend()),dir));
+      next.push_back(subdiv[i].vextrema(false).size());
+      lens.push_back(subdiv[i].length());
+    }
+    for (h=31;h;h/=2) // Shell sort. The maximum possible number of lines is 60.
+      for (i=h;i<subdiv.size();i++)
+	for (j=i-h;j>=0 && (next[j]>next[j+h] || (next[j]==next[j+h] && lens[j]>lens[j+h]));j-=h)
+	{
+	  swap(lens[j],lens[j+h]);
+	  swap(next[j],next[j+h]);
+	  swap(subdiv[j],subdiv[j+h]);
+	}
+    for (i=0;i<subdiv.size();i++)
+      cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
+    subdivcopy=subdiv;
+    for (i=subdiv.size()-1;i>0;i--)
+      for (del=j=0;j<i && !del;j++)
       {
-	subdiv.erase(subdiv.begin()+i);
-	next.erase(next.begin()+i);
-	lens.erase(lens.begin()+i);
+	itype=intersection_type(subdiv[i],subdiv[j]);
+	cout<<i<<' '<<j<<' '<<inttype_str(itype)<<endl;
+	switch (itype)
+	{
+	  case NOINT:
+	  case COINC: // can't happen
+	  case COLIN: // may need special treatment
+	  case IMPOS:
+	  case ACVBD:
+	    break;
+	  case ACTBD: // This case is unusual and would require deleting subdiv[j].
+	    break;    // I'm ignoring it for now.
+	  case BDTAC:
+	  case ACXBD:
+	    del=true;
+	    break;
+	}
+	if (del)
+	{
+	  subdiv.erase(subdiv.begin()+i);
+	  next.erase(next.begin()+i);
+	  lens.erase(lens.begin()+i);
+	}
+      }
+    for (i=0;i<subdivcopy.size();i++)
+    {
+      for (j=0;j<subdiv.size();j++)
+      {
+	itype=intersection_type(subdivcopy[i],subdiv[j]);
+	if (itype==ACXBD || (subdivcopy[i]==subdiv[j]))
+	  j=2*subdivcopy.size();
+      }
+      if (j==subdiv.size())
+      {
+	subdiv.push_back(subdivcopy[i]);
+	next.push_back(subdivcopy[i].vextrema(false).size());
+	lens.push_back(subdivcopy[i].length());
       }
     }
-  for (i=0;i<subdivcopy.size();i++)
-  {
-    for (j=0;j<subdiv.size();j++)
+    n=subdiv.size();
+    for (i=newcrit=0;i<n;i++)
     {
-      itype=intersection_type(subdivcopy[i],subdiv[j]);
-      if (itype==ACXBD || (subdivcopy[i]==subdiv[j]))
-	j=2*subdivcopy.size();
+      vex=subdiv[i].vextrema(false);
+      if (vex.size())
+      {
+	++newcrit;
+	morecritpoints.push_back(subdiv[i].station(vex[0]));
+	critdir.push_back(subdiv[i].chordbearing());
+	subdiv[i].split(vex[0],newseg0,newseg1);
+	subdiv[i]=newseg0;
+	subdiv.push_back(newseg1);
+      }
     }
-    if (j==subdiv.size())
+    subdivcopy.clear();
+    for (i=critpoints.size();i<morecritpoints.size();i++)
     {
-      subdiv.push_back(subdivcopy[i]);
-      next.push_back(subdivcopy[i].vextrema(false).size());
-      lens.push_back(subdivcopy[i].length());
+      cr=xyz(morecritpoints[i],elevation(morecritpoints[i]));
+      for (j=0;j<i;j++)
+      {
+        newseg0=segment(cr,xyz(morecritpoints[j],elevation(morecritpoints[j])));
+	if (((critdir[i]-newseg0.chordbearing()+1)&(DEG180-1))>2)
+	  subdivcopy.push_back(newseg0);
+      }
+      for (j=0;j<sidea.size();j++)
+      {
+        newseg0=segment(cr,sidea[j]);
+	if (((critdir[i]-newseg0.chordbearing()+1)&(DEG180-1))>2)
+	  subdivcopy.push_back(newseg0);
+      }
+      for (j=0;j<sideb.size();j++)
+      {
+        newseg0=segment(cr,sideb[j]);
+	if (((critdir[i]-newseg0.chordbearing()+1)&(DEG180-1))>2)
+	  subdivcopy.push_back(newseg0);
+      }
+      for (j=0;j<sidec.size();j++)
+      {
+        newseg0=segment(cr,sidec[j]);
+	if (((critdir[i]-newseg0.chordbearing()+1)&(DEG180-1))>2)
+	  subdivcopy.push_back(newseg0);
+      }
+      newseg0=segment(cr,*a);
+      if (((critdir[i]-newseg0.chordbearing()+1)&(DEG180-1))>2)
+	subdivcopy.push_back(newseg0);
+      newseg0=segment(cr,*b);
+      if (((critdir[i]-newseg0.chordbearing()+1)&(DEG180-1))>2)
+	subdivcopy.push_back(newseg0);
+      newseg0=segment(cr,*c);
+      if (((critdir[i]-newseg0.chordbearing()+1)&(DEG180-1))>2)
+	subdivcopy.push_back(newseg0);
+    for (i=0;i<subdivcopy.size();i++)
+    {
+      for (j=0;j<subdiv.size();j++)
+      {
+	itype=intersection_type(subdivcopy[i],subdiv[j]);
+	if (itype==ACXBD || (subdivcopy[i]==subdiv[j]))
+	  j=2*subdiv.size()+1;
+      }
+      if (j==subdiv.size())
+      {
+	subdiv.push_back(subdivcopy[i]);
+	next.push_back(subdivcopy[i].vextrema(false).size());
+	lens.push_back(subdivcopy[i].length());
+      }
     }
+    }
+    round++;
   }
+  while (newcrit>0 && round<1);
   for (i=0;i<subdiv.size();i++)
     cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
 }

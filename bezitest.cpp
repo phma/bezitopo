@@ -1279,14 +1279,14 @@ void trianglecontours()
   topopoints.setgradient(true);
   for (j=0;j<3;j++)
     topopoints.points[j+1].gradient=xy(topopoints.elevation(xy(1,0))-topopoints.elevation(xy(0,0)),topopoints.elevation(xy(0,1))-topopoints.elevation(xy(0,0)));
-  //test1tri(fname,0);
+  test1tri(fname,0);
   fname="monkeysaddle";
   for (j=0;j<3;j++)
   {
     topopoints.points[j+1].setelev(0);
     topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10;
   }
-  //test1tri(fname,1);
+  test1tri(fname,1);
   fname="tilted";
   tilt=(xy(topopoints.points[1])-xy(topopoints.points[3]))/1000;
   /* This triangle has two saddle points on a horizontal line in the no-cube direction.
@@ -1298,7 +1298,7 @@ void trianglecontours()
     topopoints.points[j+1].setelev(dot(tilt,xy(topopoints.points[j+1])));
     topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10+tilt;
   }
-  //test1tri(fname,2);
+  test1tri(fname,2);
   fname="tolted";
   tilt=(xy(topopoints.points[3])-xy(topopoints.points[2]))/1000;
   /* This is the same as above, except for tilting in a different direction
@@ -1309,14 +1309,14 @@ void trianglecontours()
     topopoints.points[j+1].setelev(dot(tilt,xy(topopoints.points[j+1])));
     topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10+tilt;
   }
-  //test1tri(fname,2);
+  test1tri(fname,2);
   fname="table";
   for (j=0;j<3;j++)
   {
     topopoints.points[j+1].setelev(M_PI);
     topopoints.points[j+1].gradient=xy(0,0);
   }
-  //test1tri(fname,0);
+  test1tri(fname,0);
   i=topopoints.triangles[0].pointtype(xy(0,0));
   fname="floor";
   for (j=0;j<3;j++)
@@ -1324,7 +1324,7 @@ void trianglecontours()
     topopoints.points[j+1].setelev(0);
     topopoints.points[j+1].gradient=xy(0,0);
   }
-  //test1tri(fname,0);
+  test1tri(fname,0);
 }
 
 void testgrad()
