@@ -776,6 +776,35 @@ int triangle::pointtype(xy pnt)
   return i;
 }
 
+void triangle::setsubslopes(segment &s)
+/* Sets the slopes of a segment that subdivides a triangle.
+ * If one end is a primary critical point, its slope is set to 0.
+ * If one end is a secondary critical point (a max or min found on a subdividing
+ * segment), the slope is 0 iff the segment is part of the segment where
+ * the point was found. Those segments are produced by splitting the original
+ * segment; the end slope may not be exactly 0, but there is no need to call
+ * this method. So this method ignores secondary critical points.
+ */
+{
+  int i;
+  xy dir;
+  dir=cossin(subdiv[i].chordbearing());
+  for (i=0;i<critpoints.size();i++)
+    if (xy(s.getstart())==critpoints[i])
+      break;
+  if (i<critpoints.size())
+    s.setslope(START,0);
+  else
+    s.setslope(START,dot(gradient(s.getstart()),dir));
+  for (i=0;i<critpoints.size();i++)
+    if (xy(s.getend())==critpoints[i])
+      break;
+  if (i<critpoints.size())
+    s.setslope(END,0);
+  else
+    s.setslope(END,dot(gradient(s.getend()),dir));
+}
+
 /* To subdivide a triangle:
  * 1. Find all critical points in the interior and on the edges.
  * 2. Connect the interior critical points to each other.

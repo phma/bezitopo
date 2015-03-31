@@ -97,6 +97,7 @@ public:
   void subdivide();
 private:
   double vtxeloff(double off);
+  void setsubslopes(segment &s);
 };
 
 double deriv0(std::vector<double> xsect);
