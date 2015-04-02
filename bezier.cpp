@@ -788,7 +788,7 @@ void triangle::setsubslopes(segment &s)
 {
   int i;
   xy dir;
-  dir=cossin(subdiv[i].chordbearing());
+  dir=cossin(s.chordbearing());
   for (i=0;i<critpoints.size();i++)
     if (xy(s.getstart())==critpoints[i])
       break;
@@ -888,20 +888,7 @@ void triangle::subdivide()
     for (i=0;i<subdiv.size();i++)
     {
       dir=cossin(subdiv[i].chordbearing());
-      for (j=0;j<morecritpoints.size();j++)
-	if (xy(subdiv[i].getstart())==morecritpoints[j])
-	  break;
-      if (j<morecritpoints.size() && (critdir[j]==INT_MAX || ((critdir[j]-subdiv[i].chordbearing()+1)&(DEG180-1))<3))
-	subdiv[i].setslope(START,0);
-      else
-	subdiv[i].setslope(START,dot(gradient(subdiv[i].getstart()),dir));
-      for (j=0;j<morecritpoints.size();j++)
-	if (xy(subdiv[i].getend())==morecritpoints[j])
-	  break;
-      if (j<morecritpoints.size() && (critdir[j]==INT_MAX || ((critdir[j]-subdiv[i].chordbearing()+1)&(DEG180-1))<3))
-	subdiv[i].setslope(END,0);
-      else
-	subdiv[i].setslope(END,dot(gradient(subdiv[i].getend()),dir));
+      setsubslopes(subdiv[i]);
       next.push_back(subdiv[i].vextrema(false).size());
       lens.push_back(subdiv[i].length());
     }
@@ -913,14 +900,14 @@ void triangle::subdivide()
 	  swap(next[j],next[j+h]);
 	  swap(subdiv[j],subdiv[j+h]);
 	}
-    for (i=0;i<subdiv.size();i++)
-      cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
+    //for (i=0;i<subdiv.size();i++)
+      //cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
     subdivcopy=subdiv;
     for (i=subdiv.size()-1;i>0;i--)
       for (del=j=0;j<i && !del;j++)
       {
 	itype=intersection_type(subdiv[i],subdiv[j]);
-	cout<<i<<' '<<j<<' '<<inttype_str(itype)<<endl;
+	//cout<<i<<' '<<j<<' '<<inttype_str(itype)<<endl;
 	switch (itype)
 	{
 	  case NOINT:
@@ -973,6 +960,7 @@ void triangle::subdivide()
       }
     }
     subdivcopy.clear();
+    cout<<morecritpoints.size()-critpoints.size()<<" secondary critical points"<<endl;
     for (i=critpoints.size();i<morecritpoints.size();i++)
     {
       cr=xyz(morecritpoints[i],elevation(morecritpoints[i]));
@@ -1009,8 +997,10 @@ void triangle::subdivide()
       newseg0=segment(cr,*c);
       if (((critdir[i]-newseg0.chordbearing()+1)&(DEG180-1))>2)
 	subdivcopy.push_back(newseg0);
+    }
     for (i=0;i<subdivcopy.size();i++)
     {
+      setsubslopes(subdivcopy[i]);
       for (j=0;j<subdiv.size();j++)
       {
 	itype=intersection_type(subdivcopy[i],subdiv[j]);
@@ -1023,7 +1013,6 @@ void triangle::subdivide()
 	next.push_back(subdivcopy[i].vextrema(false).size());
 	lens.push_back(subdivcopy[i].length());
       }
-    }
     }
     round++;
   }
