@@ -1536,7 +1536,15 @@ void testpolyline()
   p.setdelta(1,633866811);
   p.setdelta(2,1073741824);
   p.setlengths();
+  /* Total area of circle is 19.6350. Of this,
+   * 6.0000 is in the triangle,
+   * 9.8175 is on the 5 side,
+   * 2.7956 is on the 4 side, and
+   * 1.0219 is on the 3 side.
+   */
+  cout<<"testpolyline: area of circle is "<<p.area()<<endl;
   assert(fabs(p.length()-M_PI*5)<0.0005);
+  assert(fabs(p.area()-M_PI*6.25)<0.0005);
   cout<<p.getarc(0).center().north()<<endl;
   cout<<p.length()<<endl;
 }

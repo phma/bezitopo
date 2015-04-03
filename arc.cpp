@@ -66,6 +66,19 @@ double arc::length()
     return chordlength();
 }
 
+double arc::diffarea()
+{
+  double r;
+  if (delta)
+  {
+    r=radius(0);
+    return r*r*(bintorad(delta)-sin(delta))/2;
+    //FIXME fix numerical stability for small delta
+  }
+  else
+    return 0;
+}
+
 xyz arc::station(double along)
 {
   double gnola,len;

@@ -28,6 +28,7 @@ public:
   {
     return 2*sinhalf(delta)/chordlength();
   }
+  virtual double diffarea();
   int startbearing()
   {
     return chordbearing()-delta/2;
