@@ -46,6 +46,11 @@ protected:
   double x,y;
 };
 
+extern const xy beforestart,afterend;
+/* Used to answer segment::nearpnt if the closest point is the start or end
+ * and the line isn't normal to the segment/arc/spiralarc
+ */
+
 /*class farna: public xy
 {
  private:

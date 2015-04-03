@@ -13,6 +13,7 @@
    */
 
 #include "polyline.h"
+#include "manysum.h"
 using namespace std;
 
 bool polyline::isopen()
@@ -73,6 +74,24 @@ double polyline::length()
   for (len=i=0;i<lengths.size();i++)
     len+=lengths[i];
   return len;
+}
+
+double polyline::area()
+{
+  int i;
+  xy startpnt;
+  manysum a;
+  if (endpoints.size())
+    startpnt=endpoints[0];
+  if (isopen())
+    a+=NAN;
+  else
+    for (i=0;i<lengths.size();i++)
+    {
+      a+=area3(startpnt,endpoints[i],endpoints[(i+1)%endpoints.size()]);
+      a+=getarc(i).diffarea();
+    }
+  return a.total();
 }
 
 void polyline::open()

@@ -29,6 +29,7 @@ public:
   void open();
   void close();
   double length();
+  double area();
 };
 
 class alignment

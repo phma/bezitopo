@@ -107,6 +107,9 @@ double dot(xy a,xy b)
 {return (a.y*b.y+a.x*b.x);
  }
 
+const xy beforestart(-INFINITY,-INFINITY);
+const xy afterend(INFINITY,INFINITY);
+
 xyz::xyz(double e,double n,double h)
 {x=e;
  y=n;

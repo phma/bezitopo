@@ -1265,7 +1265,7 @@ void trianglecontours()
   fname="tri";
   for (j=0;j<9;j++)
   {
-    //bytes[j]=rng.ucrandom();
+    bytes[j]=rng.ucrandom();
     fname+=hexdig[bytes[j]>>4];
     fname+=hexdig[bytes[j]&15];
   }
@@ -1525,8 +1525,10 @@ void testpolyline()
   p.insert(xy(3,4));
   p.setlengths();
   assert(p.length()==12);
+  assert(p.area()==6);
   p.open();
   assert(p.length()==7);
+  assert(::isnan(p.area()));
   p.close();
   p.setlengths();
   assert(p.length()==12);

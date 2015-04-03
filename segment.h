@@ -84,6 +84,15 @@ public:
   }
   xy center();
   xyz midpoint();
+  virtual int diffinside(xy pnt)
+  {
+    return 0;
+  }
+  virtual double diffarea()
+  {
+    return 0;
+  }
+  //virtual xy nearpnt;
   virtual void split(double along,segment &a,segment &b);
   bezier3d approx3d(double precision);
   friend xy intersection (segment seg1,segment seg2);
