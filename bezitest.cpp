@@ -1519,7 +1519,7 @@ void testhalton()
 
 void testpolyline()
 {
-  polyline p;
+  polyarc p;
   p.insert(xy(0,0));
   p.insert(xy(3,0));
   p.insert(xy(3,4));

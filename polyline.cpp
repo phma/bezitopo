@@ -12,16 +12,30 @@
    evenly among the points, and makes the shortest total length.
    */
 
+#include <cassert>
 #include "polyline.h"
 #include "manysum.h"
 using namespace std;
 
-bool polyline::isopen()
+polyline::polyline()
 {
-  return endpoints.size()>deltas.size();
+  elevation=0;
 }
 
-arc polyline::getarc(int i)
+bool polyline::isopen()
+{
+  return endpoints.size()>lengths.size();
+}
+
+segment polyline::getsegment(int i)
+{
+  i%=lengths.size();
+  if (i<0)
+    i+=lengths.size();
+  return segment(xyz(endpoints[i],elevation),xyz(endpoints[(i+1)%endpoints.size()],elevation));
+}
+
+arc polyarc::getarc(int i)
 {
   i%=deltas.size();
   if (i<0)
@@ -40,29 +54,51 @@ void polyline::insert(xy newpoint,int pos)
  * proportionally to the distances to the adjacent points.
  */
 {
-  xy *prevpt,*nextpt;
-  int *prevarc,*nextarc;
   bool wasopen;
   vector<xy>::iterator ptit;
-  vector<int>::iterator arcit;
+  vector<double>::iterator lenit;
   wasopen=isopen();
   if (pos<0 || pos>endpoints.size())
     pos=endpoints.size();
   ptit=endpoints.begin()+pos;
+  lenit=lengths.begin()+pos;
+  endpoints.insert(ptit,newpoint);
+  lengths.insert(lenit,0);
+}
+
+void polyarc::insert(xy newpoint,int pos)
+{
+  bool wasopen;
+  vector<xy>::iterator ptit;
+  vector<int>::iterator arcit;
+  vector<double>::iterator lenit;
+  wasopen=isopen();
+  if (pos<0 || pos>endpoints.size())
+    pos=endpoints.size();
+  ptit=endpoints.begin()+pos;
+  lenit=lengths.begin()+pos;
   arcit=deltas.begin()+pos;
   endpoints.insert(ptit,newpoint);
   deltas.insert(arcit,0);
+  lengths.insert(lenit,0);
 }
 
 void polyline::setlengths()
 {
   int i;
-  lengths.resize(deltas.size());
+  for (i=0;i<lengths.size();i++)
+    lengths[i]=getsegment(i).length();
+}
+
+void polyarc::setlengths()
+{
+  int i;
+  assert(lengths.size()==deltas.size());
   for (i=0;i<deltas.size();i++)
     lengths[i]=getarc(i).length();
 }
 
-void polyline::setdelta(int i,int delta)
+void polyarc::setdelta(int i,int delta)
 {
   deltas[i%deltas.size()]=delta;
 }
@@ -89,6 +125,23 @@ double polyline::area()
     for (i=0;i<lengths.size();i++)
     {
       a+=area3(startpnt,endpoints[i],endpoints[(i+1)%endpoints.size()]);
+    }
+  return a.total();
+}
+
+double polyarc::area()
+{
+  int i;
+  xy startpnt;
+  manysum a;
+  if (endpoints.size())
+    startpnt=endpoints[0];
+  if (isopen())
+    a+=NAN;
+  else
+    for (i=0;i<lengths.size();i++)
+    {
+      a+=area3(startpnt,endpoints[i],endpoints[(i+1)%endpoints.size()]);
       a+=getarc(i).diffarea();
     }
   return a.total();
@@ -96,11 +149,21 @@ double polyline::area()
 
 void polyline::open()
 {
+  lengths.resize(endpoints.size()-1);
+}
+
+void polyarc::open()
+{
   deltas.resize(endpoints.size()-1);
   lengths.resize(endpoints.size()-1);
 }
 
 void polyline::close()
+{
+  lengths.resize(endpoints.size());
+}
+
+void polyarc::close()
 {
   deltas.resize(endpoints.size());
   lengths.resize(endpoints.size());

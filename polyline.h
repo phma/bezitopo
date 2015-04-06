@@ -15,21 +15,35 @@
 
 class polyline
 {
-private:
+protected:
   double elevation;
   std::vector<xy> endpoints;
-  std::vector<int> deltas;
   std::vector<double> lengths;
 public:
+  polyline();
   bool isopen();
+  segment getsegment(int i);
+  virtual void insert(xy newpoint,int pos=-1);
+  virtual void setlengths();
+  virtual void open();
+  virtual void close();
+  virtual double length();
+  virtual double area();
+};
+
+class polyarc: public polyline
+{
+protected:
+  std::vector<int> deltas;
+public:
   arc getarc(int i);
-  void insert(xy newpoint,int pos=-1);
-  void setlengths();
+  virtual void insert(xy newpoint,int pos=-1);
   void setdelta(int i,int delta);
-  void open();
-  void close();
-  double length();
-  double area();
+  virtual void setlengths();
+  virtual void open();
+  virtual void close();
+  //virtual double length();
+  virtual double area();
 };
 
 class alignment
