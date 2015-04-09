@@ -26,6 +26,7 @@
 #include "icommon.h"
 #include "mkpoint.h"
 #include "closure.h"
+#include "cvtmeas.h"
 
 using namespace std;
 
@@ -166,6 +167,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("mkpoint",mkpoint_i,"Make new points"));
   commands.push_back(command("setfoot",setfoot_i,"Set foot unit: int'l, US, Indian"));
   commands.push_back(command("setlunit",setlengthunit_i,"Set length unit: m, ft, ch"));
+  commands.push_back(command("cvtmeas",cvtmeas_i,"Convert measurements"));
   commands.push_back(command("read",readpoints,"Read coordinate file in PNEZD format: filename"));
   commands.push_back(command("maketin",maketin_i,"Make triangulated irregular network"));
   commands.push_back(command("drawtin",drawtin_i,"Draw TIN: filename.ps"));
