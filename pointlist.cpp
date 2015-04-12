@@ -55,7 +55,7 @@ void copytopopoints(criteria crit)
       if (i->second.note.find(crit[j].str)!=string::npos)
 	include=crit[j].istopo;
     if (include)
-      topopoints.addpoint(1,i->second);
+      topopoints.addpoint(i->first,i->second);
   }
 }
 

@@ -85,7 +85,7 @@ void maketin_i(string args)
   copytopopoints(crit);
   try
   {
-    topopoints.maketin("");
+    topopoints.maketin("maketin.ps");
   }
   catch(int e)
   {

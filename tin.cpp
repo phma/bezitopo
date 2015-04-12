@@ -20,6 +20,7 @@
 using std::map;
 using std::multimap;
 using std::vector;
+using namespace std;
 
 edge* edge::next(point* end)
 {if (end==a)
@@ -339,7 +340,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
         dot(startpnt);
         setcolor(1,.5,0);
         for (i=points.begin();i!=points.end();i++)
-            dot(i->second);
+            dot(i->second,to_string(revpoints[&i->second]));
         endpage();
       }
       j=outward.begin();
@@ -447,12 +448,16 @@ void pointlist::maketin(string filename,bool colorfibaster)
            //dumppoints();
            //dumpedges();
            for (n=0;n<val;n++)
-               {edges[(n+1)%val+edgeoff].nexta=&edges[n+edgeoff];
-                edges[n+edgeoff].nextb=visible[n]->line->next(visible[n]);
-                visible[n]->line->setnext(visible[n],&edges[n+edgeoff]);
-                }
+           {
+	     edges[(n+1)%val+edgeoff].nexta=&edges[n+edgeoff];
+	     if (visible[n]->line)
+	     {
+               edges[n+edgeoff].nextb=visible[n]->line->next(visible[n]); // crashes here
+               visible[n]->line->setnext(visible[n],&edges[n+edgeoff]);
+	     }
+           }
            for (fail=false,n=edgeoff;n<edges.size();n++)
-               if (edges[n].nexta==NULL)
+               if (edges[n].nexta==NULL || edges[n].nextb==NULL)
                   fail=true;
            if (fail)
 	   {

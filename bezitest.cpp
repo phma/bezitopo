@@ -318,6 +318,27 @@ void testmaketin123()
   assert(i==0);
 }
 
+void testmaketindouble()
+{
+  int i;
+  topopoints.clear();
+  aster(100);
+  for (i=1;i<101;i++)
+    topopoints.addpoint(i+100,topopoints.points[i],false);
+  cout<<"testmaketindouble: ";
+  cout.flush();
+  i=0;
+  try
+  {
+    topopoints.maketin(psoutput?"double.ps":"",false);
+  }
+  catch(int e)
+  {
+    i=e;
+  }
+  cout<<"maketin threw "<<i<<endl;
+}
+
 void testmaketinaster()
 {
   double totallength;
@@ -1781,6 +1802,7 @@ int main(int argc, char *argv[])
   testinvalidintersectionlozenge();
   testinvalidintersectionaster();
   testmaketin123();
+  testmaketindouble();
   testmaketinaster();
   testmaketinbigaster();
   testmaketinstraightrow();

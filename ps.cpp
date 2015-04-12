@@ -107,12 +107,17 @@ void endpage()
  fflush(psfile);
  }
 
-void dot(xy pnt)
+void dot(xy pnt,string comment)
 {
   pnt=turn(pnt,orientation);
   if (isfinite(pnt.east()) && isfinite(pnt.north()))
-    fprintf(psfile,"%7.3f %7.3f .\n",
+  {
+    fprintf(psfile,"%7.3f %7.3f .",
            xscale(pnt.east()),yscale(pnt.north()));
+    if (comment.length())
+      fprintf(psfile," %%%s",comment.c_str());
+    fprintf(psfile,"\n");
+  }
 }
 
 void circle(xy pnt,double radius)
