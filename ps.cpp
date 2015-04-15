@@ -148,7 +148,7 @@ void line(edge lin,int num,bool colorfibaster,bool directed)
   b=turn(b,orientation);
   if (lin.delaunay())
     if (colorfibaster)
-      switch (fibmod3(abs(topopoints.revpoints[lin.a]-topopoints.revpoints[lin.b])))
+      switch (fibmod3(abs(pointlists[1].revpoints[lin.a]-pointlists[1].revpoints[lin.b])))
       {
 	case -1:
 	  rgb=".3 .3 .3";

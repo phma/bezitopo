@@ -500,7 +500,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
  do {for (m=n=0;n<edges.size();n++)
          if (!edges[n].delaunay())
             {//printf("Flipping edge %d\n",n);
-             edges[n].flip(&topopoints);
+             edges[n].flip(this);
              m++;
              flipcount++;
              //debugdel=0;

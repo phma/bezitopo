@@ -144,27 +144,27 @@ void testcopytopopoints()
 {
   criteria crit;
   criterion crit1;
-  surveypoints.clear();
+  pointlists[0].clear();
   copytopopoints(crit);
-  assert(topopoints.points.size()==0);
-  surveypoints.addpoint(1,point(0,0,0,"eip"));
-  surveypoints.addpoint(1,point(25,0,0,"eip"));
-  surveypoints.addpoint(1,point(25,40,0,"eip"));
-  surveypoints.addpoint(1,point(0,40,0,"eip"));
-  surveypoints.addpoint(1,point(5,10,0,"house"));
-  surveypoints.addpoint(1,point(20,10,0,"house"));
-  surveypoints.addpoint(1,point(20,20,0,"house"));
-  surveypoints.addpoint(1,point(5,20,0,"house"));
-  surveypoints.addpoint(1,point(3,-5,0,"pipe"));
-  surveypoints.addpoint(1,point(3,41,0,"pipe"));
-  surveypoints.addpoint(1,point(2,22,0,"topo"));
-  surveypoints.addpoint(1,point(23,22,0,"topo"));
-  surveypoints.addpoint(1,point(12.5,38,0,"topo"));
+  assert(pointlists[1].points.size()==0);
+  pointlists[0].addpoint(1,point(0,0,0,"eip"));
+  pointlists[0].addpoint(1,point(25,0,0,"eip"));
+  pointlists[0].addpoint(1,point(25,40,0,"eip"));
+  pointlists[0].addpoint(1,point(0,40,0,"eip"));
+  pointlists[0].addpoint(1,point(5,10,0,"house"));
+  pointlists[0].addpoint(1,point(20,10,0,"house"));
+  pointlists[0].addpoint(1,point(20,20,0,"house"));
+  pointlists[0].addpoint(1,point(5,20,0,"house"));
+  pointlists[0].addpoint(1,point(3,-5,0,"pipe"));
+  pointlists[0].addpoint(1,point(3,41,0,"pipe"));
+  pointlists[0].addpoint(1,point(2,22,0,"topo"));
+  pointlists[0].addpoint(1,point(23,22,0,"topo"));
+  pointlists[0].addpoint(1,point(12.5,38,0,"topo"));
   crit1.str="topo";
   crit1.istopo=true;
   crit.push_back(crit1);
   copytopopoints(crit);
-  assert(topopoints.points.size()==3);
+  assert(pointlists[1].points.size()==3);
 }
 
 void checkimpos(int itype,xy a,xy c,xy b,xy d)
@@ -180,15 +180,15 @@ void testinvalidintersectionlozenge()
 {
   int i,j,k,l,m,itype;
   char rightanswers[9][9][9][9];
-  topopoints.clear();
+  pointlists[1].clear();
   lozenge(7);
   for (j=1;j<=9;j++)
     for (k=1;k<=9;k++)
       for (l=1;l<=9;l++)
         for (m=1;m<=9;m++)
 	{
-	  itype=intersection_type(topopoints.points[j],topopoints.points[k],
-			          topopoints.points[l],topopoints.points[m]);
+	  itype=intersection_type(pointlists[1].points[j],pointlists[1].points[k],
+			          pointlists[1].points[l],pointlists[1].points[m]);
           rightanswers[j-1][k-1][l-1][m-1]=itype;
 	}
   for (i=0;i<81;i++)
@@ -200,10 +200,10 @@ void testinvalidintersectionlozenge()
 	for (l=1;l<=9;l++)
 	  for (m=1;m<=9;m++)
 	  {
-	    itype=intersection_type(topopoints.points[j],topopoints.points[k],
-				    topopoints.points[l],topopoints.points[m]);
-	    checkimpos(itype,topopoints.points[j],topopoints.points[k],
-		       topopoints.points[l],topopoints.points[m]);
+	    itype=intersection_type(pointlists[1].points[j],pointlists[1].points[k],
+				    pointlists[1].points[l],pointlists[1].points[m]);
+	    checkimpos(itype,pointlists[1].points[j],pointlists[1].points[k],
+		       pointlists[1].points[l],pointlists[1].points[m]);
 	    /*if (itype!=rightanswers[j-1][k-1][l-1][m-1])
 	      printf("Iter %i, %d %d %d %d, %d should be %d\n",i,j,k,l,m,itype,rightanswers[j-1][k-1][l-1][m-1]);*/
 	  }
@@ -216,15 +216,15 @@ void testinvalidintersectionaster()
   char rightanswers[9][9][9][9];
   double shift;
   cout<<"Checking for invalid intersections";
-  topopoints.clear();
+  pointlists[1].clear();
   aster(9);
   for (j=1;j<=9;j++)
     for (k=1;k<=9;k++)
       for (l=1;l<=9;l++)
         for (m=1;m<=9;m++)
 	{
-	  itype=intersection_type(topopoints.points[j],topopoints.points[k],
-			          topopoints.points[l],topopoints.points[m]);
+	  itype=intersection_type(pointlists[1].points[j],pointlists[1].points[k],
+			          pointlists[1].points[l],pointlists[1].points[m]);
           rightanswers[j-1][k-1][l-1][m-1]=itype;
 	}
   for (i=0,shift=2e7;i<81;i++)
@@ -243,13 +243,13 @@ void testinvalidintersectionaster()
 	for (l=1;l<=9;l++)
 	  for (m=1;m<=9;m++)
 	  {
-	    itype=intersection_type(topopoints.points[j],topopoints.points[k],
-				    topopoints.points[l],topopoints.points[m]);
+	    itype=intersection_type(pointlists[1].points[j],pointlists[1].points[k],
+				    pointlists[1].points[l],pointlists[1].points[m]);
 	    if (itype!=rightanswers[j-1][k-1][l-1][m-1])
 	      //printf("Iter %i, %d %d %d %d, %d should be %d\n",i,j,k,l,m,itype,rightanswers[j-1][k-1][l-1][m-1]);
 	      nmisses++;
-	    checkimpos(itype,topopoints.points[j],topopoints.points[k],
-		       topopoints.points[l],topopoints.points[m]);
+	    checkimpos(itype,pointlists[1].points[j],pointlists[1].points[k],
+		       pointlists[1].points[l],pointlists[1].points[m]);
 	  }
   }
   cout<<endl;
@@ -262,17 +262,17 @@ void testpointedg()
 {
   int i;
   edge *sa,*sb,*sc;
-  for (i=0;i<topopoints.triangles.size();i++)
+  for (i=0;i<pointlists[1].triangles.size();i++)
   {
-    sa=topopoints.triangles[i].a->edg(&topopoints.triangles[i]);
-    sb=topopoints.triangles[i].b->edg(&topopoints.triangles[i]);
-    sc=topopoints.triangles[i].c->edg(&topopoints.triangles[i]);
+    sa=pointlists[1].triangles[i].a->edg(&pointlists[1].triangles[i]);
+    sb=pointlists[1].triangles[i].b->edg(&pointlists[1].triangles[i]);
+    sc=pointlists[1].triangles[i].c->edg(&pointlists[1].triangles[i]);
     if (sa==sb || sb==sc || sc==sa)
       cout<<"Two sides of triangle "<<i<<" are the same"<<endl;
     if (sa==NULL || sb==NULL || sc==NULL)
       cout<<"A side of triangle "<<i<<" is NULL"<<endl;
     assert(sa!=sb && sb!=sc && sc !=sa && sa!=NULL && sb!=NULL && sc!=NULL);
-    if (sa->a==topopoints.triangles[i].b || sa->b==topopoints.triangles[i].b)
+    if (sa->a==pointlists[1].triangles[i].b || sa->b==pointlists[1].triangles[i].b)
       cout<<"sa is not opposite b"<<endl;
   }
 }
@@ -280,36 +280,36 @@ void testpointedg()
 void testmaketin123()
 {
   int i;
-  topopoints.clear();
+  pointlists[1].clear();
   aster(1);
   i=0;
   try
   {
-    topopoints.maketin();
+    pointlists[1].maketin();
   }
   catch(int e)
   {
     i=e;
   }
   assert(i==notri);
-  topopoints.clear();
+  pointlists[1].clear();
   aster(2);
   i=0;
   try
   {
-    topopoints.maketin();
+    pointlists[1].maketin();
   }
   catch(int e)
   {
     i=e;
   }
   assert(i==notri);
-  topopoints.clear();
+  pointlists[1].clear();
   aster(3);
   i=0;
   try
   {
-    topopoints.maketin();
+    pointlists[1].maketin();
   }
   catch(int e)
   {
@@ -321,16 +321,16 @@ void testmaketin123()
 void testmaketindouble()
 {
   int i;
-  topopoints.clear();
+  pointlists[1].clear();
   aster(100);
   for (i=1;i<101;i++)
-    topopoints.addpoint(i+100,topopoints.points[i],false);
+    pointlists[1].addpoint(i+100,pointlists[1].points[i],false);
   cout<<"testmaketindouble: ";
   cout.flush();
   i=0;
   try
   {
-    topopoints.maketin(psoutput?"double.ps":"",false);
+    pointlists[1].maketin(psoutput?"double.ps":"",false);
   }
   catch(int e)
   {
@@ -343,12 +343,12 @@ void testmaketinaster()
 {
   double totallength;
   int i;
-  topopoints.clear();
+  pointlists[1].clear();
   aster(100);
-  topopoints.maketin(psoutput?"aster.ps":"",false);
-  assert(topopoints.edges.size()==284);
-  for (totallength=i=0;i<topopoints.edges.size();i++)
-    totallength+=topopoints.edges[i].length();
+  pointlists[1].maketin(psoutput?"aster.ps":"",false);
+  assert(pointlists[1].edges.size()==284);
+  for (totallength=i=0;i<pointlists[1].edges.size();i++)
+    totallength+=pointlists[1].edges[i].length();
   assert(fabs(totallength-600.689)<0.001);
 }
 
@@ -356,12 +356,12 @@ void testmaketinbigaster()
 {
   double totallength;
   int i;
-  topopoints.clear();
+  pointlists[1].clear();
   aster(5972);
-  topopoints.maketin(psoutput?"bigaster.ps":"",true);
-  //assert(topopoints.edges.size()==284);
-  for (totallength=i=0;i<topopoints.edges.size();i++)
-    totallength+=topopoints.edges[i].length();
+  pointlists[1].maketin(psoutput?"bigaster.ps":"",true);
+  //assert(pointlists[1].edges.size()==284);
+  for (totallength=i=0;i<pointlists[1].edges.size();i++)
+    totallength+=pointlists[1].edges[i].length();
   //dumppointsvalence();
   //assert(fabs(totallength-600.689)<0.001);
   /* Flip zones:
@@ -379,12 +379,12 @@ void testmaketinstraightrow()
 {
   double totallength;
   int i;
-  topopoints.clear();
+  pointlists[1].clear();
   straightrow(100);
   rotate(30);
   try
   {
-    topopoints.maketin();
+    pointlists[1].maketin();
   }
   catch(int e)
   {
@@ -397,14 +397,14 @@ void testmaketinlongandthin()
 {
   double totallength;
   int i;
-  topopoints.clear();
+  pointlists[1].clear();
   longandthin(100);
   rotate(30);
-  topopoints.maketin(psoutput?"longandthin.ps":"");
-  assert(topopoints.edges.size()==197);
-  for (totallength=i=0;i<topopoints.edges.size();i++)
-    totallength+=topopoints.edges[i].length();
-  printf("longandthin %ld edges total length %f\n",topopoints.edges.size(),totallength);
+  pointlists[1].maketin(psoutput?"longandthin.ps":"");
+  assert(pointlists[1].edges.size()==197);
+  for (totallength=i=0;i<pointlists[1].edges.size();i++)
+    totallength+=pointlists[1].edges[i].length();
+  printf("longandthin %ld edges total length %f\n",pointlists[1].edges.size(),totallength);
   assert(fabs(totallength-123.499)<0.001);
 }
 
@@ -412,14 +412,14 @@ void testmaketinlozenge()
 {
   double totallength;
   int i;
-  topopoints.clear();
+  pointlists[1].clear();
   lozenge(100);
   rotate(30);
-  topopoints.maketin(psoutput?"lozenge.ps":"");
-  assert(topopoints.edges.size()==299);
-  for (totallength=i=0;i<topopoints.edges.size();i++)
-    totallength+=topopoints.edges[i].length();
-  printf("lozenge %ld edges total length %f\n",topopoints.edges.size(),totallength);
+  pointlists[1].maketin(psoutput?"lozenge.ps":"");
+  assert(pointlists[1].edges.size()==299);
+  for (totallength=i=0;i<pointlists[1].edges.size();i++)
+    totallength+=pointlists[1].edges[i].length();
+  printf("lozenge %ld edges total length %f\n",pointlists[1].edges.size(),totallength);
   assert(fabs(totallength-2111.8775)<0.001);
 }
 
@@ -427,13 +427,13 @@ void testmaketinring()
 {
   double totallength;
   int i;
-  topopoints.clear();
+  pointlists[1].clear();
   ring(100);
   rotate(30);
-  topopoints.maketin(psoutput?"ring.ps":"");
-  assert(topopoints.edges.size()==197);
-  for (totallength=i=0;i<topopoints.edges.size();i++)
-    totallength+=topopoints.edges[i].length();
+  pointlists[1].maketin(psoutput?"ring.ps":"");
+  assert(pointlists[1].edges.size()==197);
+  for (totallength=i=0;i<pointlists[1].edges.size();i++)
+    totallength+=pointlists[1].edges[i].length();
   printf("ring edges total length %f\n",totallength);
   //Don't assert the total length. There are over 10^56 (2^189) right answers to that.
 }
@@ -442,12 +442,12 @@ void testmaketinellipse()
 {
   double totallength;
   int i;
-  topopoints.clear();
+  pointlists[1].clear();
   ellipse(100);
-  topopoints.maketin(psoutput?"ellipse.ps":"");
-  assert(topopoints.edges.size()==197);
-  for (totallength=i=0;i<topopoints.edges.size();i++)
-    totallength+=topopoints.edges[i].length();
+  pointlists[1].maketin(psoutput?"ellipse.ps":"");
+  assert(pointlists[1].edges.size()==197);
+  for (totallength=i=0;i<pointlists[1].edges.size();i++)
+    totallength+=pointlists[1].edges[i].length();
   printf("ellipse edges total length %f\n",totallength);
   assert(fabs(totallength-1329.4675)<0.001);
 }
@@ -853,14 +853,14 @@ void testtriangle()
   triangle tri;
   double elev,elevd,elevg,eleva;
   xy o(0,0),a(1,0),d(-0.5,0),g(0.5,0);
-  surveypoints.clear();
+  pointlists[0].clear();
   // Start with an identically 0 surface. The elevation at the center should be 0.
-  surveypoints.addpoint(1,point(1,0,0,"eip"));
-  surveypoints.addpoint(1,point(-0.5,M_SQRT_3_4,0,"eip"));
-  surveypoints.addpoint(1,point(-0.5,-M_SQRT_3_4,0,"eip"));
-  tri.a=&surveypoints.points[1];
-  tri.b=&surveypoints.points[2];
-  tri.c=&surveypoints.points[3];
+  pointlists[0].addpoint(1,point(1,0,0,"eip"));
+  pointlists[0].addpoint(1,point(-0.5,M_SQRT_3_4,0,"eip"));
+  pointlists[0].addpoint(1,point(-0.5,-M_SQRT_3_4,0,"eip"));
+  tri.a=&pointlists[0].points[1];
+  tri.b=&pointlists[0].points[2];
+  tri.c=&pointlists[0].points[3];
   tri.flatten(); // sets area, needed for computing elevations
   for (i=0;i<7;i++)
     tri.ctrl[i]=0;
@@ -868,18 +868,18 @@ void testtriangle()
   printf("elevation=%f\n",elev);
   assert(elev==0);
   // Now make a constant surface at elevation 1.
-  surveypoints.points[1].setelev(1);
-  surveypoints.points[2].setelev(1);
-  surveypoints.points[3].setelev(1);
+  pointlists[0].points[1].setelev(1);
+  pointlists[0].points[2].setelev(1);
+  pointlists[0].points[3].setelev(1);
   for (i=0;i<7;i++)
     tri.ctrl[i]=1;
   elev=tri.elevation(o);
   printf("elevation=%f\n",elev);
   assert(elev==1);
   // Now make a linear surface.
-  surveypoints.points[1].setelev(1);
-  surveypoints.points[2].setelev(0);
-  surveypoints.points[3].setelev(0);
+  pointlists[0].points[1].setelev(1);
+  pointlists[0].points[2].setelev(0);
+  pointlists[0].points[3].setelev(0);
   tri.ctrl[0]=tri.ctrl[1]=2/3.;
   tri.ctrl[2]=tri.ctrl[4]=1/3.;
   tri.ctrl[5]=tri.ctrl[6]=0;
@@ -888,9 +888,9 @@ void testtriangle()
   printf("ctrl[3]=%f elevation=%f\n",tri.ctrl[3],elev);
   assert(abs(elev*3-1)<1e-7);
   // Now make a quadratic surface. It is a paraboloid z=r². Check that the cubic component is 0.
-  surveypoints.points[1].setelev(1);
-  surveypoints.points[2].setelev(1);
-  surveypoints.points[3].setelev(1);
+  pointlists[0].points[1].setelev(1);
+  pointlists[0].points[2].setelev(1);
+  pointlists[0].points[3].setelev(1);
   for (i=0;i<7;i++)
     tri.ctrl[i]=0;
   tri.setcentercp();
@@ -901,12 +901,12 @@ void testtriangle()
   printf("ctrl[3]=%f elevation=%f %f %f %f\n",tri.ctrl[3],elevd,elev,elevg,eleva);
   assert(abs(elevd-elev*3+elevg*3-eleva)<1e-7);
   // Now turn the quadratic surface upside-down, using setgradient.
-  surveypoints.points[1].setelev(0);
-  surveypoints.points[2].setelev(0);
-  surveypoints.points[3].setelev(0);
-  tri.setgradient(surveypoints.points[1],(xy)surveypoints.points[1]*-2);
-  tri.setgradient(surveypoints.points[2],(xy)surveypoints.points[2]*-2);
-  tri.setgradient(surveypoints.points[3],(xy)surveypoints.points[3]*-2);
+  pointlists[0].points[1].setelev(0);
+  pointlists[0].points[2].setelev(0);
+  pointlists[0].points[3].setelev(0);
+  tri.setgradient(pointlists[0].points[1],(xy)pointlists[0].points[1]*-2);
+  tri.setgradient(pointlists[0].points[2],(xy)pointlists[0].points[2]*-2);
+  tri.setgradient(pointlists[0].points[3],(xy)pointlists[0].points[3]*-2);
   tri.setcentercp();
   elev=tri.elevation(o);
   elevd=tri.elevation(d);
@@ -926,34 +926,34 @@ void testqindex()
   double pathlength;
   vector<qindex*> hilbertpath;
   xy offset(16,8),bone1(3,4),bone2(-3,-4),bone3(49,-64);
-  topopoints.clear();
+  pointlists[1].clear();
   plist.clear();
-  topopoints.addpoint(1,point(0.3,0.3,0,""));
-  topopoints.addpoint(1,point(0.6,0.8,0,""));
-  topopoints.addpoint(1,point(0.8,0.6,0,""));
+  pointlists[1].addpoint(1,point(0.3,0.3,0,""));
+  pointlists[1].addpoint(1,point(0.6,0.8,0,""));
+  pointlists[1].addpoint(1,point(0.8,0.6,0,""));
   for (i=0;i<3;i++)
-    plist.push_back(topopoints.points[i+1]+offset);
+    plist.push_back(pointlists[1].points[i+1]+offset);
   qinx.sizefit(plist);
   printf("side=%f x=%f y=%f\n",qinx.side,qinx.x,qinx.y);
   assert(qinx.side==1);
-  topopoints.maketin();
-  topopoints.maketriangles();
-  printf("%d triangle, should be 1\n",(int)topopoints.triangles.size());
-  assert(topopoints.triangles.size()==1);
+  pointlists[1].maketin();
+  pointlists[1].maketriangles();
+  printf("%d triangle, should be 1\n",(int)pointlists[1].triangles.size());
+  assert(pointlists[1].triangles.size()==1);
   qinx.clear();
-  topopoints.clear();
+  pointlists[1].clear();
   plist.clear();
   psopen("qindex.ps");
   psprolog();
   startpage();
   setscale(1,-7,31,23);
   aster(100);
-  topopoints.maketin();
+  pointlists[1].maketin();
   enlarge(pow(2,(rng.usrandom()-32767.5)/65536));
   for (i=0;i<100;i++)
   {
-    dot(topopoints.points[i+1]+offset);
-    plist.push_back(topopoints.points[i+1]+offset);
+    dot(pointlists[1].points[i+1]+offset);
+    plist.push_back(pointlists[1].points[i+1]+offset);
   }
   qinx.sizefit(plist);
   qinx.split(plist);
@@ -981,33 +981,33 @@ void testqindex()
   endpage();
   startpage();
   setscale(-15,-15,15,15);
-  topopoints.maketin();
-  topopoints.maketriangles();
-  for (i=ntri=0;i<topopoints.edges.size();i++)
+  pointlists[1].maketin();
+  pointlists[1].maketriangles();
+  for (i=ntri=0;i<pointlists[1].edges.size();i++)
   {
-    ntri+=topopoints.edges[i].tria!=NULL;
-    ntri+=topopoints.edges[i].trib!=NULL;
-    line(topopoints.edges[i],i,false,true);
+    ntri+=pointlists[1].edges[i].tria!=NULL;
+    ntri+=pointlists[1].edges[i].trib!=NULL;
+    line(pointlists[1].edges[i],i,false,true);
     setcolor(0.6,0.4,0);
-    if (topopoints.edges[i].tria)
-      line2p(topopoints.edges[i].midpoint(),topopoints.edges[i].tria->centroid());
+    if (pointlists[1].edges[i].tria)
+      line2p(pointlists[1].edges[i].midpoint(),pointlists[1].edges[i].tria->centroid());
     setcolor(0,0.4,0.6);
-    if (topopoints.edges[i].trib)
-      line2p(topopoints.edges[i].midpoint(),topopoints.edges[i].trib->centroid());
+    if (pointlists[1].edges[i].trib)
+      line2p(pointlists[1].edges[i].midpoint(),pointlists[1].edges[i].trib->centroid());
   }
   printf("%d edges ntri=%d\n",i,ntri);
   assert(ntri>i/2);
   setcolor(1,0,0);
-  for (i=0;i<topopoints.triangles.size();i++)
+  for (i=0;i<pointlists[1].triangles.size();i++)
   {
-    assert(topopoints.triangles[i].area()>0);
-    //printf("tri %d area %f\n",i,topopoints.triangles[i].area());
-    dot(topopoints.triangles[i].centroid());
+    assert(pointlists[1].triangles[i].area()>0);
+    //printf("tri %d area %f\n",i,pointlists[1].triangles[i].area());
+    dot(pointlists[1].triangles[i].centroid());
   }
   printf("%d triangles\n",i);
   assert(ntri==i*3); // ntri is the number of sides of edges which are linked to a triangle
   endpage();
-  ptri=&topopoints.triangles[0];
+  ptri=&pointlists[1].triangles[0];
   ptri=ptri->findt(bone1);
   assert(ptri->in(bone1));
   assert(!ptri->in(bone2));
@@ -1020,13 +1020,13 @@ void testqindex()
   setscale(-15,-15,15,15);
   plist.clear();
   for (i=0;i<100;i++)
-    plist.push_back(topopoints.points[i+1]);
+    plist.push_back(pointlists[1].points[i+1]);
   qinx.sizefit(plist);
   qinx.split(plist);
   qinx.draw();
-  qinx.settri(&topopoints.triangles[0]);
-  for (i=ntri=0;i<topopoints.edges.size();i++)
-    line(topopoints.edges[i],i,false);
+  qinx.settri(&pointlists[1].triangles[0]);
+  for (i=ntri=0;i<pointlists[1].edges.size();i++)
+    line(pointlists[1].edges[i],i,false);
   setcolor(1,0,0);
   hilbertpath=qinx.traverse();
   for (i=pathlength=0;i<hilbertpath.size();i++)
@@ -1052,7 +1052,7 @@ void testqindex()
 void drawgrad(double scale)
 {
   ptlist::iterator i;
-  for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+  for (i=pointlists[1].points.begin();i!=pointlists[1].points.end();i++)
   {
     setcolor(0,1,0);
     line2p(i->second,xy(i->second)+testsurfacegrad(i->second)*scale);
@@ -1068,7 +1068,7 @@ void checkgrad(double &avgerror,double &maxerror)
   double error;
   int n;
   avgerror=maxerror=0;
-  for (n=0,i=topopoints.points.begin();i!=topopoints.points.end();i++,n++)
+  for (n=0,i=pointlists[1].points.begin();i!=pointlists[1].points.end();i++,n++)
   {
     error=dist(i->second.gradient,testsurfacegrad(i->second));
     avgerror+=error*error;
@@ -1082,15 +1082,15 @@ void testmakegrad()
 {
   double avgerror,maxerror,corr;
   xy grad63,grad63half;
-  topopoints.clear();
+  pointlists[1].clear();
   setsurface(HYPAR);
   aster(100);
-  topopoints.maketin();
-  topopoints.makegrad(0.15);
-  grad63=topopoints.points[63].gradient;
+  pointlists[1].maketin();
+  pointlists[1].makegrad(0.15);
+  grad63=pointlists[1].points[63].gradient;
   enlarge(2); // affects x and y but not z, so gradient should be halved
-  topopoints.makegrad(0.15);
-  grad63half=topopoints.points[63].gradient;
+  pointlists[1].makegrad(0.15);
+  grad63half=pointlists[1].points[63].gradient;
   printf("grad63 %f %f grad63half %f %f\n",grad63.east(),grad63.north(),grad63half.east(),grad63half.north());
   assert(grad63==grad63half*2);
   enlarge(0.5);
@@ -1099,7 +1099,7 @@ void testmakegrad()
   for (corr=0;corr<=1;corr+=0.1)
   {
     startpage();
-    topopoints.makegrad(corr);
+    pointlists[1].makegrad(corr);
     checkgrad(avgerror,maxerror);
     printf("testmakegrad: corr=%f avgerror=%f maxerror=%f\n",corr,avgerror,maxerror);
     drawgrad(3);
@@ -1111,17 +1111,17 @@ void testmakegrad()
 
 void testrasterdraw()
 {
-  topopoints.clear();
+  pointlists[1].clear();
   setsurface(HYPAR);
   aster(100);
-  topopoints.maketin();
-  topopoints.makegrad(0.);
-  topopoints.maketriangles();
-  topopoints.setgradient();
-  topopoints.makeqindex();
-  rasterdraw(topopoints,xy(0,0),30,30,30,0,3,"raster.ppm");
-  topopoints.setgradient(true);
-  rasterdraw(topopoints,xy(0,0),30,30,30,0,3,"rasterflat.ppm");
+  pointlists[1].maketin();
+  pointlists[1].makegrad(0.);
+  pointlists[1].maketriangles();
+  pointlists[1].setgradient();
+  pointlists[1].makeqindex();
+  rasterdraw(pointlists[1],xy(0,0),30,30,30,0,3,"raster.ppm");
+  pointlists[1].setgradient(true);
+  rasterdraw(pointlists[1],xy(0,0),30,30,30,0,3,"rasterflat.ppm");
   testpointedg();
 }
 
@@ -1137,36 +1137,36 @@ void test1tri(string triname,int excrits)
   fname=triname+".ppm";
   tfname=triname+".txt";
   psfname=triname+".ps";
-  topopoints.maketriangles();
-  topopoints.setgradient();
-  topopoints.makeqindex();
-  rasterdraw(topopoints,xy(5,0),30,40,30,0,1,fname);
+  pointlists[1].maketriangles();
+  pointlists[1].setgradient();
+  pointlists[1].makeqindex();
+  rasterdraw(pointlists[1],xy(5,0),30,40,30,0,1,fname);
   ofile.open(tfname.c_str(),ios_base::out);
   psopen(psfname.c_str());
   psprolog();
   startpage();
   setscale(-17,-17,17,17);
-  for (j=0;j<topopoints.edges.size();j++)
-    line(topopoints.edges[j],j,false);
-  cubedir=topopoints.triangles[0].findnocubedir();
+  for (j=0;j<pointlists[1].edges.size();j++)
+    line(pointlists[1].edges[j],j,false);
+  cubedir=pointlists[1].triangles[0].findnocubedir();
   ofile<<"Zero cube dir "<<cubedir<<' '<<bintodeg(cubedir)<<"°"<<endl;
-  ofile<<"Zero quad offset "<<topopoints.triangles[0].flatoffset()<<endl;
+  ofile<<"Zero quad offset "<<pointlists[1].triangles[0].flatoffset()<<endl;
   for (j=30;j>=-30;j--)
   {
     offset=j/20.;
-    xs=topopoints.triangles[0].xsect(cubedir,offset);
+    xs=pointlists[1].triangles[0].xsect(cubedir,offset);
     vertex=paravertex(xs);
     ofile<<fixed<<setprecision(3)<<setw(7)<<offset<<' '<<setw(7)<<deriv3(xs)<<' '<<setw(7)<<vertex;
     if (vertex<=1.5 && vertex>=-1.5)
       ofile<<string(rint((vertex+1.5)*20),' ')<<'*';
     ofile<<endl;
   }
-  line2p(topopoints.triangles[0].spcoord(1.5,-1.5),topopoints.triangles[0].spcoord(-1.5,-1.5));
-  line2p(topopoints.triangles[0].spcoord(-1.5,-1.5),topopoints.triangles[0].spcoord(-1.5,1.5));
+  line2p(pointlists[1].triangles[0].spcoord(1.5,-1.5),pointlists[1].triangles[0].spcoord(-1.5,-1.5));
+  line2p(pointlists[1].triangles[0].spcoord(-1.5,-1.5),pointlists[1].triangles[0].spcoord(-1.5,1.5));
   for (side=0;side<2;side++)
   {
     ofile<<"Side "<<side<<endl;
-    slice=topopoints.triangles[0].slices(side);
+    slice=pointlists[1].triangles[0].slices(side);
     for (j=0;j<slice.size();j++)
     {
       ofile<<fixed<<setprecision(3)<<setw(7)<<slice[j].east()<<setw(7)<<
@@ -1177,43 +1177,43 @@ void test1tri(string triname,int excrits)
 	  setcolor(0,.7,0);
 	else
 	  setcolor(1,0,1);
-	line2p(topopoints.triangles[0].spcoord(slice[j-1].east(),slice[j-1].north()),
-		topopoints.triangles[0].spcoord(slice[j].east(),slice[j].north()));
+	line2p(pointlists[1].triangles[0].spcoord(slice[j-1].east(),slice[j-1].north()),
+		pointlists[1].triangles[0].spcoord(slice[j].east(),slice[j].north()));
       }
     }
-    crits=topopoints.triangles[0].criticalpts_side(side);
+    crits=pointlists[1].triangles[0].criticalpts_side(side);
     for (j=0;j<crits.size();j++)
     {
       ofile<<fixed<<setprecision(3)<<setw(7)<<crits[j].east()<<setw(7)<<crits[j].north()<<endl;
       dot(crits[j]);
     }
   }
-  crits=topopoints.triangles[0].criticalpts_axis();
+  crits=pointlists[1].triangles[0].criticalpts_axis();
   ofile<<endl;
   for (j=0;j<crits.size();j++)
   {
     ofile<<fixed<<setprecision(3)<<setw(7)<<crits[j].east()<<setw(7)<<crits[j].north()<<endl;
     dot(crits[j]);
   }
-  topopoints.triangles[0].findcriticalpts();
-  crits=topopoints.triangles[0].critpoints;
+  pointlists[1].triangles[0].findcriticalpts();
+  crits=pointlists[1].triangles[0].critpoints;
   for (j=0;j<crits.size();j++)
   {
-    ptype=topopoints.triangles[0].pointtype(crits[j]);
+    ptype=pointlists[1].triangles[0].pointtype(crits[j]);
     cout<<crits[j].east()<<','<<crits[j].north()<<" type="<<ptype<<endl;
     ofile<<crits[j].east()<<','<<crits[j].north()<<" type="<<ptype<<endl;
     assert(ptype!=PT_SLOPE && ptype!=PT_GRASS);
   }
   for (j=0;j<3;j++)
   {
-    topopoints.edges[j].findextrema();
+    pointlists[1].edges[j].findextrema();
     for (i=0;i<2;i++)
-      if (isfinite(topopoints.edges[j].extrema[i]))
-	dot(topopoints.edges[j].critpoint(i));
+      if (isfinite(pointlists[1].edges[j].extrema[i]))
+	dot(pointlists[1].edges[j].critpoint(i));
   }
-  topopoints.triangles[0].subdivide();
-  for (j=0;j<topopoints.triangles[0].subdiv.size();j++)
-    spline(topopoints.triangles[0].subdiv[j].approx3d(1));
+  pointlists[1].triangles[0].subdivide();
+  for (j=0;j<pointlists[1].triangles[0].subdiv.size();j++)
+    spline(pointlists[1].triangles[0].subdiv[j].approx3d(1));
   endpage();
   psclose();
   cout<<fname<<endl;
@@ -1230,10 +1230,10 @@ void test1grad()
   map<int,triangle>::iterator i;
   int j;
   vector<double> xsect,ysect;
-  topopoints.maketriangles();
-  topopoints.setgradient();
-  topopoints.makeqindex();
-  for (i=topopoints.triangles.begin();i!=topopoints.triangles.end();i++)
+  pointlists[1].maketriangles();
+  pointlists[1].setgradient();
+  pointlists[1].makeqindex();
+  for (i=pointlists[1].triangles.begin();i!=pointlists[1].triangles.end();i++)
   {
     pt=(*i->second.a+*i->second.b*2+*i->second.c*3)/6;
     i->second.setgradmat();
@@ -1279,10 +1279,10 @@ void trianglecontours()
   {0xd3,0x06,0xed,0xc9,0x6e,0x91,0xf8,0xad,0xcc};
   string fname;
   xy tilt;
-  topopoints.clear();
+  pointlists[1].clear();
   regpolygon(3);
   enlarge(10);
-  topopoints.maketin();
+  pointlists[1].maketin();
   fname="tri";
   for (j=0;j<9;j++)
   {
@@ -1292,58 +1292,58 @@ void trianglecontours()
   }
   for (j=0;j<3;j++)
   {
-    topopoints.points[j+1].setelev((bytes[j]-127.5)/100);
-    topopoints.points[j+1].gradient=xy((bytes[j+3]-127.5)/1000,(bytes[j+6]-127.5)/1000);
+    pointlists[1].points[j+1].setelev((bytes[j]-127.5)/100);
+    pointlists[1].points[j+1].gradient=xy((bytes[j+3]-127.5)/1000,(bytes[j+6]-127.5)/1000);
   }
   test1tri(fname,-1);
   fname=fname.substr(0,9)+"flat";
-  topopoints.setgradient(true);
+  pointlists[1].setgradient(true);
   for (j=0;j<3;j++)
-    topopoints.points[j+1].gradient=xy(topopoints.elevation(xy(1,0))-topopoints.elevation(xy(0,0)),topopoints.elevation(xy(0,1))-topopoints.elevation(xy(0,0)));
+    pointlists[1].points[j+1].gradient=xy(pointlists[1].elevation(xy(1,0))-pointlists[1].elevation(xy(0,0)),pointlists[1].elevation(xy(0,1))-pointlists[1].elevation(xy(0,0)));
   test1tri(fname,0);
   fname="monkeysaddle";
   for (j=0;j<3;j++)
   {
-    topopoints.points[j+1].setelev(0);
-    topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10;
+    pointlists[1].points[j+1].setelev(0);
+    pointlists[1].points[j+1].gradient=turn90(xy(pointlists[1].points[j+1]))/10;
   }
   test1tri(fname,1);
   fname="tilted";
-  tilt=(xy(topopoints.points[1])-xy(topopoints.points[3]))/1000;
+  tilt=(xy(pointlists[1].points[1])-xy(pointlists[1].points[3]))/1000;
   /* This triangle has two saddle points on a horizontal line in the no-cube direction.
    * The triangle has three equally spaced nocubedirs; the program picks the one
    * passing through points[2].
    */
   for (j=0;j<3;j++)
   {
-    topopoints.points[j+1].setelev(dot(tilt,xy(topopoints.points[j+1])));
-    topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10+tilt;
+    pointlists[1].points[j+1].setelev(dot(tilt,xy(pointlists[1].points[j+1])));
+    pointlists[1].points[j+1].gradient=turn90(xy(pointlists[1].points[j+1]))/10+tilt;
   }
   test1tri(fname,2);
   fname="tolted";
-  tilt=(xy(topopoints.points[3])-xy(topopoints.points[2]))/1000;
+  tilt=(xy(pointlists[1].points[3])-xy(pointlists[1].points[2]))/1000;
   /* This is the same as above, except for tilting in a different direction
    * perpendicular to a different no-cube direction.
    */
   for (j=0;j<3;j++)
   {
-    topopoints.points[j+1].setelev(dot(tilt,xy(topopoints.points[j+1])));
-    topopoints.points[j+1].gradient=turn90(xy(topopoints.points[j+1]))/10+tilt;
+    pointlists[1].points[j+1].setelev(dot(tilt,xy(pointlists[1].points[j+1])));
+    pointlists[1].points[j+1].gradient=turn90(xy(pointlists[1].points[j+1]))/10+tilt;
   }
   test1tri(fname,2);
   fname="table";
   for (j=0;j<3;j++)
   {
-    topopoints.points[j+1].setelev(M_PI);
-    topopoints.points[j+1].gradient=xy(0,0);
+    pointlists[1].points[j+1].setelev(M_PI);
+    pointlists[1].points[j+1].gradient=xy(0,0);
   }
   test1tri(fname,0);
-  i=topopoints.triangles[0].pointtype(xy(0,0));
+  i=pointlists[1].triangles[0].pointtype(xy(0,0));
   fname="floor";
   for (j=0;j<3;j++)
   {
-    topopoints.points[j+1].setelev(0);
-    topopoints.points[j+1].gradient=xy(0,0);
+    pointlists[1].points[j+1].setelev(0);
+    pointlists[1].points[j+1].gradient=xy(0,0);
   }
   test1tri(fname,0);
 }
@@ -1351,24 +1351,24 @@ void trianglecontours()
 void testgrad()
 {
   int j;
-  topopoints.clear();
+  pointlists[1].clear();
   setsurface(FLATSLOPE);
   regpolygon(3);
-  topopoints.maketin();
-  topopoints.makegrad(0);
+  pointlists[1].maketin();
+  pointlists[1].makegrad(0);
   cout<<"testgrad"<<endl;
   test1grad();
   for (j=0;j<3;j++)
   {
-    topopoints.points[j+1].setelev(M_PI);
-    topopoints.points[j+1].gradient=xy(0,0);
+    pointlists[1].points[j+1].setelev(M_PI);
+    pointlists[1].points[j+1].gradient=xy(0,0);
   }
   test1grad();
-  topopoints.clear();
+  pointlists[1].clear();
   setsurface(HYPAR);
   aster(20);
-  topopoints.maketin();
-  topopoints.makegrad(0);
+  pointlists[1].maketin();
+  pointlists[1].makegrad(0);
   test1grad();
 }
 
@@ -1428,33 +1428,33 @@ void testderivs()
 void teststl()
 {
   stltriangle stltri;
-  topopoints.clear();
+  pointlists[1].clear();
   setsurface(HYPAR);
   aster(3);
-  topopoints.maketin();
-  topopoints.makegrad(0.);
-  topopoints.maketriangles();
-  topopoints.setgradient();
-  topopoints.makeqindex();
-  stltri=stltriangle(topopoints.points[1],topopoints.points[3],topopoints.points[3]);
+  pointlists[1].maketin();
+  pointlists[1].makegrad(0.);
+  pointlists[1].maketriangles();
+  pointlists[1].setgradient();
+  pointlists[1].makeqindex();
+  stltri=stltriangle(pointlists[1].points[1],pointlists[1].points[3],pointlists[1].points[3]);
 }
 
 void testdirbound()
 {
   double bound;
   int i;
-  topopoints.clear();
+  pointlists[1].clear();
   aster(100);
-  bound=topopoints.dirbound(degtobin(0));
+  bound=pointlists[1].dirbound(degtobin(0));
   for (i=1;i<=100;i++)
-    if (bound==topopoints.points[i].east())
+    if (bound==pointlists[1].points[i].east())
       printf("westernmost point is %d\n",i);
-  assert(bound==topopoints.points[94].east());
-  bound=topopoints.dirbound(degtobin(90));
+  assert(bound==pointlists[1].points[94].east());
+  bound=pointlists[1].dirbound(degtobin(90));
   for (i=1;i<=100;i++)
-    if (bound==topopoints.points[i].north())
+    if (bound==pointlists[1].points[i].north())
       printf("southernmost point is %d\n",i);
-  assert(bound==topopoints.points[96].north());
+  assert(bound==pointlists[1].points[96].north());
 }
 
 void print16_9(unsigned long long n,int size)
@@ -1795,6 +1795,7 @@ void testcsvline()
 
 int main(int argc, char *argv[])
 {
+  pointlists.resize(2);
   testarea3();
   testintersection();
   testtriangle();

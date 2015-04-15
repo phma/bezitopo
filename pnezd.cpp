@@ -104,7 +104,7 @@ int readpnezd(string fname,bool overwrite)
 	  n=parse_length(nstr.c_str());
 	  e=parse_length(estr.c_str());
 	  z=parse_length(zstr.c_str());
-	  surveypoints.addpoint(p,point(e,n,z,d),overwrite);
+	  pointlists[0].addpoint(p,point(e,n,z,d),overwrite);
 	  npoints++;
 	}
 	//puts(d.c_str());

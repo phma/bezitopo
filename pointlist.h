@@ -44,7 +44,7 @@ struct criterion
 
 typedef std::vector<criterion> criteria;
 
-extern pointlist surveypoints,topopoints;
+extern std::vector<pointlist> pointlists;
 
 void copytopopoints(criteria crit);
 #endif

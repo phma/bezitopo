@@ -50,20 +50,20 @@ void indpark(string args)
   crit.push_back(crit1);
   copytopopoints(crit);
   //rotate(2);
-  topopoints.maketin("bezitopo.ps");
-  topopoints.makegrad(0.15);
-  topopoints.maketriangles();
-  topopoints.setgradient(false);
-  topopoints.makeqindex();
-  w=topopoints.dirbound(degtobin(0));
-  s=topopoints.dirbound(degtobin(90));
-  e=-topopoints.dirbound(degtobin(180));
-  n=-topopoints.dirbound(degtobin(270));
+  pointlists[1].maketin("bezitopo.ps");
+  pointlists[1].makegrad(0.15);
+  pointlists[1].maketriangles();
+  pointlists[1].setgradient(false);
+  pointlists[1].makeqindex();
+  w=pointlists[1].dirbound(degtobin(0));
+  s=pointlists[1].dirbound(degtobin(90));
+  e=-pointlists[1].dirbound(degtobin(180));
+  n=-pointlists[1].dirbound(degtobin(270));
   cout<<"Writing topo with curved triangles"<<endl;
-  rasterdraw(topopoints,xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark.ppm");
-  topopoints.setgradient(true);
+  rasterdraw(pointlists[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark.ppm");
+  pointlists[1].setgradient(true);
   cout<<"Writing topo with flat triangles"<<endl;
-  rasterdraw(topopoints,xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark-flat.ppm");
+  rasterdraw(pointlists[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark-flat.ppm");
 }
 
 vector<command> commands;
@@ -85,7 +85,7 @@ void maketin_i(string args)
   copytopopoints(crit);
   try
   {
-    topopoints.maketin("maketin.ps");
+    pointlists[1].maketin("maketin.ps");
   }
   catch(int e)
   {
@@ -104,27 +104,27 @@ void maketin_i(string args)
       break;
     default:
       cout<<"Successfully made TIN."<<endl;
-      topopoints.makegrad(0.15);
-      topopoints.maketriangles();
-      topopoints.setgradient(false);
-      topopoints.makeqindex();
+      pointlists[1].makegrad(0.15);
+      pointlists[1].maketriangles();
+      pointlists[1].setgradient(false);
+      pointlists[1].makeqindex();
   }
 }
 
 void drawtin_i(string args)
 {
   double w,e,s,n;
-  if (topopoints.edges.size())
+  if (pointlists[1].edges.size())
   {
-    w=topopoints.dirbound(degtobin(0));
-    s=topopoints.dirbound(degtobin(90));
-    e=-topopoints.dirbound(degtobin(180));
-    n=-topopoints.dirbound(degtobin(270));
+    w=pointlists[1].dirbound(degtobin(0));
+    s=pointlists[1].dirbound(degtobin(90));
+    e=-pointlists[1].dirbound(degtobin(180));
+    n=-pointlists[1].dirbound(degtobin(270));
     psopen(trim(args).c_str());
     psprolog();
     setscale(w,s,n,e);
     startpage();
-    topopoints.dumpedges_ps(false);
+    pointlists[1].dumpedges_ps(false);
     endpage();
     pstrailer();
     psclose();
@@ -136,11 +136,11 @@ void drawtin_i(string args)
 void rasterdraw_i(string args)
 {
   double w,e,s,n;
-  w=topopoints.dirbound(degtobin(0));
-  s=topopoints.dirbound(degtobin(90));
-  e=-topopoints.dirbound(degtobin(180));
-  n=-topopoints.dirbound(degtobin(270));
-  rasterdraw(topopoints,xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,trim(args));
+  w=pointlists[1].dirbound(degtobin(0));
+  s=pointlists[1].dirbound(degtobin(90));
+  e=-pointlists[1].dirbound(degtobin(180));
+  n=-pointlists[1].dirbound(degtobin(270));
+  rasterdraw(pointlists[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,trim(args));
 }
 
 void help(string args)
@@ -174,6 +174,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("raster",rasterdraw_i,"Draw raster topo: filename.ppm"));
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
+  pointlists.resize(1);
   while (cont)
   {
     cout<<"? ";

@@ -15,7 +15,7 @@ using std::map;
 void dumppoints()
 {map<int,point>::iterator i;
  printf("dumppoints\n");
- for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+ for (i=pointlists[1].points.begin();i!=pointlists[1].points.end();i++)
      i->second.dump();
  printf("end dump\n");
  }
@@ -24,7 +24,7 @@ void dumppointsvalence()
 {
   map<int,point>::iterator i;
   printf("dumppoints\n");
-  for (i=topopoints.points.begin();i!=topopoints.points.end();i++)
+  for (i=pointlists[1].points.begin();i!=pointlists[1].points.end();i++)
     printf("%d %d\n",i->first,i->second.valence());
   printf("end dump\n");
 }
@@ -111,7 +111,7 @@ void aster(int n)
  xy pnt;
  for (i=0;i<n;i++)
      {pnt=xy(cos(angle*i)*sqrt(i+0.5),sin(angle*i)*sqrt(i+0.5));
-      topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+      pointlists[1].addpoint(i+1,point(pnt,testsurface(pnt),"test"));
       }
  }
 
@@ -124,7 +124,7 @@ void _ellipse(int n,double skewness)
   for (i=0;i<n;i++)
   {
     pnt=xy(cos(angle*i)*sqrt(n+0.5)*(1-skewness),sin(angle*i)*sqrt(n+0.5)*(1+skewness));
-    topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+    pointlists[1].addpoint(i+1,point(pnt,testsurface(pnt),"test"));
   }
 }
 
@@ -136,7 +136,7 @@ void regpolygon(int n)
   for (i=0;i<n;i++)
   {
     pnt=xy(cos(angle*i)*sqrt(n+0.5),sin(angle*i)*sqrt(n+0.5));
-    topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+    pointlists[1].addpoint(i+1,point(pnt,testsurface(pnt),"test"));
   }
 }
 
@@ -169,7 +169,7 @@ void straightrow(int n)
   {
     angle=(2.0*i/(n-1)-1)*M_PI/6;
     pnt=xy(0,sqrt(n)*tan(angle));
-    topopoints.addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+    pointlists[1].addpoint(i+1,point(pnt,testsurface(pnt),"test"));
   }
 }
 
@@ -179,16 +179,16 @@ void lozenge(int n)
   xy pnt;
   straightrow(n);
   pnt=xy(-sqrt(n),0);
-  topopoints.addpoint(n+1,point(pnt,testsurface(pnt),"test"));
+  pointlists[1].addpoint(n+1,point(pnt,testsurface(pnt),"test"));
   pnt=xy(sqrt(n),0);
-  topopoints.addpoint(n+2,point(pnt,testsurface(pnt),"test"));
+  pointlists[1].addpoint(n+2,point(pnt,testsurface(pnt),"test"));
 }
 
 void rotate(int n)
 {int i;
  double tmpx,tmpy;
  map<int,point>::iterator j;
- for (j=topopoints.points.begin();j!=topopoints.points.end();j++)
+ for (j=pointlists[1].points.begin();j!=pointlists[1].points.end();j++)
      for (i=0;i<n;i++)
          {tmpx=j->second.x*0.6-j->second.y*0.8;
           tmpy=j->second.y*0.6+j->second.x*0.8;
@@ -202,7 +202,7 @@ void movesideways(double sw)
   int i;
   double tmpx,tmpy;
   map<int,point>::iterator j;
-  for (j=topopoints.points.begin();j!=topopoints.points.end();j++)
+  for (j=pointlists[1].points.begin();j!=pointlists[1].points.end();j++)
     j->second.x+=sw;
 }
 
@@ -211,7 +211,7 @@ void enlarge(double sc)
   int i;
   double tmpx,tmpy;
   map<int,point>::iterator j;
-  for (j=topopoints.points.begin();j!=topopoints.points.end();j++)
+  for (j=pointlists[1].points.begin();j!=pointlists[1].points.end();j++)
   {
     j->second.x*=sc;
     j->second.y*=sc;
