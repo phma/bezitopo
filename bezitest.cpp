@@ -39,6 +39,7 @@
 #include "bezier3d.h"
 #include "closure.h"
 #include "manysum.h"
+#include "ldecimal.h"
 
 #define psoutput false
 // affects only maketin
@@ -1793,6 +1794,15 @@ void testcsvline()
   assert(words.size()==2);
 }
 
+void testldecimal()
+{
+  double d;
+  cout<<ldecimal(1/3.)<<endl;
+  cout<<ldecimal(M_PI)<<endl;
+  for (d=M_SQRT_3-20*DBL_EPSILON;d<=M_SQRT_3+20*DBL_EPSILON;d+=DBL_EPSILON)
+    cout<<ldecimal(d)<<endl;
+}
+
 int main(int argc, char *argv[])
 {
   pointlists.resize(2);
@@ -1834,6 +1844,7 @@ int main(int argc, char *argv[])
   testangleconv();
   testgrad();
   testcsvline();
+  testldecimal();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //closure_i();
   return EXIT_SUCCESS;
