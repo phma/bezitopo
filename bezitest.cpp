@@ -1801,6 +1801,11 @@ void testldecimal()
   cout<<ldecimal(M_PI)<<endl;
   for (d=M_SQRT_3-20*DBL_EPSILON;d<=M_SQRT_3+20*DBL_EPSILON;d+=DBL_EPSILON)
     cout<<ldecimal(d)<<endl;
+  for (d=1.25-20*DBL_EPSILON;d<=1.25+20*DBL_EPSILON;d+=DBL_EPSILON)
+    cout<<ldecimal(d)<<endl;
+  for (d=95367431640625;d>1e-14;d/=5)
+    cout<<ldecimal(d)<<endl;
+  cout<<ldecimal(0)<<' '<<ldecimal(INFINITY)<<' '<<ldecimal(NAN)<<' '<<ldecimal(-5.67)<<endl;
 }
 
 int main(int argc, char *argv[])
