@@ -1797,15 +1797,30 @@ void testcsvline()
 void testldecimal()
 {
   double d;
+  bool looptests=false;
   cout<<ldecimal(1/3.)<<endl;
   cout<<ldecimal(M_PI)<<endl;
-  for (d=M_SQRT_3-20*DBL_EPSILON;d<=M_SQRT_3+20*DBL_EPSILON;d+=DBL_EPSILON)
-    cout<<ldecimal(d)<<endl;
-  for (d=1.25-20*DBL_EPSILON;d<=1.25+20*DBL_EPSILON;d+=DBL_EPSILON)
-    cout<<ldecimal(d)<<endl;
-  for (d=95367431640625;d>1e-14;d/=5)
-    cout<<ldecimal(d)<<endl;
+  if (looptests)
+  {
+    for (d=M_SQRT_3-20*DBL_EPSILON;d<=M_SQRT_3+20*DBL_EPSILON;d+=DBL_EPSILON)
+      cout<<ldecimal(d)<<endl;
+    for (d=1.25-20*DBL_EPSILON;d<=1.25+20*DBL_EPSILON;d+=DBL_EPSILON)
+      cout<<ldecimal(d)<<endl;
+    for (d=95367431640625;d>1e-14;d/=5)
+      cout<<ldecimal(d)<<endl;
+    for (d=123400000000000;d>3e-15;d/=10)
+      cout<<ldecimal(d)<<endl;
+  }
   cout<<ldecimal(0)<<' '<<ldecimal(INFINITY)<<' '<<ldecimal(NAN)<<' '<<ldecimal(-5.67)<<endl;
+  cout<<ldecimal(3628800)<<' '<<ldecimal(1296000)<<' '<<ldecimal(0.000016387064)<<endl;
+  assert(ldecimal(0)=="0");
+  assert(ldecimal(1)=="1");
+  assert(ldecimal(-1)=="-1");
+  assert(ldecimal(1.7320508)=="1.7320508");
+  assert(ldecimal(-0.00064516)=="-.00064516");
+  assert(ldecimal(3628800)=="3628800");
+  assert(ldecimal(1296000)=="1296e3");
+  assert(ldecimal(0.000016387064)=="1.6387064e-5");
 }
 
 int main(int argc, char *argv[])

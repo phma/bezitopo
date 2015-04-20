@@ -13,7 +13,7 @@ using namespace std;
 string ldecimal(double x)
 {
   double x2;
-  int i,iexp;
+  int i,iexp,chexp;
   size_t zpos;
   char *dotpos,*epos;
   string ret,s,m,antissa,exponent;
@@ -46,11 +46,14 @@ string ldecimal(double x)
       m="";
       iexp++;
     }
-    if (iexp>0 && iexp<=antissa.length())
+    if (iexp>0)
     {
-      m+=antissa.substr(0,iexp);
-      antissa.erase(0,iexp);
-      iexp=0;
+      chexp=iexp;
+      if (chexp>antissa.length())
+	chexp=antissa.length();
+      m+=antissa.substr(0,chexp);
+      antissa.erase(0,chexp);
+      iexp-=chexp;
     }
     while (iexp>-5 && iexp<0 && m.length()==0)
     {
