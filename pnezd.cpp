@@ -20,7 +20,7 @@ using namespace std;
  * consisting of ^Z; it must be ignored.
  */
 
-vector<string> csvline(string line)
+vector<string> parsecsvline(string line)
 {
   bool inquote,endquote;
   size_t pos;
@@ -74,6 +74,49 @@ vector<string> csvline(string line)
   return ret;
 }
 
+string makecsvword(string word)
+{
+  string ret;
+  size_t pos;
+  if (word.find_first_of("\",")==string::npos)
+    ret=word;
+  else
+  {
+    ret="\"";
+    while (word.length())
+    {
+      pos=word.find_first_of('"');
+      if (pos==string::npos)
+      {
+	ret+=word;
+	word="";
+      }
+      else
+      {
+	ret+=word.substr(0,pos+1)+'"';
+	word.erase(0,pos+1);
+      }
+    }
+    ret+='"';
+  }
+  return ret;
+}
+
+string makecsvline(vector<string> words)
+{
+  string ret;
+  int i;
+  if (words.size()==1 && words[0].length()==0)
+    ret="\"\""; // special case: a single empty word must be quoted
+  for (i=0;i<words.size();i++)
+  {
+    if (i)
+      ret+=',';
+    ret+=makecsvword(words[i]);
+  }
+  return ret;
+}
+
 int readpnezd(string fname,bool overwrite)
 {
   ifstream infile;
@@ -90,7 +133,7 @@ int readpnezd(string fname,bool overwrite)
     do
     {
       getline(infile,line);
-      words=csvline(line);
+      words=parsecsvline(line);
       if (words.size()==5)
       {
 	pstr=words[0];

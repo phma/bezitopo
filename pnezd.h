@@ -8,5 +8,6 @@
 #include <vector>
 #include <string>
 
-std::vector<std::string> csvline(string line);
+std::vector<std::string> parsecsvline(std::string line);
+std::string makecsvline(std::vector<std::string> words);
 int readpnezd(std::string fname,bool overwrite=false);

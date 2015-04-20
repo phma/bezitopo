@@ -1784,14 +1784,20 @@ void testangleconv()
 void testcsvline()
 {
   vector<string> words;
-  words=csvline("");
+  string line;
+  words=parsecsvline(line="");
   assert(words.size()==0);
-  words=csvline("\"\"");
+  assert(makecsvline(words)==line);
+  words=parsecsvline(line="\"\"");
   assert(words.size()==1);
-  words=csvline("\"pote\"\"mkin\"");
+  //cout<<makecsvline(words)<<endl;
+  assert(makecsvline(words)==line);
+  words=parsecsvline(line="\"pote\"\"mkin\"");
   assert(words[0].length()==9);
-  words=csvline("\"3,4\",\"5,12\"");
+  assert(makecsvline(words)==line);
+  words=parsecsvline(line="\"3,4\",\"5,12\"");
   assert(words.size()==2);
+  assert(makecsvline(words)==line);
 }
 
 void testldecimal()
