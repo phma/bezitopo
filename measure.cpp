@@ -261,6 +261,26 @@ void setfoot(int f)
   cfactors[1].factor=cfactors[0].factor*66;
 }
 
+double from_coherent(double measurement,int unitp)
+{
+  return measurement/cfactor(unitp);
+}
+
+double to_coherent(double measurement,int unitp)
+{
+  return measurement*cfactor(unitp);
+}
+
+double from_coherent_length(double measurement)
+{
+  return from_coherent(measurement,length_unit);
+}
+
+double to_coherent_length(double measurement)
+{
+  return to_coherent(measurement,length_unit);
+}
+
 char *format_meas(double measurement, unsigned int unitp)
 {static char output[80],format[80];
  unsigned int base,exp,i;

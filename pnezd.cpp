@@ -12,6 +12,7 @@
 #include "pnezd.h"
 #include "measure.h"
 #include "pointlist.h"
+#include "ldecimal.h"
 using namespace std;
 
 /* The file produced by Total Open Station has a first line consisting of column
@@ -158,6 +159,47 @@ int readpnezd(string fname,bool overwrite)
 	cerr<<"Ignored line: "<<line<<endl;
     } while (infile.good());
     infile.close();
+  }
+  return npoints;
+}
+
+int writepnezd(string fname)
+{
+  ofstream outfile;
+  size_t size=0,pos1,pos2;
+  ssize_t len;
+  int p,npoints;
+  double n,e,z;
+  ptlist::iterator i;
+  vector<string> words;
+  string line,pstr,nstr,estr,zstr,d;
+  outfile.open(fname);
+  npoints=-(!outfile.is_open());
+  if (outfile.is_open())
+  {
+    for (i=pointlists[0].points.begin();i!=pointlists[0].points.end();i++)
+    {
+      p=i->first;
+      n=i->second.north();
+      e=i->second.east();
+      z=i->second.elev();
+      d=i->second.note;
+      pstr=to_string(p);
+      nstr=ldecimal(from_coherent_length(n));
+      estr=ldecimal(from_coherent_length(e));
+      zstr=ldecimal(from_coherent_length(z));
+      words.clear();
+      words.push_back(pstr);
+      words.push_back(nstr);
+      words.push_back(estr);
+      words.push_back(zstr);
+      words.push_back(d);
+      line=makecsvline(words);
+      outfile<<line<<endl;
+      if (outfile.good())
+	npoints++;
+    }
+    outfile.close();
   }
   return npoints;
 }

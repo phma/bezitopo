@@ -74,6 +74,12 @@ void readpoints(string args)
   readpnezd(trim(args),false);
 }
 
+void writepoints(string args)
+// just pnezd for now
+{
+  writepnezd(trim(args));
+}
+
 void maketin_i(string args)
 {
   int error=0;
@@ -169,6 +175,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("setlunit",setlengthunit_i,"Set length unit: m, ft, ch"));
   commands.push_back(command("cvtmeas",cvtmeas_i,"Convert measurements"));
   commands.push_back(command("read",readpoints,"Read coordinate file in PNEZD format: filename"));
+  commands.push_back(command("write",writepoints,"Write coordinate file in PNEZD format: filename"));
   commands.push_back(command("maketin",maketin_i,"Make triangulated irregular network"));
   commands.push_back(command("drawtin",drawtin_i,"Draw TIN: filename.ps"));
   commands.push_back(command("raster",rasterdraw_i,"Draw raster topo: filename.ppm"));

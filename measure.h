@@ -99,6 +99,14 @@ void setfoot(int f);
 /* Switches between international and survey feet. */
 void set_length_unit(int unitp);
 double precision(int unitp);
+/* Converts measurements to and from coherent SI units (internal units)
+ * without formatting to a precision. Used when writing coordinate files
+ * that may be in feet or meters.
+ */
+double from_coherent(double measurement,int unitp);
+double to_coherent(double measurement,int unitp);
+double from_coherent_length(double measurement);
+double to_coherent_length(double measurement);
 double parse_length(const char *meas);
 double parse_length(std::string meas);
 std::string format_length(double measurement);
