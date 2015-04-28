@@ -45,6 +45,7 @@ public:
   double slope(double along);
   double startslope();
   double endslope();
+  double contourcept(double e);
   virtual xyz station(double along);
   double avgslope()
   {

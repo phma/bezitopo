@@ -589,6 +589,7 @@ void testvcurve()
 void testsegment()
 {
   int i;
+  double cept;
   vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),sta;
   segment a(beg,end),b,c;
@@ -599,6 +600,9 @@ void testsegment()
   a.setslope(END,-0.1+a.avgslope());
   assert(fabs(a.elev(1)-3.3)<0.05);
   assert(fabs(a.slope(250)+0.042)<0.001);
+  cept=a.contourcept(5);
+  cout<<"a crosses 5 at "<<cept<<"; a.elev()="<<a.elev(cept)<<endl;
+  assert(fabs(a.elev(cept)-5)<1e-6);
   sta=a.station(200);
   assert(sta==xyz(120,160,31));
   assert(std::isinf(a.radius(0)));

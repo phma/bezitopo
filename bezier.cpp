@@ -314,6 +314,8 @@ int triangle::findnocubedir()
  * But if they have the same sign, try b+30 and b+90° If those still have
  * the same sign, try b+90° and b+150. If even those have the same sign,
  * the 3d deriv is identically 0 and you're seeing roundoff error; return b+90°.
+ * 
+ * The same root-finding algorithm is used in segment::contourcept in segment.cpp.
  */
 {
   int i,b,d,beg,mid,end;

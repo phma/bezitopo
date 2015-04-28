@@ -8,6 +8,7 @@
 #include <cmath>
 #include <typeinfo>
 #include <iostream>
+#include <cfloat>
 #include "segment.h"
 #include "arc.h"
 #include "spiral.h"
@@ -105,6 +106,49 @@ xyz segment::station(double along)
   gnola=len-along;
   return xyz((start.east()*gnola+end.east()*along)/len,(start.north()*gnola+end.north()*along)/len,
 	     elev(along));
+}
+
+double segment::contourcept(double e)
+/* Finds ret such that elev(ret)=e. Used for tracing a contour from one subedge
+ * to the next within a triangle.
+ * 
+ * This uses a combination of bisection and false position. It's the same algorithm
+ * used in triangle::findnocubedir in bezier.cpp. I'll replace it with Brent's
+ * or Dekker's method when I figure out how those work.
+ */
+{
+  double beg,mdp,lst,begelev,mdpelev,lstelev,crit,ret;
+  beg=0;
+  lst=length();
+  begelev=elev(beg)-e;
+  lstelev=elev(lst)-e;
+  while ((lst-beg)/(fabs(lst)+fabs(beg))>3*DBL_EPSILON)
+  {
+    if (abs(lstelev)>=10*abs(begelev) || abs(begelev)>=10*abs(lstelev) || (lst-beg)/(fabs(lst)+fabs(beg))>30*DBL_EPSILON)
+      mdp=(lst+beg)/2;
+    else
+      mdp=(beg*lstelev-lst*begelev)/(lstelev-begelev);
+    mdpelev=elev(mdp)-e;
+    //cout<<beg<<' '<<begderiv<<' '<<mdp<<' '<<mdpderiv<<' '<<end<<' '<<endderiv<<endl;
+    crit=mdpelev/(lstelev-begelev);
+    if (std::isnan(crit))
+      crit=0;
+    if (crit>=0)
+    {
+      lst=mdp;
+      lstelev=mdpelev;
+    }
+    if (crit<=0)
+    {
+      beg=mdp;
+      begelev=mdpelev;
+    }
+  }
+  if (abs(begelev)>abs(lstelev))
+    ret=lst;
+  else
+    ret=beg;
+  return ret;
 }
 
 vector<double> segment::vextrema(bool withends)
