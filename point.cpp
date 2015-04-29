@@ -134,6 +134,11 @@ double xyz::elev()
 {return z;
  }
 
+double xyz::length()
+{
+  return sqrt(x*x+y*y+z*z);
+}
+
 xyz::xyz()
 {x=y=z=0;
  }

@@ -40,6 +40,7 @@
 #include "closure.h"
 #include "manysum.h"
 #include "ldecimal.h"
+#include "ellipsoid.h"
 
 #define psoutput false
 // affects only maketin
@@ -1833,6 +1834,16 @@ void testldecimal()
   assert(ldecimal(0.000016387064)=="1.6387064e-5");
 }
 
+void testellipsoid()
+{
+  xyz sealevel,kmhigh,diff;
+  ellipsoid test1(8026957,0,0.5),test2(8026957,4013478.5,0);
+  sealevel=test1.geoc(degtobin(45),0,0);
+  kmhigh=test1.geoc(degtobin(45),0,65536000);
+  diff=kmhigh-sealevel;
+  cout<<diff.east()<<' '<<diff.north()<<' '<<diff.elev()<<endl;
+}
+
 int main(int argc, char *argv[])
 {
   pointlists.resize(2);
@@ -1875,6 +1886,7 @@ int main(int argc, char *argv[])
   testgrad();
   testcsvline();
   testldecimal();
+  testellipsoid();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //closure_i();
   return EXIT_SUCCESS;

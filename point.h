@@ -67,6 +67,7 @@ class xyz
  double east();
  double north();
  double elev();
+ double length();
  void setelev(double h)
  {
    z=h;
