@@ -1836,12 +1836,21 @@ void testldecimal()
 
 void testellipsoid()
 {
-  xyz sealevel,kmhigh,diff;
+  xyz sealevel,kmhigh,noffset,soffset,diff;
   ellipsoid test1(8026957,0,0.5),test2(8026957,4013478.5,0);
   sealevel=test1.geoc(degtobin(45),0,0);
   kmhigh=test1.geoc(degtobin(45),0,65536000);
   diff=kmhigh-sealevel;
   cout<<diff.east()<<' '<<diff.north()<<' '<<diff.elev()<<endl;
+  assert(abs(diff.east()-707.107)<0.001);
+  assert(abs(diff.elev()-707.107)<0.001);
+  cout<<sealevel.east()<<' '<<sealevel.north()<<' '<<sealevel.elev()<<endl;
+  assert(sealevel.east()/sealevel.elev()==4);
+  noffset=test1.geoc(degtobin(45)+1,0,0);
+  soffset=test1.geoc(degtobin(45)-1,0,0);
+  diff=noffset-soffset;
+  cout<<diff.east()<<' '<<diff.north()<<' '<<diff.elev()<<endl;
+  assert(abs(diff.east()+diff.elev())<1e-6);
 }
 
 int main(int argc, char *argv[])
