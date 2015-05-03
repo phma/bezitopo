@@ -138,6 +138,11 @@ unsigned treverse(unsigned n)
   return treversetable[n%59049]*59049+treversetable[n/59049];
 }
 
+halton::halton()
+{
+  n=0;
+}
+
 halton& halton::operator++()
 {
   ++n;

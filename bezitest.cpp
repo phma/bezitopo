@@ -777,6 +777,7 @@ void testspiral()
    * it depends on the processor, not the operating system.
    * The ARM on a Raspberry Pi does not have a distinct long double type
    * and fails this test. The Pi is not suitable to run this program.
+   * Running under Valgrind, the program says there are 10 bad bearings.
    */
   printf("%d bad bearings out of 118\n",badcount);
   assert(badcount<=13);
@@ -1851,8 +1852,9 @@ void testellipsoid()
   cout<<diff.east()<<' '<<diff.north()<<' '<<diff.elev()<<endl;
   assert(abs(diff.east()-707.107)<0.001);
   assert(abs(diff.elev()-707.107)<0.001);
-  cout<<sealevel.east()<<' '<<sealevel.north()<<' '<<sealevel.elev()<<endl;
-  assert(sealevel.east()/sealevel.elev()==4);
+  cout<<sealevel.east()<<' '<<sealevel.north()<<' '<<sealevel.elev()<<' '<<ldecimal(sealevel.east()/sealevel.elev())<<endl;
+  assert(fabs(sealevel.east()/sealevel.elev()-4)<1e-9);
+  // The ratio is 4 when running on the CPU but 4.000000000000001 when running on Valgrind.
   noffset=test1.geoc(degtobin(45)+1,0,0);
   soffset=test1.geoc(degtobin(45)-1,0,0);
   diff=noffset-soffset;

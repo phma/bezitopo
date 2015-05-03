@@ -30,6 +30,7 @@ private:
   unsigned long long n;
   halton& operator++();
 public:
+  halton();
   xy _pnt();
   xy pnt();
   double _scalar(double x);

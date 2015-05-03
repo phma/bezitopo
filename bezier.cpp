@@ -1043,9 +1043,9 @@ void triangle::addperimeter()
   if (sidec.size()>1 && dist(xy(*a),xy(sidec[0]))>dist(xy(*a),xy(sidec[1])))
     swap(sidec[0],sidec[1]);
   if (sidea.size()>1 && dist(xy(*b),xy(sidea[0]))>dist(xy(*b),xy(sidea[1])))
-    swap(sidec[0],sidec[1]);
+    swap(sidea[0],sidea[1]);
   if (sideb.size()>1 && dist(xy(*c),xy(sideb[0]))>dist(xy(*c),xy(sideb[1])))
-    swap(sidec[0],sidec[1]);
+    swap(sideb[0],sideb[1]);
   oldnumber=subdiv.size();
   if (sidec.size())
   {

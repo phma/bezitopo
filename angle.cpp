@@ -99,7 +99,7 @@ double bintorad(int angle)
 
 int rottobin(double angle)
 {
-  double iprt,fprt;
+  double iprt=0,fprt;
   fprt=2*modf(angle/2,&iprt);
   if (fprt>=1)
     fprt-=2;

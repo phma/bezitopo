@@ -82,7 +82,7 @@ xy cornu(double t,double curvature,double clothance)
 {
   vector<long double> realparts,imagparts,cupower,clpower;
   int i,j;
-  long double facpower,rsum,isum,t2,bigpart,binom,clotht,term,bigterm;
+  long double facpower,rsum,isum,t2,bigpart,binom,clotht,term,bigterm=0;
   double precision;
   t2=t*t;
   clotht=clothance*t/2;
