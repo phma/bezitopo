@@ -1136,7 +1136,7 @@ void test1tri(string triname,int excrits)
   vector<double> xs;
   vector<xyz> slice;
   vector<xy> crits;
-  int i,j,side,cubedir,ptype;
+  int i,j,side,cubedir,ptype,size0,size1,size2;
   double vertex,offset,arearatio;
   string fname,tfname,psfname;
   fstream ofile;
@@ -1218,6 +1218,13 @@ void test1tri(string triname,int excrits)
 	dot(pointlists[1].edges[j].critpoint(i));
   }
   pointlists[1].triangles[0].subdivide();
+  size0=pointlists[1].triangles[0].subdiv.size();
+  pointlists[1].triangles[0].addperimeter();
+  size1=pointlists[1].triangles[0].subdiv.size();
+  pointlists[1].triangles[0].removeperimeter();
+  size2=pointlists[1].triangles[0].subdiv.size();
+  assert(size0==size2);
+  cout<<size1-size0<<" monotonic segments in perimeter"<<endl;
   for (j=0;j<pointlists[1].triangles[0].subdiv.size();j++)
     spline(pointlists[1].triangles[0].subdiv[j].approx3d(1));
   endpage();

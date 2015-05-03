@@ -95,6 +95,8 @@ public:
   void findcriticalpts();
   int pointtype(xy pnt);
   void subdivide();
+  void addperimeter();
+  void removeperimeter();
 private:
   double vtxeloff(double off);
   void setsubslopes(segment &s);

@@ -1022,3 +1022,87 @@ void triangle::subdivide()
   for (i=0;i<subdiv.size();i++)
     cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
 }
+
+void triangle::addperimeter()
+{
+  int i,oldnumber;
+  edge *sid;
+  vector<xyz> sidea,sideb,sidec;
+  sid=a->edg(this);
+  for (i=0;i<2;i++)
+    if (isfinite(sid->extrema[i]))
+      sideb.push_back(sid->critpoint(i));
+  sid=b->edg(this);
+  for (i=0;i<2;i++)
+    if (isfinite(sid->extrema[i]))
+      sidec.push_back(sid->critpoint(i));
+  sid=c->edg(this);
+  for (i=0;i<2;i++)
+    if (isfinite(sid->extrema[i]))
+      sidea.push_back(sid->critpoint(i));
+  if (sidec.size()>1 && dist(xy(*a),xy(sidec[0]))>dist(xy(*a),xy(sidec[1])))
+    swap(sidec[0],sidec[1]);
+  if (sidea.size()>1 && dist(xy(*b),xy(sidea[0]))>dist(xy(*b),xy(sidea[1])))
+    swap(sidec[0],sidec[1]);
+  if (sideb.size()>1 && dist(xy(*c),xy(sideb[0]))>dist(xy(*c),xy(sideb[1])))
+    swap(sidec[0],sidec[1]);
+  oldnumber=subdiv.size();
+  if (sidec.size())
+  {
+    subdiv.push_back(segment(*a,sidec[0]));
+    for (i=0;i<sidec.size()-1;i++)
+      subdiv.push_back(segment(sidec[i],sidec[i+1]));
+    subdiv.push_back(segment(sidec[0],*b));
+  }
+  else
+    subdiv.push_back(segment(*a,*b));
+  if (sidea.size())
+  {
+    subdiv.push_back(segment(*b,sidea[0]));
+    for (i=0;i<sidea.size()-1;i++)
+      subdiv.push_back(segment(sidea[i],sidea[i+1]));
+    subdiv.push_back(segment(sidea[0],*c));
+  }
+  else
+    subdiv.push_back(segment(*b,*c));
+  if (sideb.size())
+  {
+    subdiv.push_back(segment(*c,sideb[0]));
+    for (i=0;i<sideb.size()-1;i++)
+      subdiv.push_back(segment(sideb[i],sideb[i+1]));
+    subdiv.push_back(segment(sideb[0],*a));
+  }
+  else
+    subdiv.push_back(segment(*c,*a));
+  for (i=oldnumber;i<subdiv.size();i++)
+    setsubslopes(subdiv[i]);
+}
+
+void triangle::removeperimeter()
+{
+  int acnt,bcnt,ccnt,i;
+  for (i=subdiv.size()-1,acnt=bcnt=ccnt=0;i>=0 && acnt<3 && bcnt<3 && ccnt<3 && acnt+bcnt+ccnt<6;i--)
+  {
+    if (subdiv[i].getstart()==*a)
+      acnt++;
+    if (subdiv[i].getend()==*a)
+      acnt++;
+    if (subdiv[i].getstart()==*b)
+      bcnt++;
+    if (subdiv[i].getend()==*b)
+      bcnt++;
+    if (subdiv[i].getstart()==*c)
+      ccnt++;
+    if (subdiv[i].getend()==*c)
+      ccnt++;
+  }
+  i++;
+  assert(subdiv.size()-i<=9);
+  if (acnt==2 && bcnt==2 && ccnt==2)
+  {
+    subdiv.resize(i);
+    subdiv.shrink_to_fit();
+  }
+  else
+    assert(acnt==2 && bcnt==2 && ccnt==2);
+}
