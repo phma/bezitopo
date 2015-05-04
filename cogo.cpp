@@ -38,36 +38,49 @@ char intstable[3][3][3][3]=
   };
 
 double area3(xy a,xy b,xy c)
-{int i,j;
- double surface,area[COLIN];
- bool cont;
- area[0]=a.east()*b.north();
- area[1]=-b.east()*a.north();
- area[2]=b.east()*c.north();
- area[3]=-c.east()*b.north();
- area[4]=c.east()*a.north();
- area[5]=-a.east()*c.north();
- do {cont=false; // Sort the six areas into absolute value order for numerical stability.
-     for (i=0;i<5;i++)
-         if (fabs(area[i+1])<fabs(area[i]))
-            {surface=area[i];
-             area[i]=area[i+1];
-             area[i+1]=surface;
-             cont=true;
-             }
-     } while (cont);
- for (j=5;j>0;j-=2) // Make signs of equal-absolute-value areas alternate.
-   for (i=0;i+j<6;i++)
-     if (area[i]+area[i+j]==0 && (area[i]<0 ^ (i&1)))
-     {
-       area[i]=-area[i];
-       area[i+j]=-area[i+j];
-     }
- for (surface=i=0;i<6;i++)
-     surface+=area[i];
- surface/=2;
- return surface;
- }
+{
+  int i,j;
+  double surface,area[COLIN];
+  area[0]=a.east()*b.north();
+  area[1]=-b.east()*a.north();
+  area[2]=b.east()*c.north();
+  area[3]=-c.east()*b.north();
+  area[4]=c.east()*a.north();
+  area[5]=-a.east()*c.north();
+  // Sort the six areas into absolute value order for numerical stability.
+  for (i=0;i<3;i++) // Shell sort, steps 3, 2, and 1
+    if (fabs(area[i+3])<fabs(area[i]))
+    {
+      surface=area[i];
+      area[i]=area[i+3];
+      area[i+3]=surface;
+    }
+  for (i=0;i<4;i++)
+    if (fabs(area[i+2])<fabs(area[i]))
+    {
+      surface=area[i];
+      area[i]=area[i+2];
+      area[i+2]=surface;
+    }
+  for (i=0;i<5;i++)
+    if (fabs(area[i+1])<fabs(area[i]))
+    {
+      surface=area[i];
+      area[i]=area[i+1];
+      area[i+1]=surface;
+    }
+  for (j=5;j>0;j-=2) // Make signs of equal-absolute-value areas alternate.
+    for (i=0;i+j<6;i++)
+      if (area[i]+area[i+j]==0 && (area[i]<0 ^ (i&1)))
+      {
+        area[i]=-area[i];
+        area[i+j]=-area[i+j];
+      }
+  for (surface=i=0;i<6;i++)
+    surface+=area[i];
+  surface/=2;
+  return surface;
+}
 
 xy intersection (xy a,xy c,xy b,xy d)
 //Intersection of lines ac and bd.

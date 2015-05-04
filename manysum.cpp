@@ -10,6 +10,8 @@
 #include "manysum.h"
 using namespace std;
 
+int manysum::cnt=0;
+
 void manysum::clear()
 {
   bucket.clear();
@@ -46,15 +48,18 @@ void manysum::prune()
 manysum& manysum::operator+=(double x)
 {
   int i,j;
+  double d;
   while (x!=0)
   {
     frexp(x,&i);
     bucket[i]+=x;
-    frexp(bucket[i],&j);
+    frexp(d=bucket[i],&j);
     if (j>i)
     {
-      x=bucket[i];
+      x=d;
       bucket[i]=0;
+      if (((++cnt)&0xff)==0)
+	prune();
     }
     else
       x=0;

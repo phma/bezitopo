@@ -19,6 +19,7 @@ class manysum
 {
 private:
   std::map<int,double> bucket;
+  static int cnt;
 public:
   void clear();
   void prune();
