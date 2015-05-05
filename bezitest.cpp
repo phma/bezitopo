@@ -1846,6 +1846,8 @@ void testellipsoid()
 {
   xyz sealevel,kmhigh,noffset,soffset,diff;
   ellipsoid test1(8026957,0,0.5),test2(8026957,4013478.5,0);
+  assert(test1.geteqr()==test2.geteqr());
+  assert(test1.getpor()==test2.getpor());
   sealevel=test1.geoc(degtobin(45),0,0);
   kmhigh=test1.geoc(degtobin(45),0,65536000);
   diff=kmhigh-sealevel;
@@ -1854,12 +1856,12 @@ void testellipsoid()
   assert(abs(diff.elev()-707.107)<0.001);
   cout<<sealevel.east()<<' '<<sealevel.north()<<' '<<sealevel.elev()<<' '<<ldecimal(sealevel.east()/sealevel.elev())<<endl;
   assert(fabs(sealevel.east()/sealevel.elev()-4)<1e-9);
-  // The ratio is 4 when running on the CPU but 4.000000000000001 when running on Valgrind.
   noffset=test1.geoc(degtobin(45)+1,0,0);
   soffset=test1.geoc(degtobin(45)-1,0,0);
   diff=noffset-soffset;
   cout<<diff.east()<<' '<<diff.north()<<' '<<diff.elev()<<endl;
   assert(abs(diff.east()+diff.elev())<1e-6);
+  cout<<"average radius "<<ldecimal(test1.avgradius())<<endl;
 }
 
 int main(int argc, char *argv[])
