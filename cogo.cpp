@@ -40,7 +40,7 @@ char intstable[3][3][3][3]=
 double area3(xy a,xy b,xy c)
 {
   int i,j;
-  double surface,area[COLIN];
+  double surface,area[6];
   area[0]=a.east()*b.north();
   area[1]=-b.east()*a.north();
   area[2]=b.east()*c.north();

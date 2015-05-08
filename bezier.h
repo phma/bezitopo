@@ -97,6 +97,8 @@ public:
   void subdivide();
   void addperimeter();
   void removeperimeter();
+  uintptr_t edgepart(int subdir);
+  int subdir(uintptr_t edgepart);
 private:
   double vtxeloff(double off);
   void setsubslopes(segment &s);

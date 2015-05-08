@@ -1106,3 +1106,131 @@ void triangle::removeperimeter()
   else
     assert(acnt==2 && bcnt==2 && ccnt==2);
 }
+
+/* Convert an index number to a triangle's subdiv to and from a pointer to edge
+ * with a part number added. This is used to transfer the subdiv from one triangle
+ * to the next when drawing contours. The index number has bit 16 set or clear
+ * to indicate which side of the segment the next point of the contour is on.
+ * If it's set, you're crossing the segment rightward, which is to the outside
+ * if the segment is on the perimeter.
+ */
+uintptr_t triangle::edgepart(int subdir) // subdir should have bit 16 set, but it's ignored
+{
+  int acnt,bcnt,ccnt,apos,bpos,cpos,i,base,pieces;
+  edge *sid=NULL;
+  bool backward;
+  uintptr_t ret;
+  for (i=subdiv.size()-1,acnt=bcnt=ccnt=0;i>=0 && acnt<3 && bcnt<3 && ccnt<3 && acnt+bcnt+ccnt<6;i--)
+  {
+    if (subdiv[i].getstart()==*a)
+    {
+      apos=i;
+      acnt++;
+    }
+    if (subdiv[i].getend()==*a)
+      acnt++;
+    if (subdiv[i].getstart()==*b)
+    {
+      bpos=i;
+      bcnt++;
+    }
+    if (subdiv[i].getend()==*b)
+      bcnt++;
+    if (subdiv[i].getstart()==*c)
+    {
+      cpos=i;
+      ccnt++;
+    }
+    if (subdiv[i].getend()==*c)
+      ccnt++;
+  }
+  assert (apos<bpos && bpos<cpos);
+  subdir&=65535;
+  if (subdir>=apos) // the side starting at A is side c
+  {
+    sid=b->edg(this); // which is found by asking point B
+    base=apos;
+    pieces=bpos-apos;
+  }
+  if (subdir>=bpos) // the side starting at B is side a
+  {
+    sid=c->edg(this); // which is found by asking point C
+    base=bpos;
+    pieces=cpos-bpos;
+  }
+  if (subdir>=cpos) // the side starting at C is side b
+  {
+    sid=a->edg(this); // which is found by asking point A
+    base=cpos;
+    pieces=subdiv.size()-cpos;
+  }
+  if (subdir>subdiv.size())
+    sid=NULL;
+  if (sid)
+  {
+    backward=area3(*sid->a,*sid->b,centroid())<0;
+    ret=(uintptr_t)sid;
+    assert((ret&3)==0);
+    ret+=backward?(base-subdir+pieces-1):(subdir-base);
+  }
+  else
+    ret=0;
+  return ret;
+}
+
+int triangle::subdir(uintptr_t edgepart)
+{
+  int acnt,bcnt,ccnt,apos,bpos,cpos,i,base=-1,pieces;
+  edge *sid;
+  bool backward;
+  int ret;
+  for (i=subdiv.size()-1,acnt=bcnt=ccnt=0;i>=0 && acnt<3 && bcnt<3 && ccnt<3 && acnt+bcnt+ccnt<6;i--)
+  {
+    if (subdiv[i].getstart()==*a)
+    {
+      apos=i;
+      acnt++;
+    }
+    if (subdiv[i].getend()==*a)
+      acnt++;
+    if (subdiv[i].getstart()==*b)
+    {
+      bpos=i;
+      bcnt++;
+    }
+    if (subdiv[i].getend()==*b)
+      bcnt++;
+    if (subdiv[i].getstart()==*c)
+    {
+      cpos=i;
+      ccnt++;
+    }
+    if (subdiv[i].getend()==*c)
+      ccnt++;
+  }
+  assert (apos<bpos && bpos<cpos);
+  sid=(edge *)(edgepart&~3);
+  if (sid==b->edg(this))
+  {
+    base=apos;
+    pieces=bpos-apos;
+  }
+  if (sid==c->edg(this))
+  {
+    base=bpos;
+    pieces=cpos-bpos;
+  }
+  if (sid==a->edg(this))
+  {
+    base=cpos;
+    pieces=subdiv.size()-cpos;
+  }
+  if (base>=0)
+  {
+    backward=area3(*sid->a,*sid->b,centroid())<0;
+    ret=base+backward?(pieces-1-(edgepart&3)):(edgepart&3);
+  }
+  else
+    ret=-1;
+  return ret;
+}
