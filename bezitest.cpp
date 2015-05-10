@@ -46,6 +46,7 @@
 // affects only maketin
 
 char hexdig[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+bool slowmanysum=false;
 
 using namespace std;
 
@@ -457,14 +458,14 @@ void testmaketinellipse()
 void testmanysum()
 {
   manysum ms;
-  int i,j;
+  int i,j,h;
   double x,naiveforwardsum,forwardsum,naivebackwardsum,backwardsum;
   cout<<"manysum"<<endl;
   ms.clear();
   for (naiveforwardsum=i=0;i>-7;i--)
   {
     x=pow(1000,i);
-    for (j=0;j<1000000;j++)
+    for (j=0;j<(slowmanysum?1000000:100000);j++)
     {
       naiveforwardsum+=x;
       ms+=x;
@@ -476,7 +477,7 @@ void testmanysum()
   for (naivebackwardsum=0,i=-6;i<1;i++)
   {
     x=pow(1000,i);
-    for (j=0;j<1000000;j++)
+    for (j=0;j<(slowmanysum?1000000:100000);j++)
     {
       naivebackwardsum+=x;
       ms+=x;
@@ -484,10 +485,11 @@ void testmanysum()
   }
   ms.prune();
   backwardsum=ms.total();
-  cout<<setprecision(18)<<naiveforwardsum<<' '<<forwardsum<<' '<<naivebackwardsum<<' '<<backwardsum<<endl;
+  cout<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<endl;
   assert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
   ms.clear();
-  for (naiveforwardsum=i=0;i>-0x360000;i--)
+  h=slowmanysum?1:16;
+  for (naiveforwardsum=i=0;i>-0x360000;i-=h)
   {
     x=exp(i/65536.);
     naiveforwardsum+=x;
@@ -496,7 +498,7 @@ void testmanysum()
   ms.prune();
   forwardsum=ms.total();
   ms.clear();
-  for (naivebackwardsum=0,i=-0x35ffff;i<1;i++)
+  for (naivebackwardsum=0,i=-0x35ffff&-h;i<1;i+=h)
   {
     x=exp(i/65536.);
     naivebackwardsum+=x;
@@ -504,7 +506,7 @@ void testmanysum()
   }
   ms.prune();
   backwardsum=ms.total();
-  cout<<setprecision(18)<<naiveforwardsum<<' '<<forwardsum<<' '<<naivebackwardsum<<' '<<backwardsum<<endl;
+  cout<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<endl;
   assert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
 }
 
