@@ -487,6 +487,9 @@ void testmanysum()
   backwardsum=ms.total();
   cout<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<endl;
   assert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
+  assert(fabs((forwardsum-naiveforwardsum)/(forwardsum+naiveforwardsum))<1000000*DBL_EPSILON);
+  assert(fabs((backwardsum-naivebackwardsum)/(backwardsum+naivebackwardsum))<1000*DBL_EPSILON);
+  assert(fabs((naiveforwardsum-naivebackwardsum)/(naiveforwardsum+naivebackwardsum))>30*DBL_EPSILON);
   ms.clear();
   h=slowmanysum?1:16;
   for (naiveforwardsum=i=0;i>-0x360000;i-=h)
@@ -508,6 +511,9 @@ void testmanysum()
   backwardsum=ms.total();
   cout<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<endl;
   assert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
+  assert(fabs((forwardsum-naiveforwardsum)/(forwardsum+naiveforwardsum))<1000000*DBL_EPSILON);
+  assert(fabs((backwardsum-naivebackwardsum)/(backwardsum+naivebackwardsum))<1000*DBL_EPSILON);
+  assert(fabs((naiveforwardsum-naivebackwardsum)/(naiveforwardsum+naivebackwardsum))>30*DBL_EPSILON);
 }
 
 void testvcurve()
