@@ -38,9 +38,9 @@ char intstable[3][3][3][3]=
   };
 
 #define CMPSWAP(m,n,o) if (fabs(m)>fabs(n)) {o=m;m=n;n=o;}
+#define EQOPP(m,n) if (m+n==0 && m>0) {m=-m;n=-n;}
 double area3(xy a,xy b,xy c)
 {
-  int i,j;
   double surface,temp,area[6];
   area[0]=a.x*b.y;
   area[1]=-b.x*a.y;
@@ -61,16 +61,17 @@ double area3(xy a,xy b,xy c)
   CMPSWAP(area[1],area[2],temp);
   CMPSWAP(area[3],area[4],surface);
   CMPSWAP(area[2],area[3],temp);
-  for (j=5;j>0;j-=2) // Make signs of equal-absolute-value areas alternate.
-    for (i=0;i+j<6;i++)
-      if (area[i]+area[i+j]==0 && (area[i]<0 ^ (i&1)))
-      {
-        area[i]=-area[i];
-        area[i+j]=-area[i+j];
-      }
-  for (surface=i=0;i<6;i++)
-    surface+=area[i];
-  surface/=2;
+  // Make signs of equal-absolute-value areas alternate.
+  EQOPP(area[0],area[5]);
+  EQOPP(area[0],area[3]);
+  EQOPP(area[4],area[1]);
+  EQOPP(area[2],area[5]);
+  EQOPP(area[0],area[1]);
+  EQOPP(area[2],area[1]);
+  EQOPP(area[2],area[3]);
+  EQOPP(area[4],area[3]);
+  EQOPP(area[4],area[5]);
+  surface=(((((area[0]+area[1])+area[2])+area[3])+area[4])+area[5])/2;
   return surface;
 }
 
