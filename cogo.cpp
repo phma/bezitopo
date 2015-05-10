@@ -37,38 +37,30 @@ char intstable[3][3][3][3]=
   IMPOS,IMPOS,NOINT,IMPOS,IMPOS,BDTAC,NOINT,BDTAC,ACXBD  // + +
   };
 
+#define CMPSWAP(m,n,o) if (fabs(m)>fabs(n)) {o=m;m=n;n=o;}
 double area3(xy a,xy b,xy c)
 {
   int i,j;
-  double surface,area[6];
-  area[0]=a.east()*b.north();
-  area[1]=-b.east()*a.north();
-  area[2]=b.east()*c.north();
-  area[3]=-c.east()*b.north();
-  area[4]=c.east()*a.north();
-  area[5]=-a.east()*c.north();
+  double surface,temp,area[6];
+  area[0]=a.x*b.y;
+  area[1]=-b.x*a.y;
+  area[2]=b.x*c.y;
+  area[3]=-c.x*b.y;
+  area[4]=c.x*a.y;
+  area[5]=-a.x*c.y;
   // Sort the six areas into absolute value order for numerical stability.
-  for (i=0;i<3;i++) // Shell sort, steps 3, 2, and 1
-    if (fabs(area[i+3])<fabs(area[i]))
-    {
-      surface=area[i];
-      area[i]=area[i+3];
-      area[i+3]=surface;
-    }
-  for (i=0;i<4;i++)
-    if (fabs(area[i+2])<fabs(area[i]))
-    {
-      surface=area[i];
-      area[i]=area[i+2];
-      area[i+2]=surface;
-    }
-  for (i=0;i<5;i++)
-    if (fabs(area[i+1])<fabs(area[i]))
-    {
-      surface=area[i];
-      area[i]=area[i+1];
-      area[i+1]=surface;
-    }
+  CMPSWAP(area[0],area[1],surface); // sorting network
+  CMPSWAP(area[2],area[3],temp);
+  CMPSWAP(area[4],area[5],surface);
+  CMPSWAP(area[0],area[2],temp);
+  CMPSWAP(area[1],area[4],surface);
+  CMPSWAP(area[3],area[5],temp);
+  CMPSWAP(area[0],area[1],surface);
+  CMPSWAP(area[2],area[3],temp);
+  CMPSWAP(area[4],area[5],surface);
+  CMPSWAP(area[1],area[2],temp);
+  CMPSWAP(area[3],area[4],surface);
+  CMPSWAP(area[2],area[3],temp);
   for (j=5;j>0;j-=2) // Make signs of equal-absolute-value areas alternate.
     for (i=0;i+j<6;i++)
       if (area[i]+area[i+j]==0 && (area[i]<0 ^ (i&1)))
