@@ -99,6 +99,7 @@ public:
   void removeperimeter();
   uintptr_t edgepart(int subdir);
   int subdir(uintptr_t edgepart);
+  int proceed(int subdir,double elevation);
 private:
   double vtxeloff(double off);
   void setsubslopes(segment &s);

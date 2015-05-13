@@ -1234,3 +1234,51 @@ int triangle::subdir(uintptr_t edgepart)
     ret=-1;
   return ret;
 }
+
+struct prorec
+{
+  int n;
+  double a;
+  xy farend;
+};
+
+int triangle::proceed(int subdir,double elevation)
+{
+  int i,j,sign,ret;
+  vector<prorec> list;
+  prorec p;
+  xy s,e;
+  sign=1;
+  if (subdir&65536)
+    sign=-1;
+  subdir&=65535;
+  if (subdir<subdiv.size())
+  {
+    s=subdiv[subdir].getstart();
+    e=subdiv[subdir].getend();
+    for (i=0;i<subdiv.size();i++)
+    {
+      p.n=-1;
+      if (subdiv[i].getstart()==s || subdiv[i].getstart()==e)
+      {
+	p.n=i;
+	p.farend=subdiv[i].getend();
+      }
+      if (subdiv[i].getend()==s || subdiv[i].getend()==e)
+      {
+	p.n=i;
+	p.farend=subdiv[i].getstart();
+      }
+      p.a=area3(s,e,p.farend)*sign;
+      if (p.a<=0)
+	p.n=-1;
+      if (p.n>=0)
+	list.push_back(p);
+    }
+    cout<<subdir<<": "<<list.size()<<" adjacent segments on that side"<<endl;
+    ret=-1;
+  }
+  else
+    ret=-2;
+  return ret;
+}

@@ -1230,6 +1230,11 @@ void test1tri(string triname,int excrits)
   size0=pointlists[1].triangles[0].subdiv.size();
   pointlists[1].triangles[0].addperimeter();
   size1=pointlists[1].triangles[0].subdiv.size();
+  for (j=0;j<pointlists[1].triangles[0].subdiv.size();j++)
+  {
+    pointlists[1].triangles[0].proceed(j,0);
+    pointlists[1].triangles[0].proceed(j+65536,0);
+  }
   pointlists[1].triangles[0].removeperimeter();
   size2=pointlists[1].triangles[0].subdiv.size();
   assert(size0==size2);
@@ -1284,6 +1289,7 @@ void trianglecontours()
  * 10.9596,-3.169,0.403 saddle.
  * tri93db9159a54b09a0fc has two critical points in the triangle, both saddles,
  * two critical points on two sides, and one critical point on the third side.
+ * tri45653a366286ff0747 also has two saddles in the triangle.
  * 
  * Hypothesis to attack the minimax problem:
  * Every surface in a Bézier triangle can be stretched linearly and rotated
