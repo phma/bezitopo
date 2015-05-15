@@ -1232,8 +1232,8 @@ void test1tri(string triname,int excrits)
   size1=pointlists[1].triangles[0].subdiv.size();
   for (j=0;j<pointlists[1].triangles[0].subdiv.size();j++)
   {
-    pointlists[1].triangles[0].proceed(j,0);
-    pointlists[1].triangles[0].proceed(j+65536,0);
+    cout<<j<<"L: "<<pointlists[1].triangles[0].proceed(j,0)<<endl;
+    cout<<j<<"R: "<<pointlists[1].triangles[0].proceed(j+65536,0)<<endl;
   }
   pointlists[1].triangles[0].removeperimeter();
   size2=pointlists[1].triangles[0].subdiv.size();

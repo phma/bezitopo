@@ -1245,6 +1245,7 @@ struct prorec
 int triangle::proceed(int subdir,double elevation)
 {
   int i,j,sign,ret;
+  bool done;
   vector<prorec> list;
   prorec p;
   xy s,e;
@@ -1275,8 +1276,38 @@ int triangle::proceed(int subdir,double elevation)
       if (p.n>=0)
 	list.push_back(p);
     }
-    cout<<subdir<<": "<<list.size()<<" adjacent segments on that side"<<endl;
-    ret=-1;
+    cout<<subdir<<((sign>0)?'L':'R')<<": "<<list.size()<<" adjacent segments on that side"<<endl;
+    // The size of the list varies from 0 to 7. Sort it by area.
+    do
+    {
+      done=true;
+      for (i=0;i+1<list.size();i++)
+	if (list[i].a>list[i+1].a)
+	{
+	  done=false;
+	  swap(list[i],list[i+1]);
+	}
+    } while (!done);
+    /*for (i=0;i<list.size();i++)
+      cout<<i<<' '<<list[i].a<<' '<<setprecision(7)<<
+	" ("<<list[i].farend.east()<<','<<list[i].farend.north()<<')'<<endl;*/
+    for (i=0;i<list.size();i++)
+      for (j=i+1;j<list.size() && list[i].a==list[j].a;j++)
+	if (list[i].farend==list[j].farend)
+	  goto found;
+    found:
+    //cout<<i<<' '<<j<<endl;
+    if (j<list.size())
+    {
+      if ((subdiv[list[j].n].getstart().elev()<elevation)^(subdiv[list[j].n].getend().elev()<elevation))
+	ret=list[j].n;
+      else
+	ret=list[i].n;
+      if (area3(subdiv[ret].getstart(),subdiv[ret].getend(),(s+e)/2)>0)
+	ret+=65536;
+    }
+    else
+      ret=-1;
   }
   else
     ret=-2;
