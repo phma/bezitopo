@@ -13,10 +13,11 @@
 #include "angle.h"
 #include "bezier3d.h"
 #include "cogo.h"
+#include "drawobj.h"
 #define START 1
 #define END 2
 
-class segment
+class segment: public drawobj
 {
 protected:
   xyz start,end;
