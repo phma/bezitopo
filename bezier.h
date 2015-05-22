@@ -98,6 +98,7 @@ public:
   void addperimeter();
   void removeperimeter();
   uintptr_t edgepart(int subdir);
+  std::vector<double> lohi();
   int subdir(uintptr_t edgepart);
   int proceed(int subdir,double elevation);
 private:

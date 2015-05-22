@@ -1142,7 +1142,7 @@ void testrasterdraw()
 
 void test1tri(string triname,int excrits)
 {
-  vector<double> xs;
+  vector<double> xs,lh;
   vector<xyz> slice;
   vector<xy> crits;
   int i,j,side,cubedir,ptype,size0,size1,size2;
@@ -1239,6 +1239,8 @@ void test1tri(string triname,int excrits)
   size2=pointlists[1].triangles[0].subdiv.size();
   assert(size0==size2);
   cout<<size1-size0<<" monotonic segments in perimeter"<<endl;
+  lh=pointlists[1].triangles[0].lohi();
+  cout<<"lohi: "<<setprecision(7)<<lh[0]<<' '<<lh[1]<<' '<<lh[2]<<' '<<lh[3]<<endl;
   for (j=0;j<pointlists[1].triangles[0].subdiv.size();j++)
     spline(pointlists[1].triangles[0].subdiv[j].approx3d(1));
   endpage();

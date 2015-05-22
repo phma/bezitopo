@@ -1107,6 +1107,74 @@ void triangle::removeperimeter()
     assert(acnt==2 && bcnt==2 && ccnt==2);
 }
 
+vector<double> triangle::lohi()
+/* Returns a vector of four numbers: the lowest elevation anywhere in the triangle,
+ * the lowest elevation on the perimeter, the highest elevation on the perimeter,
+ * and the highest elevation anywhere.
+ */
+{
+  int i;
+  double e;
+  edge *sid=NULL;
+  vector<double> ret(4,0);
+  ret[1]=ret[2]=a->z;
+  if (b->z<ret[1])
+    ret[1]=b->z;
+  if (b->z>ret[2])
+    ret[2]=b->z;
+  if (c->z<ret[1])
+    ret[1]=c->z;
+  if (c->z>ret[2])
+    ret[2]=c->z;
+  sid=a->edg(this);
+  for (i=0;i<2;i++)
+  {
+    e=sid->critpoint(i).z;
+    if (std::isfinite(e))
+    {
+      if (e<ret[1])
+	ret[1]=e;
+      if (e>ret[2])
+	ret[2]=e;
+    }
+  }
+  sid=b->edg(this);
+  for (i=0;i<2;i++)
+  {
+    e=sid->critpoint(i).z;
+    if (std::isfinite(e))
+    {
+      if (e<ret[1])
+	ret[1]=e;
+      if (e>ret[2])
+	ret[2]=e;
+    }
+  }
+  sid=c->edg(this);
+  for (i=0;i<2;i++)
+  {
+    e=sid->critpoint(i).z;
+    if (std::isfinite(e))
+    {
+      if (e<ret[1])
+	ret[1]=e;
+      if (e>ret[2])
+	ret[2]=e;
+    }
+  }
+  ret[0]=ret[1];
+  ret[3]=ret[2];
+  for (i=0;i<critpoints.size();i++)
+  {
+    e=elevation(critpoints[i]);
+    if (e<ret[0])
+      ret[0]=e;
+    if (e>ret[3])
+      ret[3]=e;
+  }
+  return ret;
+}
+
 /* Convert an index number to a triangle's subdiv to and from a pointer to edge
  * with a part number added. This is used to transfer the subdiv from one triangle
  * to the next when drawing contours. The index number has bit 16 set or clear
