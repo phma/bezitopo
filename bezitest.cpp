@@ -41,6 +41,7 @@
 #include "manysum.h"
 #include "ldecimal.h"
 #include "ellipsoid.h"
+#include "color.h"
 
 #define psoutput false
 // affects only maketin
@@ -1880,6 +1881,30 @@ void testellipsoid()
   cout<<"average radius "<<ldecimal(test1.avgradius())<<endl;
 }
 
+void testcolor()
+{
+  int i,cint,cint1;
+  unsigned short csht,csht1;
+  for (i=0;i<1000;i++)
+  {
+    cint=(rng.ucrandom()<<16)+rng.usrandom();
+    cint1=cint^16777215;
+    csht=colorshort(cint);
+    csht1=colorshort(cint1);
+    assert(csht+csht1==63999);
+    csht=rng.usrandom();
+    csht1=colorshort(colorint(csht));
+    assert(csht==csht1);
+    if (csht<64000)
+    {
+      csht1=63999-csht;
+      cint=colorint(csht);
+      cint1=colorint(csht1);
+      assert(cint+cint1==16777215);
+    }
+  }
+}
+
 int main(int argc, char *argv[])
 {
   pointlists.resize(2);
@@ -1923,6 +1948,7 @@ int main(int argc, char *argv[])
   testcsvline();
   testldecimal();
   testellipsoid();
+  testcolor();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //closure_i();
   return EXIT_SUCCESS;

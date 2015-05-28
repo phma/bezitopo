@@ -1,16 +1,16 @@
 project(bezitopo)
 cmake_minimum_required(VERSION 2.8)
 add_executable(bezitopo angle.cpp arc.cpp bezier3d.cpp bezier.cpp bezitopo.cpp
-               closure.cpp cogo.cpp contour.cpp cvtmeas.cpp drawobj.cpp ellipsoid.cpp
-               halton.cpp icommon.cpp ldecimal.cpp manysum.cpp measure.cpp
-               mkpoint.cpp plot.cpp pnezd.cpp
+               closure.cpp cogo.cpp color.cpp contour.cpp cvtmeas.cpp drawobj.cpp
+               ellipsoid.cpp halton.cpp icommon.cpp ldecimal.cpp manysum.cpp
+               measure.cpp mkpoint.cpp plot.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
                raster.cpp spiral.cpp stl.cpp test.cpp segment.cpp tin.cpp
                vcurve.cpp)
 add_executable(bezitest angle.cpp arc.cpp bezier3d.cpp bezier.cpp bezitest.cpp
-               closure.cpp cogo.cpp contour.cpp drawobj.cpp ellipsoid.cpp halton.cpp
-               ldecimal.cpp manysum.cpp measure.cpp plot.cpp pnezd.cpp point.cpp
-               pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
+               closure.cpp cogo.cpp color.cpp contour.cpp drawobj.cpp ellipsoid.cpp
+               halton.cpp ldecimal.cpp manysum.cpp measure.cpp plot.cpp pnezd.cpp
+               point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
                raster.cpp spiral.cpp stl.cpp test.cpp segment.cpp tin.cpp
                vcurve.cpp)
 
