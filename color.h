@@ -16,6 +16,14 @@
  */
 
 #define SAMECOLOR 65535
+#define BLACK 0
+#define BLUE 39
+#define GREEN 1560
+#define CYAN 1599
+#define RED 62400
+#define MAGENTA 62439
+#define YELLOW 63960
+#define WHITE 63999
 
 int colorint(unsigned short colorshort);
 unsigned short colorshort(int colorint);
