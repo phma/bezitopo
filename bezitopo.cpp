@@ -27,10 +27,12 @@
 #include "mkpoint.h"
 #include "closure.h"
 #include "cvtmeas.h"
+#include "document.h"
 
 using namespace std;
 
 bool cont=true;
+document doc;
 
 void indpark(string args)
 {

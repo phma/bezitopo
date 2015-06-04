@@ -18,5 +18,3 @@ public:
   //unsigned short getcolor();
   //unsigned short getthickness();
 };
-
-extern std::vector<objrec> objlist;

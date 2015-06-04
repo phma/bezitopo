@@ -45,25 +45,6 @@ void pointlist::addpoint(int numb,point pnt,bool overwrite)
  revpoints[&(points[a])]=a;
  }
 
-void copytopopoints(criteria crit)
-{
-  ptlist::iterator i;
-  if (pointlists.size()<2)
-    pointlists.resize(2);
-  pointlists[1].clear();
-  int j;
-  bool include;
-  for (i=pointlists[0].points.begin();i!=pointlists[0].points.end();i++)
-  {
-    include=false;
-    for (j=0;j<crit.size();j++)
-      if (i->second.note.find(crit[j].str)!=string::npos)
-	include=crit[j].istopo;
-    if (include)
-      pointlists[1].addpoint(i->first,i->second);
-  }
-}
-
 void pointlist::makeqindex()
 {
   vector<xy> plist;

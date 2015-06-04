@@ -46,5 +46,4 @@ typedef std::vector<criterion> criteria;
 
 extern std::vector<pointlist> pointlists;
 
-void copytopopoints(criteria crit);
 #endif

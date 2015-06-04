@@ -4,6 +4,8 @@
 /*                                                    */
 /******************************************************/
 
+#ifndef LAYER_H
+#define LAYER_H
 #include <string>
 #include <vector>
 #include "color.h"
@@ -16,5 +18,4 @@ public:
   bool visible;
   std::string name;
 };
-
-extern std::vector<layer> layers;
+#endif

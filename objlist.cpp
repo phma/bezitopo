@@ -8,4 +8,3 @@
 
 using namespace std;
 
-vector<objrec> objlist;

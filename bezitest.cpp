@@ -42,12 +42,14 @@
 #include "ldecimal.h"
 #include "ellipsoid.h"
 #include "color.h"
+#include "document.h"
 
 #define psoutput false
 // affects only maketin
 
 char hexdig[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
 bool slowmanysum=false;
+document doc;
 
 using namespace std;
 
