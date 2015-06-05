@@ -13,6 +13,7 @@
 #include "measure.h"
 #include "pointlist.h"
 #include "ldecimal.h"
+#include "document.h"
 using namespace std;
 
 /* The file produced by Total Open Station has a first line consisting of column
@@ -118,7 +119,7 @@ string makecsvline(vector<string> words)
   return ret;
 }
 
-int readpnezd(string fname,bool overwrite)
+int document::readpnezd(string fname,bool overwrite)
 {
   ifstream infile;
   size_t size=0,pos1,pos2;
@@ -148,7 +149,7 @@ int readpnezd(string fname,bool overwrite)
 	  n=parse_length(nstr.c_str());
 	  e=parse_length(estr.c_str());
 	  z=parse_length(zstr.c_str());
-	  pointlists[0].addpoint(p,point(e,n,z,d),overwrite);
+	  pl[0].addpoint(p,point(e,n,z,d),overwrite);
 	  npoints++;
 	}
 	//puts(d.c_str());
@@ -163,7 +164,7 @@ int readpnezd(string fname,bool overwrite)
   return npoints;
 }
 
-int writepnezd(string fname)
+int document::writepnezd(string fname)
 {
   ofstream outfile;
   size_t size=0,pos1,pos2;
@@ -177,7 +178,7 @@ int writepnezd(string fname)
   npoints=-(!outfile.is_open());
   if (outfile.is_open())
   {
-    for (i=pointlists[0].points.begin();i!=pointlists[0].points.end();i++)
+    for (i=pl[0].points.begin();i!=pl[0].points.end();i++)
     {
       p=i->first;
       n=i->second.north();

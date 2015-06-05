@@ -27,7 +27,6 @@
 #include "mkpoint.h"
 #include "closure.h"
 #include "cvtmeas.h"
-#include "document.h"
 
 using namespace std;
 
@@ -42,30 +41,30 @@ void indpark(string args)
   criterion crit1;
   setfoot(USSURVEY);
   set_length_unit(FOOT+DEC2);
-  if (readpnezd("topo0.asc")<0)
-    readpnezd("../topo0.asc");
+  if (doc.readpnezd("topo0.asc")<0)
+    doc.readpnezd("../topo0.asc");
   crit1.str="";
   crit1.istopo=true;
   crit.push_back(crit1);
   crit1.str="FH";
   crit1.istopo=false; // The point labeled FH has a nonsensical elevation and must be removed.
   crit.push_back(crit1);
-  copytopopoints(crit);
+  doc.copytopopoints(crit);
   //rotate(2);
-  pointlists[1].maketin("bezitopo.ps");
-  pointlists[1].makegrad(0.15);
-  pointlists[1].maketriangles();
-  pointlists[1].setgradient(false);
-  pointlists[1].makeqindex();
-  w=pointlists[1].dirbound(degtobin(0));
-  s=pointlists[1].dirbound(degtobin(90));
-  e=-pointlists[1].dirbound(degtobin(180));
-  n=-pointlists[1].dirbound(degtobin(270));
+  doc.pl[1].maketin("bezitopo.ps");
+  doc.pl[1].makegrad(0.15);
+  doc.pl[1].maketriangles();
+  doc.pl[1].setgradient(false);
+  doc.pl[1].makeqindex();
+  w=doc.pl[1].dirbound(degtobin(0));
+  s=doc.pl[1].dirbound(degtobin(90));
+  e=-doc.pl[1].dirbound(degtobin(180));
+  n=-doc.pl[1].dirbound(degtobin(270));
   cout<<"Writing topo with curved triangles"<<endl;
-  rasterdraw(pointlists[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark.ppm");
-  pointlists[1].setgradient(true);
+  rasterdraw(doc.pl[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark.ppm");
+  doc.pl[1].setgradient(true);
   cout<<"Writing topo with flat triangles"<<endl;
-  rasterdraw(pointlists[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark-flat.ppm");
+  rasterdraw(doc.pl[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark-flat.ppm");
 }
 
 vector<command> commands;
@@ -73,13 +72,13 @@ vector<command> commands;
 void readpoints(string args)
 // just pnezd for now
 {
-  readpnezd(trim(args),false);
+  doc.readpnezd(trim(args),false);
 }
 
 void writepoints(string args)
 // just pnezd for now
 {
-  writepnezd(trim(args));
+  doc.writepnezd(trim(args));
 }
 
 void maketin_i(string args)
@@ -90,10 +89,10 @@ void maketin_i(string args)
   crit1.str="";
   crit1.istopo=true;
   crit.push_back(crit1); // will later make a point-selection command
-  copytopopoints(crit);
+  doc.copytopopoints(crit);
   try
   {
-    pointlists[1].maketin("maketin.ps");
+    doc.pl[1].maketin("maketin.ps");
   }
   catch(int e)
   {
@@ -112,27 +111,27 @@ void maketin_i(string args)
       break;
     default:
       cout<<"Successfully made TIN."<<endl;
-      pointlists[1].makegrad(0.15);
-      pointlists[1].maketriangles();
-      pointlists[1].setgradient(false);
-      pointlists[1].makeqindex();
+      doc.pl[1].makegrad(0.15);
+      doc.pl[1].maketriangles();
+      doc.pl[1].setgradient(false);
+      doc.pl[1].makeqindex();
   }
 }
 
 void drawtin_i(string args)
 {
   double w,e,s,n;
-  if (pointlists[1].edges.size())
+  if (doc.pl[1].edges.size())
   {
-    w=pointlists[1].dirbound(degtobin(0));
-    s=pointlists[1].dirbound(degtobin(90));
-    e=-pointlists[1].dirbound(degtobin(180));
-    n=-pointlists[1].dirbound(degtobin(270));
+    w=doc.pl[1].dirbound(degtobin(0));
+    s=doc.pl[1].dirbound(degtobin(90));
+    e=-doc.pl[1].dirbound(degtobin(180));
+    n=-doc.pl[1].dirbound(degtobin(270));
     psopen(trim(args).c_str());
     psprolog();
     setscale(w,s,n,e);
     startpage();
-    pointlists[1].dumpedges_ps(false);
+    doc.pl[1].dumpedges_ps(false);
     endpage();
     pstrailer();
     psclose();
@@ -144,11 +143,11 @@ void drawtin_i(string args)
 void rasterdraw_i(string args)
 {
   double w,e,s,n;
-  w=pointlists[1].dirbound(degtobin(0));
-  s=pointlists[1].dirbound(degtobin(90));
-  e=-pointlists[1].dirbound(degtobin(180));
-  n=-pointlists[1].dirbound(degtobin(270));
-  rasterdraw(pointlists[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,trim(args));
+  w=doc.pl[1].dirbound(degtobin(0));
+  s=doc.pl[1].dirbound(degtobin(90));
+  e=-doc.pl[1].dirbound(degtobin(180));
+  n=-doc.pl[1].dirbound(degtobin(270));
+  rasterdraw(doc.pl[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,trim(args));
 }
 
 void help(string args)
@@ -183,7 +182,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("raster",rasterdraw_i,"Draw raster topo: filename.ppm"));
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
-  pointlists.resize(1);
+  doc.pl.resize(1);
   while (cont)
   {
     cout<<"? ";

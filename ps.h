@@ -5,6 +5,7 @@
 /******************************************************/
 #include <string>
 #include "bezier3d.h"
+class document;
 
 extern FILE *psfile;
 extern int orientation;
@@ -13,7 +14,7 @@ void startpage();
 void endpage();
 void dot(xy pnt,std::string comment="");
 void circle(xy pnt,double radius);
-void line(edge lin,int num,bool colorfibaster,bool directed=false);
+void line(document &doc,edge lin,int num,bool colorfibaster,bool directed=false);
 void pstrailer();
 void psopen(const char * psfname);
 void psclose();

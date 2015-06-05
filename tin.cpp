@@ -149,7 +149,7 @@ void pointlist::dumpedges_ps(bool colorfibaster)
   map<int,edge>::iterator i;
   int n;
   for (i=edges.begin(),n=0;i!=edges.end();i++,n++)
-     line(i->second,n,colorfibaster);
+     line(doc,i->second,n,colorfibaster);
 }
 
 void pointlist::dumpnext_ps()

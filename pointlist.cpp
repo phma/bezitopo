@@ -6,14 +6,12 @@
 
 #include <cmath>
 #include "angle.h"
+#include "bezitopo.h"
 #include "pointlist.h"
 
 using namespace std;
 
-vector<pointlist> pointlists;
-/* pointlists[0] is the points downloaded from the total station.
- * pointlists[1] and farther are used for surfaces.
- */
+//vector<pointlist> pointlists;
 
 void pointlist::clear()
 {

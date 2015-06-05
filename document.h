@@ -17,14 +17,25 @@
  *   or a point in Cartesian coordinates.
  */
 
+#ifndef DOCUMENT_H
+#define DOCUMENT_H
 #include "pointlist.h"
 #include "layer.h"
 #include "objlist.h"
 
 class document
 {
+public:
   std::vector<objrec> objlist;
   std::vector<layer> layers;
   std::vector<pointlist> pl;
+  /* pointlists[0] is the points downloaded from the total station.
+   * pointlists[1] and farther are used for surfaces.
+   */
   void copytopopoints(criteria crit);
+  // readpnezd and writepnezd are in pnezd.cpp
+  int readpnezd(std::string fname,bool overwrite=false);
+  int writepnezd(std::string fname);
 };
+
+#endif

@@ -4,6 +4,8 @@
 /*                                                    */
 /******************************************************/
 
+#include "document.h"
+
 /* Test patterns:
    1. Asteraceous pattern. r=sqrt(n+0.5), θ=2πφn.
    2. Square root spiral.
@@ -34,15 +36,15 @@
 #define FLATSLOPE 3
 void setsurface(int surf);
 void dumppoints();
-void dumppointsvalence();
-void aster(int n);
-void ring(int n);
-void regpolygon(int n);
-void ellipse(int n);
-void longandthin(int n);
-void straightrow(int n);
-void lozenge(int n);
-void rotate(int n);
-void movesideways(double sw);
-void enlarge(double sc);
+void dumppointsvalence(document &doc);
+void aster(document &doc,int n);
+void ring(document &doc,int n);
+void regpolygon(document &doc,int n);
+void ellipse(document &doc,int n);
+void longandthin(document &doc,int n);
+void straightrow(document &doc,int n);
+void lozenge(document &doc,int n);
+void rotate(document &doc,int n);
+void movesideways(document &doc,double sw);
+void enlarge(document &doc,double sc);
 extern xy (*testsurfacegrad)(xy pnt);

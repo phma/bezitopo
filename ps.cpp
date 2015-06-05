@@ -17,6 +17,7 @@
 #include "tin.h"
 #include "pointlist.h"
 #include "plot.h"
+#include "document.h"
 using namespace std;
 
 FILE *psfile;
@@ -138,7 +139,7 @@ int fibmod3(int n)
   return (a==n)?(i%3):-1;
 }
 
-void line(edge lin,int num,bool colorfibaster,bool directed)
+void line(document &doc,edge lin,int num,bool colorfibaster,bool directed)
 {
   xy mid,disp,base,ab1,ab2,a,b;
   char *rgb;
@@ -148,7 +149,7 @@ void line(edge lin,int num,bool colorfibaster,bool directed)
   b=turn(b,orientation);
   if (lin.delaunay())
     if (colorfibaster)
-      switch (fibmod3(abs(pointlists[1].revpoints[lin.a]-pointlists[1].revpoints[lin.b])))
+      switch (fibmod3(abs(doc.pl[1].revpoints[lin.a]-doc.pl[1].revpoints[lin.b])))
       {
 	case -1:
 	  rgb=".3 .3 .3";

@@ -29,6 +29,7 @@
 #include "angle.h"
 #include "icommon.h"
 #include "pointlist.h"
+#include "bezitopo.h"
 
 using namespace std;
 
@@ -54,7 +55,7 @@ void mkpt_mk(string args)
   if (std::isnan(pointxy.east()))
     cout<<"Not a valid point"<<endl;
   else
-    pointlists[0].addpoint(1,point(pointxy,0,label));
+    doc.pl[0].addpoint(1,point(pointxy,0,label));
 }
 
 void label_mk(string args)
@@ -71,7 +72,7 @@ void outpnt(point pnt)
 void listpoints(string args)
 {
   ptlist::iterator i;
-  for (i=pointlists[0].points.begin();i!=pointlists[0].points.end();i++)
+  for (i=doc.pl[0].points.begin();i!=doc.pl[0].points.end();i++)
   {
     cout<<i->first<<' ';
     outpnt(i->second);

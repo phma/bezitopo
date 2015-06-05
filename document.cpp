@@ -3,6 +3,7 @@
 /* document.cpp - main document class                 */
 /*                                                    */
 /******************************************************/
+#include "bezitopo.h"
 #include "document.h"
 
 void document::copytopopoints(criteria crit)

@@ -8,6 +8,7 @@
 #include <climits>
 #include <iostream>
 #include <iomanip>
+#include <cassert>
 #include "bezier.h"
 #include "angle.h"
 #include "tin.h"

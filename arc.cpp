@@ -5,6 +5,7 @@
 /******************************************************/
 
 #include <cstdio>
+#include "point.h"
 #include "arc.h"
 #include "vcurve.h"
 

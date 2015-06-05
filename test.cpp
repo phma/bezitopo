@@ -13,18 +13,19 @@
 using std::map;
 
 void dumppoints()
-{map<int,point>::iterator i;
- printf("dumppoints\n");
- for (i=pointlists[1].points.begin();i!=pointlists[1].points.end();i++)
-     i->second.dump();
- printf("end dump\n");
- }
-
-void dumppointsvalence()
 {
   map<int,point>::iterator i;
   printf("dumppoints\n");
-  for (i=pointlists[1].points.begin();i!=pointlists[1].points.end();i++)
+  //for (i=doc.pl[1].points.begin();i!=doc.pl[1].points.end();i++)
+  //    i->second.dump();
+  printf("end dump\n");
+}
+
+void dumppointsvalence(document &doc)
+{
+  map<int,point>::iterator i;
+  printf("dumppoints\n");
+  for (i=doc.pl[1].points.begin();i!=doc.pl[1].points.end();i++)
     printf("%d %d\n",i->first,i->second.valence());
   printf("end dump\n");
 }
@@ -103,7 +104,7 @@ void setsurface(int surf)
   }
 }
 
-void aster(int n)
+void aster(document &doc,int n)
 /* Fill points with asteraceous pattern. Pattern invented by H. Vogel in 1979
    and later by me, not knowing of Vogel. */
 {int i;
@@ -111,11 +112,11 @@ void aster(int n)
  xy pnt;
  for (i=0;i<n;i++)
      {pnt=xy(cos(angle*i)*sqrt(i+0.5),sin(angle*i)*sqrt(i+0.5));
-      pointlists[1].addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+      doc.pl[1].addpoint(i+1,point(pnt,testsurface(pnt),"test"));
       }
  }
 
-void _ellipse(int n,double skewness)
+void _ellipse(document &doc,int n,double skewness)
 /* Skewness is not eccentricity. When skewness=0.01, eccentricity=0.14072. */
 {
   int i;
@@ -124,11 +125,11 @@ void _ellipse(int n,double skewness)
   for (i=0;i<n;i++)
   {
     pnt=xy(cos(angle*i)*sqrt(n+0.5)*(1-skewness),sin(angle*i)*sqrt(n+0.5)*(1+skewness));
-    pointlists[1].addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+    doc.pl[1].addpoint(i+1,point(pnt,testsurface(pnt),"test"));
   }
 }
 
-void regpolygon(int n)
+void regpolygon(document &doc,int n)
 {
   int i;
   double angle=2*M_PI/n;
@@ -136,30 +137,30 @@ void regpolygon(int n)
   for (i=0;i<n;i++)
   {
     pnt=xy(cos(angle*i)*sqrt(n+0.5),sin(angle*i)*sqrt(n+0.5));
-    pointlists[1].addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+    doc.pl[1].addpoint(i+1,point(pnt,testsurface(pnt),"test"));
   }
 }
 
-void ring(int n)
+void ring(document &doc,int n)
 /* Points in a circle, for most ambiguous case of the Delaunay algorithm.
  * The number of different ways to make the TIN is a Catalan number.
  */
 {
-  _ellipse(n,0);
+  _ellipse(doc,n,0);
 }
 
-void ellipse(int n)
+void ellipse(document &doc,int n)
 /* Points in an ellipse, for worst case of the Delaunay algorithm. */
 {
-  _ellipse(n,0.01);
+  _ellipse(doc,n,0.01);
 }
 
-void longandthin(int n)
+void longandthin(document &doc,int n)
 {
-  _ellipse(n,0.999);
+  _ellipse(doc,n,0.999);
 }
 
-void straightrow(int n)
+void straightrow(document &doc,int n)
 // Add points in a straight line.
 {
   int i;
@@ -169,26 +170,26 @@ void straightrow(int n)
   {
     angle=(2.0*i/(n-1)-1)*M_PI/6;
     pnt=xy(0,sqrt(n)*tan(angle));
-    pointlists[1].addpoint(i+1,point(pnt,testsurface(pnt),"test"));
+    doc.pl[1].addpoint(i+1,point(pnt,testsurface(pnt),"test"));
   }
 }
 
-void lozenge(int n)
+void lozenge(document &doc,int n)
 // Add points on the short diagonal of a rhombus, then add the two other points.
 {
   xy pnt;
-  straightrow(n);
+  straightrow(doc,n);
   pnt=xy(-sqrt(n),0);
-  pointlists[1].addpoint(n+1,point(pnt,testsurface(pnt),"test"));
+  doc.pl[1].addpoint(n+1,point(pnt,testsurface(pnt),"test"));
   pnt=xy(sqrt(n),0);
-  pointlists[1].addpoint(n+2,point(pnt,testsurface(pnt),"test"));
+  doc.pl[1].addpoint(n+2,point(pnt,testsurface(pnt),"test"));
 }
 
-void rotate(int n)
+void rotate(document &doc,int n)
 {int i;
  double tmpx,tmpy;
  map<int,point>::iterator j;
- for (j=pointlists[1].points.begin();j!=pointlists[1].points.end();j++)
+ for (j=doc.pl[1].points.begin();j!=doc.pl[1].points.end();j++)
      for (i=0;i<n;i++)
          {tmpx=j->second.x*0.6-j->second.y*0.8;
           tmpy=j->second.y*0.6+j->second.x*0.8;
@@ -197,21 +198,21 @@ void rotate(int n)
           }
  }
 
-void movesideways(double sw)
+void movesideways(document &doc,double sw)
 {
   int i;
   double tmpx,tmpy;
   map<int,point>::iterator j;
-  for (j=pointlists[1].points.begin();j!=pointlists[1].points.end();j++)
+  for (j=doc.pl[1].points.begin();j!=doc.pl[1].points.end();j++)
     j->second.x+=sw;
 }
 
-void enlarge(double sc)
+void enlarge(document &doc,double sc)
 {
   int i;
   double tmpx,tmpy;
   map<int,point>::iterator j;
-  for (j=pointlists[1].points.begin();j!=pointlists[1].points.end();j++)
+  for (j=doc.pl[1].points.begin();j!=doc.pl[1].points.end();j++)
   {
     j->second.x*=sc;
     j->second.y*=sc;

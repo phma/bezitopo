@@ -16,6 +16,7 @@ class point;
 class edge;
 class triangle;
 class drawobj;
+class document;
 
 using std::string;
 
@@ -42,12 +43,12 @@ class point: public xyz, public drawobj
  //~point();
  const point& operator=(const point &rhs);
  //void setedge(point *oend);
- void dump();
+ //void dump(document doc);
  friend class edge;
  friend void maketin(string filename);
- friend void rotate(int n);
- friend void movesideways(double sw);
- friend void enlarge(double sw);
+ friend void rotate(document &doc,int n);
+ friend void movesideways(document &doc,double sw);
+ friend void enlarge(document &doc,double sw);
  short flags;
  /* 0: a normal point from the input file
     1: a point resulting from merging several points

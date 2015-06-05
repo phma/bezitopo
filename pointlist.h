@@ -44,6 +44,6 @@ struct criterion
 
 typedef std::vector<criterion> criteria;
 
-extern std::vector<pointlist> pointlists;
+//extern std::vector<pointlist> pointlists;
 
 #endif

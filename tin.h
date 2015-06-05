@@ -12,7 +12,7 @@
 #include <string>
 #include "cogo.h"
 #include "bezier.h"
-#include "bezitopo.h"
+//#include "bezitopo.h"
 #include "pointlist.h"
 #include "segment.h"
 

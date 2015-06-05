@@ -11,6 +11,7 @@
 #include "tin.h"
 #include "pointlist.h"
 #include "angle.h"
+#include "document.h"
 
 xy::xy(double e,double n)
 {x=e;
@@ -219,9 +220,10 @@ const point& point::operator=(const point &rhs)
      }
  }
 
-void point::dump()
-{printf("address=%p\nnum=%d\n(%f,%f,%f)\nline=%p\n",this,pointlists[1].revpoints[this],x,y,z,line);
- }
+//void point::dump(document doc)
+//{
+//  printf("address=%p\nnum=%d\n(%f,%f,%f)\nline=%p\n",this,doc.pl[1].revpoints[this],x,y,z,line);
+//}
 
 int point::valence()
 {
