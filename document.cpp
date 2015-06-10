@@ -4,7 +4,9 @@
 /*                                                    */
 /******************************************************/
 #include "bezitopo.h"
+#include "pnezd.h"
 #include "document.h"
+using namespace std;
 
 void document::copytopopoints(criteria crit)
 {
@@ -23,4 +25,14 @@ void document::copytopopoints(criteria crit)
     if (include)
       pl[1].addpoint(i->first,i->second);
   }
+}
+
+int document::readpnezd(string fname,bool overwrite)
+{
+  ::readpnezd(this,fname,overwrite);
+}
+
+int document::writepnezd(string fname)
+{
+  ::writepnezd(this,fname);
 }

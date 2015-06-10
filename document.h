@@ -33,7 +33,6 @@ public:
    * pointlists[1] and farther are used for surfaces.
    */
   void copytopopoints(criteria crit);
-  // readpnezd and writepnezd are in pnezd.cpp
   int readpnezd(std::string fname,bool overwrite=false);
   int writepnezd(std::string fname);
 };

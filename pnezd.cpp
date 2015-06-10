@@ -119,7 +119,7 @@ string makecsvline(vector<string> words)
   return ret;
 }
 
-int document::readpnezd(string fname,bool overwrite)
+int readpnezd(document *doc,string fname,bool overwrite)
 {
   ifstream infile;
   size_t size=0,pos1,pos2;
@@ -149,7 +149,7 @@ int document::readpnezd(string fname,bool overwrite)
 	  n=parse_length(nstr.c_str());
 	  e=parse_length(estr.c_str());
 	  z=parse_length(zstr.c_str());
-	  pl[0].addpoint(p,point(e,n,z,d),overwrite);
+	  doc->pl[0].addpoint(p,point(e,n,z,d),overwrite);
 	  npoints++;
 	}
 	//puts(d.c_str());
@@ -164,7 +164,7 @@ int document::readpnezd(string fname,bool overwrite)
   return npoints;
 }
 
-int document::writepnezd(string fname)
+int writepnezd(document *doc,string fname)
 {
   ofstream outfile;
   size_t size=0,pos1,pos2;
@@ -178,7 +178,7 @@ int document::writepnezd(string fname)
   npoints=-(!outfile.is_open());
   if (outfile.is_open())
   {
-    for (i=pl[0].points.begin();i!=pl[0].points.end();i++)
+    for (i=doc->pl[0].points.begin();i!=doc->pl[0].points.end();i++)
     {
       p=i->first;
       n=i->second.north();
