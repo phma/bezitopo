@@ -1905,8 +1905,24 @@ void testcolor()
       assert(cint+cint1==16777215);
     }
   }
-  cint=printingcolor(0x151515,4);
+  i=0x151515;
+  cint=printingcolor(i,4);
   assert(cint==0x151515);
+  i=0x888888;
+  cint=printingcolor(i,4);
+  assert(cint==0x888888);
+  i=0xcacaca;
+  cint=printingcolor(i,4);
+  assert(cint==0xcacaca);
+  i=0x093309;
+  cint=printingcolor(i,4);
+  //assert(cint==0xcacaca);
+  cout<<hex<<i<<' '<<cint<<dec<<endl;
+  for (i=0;i<10;i++)
+  {
+    cint=(rng.ucrandom()<<16)+rng.usrandom();
+    cint1=printingcolor(printingcolor(cint,4),4);
+  }
 }
 
 int main(int argc, char *argv[])

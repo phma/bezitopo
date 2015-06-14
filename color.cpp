@@ -4,7 +4,10 @@
 /*                                                    */
 /******************************************************/
 
+#include <cassert>
+#include <iostream>
 #include "color.h"
+using namespace std;
 
 unsigned char tab40[]=
 {
@@ -30,6 +33,18 @@ char tab256[]=
   32,32,32,32,32,33,33,33,33,33,33,33,34,34,34,34,
   34,34,35,35,35,35,35,35,35,36,36,36,36,36,36,37,
   37,37,37,37,37,37,38,38,38,38,38,38,39,39,39,39
+};
+
+/* Sextants:0 through 5
+ * Axis parts: 16 through 21
+ * Center: 32
+ * Invalid: 64
+ */
+char sexttab[]=
+{
+  64,64,00, 64,64,20, 02,21,01,
+  64,64,19, 64,32,64, 16,64,64,
+  04,18,05, 17,64,64, 03,64,64
 };
 
 int colorint(unsigned short colorshort)
@@ -124,10 +139,13 @@ int fliphue(int color)
   r=3*r-val;
   g=3*g-val;
   b=3*b-val;
+  sext=((r>g)-(g>r))*9+((g>b)-(b>g))*3+((b>r)-(r>b));
+  sext=sexttab[sext+13];
+  cout<<"r="<<r<<" g="<<g<<" b="<<b<<" sext="<<sext<<endl;
   r=(r+val)/3;
   g=(g+val)/3;
   b=(b+val)/3;
-  assert(r>=0 && r<256 && g>=0 && g<256 && b>=0 && b<256)
+  assert(r>=0 && r<256 && g>=0 && g<256 && b>=0 && b<256);
   color=(r<<16)+(g<<8)+b;
   return color;
 }
@@ -136,10 +154,11 @@ int printingcolor(int color,int op)
 {
   color&=16777215;
   if (op&1)
-    if (color==0 || color=16777215)
+    if (color==0 || color==16777215)
       color^=16777215;
   if (op&2)
     color^=16777215;
   if (op&4)
     color=fliphue(color);
   return color;
+}
