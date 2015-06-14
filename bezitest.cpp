@@ -1905,6 +1905,8 @@ void testcolor()
       assert(cint+cint1==16777215);
     }
   }
+  cint=printingcolor(0x151515,4);
+  assert(cint==0x151515);
 }
 
 int main(int argc, char *argv[])

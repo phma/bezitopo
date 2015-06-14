@@ -68,3 +68,78 @@ unsigned short colorshort(int colorint)
     ret=colorint&0xffff;
   return ret;
 }
+
+/* Flipping the hue:
+ * *  *
+ * 
+ *  *    *
+ * * *  * *
+ * 
+ *   r      c
+ *  y m    b g
+ * g c b  m r y
+ * 
+ *    *        *
+ *   y m      c c
+ *  y * m    m * y
+ * * c c *  * m y *
+ * 
+ *     r          c
+ *    r r        b g
+ *   y * m      b * g
+ *  g * * b    b * * g
+ * g g c b b  m r r r y
+ * 
+ *      r            c
+ *     r r          c c
+ *    y * m        b * g
+ *   y y m m      b b g g
+ *  g * c * b    m * r * y
+ * g g c c b b  m m r r y y
+ * 
+ *       r              c
+ *      r r            c c
+ *     y * m          c * c
+ *    y y m m        b b y y
+ *   y y * m m      m b * g y
+ *  g * c c * b    m * r r * y
+ * g g c c c b b  m m m r y y y
+ * 
+ *        r
+ *       r r
+ *      r r r
+ *     y y m m
+ *    y y | m m
+ *   g y / \ m b
+ *  g g c c c b b
+ * g g g c c b b b
+ */
+int fliphue(int color)
+{
+  int r,g,b,val,ring,sext;
+  r=(color&0xff0000)>>16;
+  g=(color&0xff00)>>8;
+  b=color&0xff;
+  val=r+g+b;
+  r=3*r-val;
+  g=3*g-val;
+  b=3*b-val;
+  r=(r+val)/3;
+  g=(g+val)/3;
+  b=(b+val)/3;
+  assert(r>=0 && r<256 && g>=0 && g<256 && b>=0 && b<256)
+  color=(r<<16)+(g<<8)+b;
+  return color;
+}
+
+int printingcolor(int color,int op)
+{
+  color&=16777215;
+  if (op&1)
+    if (color==0 || color=16777215)
+      color^=16777215;
+  if (op&2)
+    color^=16777215;
+  if (op&4)
+    color=fliphue(color);
+  return color;

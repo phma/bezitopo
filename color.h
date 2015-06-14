@@ -27,3 +27,4 @@
 
 int colorint(unsigned short colorshort);
 unsigned short colorshort(int colorint);
+int printingcolor(int color,int op);

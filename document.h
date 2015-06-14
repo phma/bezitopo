@@ -26,6 +26,7 @@
 class document
 {
 public:
+  int curlayer;
   std::vector<objrec> objlist;
   std::vector<layer> layers;
   std::vector<pointlist> pl;
@@ -35,6 +36,7 @@ public:
   void copytopopoints(criteria crit);
   int readpnezd(std::string fname,bool overwrite=false);
   int writepnezd(std::string fname);
+  void addobject(drawobj *obj); // obj must be created with new
 };
 
 #endif

@@ -36,3 +36,25 @@ int document::writepnezd(string fname)
 {
   ::writepnezd(this,fname);
 }
+
+void document::addobject(drawobj *obj)
+// The drawobj must be created with new; it will be destroyed with delete.
+{
+  objrec o;
+  if (curlayer<0 || curlayer>=layers.size())
+  {
+    curlayer=0;
+    if (layers.size()==0)
+    {
+      layer l;
+      l.colr=WHITE;
+      l.visible=true;
+      l.name="0";
+      layers.push_back(l);
+    }
+  }
+  o.layr=curlayer;
+  o.ltype=o.colr=o.thik=SAMECOLOR;
+  o.obj=obj;
+  objlist.push_back(o);
+}
