@@ -1921,6 +1921,7 @@ void testcolor()
   for (i=0;i<10;i++)
   {
     cint=(rng.ucrandom()<<16)+rng.usrandom();
+    cint&=0xa5a5a5;
     cint1=printingcolor(printingcolor(cint,4),4);
   }
 }

@@ -128,10 +128,20 @@ unsigned short colorshort(int colorint)
  *   g y / \ m b
  *  g g c c c b b
  * g g g c c b b b
+ * 
+ *        17
+ *          
+ *      3 | 4
+ *  16         18
+ *      \ | /  
+ *   2   / \   5
+ *    /   |   \  
+ * 21  1     0   19
+ *        20
  */
 int fliphue(int color)
 {
-  int r,g,b,val,ring,sext;
+  int r,g,b,val,ring,sext,sext1,hilim,lolim,hilim2,lolim2;
   r=(color&0xff0000)>>16;
   g=(color&0xff00)>>8;
   b=color&0xff;
@@ -141,7 +151,93 @@ int fliphue(int color)
   b=3*b-val;
   sext=((r>g)-(g>r))*9+((g>b)-(b>g))*3+((b>r)-(r>b));
   sext=sexttab[sext+13];
+  if (val<255)
+    hilim=val*2;
+  else
+    hilim=765-val;
+  if (val<=510)
+    lolim=-val;
+  else
+    lolim=2*(765-val);
+  /* If hilim:lolim is even, there's a midpoint in the top:bottom line.
+   * If val is a multiple of 3, there is a center point where altitudes intersect.
+   * val hilim lolim
+   *   0    0     0 one point is midpoint
+   *   1    2    -1 three points, each altitude has one point
+   *   2    4    -2 six points, each altitude has two points, sides have midpoints
+   *   3    6    -3 ten points, each altitude has two points but the midpoint is skipped, so the other point (corner) is fixed
+   *   4    8    -4 15 points, each alt has 3 points, corner xch opposite midpoint
+   *   5   10    -5 21 points, each alt has 3 points, corner xch midpoint of 1st ring
+   *   6   12    -6 28 points, each alt has 4 points but midpoint is skipped
+   * ..............
+   * 250  500  -250
+   * 251  502  -251
+   * 252  504  -252
+   * 253  506  -253
+   * 254  508  -254
+   * 255  510  -255
+   * 256  509  -256
+   * 257  508  -257
+   * 258  507  -258
+   * 259  506  -259
+   * 260  505  -260
+   * ..............
+   * 509  256  -509
+   * 510  255  -510
+   * 511  254  -508
+   * ..............
+   * 763    2    -4
+   * 764    1    -2
+   * 765    0     0
+   */
+  hilim2=hilim-3*(hilim&1);
+  lolim2=lolim+3*(lolim&1);
   cout<<"r="<<r<<" g="<<g<<" b="<<b<<" sext="<<sext<<endl;
+  if ((sext&240)==16) // on one altitude
+  {
+    switch (sext)
+    {
+      case 17:
+      case 20:
+	r=(hilim2+lolim2)-r;
+	g=b=-r/2;
+	break;
+      case 18:
+      case 21:
+	g=(hilim2+lolim2)-g;
+	b=r=-g/2;
+	break;
+      case 16:
+      case 19:
+	b=(hilim2+lolim2)-b;
+	r=g=-b/2;
+	break;
+    }
+    sext1=((r>g)-(g>r))*9+((g>b)-(b>g))*3+((b>r)-(r>b));
+    sext1=sexttab[sext1+13];
+    if (abs(sext1-sext)!=3 && val%3==0)
+      switch (sext)
+      {
+	case 17:
+	case 20:
+	  r+=6;
+	  g-=3;
+	  b-=3;
+	  break;
+	case 18:
+	case 21:
+	  r-=3;
+	  g+=6;
+	  b-=3;
+	  break;
+	case 16:
+	case 19:
+	  r-=3;
+	  g-=3;
+	  b+=6;
+	  break;
+      }
+  }
   r=(r+val)/3;
   g=(g+val)/3;
   b=(b+val)/3;
