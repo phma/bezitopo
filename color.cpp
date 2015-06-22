@@ -158,7 +158,7 @@ int fliphue(int color)
   if (val<=510)
     lolim=-val;
   else
-    lolim=2*(765-val);
+    lolim=2*(val-765);
   /* If hilim:lolim is even, there's a midpoint in the top:bottom line.
    * If val is a multiple of 3, there is a center point where altitudes intersect.
    * val hilim lolim
@@ -192,7 +192,7 @@ int fliphue(int color)
    */
   hilim2=hilim-3*(hilim&1);
   lolim2=lolim+3*(lolim&1);
-  cout<<"r="<<r<<" g="<<g<<" b="<<b<<" sext="<<sext<<endl;
+  cout<<"r="<<r<<" g="<<g<<" b="<<b<<" sext="<<sext<<" val="<<val;
   if ((sext&240)==16) // on one altitude
   {
     switch (sext)
@@ -238,6 +238,7 @@ int fliphue(int color)
 	  break;
       }
   }
+  cout<<" r="<<r<<" g="<<g<<" b="<<b<<" sext="<<sext1<<" val="<<val<<endl;
   r=(r+val)/3;
   g=(g+val)/3;
   b=(b+val)/3;

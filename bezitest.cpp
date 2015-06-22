@@ -15,6 +15,7 @@
 #include <cstdlib>
 #include <csignal>
 #include <cfloat>
+#include <cstring>
 #include "point.h"
 #include "cogo.h"
 #include "bezitopo.h"
@@ -1885,8 +1886,21 @@ void testellipsoid()
 
 void testcolor()
 {
-  int i,cint,cint1;
+  int i,cint,cint1,g,m,hist[41];
   unsigned short csht,csht1;
+  g=rng.ucrandom();
+  m=rng.ucrandom();
+  memset(hist,0,sizeof(hist));
+  printingcolor(0xd7fed7,4);
+  for (i=0;i<256;i++)
+  {
+    cint=((m+i)&0xff)*0x10001+(((g-2*i)&0xff)<<8);
+    cint1=printingcolor(cint,4);
+    hist[cint%41]++;
+    hist[cint1%41]--;
+  }
+  for (i=0;i<41;i++)
+    assert(hist[i]==0);
   for (i=0;i<1000;i++)
   {
     cint=(rng.ucrandom()<<16)+rng.usrandom();
