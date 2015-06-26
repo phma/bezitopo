@@ -192,7 +192,7 @@ int fliphue(int color)
    */
   hilim2=hilim-3*(hilim&1);
   lolim2=lolim+3*(lolim&1);
-  cout<<"r="<<r<<" g="<<g<<" b="<<b<<" sext="<<sext<<" val="<<val;
+  //cout<<"r="<<r<<" g="<<g<<" b="<<b<<" sext="<<sext<<" val="<<val;
   if ((sext&240)==16) // on one altitude
   {
     switch (sext)
@@ -219,18 +219,30 @@ int fliphue(int color)
       switch (sext)
       {
 	case 17:
+	  r-=6;
+	  g+=3;
+	  b+=3;
+	  break;
 	case 20:
 	  r+=6;
 	  g-=3;
 	  b-=3;
 	  break;
 	case 18:
+	  r+=3;
+	  g-=6;
+	  b+=3;
+	  break;
 	case 21:
 	  r-=3;
 	  g+=6;
 	  b-=3;
 	  break;
 	case 16:
+	  r+=3;
+	  g+=3;
+	  b-=6;
+	  break;
 	case 19:
 	  r-=3;
 	  g-=3;
@@ -238,7 +250,7 @@ int fliphue(int color)
 	  break;
       }
   }
-  cout<<" r="<<r<<" g="<<g<<" b="<<b<<" sext="<<sext1<<" val="<<val<<endl;
+  //cout<<" r="<<r<<" g="<<g<<" b="<<b<<" sext="<<sext1<<" val="<<val<<endl;
   r=(r+val)/3;
   g=(g+val)/3;
   b=(b+val)/3;

@@ -1884,23 +1884,42 @@ void testellipsoid()
   cout<<"average radius "<<ldecimal(test1.avgradius())<<endl;
 }
 
+void spotcheckcolor(int col0,int col1)
+{
+  int col2;
+  col2=printingcolor(col0,4);
+  if (col2!=col1)
+    cout<<hex<<col0<<" gives "<<col2<<", should be "<<col1<<endl<<dec;
+  assert(col1==col2);
+}
+
 void testcolor()
 {
   int i,cint,cint1,g,m,hist[41];
   unsigned short csht,csht1;
+  /* Check the points on the green-magenta altitude. fliphue permutes them.
+   * The histogram detects an error if two colors are mapped to the same color.
+   */
   g=rng.ucrandom();
   m=rng.ucrandom();
   memset(hist,0,sizeof(hist));
-  printingcolor(0xd7fed7,4);
   for (i=0;i<256;i++)
   {
     cint=((m+i)&0xff)*0x10001+(((g-2*i)&0xff)<<8);
     cint1=printingcolor(cint,4);
     hist[cint%41]++;
     hist[cint1%41]--;
+    //cout<<hex<<cint<<' '<<cint1<<dec<<endl;
   }
   for (i=0;i<41;i++)
     assert(hist[i]==0);
+  // fliphue is the identity function on the gray axis.
+  for (i=0;i<256;i++)
+  {
+    cint=i*0x010101;
+    cint1=printingcolor(cint,4);
+    assert(cint==cint1);
+  }
   for (i=0;i<1000;i++)
   {
     cint=(rng.ucrandom()<<16)+rng.usrandom();
@@ -1919,19 +1938,30 @@ void testcolor()
       assert(cint+cint1==16777215);
     }
   }
-  i=0x151515;
-  cint=printingcolor(i,4);
-  assert(cint==0x151515);
-  i=0x888888;
-  cint=printingcolor(i,4);
-  assert(cint==0x888888);
-  i=0xcacaca;
-  cint=printingcolor(i,4);
-  assert(cint==0xcacaca);
-  i=0x093309;
-  cint=printingcolor(i,4);
-  //assert(cint==0xcacaca);
-  cout<<hex<<i<<' '<<cint<<dec<<endl;
+  /* 09 1b 27 3 0 e e n3 i
+   *  |   |   | | | | |  i=inside (closer to the middle than the gray point)
+   *  |   |   | | | | |  o=outside; f=fixed point (in the middle)
+   *  |   |   | | | | the number of points in the triangle or hexagon
+   *  |   |   | | | | is not divisible by 3, i.e. there is a point in the middle
+   *  |   |   | | | even number of points (including middle, if any) in the altitude
+   *  |   |   | | even number of points in the side; o=odd; x=hexagon, odd and even alternate
+   *  |   |   | layers 0 and 2 are triangles, 1 is hexagon
+   *  |   |   27 mod 6; 3 pairs with 4, 2 with 5, and 1 with 0
+   *  |   sum of three numbers in layer 0; always 3 times gray point mod 256
+   *  gray point; 090909 is in one of the layers
+   */
+  spotcheckcolor(0x330909,0x131919); // 17 45  69 3 0 e o n3 o
+  spotcheckcolor(0x051105,0x070d07); // 09 1b  27 3 0 e e n3 i
+  spotcheckcolor(0xdfefef,0xdfefef); // 3f bd 189 3 2 o o d3 f
+  spotcheckcolor(0x0f0f1f,0x0f0f1f); // bf 3d  61 1 0 e o d3 f
+  spotcheckcolor(0x7b817b,0x7b817b); // 7d 77 119 5 1 x e n3 f
+  spotcheckcolor(0x051005,0x080a08); // 5e 1a  26 2 0 o e d3 i
+  spotcheckcolor(0x5555f7,0xcccc09); // 8b a1 161 5 1 x e n3 o
+  spotcheckcolor(0x7a7e7a,0x798079); // 26 72 114 0 1 x e d3 i
+  spotcheckcolor(0xfeeded,0xdaffff); // 48 d8 216 0 2 e o d3 o
+  spotcheckcolor(0xececde,0xefefd8); // 92 b6 182 2 2 e e d3 i
+  spotcheckcolor(0xd29797,0x2ee9e9); // 00 00   0 0 2 e o d3 o
+  spotcheckcolor(0x808081,0x81817f); // 2b 81 129 3 1 x e d3 o
   for (i=0;i<10;i++)
   {
     cint=(rng.ucrandom()<<16)+rng.usrandom();
