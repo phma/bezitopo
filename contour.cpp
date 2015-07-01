@@ -14,3 +14,21 @@
   3. Make a curve defined by three of these points (which is necessarily a circle).
   4. Add points from the list to make the curve fit the points better.
   */
+#include <iostream>
+#include "contour.h"
+#include "pointlist.h"
+using namespace std;
+
+vector<uintptr_t> contstarts(pointlist &pts,double elev)
+{
+  vector<uintptr_t> ret;
+  int i;
+  cout<<"Exterior edges:";
+  for (i=0;i<pts.edges.size();i++)
+    if (!pts.edges[i].isinterior())
+    {
+      cout<<' '<<i;
+    }
+  cout<<endl;
+  return ret;
+}

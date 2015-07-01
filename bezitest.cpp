@@ -1977,6 +1977,7 @@ void testcolor()
 void testcontour()
 {
   vector<double> tinlohi;
+  vector<uintptr_t> cstarts;
   doc.pl[1].clear();
   setsurface(HYPAR);
   aster(doc,100);
@@ -1988,6 +1989,7 @@ void testcontour()
   rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
   tinlohi=doc.pl[1].lohi();
   cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
+  cstarts=contstarts(doc.pl[1],0);
 }
 
 int main(int argc, char *argv[])
