@@ -44,6 +44,7 @@
 #include "ellipsoid.h"
 #include "color.h"
 #include "document.h"
+#include "contour.h"
 
 #define psoutput false
 // affects only maketin
@@ -1296,6 +1297,9 @@ void trianglecontours()
  * tri93db9159a54b09a0fc has two critical points in the triangle, both saddles,
  * two critical points on two sides, and one critical point on the third side.
  * tri45653a366286ff0747 also has two saddles in the triangle.
+ * tri083194be44b7dace28 has a contour that does not touch the perimeter and
+ * a contour at the same elevation that does.
+ * So do tri2c7ae0064f1de9f5b2 and trie1fbf94c3a1f855e9c.
  * 
  * Hypothesis to attack the minimax problem:
  * Every surface in a Bézier triangle can be stretched linearly and rotated
@@ -1970,6 +1974,22 @@ void testcolor()
   }
 }
 
+void testcontour()
+{
+  vector<double> tinlohi;
+  doc.pl[1].clear();
+  setsurface(HYPAR);
+  aster(doc,100);
+  doc.pl[1].maketin();
+  doc.pl[1].makegrad(0.);
+  doc.pl[1].maketriangles();
+  doc.pl[1].setgradient();
+  doc.pl[1].makeqindex();
+  rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
+  tinlohi=doc.pl[1].lohi();
+  cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
+}
+
 int main(int argc, char *argv[])
 {
   doc.pl.resize(2);
@@ -2014,6 +2034,7 @@ int main(int argc, char *argv[])
   testldecimal();
   testellipsoid();
   testcolor();
+  testcontour();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //closure_i();
   return EXIT_SUCCESS;

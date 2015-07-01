@@ -35,6 +35,7 @@ public:
   void makeqindex();
   double elevation(xy location);
   double dirbound(int angle);
+  std::vector<double> lohi();
 };
 struct criterion
 {

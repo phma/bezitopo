@@ -664,3 +664,20 @@ void pointlist::maketriangles()
       edges[i].trib->setneighbor(edges[i].tria);
     }
 }
+
+vector<double> pointlist::lohi()
+{
+  int i;
+  vector<double> ret,tlohi;;
+  ret.push_back(INFINITY);
+  ret.push_back(-INFINITY);
+  for (i=0;i<triangles.size();i++)
+  {
+    tlohi=triangles[i].lohi();
+    if (ret[0]>tlohi[0])
+      ret[0]=tlohi[0];
+    if (ret[1]<tlohi[3])
+      ret[1]=tlohi[3];
+  }
+  return ret;
+}
