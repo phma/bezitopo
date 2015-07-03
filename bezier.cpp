@@ -1298,6 +1298,8 @@ int triangle::subdir(uintptr_t edgepart)
   {
     backward=area3(*sid->a,*sid->b,centroid())<0;
     ret=base+backward?(pieces-1-(edgepart&3)):(edgepart&3);
+    if (ret>=pieces)
+      ret=-1;
   }
   else
     ret=-1;
@@ -1381,4 +1383,13 @@ int triangle::proceed(int subdir,double elevation)
   else
     ret=-2;
   return ret;
+}
+
+bool triangle::crosses(int subdir,double elevation)
+{
+  subdir&=65535;
+  if (subdir<subdiv.size())
+    return subdiv[subdir].crosses(elevation);
+  else
+    return false;
 }

@@ -15,6 +15,7 @@
   4. Add points from the list to make the curve fit the points better.
   */
 #include <iostream>
+#include <cassert>
 #include "contour.h"
 #include "pointlist.h"
 using namespace std;
@@ -22,12 +23,29 @@ using namespace std;
 vector<uintptr_t> contstarts(pointlist &pts,double elev)
 {
   vector<uintptr_t> ret;
-  int i;
+  uintptr_t ep;
+  int sd;
+  triangle *tri;
+  int i,j;
   cout<<"Exterior edges:";
   for (i=0;i<pts.edges.size();i++)
     if (!pts.edges[i].isinterior())
     {
+      tri=pts.edges[i].tria;
+      if (!tri)
+	tri=pts.edges[i].trib;
+      assert(tri);
       cout<<' '<<i;
+      for (j=0;j<3;j++)
+      {
+	ep=j+(uintptr_t)&pts.edges[i];
+	sd=tri->subdir(ep);
+	if (tri->crosses(sd,elev))
+	{
+	  cout<<(char)(j+'a');
+	  ret.push_back(ep);
+	}
+      }
     }
   cout<<endl;
   return ret;

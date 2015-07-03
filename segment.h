@@ -47,6 +47,10 @@ public:
   double startslope();
   double endslope();
   double contourcept(double e);
+  bool crosses(double e)
+  {
+    return (end.elev()<e)^(start.elev()<e);
+  }
   virtual xyz station(double along);
   double avgslope()
   {

@@ -23,6 +23,8 @@ public:
   void clear();
   void setgradient(bool flat=false);
   void findcriticalpts();
+  void addperimeter();
+  void removeperimeter();
   // the following methods are in tin.cpp
 private:
   void dumpedges();

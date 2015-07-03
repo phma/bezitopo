@@ -101,6 +101,7 @@ public:
   std::vector<double> lohi();
   int subdir(uintptr_t edgepart);
   int proceed(int subdir,double elevation);
+  bool crosses(int subdir,double elevation);
 private:
   double vtxeloff(double off);
   void setsubslopes(segment &s);

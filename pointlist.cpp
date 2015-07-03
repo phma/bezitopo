@@ -107,3 +107,17 @@ void pointlist::findcriticalpts()
   for (t=triangles.begin();t!=triangles.end();t++)
     t->second.findcriticalpts();
 }
+
+void pointlist::addperimeter()
+{
+  map<int,triangle>::iterator t;
+  for (t=triangles.begin();t!=triangles.end();t++)
+    t->second.addperimeter();
+}
+
+void pointlist::removeperimeter()
+{
+  map<int,triangle>::iterator t;
+  for (t=triangles.begin();t!=triangles.end();t++)
+    t->second.removeperimeter();
+}

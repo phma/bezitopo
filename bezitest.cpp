@@ -1986,6 +1986,8 @@ void testcontour()
   doc.pl[1].maketriangles();
   doc.pl[1].setgradient();
   doc.pl[1].makeqindex();
+  doc.pl[1].findcriticalpts();
+  doc.pl[1].addperimeter();
   rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
   tinlohi=doc.pl[1].lohi();
   cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
