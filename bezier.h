@@ -102,6 +102,7 @@ public:
   int subdir(uintptr_t edgepart);
   int proceed(int subdir,double elevation);
   bool crosses(int subdir,double elevation);
+  bool upleft(int subdir);
 private:
   double vtxeloff(double off);
   void setsubslopes(segment &s);

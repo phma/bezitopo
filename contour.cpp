@@ -40,7 +40,7 @@ vector<uintptr_t> contstarts(pointlist &pts,double elev)
       {
 	ep=j+(uintptr_t)&pts.edges[i];
 	sd=tri->subdir(ep);
-	if (tri->crosses(sd,elev))
+	if (tri->crosses(sd,elev) && tri->upleft(sd))
 	{
 	  cout<<(char)(j+'a');
 	  ret.push_back(ep);

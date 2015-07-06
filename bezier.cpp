@@ -1393,3 +1393,17 @@ bool triangle::crosses(int subdir,double elevation)
   else
     return false;
 }
+
+bool triangle::upleft(int subdir)
+/* Returns true if up is on the left.
+ * Used to orient contour lines counterclockwise around peaks.
+ */
+{
+  bool sign;
+  sign=(subdir&65536)>0;
+  subdir&=65535;
+  if (subdir<subdiv.size())
+    return (subdiv[subdir].getstart().elev()>subdiv[subdir].getend().elev())^sign;
+  else
+    return false;
+}
