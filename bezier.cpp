@@ -1297,8 +1297,8 @@ int triangle::subdir(uintptr_t edgepart)
   if (base>=0)
   {
     backward=area3(*sid->a,*sid->b,centroid())<0;
-    ret=base+backward?(pieces-1-(edgepart&3)):(edgepart&3);
-    if (ret>=pieces)
+    ret=base+(backward?(pieces-1-(edgepart&3)):(edgepart&3));
+    if ((ret-base)>=pieces || ret<base)
       ret=-1;
   }
   else

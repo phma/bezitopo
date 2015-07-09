@@ -72,23 +72,31 @@ polyline trace(uintptr_t edgep,double elev)
   if (tri==nullptr || !tri->upleft(tri->subdir(edgep)))
     tri=ntri;
   mark(edgep);
+  cout<<"Start edgep "<<edgep<<endl;
   ret.insert(tri->contourcept(tri->subdir(edgep),elev));
   do
   {
     subedge=tri->subdir(edgep);
+    cout<<"before loop "<<subedge<<' '<<subnext<<endl;
     do
     {
       subnext=tri->proceed(subedge,elev);
       if (subnext>=0)
       {
+	if (subnext==subedge)
+	  cout<<"proceed failed!"<<endl;
 	subedge=subnext;
 	ret.insert(tri->contourcept(subedge,elev));
       }
     } while (subnext>=0);
+    cout<<"after loop "<<subedge<<' '<<subnext<<endl;
     edgep=tri->edgepart(subedge);
+    cout<<"Next edgep "<<edgep<<endl;
     wasmarked=ismarked(edgep);
     if (!wasmarked)
       ret.insert(tri->contourcept(tri->subdir(edgep),elev));
+    else
+      cout<<"Was already marked"<<endl;
     mark(edgep);
     ntri=((edge *)(edgep&-4))->othertri(tri);
     if (ntri)
