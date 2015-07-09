@@ -19,6 +19,13 @@ void pointlist::clear()
   revpoints.clear();
 }
 
+void pointlist::clearmarks()
+{
+  map<int,edge>::iterator e;
+  for (e=edges.begin();e!=edges.end();e++)
+    e->second.clearmarks();
+}
+
 void pointlist::addpoint(int numb,point pnt,bool overwrite)
 // If numb<0, it's a point added by bezitopo.
 {int a;

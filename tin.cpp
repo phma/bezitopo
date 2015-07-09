@@ -52,6 +52,15 @@ point* edge::otherend(point* end)
     return a;
 }
 
+triangle* edge::othertri(triangle* t)
+{
+  assert(t==tria || t==trib);
+  if (t==tria)
+    return trib;
+  else
+    return tria;
+}
+
 xy edge::midpoint()
 {
   return (xy(*a)+xy(*b))/2;
@@ -220,6 +229,21 @@ void edge::findextrema()
 xyz edge::critpoint(int i)
 {
   return getsegment().station(extrema[i]);
+}
+
+void edge::clearmarks()
+{
+  contour=0;
+}
+
+void edge::mark(int n)
+{
+  contour|=(1<<n);
+}
+
+bool edge::ismarked(int n)
+{
+  return (contour>>n)&1;
 }
 
 bool goodcenter(xy a,xy b,xy c,xy d)

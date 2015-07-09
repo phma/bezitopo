@@ -21,6 +21,7 @@ public:
   qindex qinx;
   void addpoint(int numb,point pnt,bool overwrite=false);
   void clear();
+  void clearmarks();
   void setgradient(bool flat=false);
   void findcriticalpts();
   void addperimeter();

@@ -1978,6 +1978,8 @@ void testcontour()
 {
   vector<double> tinlohi;
   vector<uintptr_t> cstarts;
+  int i,j;
+  polyline ctour;
   doc.pl[1].clear();
   setsurface(HYPAR);
   aster(doc,100);
@@ -1992,6 +1994,13 @@ void testcontour()
   tinlohi=doc.pl[1].lohi();
   cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   cstarts=contstarts(doc.pl[1],0);
+  doc.pl[1].clearmarks();
+  for (i=0;i<cstarts.size();i++)
+  {
+    ctour=trace(cstarts[i],0);
+    //for (j=0;j<ctour.size();j++)
+    cout<<"Contour length: "<<ctour.length()<<endl;
+  }
 }
 
 int main(int argc, char *argv[])

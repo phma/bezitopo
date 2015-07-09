@@ -39,6 +39,7 @@ public:
    */
   void flip(pointlist *topopoints);
   point* otherend(point* end);
+  triangle* othertri(triangle* t);
   edge* next(point* end);
   triangle* tri(point* end);
   xy midpoint();
@@ -50,6 +51,9 @@ public:
   segment getsegment();
   xyz critpoint(int i);
   void findextrema();
+  void clearmarks();
+  void mark(int n);
+  bool ismarked(int n);
 };
 
 typedef std::pair<double,point*> ipoint;

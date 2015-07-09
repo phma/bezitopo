@@ -10,7 +10,7 @@
 #include "xyz.h"
 #include "drawobj.h"
 //#include "tin.h"
-// Declartion of xy and xyz is in xyz.h.
+// Declaration of xy and xyz is in xyz.h.
 
 class point;
 class edge;

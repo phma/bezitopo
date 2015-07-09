@@ -103,6 +103,7 @@ public:
   int proceed(int subdir,double elevation);
   bool crosses(int subdir,double elevation);
   bool upleft(int subdir);
+  xy contourcept(int subdir,double elevation);
 private:
   double vtxeloff(double off);
   void setsubslopes(segment &s);

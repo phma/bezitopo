@@ -1407,3 +1407,12 @@ bool triangle::upleft(int subdir)
   else
     return false;
 }
+
+xy triangle::contourcept(int subdir,double elevation)
+{
+  subdir&=65535;
+  if (subdir<subdiv.size())
+    return subdiv[subdir].station(subdiv[subdir].contourcept(elevation));
+  else
+    return xy(NAN,NAN);
+}

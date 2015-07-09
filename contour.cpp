@@ -50,3 +50,51 @@ vector<uintptr_t> contstarts(pointlist &pts,double elev)
   cout<<endl;
   return ret;
 }
+
+void mark(uintptr_t ep)
+{
+  ((edge *)(ep&-4))->mark(ep&3);
+}
+
+bool ismarked(uintptr_t ep)
+{
+  return ((edge *)(ep&-4))->ismarked(ep&3);
+}
+
+polyline trace(uintptr_t edgep,double elev)
+{
+  polyline ret(elev);
+  int subedge,subnext;
+  bool wasmarked;
+  triangle *tri,*ntri;
+  tri=((edge *)(edgep&-4))->tria;
+  ntri=((edge *)(edgep&-4))->trib;
+  if (tri==nullptr || !tri->upleft(tri->subdir(edgep)))
+    tri=ntri;
+  mark(edgep);
+  ret.insert(tri->contourcept(tri->subdir(edgep),elev));
+  do
+  {
+    subedge=tri->subdir(edgep);
+    do
+    {
+      subnext=tri->proceed(subedge,elev);
+      if (subnext>=0)
+      {
+	subedge=subnext;
+	ret.insert(tri->contourcept(subedge,elev));
+      }
+    } while (subnext>=0);
+    edgep=tri->edgepart(subedge);
+    wasmarked=ismarked(edgep);
+    if (!wasmarked)
+      ret.insert(tri->contourcept(tri->subdir(edgep),elev));
+    mark(edgep);
+    ntri=((edge *)(edgep&-4))->othertri(tri);
+    if (ntri)
+      tri=ntri;
+  } while (ntri && !wasmarked);
+  if (!ntri)
+    ret.open();
+  return ret;
+}

@@ -22,6 +22,11 @@ polyline::polyline()
   elevation=0;
 }
 
+polyline::polyline(double e)
+{
+  elevation=e;
+}
+
 bool polyline::isopen()
 {
   return endpoints.size()>lengths.size();

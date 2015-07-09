@@ -3,6 +3,8 @@
 /* polyline.h - polylines                             */
 /*                                                    */
 /******************************************************/
+#ifndef POLYLINE_H
+#define POLYLINE_H
 
 #include <vector>
 #include "point.h"
@@ -21,6 +23,7 @@ protected:
   std::vector<double> lengths;
 public:
   polyline();
+  polyline(double e);
   bool isopen();
   segment getsegment(int i);
   virtual void insert(xy newpoint,int pos=-1);
@@ -53,3 +56,5 @@ public:
   std::vector<int> deltas;
   std::vector<double> lengths;
 };
+
+#endif
