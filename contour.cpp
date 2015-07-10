@@ -65,6 +65,7 @@ polyline trace(uintptr_t edgep,double elev)
 {
   polyline ret(elev);
   int subedge,subnext;
+  uintptr_t prevedgep;
   bool wasmarked;
   triangle *tri,*ntri;
   tri=((edge *)(edgep&-4))->tria;
@@ -76,6 +77,7 @@ polyline trace(uintptr_t edgep,double elev)
   ret.insert(tri->contourcept(tri->subdir(edgep),elev));
   do
   {
+    prevedgep=edgep;
     subedge=tri->subdir(edgep);
     cout<<"before loop "<<subedge<<' '<<subnext<<endl;
     do
@@ -92,6 +94,19 @@ polyline trace(uintptr_t edgep,double elev)
     cout<<"after loop "<<subedge<<' '<<subnext<<endl;
     edgep=tri->edgepart(subedge);
     cout<<"Next edgep "<<edgep<<endl;
+    if (edgep==prevedgep)
+    {
+      cout<<"Edge didn't change"<<endl;
+      subedge=tri->subdir(edgep);
+      subnext=tri->proceed(subedge,elev);
+      if (subnext>=0)
+      {
+	if (subnext==subedge)
+	  cout<<"proceed failed!"<<endl;
+	subedge=subnext;
+	//ret.insert(tri->contourcept(subedge,elev));
+      }
+    }
     wasmarked=ismarked(edgep);
     if (!wasmarked)
       ret.insert(tri->contourcept(tri->subdir(edgep),elev));
