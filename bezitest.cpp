@@ -1369,6 +1369,14 @@ void trianglecontours()
     doc.pl[1].points[j+1].gradient=turn90(xy(doc.pl[1].points[j+1]))/10+tilt;
   }
   test1tri(fname,2);
+  fname="slope";
+  tilt=xy(0.03,0);
+  for (j=0;j<3;j++)
+  {
+    doc.pl[1].points[j+1].setelev(dot(tilt,xy(doc.pl[1].points[j+1])));
+    doc.pl[1].points[j+1].gradient=tilt;
+  }
+  test1tri(fname,0);
   fname="table";
   for (j=0;j<3;j++)
   {
@@ -1980,6 +1988,10 @@ void testcontour()
   vector<uintptr_t> cstarts;
   int i,j;
   polyline ctour;
+  psopen("contour.ps");
+  psprolog();
+  startpage();
+  setscale(-10,-10,10,10,0);
   doc.pl[1].clear();
   setsurface(HYPAR);
   aster(doc,100);
@@ -1990,6 +2002,9 @@ void testcontour()
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
+  for (i=0;i<doc.pl[1].triangles.size();i++)
+    for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
+      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
   tinlohi=doc.pl[1].lohi();
   cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
@@ -2001,6 +2016,9 @@ void testcontour()
     //for (j=0;j<ctour.size();j++)
     cout<<"Contour length: "<<ctour.length()<<endl;
   }
+  endpage();
+  pstrailer();
+  psclose();
 }
 
 int main(int argc, char *argv[])

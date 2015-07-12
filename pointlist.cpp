@@ -112,7 +112,10 @@ void pointlist::findcriticalpts()
   for (e=edges.begin();e!=edges.end();e++)
     e->second.findextrema();
   for (t=triangles.begin();t!=triangles.end();t++)
+  {
     t->second.findcriticalpts();
+    t->second.subdivide();
+  }
 }
 
 void pointlist::addperimeter()

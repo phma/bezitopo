@@ -124,7 +124,7 @@ double segment::contourcept(double e)
   lstelev=elev(lst)-e;
   while ((lst-beg)/(fabs(lst)+fabs(beg))>3*DBL_EPSILON)
   {
-    if (abs(lstelev)>=10*abs(begelev) || abs(begelev)>=10*abs(lstelev) || (lst-beg)/(fabs(lst)+fabs(beg))>30*DBL_EPSILON)
+    if (fabs(lstelev)>=10*fabs(begelev) || fabs(begelev)>=10*fabs(lstelev) || (lst-beg)/(fabs(lst)+fabs(beg))>30*DBL_EPSILON)
       mdp=(lst+beg)/2;
     else
       mdp=(beg*lstelev-lst*begelev)/(lstelev-begelev);

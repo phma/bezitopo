@@ -107,13 +107,23 @@ polyline trace(uintptr_t edgep,double elev)
 	//ret.insert(tri->contourcept(subedge,elev));
       }
     }
-    wasmarked=ismarked(edgep);
-    if (!wasmarked)
-      ret.insert(tri->contourcept(tri->subdir(edgep),elev));
+    if (edgep==0)
+    {
+      ntri=nullptr;
+      cout<<"Tracing stopped in middle of a triangle"<<endl;
+      subedge=tri->subdir(prevedgep);
+      subnext=tri->proceed(subedge,elev);
+    }
     else
-      cout<<"Was already marked"<<endl;
-    mark(edgep);
-    ntri=((edge *)(edgep&-4))->othertri(tri);
+    {
+      wasmarked=ismarked(edgep);
+      if (!wasmarked)
+	ret.insert(tri->contourcept(tri->subdir(edgep),elev));
+      else
+	cout<<"Was already marked"<<endl;
+      mark(edgep);
+      ntri=((edge *)(edgep&-4))->othertri(tri);
+    }
     if (ntri)
       tri=ntri;
   } while (ntri && !wasmarked);
