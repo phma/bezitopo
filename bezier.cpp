@@ -1024,11 +1024,39 @@ void triangle::subdivide()
     cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
 }
 
+/* 2015-07-12: There appears to be a bug in addperimeter.
+ * A triangle of the TIN of asteraceous pattern:
+ * 9:  -2.8490243449190173,-1.1760358336627177
+ * 14: -2.1900276194166555,-3.1150889274934381
+ * 6:  -0.66186370825269425,-2.4621000044063992
+ * Area: 1.6967542609633028
+ *
+ * With test surface HYPAR this triangle is subdivided as follows:
+ * 0: -2.8490243449190173,-1.1760358336627177 -> -1.3206809836707525,-2.7436145592545782
+ * 1: -2.8490243449190173,-1.1760358336627177 -> -0.67221800596207093,-2.4665244261985735
+ * 2: -2.8490243449190173,-1.1760358336627177 -> -2.1900276194166555,-3.1150889274934381
+ * 3: -2.1900276194166555,-3.1150889274934381 -> -1.3206809836707525,-2.7436145592545782
+ * 4: -1.3206809836707525,-2.7436145592545782 -> -0.67221800596207093,-2.4665244261985735
+ * 5: -1.3206809836707525,-2.7436145592545782 -> -0.66186370825269425,-2.4621000044063992
+ * 6: -0.66186370825269425,-2.4621000044063992 -> -2.8490243449190173,-1.1760358336627177
+ *
+ * It should be subdivided like this:
+ * 0: -2.8490243449190173,-1.1760358336627177 -> -1.3206809836707525,-2.7436145592545782
+ * 1: -2.8490243449190173,-1.1760358336627177 -> -0.67221800596207093,-2.4665244261985735
+ * 2: -2.8490243449190173,-1.1760358336627177 -> -2.1900276194166555,-3.1150889274934381
+ * 3: -2.1900276194166555,-3.1150889274934381 -> -1.3206809836707525,-2.7436145592545782
+ * 4: -1.3206809836707525,-2.7436145592545782 -> -0.67221800596207093,-2.4665244261985735
+ * 5: -0.67221800596207093,-2.4665244261985735 -> -0.66186370825269425,-2.4621000044063992
+ * 6: -0.66186370825269425,-2.4621000044063992 -> -2.8490243449190173,-1.1760358336627177
+ */
+
 void triangle::addperimeter()
 {
   int i,oldnumber;
   edge *sid;
   vector<xyz> sidea,sideb,sidec;
+  if (fabs(sarea-1.696754261)<0.000001)
+    cerr<<"Triangle 6-9-14"<<endl;
   sid=a->edg(this);
   for (i=0;i<2;i++)
     if (isfinite(sid->extrema[i]))
@@ -1053,7 +1081,7 @@ void triangle::addperimeter()
     subdiv.push_back(segment(*a,sidec[0]));
     for (i=0;i<sidec.size()-1;i++)
       subdiv.push_back(segment(sidec[i],sidec[i+1]));
-    subdiv.push_back(segment(sidec[0],*b));
+    subdiv.push_back(segment(sidec[i],*b));
   }
   else
     subdiv.push_back(segment(*a,*b));
@@ -1062,7 +1090,7 @@ void triangle::addperimeter()
     subdiv.push_back(segment(*b,sidea[0]));
     for (i=0;i<sidea.size()-1;i++)
       subdiv.push_back(segment(sidea[i],sidea[i+1]));
-    subdiv.push_back(segment(sidea[0],*c));
+    subdiv.push_back(segment(sidea[i],*c));
   }
   else
     subdiv.push_back(segment(*b,*c));
@@ -1071,7 +1099,7 @@ void triangle::addperimeter()
     subdiv.push_back(segment(*c,sideb[0]));
     for (i=0;i<sideb.size()-1;i++)
       subdiv.push_back(segment(sideb[i],sideb[i+1]));
-    subdiv.push_back(segment(sideb[0],*a));
+    subdiv.push_back(segment(sideb[i],*a));
   }
   else
     subdiv.push_back(segment(*c,*a));
