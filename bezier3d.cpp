@@ -85,6 +85,18 @@ bezier3d operator+(const bezier3d &l,const bezier3d &r)
   return ret;
 }
 
+bezier3d& bezier3d::operator+=(const bezier3d &r)
+{
+  int i;
+  if (controlpoints.size()==1)
+    controlpoints[0]=r.controlpoints[0];
+  if (controlpoints.size()%3==1 && r.size())
+    controlpoints.back()=(controlpoints.back()+r.controlpoints[0])/2;
+  for (i=controlpoints.size()%3;i<r.controlpoints.size();i++)
+    controlpoints.push_back(r.controlpoints[i]);
+  return *this;
+}
+
 double bez3destimate(xy kra,int bear0,double len,int bear1,xy fam)
 /* This should be used only when bear0-direc, bear1-direc, and bear0+bear1-2*direc
  * are all less than 30°. If any of them is greater, split the curve.

@@ -32,6 +32,11 @@ bool polyline::isopen()
   return endpoints.size()>lengths.size();
 }
 
+int polyline::size()
+{
+  return lengths.size();
+}
+
 segment polyline::getsegment(int i)
 {
   i%=lengths.size();
@@ -46,6 +51,15 @@ arc polyarc::getarc(int i)
   if (i<0)
     i+=deltas.size();
   return arc(xyz(endpoints[i],elevation),xyz(endpoints[(i+1)%endpoints.size()],elevation),deltas[i]);
+}
+
+bezier3d polyline::approx3d(double precision)
+{
+  bezier3d ret;
+  int i;
+  for (i=0;i<size();i++)
+    ret+=getsegment(i).approx3d(precision);
+  return ret;
 }
 
 void polyline::insert(xy newpoint,int pos)

@@ -18,6 +18,7 @@ public:
   std::vector<xyz> operator[](int n);
   xyz station(double along);
   friend bezier3d operator+(const bezier3d &l,const bezier3d &r); // concatenates, not adds
+  bezier3d& operator+=(const bezier3d &r);
 };
 
 double bez3destimate(xy kra,int bear0,double len,int bear1,xy fam);

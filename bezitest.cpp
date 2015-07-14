@@ -2002,6 +2002,7 @@ void testcontour()
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
+  setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
       spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
@@ -2010,11 +2011,13 @@ void testcontour()
   cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   cstarts=contstarts(doc.pl[1],0);
   doc.pl[1].clearmarks();
+  setcolor(0,0,0);
   for (i=0;i<cstarts.size();i++)
   {
     ctour=trace(cstarts[i],0);
     //for (j=0;j<ctour.size();j++)
     cout<<"Contour length: "<<ctour.length()<<endl;
+    spline(ctour.approx3d(1));
   }
   endpage();
   pstrailer();
