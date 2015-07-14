@@ -60,6 +60,7 @@ void polyline::insert(xy newpoint,int pos)
  */
 {
   bool wasopen;
+  int i;
   vector<xy>::iterator ptit;
   vector<double>::iterator lenit;
   wasopen=isopen();
@@ -69,6 +70,14 @@ void polyline::insert(xy newpoint,int pos)
   lenit=lengths.begin()+pos;
   endpoints.insert(ptit,newpoint);
   lengths.insert(lenit,0);
+  for (i=0;i<2;i++)
+  {
+    if (pos+1<endpoints.size())
+      lengths[pos]=dist(endpoints[pos],endpoints[pos+1]);
+    pos++;
+    if (pos>=lengths.size())
+      pos=0;
+  }
 }
 
 void polyarc::insert(xy newpoint,int pos)

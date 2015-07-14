@@ -9,6 +9,7 @@
 #include <vector>
 #include "point.h"
 #include "arc.h"
+#include "bezier3d.h"
 
 /* Polylines and alignments are very similar. The differences are:
  * polylines are in a horizontal plane, whereas alignments have vertical curves;
@@ -26,6 +27,7 @@ public:
   polyline(double e);
   bool isopen();
   segment getsegment(int i);
+  //virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
   virtual void setlengths();
   virtual void open();

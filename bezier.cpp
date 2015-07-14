@@ -1024,14 +1024,14 @@ void triangle::subdivide()
     cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
 }
 
-/* 2015-07-12: There appears to be a bug in addperimeter.
+/* 2015-07-12: There was a bug in addperimeter.
  * A triangle of the TIN of asteraceous pattern:
  * 9:  -2.8490243449190173,-1.1760358336627177
  * 14: -2.1900276194166555,-3.1150889274934381
  * 6:  -0.66186370825269425,-2.4621000044063992
  * Area: 1.6967542609633028
  *
- * With test surface HYPAR this triangle is subdivided as follows:
+ * With test surface HYPAR this triangle was subdivided as follows:
  * 0: -2.8490243449190173,-1.1760358336627177 -> -1.3206809836707525,-2.7436145592545782
  * 1: -2.8490243449190173,-1.1760358336627177 -> -0.67221800596207093,-2.4665244261985735
  * 2: -2.8490243449190173,-1.1760358336627177 -> -2.1900276194166555,-3.1150889274934381
@@ -1055,8 +1055,6 @@ void triangle::addperimeter()
   int i,oldnumber;
   edge *sid;
   vector<xyz> sidea,sideb,sidec;
-  if (fabs(sarea-1.696754261)<0.000001)
-    cerr<<"Triangle 6-9-14"<<endl;
   sid=a->edg(this);
   for (i=0;i<2;i++)
     if (isfinite(sid->extrema[i]))
@@ -1375,7 +1373,7 @@ int triangle::proceed(int subdir,double elevation)
       if (p.n>=0)
 	list.push_back(p);
     }
-    cout<<subdir<<((sign>0)?'L':'R')<<": "<<list.size()<<" adjacent segments on that side"<<endl;
+    //cout<<subdir<<((sign>0)?'L':'R')<<": "<<list.size()<<" adjacent segments on that side"<<endl;
     // The size of the list varies from 0 to 7. Sort it by area.
     do
     {

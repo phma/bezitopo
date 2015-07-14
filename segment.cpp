@@ -115,6 +115,8 @@ double segment::contourcept(double e)
  * This uses a combination of bisection and false position. It's the same algorithm
  * used in triangle::findnocubedir in bezier.cpp. I'll replace it with Brent's
  * or Dekker's method when I figure out how those work.
+ * 
+ * This needs to be tested when e=0. 3*DBL_EPSILON is apparently too small.
  */
 {
   double beg,mdp,lst,begelev,mdpelev,lstelev,crit,ret;
@@ -122,7 +124,7 @@ double segment::contourcept(double e)
   lst=length();
   begelev=elev(beg)-e;
   lstelev=elev(lst)-e;
-  while ((lst-beg)/(fabs(lst)+fabs(beg))>3*DBL_EPSILON)
+  while ((lst-beg)/(fabs(lst)+fabs(beg))>5*DBL_EPSILON)
   {
     if (fabs(lstelev)>=10*fabs(begelev) || fabs(begelev)>=10*fabs(lstelev) || (lst-beg)/(fabs(lst)+fabs(beg))>30*DBL_EPSILON)
       mdp=(lst+beg)/2;
