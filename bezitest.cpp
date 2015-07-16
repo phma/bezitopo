@@ -2024,6 +2024,47 @@ void testcontour()
   psclose();
 }
 
+void clampcubic()
+/* Determine values which will be used to check whether a spiralarc well
+ * approximates a contour. The contour segment is a piece of an elliptic
+ * curve; the curve approximating it is an Euler spiral. Pretend both are
+ * cubics. Find the distance along them of two points such that, if the
+ * distance perpendicular to them is less than x, then the distance
+ * between the two curves anywhere is less than ax, and a is minimal.
+ * 
+ * 0--------0----------|--------0
+ * y=(x+1)(x+c)(x-1)
+ * y'=(x+c)(x-1)+(x+1)(x-1)+(x+1)(x+c)
+ * y'(-1)=2(1-c)
+ * y'(1)=2(1+c)
+ * 
+ * Result: clamp=0.3849001794597505 (=sqrt(4/27)) max=1.173913043478261 (=27/23)
+ */
+{
+  double clamp,valclamp,d1,dm1,maxq,maxc,h;
+  vector<double> exq,exc;
+  xyz st(-1,0,0),nd(1,0,0);
+  segment cubic(st,nd),quadratic(st,nd);
+  for (clamp=0.375,h=0.015625;fabs(h)>DBL_EPSILON/2;clamp+=h)
+  {
+    valclamp=(clamp+1)*2*clamp*(clamp-1);
+    //cout<<"valclamp="<<valclamp<<endl;
+    d1=2*(1+clamp)/valclamp;
+    dm1=2*(1-clamp)/valclamp;
+    cubic.setslope(END,d1+dm1);
+    quadratic.setslope(END,d1-dm1);
+    cubic.setslope(START,dm1+d1);
+    quadratic.setslope(START,dm1-d1);
+    exc=cubic.vextrema(false);
+    exq=quadratic.vextrema(false);
+    maxc=cubic.station(exc[1]).elev();
+    maxq=quadratic.station(exq[0]).elev();
+    cout<<"clamp="<<ldecimal(clamp)<<" cubic max="<<ldecimal(maxc)<<" quadratic max="<<ldecimal(maxq)<<endl;
+    if ((h>0) ^ (maxq<maxc))
+      h*=-0.5;
+  }
+}
+
 int main(int argc, char *argv[])
 {
   doc.pl.resize(2);
@@ -2069,6 +2110,7 @@ int main(int argc, char *argv[])
   testellipsoid();
   testcolor();
   testcontour();
+  //clampcubic();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //closure_i();
   return EXIT_SUCCESS;
