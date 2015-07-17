@@ -1987,6 +1987,7 @@ void testcontour()
   vector<double> tinlohi;
   vector<uintptr_t> cstarts;
   int i,j;
+  double conterval;
   polyline ctour;
   psopen("contour.ps");
   psprolog();
@@ -2009,15 +2010,19 @@ void testcontour()
   rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
   tinlohi=doc.pl[1].lohi();
   cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
-  cstarts=contstarts(doc.pl[1],0);
-  doc.pl[1].clearmarks();
-  setcolor(0,0,0);
-  for (i=0;i<cstarts.size();i++)
+  conterval=0.03;
+  for (j=floor(tinlohi[0]/conterval);j<=ceil(tinlohi[1]/conterval);j++)
   {
-    ctour=trace(cstarts[i],0);
-    //for (j=0;j<ctour.size();j++)
-    cout<<"Contour length: "<<ctour.length()<<endl;
-    spline(ctour.approx3d(1));
+    cstarts=contstarts(doc.pl[1],j*conterval);
+    doc.pl[1].clearmarks();
+    setcolor(0,0,0);
+    for (i=0;i<cstarts.size();i++)
+    {
+      ctour=trace(cstarts[i],j*conterval);
+      //for (j=0;j<ctour.size();j++)
+      cout<<"Contour length: "<<ctour.length()<<endl;
+      spline(ctour.approx3d(1));
+    }
   }
   endpage();
   pstrailer();
