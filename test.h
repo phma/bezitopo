@@ -46,5 +46,6 @@ void straightrow(document &doc,int n);
 void lozenge(document &doc,int n);
 void rotate(document &doc,int n);
 void movesideways(document &doc,double sw);
+void moveup(document &doc,double sw);
 void enlarge(document &doc,double sc);
 extern xy (*testsurfacegrad)(xy pnt);

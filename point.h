@@ -48,6 +48,7 @@ class point: public xyz, public drawobj
  friend void maketin(string filename);
  friend void rotate(document &doc,int n);
  friend void movesideways(document &doc,double sw);
+ friend void moveup(document &doc,double sw);
  friend void enlarge(document &doc,double sw);
  short flags;
  /* 0: a normal point from the input file

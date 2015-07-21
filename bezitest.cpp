@@ -1996,6 +1996,7 @@ void testcontour()
   doc.pl[1].clear();
   setsurface(CIRPAR);
   aster(doc,100);
+  moveup(doc,-0.001);
   doc.pl[1].maketin();
   doc.pl[1].makegrad(0.);
   doc.pl[1].maketriangles();

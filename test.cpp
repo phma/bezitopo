@@ -207,6 +207,15 @@ void movesideways(document &doc,double sw)
     j->second.x+=sw;
 }
 
+void moveup(document &doc,double sw)
+{
+  int i;
+  double tmpx,tmpy;
+  map<int,point>::iterator j;
+  for (j=doc.pl[1].points.begin();j!=doc.pl[1].points.end();j++)
+    j->second.z+=sw;
+}
+
 void enlarge(document &doc,double sc)
 {
   int i;
