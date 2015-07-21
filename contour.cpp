@@ -24,30 +24,31 @@ vector<uintptr_t> contstarts(pointlist &pts,double elev)
 {
   vector<uintptr_t> ret;
   uintptr_t ep;
-  int sd;
+  int sd,io;
   triangle *tri;
   int i,j;
-  cout<<"Exterior edges:";
-  for (i=0;i<pts.edges.size();i++)
-    if (!pts.edges[i].isinterior())
-    {
-      tri=pts.edges[i].tria;
-      if (!tri)
-	tri=pts.edges[i].trib;
-      assert(tri);
-      cout<<' '<<i;
-      for (j=0;j<3;j++)
+  //cout<<"Exterior edges:";
+  for (io=0;io<2;io++)
+    for (i=0;i<pts.edges.size();i++)
+      if (io==pts.edges[i].isinterior())
       {
-	ep=j+(uintptr_t)&pts.edges[i];
-	sd=tri->subdir(ep);
-	if (tri->crosses(sd,elev) && tri->upleft(sd))
+	tri=pts.edges[i].tria;
+	if (!tri)
+	  tri=pts.edges[i].trib;
+	assert(tri);
+	//cout<<' '<<i;
+	for (j=0;j<3;j++)
 	{
-	  cout<<(char)(j+'a');
-	  ret.push_back(ep);
+	  ep=j+(uintptr_t)&pts.edges[i];
+	  sd=tri->subdir(ep);
+	  if (tri->crosses(sd,elev) && (io || tri->upleft(sd)))
+	  {
+	    //cout<<(char)(j+'a');
+	    ret.push_back(ep);
+	  }
 	}
       }
-    }
-  cout<<endl;
+  //cout<<endl;
   return ret;
 }
 
@@ -73,13 +74,13 @@ polyline trace(uintptr_t edgep,double elev)
   if (tri==nullptr || !tri->upleft(tri->subdir(edgep)))
     tri=ntri;
   mark(edgep);
-  cout<<"Start edgep "<<edgep<<endl;
+  //cout<<"Start edgep "<<edgep<<endl;
   ret.insert(tri->contourcept(tri->subdir(edgep),elev));
   do
   {
     prevedgep=edgep;
     subedge=tri->subdir(edgep);
-    cout<<"before loop "<<subedge<<' '<<subnext<<endl;
+    //cout<<"before loop "<<subedge<<' '<<subnext<<endl;
     do
     {
       subnext=tri->proceed(subedge,elev);
@@ -91,9 +92,9 @@ polyline trace(uintptr_t edgep,double elev)
 	ret.insert(tri->contourcept(subedge,elev));
       }
     } while (subnext>=0);
-    cout<<"after loop "<<subedge<<' '<<subnext<<endl;
+    //cout<<"after loop "<<subedge<<' '<<subnext<<endl;
     edgep=tri->edgepart(subedge);
-    cout<<"Next edgep "<<edgep<<endl;
+    //cout<<"Next edgep "<<edgep<<endl;
     if (edgep==prevedgep)
     {
       cout<<"Edge didn't change"<<endl;

@@ -1994,7 +1994,7 @@ void testcontour()
   startpage();
   setscale(-10,-10,10,10,0);
   doc.pl[1].clear();
-  setsurface(HYPAR);
+  setsurface(CIRPAR);
   aster(doc,100);
   doc.pl[1].maketin();
   doc.pl[1].makegrad(0.);
@@ -2017,12 +2017,13 @@ void testcontour()
     doc.pl[1].clearmarks();
     setcolor(0,0,0);
     for (i=0;i<cstarts.size();i++)
-    {
-      ctour=trace(cstarts[i],j*conterval);
-      //for (j=0;j<ctour.size();j++)
-      cout<<"Contour length: "<<ctour.length()<<endl;
-      spline(ctour.approx3d(1));
-    }
+      if (!ismarked(cstarts[i]))
+      {
+	ctour=trace(cstarts[i],j*conterval);
+	//for (j=0;j<ctour.size();j++)
+	cout<<"Contour length: "<<ctour.length()<<endl;
+	spline(ctour.approx3d(1));
+      }
   }
   endpage();
   pstrailer();
