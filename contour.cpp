@@ -62,6 +62,37 @@ bool ismarked(uintptr_t ep)
   return ((edge *)(ep&-4))->ismarked(ep&3);
 }
 
+polyline intrace(triangle *tri,double elev)
+/* Returns the contour that is inside the triangle, if any. The contour is an elliptic curve.
+ * If a contour is wholly inside a triangle, there is at most one contour partly in it.
+ * If there is no contour wholly inside the triangle, there can be three partly inside it.
+ * Start at a subsegment and trace the contour. One of three things will happen:
+ * • You get a segment number greater than the number of subsegments (i.e. 65535). You've exited the triangle.
+ * • You get a segment number less than the one you started with. You're retracing a contour you traced already.
+ * • You get the segment number you started with. You've found a contour inside the triangle.
+ */
+{
+  polyline ret(elev);
+  int i,j,start;
+  vector<int> sube;
+  for (i=0;i<tri->subdiv.size();i++)
+    if (tri->crosses(i,elev))
+    {
+      start=i;
+      if (!tri->upleft(start))
+	start+=65536;
+      sube.clear();
+      for (j=start;sube.size()==0 || (j&65535)>(start&65535) && (j&65535)<tri->subdiv.size();j=tri->proceed(j,elev))
+	sube.push_back(j);
+      if (j==start)
+	break;
+    }
+  if (j==start)
+    for (i=0;i<sube.size();i++)
+      ret.insert(tri->contourcept(sube[i],elev));
+  return ret;
+}
+
 polyline trace(uintptr_t edgep,double elev)
 {
   polyline ret(elev);

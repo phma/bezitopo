@@ -2025,6 +2025,12 @@ void testcontour()
 	cout<<"Contour length: "<<ctour.length()<<endl;
 	spline(ctour.approx3d(1));
       }
+    for (i=0;i<doc.pl[1].triangles.size();i++)
+    {
+      ctour=intrace(&doc.pl[1].triangles[i],j*conterval);
+      if (ctour.size())
+	spline(ctour.approx3d(1));
+    }
   }
   endpage();
   pstrailer();

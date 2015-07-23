@@ -14,4 +14,5 @@ class pointlist;
 
 std::vector<uintptr_t> contstarts(pointlist &pts,double elev);
 polyline trace(uintptr_t edgep,double elev);
+polyline intrace(triangle *tri,double elev);
 bool ismarked(uintptr_t ep);
