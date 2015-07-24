@@ -1586,34 +1586,41 @@ void testhalton()
 
 void testpolyline()
 {
-  polyarc p;
+  polyline p;
+  polyarc q;
+  //polyspiral r;
   p.insert(xy(0,0));
+  q.insert(xy(0,0));
   p.insert(xy(3,0));
+  q.insert(xy(3,0));
+  cout<<p.length()<<endl;
+  assert(p.length()==6);
   p.insert(xy(3,4));
-  p.setlengths();
-  assert(p.length()==12);
-  assert(p.area()==6);
-  p.open();
-  assert(p.length()==7);
-  assert(::isnan(p.area()));
-  p.close();
-  p.setlengths();
-  assert(p.length()==12);
-  p.setdelta(0,439875013);
-  p.setdelta(1,633866811);
-  p.setdelta(2,1073741824);
-  p.setlengths();
+  q.insert(xy(3,4));
+  q.setlengths();
+  assert(q.length()==12);
+  assert(q.area()==6);
+  q.open();
+  assert(q.length()==7);
+  assert(::isnan(q.area()));
+  q.close();
+  q.setlengths();
+  assert(q.length()==12);
+  q.setdelta(0,439875013);
+  q.setdelta(1,633866811);
+  q.setdelta(2,1073741824);
+  q.setlengths();
   /* Total area of circle is 19.6350. Of this,
    * 6.0000 is in the triangle,
    * 9.8175 is on the 5 side,
    * 2.7956 is on the 4 side, and
    * 1.0219 is on the 3 side.
    */
-  cout<<"testpolyline: area of circle is "<<p.area()<<endl;
-  assert(fabs(p.length()-M_PI*5)<0.0005);
-  assert(fabs(p.area()-M_PI*6.25)<0.0005);
-  cout<<p.getarc(0).center().north()<<endl;
-  cout<<p.length()<<endl;
+  cout<<"testpolyline: area of circle is "<<q.area()<<endl;
+  assert(fabs(q.length()-M_PI*5)<0.0005);
+  assert(fabs(q.area()-M_PI*6.25)<0.0005);
+  cout<<q.getarc(0).center().north()<<endl;
+  cout<<q.length()<<endl;
 }
 
 bool before(xy a1,xy a2,xy a3,xy b1,xy b2,xy b3)

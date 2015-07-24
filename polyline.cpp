@@ -88,6 +88,8 @@ void polyline::insert(xy newpoint,int pos)
   {
     if (pos+1<endpoints.size())
       lengths[pos]=dist(endpoints[pos],endpoints[pos+1]);
+    if (pos+1==endpoints.size() && !wasopen)
+      lengths[pos]=dist(endpoints[pos],endpoints[0]);
     pos++;
     if (pos>=lengths.size())
       pos=0;
