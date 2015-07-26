@@ -1597,6 +1597,8 @@ void testpolyline()
   assert(p.length()==6);
   p.insert(xy(3,4));
   q.insert(xy(3,4));
+  cout<<p.length()<<endl;
+  assert(p.length()==12);
   q.setlengths();
   assert(q.length()==12);
   assert(q.area()==6);
@@ -2036,7 +2038,10 @@ void testcontour()
     {
       ctour=intrace(&doc.pl[1].triangles[i],j*conterval);
       if (ctour.size())
+      {
 	spline(ctour.approx3d(1));
+	cout<<"Contour length: "<<ctour.length()<<endl;
+      }
     }
   }
   endpage();

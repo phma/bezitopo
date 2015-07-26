@@ -84,6 +84,12 @@ void polyline::insert(xy newpoint,int pos)
   lenit=lengths.begin()+pos;
   endpoints.insert(ptit,newpoint);
   lengths.insert(lenit,0);
+  pos--;
+  if (pos<0)
+    if (wasopen)
+      pos=0;
+    else
+      pos+=endpoints.size();
   for (i=0;i<2;i++)
   {
     if (pos+1<endpoints.size())
