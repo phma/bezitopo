@@ -159,8 +159,6 @@ polyline trace(uintptr_t edgep,double elev)
       wasmarked=ismarked(edgep);
       if (!wasmarked)
 	ret.insert(tri->contourcept(tri->subdir(edgep),elev));
-      else
-	cout<<"Was already marked"<<endl;
       mark(edgep);
       ntri=((edge *)(edgep&-4))->othertri(tri);
     }
@@ -170,4 +168,41 @@ polyline trace(uintptr_t edgep,double elev)
   if (!ntri)
     ret.open();
   return ret;
+}
+
+void roughcontours(pointlist &pl,double conterval)
+/* Draws contours consisting of line segments.
+ * The perimeter must be present in the triangles.
+ * Do not attempt to draw contours in the Mariana Trench with conterval
+ * less than 5 µm or of Chomolungma with conterval less than 4 µm. It will fail.
+ */
+{
+  vector<double> tinlohi;
+  vector<uintptr_t> cstarts;
+  polyline ctour;
+  int i,j;
+  pl.contours.clear();
+  tinlohi=pl.lohi();
+  for (i=floor(tinlohi[0]/conterval);i<=ceil(tinlohi[1]/conterval);i++)
+  {
+    cstarts=contstarts(pl,i*conterval);
+    pl.clearmarks();
+    for (j=0;j<cstarts.size();j++)
+      if (!ismarked(cstarts[j]))
+      {
+	ctour=trace(cstarts[j],i*conterval);
+	//for (j=0;j<ctour.size();j++)
+	//cout<<"Contour length: "<<ctour.length()<<endl;
+	pl.contours.push_back(ctour);
+      }
+    for (j=0;j<pl.triangles.size();j++)
+    {
+      ctour=intrace(&pl.triangles[j],i*conterval);
+      if (ctour.size())
+      {
+	pl.contours.push_back(ctour);
+	//cout<<"Contour length: "<<ctour.length()<<endl;
+      }
+    }
+  }
 }

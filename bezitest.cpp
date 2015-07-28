@@ -1993,11 +1993,8 @@ void testcolor()
 
 void testcontour()
 {
-  vector<double> tinlohi;
-  vector<uintptr_t> cstarts;
   int i,j;
   double conterval;
-  polyline ctour;
   psopen("contour.ps");
   psprolog();
   startpage();
@@ -2018,31 +2015,14 @@ void testcontour()
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
       spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
-  tinlohi=doc.pl[1].lohi();
-  cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
+  //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   conterval=0.03;
-  for (j=floor(tinlohi[0]/conterval);j<=ceil(tinlohi[1]/conterval);j++)
+  roughcontours(doc.pl[1],conterval);
+  setcolor(0,0,0);
+  for (i=0;i<doc.pl[1].contours.size();i++)
   {
-    cstarts=contstarts(doc.pl[1],j*conterval);
-    doc.pl[1].clearmarks();
-    setcolor(0,0,0);
-    for (i=0;i<cstarts.size();i++)
-      if (!ismarked(cstarts[i]))
-      {
-	ctour=trace(cstarts[i],j*conterval);
-	//for (j=0;j<ctour.size();j++)
-	cout<<"Contour length: "<<ctour.length()<<endl;
-	spline(ctour.approx3d(1));
-      }
-    for (i=0;i<doc.pl[1].triangles.size();i++)
-    {
-      ctour=intrace(&doc.pl[1].triangles[i],j*conterval);
-      if (ctour.size())
-      {
-	spline(ctour.approx3d(1));
-	cout<<"Contour length: "<<ctour.length()<<endl;
-      }
-    }
+    cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
+    spline(doc.pl[1].contours[i].approx3d(1));
   }
   endpage();
   pstrailer();
