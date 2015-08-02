@@ -52,6 +52,25 @@ public:
   virtual double area();
 };
 
+class polyspiral: public polyarc
+{
+protected:
+  std::vector<int> bearings;
+  std::vector<int> delta2s;
+  std::vector<int> midbearings;
+  std::vector<xy> midpoints;
+  std::vector<double> clothances,curvatures;
+public:
+  //spiralarc getspiralarc(int i);
+  //virtual void insert(xy newpoint,int pos=-1);
+  //void setdelta(int i,int delta);
+  //virtual void setlengths();
+  //virtual void open();
+  //virtual void close();
+  //virtual double length();
+  //virtual double area();
+};
+
 class alignment
 {
 public:
