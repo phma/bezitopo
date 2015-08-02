@@ -2070,6 +2070,26 @@ void clampcubic()
   }
 }
 
+void testminquad()
+{
+  double m;
+  m=minquad(-1,1,0,0,1,1);
+  cout<<"m="<<m<<endl;
+  assert(m==0);
+  m=minquad(0,0,1,1,2,4);
+  cout<<"m="<<m<<endl;
+  assert(m==0);
+  m=minquad(0,0,2,4,4,16);
+  cout<<"m="<<m<<endl;
+  assert(m==0);
+  m=minquad(0,0,1,1,3,9);
+  cout<<"m="<<m<<endl;
+  assert(m==0);
+  m=minquad(-8,64,13,169,21,441);
+  cout<<"m="<<m<<endl;
+  assert(m==0);
+}
+
 int main(int argc, char *argv[])
 {
   doc.pl.resize(2);
@@ -2091,6 +2111,7 @@ int main(int argc, char *argv[])
   testmanysum();
   testvcurve();
   testintegertrig();
+  testminquad();
   testsegment();
   testarc();
   testspiral();
