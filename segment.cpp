@@ -8,6 +8,8 @@
 #include <cmath>
 #include <typeinfo>
 #include <iostream>
+#include <set>
+#include <map>
 #include <cfloat>
 #include "segment.h"
 #include "arc.h"
@@ -259,4 +261,63 @@ xy intersection (segment seg1,segment seg2)
 inttype intersection_type(segment seg1,segment seg2)
 {
   return intersection_type(seg1.start,seg1.end,seg2.start,seg2.end);
+}
+
+double segment::closest(xy topoint,double closesofar,bool offends)
+/* Finds the closest point on the segment/arc/spiralarc to the point topoint.
+ * Does successive parabolic interpolation on the square of the distance.
+ * This method finds the exact closest point on a segment in one step;
+ * the function takes one more step to verify the solution and maybe another
+ * because of roundoff error. On arcs and spiralarcs, takes more steps.
+ */
+{
+  int nstartpoints,i;
+  double closest,closedist,lastclosedist,fardist,len,len2,vertex;
+  map<double,double> stdist;
+  set<double> inserenda,delenda;
+  set<double>::iterator j;
+  map<double,double>::iterator k0,k1,k2;
+  len=length();
+  closest=curvature(0);
+  closedist=curvature(len);
+  if (closedist>closest)
+    closest=closedist;
+  nstartpoints=nearbyint(closest*len)+2;
+  closedist=INFINITY;
+  fardist=0;
+  for (i=0;i<=nstartpoints;i++)
+    inserenda.insert((i/nstartpoints)*len);
+  do
+  {
+    lastclosedist=closedist;
+    for (j=delenda.begin();j!=delenda.end();++j)
+      stdist.erase(*j);
+    for (j=inserenda.begin();j!=inserenda.end();++j)
+    {
+      len2=sqr(dist((xy)station(*j),topoint));
+      if (len2<closedist)
+      {
+	closest=*j;
+	closedist=len2;
+      }
+      if (len2>fardist)
+	fardist=len2;
+      stdist[*j]=len2;
+    }
+    inserenda.clear();
+    delenda.clear();
+    for (k0=k1=stdist.begin(),k2=++k1,++k2;stdist.size()>2 && k2!=stdist.end();++k0,++k1,++k2)
+    {
+      vertex=minquad(k0->first,k0->second,k1->first,k1->second,k2->first,k2->second);
+      if (vertex<0 && vertex>-len/2)
+	vertex=-vertex;
+      if (vertex>len && vertex<3*len/2)
+	vertex=2*len-vertex;
+      if (stdist.count(vertex) && vertex!=k1->first)
+	delenda.insert(k1->first);
+      if (!stdist.count(vertex) && vertex>=0 && vertex<=len)
+	inserenda.insert(vertex);
+    }
+  } while (lastclosedist>closedist || inserenda.size());
+  return closest;
 }

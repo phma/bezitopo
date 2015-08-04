@@ -100,7 +100,7 @@ public:
   {
     return 0;
   }
-  //virtual xy nearpnt;
+  double closest(xy topoint,double closesofar=INFINITY,bool offends=false);
   virtual void split(double along,segment &a,segment &b);
   bezier3d approx3d(double precision);
   friend xy intersection (segment seg1,segment seg2);
