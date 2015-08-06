@@ -740,6 +740,33 @@ void testspiralarc()
   
 }
 
+void testclosest()
+{
+  xyz beg(-30,0,0),end(30,0,0);
+  spiralarc a(beg,end);
+  int i,j;
+  double close;
+  doc.pl[1].clear();
+  aster(doc,1000);
+  psopen("closest.ps");
+  psprolog();
+  for (i=0;i<3;i++)
+  {
+    a.setdelta(degtobin(60*(i==1)),degtobin(60*(i==2)));
+    startpage();
+    setscale(-32,-32,32,32,0);
+    for (j=1;j<=1000;j++)
+    {
+      close=a.closest(doc.pl[1].points[j]);
+      if (isfinite(close))
+	line2p(doc.pl[1].points[j],a.station(close));
+    }
+    endpage();
+  }
+  pstrailer();
+  psclose();
+}
+
 void testspiral()
 {
   xy a,b,c,limitpoint;
@@ -2116,6 +2143,7 @@ int main(int argc, char *argv[])
   testarc();
   testspiral();
   testspiralarc();
+  testclosest();
   testqindex();
   testmakegrad();
   testderivs();
