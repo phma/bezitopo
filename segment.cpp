@@ -286,7 +286,7 @@ double segment::closest(xy topoint,double closesofar,bool offends)
   closedist=INFINITY;
   fardist=0;
   for (i=0;i<=nstartpoints;i++)
-    inserenda.insert((i/nstartpoints)*len);
+    inserenda.insert(((double)i/nstartpoints)*len);
   do
   {
     lastclosedist=closedist;
@@ -318,6 +318,6 @@ double segment::closest(xy topoint,double closesofar,bool offends)
       if (!stdist.count(vertex) && vertex>=0 && vertex<=len)
 	inserenda.insert(vertex);
     }
-  } while (lastclosedist>closedist || inserenda.size());
+  } while (lastclosedist>closedist/* || inserenda.size()*/);
   return closest;
 }
