@@ -271,7 +271,7 @@ double segment::closest(xy topoint,double closesofar,bool offends)
  * because of roundoff error. On arcs and spiralarcs, takes more steps.
  */
 {
-  int nstartpoints,i;
+  int nstartpoints,i,angerr,angtoler;
   double closest,closedist,lastclosedist,fardist,len,len2,vertex;
   map<double,double> stdist;
   set<double> inserenda,delenda;
@@ -299,6 +299,7 @@ double segment::closest(xy topoint,double closesofar,bool offends)
       {
 	closest=*j;
 	closedist=len2;
+	angerr=((bearing(*j)-atan2i((xy)station(*j)-topoint))&(DEG180-1))-DEG90;
       }
       if (len2>fardist)
 	fardist=len2;
@@ -318,6 +319,10 @@ double segment::closest(xy topoint,double closesofar,bool offends)
       if (!stdist.count(vertex) && vertex>=0 && vertex<=len)
 	inserenda.insert(vertex);
     }
-  } while (lastclosedist>closedist/* || inserenda.size()*/);
+    if (lastclosedist>closedist)
+      angtoler=1;
+    else
+      angtoler*=7;
+  } while (abs(angerr)>=angtoler);
   return closest;
 }

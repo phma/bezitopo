@@ -762,7 +762,7 @@ void testclosest()
       {
 	ang=a.bearing(close)-atan2i(doc.pl[1].points[j]-a.station(close));
 	ang=(ang&(DEG180-1))-DEG90;
-	if (abs(ang)>1000)
+	if (abs(ang)>10)
 	  if (close==0 || close==a.length())
 	    setcolor(0,0,1);
 	  else
