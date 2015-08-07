@@ -757,7 +757,7 @@ void testclosest()
     setscale(-32,-32,32,32,0);
     for (j=1;j<=1000;j++)
     {
-      close=a.closest(doc.pl[1].points[j]);
+      close=a.closest(doc.pl[1].points[j],15);
       if (isfinite(close))
       {
 	ang=a.bearing(close)-atan2i(doc.pl[1].points[j]-a.station(close));

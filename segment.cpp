@@ -269,6 +269,10 @@ double segment::closest(xy topoint,double closesofar,bool offends)
  * This method finds the exact closest point on a segment in one step;
  * the function takes one more step to verify the solution and maybe another
  * because of roundoff error. On arcs and spiralarcs, takes more steps.
+ * 
+ * If the distance to the closest point is obviously greater than closesofar,
+ * it stops early and returns an inaccurate result. This is used when finding
+ * the closest point on an alignment consisting of many segments and arcs.
  */
 {
   int nstartpoints,i,angerr,angtoler;
@@ -277,6 +281,7 @@ double segment::closest(xy topoint,double closesofar,bool offends)
   set<double> inserenda,delenda;
   set<double>::iterator j;
   map<double,double>::iterator k0,k1,k2;
+  closesofar*=closesofar;
   len=length();
   closest=curvature(0);
   closedist=curvature(len);
@@ -323,6 +328,6 @@ double segment::closest(xy topoint,double closesofar,bool offends)
       angtoler=1;
     else
       angtoler*=7;
-  } while (abs(angerr)>=angtoler);
+  } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<closesofar);
   return closest;
 }
