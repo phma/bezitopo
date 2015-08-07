@@ -24,6 +24,7 @@ FILE *psfile;
 int pages;
 double scale=1; // paper size is in millimeters, but model space is in meters
 int orientation=0;
+double oldr=-1,oldg=-2,oldb=-3;
 xy paper(210,297),modelcenter;
 char rscales[]={10,12,15,20,25,30,40,50,60,80};
 
@@ -47,8 +48,15 @@ void widen(double factor)
  }
 
 void setcolor(double r,double g,double b)
-{fprintf(psfile,"%f %f %f setrgbcolor\n",r,g,b);
- }
+{
+  if (r!=oldr || g!=oldg || b!=oldb)
+  {
+    fprintf(psfile,"%f %f %f setrgbcolor\n",r,g,b);
+    oldr=r;
+    oldg=g;
+    oldb=b;
+  }
+}
 
 void psopen(const char * psfname)
 {psfile=fopen(psfname,"w");
@@ -152,7 +160,7 @@ void line(document &doc,edge lin,int num,bool colorfibaster,bool directed)
       switch (fibmod3(abs(doc.pl[1].revpoints[lin.a]-doc.pl[1].revpoints[lin.b])))
       {
 	case -1:
-	  rgb=".3 .3 .3";
+	  rgb=".3 .3 .3"; // FIXME call setcolor
 	  break;
 	case 0:
 	  rgb="1 .3 .3";

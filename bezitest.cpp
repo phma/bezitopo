@@ -744,7 +744,7 @@ void testclosest()
 {
   xyz beg(-30,0,0),end(30,0,0);
   spiralarc a(beg,end);
-  int i,j;
+  int i,j,ang;
   double close;
   doc.pl[1].clear();
   aster(doc,1000);
@@ -759,7 +759,18 @@ void testclosest()
     {
       close=a.closest(doc.pl[1].points[j]);
       if (isfinite(close))
+      {
+	ang=a.bearing(close)-atan2i(doc.pl[1].points[j]-a.station(close));
+	ang=(ang&(DEG180-1))-DEG90;
+	if (abs(ang)>1000)
+	  if (close==0 || close==a.length())
+	    setcolor(0,0,1);
+	  else
+	    setcolor(1,0,0);
+	else
+	  setcolor(0,0,0);
 	line2p(doc.pl[1].points[j],a.station(close));
+      }
     }
     endpage();
   }
