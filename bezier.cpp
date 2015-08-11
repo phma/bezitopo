@@ -963,7 +963,7 @@ void triangle::subdivide()
       }
     }
     subdivcopy.clear();
-    cout<<morecritpoints.size()-critpoints.size()<<" secondary critical points"<<endl;
+    //cout<<morecritpoints.size()-critpoints.size()<<" secondary critical points"<<endl;
     for (i=critpoints.size();i<morecritpoints.size();i++)
     {
       cr=xyz(morecritpoints[i],elevation(morecritpoints[i]));
@@ -1020,8 +1020,8 @@ void triangle::subdivide()
     round++;
   }
   while (newcrit>0 && round<1);
-  for (i=0;i<subdiv.size();i++)
-    cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;
+  /*for (i=0;i<subdiv.size();i++)
+    cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;*/
 }
 
 /* 2015-07-12: There was a bug in addperimeter.

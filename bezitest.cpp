@@ -744,20 +744,49 @@ void testclosest()
 {
   xyz beg(-30,0,0),end(30,0,0);
   spiralarc a(beg,end);
+  int d1[]={0,DEG60,170891318,0,85445658};
+  int d2[]={0,0,0,DEG60,28512070};
+  /* 170891318 is 0.5 radian rounded down. 0.5 radian is 170891318.9.
+   * The circular arc is started in closest with 3 points if its delta
+   * is less than 0.5 radian. From 0.5 to 1.5 radians it is started
+   * with 4 points.
+   * 
+   * 0: straight line
+   * 1: 60° arc
+   * 2: 0.5 radian arc, the most an arc can bend and still start with 3 points
+   * 3: 60° spiralarc
+   * 4: The most a spiralarc straight at one end can bend and still start with 3 points
+   */
   int i,j,ang;
-  double close;
+  bool showinaccurate=true;
+  double close,close15,minquick,d,d15;
   doc.pl[1].clear();
   aster(doc,1000);
   psopen("closest.ps");
   psprolog();
-  for (i=0;i<3;i++)
+  for (i=0;i<5;i++)
   {
-    a.setdelta(degtobin(60*(i==1)),degtobin(60*(i==2)));
+    a.setdelta(d1[i],d2[i]);
     startpage();
+    minquick=INFINITY;
+    /* minquick is the minimum distance that it calculates quickly and inaccurately.
+     * It should be greater than closesofar, which is 15.
+     */
     setscale(-32,-32,32,32,0);
+    cout<<"Curvature*length at start "<<ldecimal(a.curvature(0)*a.length())<<", at end "<<ldecimal(a.curvature(a.length())*a.length())<<endl;
     for (j=1;j<=1000;j++)
     {
-      close=a.closest(doc.pl[1].points[j],15);
+      close=a.closest(doc.pl[1].points[j],INFINITY);
+      close15=a.closest(doc.pl[1].points[j],15);
+      if (close!=close15)
+      {
+	d=dist(doc.pl[1].points[j],a.station(close));
+	d15=dist(doc.pl[1].points[j],a.station(close15));
+	if (minquick>d)
+	  minquick=d;
+      }
+      if (showinaccurate)
+	close=close15;
       if (isfinite(close))
       {
 	ang=a.bearing(close)-atan2i(doc.pl[1].points[j]-a.station(close));
@@ -773,6 +802,8 @@ void testclosest()
       }
     }
     endpage();
+    cout<<"Minimum distance that is calculated inaccurately is "<<minquick<<endl;
+    assert(minquick>15);
   }
   pstrailer();
   psclose();
@@ -1273,11 +1304,11 @@ void test1tri(string triname,int excrits)
   size0=doc.pl[1].triangles[0].subdiv.size();
   doc.pl[1].triangles[0].addperimeter();
   size1=doc.pl[1].triangles[0].subdiv.size();
-  for (j=0;j<doc.pl[1].triangles[0].subdiv.size();j++)
+  /*for (j=0;j<doc.pl[1].triangles[0].subdiv.size();j++)
   {
     cout<<j<<"L: "<<doc.pl[1].triangles[0].proceed(j,0)<<endl;
     cout<<j<<"R: "<<doc.pl[1].triangles[0].proceed(j+65536,0)<<endl;
-  }
+  }*/
   doc.pl[1].triangles[0].removeperimeter();
   size2=doc.pl[1].triangles[0].subdiv.size();
   assert(size0==size2);
