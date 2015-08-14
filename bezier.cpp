@@ -57,7 +57,11 @@ double triangle::perimeter()
 }
 
 double triangle::elevation(xy pnt)
-/* Computes the elevation of triangle tri at the point x,y. */
+/* Computes the elevation of triangle tri at the point x,y.
+ * This is the oldest function in Bezitopo, attested in C from 2007-12-13,
+ * though since all files in the directory have the same date, I probably
+ * wrote it earlier and copied it.
+ */
 {
   double p,q,r; // Fraction of distance from a side to opposite corner. p+q+r=1.
   p=area3(pnt,*b,*c)/sarea;

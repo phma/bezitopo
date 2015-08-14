@@ -21,6 +21,8 @@ public:
   double east();
   double north();
   double length();
+  void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
+  virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
   friend xy operator+(const xy &l,const xy &r);
   friend xy operator+=(xy &l,const xy &r);
   friend xy operator-(const xy &l,const xy &r);
@@ -53,6 +55,8 @@ public:
   double north();
   double elev();
   double length();
+  void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
+  virtual void roscat(xy tfrom,int ro,double sca,xy tto);
   void setelev(double h)
   {
     z=h;

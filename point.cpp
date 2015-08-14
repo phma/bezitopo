@@ -41,6 +41,22 @@ double xy::length()
   return hypot(x,y);
 }
 
+void xy::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
+{
+  double tx,ty;
+  x-=tfrom.x;
+  y-=tfrom.y;
+  tx=x*cis.x-y*cis.y;
+  ty=y*cis.x+x*cis.y;
+  x=tx+tto.x;
+  y=ty+tto.y;
+}
+
+void xy::roscat(xy tfrom,int ro,double sca,xy tto)
+{
+  _roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
+}
+
 xy operator+(const xy &l,const xy &r)
 {xy sum(l.x+r.x,l.y+r.y);
  return sum;
@@ -143,6 +159,22 @@ double xyz::length()
 xyz::xyz()
 {x=y=z=0;
  }
+
+void xyz::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
+{
+  double tx,ty;
+  x-=tfrom.x;
+  y-=tfrom.y;
+  tx=x*cis.x-y*cis.y;
+  ty=y*cis.x+x*cis.y;
+  x=tx+tto.x;
+  y=ty+tto.y;
+}
+
+void xyz::roscat(xy tfrom,int ro,double sca,xy tto)
+{
+  _roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
+}
 
 bool operator==(const xyz &l,const xyz &r)
 {
