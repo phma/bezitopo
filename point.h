@@ -53,10 +53,8 @@ class point: public xyz, public drawobj
  short flags;
  /* 0: a normal point from the input file
     1: a point resulting from merging several points
-    2: an extremal point in an edge
-    3: an extremal point inside a triangle
-    4: an explicitly ignored point
-    5: a point ignored because it's in a group that was merged
+    2: an explicitly ignored point
+    3: a point ignored because it's in a group that was merged
     */
  string note;
  edge *line; // a line incident on this point in the TIN. Used to arrange the lines in order around their endpoints.
