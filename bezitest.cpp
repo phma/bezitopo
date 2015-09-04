@@ -49,6 +49,8 @@
 #define psoutput false
 // affects only maketin
 
+#define CBRT2 1.2599210498948731647592197537
+
 char hexdig[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
 bool slowmanysum=false;
 document doc;
@@ -2162,10 +2164,20 @@ void testminquad()
 
 void testroscat()
 {
-  xy xy0(32,27),xy1(16,15),piv0(27,27),piv1(12,12);
+  xy xy0(32,27),xy1(16,15),xy2(46,58),xy3(58,73),org(0,0),piv0(27,27),piv1(12,12);
+  point pt0(32,27,99,""),pt1(16,15,99,""),pt2(46,58,99,""),pt3(58,73,99,"");
   xy0.roscat(piv0,AT34,1,piv1);
   assert(dist(xy0,xy1)<1e-6);
   cout<<"roscat dist "<<dist(xy0,xy1)<<endl;
+  xy2.roscat(org,0,CBRT2,org);
+  assert(dist(xy2,xy3)<1e-1);
+  cout<<"roscat dist "<<dist(xy2,xy3)<<endl;
+  pt0.roscat(piv0,AT34,1,piv1);
+  assert(dist(pt0,pt1)<1e-6);
+  cout<<"roscat dist "<<dist(pt0,pt1)<<endl;
+  pt2.roscat(org,0,CBRT2,org);
+  assert(dist(pt2,pt3)<1e-1);
+  cout<<"roscat dist "<<dist(pt2,pt3)<<endl;
 }
 
 int main(int argc, char *argv[])
