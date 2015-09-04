@@ -61,6 +61,8 @@ int radtobin(double angle);
  */
 
 #define DEG30 0x0aaaaaab
+#define AT34 0x0d1bfae2
+// AT34 is arctangent of 3/4, 36.8698976°
 #define DEG45 0x10000000
 #define DEG60 0x15555555
 #define DEG90 0x20000000

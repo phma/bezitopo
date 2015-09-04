@@ -29,7 +29,7 @@ public:
   virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
   {
   }
-  virtual void roscat(xy tfrom,int ro,double sca,xy tto);
+  virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
   /* This will also have a method to draw on a device. It will be passed
    * a callback of some sort and will pass bezier3d objects to the callback.
    */

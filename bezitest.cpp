@@ -1363,6 +1363,7 @@ void trianglecontours()
  * 7.95533,14.1356,-1.270 minimum
  * -7.83778,-12.9386,1.227 maximum
  * 10.9596,-3.169,0.403 saddle.
+ * tria73ddcd27198f6a1bc also has three critical points inside the triangle.
  * tri93db9159a54b09a0fc has two critical points in the triangle, both saddles,
  * two critical points on two sides, and one critical point on the third side.
  * tri45653a366286ff0747 also has two saddles in the triangle.
@@ -2159,6 +2160,14 @@ void testminquad()
   assert(m==0);
 }
 
+void testroscat()
+{
+  xy xy0(32,27),xy1(16,15),piv0(27,27),piv1(12,12);
+  xy0.roscat(piv0,AT34,1,piv1);
+  assert(dist(xy0,xy1)<1e-6);
+  cout<<"roscat dist "<<dist(xy0,xy1)<<endl;
+}
+
 int main(int argc, char *argv[])
 {
   doc.pl.resize(2);
@@ -2206,6 +2215,7 @@ int main(int argc, char *argv[])
   testellipsoid();
   testcolor();
   testcontour();
+  testroscat();
   //clampcubic();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //closure_i();
