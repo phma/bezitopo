@@ -45,6 +45,7 @@
 #include "color.h"
 #include "document.h"
 #include "contour.h"
+#include "absorient.h"
 
 #define psoutput false
 // affects only maketin
@@ -2164,7 +2165,8 @@ void testminquad()
 
 void testroscat()
 {
-  xy xy0(32,27),xy1(16,15),xy2(46,58),xy3(58,73),org(0,0),piv0(27,27),piv1(12,12);
+  xy xy0(32,27),xy1(16,15),xy2(46,58),xy3(58,73),xy4(84,12),xy5(79,47),
+     org(0,0),piv0(27,27),piv1(12,12);
   point pt0(32,27,99,""),pt1(16,15,99,""),pt2(46,58,99,""),pt3(58,73,99,"");
   xy0.roscat(piv0,AT34,1,piv1);
   assert(dist(xy0,xy1)<1e-6);
@@ -2172,12 +2174,33 @@ void testroscat()
   xy2.roscat(org,0,CBRT2,org);
   assert(dist(xy2,xy3)<1e-1);
   cout<<"roscat dist "<<dist(xy2,xy3)<<endl;
+  xy4.roscat(org,AT0512,13/12.,org);
+  assert(dist(xy4,xy5)<1e-6);
+  cout<<"roscat dist "<<dist(xy4,xy5)<<endl;
   pt0.roscat(piv0,AT34,1,piv1);
   assert(dist(pt0,pt1)<1e-6);
   cout<<"roscat dist "<<dist(pt0,pt1)<<endl;
   pt2.roscat(org,0,CBRT2,org);
   assert(dist(pt2,pt3)<1e-1);
   cout<<"roscat dist "<<dist(pt2,pt3)<<endl;
+}
+
+void testabsorient()
+{
+  int i;
+  double ssd;
+  vector<xy> a,b;
+  xy big(1000,0),little(1,0),org(0,0);
+  for (i=0;i<1000;i++)
+  {
+    big.roscat(org,AT0512,1,org);
+    little.roscat(org,AT34,1,org);
+    a.push_back(big);
+    b.push_back(big+little);
+  }
+  ssd=sumsqdist(a,b);
+  cout<<"sumsqdist="<<ldecimal(ssd)<<endl;
+  assert(fabs(ssd-1000)<1e-9);
 }
 
 int main(int argc, char *argv[])
@@ -2228,6 +2251,7 @@ int main(int argc, char *argv[])
   testcolor();
   testcontour();
   testroscat();
+  testabsorient();
   //clampcubic();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //closure_i();
