@@ -67,6 +67,15 @@ int foldangle(int angle)
   return angle;
 }
 
+bool isinsector(int angle,int sectors)
+/* Quick check for ranges of angles. angle is in [0°,720°), so sectors
+ * is normally an unsigned multiple of 65537. Bit 0 is [0,22.5°), bit 1
+ * is [22.5°,45°), etc.
+ */
+{
+  return ((sectors>>((unsigned)angle>>27))&1);
+}
+
 double bintorot(int angle)
 {
   return angle/2147483648.;

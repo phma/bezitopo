@@ -328,6 +328,6 @@ double segment::closest(xy topoint,double closesofar,bool offends)
       angtoler=1;
     else
       angtoler*=7;
-  } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<closesofar);
+  } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<closesofar && !((closest==0 && isinsector(dir(topoint,start)-startbearing(),0xf00ff00f)) || (closest==len && isinsector(dir(topoint,end)-endbearing(),0x0ff00ff0))));
   return closest;
 }
