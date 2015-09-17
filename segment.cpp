@@ -275,7 +275,7 @@ double segment::closest(xy topoint,double closesofar,bool offends)
  * the closest point on an alignment consisting of many segments and arcs.
  */
 {
-  int nstartpoints,i,angerr,angtoler;
+  int nstartpoints,i,angerr,angtoler,endangle;
   double closest,closedist,lastclosedist,fardist,len,len2,vertex;
   map<double,double> stdist;
   set<double> inserenda,delenda;
@@ -329,5 +329,12 @@ double segment::closest(xy topoint,double closesofar,bool offends)
     else
       angtoler*=7;
   } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<closesofar && !((closest==0 && isinsector(dir(topoint,start)-startbearing(),0xf00ff00f)) || (closest==len && isinsector(dir(topoint,end)-endbearing(),0x0ff00ff0))));
+  endangle=DEG90;
+  if (closest==0)
+    endangle=foldangle(dir(topoint,start)-startbearing());
+  if (closest==len)
+    endangle=foldangle(dir(end,topoint)-endbearing());
+  if (!offends && endangle>-DEG90 && endangle<DEG90)
+    closest=(closest==0)?-INFINITY:INFINITY;
   return closest;
 }

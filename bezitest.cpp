@@ -761,7 +761,7 @@ void testclosest()
    * 4: The most a spiralarc straight at one end can bend and still start with 3 points
    */
   int i,j,ang;
-  bool showinaccurate=true;
+  bool showinaccurate=false;
   double close,close15,minquick,d,d15;
   doc.pl[1].clear();
   aster(doc,1000);
