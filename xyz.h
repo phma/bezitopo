@@ -54,6 +54,9 @@ public:
   double east();
   double north();
   double elev();
+  double getx();
+  double gety();
+  double getz();
   double length();
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto);

@@ -140,16 +140,34 @@ xyz::xyz(xy en,double h)
  }
 
 double xyz::east()
-{return x;
- }
+{
+  return x;
+}
 
 double xyz::north()
-{return y;
- }
+{
+  return y;
+}
 
 double xyz::elev()
-{return z;
- }
+{
+  return z;
+}
+
+double xyz::getx()
+{
+  return x;
+}
+
+double xyz::gety()
+{
+  return y;
+}
+
+double xyz::getz()
+{
+  return z;
+}
 
 double xyz::length()
 {
