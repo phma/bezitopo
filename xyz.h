@@ -57,6 +57,10 @@ public:
   double getx();
   double gety();
   double getz();
+  double lat(); // These assume a sphere and are used for converting geoid files.
+  double lon(); // For latitude on the real Earth, see the ellipsoid class.
+  int lati();
+  int loni();
   double length();
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto);

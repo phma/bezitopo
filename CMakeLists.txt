@@ -15,6 +15,11 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
                raster.cpp spiral.cpp stl.cpp test.cpp segment.cpp tin.cpp
                vcurve.cpp)
+add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp cogo.cpp
+               convertgeoid.cpp document.cpp drawobj.cpp geoid.cpp ldecimal.cpp
+               manysum.cpp measure.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp
+               ps.cpp qindex.cpp random.cpp segment.cpp sourcegeoid.cpp spiral.cpp
+               tin.cpp vcurve.cpp)
 
 include(TestBigEndian)
 include(CheckTypeSize)

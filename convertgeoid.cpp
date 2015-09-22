@@ -5,3 +5,11 @@
 /******************************************************/
 #include "geoid.h"
 #include "sourcegeoid.h"
+#include "document.h"
+
+document doc;
+
+int main(int argc, char *argv[])
+{
+  return 0;
+}

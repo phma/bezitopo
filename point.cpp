@@ -169,6 +169,26 @@ double xyz::getz()
   return z;
 }
 
+double xyz::lat()
+{
+  return atan2(z,hypot(x,y));
+}
+
+double xyz::lon()
+{
+  return atan2(y,x);
+}
+
+int xyz::lati()
+{
+  return atan2i(z,hypot(x,y));
+}
+
+int xyz::loni()
+{
+  return atan2i(y,x);
+}
+
 double xyz::length()
 {
   return sqrt(x*x+y*y+z*z);
