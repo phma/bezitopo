@@ -56,7 +56,7 @@ vball encodedir(xyz dir)
     {
       ret.face=3;
       ret.x=dir.getx()/absz;
-      ret.y=dir.getx()/dir.getz();
+      ret.y=dir.gety()/dir.getz();
       if (dir.getz()<0)
 	ret.face=4;
     }

@@ -3,6 +3,8 @@
 /* ellipsoid.h - ellipsoids                           */
 /*                                                    */
 /******************************************************/
+#ifndef ELLIPSOID_H
+#define ELLIPSOID_H
 #include "point.h"
 
 class ellipsoid
@@ -27,3 +29,4 @@ public:
 };
 
 extern ellipsoid Clarke,GRS80,WGS84,ITRS;
+#endif

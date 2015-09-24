@@ -46,6 +46,7 @@
 #include "document.h"
 #include "contour.h"
 #include "absorient.h"
+#include "geoid.h"
 
 #define psoutput false
 // affects only maketin
@@ -2203,6 +2204,33 @@ void testabsorient()
   assert(fabs(ssd-1000)<1e-9);
 }
 
+void testgeoid()
+{
+  vball v;
+  int lat,lon,olat,olon;
+  xyz dir;
+  cout<<"Testing conversion to and from volleyball coordinates...";
+  cout.flush();
+  for (lon=-0x3f800000;lon<=0x3f800000;lon+=0x1000000) // every 2.8125°
+  {
+    //cout<<fixed<<setprecision(3)<<setw(7)<<bintodeg(lon)<<' ';
+    for (lat=-0x1e000000;lat<=0x1e000000;lat+=0xf000000) // at 42.2°, it's about half in face 3 and half in faces 1,2,5,6
+    {
+      dir=WGS84.sphere->geoc(lat,lon,0);
+      v=encodedir(dir);
+      //cout<<v.face<<setw(7)<<v.x<<setw(7)<<v.y<<' ';
+      dir=decodedir(v);
+      olat=dir.lati();
+      olon=dir.loni();
+      if (olat!=lat || olon!=lon)
+	cout<<endl<<"should be "<<bintodeg(lat)<<','<<bintodeg(lon)<<" is "<<bintodeg(olat)<<','<<bintodeg(olon)<<endl;
+      assert(olat==lat && olon==lon);
+    }
+    //cout<<endl;
+  }
+  cout<<"done."<<endl;
+}
+
 int main(int argc, char *argv[])
 {
   doc.pl.resize(2);
@@ -2252,6 +2280,7 @@ int main(int argc, char *argv[])
   testcontour();
   testroscat();
   testabsorient();
+  testgeoid();
   //clampcubic();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //closure_i();
