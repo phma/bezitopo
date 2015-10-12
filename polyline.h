@@ -62,7 +62,7 @@ protected:
   std::vector<double> clothances,curvatures;
 public:
   //spiralarc getspiralarc(int i);
-  //virtual void insert(xy newpoint,int pos=-1);
+  virtual void insert(xy newpoint,int pos=-1);
   //void setdelta(int i,int delta);
   //virtual void setlengths();
   //virtual void open();

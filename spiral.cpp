@@ -175,6 +175,20 @@ spiralarc::spiralarc(xyz kra,xyz fam)
   midbear=atan2i(xy(end-start));
 }
 
+spiralarc::spiralarc(xyz kra,xyz mij,xyz fam,int mbear,double curvature,double clothance,double length)
+// This does NO checking and is intended for polyspiral and alignment.
+{
+  start=kra;
+  mid=mij;
+  end=fam;
+  midbear=mbear;
+  cur=curvature;
+  clo=clothance;
+  len=length;
+  control1=(2*start.elev()+end.elev())/3;
+  control2=(start.elev()+2*end.elev())/3;
+}
+
 xyz spiralarc::station(double along)
 {
   double midlong;

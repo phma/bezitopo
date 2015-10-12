@@ -69,8 +69,8 @@ void polyline::insert(xy newpoint,int pos)
  * (-1 means after the last) results in adding a line segment.
  * If the polyline is empty (and therefore closed), inserting a point results in
  * adding a line segment from that point to itself.
- * In all other cases, newpoint is inserted into an arc, whose delta is split
- * proportionally to the distances to the adjacent points.
+ * In all other cases, newpoint is inserted between two points and connected to
+ * them with line segments.
  */
 {
   bool wasopen;
@@ -103,6 +103,10 @@ void polyline::insert(xy newpoint,int pos)
 }
 
 void polyarc::insert(xy newpoint,int pos)
+/* Same as polyline::insert for beginning, end, and empty cases.
+ * In all other cases, newpoint is inserted into an arc, whose delta is split
+ * proportionally to the distances to the adjacent points.
+ */
 {
   bool wasopen;
   vector<xy>::iterator ptit;
@@ -204,3 +208,21 @@ void polyarc::close()
   deltas.resize(endpoints.size());
   lengths.resize(endpoints.size());
 }
+
+void polyspiral::insert(xy newpoint,int pos)
+/* If there is one point after insertion and the polyspiral is closed:
+ * Adds a line from the point to itself.
+ * If there are two points after insertion and the polyspiral is open:
+ * Adds a line from one point to the other.
+ * If it's closed:
+ * Adds two 180° arcs, making a circle.
+ * If there are at least three points after insertion:
+ * Updates the bearings of the new point and two adjacent points (unless
+ * it is the first or last of an open polyspiral, in which case one) to
+ * match an arc passing through three points, then updates the clothances
+ * and curvatures of four consecutive spirals (unless the polyspiral is open
+ * and the point is one of the first two or last two) to match the bearings.
+ */
+{
+}
+
