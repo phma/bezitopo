@@ -17,6 +17,14 @@
 #include "manysum.h"
 using namespace std;
 
+int midarcdir(xy a,xy b,xy c)
+/* Returns the bearing of the arc abc at point b. May be off by 360°;
+ * make sure consecutive bearings do not differ by more than 180°.
+ */
+{
+  return dir(a,b)+dir(b,c)-dir(a,c);
+}
+
 polyline::polyline()
 {
   elevation=0;
@@ -198,6 +206,17 @@ void polyarc::open()
   lengths.resize(endpoints.size()-1);
 }
 
+void polyspiral::open()
+{
+  curvatures.resize(endpoints.size()-1);
+  clothances.resize(endpoints.size()-1);
+  midpoints.resize(endpoints.size()-1);
+  midbearings.resize(endpoints.size()-1);
+  delta2s.resize(endpoints.size()-1);
+  deltas.resize(endpoints.size()-1);
+  lengths.resize(endpoints.size()-1);
+}
+
 void polyline::close()
 {
   lengths.resize(endpoints.size());
@@ -205,6 +224,17 @@ void polyline::close()
 
 void polyarc::close()
 {
+  deltas.resize(endpoints.size());
+  lengths.resize(endpoints.size());
+}
+
+void polyspiral::close()
+{
+  curvatures.resize(endpoints.size());
+  clothances.resize(endpoints.size());
+  midpoints.resize(endpoints.size());
+  midbearings.resize(endpoints.size());
+  delta2s.resize(endpoints.size());
   deltas.resize(endpoints.size());
   lengths.resize(endpoints.size());
 }
@@ -224,5 +254,19 @@ void polyspiral::insert(xy newpoint,int pos)
  * and the point is one of the first two or last two) to match the bearings.
  */
 {
+  bool wasopen;
+  vector<xy>::iterator ptit,midit;
+  vector<int>::iterator arcit,brgit,d2it,mbrit;
+  vector<double>::iterator lenit,cloit,crvit;
+  wasopen=isopen();
+  if (pos<0 || pos>endpoints.size())
+    pos=endpoints.size();
+  ptit=endpoints.begin()+pos;
+  midit=midpoints.begin()+pos;
+  lenit=lengths.begin()+pos;
+  arcit=deltas.begin()+pos;
+  endpoints.insert(ptit,newpoint);
+  deltas.insert(arcit,0);
+  lengths.insert(lenit,0);
 }
 

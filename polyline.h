@@ -15,6 +15,7 @@
  * polylines are in a horizontal plane, whereas alignments have vertical curves;
  * polylines consist of arcs, whereas alignments can have spirals (once I figure out how).
  */
+int midarcdir(xy a,xy b,xy c);
 
 class polyline
 {
@@ -55,7 +56,7 @@ public:
 class polyspiral: public polyarc
 {
 protected:
-  std::vector<int> bearings;
+  std::vector<int> bearings; // correspond to endpoints
   std::vector<int> delta2s;
   std::vector<int> midbearings;
   std::vector<xy> midpoints;
@@ -65,8 +66,8 @@ public:
   virtual void insert(xy newpoint,int pos=-1);
   //void setdelta(int i,int delta);
   //virtual void setlengths();
-  //virtual void open();
-  //virtual void close();
+  virtual void open();
+  virtual void close();
   //virtual double length();
   //virtual double area();
 };

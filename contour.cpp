@@ -62,14 +62,6 @@ bool ismarked(uintptr_t ep)
   return ((edge *)(ep&-4))->ismarked(ep&3);
 }
 
-int midarcdir(xy a,xy b,xy c)
-/* Returns the bearing of the arc abc at point b. May be off by 360°;
- * make sure consecutive bearings do not differ by more than 180°.
- */
-{
-  return dir(a,b)+dir(b,c)-dir(a,c);
-}
-
 polyline intrace(triangle *tri,double elev)
 /* Returns the contour that is inside the triangle, if any. The contour is an elliptic curve.
  * If a contour is wholly inside a triangle, there is at most one contour partly in it.
