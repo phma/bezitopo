@@ -270,3 +270,45 @@ void polyspiral::insert(xy newpoint,int pos)
   lengths.insert(lenit,0);
 }
 
+void polyspiral::setbear(int i)
+{
+  int h,j,prevbear,nextbear,avgbear;
+  i%=endpoints.size();
+  if (i<0)
+    i+=endpoints.size();
+  h=i-1;
+  j=i+1;
+  if (h<0)
+    if (isopen())
+      h+=3;
+    else
+      h+=endpoints.size();
+  if (j>=endpoints.size())
+    if (isopen())
+      j-=3;
+    else
+      j-=endpoints.size();
+  if (endpoints.size()==2)
+    if (isopen())
+      bearings[i]=dir(endpoints[0],endpoints[1]);
+    else
+      bearings[i]=dir(endpoints[i],endpoints[j])-DEG90;
+  if (endpoints.size()>2)
+  {
+    bearings[i]=midarcdir(endpoints[h],endpoints[i],endpoints[j]);
+    prevbear=bearings[h];
+    nextbear=bearings[j];
+    if (i==0)
+      if (isopen())
+	prevbear=nextbear;
+      else
+	prevbear+=DEG360;
+    if (i==endpoints.size()-1)
+      if (isopen())
+	nextbear=prevbear;
+      else
+	nextbear+=DEG360;
+    avgbear=prevbear+(nextbear-prevbear)/2;
+    bearings[i]+avgbear+foldangle(bearings[i]-avgbear);
+  }
+}
