@@ -24,6 +24,8 @@ protected:
   std::vector<xy> endpoints;
   std::vector<double> lengths;
 public:
+  friend class polyarc;
+  friend class polyspiral;
   polyline();
   polyline(double e);
   bool isopen();
@@ -43,6 +45,10 @@ class polyarc: public polyline
 protected:
   std::vector<int> deltas;
 public:
+  friend class polyspiral;
+  polyarc();
+  polyarc(double e);
+  polyarc(polyline &p);
   arc getarc(int i);
   virtual void insert(xy newpoint,int pos=-1);
   void setdelta(int i,int delta);
@@ -62,6 +68,9 @@ protected:
   std::vector<xy> midpoints;
   std::vector<double> clothances,curvatures;
 public:
+  polyspiral();
+  polyspiral(double e);
+  polyspiral(polyline &p);
   //spiralarc getspiralarc(int i);
   virtual void insert(xy newpoint,int pos=-1);
   void setbear(int i);

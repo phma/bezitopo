@@ -30,9 +30,57 @@ polyline::polyline()
   elevation=0;
 }
 
+polyarc::polyarc(): polyline::polyline()
+{
+}
+
+polyspiral::polyspiral(): polyarc::polyarc()
+{
+}
+
 polyline::polyline(double e)
 {
   elevation=e;
+}
+
+polyarc::polyarc(double e): polyline::polyline(e)
+{
+}
+
+polyspiral::polyspiral(double e): polyarc::polyarc(e)
+{
+}
+
+polyarc::polyarc(polyline &p)
+{
+  elevation=p.elevation;
+  endpoints=p.endpoints;
+  lengths=p.lengths;
+  deltas.resize(lengths.size());
+}
+
+polyspiral::polyspiral(polyline &p)
+{
+  int i,j;
+  elevation=p.elevation;
+  endpoints=p.endpoints;
+  lengths=p.lengths;
+  deltas.resize(lengths.size());
+  delta2s.resize(lengths.size());
+  bearings.resize(endpoints.size());
+  midbearings.resize(lengths.size());
+  midpoints.resize(lengths.size());
+  clothances.resize(lengths.size());
+  curvatures.resize(lengths.size());
+  for (i=0;i<lengths.size();i++)
+  {
+    j=(i+1==endpoints.size())?i+1:0;
+    midpoints[i]=(endpoints[i]+endpoints[j])/2;
+    midbearings[i]=dir(endpoints[i],endpoints[j]);
+    if (i)
+      midbearings[i]=midbearings[i-1]+foldangle(midbearings[i]-midbearings[i-1]);
+    bearings[i]=midbearings[i];
+  }
 }
 
 bool polyline::isopen()
