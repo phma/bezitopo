@@ -10,6 +10,7 @@
 #include "point.h"
 #include "arc.h"
 #include "bezier3d.h"
+#include "spiral.h"
 
 /* Polylines and alignments are very similar. The differences are:
  * polylines are in a horizontal plane, whereas alignments have vertical curves;
@@ -50,6 +51,7 @@ public:
   polyarc(double e);
   polyarc(polyline &p);
   arc getarc(int i);
+  virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
   void setdelta(int i,int delta);
   virtual void setlengths();
@@ -71,7 +73,8 @@ public:
   polyspiral();
   polyspiral(double e);
   polyspiral(polyline &p);
-  //spiralarc getspiralarc(int i);
+  spiralarc getspiralarc(int i);
+  virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
   void setbear(int i);
   //void setdelta(int i,int delta);

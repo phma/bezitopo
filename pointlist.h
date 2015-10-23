@@ -19,7 +19,7 @@ public:
   revptlist revpoints;
   std::map<int,edge> edges;
   std::map<int,triangle> triangles;
-  std::vector<polyline> contours; // will be polyspirals, when they're working
+  std::vector<polyspiral> contours;
   qindex qinx;
   void addpoint(int numb,point pnt,bool overwrite=false);
   void clear();

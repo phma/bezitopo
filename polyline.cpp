@@ -74,7 +74,7 @@ polyspiral::polyspiral(polyline &p)
   curvatures.resize(lengths.size());
   for (i=0;i<lengths.size();i++)
   {
-    j=(i+1==endpoints.size())?i+1:0;
+    j=(i+1==endpoints.size())?0:i+1;
     midpoints[i]=(endpoints[i]+endpoints[j])/2;
     midbearings[i]=dir(endpoints[i],endpoints[j]);
     if (i)
@@ -109,12 +109,40 @@ arc polyarc::getarc(int i)
   return arc(xyz(endpoints[i],elevation),xyz(endpoints[(i+1)%endpoints.size()],elevation),deltas[i]);
 }
 
+spiralarc polyspiral::getspiralarc(int i)
+{
+  i%=deltas.size();
+  if (i<0)
+    i+=deltas.size();
+  return spiralarc(xyz(endpoints[i],elevation),xyz(midpoints[i],elevation),
+		   xyz(endpoints[(i+1)%endpoints.size()],elevation),midbearings[i],
+		   curvatures[i],clothances[i],lengths[i]);
+}
+
 bezier3d polyline::approx3d(double precision)
 {
   bezier3d ret;
   int i;
   for (i=0;i<size();i++)
     ret+=getsegment(i).approx3d(precision);
+  return ret;
+}
+
+bezier3d polyarc::approx3d(double precision)
+{
+  bezier3d ret;
+  int i;
+  for (i=0;i<size();i++)
+    ret+=getarc(i).approx3d(precision);
+  return ret;
+}
+
+bezier3d polyspiral::approx3d(double precision)
+{
+  bezier3d ret;
+  int i;
+  for (i=0;i<size();i++)
+    ret+=getspiralarc(i).approx3d(precision);
   return ret;
 }
 

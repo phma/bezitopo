@@ -3,6 +3,8 @@
 /* spiral.h - Cornu or Euler spirals                  */
 /*                                                    */
 /******************************************************/
+#ifndef SPIRAL_H
+#define SPIRAL_H
 
 #include <cmath>
 #include "point.h"
@@ -73,3 +75,5 @@ public:
     return (std::isfinite(cur) && std::isfinite(clo) && std::isfinite(len));
   }
 };
+
+#endif
