@@ -9,14 +9,20 @@ Before 0.1.0 (first public release):
  •start and end points and curvatures;
  •start and end points and directions. ✓
 
+Before 0.1.1:
+TBD
+
+Before 0.2.0:
+•Save and open a file containing a scene.
+•Define paper sizes and layouts with paper space and model space windows (initially without clipping).
+•Print a scene, inverting the brightness while preserving (Approximately) the hue.
+•Implement a GUI, which may be rudimentary (a visual display, but without hit-testing, and manipulated by typed commands).
+
 For later:
 •Find the volume of a surface in a boundary, using a quadtree of Halton generators. The test surface is a hemisphere; its boundary is a circle.
 •Output an STL file.
-•Save and open a file containing a scene.
 •Approximate a spiral arc by at least two circular arcs.
 •Implement cross-sections and interpolate between them.
 •Add a vector (or map indexed by integer) of segments, and one of arcs (but not spiralarcs), to serve as lot boundary lines, and a lot class, whose boundary is a vector of pointers to segments, some of which may be backward.
 •Make a text drawing object class.
-•Define paper sizes and layouts with paper space and model space windows (initially without clipping).
 •Add cross-section windows (which require cross-sections) and line/curve/spiral tables (which require drawing text).
-•Print a scene, inverting the brightness while preserving (Approximately) the hue.
