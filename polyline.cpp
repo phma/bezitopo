@@ -385,6 +385,24 @@ void polyspiral::setbear(int i)
       else
 	nextbear+=DEG360;
     avgbear=prevbear+(nextbear-prevbear)/2;
-    bearings[i]+avgbear+foldangle(bearings[i]-avgbear);
+    bearings[i]=avgbear+foldangle(bearings[i]-avgbear);
   }
+}
+
+void polyspiral::setspiral(int i)
+{
+  int j;
+  spiralarc s;
+  j=i+1;
+  if (j>=endpoints.size())
+    j=0;
+  s=spiralarc(xyz(endpoints[i],elevation),xyz(endpoints[j],elevation));
+  s.setdelta(bearings[j]-bearings[i]+DEG360*(j<i),bearings[j]+bearings[i]+DEG360*(j<i)-2*dir(endpoints[i],endpoints[j]));
+  deltas[i]=s.getdelta();
+  delta2s[i]=s.getdelta2();
+  lengths[i]=s.length();
+  midbearings[i]=s.bearing(lengths[i]/2);
+  midpoints[i]=s.station(lengths[i]/2);
+  curvatures[i]=s.curvature(lengths[i]/2);
+  clothances[i]=s.clothance();
 }

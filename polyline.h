@@ -8,6 +8,7 @@
 
 #include <vector>
 #include "point.h"
+#include "xyz.h"
 #include "arc.h"
 #include "bezier3d.h"
 #include "spiral.h"
@@ -77,6 +78,7 @@ public:
   virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
   void setbear(int i);
+  void setspiral(int i);
   //void setdelta(int i,int delta);
   //virtual void setlengths();
   virtual void open();

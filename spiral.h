@@ -8,6 +8,7 @@
 
 #include <cmath>
 #include "point.h"
+#include "xyz.h"
 #include "segment.h"
 
 /* Clothance is the derivative of curvature with respect to distance
@@ -57,6 +58,18 @@ public:
   virtual double curvature(double along)
   {
     return cur+clo*(along-len/2);
+  }
+  virtual int getdelta()
+  {
+    return radtobin(cur*len);
+  }
+  virtual int getdelta2()
+  {
+    return startbearing()+endbearing()-2*dir(xy(start),xy(end));
+  }
+  virtual double clothance()
+  {
+    return clo;
   }
   virtual xyz station(double along);
   //double sthrow();

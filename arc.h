@@ -37,6 +37,14 @@ public:
   {
     return chordbearing()+delta/2;
   }
+  virtual int getdelta()
+  {
+    return delta;
+  }
+  virtual int getdelta2()
+  {
+    return 0;
+  }
   double length();
   virtual xyz station(double along);
   virtual int bearing(double along);

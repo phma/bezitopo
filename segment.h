@@ -86,7 +86,15 @@ public:
   {
     return 0;
   }
-  virtual double clothance(double along)
+  virtual double clothance()
+  {
+    return 0;
+  }
+  virtual int getdelta()
+  {
+    return 0;
+  }
+  virtual int getdelta2()
   {
     return 0;
   }
