@@ -27,6 +27,7 @@
 #include "mkpoint.h"
 #include "closure.h"
 #include "cvtmeas.h"
+#include "contour.h"
 
 using namespace std;
 
@@ -56,12 +57,26 @@ void indpark(string args)
   doc.pl[1].maketriangles();
   doc.pl[1].setgradient(false);
   doc.pl[1].makeqindex();
+  doc.pl[1].findcriticalpts();
+  doc.pl[1].addperimeter();
   w=doc.pl[1].dirbound(degtobin(0));
   s=doc.pl[1].dirbound(degtobin(90));
   e=-doc.pl[1].dirbound(degtobin(180));
   n=-doc.pl[1].dirbound(degtobin(270));
   cout<<"Writing topo with curved triangles"<<endl;
   rasterdraw(doc.pl[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark.ppm");
+  //roughcontours(doc.pl[1],0.1);
+  doc.pl[1].removeperimeter();
+  //smoothcontours(doc.pl[1],0.1);
+  psopen("IndependencePark.ps");
+  psprolog();
+  startpage();
+  setscale(w,s,e,n,0);
+  //for (i=0;i<doc.pl[1].contours.size();i++)
+    //spline(doc.pl[1].contours[i].approx3d(0.1));
+  endpage();
+  pstrailer();
+  psclose();
   doc.pl[1].setgradient(true);
   cout<<"Writing topo with flat triangles"<<endl;
   rasterdraw(doc.pl[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark-flat.ppm");

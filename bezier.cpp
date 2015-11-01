@@ -1307,7 +1307,7 @@ int triangle::subdir(uintptr_t edgepart)
     if (subdiv[i].getend()==*c)
       ccnt++;
   }
-  assert (apos<bpos && bpos<cpos);
+  assert (apos<bpos && bpos<cpos); // if this fails, you may have forgotten to add the perimeter
   sid=(edge *)(edgepart&~3);
   if (sid==b->edg(this))
   {

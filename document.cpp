@@ -29,7 +29,7 @@ void document::copytopopoints(criteria crit)
 
 int document::readpnezd(string fname,bool overwrite)
 {
-  ::readpnezd(this,fname,overwrite);
+  return ::readpnezd(this,fname,overwrite);
 }
 
 int document::writepnezd(string fname)

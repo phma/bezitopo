@@ -82,7 +82,7 @@ polyline intrace(triangle *tri,double elev)
       if (!tri->upleft(start))
 	start+=65536;
       sube.clear();
-      for (j=start;sube.size()==0 || (j&65535)>(start&65535) && (j&65535)<tri->subdiv.size();j=tri->proceed(j,elev))
+      for (j=start;sube.size()==0 || (j&65535)>(start&65535) && (j&65535)<tri->subdiv.size() && sube.size()<256;j=tri->proceed(j,elev))
 	sube.push_back(j);
       if (j==start)
 	break;
@@ -96,7 +96,7 @@ polyline intrace(triangle *tri,double elev)
 polyline trace(uintptr_t edgep,double elev)
 {
   polyline ret(elev);
-  int subedge,subnext;
+  int subedge,subnext,i;
   uintptr_t prevedgep;
   bool wasmarked;
   xy lastcept,thiscept,firstcept;
@@ -113,6 +113,7 @@ polyline trace(uintptr_t edgep,double elev)
     prevedgep=edgep;
     subedge=tri->subdir(edgep);
     //cout<<"before loop "<<subedge<<' '<<subnext<<endl;
+    i=0;
     do
     {
       subnext=tri->proceed(subedge,elev);
@@ -128,7 +129,7 @@ polyline trace(uintptr_t edgep,double elev)
 	  cerr<<"Repeated contourcept: "<<edgep<<endl;
 	lastcept=thiscept;
       }
-    } while (subnext>=0);
+    } while (subnext>=0 && ++i<256);
     //cout<<"after loop "<<subedge<<' '<<subnext<<endl;
     edgep=tri->edgepart(subedge);
     //cout<<"Next edgep "<<edgep<<endl;
@@ -185,7 +186,7 @@ void roughcontours(pointlist &pl,double conterval)
   polyline ctour;
   int i,j;
   pl.contours.clear();
-  tinlohi=pl.lohi();
+  tinlohi=pl.lohi(); // FIXME produces garbage for Independence Park
   for (i=floor(tinlohi[0]/conterval);i<=ceil(tinlohi[1]/conterval);i++)
   {
     cstarts=contstarts(pl,i*conterval);
