@@ -33,6 +33,7 @@ public:
   bool isopen();
   int size();
   segment getsegment(int i);
+  void dedup();
   virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
   virtual void setlengths();

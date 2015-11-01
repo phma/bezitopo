@@ -147,6 +147,58 @@ bezier3d polyspiral::approx3d(double precision)
   return ret;
 }
 
+void polyline::dedup()
+/* Collapses into one adjacent points that are too close together.
+ * They result from running contourcept on two segments that are the same
+ * in opposite directions.
+ */
+{
+  int h,i,j,k;
+  vector<xy>::iterator ptit;
+  vector<double>::iterator lenit;
+  xy avg;
+  for (i=0;i<endpoints.size() && endpoints.size()>2;i++)
+  {
+    h=i-1;
+    if (h<0)
+      if (isopen())
+	h=0;
+      else
+	h+=endpoints.size();
+    j=i+1;
+    if (j>=endpoints.size())
+      if (isopen())
+	j--;
+      else
+	j-=endpoints.size();
+    k=j+1;
+    if (k>=endpoints.size())
+      if (isopen())
+	k--;
+      else
+	k-=endpoints.size();
+    if (i!=j && (dist(endpoints[i],endpoints[j])*16777216<=dist(endpoints[h],endpoints[i]) || dist(endpoints[i],endpoints[j])*16777216<=dist(endpoints[j],endpoints[k])))
+    {
+      avg=(endpoints[i]+endpoints[j])/2;
+      ptit=endpoints.begin()+i;
+      lenit=lengths.begin()+i;
+      endpoints.erase(ptit);
+      lengths.erase(lenit);
+      if (h>i)
+	h--;
+      j-i;
+      if (k>i)
+	k--;
+      endpoints[i]=avg;
+      if (i!=h)
+	lengths[h]=dist(endpoints[h],endpoints[i]);
+      if (j!=k)
+	lengths[j]=dist(endpoints[k],endpoints[j]);
+      i--; // in case three in a row are the same
+    }
+  }
+}
+
 void polyline::insert(xy newpoint,int pos)
 /* Inserts newpoint in position pos. E.g. insert(xy(8,5),2) does
  * {(0,0),(1,1),(2,2),(3,3)} -> {(0,0),(1,1),(8,5),(2,2),(3,3)}.

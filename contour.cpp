@@ -99,7 +99,7 @@ polyline trace(uintptr_t edgep,double elev)
   int subedge,subnext;
   uintptr_t prevedgep;
   bool wasmarked;
-  xy lastcept,thiscept;
+  xy lastcept,thiscept,firstcept;
   triangle *tri,*ntri;
   tri=((edge *)(edgep&-4))->tria;
   ntri=((edge *)(edgep&-4))->trib;
@@ -107,7 +107,7 @@ polyline trace(uintptr_t edgep,double elev)
     tri=ntri;
   mark(edgep);
   //cout<<"Start edgep "<<edgep<<endl;
-  ret.insert(lastcept=tri->contourcept(tri->subdir(edgep),elev));
+  ret.insert(firstcept=lastcept=tri->contourcept(tri->subdir(edgep),elev));
   do
   {
     prevedgep=edgep;
@@ -158,7 +158,7 @@ polyline trace(uintptr_t edgep,double elev)
       if (!wasmarked)
       {
 	thiscept=tri->contourcept(tri->subdir(edgep),elev);
-	if (thiscept!=lastcept)
+	if (thiscept!=lastcept && thiscept!=firstcept)
 	  ret.insert(thiscept);
 	lastcept=thiscept;
       }
@@ -194,6 +194,7 @@ void roughcontours(pointlist &pl,double conterval)
       if (!ismarked(cstarts[j]))
       {
 	ctour=trace(cstarts[j],i*conterval);
+	ctour.dedup();
 	//for (j=0;j<ctour.size();j++)
 	//cout<<"Contour length: "<<ctour.length()<<endl;
 	pl.contours.push_back(ctour);
@@ -215,6 +216,7 @@ void smoothcontours(pointlist &pl,double conterval)
   int i;
   for (i=0;i<pl.contours.size();i++)
   {
+    //cout<<"i="<<i<<endl;
     pl.contours[i].smooth();
   }
 }
