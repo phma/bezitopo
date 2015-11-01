@@ -2092,6 +2092,7 @@ void testcontour()
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   conterval=0.03;
   roughcontours(doc.pl[1],conterval);
+  smoothcontours(doc.pl[1],conterval);
   setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {

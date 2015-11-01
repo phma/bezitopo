@@ -61,6 +61,9 @@ int radtobin(double angle);
  * As azimuths or bearings, 0x80000000 and 0x00000000 are equivalent; as deltas they are not.
  */
 
+#define SEC1 1657
+#define MIN1 99421
+#define DEG1 5965232
 #define AT0512 0x80ae90e
 // AT0512 is arctangent of 5/12, 22.619865°
 #define DEG30 0x0aaaaaab

@@ -13,6 +13,7 @@
    */
 
 #include <cassert>
+#include <iostream>
 #include "polyline.h"
 #include "manysum.h"
 using namespace std;
@@ -398,11 +399,24 @@ void polyspiral::setspiral(int i)
     j=0;
   s=spiralarc(xyz(endpoints[i],elevation),xyz(endpoints[j],elevation));
   s.setdelta(bearings[j]-bearings[i]+DEG360*(j<i),bearings[j]+bearings[i]+DEG360*(j<i)-2*dir(endpoints[i],endpoints[j]));
+  if (lengths[i]==0)
+    cerr<<"length["<<i<<"]=0"<<endl;
   deltas[i]=s.getdelta();
   delta2s[i]=s.getdelta2();
   lengths[i]=s.length();
+  if (std::isnan(lengths[i]))
+    cerr<<"length["<<i<<"]=nan"<<endl;
   midbearings[i]=s.bearing(lengths[i]/2);
   midpoints[i]=s.station(lengths[i]/2);
   curvatures[i]=s.curvature(lengths[i]/2);
   clothances[i]=s.clothance();
+}
+
+void polyspiral::smooth()
+{
+  int i;
+  for (i=0;i<endpoints.size();i++)
+    setbear(i);
+  for (i=0;i<lengths.size();i++)
+    setspiral(i);
 }
