@@ -1,5 +1,5 @@
 Before 0.1.0 (first public release):
-•Read the sample data file topo0.asc and output a PostScript file of contours, drawn with arcs.
+•Read the sample data file topo0.asc and output a PostScript file of contours, drawn with spiralarcs.
 •Produce a 3D Bézier spline of all vertical and horizontal curves, for display purposes. ✓
 •Quickly find the triangle any point is in and return its elevation. ✓
 •Compute spirals of arbitrary curvature and clothance. ✓
@@ -15,7 +15,7 @@ TBD
 Before 0.2.0:
 •Save and open a file containing a scene.
 •Define paper sizes and layouts with paper space and model space windows (initially without clipping).
-•Print a scene, inverting the brightness while preserving (Approximately) the hue.
+•Print a scene, inverting the brightness while preserving (approximately) the hue.
 •Implement a GUI, which may be rudimentary (a visual display, but without hit-testing, and manipulated by typed commands).
 
 For later:
@@ -26,3 +26,6 @@ For later:
 •Add a vector (or map indexed by integer) of segments, and one of arcs (but not spiralarcs), to serve as lot boundary lines, and a lot class, whose boundary is a vector of pointers to segments, some of which may be backward.
 •Make a text drawing object class.
 •Add cross-section windows (which require cross-sections) and line/curve/spiral tables (which require drawing text).
+•Clip contours to a boundary. This requires intersecting a spiral with a line or arc.
+•Copy contours to two or three layers. If three, the contours in the finest layer are drawn only on very flat ground.
+•Implement at least one map projection (Lambert conic).
