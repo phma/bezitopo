@@ -2145,6 +2145,57 @@ void clampcubic()
   }
 }
 
+void splitcubic()
+/* Find the relation between the values at the clamp points and the extrema
+ * of a cubic representing a spiralarc that does not well approximate a
+ * contour. The spiralarc will be split at the point that is farthest from
+ * the contour.
+ */
+{
+  int i;
+  double ratio;
+  vector<double> ex;
+  polyline pl,plneg,plpos;
+  polyspiral ps,psneg,pspos;
+  xyz st(0,0,0),nd(1,0,0);
+  segment cubic(st,nd);
+  cubic.setslope(START,1);
+  psopen("splitcubic.ps");
+  psprolog();
+  startpage();
+  setscale(-1,0,1,0.5,0);
+  for (i=-310;i<1334;i++)
+  {
+    cubic.setslope(END,((2*i+1)/2048.)*2-1);
+    ratio=cubic.station(1-CCHALONG).elev()/cubic.station(CCHALONG).elev();
+    ex=cubic.vextrema(false);
+    if (i%31==0)
+      cout<<ratio<<' '<<ex[0]<<endl;
+    if (ratio>1)
+      plpos.insert(xy(ratio,ex[0]));
+    else if (ratio<-1)
+      plneg.insert(xy(ratio,ex[0]));
+    else
+      pl.insert(xy(ratio,ex[0]));
+  }
+  pl.open();
+  ps=polyspiral(pl);
+  ps.smooth();
+  plneg.open();
+  psneg=polyspiral(plneg);
+  psneg.smooth();
+  plpos.open();
+  pspos=polyspiral(plpos);
+  pspos.smooth();
+  spline(ps.approx3d(0.1));
+  setcolor(0,0,1);
+  spline(pspos.approx3d(0.1));
+  spline(psneg.approx3d(0.1));
+  endpage();
+  pstrailer();
+  psclose();
+}
+
 void testminquad()
 {
   double m;
@@ -2283,6 +2334,7 @@ int main(int argc, char *argv[])
   testabsorient();
   testgeoid();
   //clampcubic();
+  splitcubic();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //closure_i();
   return EXIT_SUCCESS;
