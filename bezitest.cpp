@@ -2152,8 +2152,8 @@ void splitcubic()
  * the contour.
  */
 {
-  int i;
-  double ratio;
+  int i,bcount[65],bar;
+  double ratio,bsum[65];
   vector<double> ex;
   polyline pl,plneg,plpos;
   polyspiral ps,psneg,pspos;
@@ -2164,11 +2164,19 @@ void splitcubic()
   psprolog();
   startpage();
   setscale(-1,0,1,0.5,0);
+  for (i=0;i<65;i++)
+    bsum[i]=bcount[i]=0;
   for (i=-310;i<1334;i++)
   {
     cubic.setslope(END,((2*i+1)/2048.)*2-1);
     ratio=cubic.station(1-CCHALONG).elev()/cubic.station(CCHALONG).elev();
     ex=cubic.vextrema(false);
+    bar=rint((ratio+1)*32);
+    if (bar>=0 && bar<=64)
+    {
+      bcount[bar]++;
+      bsum[bar]+=ex[0];
+    }
     if (i%31==0)
       cout<<ratio<<' '<<ex[0]<<endl;
     if (ratio>1)
@@ -2178,6 +2186,8 @@ void splitcubic()
     else
       pl.insert(xy(ratio,ex[0]));
   }
+  for (i=0;i<65;i++)
+    cout<<setw(2)<<i<<setw(3)<<bcount[i]<<' '<<setprecision(4)<<bsum[i]/bcount[i]<<endl;
   pl.open();
   ps=polyspiral(pl);
   ps.smooth();

@@ -5,20 +5,51 @@
 /******************************************************/
 
 /* After finding extrema, generate contours. The method for generating contours
-  as polylines is as follows:
-  1. Between two corners (i.e. points in the TIN, corners of triangles) in the TIN
-     that includes the extrema, find a point on the edge that has the given elevation.
-     Join these points with line segments.
-  2. Add points to each line segment, staying within the triangle, until they are
-     closer together than the tolerance. Keep the circular list of points.
-  3. Make a curve defined by three of these points (which is necessarily a circle).
-  4. Add points from the list to make the curve fit the points better.
-  */
+ * as polylines is as follows:
+ * 1. Between two corners (i.e. points in the TIN, corners of triangles) in the TIN
+ *    that includes the extrema, find a point on the edge that has the given elevation.
+ *    Join these points with line segments.
+ * 2. Change the line segments to spiralarcs to form a smooth curve.
+ * 3. Add points to each spiralarc, staying within the triangle, until the elevation
+ *    all along each spiralarc is within the tolerance or the spiralarc is shorter
+ *    than the tolerance.
+ */
 #include <iostream>
 #include <cassert>
 #include "contour.h"
 #include "pointlist.h"
 using namespace std;
+
+float splittab[65]=
+{
+  0.2113,0.2123,0.2134,0.2145,0.2156,0.2167,0.2179,0.2191,0.2204,0.2216,0.2229,0.2244,0.2257,
+  0.2272,0.2288,0.2303,0.2319,0.2337,0.2354,0.2372,0.2390,0.2410,0.2430,0.2451,0.2472,0.2495,
+  0.2519,0.2544,0.2570,0.2597,0.2625,0.2654,0.2684,0.2716,0.2750,0.2786,0.2823,0.2861,0.2902,
+  0.2945,0.2990,0.3038,0.3088,0.3141,0.3198,0.3258,0.3320,0.3386,0.3454,0.3527,0.3605,0.3687,
+  0.3773,0.3862,0.3955,0.4053,0.4153,0.4256,0.4362,0.4469,0.4577,0.4684,0.4792,0.4897,0.5000
+};
+
+float splitpoint(double leftclamp,double rightclamp,double tolerance)
+/* If the values at the clamp points indicate that the curve may be out of tolerance,
+ * returns the point to split it at, as a fraction of the length. If not, returns 0.
+ * tolerance must be positive.
+ */
+{
+  bool whichbig;
+  double ratio;
+  float sp;
+  if (fabs(leftclamp)*27>tolerance*23 || fabs(rightclamp)*27>tolerance*23)
+  {
+    whichbig=fabs(rightclamp)>fabs(leftclamp);
+    ratio=whichbig?(leftclamp/rightclamp):(rightclamp/leftclamp);
+    sp=splittab[(int)rint((ratio+1)*32)];
+    if (whichbig)
+      sp=1-sp;
+  }
+  else
+    sp=0;
+  return sp;
+}
 
 vector<uintptr_t> contstarts(pointlist &pts,double elev)
 {
