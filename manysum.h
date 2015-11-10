@@ -26,4 +26,5 @@ public:
   double total();
   void dump();
   manysum& operator+=(double x);
+  manysum& operator-=(double x);
 };

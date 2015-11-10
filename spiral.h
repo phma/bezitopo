@@ -19,6 +19,7 @@ xy cornu(double t,double curvature,double clothance);
 double spiralbearing(double t,double curvature,double clothance);
 int ispiralbearing(double t,double curvature,double clothance);
 double spiralcurvature(double t,double curvature,double clothance);
+void cornustats();
 
 class spiralarc: public segment
 /* station() ignores the x and y coordinates of start and end.

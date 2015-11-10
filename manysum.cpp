@@ -65,3 +65,25 @@ manysum& manysum::operator+=(double x)
       x=0;
   }
 }
+
+manysum& manysum::operator-=(double x)
+{
+  int i,j;
+  double d;
+  x=-x;
+  while (x!=0)
+  {
+    frexp(x,&i);
+    bucket[i]+=x;
+    frexp(d=bucket[i],&j);
+    if (j>i)
+    {
+      x=d;
+      bucket[i]=0;
+      if (((++cnt)&0xff)==0)
+	prune();
+    }
+    else
+      x=0;
+  }
+}

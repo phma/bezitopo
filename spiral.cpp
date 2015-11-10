@@ -32,7 +32,13 @@
 #include "spiral.h"
 #include "angle.h"
 #include "vcurve.h"
+#include "manysum.h"
 using namespace std;
+#define MAXITER 64
+// The most iterations in an actual run is 45. This occurs at the ends of the
+// bendiest curves in spiraltest.
+
+vector<int> cornuhisto;
 
 xy cornu(double t)
 /* If |t|>=6, it returns the limit points rather than a value with no precision.
@@ -55,6 +61,9 @@ xy cornu(double t)
     imagparts.push_back(-facpower/(8*i+7));
     facpower*=t2/(4*i+4);
   }
+  if (i>=cornuhisto.size())
+    cornuhisto.resize(i+1);
+  cornuhisto[i]++;
   for (i=realparts.size()-1,rsum=isum=bigpart=0;i>=0;i--)
   {
     rsum+=realparts[i];
@@ -80,15 +89,16 @@ xy cornu(double t,double curvature,double clothance)
  * If curvature=0 and clothance=2, you get cornu(t).
  */
 {
-  vector<long double> realparts,imagparts,cupower,clpower;
-  int i,j;
+  long double cupower[MAXITER+1],clpower[MAXITER+1];
+  long double realparts[((MAXITER+2)*(MAXITER+2))/4],imagparts[((MAXITER+2)*(MAXITER+2))/4];
+  int i,j,rinx,iinx;
   long double facpower,rsum,isum,t2,bigpart,binom,clotht,term,bigterm=0;
   double precision;
   t2=t*t;
   clotht=clothance*t/2;
-  cupower.push_back(1);
-  clpower.push_back(1);
-  for (i=0,facpower=t;0.9+bigterm!=0.9 || !i;i++)
+  cupower[0]=clpower[0]=1;
+  realparts[0]=imagparts[0]=0;
+  for (bigpart=i=iinx=rinx=0,facpower=t;(0.9+bigterm!=0.9 || !i) && i<MAXITER;i++)
   {
     for (bigterm=j=0,binom=1;j<=i;j++)
     {
@@ -96,39 +106,42 @@ xy cornu(double t,double curvature,double clothance)
       //cout<<"i="<<i<<" j="<<j<<" term="<<cupower[j]<<'*'<<clpower[i-j]<<'*'<<binom<<'*'<<facpower<<'/'<<i+j+1<<'='<<term<<endl;
       if (fabsl(term)>bigterm)
 	bigterm=fabsl(term);
+      if (fabsl(term)>bigpart)
+	bigpart=fabsl(term);
       switch (i&3)
       {
 	case 0:
-	  realparts.push_back(term);
+	  realparts[rinx++]=term;
 	  break;
 	case 1:
-	  imagparts.push_back(term);
+	  imagparts[iinx++]=term;
 	  break;
 	case 2:
-	  realparts.push_back(-term);
+	  realparts[rinx++]=-term;
 	  break;
 	case 3:
-	  imagparts.push_back(-term);
+	  imagparts[iinx++]=-term;
 	  break;
       }
       binom=binom*(i-j)/(j+1);
     }
-    cupower.push_back(cupower.back()*curvature);
-    clpower.push_back(clpower.back()*clotht);
+    cupower[i+1]=cupower[i]*curvature;
+    clpower[i+1]=clpower[i]*clotht;
     facpower*=t/(i+1);
   }
-  for (i=realparts.size()-1,rsum=bigpart=0;i>=0;i--)
-  {
-    rsum+=realparts[i];
-    if (fabsl(realparts[i])>bigpart)
-      bigpart=fabsl(realparts[i]);
-  }
-  for (i=imagparts.size()-1,isum=0;i>=0;i--)
-  {
-    isum+=imagparts[i];
-    if (fabsl(imagparts[i])>bigpart)
-      bigpart=fabsl(imagparts[i]);
-  }
+  /*if (i>=cornuhisto.size())
+    cornuhisto.resize(i+1);
+  cornuhisto[i]++;*/
+  if (i>=MAXITER-1)
+    cerr<<"cornu needs more iterations"<<endl;
+  for (i=1;i<rinx;i*=2)
+    for (j=0;j+i<rinx;j+=2*i)
+      realparts[j]+=realparts[j+i];
+  for (i=1;i<iinx;i*=2)
+    for (j=0;j+i<iinx;j+=2*i)
+      imagparts[j]+=imagparts[j+i];
+  rsum=realparts[0];
+  isum=imagparts[0];
   precision=nextafterl(bigpart,2*bigpart)-bigpart;
   //printf("precision %e\n",precision);
   if (precision>1e-6)
@@ -136,6 +149,13 @@ xy cornu(double t,double curvature,double clothance)
   return xy(rsum,isum);
 }
 
+void cornustats()
+{
+  int i;
+  cout<<"Cornu statistics"<<endl;
+  for (i=0;i<cornuhisto.size();i++)
+    cout<<i<<' '<<cornuhisto[i]<<endl;
+}
 /* It should be possible to fit a spiral to be tangent to two given circular
  * or straight curves by successive approximation using these functions.
  */

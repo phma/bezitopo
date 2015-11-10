@@ -2346,6 +2346,7 @@ int main(int argc, char *argv[])
   //clampcubic();
   splitcubic();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
+  //cornustats();
   //closure_i();
   return EXIT_SUCCESS;
 }
