@@ -143,7 +143,7 @@ int readpnezd(document *doc,string fname,bool overwrite)
 	estr=words[2];
 	zstr=words[3];
 	d=words[4];
-	if (zstr!="z")
+	if (zstr!="z" && zstr!="Elevation")
 	{
 	  p=atoi(pstr.c_str());
 	  n=parse_length(nstr.c_str());

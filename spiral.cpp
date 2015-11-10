@@ -134,7 +134,7 @@ xy cornu(double t,double curvature,double clothance)
   cornuhisto[i]++;*/
   if (i>=MAXITER-1)
     cerr<<"cornu needs more iterations"<<endl;
-  for (i=1;i<rinx;i*=2)
+  for (i=1;i<rinx;i*=2) // pairwise summation
     for (j=0;j+i<rinx;j+=2*i)
       realparts[j]+=realparts[j+i];
   for (i=1;i<iinx;i*=2)

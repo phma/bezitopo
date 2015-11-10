@@ -2344,7 +2344,7 @@ int main(int argc, char *argv[])
   testabsorient();
   testgeoid();
   //clampcubic();
-  splitcubic();
+  //splitcubic();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //cornustats();
   //closure_i();
