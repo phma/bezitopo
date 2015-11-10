@@ -47,6 +47,7 @@
 #include "contour.h"
 #include "absorient.h"
 #include "geoid.h"
+#include "binio.h"
 
 #define psoutput false
 // affects only maketin
@@ -2293,6 +2294,31 @@ void testgeoid()
   cout<<"done."<<endl;
 }
 
+void testgeint()
+{
+  int i,j;
+  fstream geintf("geint.dat",fstream::in|fstream::out|fstream::binary|fstream::trunc);
+  for (i=-8388611;i<=8388611;i+=108943)
+  {
+    writegeint(geintf,i);
+    writegeint(geintf,i+0x40000000);
+    writegeint(geintf,i+0x80000000);
+    writegeint(geintf,i+0xc0000000);
+  }
+  geintf.seekg(0);
+  for (i=-8388611;i<=8388611;i+=108943)
+  {
+    j=readgeint(geintf);
+    cout<<i<<' '<<j<<endl;
+    j=readgeint(geintf);
+    cout<<i+0x40000000<<' '<<j<<endl;
+    j=readgeint(geintf);
+    cout<<i+0x80000000<<' '<<j<<endl;
+    j=readgeint(geintf);
+    cout<<i+0xc0000000<<' '<<j<<endl;
+  }
+}
+
 int main(int argc, char *argv[])
 {
   doc.pl.resize(2);
@@ -2343,6 +2369,7 @@ int main(int argc, char *argv[])
   testroscat();
   testabsorient();
   testgeoid();
+  testgeint();
   //clampcubic();
   //splitcubic();
   printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));

@@ -20,7 +20,7 @@ void endianflip(void *addr,int n)
   }
 }
 
-void writegeint(std::ofstream &file,int i)
+void writegeint(std::fstream &file,int i)
 /* Numbers in Bezitopo's geoid files are in 65536ths of a meter and are less than 110 m
  * (7208960) in absolute value. They are encoded as follows:
  * gg xx xx where gg is 00-7f		00 gg xx xx
@@ -59,6 +59,33 @@ void writegeint(std::ofstream &file,int i)
   }
 }
 
-int readgeint(std::ifstream &file)
+int readgeint(std::fstream &file)
 {
+  char buf[8];
+  int ret;
+  file.read(buf,2);
+  if (buf[0]==(char)0x80)
+    if (buf[1]==0)
+      ret=0x80000000;
+    else
+    {
+      file.read(buf+2,3);
+      memmove(buf,buf+1,4);
+#ifndef BIGENDIAN
+      endianflip(buf,4);
+#endif
+      ret=*(int *)buf;
+      //add something
+    }
+  else
+  {
+    file.read(buf+2,1);
+    memmove(buf+1,buf,3);
+    buf[0]=(buf[1]&0x80)?0xff:0;
+#ifndef BIGENDIAN
+    endianflip(buf,4);
+#endif
+    ret=*(int *)buf;
+  }
+  return ret;
 }

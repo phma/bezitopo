@@ -1,7 +1,7 @@
 project(bezitopo)
 cmake_minimum_required(VERSION 2.8)
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitopo.cpp closure.cpp cogo.cpp color.cpp contour.cpp
+               bezitopo.cpp binio.cpp closure.cpp cogo.cpp color.cpp contour.cpp
                cvtmeas.cpp document.cpp drawobj.cpp
                ellipsoid.cpp geoid.cpp halton.cpp icommon.cpp layer.cpp ldecimal.cpp
                manysum.cpp measure.cpp mkpoint.cpp objlist.cpp plot.cpp pnezd.cpp
@@ -9,13 +9,14 @@ add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                raster.cpp spiral.cpp stl.cpp test.cpp segment.cpp tin.cpp
                vcurve.cpp)
 add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitest.cpp closure.cpp cogo.cpp color.cpp contour.cpp document.cpp drawobj.cpp
+               bezitest.cpp binio.cpp closure.cpp cogo.cpp color.cpp contour.cpp
+               document.cpp drawobj.cpp
                ellipsoid.cpp geoid.cpp halton.cpp layer.cpp ldecimal.cpp manysum.cpp
                measure.cpp objlist.cpp plot.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
                raster.cpp spiral.cpp stl.cpp test.cpp segment.cpp tin.cpp
                vcurve.cpp)
-add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp cogo.cpp
+add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp cogo.cpp
                convertgeoid.cpp document.cpp drawobj.cpp geoid.cpp ldecimal.cpp
                manysum.cpp measure.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp
                ps.cpp qindex.cpp random.cpp segment.cpp sourcegeoid.cpp spiral.cpp

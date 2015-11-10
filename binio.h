@@ -21,5 +21,5 @@ void writebedouble(std::ofstream &file,double f);
 void writeledouble(std::ofstream &file,double f);
 double readbedouble(std::ifstream &file);
 double readledouble(std::ifstream &file);
-void writegeint(std::ofstream &file,int i); // for Bezitopo's geoid files
-int readgeint(std::ifstream &file);
+void writegeint(std::fstream &file,int i); // for Bezitopo's geoid files
+int readgeint(std::fstream &file);
