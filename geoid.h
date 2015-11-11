@@ -30,6 +30,7 @@ public:
   bool subdivided();
   geoquad();
   ~geoquad();
+  void clear();
   void subdivide();
   double undulation(double x,double y);
 };

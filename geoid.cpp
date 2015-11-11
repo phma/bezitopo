@@ -139,6 +139,19 @@ geoquad::~geoquad()
       delete(sub[i]);
 }
 
+void geoquad::clear()
+{
+  int i;
+  if (subdivided())
+    for (i=0;i<4;i++)
+      delete(sub[i]);
+  for (i=0;i<4;i++)
+    sub[i]=nullptr;
+  for (i=1;i<6;i++)
+    und[i]=0;
+  und[0]=0x80000000;
+}
+
 void geoquad::subdivide()
 /* This makes no attempt to subdivide the surface.
  * The four subsquares are initialized to NAN.
