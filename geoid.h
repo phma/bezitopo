@@ -18,3 +18,18 @@ struct vball // so called because a sphere so marked looks like a volleyball
 
 vball encodedir(xyz dir);
 xyz decodedir(vball code);
+
+class geoquad
+{
+public:
+  union
+  {
+    geoquad *sub[4];
+    int und[6];
+  };
+  bool subdivided();
+  geoquad();
+  ~geoquad();
+  void subdivide();
+  double undulation(double x,double y);
+};

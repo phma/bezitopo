@@ -36,6 +36,8 @@ elseif(UNSIGNED_LONG_INT EQUAL 4)
 else()
   message(SEND_ERROR "unsigned long int doesn't have right size for ISAAC")
 endif()
+check_type_size("int" INT)
+check_type_size("int *" INT_POINTER)
 
 set(BEZITOPO_MAJOR_VERSION 0)
 set(BEZITOPO_MINOR_VERSION 1)

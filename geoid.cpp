@@ -98,3 +98,75 @@ xyz decodedir(vball code)
     ret=ret/ret.length();
   return ret;
 }
+
+bool geoquad::subdivided()
+/* Unlike qindex, this is architecture-dependent.
+ * On 64-bit Intel/AMD architecture, pointer is 8 bytes and int is 4.
+ * SSSSSSSSssssssssSSSSSSSSssssssss
+ * UUUUuuuuUUUUuuuuUUUUuuuu
+ * The last sub is NULL if it is not subdivided and points to the upper right
+ * quadrant if it is.
+ * If int is 8 bytes (which will require rewriting writegeint):
+ * SSSSSSSSssssssssSSSSSSSSssssssss
+ * UUUUUUUUuuuuuuuuUUUUUUUUuuuuuuuuUUUUUUUUuuuuuuuu
+ * The last und is set to 0x8000000000000000 (which means NAN) if it is subdivided
+ * and some small value if it isn't. To indicate that the undulation is unknown,
+ * set the first und, but not the last, to NAN.
+ * If int is 4 bytes and pointers are 6 bytes, this won't work.
+ */
+{
+  if (sizeof(geoquad *)*3>=sizeof(int)*6)
+    return sub[3]!=nullptr;
+  if (sizeof(int)*5>=sizeof(geoquad *)*4)
+    return und[5]>8850*256 || und[5]<-11000*256;
+}
+
+geoquad::geoquad()
+{
+  int i;
+  for (i=0;i<4;i++)
+    sub[i]=nullptr;
+  for (i=1;i<6;i++)
+    und[i]=0;
+  und[0]=0x80000000;
+}
+
+geoquad::~geoquad()
+{
+  int i;
+  if (subdivided())
+    for (i=0;i<4;i++)
+      delete(sub[i]);
+}
+
+void geoquad::subdivide()
+/* This makes no attempt to subdivide the surface.
+ * The four subsquares are initialized to NAN.
+ */
+{
+  int i;
+  und[5]=0x80000000;
+  for (i=0;i<4;i++)
+    sub[i]=new(geoquad);
+}
+
+double geoquad::undulation(double x,double y)
+{
+  int xbit,ybit;
+  double u;
+  if (subdivided())
+  {
+    xbit=x>=0;
+    ybit=y>=0;
+    x=2*(x-(xbit-0.5));
+    y=2*(y-(ybit-0.5));
+    u=sub[(ybit<<1)|xbit]->undulation(x,y);
+  }
+  else
+  {
+    u=(und[0]+und[1]*x+und[2]*y+und[3]*x*x+und[4]*x*y+und[5]*y*y)/65536;
+    if (u>8850 || u<-11000)
+      u=NAN;
+  }
+  return u;
+}
