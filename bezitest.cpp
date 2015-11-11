@@ -2309,14 +2309,15 @@ void testgeint()
   for (i=-8388611;i<=8388611;i+=108943)
   {
     j=readgeint(geintf);
-    cout<<i<<' '<<j<<endl;
+    cout<<setw(9)<<hex<<i<<setw(9)<<j;
     j=readgeint(geintf);
-    cout<<i+0x40000000<<' '<<j<<endl;
+    cout<<setw(9)<<hex<<i+0x40000000<<setw(9)<<j;
     j=readgeint(geintf);
-    cout<<i+0x80000000<<' '<<j<<endl;
+    cout<<setw(9)<<hex<<i+0x80000000<<setw(9)<<j;
     j=readgeint(geintf);
-    cout<<i+0xc0000000<<' '<<j<<endl;
+    cout<<setw(9)<<hex<<i+0xc0000000<<setw(9)<<j<<endl;
   }
+  cout<<dec;
 }
 
 int main(int argc, char *argv[])
