@@ -2296,9 +2296,9 @@ void testgeoid()
 
 void testgeint()
 {
-  int i,j;
+  int i,j,nancount;
   fstream geintf("geint.dat",fstream::in|fstream::out|fstream::binary|fstream::trunc);
-  for (i=-8388611;i<=8388611;i+=108943)
+  for (nancount=0,i=-8388625;i<=8388625;i+=47935)
   {
     writegeint(geintf,i);
     writegeint(geintf,i+0x40000000);
@@ -2306,18 +2306,25 @@ void testgeint()
     writegeint(geintf,i+0xc0000000);
   }
   geintf.seekg(0);
-  for (i=-8388611;i<=8388611;i+=108943)
+  for (i=-8388625;i<=8388625;i+=47935)
   {
     j=readgeint(geintf);
     cout<<setw(9)<<hex<<i<<setw(9)<<j;
+    assert(i==j);
     j=readgeint(geintf);
     cout<<setw(9)<<hex<<i+0x40000000<<setw(9)<<j;
+    assert(i+0x40000000==j);
     j=readgeint(geintf);
     cout<<setw(9)<<hex<<i+0x80000000<<setw(9)<<j;
+    assert(i+0x80000000==j || j==(int)0x80000000);
+    if (j==(int)0x80000000)
+      nancount++;
     j=readgeint(geintf);
     cout<<setw(9)<<hex<<i+0xc0000000<<setw(9)<<j<<endl;
+    assert(i+0xc0000000==j);
   }
-  cout<<dec;
+  cout<<dec<<nancount<<" NANs"<<endl;
+  assert(nancount==175);
 }
 
 int main(int argc, char *argv[])

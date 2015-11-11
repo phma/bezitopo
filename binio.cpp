@@ -27,6 +27,8 @@ void writegeint(std::fstream &file,int i)
  * gg xx xx where gg is 81-ff		ff gg xx xx
  * 80 gg xx xx xx where gg is not 0	gg xx xx xx with an offset
  * 80 00				80 00 00 00, which means NaN
+ * Numbers greater than 0x7f800000 are encoded as 80 00. They mean 32640 m, which is
+ * higher than the tallest mountain, so they cannot occur.
  */
 {
   char buf[8];
@@ -38,7 +40,7 @@ void writegeint(std::fstream &file,int i)
 #endif
     file.write(buf+1,3);
   }
-  else if (i<(int)0x80010000)
+  else if (i==(int)0x80000000 || i>=(int)0x7f800000)
   {
     buf[0]=0x80;
     buf[1]=0;
@@ -75,7 +77,10 @@ int readgeint(std::fstream &file)
       endianflip(buf,4);
 #endif
       ret=*(int *)buf;
-      //add something
+      if (ret<0)
+	ret-=0x7f0000;
+      else
+	ret-=0x800000;
     }
   else
   {
