@@ -8,6 +8,7 @@
  * I don't know what formats are used for polar geoid files.
  */
 #include <vector>
+#include <string>
 #include "angle.h"
 
 class geolattice
@@ -25,3 +26,11 @@ public:
   double elev(int lat,int lon);
   double elev(xyz dir);
 };
+
+struct usngsheader
+{
+  double south,west,latspace,longspace;
+  int nlat,nlong,dtype;
+};
+
+int readusngsbin(geolattice &geo,std::string filename);

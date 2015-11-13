@@ -20,5 +20,7 @@ document doc;
 
 int main(int argc, char *argv[])
 {
+  geolattice geo;
+  readusngsbin(geo,"../g2012bu0.bin");
   return 0;
 }

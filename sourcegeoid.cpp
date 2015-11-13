@@ -3,7 +3,11 @@
 /* sourcegeoid.cpp - geoidal undulation source data   */
 /*                                                    */
 /******************************************************/
+#include <fstream>
+#include <iostream>
 #include "sourcegeoid.h"
+#include "binio.h"
+
 using namespace std;
 
 double geolattice::elev(int lat,int lon)
@@ -53,4 +57,39 @@ double geolattice::elev(int lat,int lon)
 double geolattice::elev(xyz dir)
 {
   return elev(dir.lati(),dir.loni());
+}
+
+void readusngsbinheaderbe(usngsheader &hdr,fstream &file)
+{
+  hdr.south=readbedouble(file);
+  hdr.west=readbedouble(file);
+  hdr.latspace=readbedouble(file);
+  hdr.longspace=readbedouble(file);
+  hdr.nlat=readbeint(file);
+  hdr.nlong=readbeint(file);
+  hdr.dtype=readbeint(file);
+}
+
+void readusngsbinheaderle(usngsheader &hdr,fstream &file)
+{
+  hdr.south=readledouble(file);
+  hdr.west=readledouble(file);
+  hdr.latspace=readledouble(file);
+  hdr.longspace=readledouble(file);
+  hdr.nlat=readleint(file);
+  hdr.nlong=readleint(file);
+  hdr.dtype=readleint(file);
+}
+
+int readusngsbin(geolattice &geo,string filename)
+{
+  fstream file;
+  usngsheader hdr;
+  file.open(filename,fstream::in|fstream::binary);
+  readusngsbinheaderle(hdr,file);
+  cout<<"South "<<hdr.south<<" West "<<hdr.west<<endl;
+  cout<<"Latitude spacing "<<hdr.latspace<<" Longitude spacing "<<hdr.longspace<<endl;
+  cout<<"Rows "<<hdr.nlat<<" Columns "<<hdr.nlong<<endl;
+  file.close();
+  return 0;
 }
