@@ -2270,8 +2270,10 @@ void testabsorient()
 void testgeoid()
 {
   vball v;
-  int lat,lon,olat,olon;
+  int lat,lon,olat,olon,i,j;
+  double x,y,sum;
   xyz dir;
+  geoquad gq;
   cout<<"Testing conversion to and from volleyball coordinates...";
   cout.flush();
   for (lon=-0x3f800000;lon<=0x3f800000;lon+=0x1000000) // every 2.8125°
@@ -2292,12 +2294,22 @@ void testgeoid()
     //cout<<endl;
   }
   cout<<"done."<<endl;
+  for (i=0;i<6;i++)
+  {
+    for (j=0;j<6;j++)
+      gq.und[j]=(i==j)<<16;
+    for (x=-0.9375,sum=0;x<1;x+=0.125)
+      for (y=-0.9375;y<1;y+=0.125)
+	sum+=sqr(gq.undulation(x,y));
+    cout<<i<<' '<<ldecimal(sum)<<endl;
+  }
 }
 
 void testgeint()
 {
   int i,j,nancount;
   fstream geintf("geint.dat",fstream::in|fstream::out|fstream::binary|fstream::trunc);
+  cout<<"Testing geint"<<endl;
   for (nancount=0,i=-8388625;i<=8388625;i+=47935)
   {
     writegeint(geintf,i);
@@ -2309,22 +2321,23 @@ void testgeint()
   for (i=-8388625;i<=8388625;i+=47935)
   {
     j=readgeint(geintf);
-    cout<<setw(9)<<hex<<i<<setw(9)<<j;
+    //cout<<setw(9)<<hex<<i<<setw(9)<<j;
     assert(i==j);
     j=readgeint(geintf);
-    cout<<setw(9)<<hex<<i+0x40000000<<setw(9)<<j;
+    //cout<<setw(9)<<hex<<i+0x40000000<<setw(9)<<j;
     assert(i+0x40000000==j);
     j=readgeint(geintf);
-    cout<<setw(9)<<hex<<i+0x80000000<<setw(9)<<j;
+    //cout<<setw(9)<<hex<<i+0x80000000<<setw(9)<<j;
     assert(i+0x80000000==j || j==(int)0x80000000);
     if (j==(int)0x80000000)
       nancount++;
     j=readgeint(geintf);
-    cout<<setw(9)<<hex<<i+0xc0000000<<setw(9)<<j<<endl;
+    //cout<<setw(9)<<hex<<i+0xc0000000<<setw(9)<<j<<endl;
     assert(i+0xc0000000==j);
   }
   cout<<dec<<nancount<<" NANs"<<endl;
   assert(nancount==175);
+  cout<<"done."<<endl;
 }
 
 int main(int argc, char *argv[])
