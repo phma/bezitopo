@@ -3,9 +3,11 @@
 /* convertgeoid.cpp - convert geoidal undulation data */
 /*                                                    */
 /******************************************************/
+#include <iostream>
 #include "geoid.h"
 #include "sourcegeoid.h"
 #include "document.h"
+using namespace std;
 
 document doc;
 
@@ -22,5 +24,7 @@ int main(int argc, char *argv[])
 {
   geolattice geo;
   readusngsbin(geo,"../g2012bu0.bin");
+  cout<<"Undulation in Green Hill is "<<geo.elev(degtobin(35.4),degtobin(-82.05))<<endl;
+  cout<<"Undulation in Charlotte is "<<geo.elev(degtobin(35.22),degtobin(-80.84))<<endl;
   return 0;
 }

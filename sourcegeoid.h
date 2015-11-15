@@ -11,6 +11,12 @@
 #include <string>
 #include "angle.h"
 
+struct usngsheader
+{
+  double south,west,latspace,longspace;
+  int nlat,nlong,dtype;
+};
+
 class geolattice
 {
   /* nbd must be greater than sbd; both must be in [-DEG90,DEG90].
@@ -22,15 +28,10 @@ public:
   int type; // not used yet - will distinguish lat-long grid from whatever is used at the poles
   int nbd,ebd,sbd,wbd; // fixed-point binary - 18 mm is good enough for geoid work
   int width,height;
-  std::vector<int> undula; // starts at southwest corner
+  std::vector<int> undula; // starts at southwest corner, heads east
   double elev(int lat,int lon);
   double elev(xyz dir);
-};
-
-struct usngsheader
-{
-  double south,west,latspace,longspace;
-  int nlat,nlong,dtype;
+  void setheader(usngsheader &hdr);
 };
 
 int readusngsbin(geolattice &geo,std::string filename);
