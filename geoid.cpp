@@ -15,6 +15,32 @@
  * face=6: in the Howland face; x=+y, y=-z
  * face=7: a coordinate is NaN or at least two are infinite
  */
+/* Format of Bezitopo's geoid files:
+ * Start Len
+ * 0000 0008 literal string "BezGeoid"
+ * 0008 0001 00 type of data is geoidal undulation (others are not defined but
+ *           include deflection of vertical or variation of gravity)
+ * 0009 0001 01 encoding (00 is 4-byte big endian, 01 is variable length)
+ * 000a 0001 01 data are scalar (order of data if there are more components
+ *           is not yet defined)
+ * 000b 0002 fff0 scale factor as binary exponent is -16, one ulp is 1/65536 m
+ * 000d 0008 tolerance of conversion
+ * 0015 0008 limit of subdivision. If a geoquad is partly NaN and partly number,
+ *           it will not be subdivided if it's smaller than this.
+ * 001d 0008 smallest island or lacuna of data that won't be missed
+ * 0025 0002 number of source files
+ * 0027 vary names of source files alternating with names of formats, each
+ *           null-terminated
+ * vary vary six quadtrees of geoquads
+ * 
+ * Quadtrees look like this:
+ * An empty face of the earth:
+ * 00 8000
+ * A face with just one geoquad:
+ * 00 1e0943 fff382 002583 01ba38 000302 fffeed
+ * Three quarters undivided, the upper right subdivided in quarters, all NaN:
+ * 01 8000 00 8000 00 8000 01 8000 00 8000 00 8000 00 8000
+ */
 
 vball encodedir(xyz dir)
 {

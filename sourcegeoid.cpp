@@ -81,12 +81,36 @@ void readusngsbinheaderle(usngsheader &hdr,fstream &file)
   hdr.dtype=readleint(file);
 }
 
+bool sanitycheck(usngsheader &hdr)
+{
+  bool ssane,wsane,latsane,longsane,nlatsane,nlongsane,typesane;
+  ssane=hdr.south>-360.0001 && hdr.south<360.0001 && (hdr.south==0 || fabs(hdr.south)>0.000001);
+  wsane=hdr.west>-360.0001 && hdr.west<360.0001 && (hdr.west==0 || fabs(hdr.west)>0.000001);
+  latsane=hdr.latspace>0.000001 && hdr.latspace<190;
+  longsane=hdr.longspace>0.000001 && hdr.longspace<190;
+  nlatsane=hdr.nlat>0 && hdr.nlat*hdr.latspace<180.000001;
+  nlongsane=hdr.nlong>0 && hdr.nlong*hdr.longspace<360.000001;
+  typesane=hdr.dtype<256;
+  return ssane && wsane && latsane && longsane && nlatsane && nlongsane && typesane;
+}
+
 int readusngsbin(geolattice &geo,string filename)
 {
   fstream file;
   usngsheader hdr;
+  bool bigendian;
   file.open(filename,fstream::in|fstream::binary);
   readusngsbinheaderle(hdr,file);
+  if (sanitycheck(hdr))
+    bigendian=false;
+  else
+  {
+    file.seekg(0);
+    readusngsbinheaderbe(hdr,file);
+    bigendian=true;
+  }
+  if (sanitycheck(hdr))
+    cout<<"Header sane"<<endl;
   cout<<"South "<<hdr.south<<" West "<<hdr.west<<endl;
   cout<<"Latitude spacing "<<hdr.latspace<<" Longitude spacing "<<hdr.longspace<<endl;
   cout<<"Rows "<<hdr.nlat<<" Columns "<<hdr.nlong<<endl;
