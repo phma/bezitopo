@@ -36,10 +36,15 @@ double geolattice::elev(int lat,int lon)
   epart=1-epart;
   npart=1-npart;
   epart=1-epart;
-  sw=undula[(width+1)*nint+eint];
-  se=undula[(width+1)*nint+eint+1];
-  nw=undula[(width+1)*(nint+1)+eint];
-  ne=undula[(width+1)*(nint+1)+eint+1];
+  if (eint>=0 && eint<width && nint>=0 && nint<height)
+  {
+    sw=undula[(width+1)*nint+eint];
+    se=undula[(width+1)*nint+eint+1];
+    nw=undula[(width+1)*(nint+1)+eint];
+    ne=undula[(width+1)*(nint+1)+eint+1];
+  }
+  else
+    sw=se=nw=ne=-2147483648;
   if (sw==-2147483648)
     sw=1e30;
   if (se==-2147483648)
@@ -103,6 +108,16 @@ void geolattice::setheader(usngsheader &hdr)
   width=hdr.nlong-1;
   height=hdr.nlat-1;
   undula.resize((width+1)*(height+1));
+}
+
+void readusngatxt(geolattice &geo,string filename)
+/* This geoid file has order-360 harmonics, but is sampled every 0.25°,
+ * so it may not interpolate accurately. It would be better to compute
+ * the geoid from the coefficients; this requires making sense of a
+ * Fortran program.
+ * http://earth-info.nga.mil/GandG/wgs84/gravitymod/egm96/egm96.html
+ */
+{
 }
 
 int readusngsbin(geolattice &geo,string filename)

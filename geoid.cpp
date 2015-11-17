@@ -155,6 +155,7 @@ geoquad::geoquad()
   for (i=1;i<6;i++)
     und[i]=0;
   und[0]=0x80000000;
+  scale=1;
 }
 
 geoquad::~geoquad()
@@ -183,10 +184,27 @@ void geoquad::subdivide()
  * The four subsquares are initialized to NAN.
  */
 {
-  int i;
+  int i,j;
   und[5]=0x80000000;
   for (i=0;i<4;i++)
+  {
     sub[i]=new(geoquad);
+    sub[i]->scale=scale/2;
+    sub[i]->center=xy(center.east()+scale/((i&1)?2:-2),center.north()+scale/((i&2)?2:-2));
+    for (j=0;j<nans.size();j++)
+      if (sub[i]->in(nans[i]))
+	sub[i]->nans.push_back(nans[i]);
+    for (j=0;j<nums.size();j++)
+      if (sub[i]->in(nums[i]))
+	sub[i]->nums.push_back(nums[i]);
+  }
+  nans.clear();
+  nums.clear();
+}
+
+bool geoquad::in(xy pnt)
+{
+  return fabs(pnt.east()-center.east())<=scale && fabs(pnt.north()-center.north())<=scale;
 }
 
 double geoquad::undulation(double x,double y)
