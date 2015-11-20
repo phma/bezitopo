@@ -19,7 +19,7 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp cogo.cpp
                convertgeoid.cpp document.cpp drawobj.cpp geoid.cpp ldecimal.cpp
                manysum.cpp measure.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp
-               ps.cpp qindex.cpp random.cpp segment.cpp sourcegeoid.cpp spiral.cpp
+               ps.cpp qindex.cpp random.cpp raster.cpp segment.cpp sourcegeoid.cpp spiral.cpp
                tin.cpp vcurve.cpp)
 
 include(TestBigEndian)
