@@ -44,6 +44,7 @@
 #include "ellipsoid.h"
 #include "color.h"
 #include "document.h"
+#include "relprime.h"
 #include "contour.h"
 #include "absorient.h"
 #include "geoid.h"
@@ -463,6 +464,26 @@ void testmaketinellipse()
     totallength+=doc.pl[1].edges[i].length();
   printf("ellipse edges total length %f\n",totallength);
   assert(fabs(totallength-1329.4675)<0.001);
+}
+
+void testrelprime()
+{
+  assert(relprime(987)==610);
+  assert(relprime(610)==377);
+  assert(relprime(377)==233);
+  assert(relprime(233)==144);
+  assert(relprime(144)==89);
+  assert(relprime(89)==55);
+  assert(relprime(55)==34);
+  assert(relprime(100000)==61803);
+  assert(relprime(100)==61);
+  assert(relprime(0)==1);
+  assert(relprime(1)==1);
+  assert(relprime(2)==1);
+  assert(relprime(3)==2);
+  assert(relprime(4)==3);
+  assert(relprime(5)==3);
+  assert(relprime(6)==5);
 }
 
 void testmanysum()
@@ -2344,6 +2365,7 @@ int main(int argc, char *argv[])
 {
   doc.pl.resize(2);
   testarea3();
+  testrelprime();
   testintersection();
   testtriangle();
   testcopytopopoints();

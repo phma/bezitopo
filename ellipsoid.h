@@ -28,5 +28,5 @@ public:
   };
 };
 
-extern ellipsoid Clarke,GRS80,WGS84,ITRS;
+extern ellipsoid Sphere,Clarke,GRS80,WGS84,ITRS;
 #endif

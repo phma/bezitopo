@@ -67,6 +67,7 @@ double ellipsoid::avgradius()
   return cbrt(eqr*eqr*por);
 }
 
+ellipsoid Sphere(6371000,0,0);
 ellipsoid Clarke(6378206.4,6356583.8,0);
 ellipsoid GRS80(6378137,0,1/298.257222101);
 ellipsoid WGS84(6378137,0,1/298.257223563);
