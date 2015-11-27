@@ -9,6 +9,7 @@
 #include "binio.h"
 
 using namespace std;
+vector<geolattice> geo;
 
 double geolattice::elev(int lat,int lon)
 {
@@ -149,4 +150,20 @@ int readusngsbin(geolattice &geo,string filename)
   }
   file.close();
   return 0;
+}
+
+double avgelev(xyz dir)
+{
+  int i,n;
+  double u,sum;
+  for (sum=i=n=0;i<geo.size();i++)
+  {
+    u=geo[i].elev(dir);
+    if (std::isfinite(u))
+    {
+      sum+=u;
+      n++;
+    }
+  }
+  return sum/n;
 }

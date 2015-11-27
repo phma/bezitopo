@@ -3,7 +3,6 @@
 /* convertgeoid.cpp - convert geoidal undulation data */
 /*                                                    */
 /******************************************************/
-#define CONVERTGEOID
 #include <iostream>
 #include "geoid.h"
 #include "sourcegeoid.h"
@@ -12,7 +11,6 @@
 using namespace std;
 
 document doc;
-vector<geolattice> geo;
 
 /* The factors used when setting the six components of a geoquad are
  * 0: 1/1
@@ -42,6 +40,6 @@ int main(int argc, char *argv[])
   outund("Kitimat",degtobin(54.0547),degtobin(-128.6578)); // in the overlap of two files
   outund("Denali",degtobin(63.0695),degtobin(-151.0074));
   outund("Haleakala",degtobin(20.7097),degtobin(-156.2533));
-  drawglobecube(256,1,0,0,"geoid.ppm");
+  drawglobecube(1024,300,1,0,"geoid.ppm");
   return 0;
 }

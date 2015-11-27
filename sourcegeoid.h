@@ -35,3 +35,5 @@ public:
 };
 
 int readusngsbin(geolattice &geo,std::string filename);
+extern std::vector<geolattice> geo;
+double avgelev(xyz dir);

@@ -21,6 +21,7 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp 
                manysum.cpp measure.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp
                ps.cpp qindex.cpp random.cpp raster.cpp relprime.cpp segment.cpp
                sourcegeoid.cpp spiral.cpp tin.cpp vcurve.cpp)
+target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID)
 
 include(TestBigEndian)
 include(CheckTypeSize)

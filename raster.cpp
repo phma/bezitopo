@@ -5,6 +5,9 @@
 #include <stdexcept>
 #include "raster.h"
 #include "geoid.h"
+#ifdef CONVERTGEOID
+#include "sourcegeoid.h"
+#endif
 
 using namespace std;
 fstream rfile;
@@ -156,6 +159,10 @@ void drawglobecube(int side,double zscale,int source,int imagetype,string filena
 	if (source)
 	{
 	  z=0;
+#ifdef CONVERTGEOID
+	  if (source==1)
+	    z=avgelev(sphloc);
+#endif
 	  pixel=color(z/zscale);
 	}
 	else
