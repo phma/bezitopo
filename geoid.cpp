@@ -121,7 +121,7 @@ xyz decodedir(vball code)
       break;
   }
   if ((code.face&7)%7)
-    ret=ret/ret.length();
+    ret=ret*(6371e3/ret.length());
   return ret;
 }
 

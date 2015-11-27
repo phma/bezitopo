@@ -87,13 +87,16 @@ void rasterdraw(pointlist &pts,xy center,double width,double height,
   rclose();
 }
 
-void drawglobecube(int side,double zscale,string filename)
+void drawglobecube(int side,double zscale,int source,int imagetype,string filename)
 /* side is in pixels. Draws 4*side wide by 3*side high. imagetype is currently ignored.
+ * source is 0 for xyz color (zscale is ignored), 1 for source geoid (only in
+ * convertgeoid; in bezitest or bezitopo it is same as 2), 2 for converted geoid.
  */
 {
   int i,j,panel;
   string pixel;
   double x,y,z;
+  xyz sphloc;
   vball v;
   //hvec bend,dir,center,lastcenter,jump;
   char letter;
@@ -101,10 +104,10 @@ void drawglobecube(int side,double zscale,string filename)
   ppmheader(4*side,3*side);
   for (i=0;i<3*side;i++)
   {
-    y=((i%side)+0.5)/side;
+    y=1-(((i%side)+0.5)/side)*2;
     for (j=0;j<4*side;j++)
     {
-      x=((j%side)+0.5)/side;
+      x=(((j%side)+0.5)/side)*2-1;
       panel=(i/side)*4+(j/side);
       switch (panel)
       {
@@ -118,13 +121,13 @@ void drawglobecube(int side,double zscale,string filename)
 	  break;
 	case 1:
 	  v.face=3;
-	  v.x=x;
-	  v.y=y;
+	  v.x=-y;
+	  v.y=x;
 	  break;
 	case 4:
 	  v.face=5;
-	  v.x=x;
-	  v.y=y;
+	  v.x=y;
+	  v.y=-x;
 	  break;
 	case 5:
 	  v.face=1;
@@ -133,24 +136,35 @@ void drawglobecube(int side,double zscale,string filename)
 	  break;
 	case 6:
 	  v.face=2;
-	  v.x=x;
-	  v.y=y;
+	  v.x=y;
+	  v.y=-x;
 	  break;
 	case 7:
 	  v.face=6;
-	  v.x=x;
-	  v.y=y;
+	  v.x=-x;
+	  v.y=-y;
 	  break;
 	case 9:
 	  v.face=4;
-	  v.x=x;
-	  v.y=y;
+	  v.x=y;
+	  v.y=-x;
 	  break;
       }
       if (v.face)
       {
-	z=0;
-        pixel=color(z/zscale);
+	sphloc=decodedir(v);
+	if (source)
+	{
+	  z=0;
+	  pixel=color(z/zscale);
+	}
+	else
+	{
+	  pixel="rgb";
+	  pixel[0]=rint((sphloc.getx()+6371e3)*255/12742e3);
+	  pixel[1]=rint((sphloc.gety()+6371e3)*255/12742e3);
+	  pixel[2]=rint((sphloc.getz()+6371e3)*255/12742e3);
+	}
       }
       else
 	pixel="@@@";

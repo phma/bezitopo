@@ -42,6 +42,6 @@ int main(int argc, char *argv[])
   outund("Kitimat",degtobin(54.0547),degtobin(-128.6578)); // in the overlap of two files
   outund("Denali",degtobin(63.0695),degtobin(-151.0074));
   outund("Haleakala",degtobin(20.7097),degtobin(-156.2533));
-  drawglobecube(100,1,"geoid.ppm");
+  drawglobecube(256,1,0,0,"geoid.ppm");
   return 0;
 }

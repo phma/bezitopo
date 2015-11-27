@@ -1981,7 +1981,7 @@ void testldecimal()
 
 void testellipsoid()
 {
-  xyz sealevel,kmhigh,noffset,soffset,diff;
+  xyz sealevel,kmhigh,noffset,soffset,diff,benin,bengal,howland,galapagos,npole,spole;
   ellipsoid test1(8026957,0,0.5),test2(8026957,4013478.5,0);
   assert(test1.geteqr()==test2.geteqr());
   assert(test1.getpor()==test2.getpor());
@@ -1999,6 +1999,24 @@ void testellipsoid()
   cout<<diff.east()<<' '<<diff.north()<<' '<<diff.elev()<<endl;
   assert(abs(diff.east()+diff.elev())<1e-6);
   cout<<"average radius "<<ldecimal(test1.avgradius())<<endl;
+  benin=Sphere.geoc(0,0,0);
+  bengal=Sphere.geoc(0,DEG90,0);
+  howland=Sphere.geoc(0,DEG180,0);
+  galapagos=Sphere.geoc(0,-DEG90,0);
+  npole=Sphere.geoc(DEG90,0xdeadbeef,0);
+  spole=Sphere.geoc(-DEG90,0x10decade,0);
+  cout<<"Benin x      "<<benin.getx()<<endl;
+  cout<<"Howland x    "<<howland.getx()<<endl;
+  cout<<"Bengal y     "<<bengal.gety()<<endl;
+  cout<<"Galápagos y  "<<galapagos.gety()<<endl;
+  cout<<"North Pole z "<<npole.getz()<<endl;
+  cout<<"South Pole z "<<spole.getz()<<endl;
+  assert(benin.getx()>6370999);
+  assert(howland.getx()<-6370999);
+  assert(bengal.gety()>6370999);
+  assert(galapagos.gety()<-6370999);
+  assert(npole.getz()>6370999);
+  assert(spole.getz()<-6370999);
 }
 
 void spotcheckcolor(int col0,int col1)
