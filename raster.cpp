@@ -54,6 +54,37 @@ string color(double elev)
   return str;
 }
 
+string gcolor(double elev)
+{
+  double r,g,b;
+  string str("rgb");
+  if (isfinite(elev))
+  {
+    if (elev>1)
+      elev=1;
+    if (elev<-1)
+      elev=-1;
+    g=sin((elev+1)*M_PI/4);
+    b=sin((1-elev)*M_PI/4);
+    r=0;
+  }
+  else
+    r=g=b=1;
+  r=rint(r*256);
+  g=rint(g*256);
+  b=rint(b*256);
+  if (r>255)
+    r=255;
+  if (g>255)
+    g=255;
+  if (b>255)
+    b=255;
+  str[0]=r;
+  str[1]=g;
+  str[2]=b;
+  return str;
+}
+
 void ppmheader(int width,int height)
 {
   rfile<<"P6\n"<<width<<" "<<height<<endl<<255<<endl;
@@ -90,7 +121,7 @@ void rasterdraw(pointlist &pts,xy center,double width,double height,
   rclose();
 }
 
-void drawglobecube(int side,double zscale,int source,int imagetype,string filename)
+void drawglobecube(int side,double zscale,double zmid,int source,int imagetype,string filename)
 /* side is in pixels. Draws 4*side wide by 3*side high. imagetype is currently ignored.
  * source is 0 for xyz color (zscale is ignored), 1 for source geoid (only in
  * convertgeoid; in bezitest or bezitopo it is same as 2), 2 for converted geoid.
@@ -98,11 +129,13 @@ void drawglobecube(int side,double zscale,int source,int imagetype,string filena
 {
   int i,j,panel;
   string pixel;
-  double x,y,z;
+  double x,y,z,max,min;
   xyz sphloc;
   vball v;
   //hvec bend,dir,center,lastcenter,jump;
   char letter;
+  max=-INFINITY;
+  min=INFINITY;
   ropen(filename);
   ppmheader(4*side,3*side);
   for (i=0;i<3*side;i++)
@@ -163,7 +196,11 @@ void drawglobecube(int side,double zscale,int source,int imagetype,string filena
 	  if (source==1)
 	    z=avgelev(sphloc);
 #endif
-	  pixel=color(z/zscale);
+	  if (z<min)
+	    min=z;
+	  if (z>max)
+	    max=z;
+	  pixel=gcolor((z-zmid)/zscale);
 	}
 	else
 	{
@@ -179,4 +216,5 @@ void drawglobecube(int side,double zscale,int source,int imagetype,string filena
     }
   }
   rclose();
+  cout<<"drawglobecube: max "<<max<<" min "<<min<<endl;
 }
