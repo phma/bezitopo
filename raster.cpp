@@ -60,13 +60,13 @@ string gcolor(double elev)
   string str("rgb");
   if (isfinite(elev))
   {
+    r=(sin(elev*M_PI*5)+1)/2;
     if (elev>1)
       elev=1;
     if (elev<-1)
       elev=-1;
     g=sin((elev+1)*M_PI/4);
     b=sin((1-elev)*M_PI/4);
-    r=0;
   }
   else
     r=g=b=1;

@@ -256,7 +256,7 @@ void smoothcontours(pointlist &pl,double conterval)
   spiralarc sarc;
   for (i=0;i<pl.contours.size();i++)
   {
-    cout<<"i="<<i<<endl;
+    //cout<<"i="<<i<<endl;
     pl.contours[i].smooth();
     sz=pl.contours[i].size();
     for (j=0;j<sz;j++)
@@ -266,8 +266,8 @@ void smoothcontours(pointlist &pl,double conterval)
       lpt=sarc.station(sarc.length()*CCHALONG);
       rpt=sarc.station(sarc.length()*(1-CCHALONG));
       sp=splitpoint(lpt.elev()-pl.elevation(lpt),rpt.elev()-pl.elevation(rpt),conterval/10);
-      if (sp)
-	cout<<"segment "<<n<<" needs splitting at "<<sp<<endl;
+      //if (sp)
+	//cout<<"segment "<<n<<" needs splitting at "<<sp<<endl;
       // insert code to compute the point to insert into the arc
       // and to reset j if it needs splitting
     }

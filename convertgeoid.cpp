@@ -31,15 +31,18 @@ void outund(string loc,int lat,int lon)
 
 int main(int argc, char *argv[])
 {
-  geo.resize(3);
+  geo.resize(6);
   readusngsbin(geo[0],"../g2012bu0.bin");
   readusngsbin(geo[1],"../g2012ba0.bin");
   readusngsbin(geo[2],"../g2012bh0.bin");
+  readusngsbin(geo[3],"../g2012bg0.bin");
+  readusngsbin(geo[4],"../g2012bp0.bin");
+  readusngsbin(geo[5],"../g2012bs0.bin");
   outund("Green Hill",degtobin(35.4),degtobin(-82.05));
   outund("Charlotte",degtobin(35.22),degtobin(-80.84));
   outund("Kitimat",degtobin(54.0547),degtobin(-128.6578)); // in the overlap of two files
   outund("Denali",degtobin(63.0695),degtobin(-151.0074));
   outund("Haleakala",degtobin(20.7097),degtobin(-156.2533));
-  drawglobecube(1024,40,-12,1,0,"geoid.ppm");
+  drawglobecube(1024,62,-7,1,0,"geoid.ppm");
   return 0;
 }
