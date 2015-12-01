@@ -47,6 +47,7 @@
 #include "relprime.h"
 #include "contour.h"
 #include "absorient.h"
+#include "hlattice.h"
 #include "geoid.h"
 #include "binio.h"
 
@@ -2379,6 +2380,40 @@ void testgeint()
   cout<<"done."<<endl;
 }
 
+void testhlattice()
+{
+  hlattice latt(31); // 2977 points
+  hvec a,b;
+  a=nthhvec(1488,31,2977);
+  b=latt.nthhvec(1488);
+  cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
+  assert(a==b);
+  a=nthhvec(1457,31,2977);
+  b=latt.nthhvec(1457);
+  cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
+  assert(a==b);
+  a=nthhvec(1456,31,2977);
+  b=latt.nthhvec(1456);
+  cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
+  assert(a==b);
+  a=nthhvec(1024,31,2977);
+  b=latt.nthhvec(1024);
+  cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
+  assert(a==b);
+  a=nthhvec(2048,31,2977);
+  b=latt.nthhvec(2048);
+  cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
+  assert(a==b);
+  a=nthhvec(0,31,2977);
+  b=latt.nthhvec(0);
+  cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
+  assert(a==b);
+  a=nthhvec(2976,31,2977);
+  b=latt.nthhvec(2976);
+  cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
+  assert(a==b);
+}
+
 int main(int argc, char *argv[])
 {
   doc.pl.resize(2);
@@ -2429,6 +2464,7 @@ int main(int argc, char *argv[])
   testcontour();
   testroscat();
   testabsorient();
+  testhlattice();
   testgeoid();
   testgeint();
   //clampcubic();

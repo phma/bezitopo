@@ -10,8 +10,8 @@ add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                vcurve.cpp)
 add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitest.cpp binio.cpp closure.cpp cogo.cpp color.cpp contour.cpp
-               document.cpp drawobj.cpp
-               ellipsoid.cpp geoid.cpp halton.cpp layer.cpp ldecimal.cpp manysum.cpp
+               document.cpp drawobj.cpp ellipsoid.cpp geoid.cpp
+               halton.cpp hlattice.cpp layer.cpp ldecimal.cpp manysum.cpp
                measure.cpp objlist.cpp plot.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
                raster.cpp relprime.cpp spiral.cpp stl.cpp test.cpp segment.cpp tin.cpp

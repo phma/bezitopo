@@ -3,9 +3,11 @@
 /* hlattice.h - hexagonal lattice                     */
 /*                                                    */
 /******************************************************/
-/* Hexagonal vector (Eisenstein or Euler integers) and array of bytes subscripted by hexagonal vector
- * The largest hvec used in this program has a norm of about
- * than 95²*12, or 108300.
+/* Hexagonal vector (Eisenstein or Euler integers) is used to scan the area
+ * of a geoid file being converted for small islands.
+ * The largest hlattice used in this program has a size of 26754
+ * and 2147409811 points. The smallest spacing of the lattice is therefore
+ * 238 meters when applied to the largest square.
  */
 #ifndef HVEC_H
 #define HVEC_H
@@ -39,6 +41,9 @@ public:
   {x=xa;
    y=ya;
    }
+  hvec operator+(hvec b);
+  hvec operator-();
+  hvec operator-(hvec b);
   bool operator==(hvec b);
   bool operator!=(hvec b);
   unsigned long norm();
@@ -58,4 +63,14 @@ public:
 
 hvec start(int n);
 hvec nthhvec(int n,int size,int nelts);
+
+class hlattice
+{
+public:
+  std::map<int,hvec> rightedge;
+  int nelts;
+  hlattice(int size);
+  hvec nthhvec(int n);
+};
+
 #endif
