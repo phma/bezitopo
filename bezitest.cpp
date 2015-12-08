@@ -2314,6 +2314,7 @@ void testgeoid()
   double x,y,sum;
   xyz dir;
   geoquad gq;
+  array<unsigned,2> ghash;
   cout<<"Testing conversion to and from volleyball coordinates...";
   cout.flush();
   for (lon=-0x3f800000;lon<=0x3f800000;lon+=0x1000000) // every 2.8125°
@@ -2341,7 +2342,8 @@ void testgeoid()
     for (x=-0.9375,sum=0;x<1;x+=0.125)
       for (y=-0.9375;y<1;y+=0.125)
 	sum+=sqr(gq.undulation(x,y));
-    cout<<i<<' '<<ldecimal(sum)<<endl;
+    ghash=gq.hash();
+    cout<<i<<' '<<ldecimal(sum)<<hex<<setw(9)<<ghash[0]<<setw(9)<<ghash[1]<<endl;
   }
 }
 

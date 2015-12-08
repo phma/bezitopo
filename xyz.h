@@ -20,6 +20,8 @@ public:
   xy();
   double east();
   double north();
+  double getx();
+  double gety();
   double length();
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
@@ -73,8 +75,13 @@ public:
   friend double dist(xyz a,xyz b);
   friend bool operator==(const xyz &l,const xyz &r);
   friend xyz operator/(const xyz &l,const double r);
+  friend xyz operator*=(xyz &l,double r);
+  friend xyz operator/=(xyz &l,double r);
+  friend xyz operator+=(xyz &l,const xyz &r);
+  friend xyz operator-=(xyz &l,const xyz &r);
   friend xyz operator*(const xyz &l,const double r);
   friend xyz operator*(const double l,const xyz &r);
+  friend xyz operator*(const xyz &l,const xyz &r); // cross product
   friend xyz operator+(const xyz &l,const xyz &r);
   friend xyz operator-(const xyz &l,const xyz &r);
 protected:

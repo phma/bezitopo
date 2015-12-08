@@ -8,6 +8,8 @@
 #include "sourcegeoid.h"
 #include "document.h"
 #include "raster.h"
+#include "hlattice.h"
+#include "relprime.h"
 using namespace std;
 
 document doc;
@@ -20,6 +22,53 @@ document doc;
  * 4: 65536/7225
  * 5: 65536/12937
  */
+
+/* Check the square for the presence of geoid data by interrogating it with a
+ * hexagonal lattice. The size of the hexagon is sqrt(2/3) times the length
+ * of the square (sqrt(1/2) to get the half diagonal of the square, sqrt(4/3)
+ * to get the radius from the apothem), except for the whole face, where it
+ * is (1+sqrt(1/3))/2 times the length of the square, since two sides of the
+ * hexagon are parallel to two sides of the square. The process continues
+ * until the entire square has been interrogated or there are at least one
+ * point in nan and one point in num.
+ * 
+ * This procedure doesn't return anything. Use geoquad::isfull. It is possible
+ * that interrogating finds a square full, but one of the 256 points used to
+ * compute the coefficients is NaN.
+ */
+void interroquad(geoquad &quad,double spacing)
+{
+  xyz corner(3678298.565,3678298.565,3678298.565),ctr,xvec,yvec,tmp;
+  int radius,i,n,rp;
+  double qlen,hradius;
+  ctr=quad.centeronearth();
+  xvec=corner*ctr;
+  yvec=xvec*ctr;
+  xvec/=xvec.length();
+  yvec/=yvec.length();
+  tmp=(2+M_SQRT_3)*yvec+xvec;
+  xvec-=yvec;
+  yvec=tmp/tmp.length();
+  xvec/=xvec.length();
+  // xvec and yvec are now at 120° to match the components of hvec
+  qlen=quad.length();
+  if (qlen>1e7)
+    hradius=qlen*(1+M_SQRT_1_3)/2;
+  else
+    hradius=qlen*M_SQRT_2_3;
+  if (spacing<1)
+    spacing=1;
+  radius=rint(hradius/spacing);
+  if (radius>26754)
+  {
+    radius=26754; // largest hexagon with <2147483648 points
+    spacing=hradius/radius;
+  }
+  hlattice hlat(radius);
+  xvec*=spacing;
+  yvec*=spacing;
+  rp=relprime(hlat.nelts);
+}
 
 void outund(string loc,int lat,int lon)
 {

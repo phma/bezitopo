@@ -20,6 +20,7 @@
 // The continued fraction expansion is 0;1,6,2,6,2,6,2,...
 #define M_SQRT_3 1.73205080756887729352744634
 #define M_SQRT_1_3 0.5773502691896257645091487805
+#define M_SQRT_2_3 0.8164965809277260327324280249
 
 //PAGERAD should be 1 or 6 mod 8, which makes PAGESIZE 7 mod 8.
 // The maximum is 147 because of the file format.

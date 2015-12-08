@@ -5,6 +5,8 @@
 /******************************************************/
 #include <cmath>
 #include "geoid.h"
+#include "angle.h"
+using namespace std;
 
 /* face=0: point is the center of the earth
  * face=1: in the Benin face; x=+y, y=+z
@@ -17,19 +19,23 @@
  */
 /* Format of Bezitopo's geoid files:
  * Start Len
- * 0000 0008 literal string "BezGeoid"
- * 0008 0001 00 type of data is geoidal undulation (others are not defined but
+ * 0000 0008 literal string "boldatni"
+ * 0008 0008 hash identifier of this geoid file
+ * 0008 0002 0000 file refers to the earth (other planets/moons have different
+ *           sizes, so the limit of subdivision and smallest island are
+ *           relatively different)
+ * 0012 0001 00 type of data is geoidal undulation (others are not defined but
  *           include deflection of vertical or variation of gravity)
- * 0009 0001 01 encoding (00 is 4-byte big endian, 01 is variable length)
- * 000a 0001 01 data are scalar (order of data if there are more components
+ * 0013 0001 01 encoding (00 is 4-byte big endian, 01 is variable length)
+ * 0014 0001 01 data are scalar (order of data if there are more components
  *           is not yet defined)
- * 000b 0002 fff0 scale factor as binary exponent is -16, one ulp is 1/65536 m
- * 000d 0008 tolerance of conversion
- * 0015 0008 limit of subdivision. If a geoquad is partly NaN and partly number,
+ * 0015 0002 fff0 scale factor as binary exponent is -16, one ulp is 1/65536 m
+ * 0017 0008 tolerance of conversion
+ * 001f 0008 limit of subdivision. If a geoquad is partly NaN and partly number,
  *           it will not be subdivided if it's smaller than this.
- * 001d 0008 smallest island or lacuna of data that won't be missed
- * 0025 0002 number of source files
- * 0027 vary names of source files alternating with names of formats, each
+ * 0027 0008 smallest island or lacuna of data that won't be missed
+ * 002f 0002 number of source files × 2
+ * 0031 vary names of source files alternating with names of formats, each
  *           null-terminated
  * vary vary six quadtrees of geoquads
  * 
@@ -41,6 +47,19 @@
  * Three quarters undivided, the upper right subdivided in quarters, all NaN:
  * 01 8000 00 8000 00 8000 01 8000 00 8000 00 8000 00 8000
  */
+
+vball::vball()
+{
+  face=0;
+  x=y=0;
+}
+
+vball::vball(int f,xy p)
+{
+  face=f;
+  x=p.getx();
+  y=p.gety();
+}
 
 vball encodedir(xyz dir)
 {
@@ -190,6 +209,7 @@ void geoquad::subdivide()
   {
     sub[i]=new(geoquad);
     sub[i]->scale=scale/2;
+    sub[i]->face=face;
     sub[i]->center=xy(center.east()+scale/((i&1)?2:-2),center.north()+scale/((i&2)?2:-2));
     for (j=0;j<nans.size();j++)
       if (sub[i]->in(nans[i]))
@@ -205,6 +225,11 @@ void geoquad::subdivide()
 bool geoquad::in(xy pnt)
 {
   return fabs(pnt.east()-center.east())<=scale && fabs(pnt.north()-center.north())<=scale;
+}
+
+bool geoquad::in(vball pnt)
+{
+  return face==pnt.face && in(xy(pnt.x,pnt.y));
 }
 
 double geoquad::undulation(double x,double y)
@@ -226,4 +251,70 @@ double geoquad::undulation(double x,double y)
       u=NAN;
   }
   return u;
+}
+
+xyz geoquad::centeronearth()
+{
+  return decodedir(vball(face,center));
+}
+
+double geoquad::length()
+{
+  double r;
+  r=xyz(center,1).length();
+  return 6371e3*2*scale/r;
+}
+
+double geoquad::width()
+{
+  double r;
+  r=xyz(center,1).length();
+  return 6371e3*2*scale/sqr(r);
+}
+
+double geoquad::area()
+{
+  return length()*width();
+}
+
+int geoquad::isfull()
+/* Returns -1 if the square has been interrogated and all points found to have no geoid data.
+ * Returns 0 if some points have geoid data and some do not, or if no points have been tested.
+ * Returns 1 if all points tested have geoid data.
+ */
+{
+  return (nums.size()>0)-(nans.size()>0);
+}
+
+unsigned byteswap(unsigned n)
+{
+  return ((n&0xff000000)>>24)|((n&0xff0000)>>8)|((n&0xff00)<<8)|((n&0xff)<<24);
+}
+
+array<unsigned,2> geoquad::hash()
+{
+  array<unsigned,2> ret,subhash;
+  array<unsigned,8> subhashes;
+  int i;
+  if (subdivided())
+  {
+    for (i=0;i<4;i++)
+    {
+      subhash=sub[i]->hash();
+      subhashes[2*i]=subhash[0];
+      subhashes[2*i+1]=subhash[1];
+    }
+    for (i=ret[0]=ret[1]=0;i<8;i++)
+    {
+      ret[0]=byteswap((ret[0]^subhashes[i])*1657);
+      ret[1]=byteswap((ret[1]^subhashes[7-i])*6371);
+    }
+  }
+  else
+    for (i=ret[0]=ret[1]=0;i<6;i++)
+    {
+      ret[0]=byteswap((ret[0]^und[i])*99421);
+      ret[1]=byteswap((ret[1]^und[5-i])*47935);
+    }
+  return ret;
 }

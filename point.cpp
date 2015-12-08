@@ -29,12 +29,24 @@ xy::xy(xyz point)
  }
 
 double xy::east()
-{return x;
- }
+{
+  return x;
+}
 
 double xy::north()
-{return y;
- }
+{
+  return y;
+}
+
+double xy::getx()
+{
+  return x;
+}
+
+double xy::gety()
+{
+  return y;
+}
 
 double xy::length()
 {
@@ -63,10 +75,11 @@ xy operator+(const xy &l,const xy &r)
  }
 
 xy operator+=(xy &l,const xy &r)
-{l.x+=r.x;
- l.y+=r.y;
- return l;
- }
+{
+  l.x+=r.x;
+  l.y+=r.y;
+  return l;
+}
 
 xy operator*(const xy &l,double r)
 {xy prod(l.x*r,l.y*r);
@@ -84,10 +97,11 @@ xy operator/(const xy &l,double r)
  }
 
 xy operator/=(xy &l,double r)
-{l.x/=r;
- l.y/=r;
- return l;
- }
+{
+  l.x/=r;
+  l.y/=r;
+  return l;
+}
 
 bool operator!=(const xy &l,const xy &r)
 {
@@ -224,6 +238,38 @@ xyz operator/(const xyz &l,const double r)
   return xyz(l.x/r,l.y/r,l.z/r);
 }
 
+xyz operator*=(xyz &l,double r)
+{
+  l.x*=r;
+  l.y*=r;
+  l.z*=r;
+  return l;
+}
+
+xyz operator/=(xyz &l,double r)
+{
+  l.x/=r;
+  l.y/=r;
+  l.z/=r;
+  return l;
+}
+
+xyz operator+=(xyz &l,const xyz &r)
+{
+  l.x+=r.x;
+  l.y+=r.y;
+  l.z+=r.z;
+  return l;
+}
+
+xyz operator-=(xyz &l,const xyz &r)
+{
+  l.x-=r.x;
+  l.y-=r.y;
+  l.z-=r.z;
+  return l;
+}
+
 xyz operator*(const xyz &l,const double r)
 {
   return xyz(l.x*r,l.y*r,l.z*r);
@@ -232,6 +278,11 @@ xyz operator*(const xyz &l,const double r)
 xyz operator*(const double l,const xyz &r)
 {
   return xyz(l*r.x,l*r.y,l*r.z);
+}
+
+xyz operator*(const xyz &l,const xyz &r) // cross product
+{
+  return xyz(l.y*r.z-l.z*r.y,l.z*r.x-l.x*r.z,l.x*r.y-l.y*r.x);
 }
 
 xyz operator+(const xyz &l,const xyz &r)
