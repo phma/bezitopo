@@ -13,6 +13,7 @@
 using namespace std;
 
 document doc;
+cubemap cube;
 
 /* The factors used when setting the six components of a geoquad are
  * 0: 1/1
@@ -38,7 +39,9 @@ document doc;
  */
 void interroquad(geoquad &quad,double spacing)
 {
-  xyz corner(3678298.565,3678298.565,3678298.565),ctr,xvec,yvec,tmp;
+  xyz corner(3678298.565,3678298.565,3678298.565),ctr,xvec,yvec,tmp,pt;
+  vball v;
+  hvec h;
   int radius,i,n,rp;
   double qlen,hradius;
   ctr=quad.centeronearth();
@@ -68,6 +71,22 @@ void interroquad(geoquad &quad,double spacing)
   xvec*=spacing;
   yvec*=spacing;
   rp=relprime(hlat.nelts);
+  for (i=n=0;i<hlat.nelts && !(quad.nums.size() && quad.nans.size());i++)
+  {
+    h=hlat.nthhvec(n);
+    v=encodedir(ctr+h.getx()*xvec+h.gety()*yvec);
+    pt=decodedir(v);
+    if (quad.in(v))
+    {
+      if (std::isfinite(avgelev(pt)))
+	quad.nums.push_back(v.getxy());
+      else
+	quad.nans.push_back(v.getxy());
+    }
+    n-=rp;
+    if (n<0)
+      n+=hlat.nelts;
+  }
 }
 
 void outund(string loc,int lat,int lon)
@@ -80,6 +99,7 @@ void outund(string loc,int lat,int lon)
 
 int main(int argc, char *argv[])
 {
+  int i;
   geo.resize(6);
   readusngsbin(geo[0],"../g2012bu0.bin");
   readusngsbin(geo[1],"../g2012ba0.bin");
@@ -93,5 +113,15 @@ int main(int argc, char *argv[])
   outund("Denali",degtobin(63.0695),degtobin(-151.0074));
   outund("Haleakala",degtobin(20.7097),degtobin(-156.2533));
   drawglobecube(1024,62,-7,1,0,"geoid.ppm");
+  for (i=0;i<6;i++)
+  {
+    cout<<"Face "<<i+1;
+    cout.flush();
+    interroquad(cube.faces[i],1e5);
+    if (cube.faces[i].isfull()>=0)
+      cout<<" has data"<<endl;
+    else
+      cout<<" is empty"<<endl;
+  }
   return 0;
 }

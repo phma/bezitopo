@@ -61,6 +61,11 @@ vball::vball(int f,xy p)
   y=p.gety();
 }
 
+xy vball::getxy()
+{
+  return xy(x,y);
+}
+
 vball encodedir(xyz dir)
 {
   vball ret;
@@ -317,4 +322,11 @@ array<unsigned,2> geoquad::hash()
       ret[1]=byteswap((ret[1]^und[5-i])*47935);
     }
   return ret;
+}
+
+cubemap::cubemap()
+{
+  int i;
+  for (i=0;i<6;i++)
+    faces[i].face=i+1;
 }

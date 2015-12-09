@@ -18,6 +18,7 @@ struct vball // so called because a sphere so marked looks like a volleyball
   double x,y;
   vball();
   vball(int f,xy p);
+  xy getxy();
 };
 
 vball encodedir(xyz dir);
@@ -49,4 +50,11 @@ public:
   double area(); // displacement from the center of the face.
   int isfull(); // -1 if empty, 0 if partly full or unknown, 1 if full
   std::array<unsigned,2> hash();
+};
+
+class cubemap
+{
+public:
+  geoquad faces[6]; // note off-by-one: faces[0] is face 1, the Benin face
+  cubemap();
 };
