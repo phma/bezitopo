@@ -39,6 +39,7 @@ public:
   bool subdivided();
   geoquad();
   ~geoquad();
+  vball vcenter();
   void clear();
   void subdivide();
   bool in(xy pnt); // does not check whether it's on the right face

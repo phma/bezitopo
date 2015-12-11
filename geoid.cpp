@@ -203,6 +203,11 @@ void geoquad::clear()
   und[0]=0x80000000;
 }
 
+vball geoquad::vcenter()
+{
+  return vball(face,center);
+}
+
 void geoquad::subdivide()
 /* This makes no attempt to subdivide the surface.
  * The four subsquares are initialized to NAN.
@@ -217,11 +222,11 @@ void geoquad::subdivide()
     sub[i]->face=face;
     sub[i]->center=xy(center.east()+scale/((i&1)?2:-2),center.north()+scale/((i&2)?2:-2));
     for (j=0;j<nans.size();j++)
-      if (sub[i]->in(nans[i]))
-	sub[i]->nans.push_back(nans[i]);
+      if (sub[i]->in(nans[j]))
+	sub[i]->nans.push_back(nans[j]);
     for (j=0;j<nums.size();j++)
-      if (sub[i]->in(nums[i]))
-	sub[i]->nums.push_back(nums[i]);
+      if (sub[i]->in(nums[j]))
+	sub[i]->nums.push_back(nums[j]);
   }
   nans.clear();
   nums.clear();

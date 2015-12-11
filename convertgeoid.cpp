@@ -10,6 +10,7 @@
 #include "raster.h"
 #include "hlattice.h"
 #include "relprime.h"
+#include "ps.h"
 using namespace std;
 
 document doc;
@@ -23,6 +24,76 @@ cubemap cube;
  * 4: 65536/7225
  * 5: 65536/12937
  */
+
+xy unfold(vball pnt)
+{
+  xy ret(-2,-2);
+  switch (pnt.face)
+  {
+    case 1:
+      ret=xy(pnt.x,pnt.y);
+      break;
+    case 2:
+      ret=xy(2-pnt.y,pnt.x);
+      break;
+    case 3:
+      ret=xy(pnt.y,2-pnt.x);
+      break;
+    case 4:
+      ret=xy(-pnt.y,pnt.x-2);
+      break;
+    case 5:
+      ret=xy(-2-pnt.y,pnt.x);
+      break;
+    case 6:
+      ret=xy(4-pnt.x,-pnt.y);
+      break;
+  }
+  return ret;
+}
+
+void plotcenter(geoquad &quad)
+{
+  int i;
+  if (quad.subdivided())
+    for (i=0;i<4;i++)
+      plotcenter(*quad.sub[i]);
+  else
+    dot(unfold(quad.vcenter()));
+}
+
+void plotcenters()
+{
+  setscale(-3,-3,3,5,DEG90);
+  int i;
+  for (i=0;i<6;i++)
+    plotcenter(cube.faces[i]);
+}
+
+void plotinter(geoquad &quad)
+{
+  int i;
+  if (quad.subdivided())
+    for (i=0;i<4;i++)
+      plotinter(*quad.sub[i]);
+  else
+  {
+    setcolor(0,0,1);
+    for (i=0;i<quad.nums.size();i++)
+      dot(unfold(vball(quad.face,quad.nums[i])));
+    setcolor(1,0,0);
+    for (i=0;i<quad.nans.size();i++)
+      dot(unfold(vball(quad.face,quad.nans[i])));
+  }
+}
+
+void plotinters()
+{
+  setscale(-3,-3,3,5,DEG90);
+  int i;
+  for (i=0;i<6;i++)
+    plotinter(cube.faces[i]);
+}
 
 /* Check the square for the presence of geoid data by interrogating it with a
  * hexagonal lattice. The size of the hexagon is sqrt(2/3) times the length
@@ -97,8 +168,15 @@ void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
   //cout<<"Area: exact "<<quad.area()<<" approx "<<area<<" ratio "<<quad.area()/area<<endl;
   if (area>=sqr(sublimit))
   {
+    if (quad.scale>0.2)
+    {
+      cout<<"face "<<quad.face<<" ctr "<<quad.center.getx()<<','<<quad.center.gety()<<endl;
+      cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums before"<<endl;
+    }
     if (quad.nans.size()+quad.nums.size()==0 || (quad.isfull() && area/(quad.nans.size()+quad.nums.size())>sqr(spacing)))
       interroquad(quad,spacing);
+    if (quad.scale>0.2)
+      cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums after"<<endl;
     if (quad.isfull()==0)
     {
       quad.subdivide();
@@ -136,12 +214,22 @@ int main(int argc, char *argv[])
   {
     cout<<"Face "<<i+1;
     cout.flush();
-    interroquad(cube.faces[i],1e5);
+    interroquad(cube.faces[i],3e5);
     if (cube.faces[i].isfull()>=0)
       cout<<" has data"<<endl;
     else
       cout<<" is empty"<<endl;
     refine(cube.faces[i],0.01,1e5,1e5);
   }
+  psopen("geoid.ps");
+  psprolog();
+  startpage();
+  plotcenters();
+  endpage();
+  startpage();
+  plotinters();
+  endpage();
+  pstrailer();
+  psclose();
   return 0;
 }
