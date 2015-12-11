@@ -45,9 +45,10 @@ public:
   bool in(vball pnt); // does check
   double undulation(double x,double y);
   xyz centeronearth();
-  double length(); // length, width, and area are accurate only for small squares
+  double length(); // length, width, and apxarea are accurate only for small squares
   double width(); // and ignore the orientation of the square relative to the
-  double area(); // displacement from the center of the face.
+  double apxarea(); // displacement from the center of the face.
+  double area();
   int isfull(); // -1 if empty, 0 if partly full or unknown, 1 if full
   std::array<unsigned,2> hash();
 };

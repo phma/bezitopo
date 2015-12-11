@@ -89,6 +89,25 @@ void interroquad(geoquad &quad,double spacing)
   }
 }
 
+void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
+{
+  int i;
+  double area;
+  area=quad.apxarea();
+  //cout<<"Area: exact "<<quad.area()<<" approx "<<area<<" ratio "<<quad.area()/area<<endl;
+  if (area>=sqr(sublimit))
+  {
+    if (quad.nans.size()+quad.nums.size()==0 || (quad.isfull() && area/(quad.nans.size()+quad.nums.size())>sqr(spacing)))
+      interroquad(quad,spacing);
+    if (quad.isfull()==0)
+    {
+      quad.subdivide();
+      for (i=0;i<4;i++)
+	refine(*quad.sub[i],tolerance,sublimit,spacing);
+    }
+  }
+}
+
 void outund(string loc,int lat,int lon)
 {
   int i;
@@ -122,6 +141,7 @@ int main(int argc, char *argv[])
       cout<<" has data"<<endl;
     else
       cout<<" is empty"<<endl;
+    refine(cube.faces[i],0.01,1e5,1e5);
   }
   return 0;
 }

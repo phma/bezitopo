@@ -277,9 +277,24 @@ double geoquad::width()
   return 6371e3*2*scale/sqr(r);
 }
 
-double geoquad::area()
+double geoquad::apxarea()
+/* apxarea is 6/π (1.9099) times as big as area for a whole face;
+ * for a quarter face it is 4% too big;
+ * for anything else it is within 1%.
+ */
 {
   return length()*width();
+}
+
+double anglexs(xy pnt)
+{
+  return asin(pnt.getx()/sqrt(sqr(pnt.getx())+1)*pnt.gety()/sqrt(sqr(pnt.gety())+1));
+}
+
+double geoquad::area()
+{
+  xy ne(scale,scale),nw(-scale,scale);
+  return ((anglexs(center+ne)+anglexs(center-ne))-(anglexs(center+nw)+anglexs(center-nw)))*4.0589641e13;
 }
 
 int geoquad::isfull()
