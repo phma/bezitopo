@@ -128,6 +128,8 @@ void interroquad(geoquad &quad,double spacing)
   qlen=quad.length();
   if (qlen>1e7)
     hradius=qlen*(1+M_SQRT_1_3)/2;
+  else if (qlen>5e6)
+    hradius=qlen*0.95;
   else
     hradius=qlen*M_SQRT_2_3;
   if (spacing<1)
@@ -162,20 +164,36 @@ void interroquad(geoquad &quad,double spacing)
 
 void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
 {
-  int i;
-  double area;
+  int i,j=0;
+  double area,qpoints[16][16];
+  xyz pt;
+  vball v;
+  xy qpt;
   area=quad.apxarea();
   //cout<<"Area: exact "<<quad.area()<<" approx "<<area<<" ratio "<<quad.area()/area<<endl;
   if (area>=sqr(sublimit))
   {
-    if (quad.scale>0.2)
+    if (quad.scale>2)
     {
       cout<<"face "<<quad.face<<" ctr "<<quad.center.getx()<<','<<quad.center.gety()<<endl;
       cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums before"<<endl;
     }
     if (quad.nans.size()+quad.nums.size()==0 || (quad.isfull() && area/(quad.nans.size()+quad.nums.size())>sqr(spacing)))
       interroquad(quad,spacing);
-    if (quad.scale>0.2)
+    if (quad.isfull())
+      for (i=0;i<16;i++)
+	for (j=0;j<16;j++)
+	{
+	  qpt=quad.center+xy(quad.scale,0)*(i-7.5)/8+xy(0,quad.scale)*(j-7.5)/8;
+	  v=vball(quad.face,qpt);
+	  pt=decodedir(v);
+	  qpoints[i][j]=avgelev(pt);
+	  if (std::isfinite(qpoints[i][j]))
+	    quad.nums.push_back(qpt);
+	  else
+	    quad.nans.push_back(qpt);
+	}
+    if (quad.scale>2)
       cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums after"<<endl;
     if (quad.isfull()==0)
     {
