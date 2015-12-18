@@ -162,6 +162,33 @@ void interroquad(geoquad &quad,double spacing)
   }
 }
 
+array<double,6> correction(geoquad &quad,double qpoints[][16])
+{
+  array<double,6> ret;
+  int i,j,k;
+  double diff;
+  geoquad unitquad;
+  for (i=0;i<16;i++)
+    for (j=0;j<16;j++)
+      if (std::isfinite(qpoints[i][j]))
+      {
+	diff=qpoints[i][j]-quad.undulation(-0.9375+0.125*i,-0.9375+0.125*j);
+	for (k=0;k<6;k++)
+	{
+	  unitquad.und[k]=65536;
+	  unitquad.und[(k+5)%6]=0;
+	  ret[k]+=diff*unitquad.undulation(-0.9375+0.125*i,-0.9375+0.125*j);
+	}
+      }
+  ret[0]=ret[0]/256;
+  ret[1]=ret[1]/85;
+  ret[2]=ret[2]/85;
+  ret[3]=ret[3]*255/12937;
+  ret[4]=ret[4]*255/7225;
+  ret[5]=ret[5]*255/12937;
+  return ret;
+}
+
 void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
 {
   int i,j=0;
