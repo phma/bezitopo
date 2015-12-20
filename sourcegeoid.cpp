@@ -183,7 +183,7 @@ array<double,6> correction(geoquad &quad,double qpoints[][16])
 	diff=qpoints[i][j]-quad.undulation(-0.9375+0.125*i,-0.9375+0.125*j);
 	for (k=0;k<6;k++)
 	{
-	  unitquad.und[k]=65536;
+	  unitquad.und[k]=1;
 	  unitquad.und[(k+5)%6]=0;
 	  ret[k]+=diff*unitquad.undulation(-0.9375+0.125*i,-0.9375+0.125*j);
 	}

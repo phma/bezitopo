@@ -61,6 +61,7 @@ class cubemap
 {
 public:
   geoquad faces[6]; // note off-by-one: faces[0] is face 1, the Benin face
+  double scale; // always a power of 2
   cubemap();
 };
 #endif

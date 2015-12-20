@@ -217,7 +217,7 @@ void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
 	  sqerror+=sqr(corr[i]);
 	cout<<"numnums "<<numnums<<" sqerror "<<sqerror<<" before ";
 	for (i=0;i<6;i++)
-	  quad.und[i]+=rint(corr[i]*65536);
+	  quad.und[i]+=rint(corr[i]);
 	corr=correction(quad,qpoints);
 	for (sqerror=i=0;i<6;i++)
 	  sqerror+=sqr(corr[i]);
@@ -238,6 +238,7 @@ void outund(string loc,int lat,int lon)
 int main(int argc, char *argv[])
 {
   int i;
+  cube.scale=1/65536.;
   geo.resize(6);
   readusngsbin(geo[0],"../g2012bu0.bin");
   readusngsbin(geo[1],"../g2012ba0.bin");
