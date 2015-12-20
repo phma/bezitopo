@@ -1,16 +1,16 @@
 project(bezitopo)
 cmake_minimum_required(VERSION 2.8)
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitopo.cpp binio.cpp closure.cpp cogo.cpp color.cpp contour.cpp
-               cvtmeas.cpp document.cpp drawobj.cpp
+               bezitopo.cpp binio.cpp closure.cpp cogo.cpp cogospiral.cpp color.cpp
+               contour.cpp cvtmeas.cpp document.cpp drawobj.cpp
                ellipsoid.cpp geoid.cpp halton.cpp icommon.cpp layer.cpp ldecimal.cpp
                manysum.cpp measure.cpp mkpoint.cpp objlist.cpp plot.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
                raster.cpp relprime.cpp spiral.cpp stl.cpp test.cpp segment.cpp tin.cpp
                vcurve.cpp)
 add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitest.cpp binio.cpp closure.cpp cogo.cpp color.cpp contour.cpp
-               document.cpp drawobj.cpp ellipsoid.cpp geoid.cpp
+               bezitest.cpp binio.cpp closure.cpp cogo.cpp cogospiral.cpp color.cpp
+               contour.cpp document.cpp drawobj.cpp ellipsoid.cpp geoid.cpp
                halton.cpp hlattice.cpp layer.cpp ldecimal.cpp manysum.cpp
                measure.cpp objlist.cpp plot.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp

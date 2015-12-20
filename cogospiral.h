@@ -21,3 +21,8 @@
  * spiral cannot be written in closed form. Intersections involving an arc
  * of very small delta should be done iteratively, to avoid loss of precision.
  */
+#include <vector>
+#include "point.h"
+#include "spiral.h"
+
+std::vector<double> intersection1(spiralarc a,double a1,double a2,spiralarc b,double b1,double b2,bool extend=false);
