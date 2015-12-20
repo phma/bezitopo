@@ -171,6 +171,11 @@ bool geoquad::subdivided()
     return und[5]>8850*256 || und[5]<-11000*256;
 }
 
+bool geoquad::isnan()
+{
+  return und[0]>8850*256 || und[0]<-11000*256;
+}
+
 geoquad::geoquad()
 {
   int i;

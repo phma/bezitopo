@@ -37,6 +37,7 @@ public:
   int face;
   std::vector<xy> nans,nums;
   bool subdivided();
+  bool isnan();
   geoquad();
   ~geoquad();
   vball vcenter();

@@ -168,6 +168,8 @@ array<double,6> correction(geoquad &quad,double qpoints[][16])
   int i,j,k;
   double diff;
   geoquad unitquad;
+  for (i=0;i<6;i++)
+    ret[i]=0;
   for (i=0;i<16;i++)
     for (j=0;j<16;j++)
       if (std::isfinite(qpoints[i][j]))
@@ -183,16 +185,17 @@ array<double,6> correction(geoquad &quad,double qpoints[][16])
   ret[0]=ret[0]/256;
   ret[1]=ret[1]/85;
   ret[2]=ret[2]/85;
-  ret[3]=ret[3]*255/12937;
-  ret[4]=ret[4]*255/7225;
-  ret[5]=ret[5]*255/12937;
+  ret[3]=ret[3]*256/12937;
+  ret[4]=ret[4]*256/7225;
+  ret[5]=ret[5]*256/12937;
   return ret;
 }
 
 void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
 {
-  int i,j=0;
-  double area,qpoints[16][16];
+  int i,j=0,numnums;
+  double area,qpoints[16][16],sqerror;
+  array<double,6> corr;
   xyz pt;
   vball v;
   xy qpt;
@@ -227,6 +230,28 @@ void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
       quad.subdivide();
       for (i=0;i<4;i++)
 	refine(*quad.sub[i],tolerance,sublimit,spacing);
+    }
+    else
+    {
+      for (numnums=i=0;i<16;i++)
+	for (j=0;j<16;j++)
+	  if (std::isfinite(qpoints[i][j]))
+	    numnums++;
+      if (numnums>1)
+      {
+	if (quad.isnan())
+	  quad.und[0]=0;
+	corr=correction(quad,qpoints);
+	for (sqerror=i=0;i<6;i++)
+	  sqerror+=sqr(corr[i]);
+	cout<<"numnums "<<numnums<<" sqerror "<<sqerror<<" before ";
+	for (i=0;i<6;i++)
+	  quad.und[i]+=rint(corr[i]*65536);
+	corr=correction(quad,qpoints);
+	for (sqerror=i=0;i<6;i++)
+	  sqerror+=sqr(corr[i]);
+	cout<<sqerror<<" after"<<endl;
+      }
     }
   }
 }
