@@ -7,6 +7,8 @@
  * Benin, Galápagos, Howland, and Bengal. Each leaf square is a set of six
  * values for the constant, linear, and quadratic components.
  */
+#ifndef GEOID_H
+#define GEOID_H
 #include <vector>
 #include <array>
 #include "xyz.h"
@@ -61,3 +63,4 @@ public:
   geoquad faces[6]; // note off-by-one: faces[0] is face 1, the Benin face
   cubemap();
 };
+#endif

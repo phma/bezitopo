@@ -261,7 +261,7 @@ double geoquad::undulation(double x,double y)
   }
   else
   {
-    u=(und[0]+und[1]*x+und[2]*y+und[3]*x*x+und[4]*x*y+und[5]*y*y)/65536;
+    u=(und[0]+und[1]*x+und[2]*y+und[3]*(x*x-1/3.)+und[4]*x*y+und[5]*(y*y-1/3.))/65536;
     if (u>8850 || u<-11000)
       u=NAN;
   }

@@ -20,9 +20,9 @@ cubemap cube;
  * 0: 1/1
  * 1: 256/85
  * 2: 256/85
- * 3: 65536/12937
+ * 3: 589824/51409
  * 4: 65536/7225
- * 5: 65536/12937
+ * 5: 589824/51409
  */
 
 xy unfold(vball pnt)
@@ -160,35 +160,6 @@ void interroquad(geoquad &quad,double spacing)
     if (n<0)
       n+=hlat.nelts;
   }
-}
-
-array<double,6> correction(geoquad &quad,double qpoints[][16])
-{
-  array<double,6> ret;
-  int i,j,k;
-  double diff;
-  geoquad unitquad;
-  for (i=0;i<6;i++)
-    ret[i]=0;
-  for (i=0;i<16;i++)
-    for (j=0;j<16;j++)
-      if (std::isfinite(qpoints[i][j]))
-      {
-	diff=qpoints[i][j]-quad.undulation(-0.9375+0.125*i,-0.9375+0.125*j);
-	for (k=0;k<6;k++)
-	{
-	  unitquad.und[k]=65536;
-	  unitquad.und[(k+5)%6]=0;
-	  ret[k]+=diff*unitquad.undulation(-0.9375+0.125*i,-0.9375+0.125*j);
-	}
-      }
-  ret[0]=ret[0]/256;
-  ret[1]=ret[1]/85;
-  ret[2]=ret[2]/85;
-  ret[3]=ret[3]*256/12937;
-  ret[4]=ret[4]*256/7225;
-  ret[5]=ret[5]*256/12937;
-  return ret;
 }
 
 void refine(geoquad &quad,double tolerance,double sublimit,double spacing)

@@ -50,6 +50,7 @@
 #include "hlattice.h"
 #include "geoid.h"
 #include "binio.h"
+#include "sourcegeoid.h"
 
 #define psoutput false
 // affects only maketin
@@ -2310,11 +2311,12 @@ void testabsorient()
 void testgeoid()
 {
   vball v;
-  int lat,lon,olat,olon,i,j;
-  double x,y,sum;
+  int lat,lon,olat,olon,i,j,k;
+  double x,y,sum,qpoints[16][16];
   xyz dir;
   geoquad gq;
   array<unsigned,2> ghash;
+  array<double,6> corr;
   cout<<"Testing conversion to and from volleyball coordinates...";
   cout.flush();
   for (lon=-0x3f800000;lon<=0x3f800000;lon+=0x1000000) // every 2.8125°
@@ -2344,6 +2346,20 @@ void testgeoid()
 	sum+=sqr(gq.undulation(x,y));
     ghash=gq.hash();
     cout<<i<<' '<<ldecimal(sum)<<hex<<setw(9)<<ghash[0]<<setw(9)<<ghash[1]<<endl;
+  }
+  cout<<"Testing correction..."<<endl;
+  gq.clear();
+  for (k=0;k<6;k++)
+  {
+    gq.und[k]=65536;
+    for (i=0;i<16;i++)
+      for (j=0;j<16;j++)
+	qpoints[i][j]=gq.undulation(-0.9375+0.125*i,-0.9375+0.125*j);
+    gq.und[k]=0;
+    corr=correction(gq,qpoints);
+    for (i=0;i<6;i++)
+      cout<<corr[i]<<' ';
+    cout<<endl;
   }
 }
 
