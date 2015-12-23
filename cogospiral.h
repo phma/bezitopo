@@ -34,3 +34,4 @@ struct alosta
 };
 
 std::vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double b1,double b2,bool extend=false);
+std::vector<alosta> intersection1(segment a,double a1,double a2,segment b,double b1,double b2,bool extend=false);

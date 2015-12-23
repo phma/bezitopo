@@ -96,7 +96,7 @@ void segment::setctrl(int which,double el)
   }
 }
 
-double segment::elev(double along)
+double segment::elev(double along) const
 {
   return vcurve(start.elev(),control1,control2,end.elev(),along/length());
 }
@@ -116,7 +116,7 @@ double segment::endslope()
   return (end.elev()-control2)*3/length();
 }
 
-xyz segment::station(double along)
+xyz segment::station(double along) const
 {
   double gnola,len;
   len=length();
@@ -186,7 +186,7 @@ vector<double> segment::vextrema(bool withends)
   return ret;
 }
 
-xyz segment::midpoint()
+xyz segment::midpoint() const
 {
   return station(length()/2);
 }

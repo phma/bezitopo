@@ -18,11 +18,11 @@ public:
   xy(double e,double n);
   xy(xyz point);
   xy();
-  double east();
-  double north();
-  double getx();
-  double gety();
-  double length();
+  double east() const;
+  double north() const;
+  double getx() const;
+  double gety() const;
+  double length() const;
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
   friend xy operator+(const xy &l,const xy &r);
@@ -53,12 +53,12 @@ public:
   xyz(double e,double n,double h);
   xyz();
   xyz(xy en,double h);
-  double east();
-  double north();
-  double elev();
-  double getx();
-  double gety();
-  double getz();
+  double east() const;
+  double north() const;
+  double elev() const;
+  double getx() const;
+  double gety() const;
+  double getz() const;
   double lat(); // These assume a sphere and are used for converting geoid files.
   double lon(); // For latitude on the real Earth, see the ellipsoid class.
   int lati();

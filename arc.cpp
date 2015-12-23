@@ -80,7 +80,7 @@ double arc::diffarea()
     return 0;
 }
 
-xyz arc::station(double along)
+xyz arc::station(double along) const
 {
   double gnola,len;
   int angalong;

@@ -20,20 +20,20 @@ public:
   arc(xyz kra,xyz mij,xyz fam);
   arc(xyz kra,xyz fam,int d);
   void setdelta(int d,int s=0);
-  double radius(double along)
+  virtual double radius(double along) const
   {
     return chordlength()/sinhalf(delta)/2;
   }
-  virtual double curvature(double along)
+  virtual double curvature(double along) const
   {
     return 2*sinhalf(delta)/chordlength();
   }
   virtual double diffarea();
-  int startbearing()
+  int startbearing() const
   {
     return chordbearing()-delta/2;
   }
-  int endbearing()
+  int endbearing() const
   {
     return chordbearing()+delta/2;
   }
@@ -46,7 +46,7 @@ public:
     return 0;
   }
   double length() const;
-  virtual xyz station(double along);
+  virtual xyz station(double along) const;
   virtual int bearing(double along);
   xy center();
   void split(double along,arc &a,arc &b);

@@ -140,3 +140,69 @@ vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double 
   return ret;
 }
 
+vector<alosta> intersection1(segment a,double a1,double a2,segment b,double b1,double b2,bool extend)
+/* Same as above, but for two segments, for speed and accuracy.
+ * Converting a segment to spiralarc sets the midbearing, which for a 4 km
+ * segment results is an error up to 1 µm at the ends.
+ * 
+ * It can exit in two ways:
+ * • The point in aalosta and the point in balosta which are closest are close
+ *   enough to be the same point. They are returned.
+ * • The new point is out of range of either or both of the curves.
+ *   Returns an empty vector.
+ */
+{
+  bool isnewcloser,arecloseenough;
+  xy insect;
+  double di0,di1,d01;
+  alosta aalosta[3],balosta[3];
+  vector<alosta> ret;
+  aalosta[0]=alosta(a1,a.station(a1));
+  aalosta[1]=alosta(a2,a.station(a2));
+  balosta[0]=alosta(b1,b.station(b1));
+  balosta[1]=alosta(b2,b.station(b2));
+  do
+  {
+    insect=intersection(aalosta[0].station,aalosta[1].station,balosta[0].station,balosta[1].station);
+    di0=dist(insect,aalosta[0].station);
+    di1=dist(insect,aalosta[1].station);
+    d01=dist(aalosta[0].station,aalosta[1].station);
+    if (di1>d01)
+      di0=-di0;
+    if (di0>d01)
+      di1=-di1;
+    aalosta[2].along=(aalosta[0].along*di1+aalosta[1].along*di0)/d01;
+    if (aalosta[2].along<-a.length()/2 || aalosta[2].along>3*a.length()/2)
+      aalosta[2].along=NAN;
+    if (extend && aalosta[2].along<0)
+      aalosta[2].along=-aalosta[2].along;
+    if (extend && aalosta[2].along>a.length())
+      aalosta[2].along=2*a.length()-aalosta[2].along;
+    aalosta[2].station=a.station(aalosta[2].along);
+    di0=dist(insect,balosta[0].station);
+    di1=dist(insect,balosta[1].station);
+    d01=dist(balosta[0].station,balosta[1].station);
+    if (di1>d01)
+      di0=-di0;
+    if (di0>d01)
+      di1=-di1;
+    balosta[2].along=(balosta[0].along*di1+balosta[1].along*di0)/d01;
+    if (balosta[2].along<-b.length()/2 || balosta[2].along>3*b.length()/2)
+      balosta[2].along=NAN;
+    if (extend && balosta[2].along<0)
+      balosta[2].along=-balosta[2].along;
+    if (extend && balosta[2].along>b.length())
+      balosta[2].along=2*b.length()-balosta[2].along;
+    balosta[2].station=b.station(balosta[2].along);
+    isnewcloser=sortpts(aalosta,balosta);
+    arecloseenough=dist(aalosta[0].station,balosta[0].station)<(a.length()+b.length())/4294967296.;
+  }
+  while (isnewcloser && !arecloseenough);
+  if (arecloseenough)
+  {
+    ret.push_back(aalosta[0]);
+    ret.push_back(balosta[0]);
+  }
+  return ret;
+}
+

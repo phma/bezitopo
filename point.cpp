@@ -28,27 +28,27 @@ xy::xy(xyz point)
  y=point.y;
  }
 
-double xy::east()
+double xy::east() const
 {
   return x;
 }
 
-double xy::north()
+double xy::north() const
 {
   return y;
 }
 
-double xy::getx()
+double xy::getx() const
 {
   return x;
 }
 
-double xy::gety()
+double xy::gety() const
 {
   return y;
 }
 
-double xy::length()
+double xy::length() const
 {
   return hypot(x,y);
 }
@@ -153,32 +153,32 @@ xyz::xyz(xy en,double h)
  z=h;
  }
 
-double xyz::east()
+double xyz::east() const
 {
   return x;
 }
 
-double xyz::north()
+double xyz::north() const
 {
   return y;
 }
 
-double xyz::elev()
+double xyz::elev() const
 {
   return z;
 }
 
-double xyz::getx()
+double xyz::getx() const
 {
   return x;
 }
 
-double xyz::gety()
+double xyz::gety() const
 {
   return y;
 }
 
-double xyz::getz()
+double xyz::getz() const
 {
   return z;
 }

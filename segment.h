@@ -44,7 +44,7 @@ public:
   virtual void setdelta(int d,int s=0)
   {
   }
-  double elev(double along);
+  double elev(double along) const;
   double slope(double along);
   double startslope();
   double endslope();
@@ -53,7 +53,7 @@ public:
   {
     return (end.elev()<e)^(start.elev()<e);
   }
-  virtual xyz station(double along);
+  virtual xyz station(double along) const;
   double avgslope()
   {
     return (end.elev()-start.elev())/length();
@@ -62,15 +62,15 @@ public:
   {
     return dist(xy(start),xy(end));
   }
-  int chordbearing()
+  int chordbearing() const
   {
     return atan2i(xy(end)-xy(start));
   }
-  virtual int startbearing()
+  virtual int startbearing() const
   {
     return chordbearing();
   }
-  virtual int endbearing()
+  virtual int endbearing() const
   {
     return chordbearing();
   }
@@ -78,11 +78,11 @@ public:
   {
     return chordbearing();
   }
-  double radius(double along)
+  virtual double radius(double along) const
   {
-    return strtod("inf",NULL);
+    return INFINITY;
   }
-  virtual double curvature(double along)
+  virtual double curvature(double along) const
   {
     return 0;
   }
@@ -99,7 +99,7 @@ public:
     return 0;
   }
   xy center();
-  xyz midpoint();
+  xyz midpoint() const;
   virtual int diffinside(xy pnt)
   {
     return 0;

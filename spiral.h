@@ -51,17 +51,21 @@ public:
   {
     return midbear+ispiralbearing(along-len/2,cur,clo);
   }
-  int startbearing()
+  int startbearing() const
   {
     return midbear+ispiralbearing(-len/2,cur,clo);
   }
-  int endbearing()
+  int endbearing() const
   {
     return midbear+ispiralbearing(len/2,cur,clo);
   }
-  virtual double curvature(double along)
+  virtual double curvature(double along) const
   {
     return cur+clo*(along-len/2);
+  }
+  virtual double radius(double along) const
+  {
+    return 1/curvature(along);
   }
   virtual int getdelta()
   {
@@ -75,7 +79,7 @@ public:
   {
     return clo;
   }
-  virtual xyz station(double along);
+  virtual xyz station(double along) const;
   //double sthrow();
   /* "throw" is a reserved word.
    * The throw is the minimum distance between the circles (one of which may be a line)
