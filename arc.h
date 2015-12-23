@@ -50,7 +50,7 @@ public:
   virtual int bearing(double along);
   xy center();
   void split(double along,arc &a,arc &b);
-  xyz midpoint();
+  //xyz midpoint();
   };
 
 #endif

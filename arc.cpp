@@ -118,11 +118,11 @@ void arc::split(double along,arc &a,arc &b)
   //printf("split: %f,%f\n",a.end.east(),a.end.north());
 }
 
-xyz arc::midpoint()
+/*xyz arc::midpoint()
 {
   return xyz((xy(start)+xy(end))/2+turn90((xy(end)-xy(start))*2*tanquarter(delta)),
              (start.elev()+end.elev()+3*(control1+control2))/8);
-}
+}*/
 
 /* To find the nearest point on the arc to a point:
    If delta is less than 0x1000000 (2°48'45") in absolute value, use linear
