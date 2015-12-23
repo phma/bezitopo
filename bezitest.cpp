@@ -30,6 +30,7 @@
 #include "segment.h"
 #include "arc.h"
 #include "spiral.h"
+#include "cogospiral.h"
 #include "qindex.h"
 #include "random.h"
 #include "ps.h"
@@ -766,6 +767,26 @@ void testspiralarc()
   assert(dist(b.station(123),a.station(123))<0.001);
   assert(dist(c.station(200),a.station(400))<0.001);
   
+}
+
+void testcogospiral()
+{
+  int i;
+  xyz beg0(-1193,-489,0),end0(0xc07,0x50b,0), // slope 5/12
+      beg1(-722,983,0),end1(382,-489,0); // slope -4/3
+  spiralarc a(beg0,end0),b(beg1,end1);
+  xy intpoint; // (7,11)
+  vector<alosta> intlist;
+  intlist=intersection1(a,0,a.length(),b,0,b.length(),false);
+  cout<<"testcogospiral: "<<intlist.size()<<" alostas"<<endl;
+  intpoint=xy(0,0);
+  for (i=0;i<intlist.size();i++)
+  {
+    cout<<((i&1)?"b: ":"a: ")<<intlist[i].along<<' '<<ldecimal(intlist[i].station.east())<<' '<<ldecimal(intlist[i].station.north())<<endl;
+    intpoint+=intlist[i].station;
+  }
+  intpoint/=i;
+  assert(dist(intpoint,xy(7,11))<1e-5);
 }
 
 void testclosest()
@@ -2459,6 +2480,7 @@ int main(int argc, char *argv[])
   testarc();
   testspiral();
   testspiralarc();
+  testcogospiral();
   testclosest();
   testqindex();
   testmakegrad();

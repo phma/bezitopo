@@ -97,7 +97,7 @@ vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double 
   balosta[1]=alosta(b2,b.station(b2));
   do
   {
-    insect=intersection(aalosta[0].station,balosta[0].station,aalosta[1].station,balosta[1].station);
+    insect=intersection(aalosta[0].station,aalosta[1].station,balosta[0].station,balosta[1].station);
     di0=dist(insect,aalosta[0].station);
     di1=dist(insect,aalosta[1].station);
     d01=dist(aalosta[0].station,aalosta[1].station);
