@@ -45,12 +45,12 @@ public:
   {
     return 0;
   }
-  double length();
+  double length() const;
   virtual xyz station(double along);
   virtual int bearing(double along);
   xy center();
   void split(double along,arc &a,arc &b);
-  //xyz midpoint();
+  xyz midpoint();
   };
 
 #endif

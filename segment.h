@@ -37,7 +37,7 @@ public:
     return end;
   }
   virtual bool operator==(const segment b) const;
-  virtual double length();
+  virtual double length() const;
   std::vector<double> vextrema(bool withends);
   void setslope(int which,double s);
   void setctrl(int which,double el);
@@ -58,7 +58,7 @@ public:
   {
     return (end.elev()-start.elev())/length();
   }
-  double chordlength()
+  double chordlength() const
   {
     return dist(xy(start),xy(end));
   }
@@ -113,6 +113,8 @@ public:
   bezier3d approx3d(double precision);
   friend xy intersection (segment seg1,segment seg2);
   friend inttype intersection_type(segment seg1,segment seg2);
+  friend class arc;
+  friend class spiralarc;
 };
 
 #endif

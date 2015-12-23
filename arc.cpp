@@ -59,7 +59,7 @@ xy arc::center()
   return ((xy(start)+xy(end))/2+turn90((xy(end)-xy(start))/2/tanhalf(delta)));
 }
 
-double arc::length()
+double arc::length() const
 {
   if (delta)
     return chordlength()*bintorad(delta)/sinhalf(delta)/2;
@@ -118,9 +118,11 @@ void arc::split(double along,arc &a,arc &b)
   //printf("split: %f,%f\n",a.end.east(),a.end.north());
 }
 
-/*xy arc::midpoint()
-{return ((xy(start)+xy(end))/2+turn90((xy(end)-xy(start))*2*tanquarter(delta)));
- }*/
+xyz arc::midpoint()
+{
+  return xyz((xy(start)+xy(end))/2+turn90((xy(end)-xy(start))*2*tanquarter(delta)),
+             (start.elev()+end.elev()+3*(control1+control2))/8);
+}
 
 /* To find the nearest point on the arc to a point:
    If delta is less than 0x1000000 (2°48'45") in absolute value, use linear

@@ -10,6 +10,7 @@
 #include "point.h"
 #include "xyz.h"
 #include "segment.h"
+#include "arc.h"
 
 /* Clothance is the derivative of curvature with respect to distance
  * along the curve.
@@ -37,10 +38,12 @@ private:
   int midbear;
 public:
   spiralarc();
+  spiralarc(const segment &b);
+  spiralarc(const arc &b);
   spiralarc(xyz kra,xyz fam);
   spiralarc(xyz kra,double c1,double c2,xyz fam);
   spiralarc(xyz kra,xyz mij,xyz fam,int mbear,double curvature,double clothance,double length);
-  double length()
+  double length() const
   {
     return len;
   }

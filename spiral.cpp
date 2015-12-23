@@ -183,6 +183,30 @@ spiralarc::spiralarc()
   midbear=0;
 }
 
+spiralarc::spiralarc(const segment &b)
+{
+  start=b.start;
+  end=b.end;
+  mid=(start+end)/2;
+  control1=b.control1;
+  control2=b.control2;
+  cur=clo=0;
+  len=b.length();
+   midbear=atan2i(xy(end-start));
+}
+
+spiralarc::spiralarc(const arc &b)
+{
+  start=b.start;
+  end=b.end;
+  mid=(start+end)/2;
+  control1=b.control1;
+  control2=b.control2;
+  cur=clo=0;
+  len=b.length();
+   midbear=atan2i(xy(end-start));
+}
+
 spiralarc::spiralarc(xyz kra,xyz fam)
 {
   start=kra;
