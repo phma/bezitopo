@@ -69,6 +69,16 @@ bool sortpts(alosta a[],alosta b[])
     ret=true;
     swap(b[1],b[bpos]);
   }
+  if (a[0].station==a[1].station)
+  {
+    ret=true;
+    swap(a[1],a[2]); // if a[0]==a[1], a divide by zero results in the next iteration
+  }
+  if (b[0].station==b[1].station)
+  {
+    ret=true;
+    swap(b[1],b[2]);
+  }
   return ret;
 }
 
@@ -86,9 +96,10 @@ vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double 
  *   Returns an empty vector.
  */
 {
-  bool isnewcloser,arecloseenough;
+  bool isnewcloser;
   xy insect;
   double di0,di1,d01;
+  int closecount=0;
   alosta aalosta[3],balosta[3];
   vector<alosta> ret;
   aalosta[0]=alosta(a1,a.station(a1));
@@ -129,10 +140,17 @@ vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double 
       balosta[2].along=2*b.length()-balosta[2].along;
     balosta[2].station=b.station(balosta[2].along);
     isnewcloser=sortpts(aalosta,balosta);
-    arecloseenough=dist(aalosta[0].station,balosta[0].station)<(a.length()+b.length())/4294967296.;
+    if (dist(aalosta[0].station,balosta[0].station)<(a.length()+b.length())/4294967296.)
+    {
+      closecount++;
+      if (aalosta[0].station==balosta[0].station)
+	closecount++;
+    }
+    else
+      closecount=0;
   }
-  while (isnewcloser && !arecloseenough);
-  if (arecloseenough)
+  while (isnewcloser && closecount<2);
+  if (closecount>1)
   {
     ret.push_back(aalosta[0]);
     ret.push_back(balosta[0]);
