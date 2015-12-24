@@ -24,6 +24,12 @@
  * line joining the centers. Two circles which do intersect, or which are
  * traveled in opposite directions, can be joined by two spiral arcs,
  * specifying the point where they abut osculating.
+ * 
+ * http://www.wsdot.wa.gov/publications/manuals/fulltext/m3087/FieldTablesEngSpirals.pdf
+ * a is the clothance, in units of 1 degree per (100 ft)². Bezitopo uses the
+ * coherent metric unit, 1 rad/m² (aka square diopter). 1 °/(100 ft)² is 
+ * 18.786568 mdpt² if the international foot is used and 18.786493 mdpt²
+ * if the US survey foot is used.
  */
 
 #include <vector>
