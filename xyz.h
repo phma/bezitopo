@@ -23,11 +23,14 @@ public:
   double getx() const;
   double gety() const;
   double length() const;
+  bool isfinite() const;
+  bool isnan() const;
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
   friend xy operator+(const xy &l,const xy &r);
   friend xy operator+=(xy &l,const xy &r);
   friend xy operator-(const xy &l,const xy &r);
+  friend xy operator-(const xy &r);
   friend xy operator*(const xy &l,double r);
   friend xy operator/(const xy &l,double r);
   friend xy operator/=(xy &l,double r);

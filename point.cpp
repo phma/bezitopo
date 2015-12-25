@@ -53,6 +53,16 @@ double xy::length() const
   return hypot(x,y);
 }
 
+bool xy::isfinite() const
+{
+  return std::isfinite(x) && std::isfinite(y);
+}
+
+bool xy::isnan() const
+{
+  return std::isnan(x) || std::isnan(y);
+}
+
 void xy::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
 {
   double tx,ty;
@@ -87,9 +97,16 @@ xy operator*(const xy &l,double r)
  }
 
 xy operator-(const xy &l,const xy &r)
-{xy sum(l.x-r.x,l.y-r.y);
- return sum;
- }
+{
+  xy sum(l.x-r.x,l.y-r.y);
+  return sum;
+}
+
+xy operator-(const xy &r)
+{
+  xy sum(-r.x,-r.y);
+  return sum;
+}
 
 xy operator/(const xy &l,double r)
 {xy prod(l.x/r,l.y/r);

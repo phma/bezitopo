@@ -3,6 +3,9 @@
 /* cogospiral.cpp - intersections of spirals          */
 /*                                                    */
 /******************************************************/
+#include <cfloat>
+#include <iostream>
+#include "ldecimal.h"
 #include "cogospiral.h"
 
 using namespace std;
@@ -140,7 +143,8 @@ vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double 
       balosta[2].along=2*b.length()-balosta[2].along;
     balosta[2].station=b.station(balosta[2].along);
     isnewcloser=sortpts(aalosta,balosta);
-    if (dist(aalosta[0].station,balosta[0].station)<(a.length()+b.length())/4294967296.)
+    //cout<<"isnewcloser "<<isnewcloser<<' '<<ldecimal(dist(aalosta[0].station,balosta[0].station))<<' '<<(a.length()+b.length()+dist(aalosta[0].station,-balosta[0].station))*DBL_EPSILON*4096<<endl;
+    if (dist(aalosta[0].station,balosta[0].station)<(a.length()+b.length()+dist(aalosta[0].station,-balosta[0].station))*DBL_EPSILON*4096)
     {
       closecount++;
       if (aalosta[0].station==balosta[0].station)
@@ -213,7 +217,9 @@ vector<alosta> intersection1(segment a,double a1,double a2,segment b,double b1,d
       balosta[2].along=2*b.length()-balosta[2].along;
     balosta[2].station=b.station(balosta[2].along);
     isnewcloser=sortpts(aalosta,balosta);
-    arecloseenough=dist(aalosta[0].station,balosta[0].station)<(a.length()+b.length())/4294967296.;
+    //cout<<"isnewcloser "<<isnewcloser<<ldecimal(dist(aalosta[0].station,balosta[0].station))<<' '<<a.length()+b.length()+dist(aalosta[0].station,-balosta[0].station)<<endl;
+    arecloseenough=dist(aalosta[0].station,balosta[0].station)<
+        (a.length()+b.length()+dist(aalosta[0].station,-balosta[0].station))*DBL_EPSILON*4096;
   }
   while (isnewcloser && !arecloseenough);
   if (arecloseenough)
