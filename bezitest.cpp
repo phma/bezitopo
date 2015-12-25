@@ -768,13 +768,14 @@ void testspiralarc()
   assert(dist(c.station(200),a.station(400))<0.001);
 }
 
-void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong)
+void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong,string fname)
 {
   int i,alim,blim;
   xy point;
   double apow2,bpow2,ainc,binc;
   double minx=INFINITY,miny=INFINITY,maxx=-INFINITY,maxy=-INFINITY;
   vector<xy> apoints,bpoints;
+  fname+=".ps";
   frexp(aalong,&i);
   apow2=ldexp(0.5,i);
   frexp(balong,&i);
@@ -817,7 +818,7 @@ void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong)
     if (point.gety()>maxy)
       maxy=point.gety();
   }
-  psopen("spiralmicro.ps");
+  psopen(fname.c_str());
   psprolog();
   startpage();
   setscale(minx,miny,maxx,maxy,0);
@@ -862,13 +863,16 @@ void testcogospiral()
   xyz beg0(-1193,-489,0),end0(0xc07,0x50b,0), // slope 5/12
       beg1(-722,983,0),end1(382,-489,0), // slope -4/3
       beg2(-101,1,0),end2(99,1,0),beg3(-99,-1,0),end3(101,-1,0),
-      beg4(-5,0,0),end4(5,0,0),beg5(-4,3,0),end5(4,3,0);
+      beg4(-5,0,0),end4(5,0,0),beg5(-4,3,0),end5(4,3,0),
+      beg6(5,0,0),end6(0,5,0),beg7(5,2,0),end7(4,9,0);
   segment a(beg0,end0),b(beg1,end1);
-  spiralarc c(beg2,end2),d(beg3,end3),e(beg4,end4),f(beg5,end5);
+  spiralarc c(beg2,end2),d(beg3,end3),e(beg4,end4),f(beg5,end5),g(beg6,end6),h(beg7,end7);
   c.setdelta(0,DEG30);
   d.setdelta(0,-DEG30);
   e.setdelta(-DEG60,0);
-  f.setdelta(DEG90,0); // e and f are 0.034 away from touching
+  f.setdelta(DEG90,0); // e and f are 0.0034 away from touching
+  g.setdelta(DEG90,0);
+  h.setdelta(-DEG90,0); // g and h are tangent at (3,4)
   xy intpoint; // (7,11)
   vector<alosta> intlist;
   intlist=intersection1(a,0,a.length(),b,0,b.length(),false);
@@ -899,7 +903,7 @@ void testcogospiral()
   }
   intpoint/=i;
   assert(dist(intpoint,xy(7,11))<1e-5);
-  spiralmicroscope(a,intlist[0].along,b,intlist[1].along);
+  spiralmicroscope(a,intlist[0].along,b,intlist[1].along,"spiralmicro");
   intlist=intersection1(c,50,c.length()-50,d,50,c.length()-50,false);
   cout<<"testcogospiral: "<<intlist.size()<<" alostas"<<endl;
   intpoint=xy(0,0);
@@ -918,6 +922,16 @@ void testcogospiral()
     intpoint+=intlist[i].station;
   }
   intpoint/=i;
+  intlist=intersection1(g,0,0.1,h,0,0.1,false);
+  cout<<"testcogospiral: "<<intlist.size()<<" alostas"<<endl;
+  intpoint=xy(0,0);
+  for (i=0;i<intlist.size();i++)
+  {
+    cout<<((i&1)?"b: ":"a: ")<<intlist[i].along<<' '<<ldecimal(intlist[i].station.east())<<' '<<ldecimal(intlist[i].station.north())<<endl;
+    intpoint+=intlist[i].station;
+  }
+  intpoint/=i;
+  spiralmicroscope(a,intlist[0].along,b,intlist[1].along,"tangentmicro");
 }
 
 void testclosest()
