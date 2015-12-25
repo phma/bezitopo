@@ -766,7 +766,39 @@ void testspiralarc()
   printf("b.station %f,%f,%f %f\n",sta.east(),sta.north(),sta.elev(),b.length());
   assert(dist(b.station(123),a.station(123))<0.001);
   assert(dist(c.station(200),a.station(400))<0.001);
-  
+}
+
+void spiralmicroscope()
+{
+  int i;
+  xyz beg(10,20,0),end(20,10,0);
+  spiralarc a(beg,end);
+  xy point;
+  double minx=30,miny=30,maxx=0,maxy=0;
+  vector<xy> points;
+  a.setdelta(AT0512,DEG30);
+  for (i=0;i<256;i++)
+  {
+    point=(a.station(10+8*DBL_EPSILON*i));
+    points.push_back(point);
+    if (point.getx()<minx)
+      minx=point.getx();
+    if (point.gety()<miny)
+      miny=point.gety();
+    if (point.getx()>maxx)
+      maxx=point.getx();
+    if (point.gety()>maxy)
+      maxy=point.gety();
+  }
+  psopen("spiralmicro.ps");
+  psprolog();
+  startpage();
+  setscale(minx,miny,maxx,maxy,0);
+  for (i=0;i<points.size();i++)
+    dot(points[i]);
+  endpage();
+  pstrailer();
+  psclose();
 }
 
 void testcogospiral()
@@ -2504,6 +2536,7 @@ int main(int argc, char *argv[])
   testspiral();
   testspiralarc();
   testcogospiral();
+  spiralmicroscope();
   testclosest();
   testqindex();
   testmakegrad();
