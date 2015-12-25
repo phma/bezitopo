@@ -106,10 +106,12 @@ double yscale(double y)
  }
 
 void startpage()
-{++pages;
- fprintf(psfile,"%%%%Page: %d %d\ngsave mmscale 0.1 setlinewidth\n\
+{
+  ++pages;
+  fprintf(psfile,"%%%%Page: %d %d\ngsave mmscale 0.1 setlinewidth\n\
 /Helvetica findfont 3 scalefont setfont\n",pages,pages);
- }
+  oldr=oldg=oldb=NAN;
+}
 
 void endpage()
 {fputs("grestore showpage\n",psfile);

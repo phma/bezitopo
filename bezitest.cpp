@@ -768,19 +768,46 @@ void testspiralarc()
   assert(dist(c.station(200),a.station(400))<0.001);
 }
 
-void spiralmicroscope()
+void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong)
 {
-  int i;
-  xyz beg(10,20,0),end(20,10,0);
-  spiralarc a(beg,end);
+  int i,alim,blim;
   xy point;
-  double minx=30,miny=30,maxx=0,maxy=0;
-  vector<xy> points;
-  a.setdelta(AT0512,DEG30);
-  for (i=0;i<256;i++)
+  double apow2,bpow2,ainc,binc;
+  double minx=INFINITY,miny=INFINITY,maxx=-INFINITY,maxy=-INFINITY;
+  vector<xy> apoints,bpoints;
+  frexp(aalong,&i);
+  apow2=ldexp(0.5,i);
+  frexp(balong,&i);
+  bpow2=ldexp(0.5,i);
+  if (abs(apow2)<abs(bpow2))
   {
-    point=(a.station(10+8*DBL_EPSILON*i));
-    points.push_back(point);
+    blim=128;
+    alim=128*bpow2/apow2;
+  }
+  else
+  {
+    alim=128;
+    blim=128*apow2/bpow2;
+  }
+  ainc=apow2*DBL_EPSILON;
+  binc=bpow2*DBL_EPSILON;
+  for (i=-alim;i<=alim;i++)
+  {
+    point=(a.station(aalong+ainc*i));
+    apoints.push_back(point);
+    if (point.getx()<minx)
+      minx=point.getx();
+    if (point.gety()<miny)
+      miny=point.gety();
+    if (point.getx()>maxx)
+      maxx=point.getx();
+    if (point.gety()>maxy)
+      maxy=point.gety();
+  }
+  for (i=-blim;i<=blim;i++)
+  {
+    point=(b.station(balong+binc*i));
+    bpoints.push_back(point);
     if (point.getx()<minx)
       minx=point.getx();
     if (point.gety()<miny)
@@ -794,8 +821,36 @@ void spiralmicroscope()
   psprolog();
   startpage();
   setscale(minx,miny,maxx,maxy,0);
-  for (i=0;i<points.size();i++)
-    dot(points[i]);
+  setcolor(1,0,0);
+  for (i=0;i<apoints.size();i++)
+    dot(apoints[i]);
+  setcolor(0,0,1);
+  for (i=0;i<bpoints.size();i++)
+    dot(bpoints[i]);
+  endpage();
+  startpage();
+  setscale(minx,miny,maxx,maxy,0);
+  setcolor(0,0,1);
+  for (i=0;i<apoints.size();i++)
+  {
+    if (i==apoints.size()/2)
+      setcolor(0,0.6,0);
+    dot(apoints[i]);
+    if (i==apoints.size()/2)
+      setcolor(0,0,1);
+  }
+  endpage();
+  startpage();
+  setscale(minx,miny,maxx,maxy,0);
+  setcolor(0,0,1);
+  for (i=0;i<bpoints.size();i++)
+  {
+    if (i==bpoints.size()/2)
+      setcolor(0,0.6,0);
+    dot(bpoints[i]);
+    if (i==bpoints.size()/2)
+      setcolor(0,0,1);
+  }
   endpage();
   pstrailer();
   psclose();
@@ -806,14 +861,20 @@ void testcogospiral()
   int i;
   xyz beg0(-1193,-489,0),end0(0xc07,0x50b,0), // slope 5/12
       beg1(-722,983,0),end1(382,-489,0), // slope -4/3
-      beg2(-101,1,0),end2(99,1,0),beg3(-99,-1,0),end3(101,-1,0);
+      beg2(-101,1,0),end2(99,1,0),beg3(-99,-1,0),end3(101,-1,0),
+      beg4(-5,0,0),end4(5,0,0),beg5(-4,3,0),end5(4,3,0);
   segment a(beg0,end0),b(beg1,end1);
-  spiralarc c(beg2,end2),d(beg3,end3);
+  spiralarc c(beg2,end2),d(beg3,end3),e(beg4,end4),f(beg5,end5);
   c.setdelta(0,DEG30);
   d.setdelta(0,-DEG30);
+  e.setdelta(-DEG60,0);
+  f.setdelta(DEG90,0); // e and f are 0.034 away from touching
   xy intpoint; // (7,11)
   vector<alosta> intlist;
   intlist=intersection1(a,0,a.length(),b,0,b.length(),false);
+  /* The distance along both lines to the intersection point is exactly an integer,
+   * so the two points are exactly equal to (7,11).
+   */
   cout<<"testcogospiral: "<<intlist.size()<<" alostas"<<endl;
   intpoint=xy(0,0);
   for (i=0;i<intlist.size();i++)
@@ -824,6 +885,11 @@ void testcogospiral()
   intpoint/=i;
   assert(dist(intpoint,xy(7,11))<1e-5);
   intlist=intersection1(spiralarc(a),0,a.length(),spiralarc(b),0,b.length(),false);
+  /* The distances along the curves are in the hundreds, but the midpoints
+   * are closer to the origin, so the two intersection points do not exactly
+   * coincide. They aren't exactly (7,11) either, because the bearings have
+   * been rounded to the nearest 1657th of a second.
+   */
   cout<<"testcogospiral: "<<intlist.size()<<" alostas"<<endl;
   intpoint=xy(0,0);
   for (i=0;i<intlist.size();i++)
@@ -833,7 +899,17 @@ void testcogospiral()
   }
   intpoint/=i;
   assert(dist(intpoint,xy(7,11))<1e-5);
+  spiralmicroscope(a,intlist[0].along,b,intlist[1].along);
   intlist=intersection1(c,50,c.length()-50,d,50,c.length()-50,false);
+  cout<<"testcogospiral: "<<intlist.size()<<" alostas"<<endl;
+  intpoint=xy(0,0);
+  for (i=0;i<intlist.size();i++)
+  {
+    cout<<((i&1)?"b: ":"a: ")<<intlist[i].along<<' '<<ldecimal(intlist[i].station.east())<<' '<<ldecimal(intlist[i].station.north())<<endl;
+    intpoint+=intlist[i].station;
+  }
+  intpoint/=i;
+  intlist=intersection1(e,0,1,f,0,1,false);
   cout<<"testcogospiral: "<<intlist.size()<<" alostas"<<endl;
   intpoint=xy(0,0);
   for (i=0;i<intlist.size();i++)
@@ -2536,7 +2612,6 @@ int main(int argc, char *argv[])
   testspiral();
   testspiralarc();
   testcogospiral();
-  spiralmicroscope();
   testclosest();
   testqindex();
   testmakegrad();

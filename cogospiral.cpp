@@ -112,9 +112,9 @@ vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double 
     di0=dist(insect,aalosta[0].station);
     di1=dist(insect,aalosta[1].station);
     d01=dist(aalosta[0].station,aalosta[1].station);
-    if (di1>d01)
+    if (di1>d01 && di1>di0)
       di0=-di0;
-    if (di0>d01)
+    if (di0>d01 && di0>di1)
       di1=-di1;
     aalosta[2].along=(aalosta[0].along*di1+aalosta[1].along*di0)/d01;
     if (aalosta[2].along<-a.length()/2 || aalosta[2].along>3*a.length()/2)
@@ -127,9 +127,9 @@ vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double 
     di0=dist(insect,balosta[0].station);
     di1=dist(insect,balosta[1].station);
     d01=dist(balosta[0].station,balosta[1].station);
-    if (di1>d01)
+    if (di1>d01 && di1>di0)
       di0=-di0;
-    if (di0>d01)
+    if (di0>d01 && di0>di1)
       di1=-di1;
     balosta[2].along=(balosta[0].along*di1+balosta[1].along*di0)/d01;
     if (balosta[2].along<-b.length()/2 || balosta[2].along>3*b.length()/2)
@@ -185,9 +185,9 @@ vector<alosta> intersection1(segment a,double a1,double a2,segment b,double b1,d
     di0=dist(insect,aalosta[0].station);
     di1=dist(insect,aalosta[1].station);
     d01=dist(aalosta[0].station,aalosta[1].station);
-    if (di1>d01)
+    if (di1>d01 && di1>di0)
       di0=-di0;
-    if (di0>d01)
+    if (di0>d01 && di0>di1)
       di1=-di1;
     aalosta[2].along=(aalosta[0].along*di1+aalosta[1].along*di0)/d01;
     if (aalosta[2].along<-a.length()/2 || aalosta[2].along>3*a.length()/2)
@@ -200,9 +200,9 @@ vector<alosta> intersection1(segment a,double a1,double a2,segment b,double b1,d
     di0=dist(insect,balosta[0].station);
     di1=dist(insect,balosta[1].station);
     d01=dist(balosta[0].station,balosta[1].station);
-    if (di1>d01)
+    if (di1>d01 && di1>di0)
       di0=-di0;
-    if (di0>d01)
+    if (di0>d01 && di0>di1)
       di1=-di1;
     balosta[2].along=(balosta[0].along*di1+balosta[1].along*di0)/d01;
     if (balosta[2].along<-b.length()/2 || balosta[2].along>3*b.length()/2)
