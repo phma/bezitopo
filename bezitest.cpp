@@ -998,7 +998,12 @@ void testspiral()
   xy a,b,c,limitpoint;
   int i,j,bearing,lastbearing,curvebearing,diff,badcount;
   double t;
+  float segalo[]={-5.96875,-5.65625,-5.3125,-4.875,-4.5,-4,-3.5,-2.828125,-2,0,
+    2,2.828125,3.5,4,4.5,4.875,5.3125,5.65625,5.96875};
   vector<xy> spoints;
+  vector<int> sbearings;
+  bezier3d a3d;
+  spiralarc sarc;
   a=cornu(0);
   assert(a==xy(0,0));
   psopen("spiral.ps");
@@ -1089,6 +1094,10 @@ void testspiral()
   }
   endpage();
   //startpage();
+  /* Compare cornu(t,curvature,clothance) with cornu(t).
+   * The code would draw a set of zero-length lines along a spiral.
+   * As these would result in a blank page, it's commented out.
+   */
   a=cornu(sqrt(M_PI*2));
   for (i=-20;i<21;i++)
   {
@@ -1107,6 +1116,34 @@ void testspiral()
     assert(fabs(dist(b,c)-1)<1e-12); // it's 0 or -1.11e-16 on 64-bit
   }
   //endpage();
+  startpage();
+  setscale(-1,-1,1,1,0);
+  spoints.clear();
+  for (i=0;i<sizeof(segalo)/sizeof(segalo[0]);i++)
+  {
+    spoints.push_back(cornu(segalo[i]));
+    sbearings.push_back(ispiralbearing(segalo[i],0,2));
+  }
+  for (i=0;i<sizeof(segalo)/sizeof(segalo[0])-1;i++)
+  {
+    sarc=spiralarc(xyz(spoints[i],0),xyz(spoints[i+1],0));
+    sarc.setdelta(sbearings[i+1]-sbearings[i],sbearings[i+1]+sbearings[i]-2*dir(spoints[i],spoints[i+1]));
+    a3d+=sarc.approx3d(0.01);
+  }
+  spline(a3d);
+  for (bearing=i=0,lastbearing=1;i<100 && bearing!=lastbearing;i++)
+  {
+    t=bintorad(bearing);
+    a=cornu(-sqrt(t));
+    b=cornu(sqrt(t+M_PI/2));
+    lastbearing=bearing;
+    bearing=dir(a,b);
+  }
+  dot(limitpoint);
+  dot(-limitpoint);
+  setcolor(0,0,1);
+  line2p(a,b);
+  endpage();
   pstrailer();
   psclose();
   assert(bearing==162105696);
