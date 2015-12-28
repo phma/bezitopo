@@ -1443,6 +1443,7 @@ void test1tri(string triname,int excrits)
   int i,j,side,cubedir,ptype,size0,size1,size2;
   double vertex,offset,arearatio;
   string fname,tfname,psfname;
+  segment clipped;
   fstream ofile;
   fname=triname+".ppm";
   tfname=triname+".txt";
@@ -1538,6 +1539,9 @@ void test1tri(string triname,int excrits)
   cout<<"lohi: "<<setprecision(7)<<lh[0]<<' '<<lh[1]<<' '<<lh[2]<<' '<<lh[3]<<endl;
   for (j=0;j<doc.pl[1].triangles[0].subdiv.size();j++)
     spline(doc.pl[1].triangles[0].subdiv[j].approx3d(1));
+  clipped=doc.pl[1].triangles[0].dirclip(xy(1,2),AT34);
+  setcolor(1,0,1);
+  spline(clipped.approx3d(1));
   endpage();
   psclose();
   cout<<fname<<endl;

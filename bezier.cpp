@@ -1472,7 +1472,7 @@ segment triangle::dirclip(const xy pnt,const int dir)
  */
 {
   segment ret;
-  xy astart=pnt-peri*cossin(dir),bstart=pnt+peri*cossin(dir);
+  xy astart=pnt-0.75*peri*cossin(dir),bstart=pnt+0.75*peri*cossin(dir);
   xy aend=astart,bend=bstart;
   xy intpt;
   int i,itype;
