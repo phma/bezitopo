@@ -32,6 +32,7 @@ public:
   friend xy operator-(const xy &l,const xy &r);
   friend xy operator-(const xy &r);
   friend xy operator*(const xy &l,double r);
+  friend xy operator*(double l,const xy &r);
   friend xy operator/(const xy &l,double r);
   friend xy operator/=(xy &l,double r);
   friend bool operator!=(const xy &l,const xy &r);

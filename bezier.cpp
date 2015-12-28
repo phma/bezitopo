@@ -1446,3 +1446,55 @@ xy triangle::contourcept(int subdir,double elevation)
   else
     return xy(NAN,NAN);
 }
+
+void clip1(const xy &astart,xy &a,const xy &x,xy &b,const xy &bstart)
+// If x is between a and b, moves a or b to x so that the midpoint is still between them.
+{
+  double d01,d02,d03,d14,d24,d34;
+  d01=dist(astart,a);
+  d02=dist(astart,x);
+  d03=dist(astart,b);
+  d14=dist(a,bstart);
+  d24=dist(x,bstart);
+  d34=dist(b,bstart);
+  if (d01<d02 && d02<d03 && d14>d24 && d24>d34)
+  {
+    if (d02>d24)
+      b=x;
+    else if (d24>d02)
+      a=x;
+  }
+}
+
+segment triangle::dirclip(const xy pnt,const int dir)
+/* This is called when refining contours. By this time, the perimeter
+ * has been removed.
+ */
+{
+  segment ret;
+  xy astart=pnt-peri*cossin(dir),bstart=pnt+peri*cossin(dir);
+  xy aend=astart,bend=bstart;
+  xy intpt;
+  int i,itype;
+  intpt=intersection(aend,bend,*a,*b);
+  if (intpt.isfinite())
+    clip1(astart,aend,intpt,bend,bstart);
+  intpt=intersection(aend,bend,*b,*c);
+  if (intpt.isfinite())
+    clip1(astart,aend,intpt,bend,bstart);
+  intpt=intersection(aend,bend,*c,*a);
+  if (intpt.isfinite())
+    clip1(astart,aend,intpt,bend,bstart);
+  for (i=0;i<subdiv.size();i++)
+  {
+    itype=intersection_type(aend,bend,subdiv[i].getstart(),subdiv[i].getend());
+    if (itype==ACXBD || itype==BDTAC)
+    {
+      intpt=intersection(aend,bend,subdiv[i].getstart(),subdiv[i].getend());
+      clip1(astart,aend,intpt,bend,bstart);
+    }
+  }
+  ret=segment(xyz(aend,elevation(aend)),xyz(bend,elevation(bend)));
+  setsubslopes(ret);
+  return ret;
+}
