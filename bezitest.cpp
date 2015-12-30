@@ -1785,6 +1785,8 @@ void testdirbound()
 {
   double bound;
   int i;
+  xyz beg(-3,4,0),end(3,-4,0);
+  spiralarc s(beg,end);
   doc.pl[1].clear();
   aster(doc,100);
   bound=doc.pl[1].dirbound(degtobin(0));
@@ -1797,6 +1799,20 @@ void testdirbound()
     if (bound==doc.pl[1].points[i].north())
       printf("southernmost point is %d\n",i);
   assert(bound==doc.pl[1].points[96].north());
+  s.setdelta(DEG180,0);
+  bound=s.dirbound(0);
+  cout<<"westernmost bound of semicircle is "<<ldecimal(bound)<<endl;
+  assert(fabs(bound+5)<1e-8);
+  bound=s.dirbound(DEG90);
+  cout<<"southernmost bound of semicircle is "<<ldecimal(bound)<<endl;
+  assert(fabs(bound+5)<1e-8);
+  s.setdelta(0,DEG180);
+  bound=s.dirbound(0);
+  cout<<"westernmost bound of spiral is "<<ldecimal(bound)<<endl;
+  assert(fabs(bound+3)<1e-8);
+  bound=s.dirbound(DEG90);
+  cout<<"southernmost bound of spiral is "<<ldecimal(bound)<<endl;
+  assert(fabs(bound+4.29208)<1e-6);
 }
 
 void print16_9(unsigned long long n,int size)

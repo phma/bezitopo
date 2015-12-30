@@ -109,7 +109,7 @@ public:
     return 0;
   }
   double closest(xy topoint,double closesofar=INFINITY,bool offends=false);
-  double dirbound(int angle,double boundsofar);
+  double dirbound(int angle,double boundsofar=INFINITY);
   virtual void split(double along,segment &a,segment &b);
   bezier3d approx3d(double precision);
   friend xy intersection (segment seg1,segment seg2);
