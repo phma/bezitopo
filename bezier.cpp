@@ -1468,7 +1468,8 @@ void clip1(const xy &astart,xy &a,const xy &x,xy &b,const xy &bstart)
 
 segment triangle::dirclip(const xy pnt,const int dir)
 /* This is called when refining contours. By this time, the perimeter
- * has been removed.
+ * has been removed. It returns a segment passing through pnt in the
+ * direction dir clipped by all the subdivision lines.
  */
 {
   segment ret;
