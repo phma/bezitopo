@@ -301,10 +301,18 @@ double anglexs(xy pnt)
   return asin(pnt.getx()/sqrt(sqr(pnt.getx())+1)*pnt.gety()/sqrt(sqr(pnt.gety())+1));
 }
 
-double geoquad::area()
+double geoquad::angarea()
 {
   xy ne(scale,scale),nw(-scale,scale);
   return ((anglexs(center+ne)+anglexs(center-ne))-(anglexs(center+nw)+anglexs(center-nw)))*4.0589641e13;
+}
+
+double geoquad::area()
+{
+  if (scale>0.0002)
+    return angarea();
+  else
+    return apxarea();
 }
 
 int geoquad::isfull()

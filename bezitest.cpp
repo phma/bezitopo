@@ -2540,8 +2540,9 @@ void testgeoid()
   vball v;
   int lat,lon,olat,olon,i,j,k;
   double x,y,sum,qpoints[16][16];
+  //vector<double> anga,apxa;
   xyz dir;
-  geoquad gq;
+  geoquad gq,*pgq;
   array<unsigned,2> ghash;
   array<double,6> corr;
   cout<<"Testing conversion to and from volleyball coordinates...";
@@ -2574,7 +2575,7 @@ void testgeoid()
     ghash=gq.hash();
     cout<<i<<' '<<ldecimal(sum)<<hex<<setw(9)<<ghash[0]<<setw(9)<<ghash[1]<<endl;
   }
-  cout<<"Testing correction..."<<endl;
+  cout<<"Testing correction..."<<dec<<endl;
   gq.clear();
   for (k=0;k<6;k++)
   {
@@ -2587,6 +2588,19 @@ void testgeoid()
     for (i=0;i<6;i++)
       cout<<corr[i]<<' ';
     cout<<endl;
+  }
+  gq.clear();
+  pgq=&gq;
+  for (i=0;i<24;i++)
+  {
+    cout<<setw(2)<<i<<setprecision(10)
+    <<setw(18)<<pgq->apxarea()/sqr(pgq->scale)
+    <<setw(18)<<pgq->angarea()/sqr(pgq->scale)
+    <<setw(18)<<pgq->area()/sqr(pgq->scale)
+    <<setw(18)<<setprecision(6)<<(pgq->apxarea()-pgq->angarea())/sqr(pgq->scale)
+    <<endl;
+    pgq->subdivide();
+    pgq=pgq->sub[i&3];
   }
 }
 
