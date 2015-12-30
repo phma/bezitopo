@@ -12,7 +12,7 @@
 arc::arc()
 {
   start=end=xyz(0,0,0);
-  control1=control2=delta=0;
+  rchordbearing=control1=control2=delta=0;
 }
 
 arc::arc(xyz kra,xyz fam)
@@ -22,6 +22,7 @@ arc::arc(xyz kra,xyz fam)
   delta=0;
   control1=(2*start.elev()+end.elev())/3;
   control2=(start.elev()+2*end.elev())/3;
+  rchordbearing=atan2(end.north()-start.north(),end.east()-start.east());
 }
 
 arc::arc(xyz kra,xyz mij,xyz fam)
@@ -38,6 +39,7 @@ arc::arc(xyz kra,xyz mij,xyz fam)
   r=(mij.elev()-start.elev()-p*(end.elev()-start.elev()))/(p*q)/3;
   control1=(2*start.elev()+end.elev())/3+r;
   control2=(start.elev()+2*end.elev())/3+r;
+  rchordbearing=atan2(end.north()-start.north(),end.east()-start.east());
 }
 
 arc::arc(xyz kra,xyz fam,int d)
@@ -47,6 +49,7 @@ arc::arc(xyz kra,xyz fam,int d)
   delta=d;
   control1=(2*start.elev()+end.elev())/3;
   control2=(start.elev()+2*end.elev())/3;
+  rchordbearing=atan2(end.north()-start.north(),end.east()-start.east());
 }
 
 void arc::setdelta(int d,int s) // s is for spirals and is ignored for circular arcs
@@ -82,15 +85,15 @@ double arc::diffarea()
 
 xyz arc::station(double along) const
 {
-  double gnola,len;
-  int angalong;
+  double gnola,len,angalong,rdelta;
   len=length();
-  if (delta) // FIXME if delta is less than 1 second or so, this isn't accurate
+  if (delta)
   {
-    angalong=lrint(along/len*delta);
+    rdelta=bintorad(delta);
+    angalong=along/len*bintorad(delta);
     gnola=len-along;
     //printf("arc::station angalong=%f startbearing=%f\n",bintodeg(angalong),bintodeg(startbearing()));
-    return xyz(xy(start)+cossinhalf(angalong+2*startbearing())*sinhalf(angalong)*radius(0)*2,
+    return xyz(xy(start)+cossin((angalong-rdelta)/2+rchordbearing)*sin(angalong/2)*radius(0)*2,
 	      elev(along));
   }
   else

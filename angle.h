@@ -29,6 +29,7 @@ double cosquarter(int angle);
 double tanquarter(int angle);
 int atan2i(double y,double x);
 int atan2i(xy vect); // range is [-536870912,536870912]
+xy cossin(double angle);
 xy cossin(int angle);
 xy cossinhalf(int angle);
 

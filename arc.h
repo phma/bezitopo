@@ -14,6 +14,7 @@ class arc: public segment
 {
 private:
   int delta; // angle subtended - "delta" is a surveying term
+  double rchordbearing; // chordbearing in radians
 public:
   arc();
   arc(xyz kra,xyz fam);

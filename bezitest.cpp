@@ -665,6 +665,7 @@ void testsegment()
 void testarc()
 {
   int i;
+  double xx;
   vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),beg1(0,-15,0),end1(0,15,0),sta,sta1,sta2;
   xy ctr;
@@ -731,6 +732,11 @@ void testarc()
   cout<<"arc4 "<<sta.east()<<' '<<sta.north()<<endl;
   cout<<"arc4 "<<sta1.east()<<' '<<sta1.north()<<endl;
   cout<<"arc4 "<<sta2.east()<<' '<<sta2.north()<<endl;
+  xx=(sta.east()+sta1.east()+sta2.east())/25;
+  assert(xx>3.6e-9 && xx<3.7e-9);
+  assert(rint(sta.east()/xx)==8);
+  assert(rint(sta1.east()/xx)==9);
+  assert(rint(sta2.east()/xx)==8);
 }
 
 void testspiralarc()

@@ -50,6 +50,11 @@ int atan2i(xy vect)
   return atan2i(vect.north(),vect.east());
 }
 
+xy cossin(double angle)
+{
+  return xy(cos(angle),sin(angle));
+}
+
 xy cossin(int angle)
 {
   return xy(cos(angle),sin(angle));
