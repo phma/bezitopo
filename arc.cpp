@@ -121,6 +121,18 @@ void arc::split(double along,arc &a,arc &b)
   //printf("split: %f,%f\n",a.end.east(),a.end.north());
 }
 
+int arc::in(xy pnt)
+{
+  int beardiff;
+  beardiff=foldangle(2*(dir(pnt,end)-dir(start,pnt)));
+  if (delta && (abs(beardiff-delta)<2 || beardiff==0))
+    return (delta>0)?1:-1; // call spiralarc::in once that's defined
+  else if (delta && (pnt==start || pnt==end))
+    return IN_AT_CORNER;
+  else
+    return 2*((beardiff>0)-(beardiff>delta));
+}
+
 /*xyz arc::midpoint()
 {
   return xyz((xy(start)+xy(end))/2+turn90((xy(end)-xy(start))*2*tanquarter(delta)),

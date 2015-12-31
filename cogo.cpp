@@ -146,7 +146,7 @@ int in3(xy p,xy a,xy b,xy c)
   if (windnum==-128)
     windnum=INT_MIN;
   if (windnum==0x69)
-    windnum=0x69969669;
+    windnum=IN_AT_CORNER;
   return windnum;
 }
 

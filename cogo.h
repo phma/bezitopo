@@ -9,6 +9,11 @@
 #include "point.h"
 
 #define sign(x) ((x>0)-(x<0))
+#define IN_AT_CORNER 0x69969669
+/* IN_AT_CORNER is set so that if you add a few of them, as results of in()
+ * are computed by adding results of in() for smaller components, you will
+ * get an obviously wrong answer.
+ */
 
 enum inttype {NOINT, ACXBD, BDTAC, ACTBD, ACVBD, COINC, COLIN, IMPOS};
 extern int debugdel;
@@ -33,7 +38,7 @@ int in3(xy p,xy a,xy b,xy c);
  * If p is on the boundary of abc, returns 1 or -1, depending on the orientation
  * of abc.
  * If abc is flat, returns 0.
- * If p is one of a, b, and c, and abc is not flat, returns 0x69969669,
+ * If p is one of a, b, and c, and abc is not flat, returns IN_AT_CORNER,
  * which must be handled specially.
  */
 double pldist(xy a,xy b,xy c);

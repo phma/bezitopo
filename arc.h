@@ -46,6 +46,7 @@ public:
   {
     return 0;
   }
+  virtual int in(xy pnt);
   double length() const;
   virtual xyz station(double along) const;
   virtual int bearing(double along);

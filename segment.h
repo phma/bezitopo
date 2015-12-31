@@ -108,6 +108,10 @@ public:
   {
     return 0;
   }
+  virtual int in(xy pnt)
+  {
+    return 0;
+  }
   double closest(xy topoint,double closesofar=INFINITY,bool offends=false);
   double dirbound(int angle,double boundsofar=INFINITY);
   virtual void split(double along,segment &a,segment &b);
