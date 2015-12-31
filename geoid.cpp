@@ -308,6 +308,12 @@ double geoquad::angarea()
 }
 
 double geoquad::area()
+/* apxarea is the area of a parallelogram tangent to the geoquad at its middle.
+ * It is accurate for small geoquads, but not large ones.
+ * angarea is the exact area computed by angle excess. It is accurate for large
+ * geoquads, but for small ones subtracts two nearly equal numbers.
+ * The difference between them is least at level 12 or 13, so switch between them there.
+ */
 {
   if (scale>0.0002)
     return angarea();

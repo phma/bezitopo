@@ -157,6 +157,37 @@ void testintersection()
   test1intersection(a,b,f,a,b,COLIN);
 }
 
+void test1in(xy p,xy a,xy b,xy c,int windnum)
+{
+  int wind;
+  wind=in3(p,a,b,c);
+  if (wind!=windnum)
+    cout<<"Triangle ("<<a.east()<<','<<a.north()<<"),("<<
+      b.east()<<','<<b.north()<<"),("<<
+      c.east()<<','<<c.north()<<"): ("<<
+      p.east()<<','<<p.north()<<")'s winding number is "<<wind<<
+      ", should be "<<windnum<<endl;
+  assert(wind==windnum);
+  wind=in3(p,c,b,a);
+  if (windnum<10 && windnum>-10)
+    windnum=-windnum;
+  if (wind!=windnum)
+    cout<<"Triangle ("<<c.east()<<','<<c.north()<<"),("<<
+      b.east()<<','<<b.north()<<"),("<<
+      a.east()<<','<<a.north()<<"): ("<<
+      p.east()<<','<<p.north()<<")'s winding number is "<<wind<<
+      ", should be "<<windnum<<endl;
+  assert(wind==windnum);
+}
+
+void testin()
+{
+  xy a(0,0),b(4,0),c(0,3),d(4/3.,1),e(4,3),f(5,0),g(7,-1),h(8,-3),
+     i(3,-5),j(0,-6),k(-2,-2),l(-4,0),m(-4,-3),n(-4,6),o(-3,7),p(0,8);
+  test1in(d,a,b,c,2);
+  test1in(e,a,b,c,0);
+}
+
 void testcopytopopoints()
 {
   criteria crit;
@@ -2679,6 +2710,7 @@ int main(int argc, char *argv[])
   testarea3();
   testrelprime();
   testintersection();
+  testin();
   testtriangle();
   testcopytopopoints();
   testinvalidintersectionlozenge();

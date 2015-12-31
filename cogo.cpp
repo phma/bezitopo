@@ -4,12 +4,13 @@
 /*                                                    */
 /******************************************************/
 
-#include "cogo.h"
-#include "bezitopo.h"
-#include "random.h"
 #include <stdarg.h>
 #include <stdlib.h>
 #include <cmath>
+#include <climits>
+#include "cogo.h"
+#include "bezitopo.h"
+#include "random.h"
 using namespace std;
 
 int debugdel;
@@ -35,6 +36,20 @@ char intstable[3][3][3][3]=
   NOINT,NOINT,NOINT,NOINT,COINC,NOINT,NOINT,NOINT,NOINT, // + -
   IMPOS,IMPOS,NOINT,IMPOS,IMPOS,ACVBD,NOINT,ACVBD,ACTBD, // + 0
   IMPOS,IMPOS,NOINT,IMPOS,IMPOS,BDTAC,NOINT,BDTAC,ACXBD  // + +
+  };
+
+signed char intable[3][3][3][3]=
+// +   +   +   0   0   0   -   -   -  pca
+// +   0   -   +   0   -   +   0   -  pab abc pbc
+{   0,  0,  0,  0,128,128,  0,128,128, //  +   -
+    1,105,  0,105,128,128,  0,128,128, //  +   0
+    2,  1,  0,  1,105,  0,  0,  0,  0, //  +   +
+    0,  0,  0,  0,128,128,  0,128,128, //  0   -
+  128,128,  0,128,  0,128,  0,128,128, //  0   0
+  128,128,  0,128,128,  0,  0,  0,  0, //  0   +
+    0,  0,  0,  0,105, -1,  0, -1, -2, //  -   -
+  128,128,  0,128,128,105,  0,105, -1, //  -   0
+  128,128,  0,128,128,  0,  0,  0,  0  //  -   +
   };
 
 #define CMPSWAP(m,n,o) if (fabs(m)>fabs(n)) {o=m;m=n;n=o;}
@@ -118,6 +133,21 @@ inttype intersection_type(xy a,xy c,xy b,xy d)
   if (itype==IMPOS && maxarea<maxcoord*maxcoord*1e-15)
     itype=COLIN;
   return (inttype)itype;
+}
+
+int in3(xy p,xy a,xy b,xy c)
+{
+  double maxarea,maxcoord;
+  int windnum=intstype(p,a,b,c,maxarea,maxcoord)+40;
+  // abc's sign is wrong, pab's sign is wring, pbc's sign is right, and pca's sign is wrong.
+  windnum=intable[windnum/27][windnum%27/9][windnum%9/3][windnum%3];
+  if (windnum==-128 && maxarea<maxcoord*maxcoord*1e-15)
+    windnum=0;
+  if (windnum==-128)
+    windnum=INT_MIN;
+  if (windnum==0x69)
+    windnum=0x69969669;
+  return windnum;
 }
 
 double pldist(xy a,xy b,xy c)

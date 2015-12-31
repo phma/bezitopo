@@ -27,6 +27,15 @@ inttype intersection_type(xy a,xy c,xy b,xy d);
    COLIN  all four points are collinear
    IMPOS  impossible, probably caused by roundoff error
    */
+int in3(xy p,xy a,xy b,xy c);
+/* Returns twice the winding number of abc arount p.
+ * If abc is counterclockwise and p is inside it, returns 2.
+ * If p is on the boundary of abc, returns 1 or -1, depending on the orientation
+ * of abc.
+ * If abc is flat, returns 0.
+ * If p is one of a, b, and c, and abc is not flat, returns 0x69969669,
+ * which must be handled specially.
+ */
 double pldist(xy a,xy b,xy c);
 // Signed distance from a to the line bc.
 bool delaunay(xy a,xy c,xy b,xy d);
