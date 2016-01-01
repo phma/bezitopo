@@ -30,6 +30,10 @@ public:
   friend class polyspiral;
   polyline();
   polyline(double e);
+  double getElevation()
+  {
+    return elevation;
+  }
   bool isopen();
   int size();
   segment getsegment(int i);
