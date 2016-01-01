@@ -183,9 +183,25 @@ void test1in(xy p,xy a,xy b,xy c,int windnum)
 void testin()
 {
   xy a(0,0),b(4,0),c(0,3),d(4/3.,1),e(4,3),f(5,0),g(7,-1),h(8,-3),
-     i(3,-5),j(0,-6),k(-2,-2),l(-4,0),m(-4,-3),n(-4,6),o(-3,7),p(0,8);
+     i(3,-5),j(0,-6),k(-2,-2),l(-4,0),m(-4,-3),n(-4,6),o(-3,7),p(0,8),q(2,1.5);
   test1in(d,a,b,c,2);
   test1in(e,a,b,c,0);
+  test1in(f,a,b,c,0);
+  test1in(g,a,b,c,0);
+  test1in(h,a,b,c,0);
+  test1in(i,a,b,c,0);
+  test1in(j,a,b,c,0);
+  test1in(k,a,b,c,0);
+  test1in(l,a,b,c,0);
+  test1in(m,a,b,c,0);
+  test1in(n,a,b,c,0);
+  test1in(o,a,b,c,0);
+  test1in(p,a,b,c,0);
+  test1in(q,a,b,c,1);
+  test1in(a,a,b,c,IN_AT_CORNER);
+  test1in(b,a,b,c,IN_AT_CORNER);
+  test1in(c,a,b,c,IN_AT_CORNER);
+  test1in(b,c,h,n,0);
 }
 
 void testcopytopopoints()
