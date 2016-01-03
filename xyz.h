@@ -65,6 +65,8 @@ public:
   double getz() const;
   double lat(); // These assume a sphere and are used for converting geoid files.
   double lon(); // For latitude on the real Earth, see the ellipsoid class.
+  bool isfinite() const;
+  bool isnan() const;
   int lati();
   int loni();
   double length();

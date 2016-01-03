@@ -229,6 +229,8 @@ bezier3d segment::approx3d(double precision)
     ret=bezier3d(start,sb,startslope(),endslope(),eb,end);
   else
   {
+    if (dist(xy(start),xy(end))>length())
+      cerr<<"approx3d: bogus spiralarc"<<endl;
     if (typeid(*this)==typeid(spiralarc))
     {
       a=new spiralarc;

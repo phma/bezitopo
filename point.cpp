@@ -202,6 +202,16 @@ double xyz::gety() const
   return y;
 }
 
+bool xyz::isfinite() const
+{
+  return std::isfinite(x) && std::isfinite(y) && std::isfinite(z);
+}
+
+bool xyz::isnan() const
+{
+  return std::isnan(x) || std::isnan(y) || std::isnan(z);
+}
+
 double xyz::getz() const
 {
   return z;

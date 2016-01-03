@@ -267,14 +267,18 @@ void smoothcontours(pointlist &pl,double conterval)
       sarc=pl.contours[i].getspiralarc(n);
       lpt=sarc.station(sarc.length()*CCHALONG);
       rpt=sarc.station(sarc.length()*(1-CCHALONG));
-      sp=splitpoint(lpt.elev()-pl.elevation(lpt),rpt.elev()-pl.elevation(rpt),conterval/10);
-      if (sp)
+      if (lpt.isfinite() && rpt.isfinite())
       {
-	cout<<"segment "<<n<<" needs splitting at "<<sp<<endl;
-	spt=sarc.getstart()+sp*(sarc.getend()-sarc.getstart());
-	splitseg=pl.qinx.findt(spt)->dirclip(spt,dir(xy(sarc.getend()),xy(sarc.getstart()))+DEG90);
-	newpt=splitseg.station(splitseg.contourcept(pl.contours[i].getElevation()));
-	//pl.contours[i].insert(newpt,n);
+	sp=splitpoint(lpt.elev()-pl.elevation(lpt),rpt.elev()-pl.elevation(rpt),conterval/10);
+	if (sp)
+	{
+	  cout<<"segment "<<n<<" needs splitting at "<<sp<<endl;
+	  spt=sarc.getstart()+sp*(sarc.getend()-sarc.getstart());
+	  splitseg=pl.qinx.findt(spt)->dirclip(spt,dir(xy(sarc.getend()),xy(sarc.getstart()))+DEG90);
+	  newpt=splitseg.station(splitseg.contourcept(pl.contours[i].getElevation()));
+	  //pl.contours[i].insert(newpt,n);
+	  //sz++;
+	}
       }
       // insert code to compute the point to insert into the arc
       // and to reset j if it needs splitting

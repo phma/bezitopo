@@ -200,19 +200,22 @@ triangle *triangle::nexttoward(xy pnt)
 // If the point is in the triangle, return the same triangle.
 // Else return which triangle to look in next.
 // If returns NULL, the point is outside the convex hull.
-{double p,q,r;
- p=area3(pnt,*b,*c);
- q=area3(*a,pnt,*c);
- r=area3(*a,*b,pnt);
- if (p>=0 && q>=0 && r>=0)
+{
+  double p,q,r;
+  p=area3(pnt,*b,*c);
+  q=area3(*a,pnt,*c);
+  r=area3(*a,*b,pnt);
+  if (p>=0 && q>=0 && r>=0)
     return this;
- else if (p<q && p<r)
+  else if (p<q && p<r)
     return aneigh;
- else if (q<r)
+  else if (q<r)
     return bneigh;
- else
+  else if (!pnt.isnan())
     return cneigh;
- }
+  else
+   return nullptr;
+}
 
 triangle *triangle::findt(xy pnt,bool clip)
 {
