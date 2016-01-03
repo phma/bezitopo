@@ -1960,20 +1960,26 @@ void testpolyline()
 {
   polyline p;
   polyarc q;
-  //polyspiral r;
+  polyspiral r;
+  cout<<"testpolyline"<<endl;
   p.insert(xy(0,0));
   q.insert(xy(0,0));
+  r.insert(xy(0,0));
   p.insert(xy(3,0));
   q.insert(xy(3,0));
-  cout<<p.length()<<endl;
+  r.insert(xy(3,0));
+  cout<<p.length()<<' '<<r.length()<<endl;
   assert(p.length()==6);
+  assert(fabs(r.length()-3*M_PI)<1e-6);
   p.insert(xy(3,4));
   q.insert(xy(3,4));
+  r.insert(xy(3,4));
   cout<<p.length()<<endl;
   assert(p.length()==12);
   q.setlengths();
   assert(q.length()==12);
   assert(q.area()==6);
+  assert(fabs(r.length()-5*M_PI)<1e-6);
   q.open();
   assert(q.length()==7);
   assert(::isnan(q.area()));

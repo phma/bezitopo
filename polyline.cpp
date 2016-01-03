@@ -384,6 +384,7 @@ void polyspiral::insert(xy newpoint,int pos)
  */
 {
   bool wasopen;
+  int i;
   vector<xy>::iterator ptit,midit;
   vector<int>::iterator arcit,brgit,d2it,mbrit;
   vector<double>::iterator lenit,cloit,crvit;
@@ -394,9 +395,24 @@ void polyspiral::insert(xy newpoint,int pos)
   midit=midpoints.begin()+pos;
   lenit=lengths.begin()+pos;
   arcit=deltas.begin()+pos;
+  brgit=bearings.begin()+pos;
+  d2it=delta2s.begin()+pos;
+  mbrit=midbearings.begin()+pos;
+  cloit=clothances.begin()+pos;
+  crvit=curvatures.begin()+pos;
   endpoints.insert(ptit,newpoint);
   deltas.insert(arcit,0);
   lengths.insert(lenit,0);
+  midpoints.insert(midit,newpoint);
+  bearings.insert(brgit,0);
+  delta2s.insert(d2it,0);
+  midbearings.insert(mbrit,0);
+  curvatures.insert(crvit,0);
+  clothances.insert(cloit,0);
+  for (i=-1;i<2;i++)
+    setbear((pos+i+endpoints.size())%endpoints.size());
+  for (i=-1;i<3;i++)
+    setspiral((pos+i+lengths.size())%lengths.size());
 }
 
 void polyspiral::setbear(int i)
