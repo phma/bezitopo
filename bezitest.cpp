@@ -2412,13 +2412,27 @@ void testcontour()
       spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
-  conterval=0.03;
+  conterval=0.3;
   roughcontours(doc.pl[1],conterval);
+  setcolor(0,0,0);
+  for (i=0;i<doc.pl[1].contours.size();i++)
+  {
+    spline(doc.pl[1].contours[i].approx3d(1));
+  }
+  endpage();
+  startpage();
+  setscale(-10,-10,10,10,0);
+  setcolor(0,1,1);
+  for (i=0;i<doc.pl[1].triangles.size();i++)
+    for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
+      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+  rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
+  //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   smoothcontours(doc.pl[1],conterval);
   setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
-    cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
+    //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
     spline(doc.pl[1].contours[i].approx3d(1));
   }
   endpage();
