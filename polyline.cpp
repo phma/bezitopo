@@ -472,8 +472,8 @@ void polyspiral::setspiral(int i)
   deltas[i]=s.getdelta();
   delta2s[i]=s.getdelta2();
   lengths[i]=s.length();
-  if (std::isnan(lengths[i]))
-    cerr<<"length["<<i<<"]=nan"<<endl;
+  //if (std::isnan(lengths[i]))
+    //cerr<<"length["<<i<<"]=nan"<<endl;
   midbearings[i]=s.bearing(lengths[i]/2);
   midpoints[i]=s.station(lengths[i]/2);
   curvatures[i]=s.curvature(lengths[i]/2);

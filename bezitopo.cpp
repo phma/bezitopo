@@ -65,15 +65,15 @@ void indpark(string args)
   n=-doc.pl[1].dirbound(degtobin(270));
   cout<<"Writing topo with curved triangles"<<endl;
   rasterdraw(doc.pl[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark.ppm");
-  //roughcontours(doc.pl[1],0.1);
+  roughcontours(doc.pl[1],0.1);
   doc.pl[1].removeperimeter();
   //smoothcontours(doc.pl[1],0.1);
   psopen("IndependencePark.ps");
   psprolog();
   startpage();
   setscale(w,s,e,n,0);
-  //for (i=0;i<doc.pl[1].contours.size();i++)
-    //spline(doc.pl[1].contours[i].approx3d(0.1));
+  for (i=0;i<doc.pl[1].contours.size();i++)
+    spline(doc.pl[1].contours[i].approx3d(0.1));
   endpage();
   pstrailer();
   psclose();

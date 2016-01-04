@@ -156,13 +156,13 @@ polyline trace(uintptr_t edgep,double elev)
       if (subnext>=0)
       {
 	if (subnext==subedge)
-	  cout<<"proceed failed!"<<endl;
+	  cerr<<"proceed failed! "<<ret.size()<<endl;
 	subedge=subnext;
 	thiscept=tri->contourcept(subedge,elev);
 	if (thiscept!=lastcept)
 	  ret.insert(thiscept);
 	else
-	  cerr<<"Repeated contourcept: "<<edgep<<endl;
+	  cerr<<"Repeated contourcept: "<<edgep<<' '<<ret.size()<<endl;
 	lastcept=thiscept;
       }
     } while (subnext>=0 && ++i<256);
@@ -185,7 +185,7 @@ polyline trace(uintptr_t edgep,double elev)
     if (edgep==0)
     {
       ntri=nullptr;
-      cout<<"Tracing stopped in middle of a triangle"<<endl;
+      cout<<"Tracing stopped in middle of a triangle "<<ret.size()<<endl;
       subedge=tri->subdir(prevedgep);
       subnext=tri->proceed(subedge,elev);
     }
@@ -258,7 +258,8 @@ void smoothcontours(pointlist &pl,double conterval)
   spiralarc sarc;
   for (i=0;i<pl.contours.size();i++)
   {
-    //cout<<"i="<<i<<endl;
+    cout<<"smoothcontours "<<i<<'/'<<pl.contours.size()<<" elev "<<pl.contours[i].getElevation()<<" \r";
+    cout.flush();
     pl.contours[i].smooth();
     sz=pl.contours[i].size();
     for (j=0;j<sz;j++)
@@ -281,8 +282,6 @@ void smoothcontours(pointlist &pl,double conterval)
 	  j=0;
 	}
       }
-      // insert code to compute the point to insert into the arc
-      // and to reset j if it needs splitting
     }
   }
 }
