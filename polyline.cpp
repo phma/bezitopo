@@ -402,7 +402,7 @@ void polyspiral::insert(xy newpoint,int pos)
   crvit=curvatures.begin()+pos;
   endpoints.insert(ptit,newpoint);
   deltas.insert(arcit,0);
-  lengths.insert(lenit,0);
+  lengths.insert(lenit,1);
   midpoints.insert(midit,newpoint);
   bearings.insert(brgit,0);
   delta2s.insert(d2it,0);
