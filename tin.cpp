@@ -698,8 +698,8 @@ vector<double> pointlist::lohi()
   for (i=0;i<triangles.size();i++)
   {
     tlohi=triangles[i].lohi();
-    if (tlohi[0]<180 || tlohi[3]>220)
-      cerr<<"Indpark out of range"<<endl;
+    //if (tlohi[0]<180 || tlohi[3]>220)
+      //cerr<<"Indpark out of range"<<endl;
     if (ret[0]>tlohi[0])
       ret[0]=tlohi[0];
     if (ret[1]<tlohi[3])
