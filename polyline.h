@@ -45,6 +45,7 @@ public:
   virtual void close();
   virtual double length();
   virtual double area();
+  virtual void writeXml(std::ofstream &ofile);
 };
 
 class polyarc: public polyline
@@ -65,6 +66,7 @@ public:
   virtual void close();
   //virtual double length();
   virtual double area();
+  virtual void writeXml(std::ofstream &ofile);
 };
 
 class polyspiral: public polyarc
@@ -91,6 +93,7 @@ public:
   virtual void close();
   //virtual double length();
   //virtual double area();
+  virtual void writeXml(std::ofstream &ofile);
 };
 
 class alignment

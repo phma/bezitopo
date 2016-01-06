@@ -38,6 +38,7 @@ void indpark(string args)
 {
   int i,j,itype;
   double w,e,s,n;
+  ofstream ofile("IndependencePark.bez");
   criteria crit;
   criterion crit1;
   setfoot(USSURVEY);
@@ -85,6 +86,7 @@ void indpark(string args)
   endpage();
   pstrailer();
   psclose();
+  doc.writeXml(ofile);
   doc.pl[1].setgradient(true);
   cout<<"Writing topo with flat triangles"<<endl;
   rasterdraw(doc.pl[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark-flat.ppm");

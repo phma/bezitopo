@@ -6,6 +6,7 @@
 
 #ifndef DRAWOBJ_H
 #define DRAWOBJ_H
+#include <fstream>
 #include "xyz.h"
 
 class bsph
@@ -33,6 +34,7 @@ public:
   /* This will also have a method to draw on a device. It will be passed
    * a callback of some sort and will pass bezier3d objects to the callback.
    */
+  virtual void writeXml(std::ofstream &ofile);
 };
 
 #endif

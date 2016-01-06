@@ -16,6 +16,7 @@
 #include <iostream>
 #include "polyline.h"
 #include "manysum.h"
+#include "ldecimal.h"
 using namespace std;
 
 int midarcdir(xy a,xy b,xy c)
@@ -489,4 +490,84 @@ void polyspiral::smooth()
     setbear(i);
   for (i=0;i<lengths.size();i++)
     setspiral(i);
+}
+
+void crspace(ofstream &ofile,int i)
+{
+  if (i%10)
+    ofile<<' ';
+  else if (i)
+    ofile<<endl;
+}
+
+void polyline::writeXml(ofstream &ofile)
+{
+  int i;
+  ofile<<"<polyline elevation=\""<<ldecimal(elevation)<<"\"><endpoints>";
+  for (i=0;i<endpoints.size();i++)
+  {
+    crspace(ofile,i);
+    endpoints[i].writeXml(ofile);
+  }
+  ofile<<"</endpoints>\n<lengths>";
+  for (i=0;i<lengths.size();i++)
+  {
+    crspace(ofile,i);
+    ofile<<ldecimal(lengths[i]);
+  }
+  ofile<<"</lengths></polyline>"<<endl;
+}
+
+void polyarc::writeXml(ofstream &ofile)
+{
+  int i;
+  ofile<<"<polyarc elevation=\""<<ldecimal(elevation)<<"\"><endpoints>";
+  for (i=0;i<endpoints.size();i++)
+  {
+    crspace(ofile,i);
+    endpoints[i].writeXml(ofile);
+  }
+  ofile<<"</endpoints>\n<lengths>";
+  for (i=0;i<lengths.size();i++)
+  {
+    crspace(ofile,i);
+    ofile<<ldecimal(lengths[i]);
+  }
+  ofile<<"</lengths>\n<deltas>";
+  for (i=0;i<deltas.size();i++)
+  {
+    crspace(ofile,i);
+    ofile<<deltas[i];
+  }
+  ofile<<"</deltas></polyarc>"<<endl;
+}
+
+void polyspiral::writeXml(ofstream &ofile)
+{
+  int i;
+  ofile<<"<polyspiral elevation=\""<<ldecimal(elevation)<<"\"><endpoints>";
+  for (i=0;i<endpoints.size();i++)
+  {
+    crspace(ofile,i);
+    endpoints[i].writeXml(ofile);
+  }
+  ofile<<"</endpoints>\n<lengths>";
+  for (i=0;i<lengths.size();i++)
+  {
+    crspace(ofile,i);
+    ofile<<ldecimal(lengths[i]);
+  }
+  ofile<<"</lengths>\n<deltas>";
+  for (i=0;i<deltas.size();i++)
+  {
+    crspace(ofile,i);
+    ofile<<deltas[i];
+  }
+  ofile<<"</deltas>\n<delta2s>";
+  for (i=0;i<delta2s.size();i++)
+  {
+    crspace(ofile,i);
+    ofile<<delta2s[i];
+  }
+  ofile<<"</delta2s></polyspiral>"<<endl;
 }

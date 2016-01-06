@@ -2393,6 +2393,7 @@ void testcontour()
 {
   int i,j;
   double conterval;
+  ofstream ofile("contour.bez");
   psopen("contour.ps");
   psprolog();
   startpage();
@@ -2440,6 +2441,7 @@ void testcontour()
   endpage();
   pstrailer();
   psclose();
+  doc.writeXml(ofile);
 }
 
 void clampcubic()

@@ -58,3 +58,12 @@ void document::addobject(drawobj *obj)
   o.obj=obj;
   objlist.push_back(o);
 }
+
+void document::writeXml(ofstream &ofile)
+{
+  int i;
+  ofile<<"<Bezitopo>";
+  for (i=0;i<pl.size();i++)
+    pl[i].writeXml(ofile);
+  ofile<<"</Bezitopo>"<<endl;
+}

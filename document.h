@@ -37,6 +37,7 @@ public:
   int readpnezd(std::string fname,bool overwrite=false);
   int writepnezd(std::string fname);
   void addobject(drawobj *obj); // obj must be created with new
+  virtual void writeXml(std::ofstream &ofile);
 };
 
 #endif

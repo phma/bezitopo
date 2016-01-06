@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include "drawobj.h"
+using namespace std;
 
 bsph drawobj::boundsphere()
 {
@@ -28,4 +29,9 @@ void drawobj::roscat(xy tfrom,int ro,double sca,xy tto)
  * which has no location. 
  */
 {
+}
+
+void drawobj::writeXml(ofstream &ofile)
+{
+  ofile<<"<DrawingObject />";
 }

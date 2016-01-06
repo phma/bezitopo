@@ -28,6 +28,7 @@ public:
   void findcriticalpts();
   void addperimeter();
   void removeperimeter();
+  virtual void writeXml(std::ofstream &ofile);
   // the following methods are in tin.cpp
 private:
   void dumpedges();
@@ -42,6 +43,7 @@ public:
   double dirbound(int angle);
   std::vector<double> lohi();
 };
+
 struct criterion
 {
   string str;

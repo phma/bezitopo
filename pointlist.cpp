@@ -131,3 +131,14 @@ void pointlist::removeperimeter()
   for (t=triangles.begin();t!=triangles.end();t++)
     t->second.removeperimeter();
 }
+
+void pointlist::writeXml(ofstream &ofile)
+{
+  int i;
+  ofile<<"<Pointlist>";
+  ofile<<"<Contours>";
+  for (i=0;i<contours.size();i++)
+    contours[i].writeXml(ofile);
+  ofile<<"</Contours>";
+  ofile<<"</Pointlist>"<<endl;
+}

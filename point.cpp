@@ -10,8 +10,10 @@
 #include <string.h>
 #include "tin.h"
 #include "pointlist.h"
+#include "ldecimal.h"
 #include "angle.h"
 #include "document.h"
+using namespace std;
 
 xy::xy(double e,double n)
 {x=e;
@@ -77,6 +79,11 @@ void xy::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
 void xy::roscat(xy tfrom,int ro,double sca,xy tto)
 {
   _roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
+}
+
+void xy::writeXml(ofstream &ofile)
+{
+  ofile<<"<xy>"<<ldecimal(x)<<' '<<ldecimal(y)<<"</xy>";
 }
 
 xy operator+(const xy &l,const xy &r)
@@ -260,6 +267,11 @@ void xyz::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
 void xyz::roscat(xy tfrom,int ro,double sca,xy tto)
 {
   _roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
+}
+
+void xyz::writeXml(ofstream &ofile)
+{
+  ofile<<"<xyz>"<<ldecimal(x)<<' '<<ldecimal(y)<<' '<<ldecimal(z)<<"</xyz>";
 }
 
 bool operator==(const xyz &l,const xyz &r)
