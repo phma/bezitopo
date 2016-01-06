@@ -467,6 +467,8 @@ void polyspiral::setspiral(int i)
     j=0;
   s=spiralarc(xyz(endpoints[i],elevation),xyz(endpoints[j],elevation));
   s.setdelta(bearings[j]-bearings[i]+DEG360*(j<i),bearings[j]+bearings[i]+DEG360*(j<i)-2*dir(endpoints[i],endpoints[j]));
+  if (std::isnan(s.length()))
+    s.setdelta(0,0);
   if (lengths[i]==0)
     cerr<<"length["<<i<<"]=0"<<endl;
   deltas[i]=s.getdelta();

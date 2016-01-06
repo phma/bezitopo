@@ -693,6 +693,8 @@ void testsegment()
   cept=a.contourcept(5);
   cout<<"a crosses 5 at "<<cept<<"; a.elev()="<<a.elev(cept)<<endl;
   assert(fabs(a.elev(cept)-5)<1e-6);
+  cept=a.contourcept(2);
+  assert(std::isnan(cept));
   sta=a.station(200);
   assert(sta==xyz(120,160,31));
   assert(std::isinf(a.radius(0)));

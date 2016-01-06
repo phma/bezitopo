@@ -8,6 +8,7 @@
 #endif
 
 #include <cstdio>
+#include <iostream>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
@@ -217,6 +218,8 @@ void spline(bezier3d spl)
     for (j=1;j<4;j++)
     {
       pnt=turn(xy(seg[j]),orientation);
+      if (pnt.isnan())
+	cerr<<"NaN point"<<endl;
       fprintf(psfile,"%7.3f %7.3f ",xscale(pnt.east()),yscale(pnt.north()));
     }
     fprintf(psfile,"curveto\n");

@@ -136,7 +136,7 @@ double segment::contourcept(double e)
  * This needs to be tested when e=0. 3*DBL_EPSILON is apparently too small.
  */
 {
-  double beg,mdp,lst,begelev,mdpelev,lstelev,crit,ret;
+  double beg,mdp,lst,begelev,mdpelev,lstelev,crit,fincrit=999,ret;
   beg=0;
   lst=length();
   begelev=elev(beg)-e;
@@ -152,6 +152,8 @@ double segment::contourcept(double e)
     crit=mdpelev/(lstelev-begelev);
     if (std::isnan(crit))
       crit=0;
+    else
+      fincrit=crit;
     if (crit>=0)
     {
       lst=mdp;
@@ -163,7 +165,9 @@ double segment::contourcept(double e)
       begelev=mdpelev;
     }
   }
-  if (abs(begelev)>abs(lstelev))
+  if (fabs(fincrit)>100)
+    ret=NAN;
+  else if (abs(begelev)>abs(lstelev))
     ret=lst;
   else
     ret=beg;

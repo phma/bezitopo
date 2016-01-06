@@ -67,7 +67,7 @@ void indpark(string args)
   rasterdraw(doc.pl[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark.ppm");
   roughcontours(doc.pl[1],0.1);
   doc.pl[1].removeperimeter();
-  //smoothcontours(doc.pl[1],0.1);
+  smoothcontours(doc.pl[1],0.1);
   psopen("IndependencePark.ps");
   psprolog();
   startpage();
@@ -163,6 +163,10 @@ void rasterdraw_i(string args)
   e=-doc.pl[1].dirbound(degtobin(180));
   n=-doc.pl[1].dirbound(degtobin(270));
   rasterdraw(doc.pl[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,trim(args));
+}
+
+void contourdraw_i(string args)
+{
 }
 
 void help(string args)

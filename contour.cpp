@@ -250,8 +250,8 @@ void roughcontours(pointlist &pl,double conterval)
 
 void smoothcontours(pointlist &pl,double conterval)
 {
-  int i,j,n=0,sz;
-  double sp;
+  int i,j,n=0,sz,origsz;
+  double sp,wide;
   xyz lpt,rpt,newpt;
   xy spt;
   segment splitseg;
@@ -261,25 +261,29 @@ void smoothcontours(pointlist &pl,double conterval)
     cout<<"smoothcontours "<<i<<'/'<<pl.contours.size()<<" elev "<<pl.contours[i].getElevation()<<" \r";
     cout.flush();
     pl.contours[i].smooth();
-    sz=pl.contours[i].size();
+    origsz=sz=pl.contours[i].size();
     for (j=0;j<sz;j++)
     {
       n=(n+relprime(sz))%sz;
+      wide=((sz>2*origsz)?(sz/(double)origsz):1)*0.1;
       sarc=pl.contours[i].getspiralarc(n);
       lpt=sarc.station(sarc.length()*CCHALONG);
       rpt=sarc.station(sarc.length()*(1-CCHALONG));
       if (lpt.isfinite() && rpt.isfinite())
       {
-	sp=splitpoint(lpt.elev()-pl.elevation(lpt),rpt.elev()-pl.elevation(rpt),conterval/10);
-	if (sp)
+	sp=splitpoint(lpt.elev()-pl.elevation(lpt),rpt.elev()-pl.elevation(rpt),conterval*wide);
+	if (sp && sarc.length()>conterval)
 	{
 	  //cout<<"segment "<<n<<" of "<<sz<<" of contour "<<i<<" needs splitting at "<<sp<<endl;
 	  spt=sarc.getstart()+sp*(sarc.getend()-sarc.getstart());
 	  splitseg=pl.qinx.findt(spt)->dirclip(spt,dir(xy(sarc.getend()),xy(sarc.getstart()))+DEG90);
 	  newpt=splitseg.station(splitseg.contourcept(pl.contours[i].getElevation()));
-	  pl.contours[i].insert(newpt,n+1);
-	  sz++;
-	  j=0;
+	  if (newpt.isfinite())
+	  {
+	    pl.contours[i].insert(newpt,n+1);
+	    sz++;
+	    j=0;
+	  }
 	}
       }
     }
