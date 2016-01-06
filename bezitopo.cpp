@@ -65,6 +65,14 @@ void indpark(string args)
   n=-doc.pl[1].dirbound(degtobin(270));
   cout<<"Writing topo with curved triangles"<<endl;
   rasterdraw(doc.pl[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark.ppm");
+  /* The first (lowest) contour in which a NaN control point is drawn on a
+   * polyspiral contour segment whose ends are real is the following:
+   * 302.559,316.867 302.398,316.802 302.488,316.551 302.557,316.826 302.517,316.637
+   * Draw the surrounding region to find out where it is. It is next to the
+   * box culvert on the northwest side of the field. The surface is grainy.
+   */
+  rasterdraw(doc.pl[1],xy(443302.5,164316.7),0.25,0.35,1000,0,10,"IPmicro.ppm");
+  rasterdraw(doc.pl[1],xy(443302.5,164316.7),7,7,100,0,10,"IPmini.ppm");
   roughcontours(doc.pl[1],0.1);
   doc.pl[1].removeperimeter();
   smoothcontours(doc.pl[1],0.1);
