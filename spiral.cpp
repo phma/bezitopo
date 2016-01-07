@@ -315,6 +315,8 @@ void spiralarc::setdelta(int d,int s)
   {
     cur=clo=0;
     len=segment::length();
+    midbear=chordbearing();
+    mid=(start+end)/2;
   }
   i=0;
   do

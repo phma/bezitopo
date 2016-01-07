@@ -111,6 +111,7 @@ polyline intrace(triangle *tri,double elev)
   polyline ret(elev);
   int i,j,start;
   vector<int> sube;
+  xy cept;
   for (i=0;i<tri->subdiv.size();i++)
     if (tri->crosses(i,elev))
     {
@@ -125,7 +126,11 @@ polyline intrace(triangle *tri,double elev)
     }
   if (j==start)
     for (i=0;i<sube.size();i++)
-      ret.insert(tri->contourcept(sube[i],elev));
+    {
+      cept=tri->contourcept(sube[i],elev);
+      if (cept.isfinite())
+	ret.insert(cept);
+    }
   return ret;
 }
 
@@ -143,7 +148,13 @@ polyline trace(uintptr_t edgep,double elev)
     tri=ntri;
   mark(edgep);
   //cout<<"Start edgep "<<edgep<<endl;
-  ret.insert(firstcept=lastcept=tri->contourcept(tri->subdir(edgep),elev));
+  firstcept=lastcept=tri->contourcept(tri->subdir(edgep),elev);
+  if (firstcept.isnan())
+  {
+    cerr<<"Tracing STARTS on Nan"<<endl;
+    return ret;
+  }
+  ret.insert(firstcept);
   do
   {
     prevedgep=edgep;
@@ -159,11 +170,16 @@ polyline trace(uintptr_t edgep,double elev)
 	  cerr<<"proceed failed! "<<ret.size()<<endl;
 	subedge=subnext;
 	thiscept=tri->contourcept(subedge,elev);
-	if (thiscept!=lastcept)
-	  ret.insert(thiscept);
+	if (thiscept.isfinite())
+	{
+	  if (thiscept!=lastcept)
+	    ret.insert(thiscept);
+	  else
+	    cerr<<"Repeated contourcept: "<<edgep<<' '<<ret.size()<<endl;
+	  lastcept=thiscept;
+	}
 	else
-	  cerr<<"Repeated contourcept: "<<edgep<<' '<<ret.size()<<endl;
-	lastcept=thiscept;
+	  cerr<<"NaN contourcept"<<endl;
       }
     } while (subnext>=0 && ++i<256);
     //cout<<"after loop "<<subedge<<' '<<subnext<<endl;
@@ -195,7 +211,7 @@ polyline trace(uintptr_t edgep,double elev)
       if (!wasmarked)
       {
 	thiscept=tri->contourcept(tri->subdir(edgep),elev);
-	if (thiscept!=lastcept && thiscept!=firstcept)
+	if (thiscept!=lastcept && thiscept!=firstcept && thiscept.isfinite())
 	  ret.insert(thiscept);
 	lastcept=thiscept;
       }
@@ -260,6 +276,8 @@ void smoothcontours(pointlist &pl,double conterval)
   {
     cout<<"smoothcontours "<<i<<'/'<<pl.contours.size()<<" elev "<<pl.contours[i].getElevation()<<" \r";
     cout.flush();
+    if (fabs(pl.contours[i].getElevation()-203.2)<1e-9 && pl.contours[i].size()==11)
+      cout<<"203.2 11"<<endl;
     pl.contours[i].smooth();
     origsz=sz=pl.contours[i].size();
     for (j=0;j<sz;j++)

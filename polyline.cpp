@@ -178,7 +178,7 @@ void polyline::dedup()
 	k--;
       else
 	k-=endpoints.size();
-    if (i!=j && (dist(endpoints[i],endpoints[j])*16777216<=dist(endpoints[h],endpoints[i]) || dist(endpoints[i],endpoints[j])*16777216<=dist(endpoints[j],endpoints[k])))
+    if (i!=j && (dist(endpoints[i],endpoints[j])*16777216<=dist(endpoints[h],endpoints[i]) || dist(endpoints[i],endpoints[j])*16777216<=dist(endpoints[j],endpoints[k]) || endpoints[j].isnan()))
     {
       avg=(endpoints[i]+endpoints[j])/2;
       ptit=endpoints.begin()+i;
@@ -190,7 +190,8 @@ void polyline::dedup()
       j-i;
       if (k>i)
 	k--;
-      endpoints[i]=avg;
+      if (avg.isfinite())
+	endpoints[i]=avg;
       if (i!=h)
 	lengths[h]=dist(endpoints[h],endpoints[i]);
       if (j!=k)
@@ -215,6 +216,8 @@ void polyline::insert(xy newpoint,int pos)
   int i;
   vector<xy>::iterator ptit;
   vector<double>::iterator lenit;
+  if (newpoint.isnan())
+    cerr<<"Inserting NaN"<<endl;
   wasopen=isopen();
   if (pos<0 || pos>endpoints.size())
     pos=endpoints.size();
