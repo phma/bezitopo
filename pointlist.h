@@ -42,6 +42,7 @@ public:
   double elevation(xy location);
   double dirbound(int angle);
   std::vector<double> lohi();
+  virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
 };
 
 struct criterion

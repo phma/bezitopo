@@ -37,6 +37,7 @@ class point: public xyz, public drawobj
 {
 public:
   using xyz::roscat;
+  using xyz::_roscat;
   //xy pagepos; //used when dumping a lozenge in PostScript
   point();
   point(double e,double n,double h,string desc);

@@ -27,6 +27,7 @@ class document
 {
 public:
   int curlayer;
+  xyz offset;
   std::vector<objrec> objlist;
   std::vector<layer> layers;
   std::vector<pointlist> pl;
@@ -38,6 +39,7 @@ public:
   int writepnezd(std::string fname);
   void addobject(drawobj *obj); // obj must be created with new
   virtual void writeXml(std::ofstream &ofile);
+  void changeOffset (xyz newOffset);
 };
 
 #endif

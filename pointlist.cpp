@@ -142,3 +142,15 @@ void pointlist::writeXml(ofstream &ofile)
   ofile<<"</Contours>";
   ofile<<"</Pointlist>"<<endl;
 }
+
+void pointlist::roscat(xy tfrom,int ro,double sca,xy tto)
+{
+  xy cs=cossin(ro);
+  int i;
+  ptlist::iterator j;
+  for (i=0;i<contours.size();i++)
+    contours[i]._roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
+  for (j=points.begin();j!=points.end();j++)
+    j->second._roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
+}
+

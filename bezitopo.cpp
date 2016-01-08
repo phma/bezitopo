@@ -41,6 +41,7 @@ void indpark(string args)
   ofstream ofile("IndependencePark.bez");
   criteria crit;
   criterion crit1;
+  doc.offset=xyz(0,0,0);
   setfoot(USSURVEY);
   set_length_unit(FOOT+DEC2);
   if (doc.readpnezd("topo0.asc")<0)
@@ -52,7 +53,7 @@ void indpark(string args)
   crit1.istopo=false; // The point labeled FH has a nonsensical elevation and must be removed.
   crit.push_back(crit1);
   doc.copytopopoints(crit);
-  //rotate(2);
+  doc.changeOffset(xyz(443392,164096,208));
   doc.pl[1].maketin("bezitopo.ps");
   doc.pl[1].makegrad(0.15);
   doc.pl[1].maketriangles();
@@ -72,8 +73,8 @@ void indpark(string args)
    * Draw the surrounding region to find out where it is. It is next to the
    * box culvert on the northwest side of the field. The surface is grainy.
    */
-  rasterdraw(doc.pl[1],xy(443302.5,164316.7),0.25,0.35,1000,0,10,"IPmicro.ppm");
-  rasterdraw(doc.pl[1],xy(443302.5,164316.7),7,7,100,0,10,"IPmini.ppm");
+  rasterdraw(doc.pl[1],xy(443302.5,164316.7)-(xy)doc.offset,0.25,0.35,1000,0,10,"IPmicro.ppm");
+  rasterdraw(doc.pl[1],xy(443302.5,164316.7)-(xy)doc.offset,7,7,100,0,10,"IPmini.ppm");
   roughcontours(doc.pl[1],0.1);
   doc.pl[1].removeperimeter();
   smoothcontours(doc.pl[1],0.1);
@@ -82,7 +83,20 @@ void indpark(string args)
   startpage();
   setscale(w,s,e,n,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
+  {
+    switch (lrint(doc.pl[1].contours[i].getElevation()/0.1)%10)
+    {
+      case 0:
+	setcolor(1,0,0);
+	break;
+      case 5:
+	setcolor(0,0,1);
+	break;
+      default:
+	setcolor(0,0,0);
+    }
     spline(doc.pl[1].contours[i].approx3d(0.1));
+  }
   endpage();
   pstrailer();
   psclose();

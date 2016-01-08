@@ -419,6 +419,32 @@ void polyspiral::insert(xy newpoint,int pos)
     setspiral((pos+i+lengths.size())%lengths.size());
 }
 
+void polyline::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
+{
+  int i;
+  for (i=0;i<endpoints.size();i++)
+    endpoints[i]._roscat(tfrom,ro,sca,cis,tto);
+  for (i=0;i<lengths.size();i++)
+    lengths[i]*=sca;
+}
+
+void polyspiral::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
+{
+  int i;
+  for (i=0;i<endpoints.size();i++)
+  {
+    endpoints[i]._roscat(tfrom,ro,sca,cis,tto);
+    bearings[i]+=ro;
+  }
+  for (i=0;i<lengths.size();i++)
+  {
+    lengths[i]*=sca;
+    midbearings[i]+=ro;
+    curvatures[i]/=sca;
+    clothances[i]/=sqr(sca);
+  }
+}
+
 void polyspiral::setbear(int i)
 {
   int h,j,prevbear,nextbear,avgbear;

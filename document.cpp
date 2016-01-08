@@ -67,3 +67,17 @@ void document::writeXml(ofstream &ofile)
     pl[i].writeXml(ofile);
   ofile<<"</Bezitopo>"<<endl;
 }
+
+void document::changeOffset (xyz newOffset)
+/* Changes the offset of the document, moving everything so that its coordinates
+ * added to the offset do not change. Everything, that is, except the quad index,
+ * which will have to be recreated.
+ */
+{
+  int i;
+  for (i=0;i<pl.size();i++)
+    pl[i].roscat(newOffset,0,1,offset); // FIXME: roscat takes xy;
+  for (i=0;i<objlist.size();i++)
+    objlist[i].obj->roscat(newOffset,0,1,offset); // the z has to be adjusted elsewise.
+  offset=newOffset;
+}

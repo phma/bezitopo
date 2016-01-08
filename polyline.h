@@ -19,7 +19,7 @@
  */
 int midarcdir(xy a,xy b,xy c);
 
-class polyline
+class polyline: public drawobj
 {
 protected:
   double elevation;
@@ -46,6 +46,7 @@ public:
   virtual double length();
   virtual double area();
   virtual void writeXml(std::ofstream &ofile);
+  virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
 };
 
 class polyarc: public polyline
@@ -94,6 +95,7 @@ public:
   //virtual double length();
   //virtual double area();
   virtual void writeXml(std::ofstream &ofile);
+  virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
 };
 
 class alignment
