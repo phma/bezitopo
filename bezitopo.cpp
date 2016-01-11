@@ -102,6 +102,9 @@ void indpark(string args)
   psprolog();
   startpage();
   setscale(w,s,e,n,0);
+  setcolor(0,0.6,0.6);
+  for (i=0;i<doc.pl[1].edges.size();i++)
+    spline(doc.pl[1].edges[i].getsegment().approx3d(1));
   setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
