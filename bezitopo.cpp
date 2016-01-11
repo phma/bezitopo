@@ -35,6 +35,26 @@ bool cont=true;
 document doc;
 
 void indpark(string args)
+/* Concrete rectangle with apparent overlap: elevation 203.7
+ * Hooklike appendage a few meters west of concrete rectangle: 203.8
+ * Outline that appears wrong, but isn't: 204.2
+ * Spurious semicircle: 204.8
+ * Apparent loop: 206.3
+ * Spiralarc clear across the scene: 207.7
+ * 
+ * On 207.7: the contour beginning at (-7.574323437274727,242.760955397681) should
+ * continue from (293.0923474548852,35.76812401806803) to (293.17543184146035,
+ * 34.75709173391407), but instead jumps back to the starting point.
+ * 
+ * On 204.8: the contour beginning at (49.294836688628344,78.90549573888802) has
+ * four points; one of the spiralarcs has delta 883276262 (148.07°) and delta2 -6.9°
+ * and happens to touch another contour at the same elevation, so the program didn't
+ * notice that it should break it. Tried to fix it by checking that the spiralarc
+ * is entirely in the triangle containing the midpoint of the segment (it isn't,
+ * of course) and if so, applying a tolerance of 0 to force it to split. The problem
+ * is that the cross segment at the split point does not intercept 204.8. Setting
+ * BENDLIMIT to DEG120 fixes it.
+ */
 {
   int i,j,itype;
   double w,e,s,n;
@@ -82,8 +102,18 @@ void indpark(string args)
   psprolog();
   startpage();
   setscale(w,s,e,n,0);
+  setcolor(0,1,1);
+  for (i=0;i<doc.pl[1].triangles.size();i++)
+    for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
+      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
+    if (i<0 && doc.pl[1].contours[i].getElevation()>doc.pl[1].contours[i-1].getElevation())
+    {
+      endpage();
+      startpage();
+      setscale(w,s,e,n,0);
+    }
     switch (lrint(doc.pl[1].contours[i].getElevation()/0.1)%10)
     {
       case 0:

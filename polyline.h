@@ -13,6 +13,8 @@
 #include "bezier3d.h"
 #include "spiral.h"
 
+#define BENDLIMIT DEG120
+
 /* Polylines and alignments are very similar. The differences are:
  * polylines are in a horizontal plane, whereas alignments have vertical curves;
  * polylines consist of arcs, whereas alignments can have spirals (once I figure out how).

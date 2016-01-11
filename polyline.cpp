@@ -490,13 +490,17 @@ void polyspiral::setbear(int i)
 
 void polyspiral::setspiral(int i)
 {
-  int j;
+  int j,d1,d2;
   spiralarc s;
   j=i+1;
   if (j>=endpoints.size())
     j=0;
   s=spiralarc(xyz(endpoints[i],elevation),xyz(endpoints[j],elevation));
-  s.setdelta(bearings[j]-bearings[i]+DEG360*(j<i),bearings[j]+bearings[i]+DEG360*(j<i)-2*dir(endpoints[i],endpoints[j]));
+  d1=bearings[j]-bearings[i]+DEG360*(j<i);
+  d2=bearings[j]+bearings[i]+DEG360*(j<i)-2*dir(endpoints[i],endpoints[j]);
+  if (abs(d1)>=BENDLIMIT || abs(d2)>=BENDLIMIT || abs(d1)+abs(d2)>=BENDLIMIT)
+    d1=d2=0;
+  s.setdelta(d1,d2);
   if (std::isnan(s.length()))
     s.setdelta(0,0);
   if (lengths[i]==0)
