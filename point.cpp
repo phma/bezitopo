@@ -392,6 +392,11 @@ const point& point::operator=(const point &rhs)
 //  printf("address=%p\nnum=%d\n(%f,%f,%f)\nline=%p\n",this,doc.pl[1].revpoints[this],x,y,z,line);
 //}
 
+void point::writeXml(ofstream &ofile,pointlist &pl)
+{
+  ofile<<"<point n=\""<<pl.revpoints[this]<<"\" d=\""<<xmlEscape(note)<<"\">"<<ldecimal(x)<<' '<<ldecimal(y)<<' '<<ldecimal(z)<<"</point>";
+}
+
 int point::valence()
 {
   int i;

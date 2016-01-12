@@ -105,6 +105,7 @@ public:
   bool upleft(int subdir);
   xy contourcept(int subdir,double elevation);
   segment dirclip(const xy pnt,const int dir);
+  virtual void writeXml(std::ofstream &ofile,pointlist &pl);
 private:
   double vtxeloff(double off);
   void setsubslopes(segment &s);

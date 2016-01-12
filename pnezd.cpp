@@ -135,6 +135,8 @@ int readpnezd(document *doc,string fname,bool overwrite)
     do
     {
       getline(infile,line);
+      while (line.back()=='\n' || line.back()=='\r')
+	line.pop_back();
       words=parsecsvline(line);
       if (words.size()==5)
       {

@@ -135,7 +135,25 @@ void pointlist::removeperimeter()
 void pointlist::writeXml(ofstream &ofile)
 {
   int i;
+  ptlist::iterator p;
+  map<int,triangle>::iterator t;
   ofile<<"<Pointlist>";
+  ofile<<"<Points>";
+  for (p=points.begin(),i=0;p!=points.end();p++,i++)
+  {
+    if (i && (i%1)==0)
+      ofile<<endl;
+    p->second.writeXml(ofile,*this);
+  }
+  ofile<<"</Points>"<<endl;
+  ofile<<"<TIN>";
+  for (t=triangles.begin(),i=0;t!=triangles.end();t++,i++)
+  {
+    if (i && (i%1)==0)
+      ofile<<endl;
+    t->second.writeXml(ofile,*this);
+  }
+  ofile<<"</TIN>"<<endl;
   ofile<<"<Contours>";
   for (i=0;i<contours.size();i++)
     contours[i].writeXml(ofile);

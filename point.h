@@ -16,6 +16,7 @@ class point;
 class edge;
 class triangle;
 class drawobj;
+class pointlist;
 class document;
 
 using std::string;
@@ -47,6 +48,7 @@ public:
   const point& operator=(const point &rhs);
   //void setedge(point *oend);
   //void dump(document doc);
+  virtual void writeXml(std::ofstream &ofile,pointlist &pl);
   friend class edge;
   friend void maketin(string filename);
   friend void rotate(document &doc,int n);

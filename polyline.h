@@ -80,6 +80,7 @@ protected:
   std::vector<int> midbearings;
   std::vector<xy> midpoints;
   std::vector<double> clothances,curvatures;
+  bool curvy;
 public:
   polyspiral();
   polyspiral(double e);

@@ -266,7 +266,7 @@ void roughcontours(pointlist &pl,double conterval)
 
 void smoothcontours(pointlist &pl,double conterval)
 {
-  int i,j,n=0,sz,origsz;
+  int i,j,k,n=0,sz,origsz;
   double sp,wide;
   xyz lpt,rpt,newpt;
   xy spt;
@@ -279,36 +279,44 @@ void smoothcontours(pointlist &pl,double conterval)
     cout.flush();
     if (fabs(pl.contours[i].getElevation()-203.2)<1e-9 && pl.contours[i].size()==11)
       cout<<"203.2 11"<<endl;
-    pl.contours[i].smooth();
-    origsz=sz=pl.contours[i].size();
-    for (j=0;j<sz;j++)
+    /* Smooth the contours in two passes. The first works with straight lines
+     * and uses 1/2 the conterval for tolerance. The second works with spiral
+     * curves and uses 1/10 the conterval for tolerance.
+     */
+    for (k=0;k<2;k++)
     {
-      n=(n+relprime(sz))%sz;
-      wide=((sz>2*origsz)?(sz/(double)origsz):1)*0.1;
-      sarc=pl.contours[i].getspiralarc(n);
-      lpt=sarc.station(sarc.length()*CCHALONG);
-      rpt=sarc.station(sarc.length()*(1-CCHALONG));
-      if (lpt.isfinite() && rpt.isfinite())
+      if (k)
+	pl.contours[i].smooth();
+      origsz=sz=pl.contours[i].size();
+      for (j=0;j<sz;j++)
       {
-	if (sarc.getdelta()==883276262)
-	  cout<<"883276262"<<endl;
-	midptri=pl.qinx.findt((sarc.getstart()+sarc.getend())/2);
-	if (midptri->in(sarc.getstart()) && midptri->in(sarc.getend()) &&
-	  !(midptri->in(lpt) && midptri->in(rpt)))
-	  sp=splitpoint(lpt.elev()-pl.elevation(lpt),rpt.elev()-pl.elevation(rpt),0);
-	else
-	  sp=splitpoint(lpt.elev()-midptri->elevation(lpt),rpt.elev()-midptri->elevation(rpt),conterval*wide);
-	if (sp && sarc.length()>conterval)
+	n=(n+relprime(sz))%sz;
+	wide=((sz>2*origsz)?(sz/(double)origsz):1)*(k?0.5:0.1);
+	sarc=pl.contours[i].getspiralarc(n);
+	lpt=sarc.station(sarc.length()*CCHALONG);
+	rpt=sarc.station(sarc.length()*(1-CCHALONG));
+	if (lpt.isfinite() && rpt.isfinite())
 	{
-	  //cout<<"segment "<<n<<" of "<<sz<<" of contour "<<i<<" needs splitting at "<<sp<<endl;
-	  spt=sarc.getstart()+sp*(sarc.getend()-sarc.getstart());
-	  splitseg=pl.qinx.findt(spt)->dirclip(spt,dir(xy(sarc.getend()),xy(sarc.getstart()))+DEG90);
-	  newpt=splitseg.station(splitseg.contourcept(pl.contours[i].getElevation()));
-	  if (newpt.isfinite())
+	  if (sarc.getdelta()==883276262)
+	    cout<<"883276262"<<endl;
+	  midptri=pl.qinx.findt((sarc.getstart()+sarc.getend())/2);
+	  if (midptri->in(sarc.getstart()) && midptri->in(sarc.getend()) &&
+	    !(midptri->in(lpt) && midptri->in(rpt)))
+	    sp=splitpoint(lpt.elev()-pl.elevation(lpt),rpt.elev()-pl.elevation(rpt),0);
+	  else
+	    sp=splitpoint(lpt.elev()-midptri->elevation(lpt),rpt.elev()-midptri->elevation(rpt),conterval*wide);
+	  if (sp && sarc.length()>conterval)
 	  {
-	    pl.contours[i].insert(newpt,n+1);
-	    sz++;
-	    j=0;
+	    //cout<<"segment "<<n<<" of "<<sz<<" of contour "<<i<<" needs splitting at "<<sp<<endl;
+	    spt=sarc.getstart()+sp*(sarc.getend()-sarc.getstart());
+	    splitseg=pl.qinx.findt(spt)->dirclip(spt,dir(xy(sarc.getend()),xy(sarc.getstart()))+DEG90);
+	    newpt=splitseg.station(splitseg.contourcept(pl.contours[i].getElevation()));
+	    if (newpt.isfinite())
+	    {
+	      pl.contours[i].insert(newpt,n+1);
+	      sz++;
+	      j=0;
+	    }
 	  }
 	}
       }

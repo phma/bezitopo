@@ -14,6 +14,7 @@
 #include "segment.h"
 #include "arc.h"
 #include "spiral.h"
+#include "ldecimal.h"
 #include "vcurve.h"
 
 using namespace std;
@@ -411,4 +412,12 @@ double segment::dirbound(int angle,double boundsofar)
       angtoler*=7;
   } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<boundsofar && !((closest==0 && isinsector(angle-startbearing(),0xf00ff00f)) || (closest==len && isinsector(angle-endbearing(),0x0ff00ff0))));
   return closedist;
+}
+
+void segment::writeXml(ofstream &ofile)
+{
+  ofile<<"<segment c1=\""<<ldecimal(control1)<<"\" c2=\""<<ldecimal(control2)<<"\">";
+  start.writeXml(ofile);
+  end.writeXml(ofile);
+  ofile<<"</segment>";
 }

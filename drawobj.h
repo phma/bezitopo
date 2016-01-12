@@ -7,7 +7,10 @@
 #ifndef DRAWOBJ_H
 #define DRAWOBJ_H
 #include <fstream>
+#include <string>
 #include "xyz.h"
+
+std::string xmlEscape(std::string str);
 
 class bsph
 {

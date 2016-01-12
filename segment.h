@@ -120,6 +120,7 @@ public:
   friend inttype intersection_type(segment seg1,segment seg2);
   friend class arc;
   friend class spiralarc;
+  virtual void writeXml(std::ofstream &ofile);
 };
 
 #endif

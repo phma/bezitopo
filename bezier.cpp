@@ -11,6 +11,7 @@
 #include <cassert>
 #include "bezier.h"
 #include "angle.h"
+#include "ldecimal.h"
 #include "tin.h"
 using namespace std;
 
@@ -285,6 +286,21 @@ double triangle::spelevation(int angle,double x,double y)
   along=cossin(angle)*s;
   across=cossin(angle+536870912)*s;
   return elevation(cen+across*y+along*x);
+}
+
+void triangle::writeXml(ofstream &ofile,pointlist &pl)
+{
+  int i;
+  ofile<<"<triangle corners=\"";
+  ofile<<pl.revpoints[a]<<' '<<pl.revpoints[b]<<' '<<pl.revpoints[c];
+  ofile<<"\" control=\"";
+  for (i=0;i<7;i++)
+  {
+    if (i)
+      ofile<<' ';
+    ofile<<ldecimal(ctrl[i]);
+  }
+  ofile<<"\" />";
 }
 
 double deriv0(vector<double> xsect)

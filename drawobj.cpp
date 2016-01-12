@@ -8,6 +8,38 @@
 #include "drawobj.h"
 using namespace std;
 
+string xmlEscape(string str)
+{
+  string ret;
+  size_t pos;
+  do
+  {
+    pos=str.find_first_of("\"&'<>");
+    ret+=str.substr(0,pos);
+    if (pos!=string::npos)
+      switch (str[pos])
+      {
+	case '"':
+	  ret+="&quot;";
+	  break;
+	case '&':
+	  ret+="&amp;";
+	  break;
+	case '\'':
+	  ret+="&apos;";
+	  break;
+	case '<':
+	  ret+="&lt;";
+	  break;
+	case '>':
+	  ret+="&gt;";
+	  break;
+      }
+    str.erase(0,pos+(pos!=string::npos));
+  } while (str.length());
+  return ret;
+}
+
 bsph drawobj::boundsphere()
 {
   bsph ret;

@@ -38,6 +38,7 @@ polyarc::polyarc(): polyline::polyline()
 
 polyspiral::polyspiral(): polyarc::polyarc()
 {
+  curvy=true;
 }
 
 polyline::polyline(double e)
@@ -51,6 +52,7 @@ polyarc::polyarc(double e): polyline::polyline(e)
 
 polyspiral::polyspiral(double e): polyarc::polyarc(e)
 {
+  curvy=true;
 }
 
 polyarc::polyarc(polyline &p)
@@ -83,6 +85,7 @@ polyspiral::polyspiral(polyline &p)
       midbearings[i]=midbearings[i-1]+foldangle(midbearings[i]-midbearings[i-1]);
     bearings[i]=midbearings[i];
   }
+  curvy=false;
 }
 
 bool polyline::isopen()
@@ -498,7 +501,7 @@ void polyspiral::setspiral(int i)
   s=spiralarc(xyz(endpoints[i],elevation),xyz(endpoints[j],elevation));
   d1=bearings[j]-bearings[i]+DEG360*(j<i);
   d2=bearings[j]+bearings[i]+DEG360*(j<i)-2*dir(endpoints[i],endpoints[j]);
-  if (abs(d1)>=BENDLIMIT || abs(d2)>=BENDLIMIT || abs(d1)+abs(d2)>=BENDLIMIT)
+  if (!curvy || abs(d1)>=BENDLIMIT || abs(d2)>=BENDLIMIT || abs(d1)+abs(d2)>=BENDLIMIT)
     d1=d2=0;
   s.setdelta(d1,d2);
   if (std::isnan(s.length()))
@@ -519,6 +522,7 @@ void polyspiral::setspiral(int i)
 void polyspiral::smooth()
 {
   int i;
+  curvy=true;
   for (i=0;i<endpoints.size();i++)
     setbear(i);
   for (i=0;i<lengths.size();i++)
