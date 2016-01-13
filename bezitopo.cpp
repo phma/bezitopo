@@ -54,6 +54,9 @@ void indpark(string args)
  * of course) and if so, applying a tolerance of 0 to force it to split. The problem
  * is that the cross segment at the split point does not intercept 204.8. Setting
  * BENDLIMIT to DEG120 fixes it.
+ * 
+ * Triangle (956 1112 430) is undivided, but contours passing through it southeast
+ * of point 1112 are bent enough that tracing results in backtracking.
  */
 {
   int i,j,itype;
@@ -212,6 +215,23 @@ void drawtin_i(string args)
     cout<<"No TIN present. Please make a TIN first."<<endl;
 }
 
+void trin_i(string args)
+{
+  triangle *tri;
+  xy pnt;
+  if (doc.pl[1].edges.size())
+  {
+    pnt=parsexy(args);
+    tri=doc.pl[1].qinx.findt(pnt);
+    if (tri)
+      cout<<doc.pl[1].revpoints[tri->a]<<' '<<doc.pl[1].revpoints[tri->b]<<' '<<doc.pl[1].revpoints[tri->c]<<endl;
+    else
+      cout<<"Not in a triangle"<<endl;
+  }
+  else
+    cout<<"No TIN present. Please make a TIN first."<<endl;
+}
+
 void rasterdraw_i(string args)
 {
   double w,e,s,n;
@@ -256,6 +276,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("maketin",maketin_i,"Make triangulated irregular network"));
   commands.push_back(command("drawtin",drawtin_i,"Draw TIN: filename.ps"));
   commands.push_back(command("raster",rasterdraw_i,"Draw raster topo: filename.ppm"));
+  commands.push_back(command("trin",trin_i,"Find what triangle a point is in: x,y"));
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
   doc.pl.resize(1);
