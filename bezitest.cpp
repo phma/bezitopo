@@ -1964,6 +1964,8 @@ void testpolyline()
   polyarc q;
   polyspiral r;
   cout<<"testpolyline"<<endl;
+  r.smooth(); // sets the curvy flag
+  bendlimit=DEG180+7;
   p.insert(xy(0,0));
   q.insert(xy(0,0));
   r.insert(xy(0,0));
@@ -2003,6 +2005,7 @@ void testpolyline()
   assert(fabs(q.area()-M_PI*6.25)<0.0005);
   cout<<q.getarc(0).center().north()<<endl;
   cout<<q.length()<<endl;
+  bendlimit=DEG120;
 }
 
 bool before(xy a1,xy a2,xy a3,xy b1,xy b2,xy b3)
@@ -2444,6 +2447,76 @@ void testcontour()
   doc.writeXml(ofile);
 }
 
+void testfoldcontour()
+/* This is a test of one triangle from Independence Park in which the contours
+ * bend through angles of at least 135° and are drawn badly. The triangle
+ * is on the northeast side. There is one very thin triangle between it and the
+ * outside.
+ */
+{
+  int i,j;
+  double conterval;
+  ofstream ofile("foldcontour.bez");
+  psopen("foldcontour.ps");
+  psprolog();
+  startpage();
+  setscale(194,-143,221,182,-DEG60);
+  doc.pl[1].clear();
+  doc.pl[1].addpoint(1,point(-56.185204978391994,267.41484378968016,206.0516647193294,"BC")); // 956
+  doc.pl[1].addpoint(2,point(13.2558628396946,217.37694386590738,208.42972517145031,"TP L")); // 1112
+  doc.pl[1].addpoint(3,point(234.44101498596137,119.28953213107889,211.83558242316485,"EP")); // 430
+  doc.pl[1].maketin();
+  doc.pl[1].makegrad(0.);
+  doc.pl[1].points[1].gradient=xy(.019183781520193895,-.03849948394793535);
+  doc.pl[1].points[2].gradient=xy(.015882042149802312,-.03014908783924382);
+  doc.pl[1].points[3].gradient=xy(.013672322600319966,-.02723434193323573);
+  doc.pl[1].maketriangles();
+  /*doc.pl[1].triangles[0].ctrl[0]=207.35851092221836;
+  doc.pl[1].triangles[0].ctrl[0]=210.57774846809454;
+  doc.pl[1].triangles[0].ctrl[0]=207.38847734738403;
+  doc.pl[1].triangles[0].ctrl[0]=209.6010286337486;
+  doc.pl[1].triangles[0].ctrl[0]=209.46053685740776;
+  doc.pl[1].triangles[0].ctrl[0]=211.01708495532736;
+  doc.pl[1].triangles[0].ctrl[0]=210.1464041938586;*/
+  doc.pl[1].setgradient();
+  doc.pl[1].makeqindex();
+  doc.pl[1].findcriticalpts();
+  doc.pl[1].addperimeter();
+  setcolor(0,1,1);
+  for (i=0;i<doc.pl[1].triangles.size();i++)
+    for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
+      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+  rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
+  //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
+  conterval=0.1;
+  roughcontours(doc.pl[1],conterval);
+  setcolor(0,0,0);
+  for (i=0;i<doc.pl[1].contours.size();i++)
+  {
+    spline(doc.pl[1].contours[i].approx3d(1));
+  }
+  endpage();
+  startpage();
+  setscale(194,-143,221,182,-DEG60);
+  setcolor(0,1,1);
+  for (i=0;i<doc.pl[1].triangles.size();i++)
+    for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
+      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+  rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
+  //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
+  smoothcontours(doc.pl[1],conterval);
+  setcolor(0,0,0);
+  for (i=0;i<doc.pl[1].contours.size();i++)
+  {
+    //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
+    spline(doc.pl[1].contours[i].approx3d(1));
+  }
+  endpage();
+  pstrailer();
+  psclose();
+  doc.writeXml(ofile);
+}
+
 void clampcubic()
 /* Determine values which will be used to check whether a spiralarc well
  * approximates a contour. The contour segment is a piece of an elliptic
@@ -2794,6 +2867,7 @@ int main(int argc, char *argv[])
   testellipsoid();
   testcolor();
   testcontour();
+  testfoldcontour();
   testroscat();
   testabsorient();
   testhlattice();

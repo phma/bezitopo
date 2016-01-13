@@ -13,7 +13,11 @@
 #include "bezier3d.h"
 #include "spiral.h"
 
-#define BENDLIMIT DEG120
+extern int bendlimit;
+/* The maximum angle through which a segment of polyspiral can bend. If the bend
+ * is greater, it will be replaced with a straight line segment. This prevents
+ * messes when drawing contours. Normal value is 120°.
+ */
 
 /* Polylines and alignments are very similar. The differences are:
  * polylines are in a horizontal plane, whereas alignments have vertical curves;

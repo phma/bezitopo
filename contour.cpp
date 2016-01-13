@@ -300,11 +300,17 @@ void smoothcontours(pointlist &pl,double conterval)
 	  if (sarc.getdelta()==883276262)
 	    cout<<"883276262"<<endl;
 	  midptri=pl.qinx.findt((sarc.getstart()+sarc.getend())/2);
-	  if (midptri->in(sarc.getstart()) && midptri->in(sarc.getend()) &&
-	    !(midptri->in(lpt) && midptri->in(rpt)))
-	    sp=splitpoint(lpt.elev()-pl.elevation(lpt),rpt.elev()-pl.elevation(rpt),0);
+	  if (midptri)
+	    if (midptri->in(sarc.getstart()) && midptri->in(sarc.getend()) &&
+	      !(midptri->in(lpt) && midptri->in(rpt)))
+	      sp=splitpoint(lpt.elev()-pl.elevation(lpt),rpt.elev()-pl.elevation(rpt),0);
+	    else
+	      sp=splitpoint(lpt.elev()-midptri->elevation(lpt),rpt.elev()-midptri->elevation(rpt),conterval*wide);
 	  else
-	    sp=splitpoint(lpt.elev()-midptri->elevation(lpt),rpt.elev()-midptri->elevation(rpt),conterval*wide);
+	  {
+	    sp=0.5;
+	    cerr<<"can't happen: midptri is null"<<endl;
+	  }
 	  if (sp && sarc.length()>conterval)
 	  {
 	    //cout<<"segment "<<n<<" of "<<sz<<" of contour "<<i<<" needs splitting at "<<sp<<endl;

@@ -18,6 +18,7 @@
 #include "manysum.h"
 #include "ldecimal.h"
 using namespace std;
+int bendlimit=DEG120;
 
 int midarcdir(xy a,xy b,xy c)
 /* Returns the bearing of the arc abc at point b. May be off by 360°;
@@ -501,7 +502,7 @@ void polyspiral::setspiral(int i)
   s=spiralarc(xyz(endpoints[i],elevation),xyz(endpoints[j],elevation));
   d1=bearings[j]-bearings[i]+DEG360*(j<i);
   d2=bearings[j]+bearings[i]+DEG360*(j<i)-2*dir(endpoints[i],endpoints[j]);
-  if (!curvy || abs(d1)>=BENDLIMIT || abs(d2)>=BENDLIMIT || abs(d1)+abs(d2)>=BENDLIMIT)
+  if (!curvy || abs(d1)>=bendlimit || abs(d2)>=bendlimit || abs(d1)+abs(d2)>=bendlimit)
     d1=d2=0;
   s.setdelta(d1,d2);
   if (std::isnan(s.length()))

@@ -394,7 +394,11 @@ const point& point::operator=(const point &rhs)
 
 void point::writeXml(ofstream &ofile,pointlist &pl)
 {
-  ofile<<"<point n=\""<<pl.revpoints[this]<<"\" d=\""<<xmlEscape(note)<<"\">"<<ldecimal(x)<<' '<<ldecimal(y)<<' '<<ldecimal(z)<<"</point>";
+  ofile<<"<point n=\""<<pl.revpoints[this]<<"\" d=\""<<xmlEscape(note)<<"\">"<<ldecimal(x)<<' '<<ldecimal(y)<<' '<<ldecimal(z);
+  ofile<<"<grad>";
+  gradient.writeXml(ofile);
+  ofile<<"</grad>";
+  ofile<<"</point>";
 }
 
 int point::valence()
