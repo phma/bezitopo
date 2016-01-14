@@ -104,7 +104,7 @@ void indpark(string args)
   psopen("IndependencePark.ps");
   psprolog();
   startpage();
-  setscale(w,s,e,n,0);
+  setscale(-n,w,-s,e,DEG90);
   setcolor(0,0.6,0.6);
   for (i=0;i<doc.pl[1].edges.size();i++)
     spline(doc.pl[1].edges[i].getsegment().approx3d(1));
@@ -118,7 +118,7 @@ void indpark(string args)
     {
       endpage();
       startpage();
-      setscale(w,s,e,n,0);
+      setscale(-n,w,-s,e,DEG90);
     }
     switch (lrint(doc.pl[1].contours[i].getElevation()/0.1)%10)
     {
@@ -244,6 +244,58 @@ void rasterdraw_i(string args)
 
 void contourdraw_i(string args)
 {
+  string contervalstr;
+  double conterval;
+  double w,e,s,n;
+  int i,j;
+  contervalstr=firstarg(args);
+  conterval=parse_length(contervalstr);
+  if (conterval>5e-6 && conterval<1e5)
+    if (doc.pl[1].edges.size())
+    {
+      doc.pl[1].findcriticalpts();
+      doc.pl[1].addperimeter();
+      roughcontours(doc.pl[1],conterval);
+      doc.pl[1].removeperimeter();
+      smoothcontours(doc.pl[1],conterval);
+      w=doc.pl[1].dirbound(degtobin(0));
+      s=doc.pl[1].dirbound(degtobin(90));
+      e=-doc.pl[1].dirbound(degtobin(180));
+      n=-doc.pl[1].dirbound(degtobin(270));
+      psopen(args.c_str());
+      psprolog();
+      startpage();
+      setscale(w,s,e,n,0);
+      setcolor(0,0.6,0.6);
+      for (i=0;i<doc.pl[1].edges.size();i++)
+	spline(doc.pl[1].edges[i].getsegment().approx3d(1));
+      setcolor(0,1,1);
+      for (i=0;i<doc.pl[1].triangles.size();i++)
+	for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
+	  spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+      for (i=0;i<doc.pl[1].contours.size();i++)
+      {
+	switch (lrint(doc.pl[1].contours[i].getElevation()/conterval)%10)
+	{
+	  case 0:
+	    setcolor(1,0,0);
+	    break;
+	  case 5:
+	    setcolor(0,0,1);
+	    break;
+	  default:
+	    setcolor(0,0,0);
+	}
+	spline(doc.pl[1].contours[i].approx3d(0.1));
+      }
+      endpage();
+      pstrailer();
+      psclose();
+    }
+    else
+      cout<<"No TIN present. Please make a TIN first."<<endl;
+  else
+    cout<<"Contour interval should be between 5 µm and 10 km"<<endl;
 }
 
 void help(string args)
@@ -276,6 +328,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("maketin",maketin_i,"Make triangulated irregular network"));
   commands.push_back(command("drawtin",drawtin_i,"Draw TIN: filename.ps"));
   commands.push_back(command("raster",rasterdraw_i,"Draw raster topo: filename.ppm"));
+  commands.push_back(command("contour",contourdraw_i,"Draw contour topo: interval filename.ps"));
   commands.push_back(command("trin",trin_i,"Find what triangle a point is in: x,y"));
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));

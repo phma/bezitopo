@@ -11,6 +11,24 @@ using namespace std;
 
 bool subcont;
 
+string firstarg(string &args)
+{
+  size_t pos;
+  string ret;
+  pos=args.find_first_not_of(' ');
+  if (pos==string::npos)
+    pos=0;
+  args.erase(0,pos);
+  pos=args.find(' ');
+  ret=args.substr(0,pos);
+  args.erase(0,pos);
+  pos=args.find_first_not_of(' ');
+  if (pos==string::npos)
+    pos=0;
+  args.erase(0,pos);
+  return ret;
+}
+
 string trim(string word)
 {
   size_t pos;

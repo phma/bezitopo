@@ -28,7 +28,8 @@ struct arangle // absolute or relative angle
 
 extern bool subcont; // continue flag within commands
 
-string trim(string word);
+std::string firstarg(std::string &args);
+std::string trim(std::string word);
 void setfoot_i(std::string args);
 void setlengthunit_i(std::string args);
 arangle parsearangle(std::string angstr,int unitp);
