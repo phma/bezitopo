@@ -562,71 +562,77 @@ void pointlist::makegrad(double corr)
 // Compute the gradient at each point.
 // corr is a correlation factor which is how much the slope
 // at one end of an edge affects the slope at the other.
-{ptlist::iterator i;
- int n,m;
- edge *e;
- double zdiff,zxtrap,zthere;
- xy gradthere,diff;
- double sum1,sumx,sumy,sumz,sumxx,sumxy,sumxz,sumzz,sumyy,sumyz;
- for (i=points.begin();i!=points.end();i++)
-     i->second.gradient=xy(0,0);
- for (n=0;n<10;n++)
-     {for (i=points.begin();i!=points.end();i++)
-          {//i->second.gradient=xy(0,0);
-           sum1=sumx=sumy=sumz=sumxx=sumxy=sumxz=sumzz=sumyy=sumyz=0;
-           for (m=0,e=i->second.line;m==0 || e!=i->second.line;m++,e=e->next(&i->second))
-               if (!e->broken)
-                  {gradthere=e->otherend(&i->second)->gradient;
-                   diff=(xy)(*e->otherend(&i->second))-(xy)i->second;
-                   zdiff=e->otherend(&i->second)->elev()-i->second.elev();
-                   zxtrap=zdiff-dot(gradthere,diff);
-                   zthere=zdiff+corr*zxtrap;
-                   sum1+=1;
-                   sumx+=diff.east();
-                   sumy+=diff.north();
-                   sumz+=zthere;
-                   sumxx+=diff.east()*diff.east();
-                   sumyy+=diff.north()*diff.north();
-                   sumzz+=zthere*zthere;
-                   sumxy+=diff.east()*diff.north();
-                   sumxz+=diff.east()*zthere;
-                   sumyz+=diff.north()*zthere;
-                   }
-           //printf("point %d sum1=%f zdiff=%f zthere=%f\n",i->first,sum1,zdiff,zthere);
-           if (sum1)
-              {sum1++; //add the point i to the set
-               sumx/=sum1;
-               sumy/=sum1;
-               sumz/=sum1;
-               sumxx/=sum1;
-               sumyy/=sum1;
-               sumzz/=sum1;
-               sumxy/=sum1;
-               sumxz/=sum1;
-               sumyz/=sum1;
-               sumxx-=sumx*sumx;
-               sumyy-=sumy*sumy;
-               sumzz-=sumz*sumz;
-               sumxy-=sumx*sumy;
-               sumxz-=sumx*sumz;
-               sumyz-=sumy*sumz;
-               /* Gradient is computed by this matrix equation:
-                  (xx xy)   (gradx)
-                  (     ) × (     ) = (xz yz)
-                  (xy yy)   (grady) */
-               i->second.newgradient=xy(sumxz/sumxx,sumyz/sumyy);
-	       /*if (i->first==63)
-		 printf("sumxz %f sumxx %f sumyz %f sumyy %f\n",sumxz,sumxx,sumyz,sumyy);*/
-               }
-           else
-              fprintf(stderr,"Warning: point at address %p has no edges that don't cross breaklines\n",&i->second);
-           }
-      for (i=points.begin();i!=points.end();i++)
-          {i->second.oldgradient=i->second.gradient;
-           i->second.gradient=i->second.newgradient;
-           }
+{
+  ptlist::iterator i;
+  int n,m;
+  edge *e;
+  double zdiff,zxtrap,zthere;
+  xy gradthere,diff;
+  double sum1,sumx,sumy,sumz,sumxx,sumxy,sumxz,sumzz,sumyy,sumyz;
+  for (i=points.begin();i!=points.end();i++)
+    i->second.gradient=xy(0,0);
+  for (n=0;n<10;n++)
+  {
+    for (i=points.begin();i!=points.end();i++)
+    {
+      //i->second.gradient=xy(0,0);
+      sum1=sumx=sumy=sumz=sumxx=sumxy=sumxz=sumzz=sumyy=sumyz=0;
+      for (m=0,e=i->second.line;m==0 || e!=i->second.line;m++,e=e->next(&i->second))
+      if (!e->broken)
+      {
+	gradthere=e->otherend(&i->second)->gradient;
+	diff=(xy)(*e->otherend(&i->second))-(xy)i->second;
+	zdiff=e->otherend(&i->second)->elev()-i->second.elev();
+	zxtrap=zdiff-dot(gradthere,diff);
+	zthere=zdiff+corr*zxtrap;
+	sum1+=1;
+	sumx+=diff.east();
+	sumy+=diff.north();
+	sumz+=zthere;
+	sumxx+=diff.east()*diff.east();
+	sumyy+=diff.north()*diff.north();
+	sumzz+=zthere*zthere;
+	sumxy+=diff.east()*diff.north();
+	sumxz+=diff.east()*zthere;
+	sumyz+=diff.north()*zthere;
       }
- }
+      //printf("point %d sum1=%f zdiff=%f zthere=%f\n",i->first,sum1,zdiff,zthere);
+      if (sum1)
+      {
+	sum1++; //add the point i to the set
+	sumx/=sum1;
+	sumy/=sum1;
+	sumz/=sum1;
+	sumxx/=sum1;
+	sumyy/=sum1;
+	sumzz/=sum1;
+	sumxy/=sum1;
+	sumxz/=sum1;
+	sumyz/=sum1;
+	sumxx-=sumx*sumx;
+	sumyy-=sumy*sumy;
+	sumzz-=sumz*sumz;
+	sumxy-=sumx*sumy;
+	sumxz-=sumx*sumz;
+	sumyz-=sumy*sumz;
+	/* Gradient is computed by this matrix equation:
+	(xx xy)   (gradx)
+	(     ) × (     ) = (xz yz)
+	(xy yy)   (grady) */
+	i->second.newgradient=xy(sumxz/sumxx,sumyz/sumyy);
+	/*if (i->first==63)
+	printf("sumxz %f sumxx %f sumyz %f sumyy %f\n",sumxz,sumxx,sumyz,sumyy);*/
+      }
+      else
+	fprintf(stderr,"Warning: point at address %p has no edges that don't cross breaklines\n",&i->second);
+    }
+    for (i=points.begin();i!=points.end();i++)
+    {
+      i->second.oldgradient=i->second.gradient;
+      i->second.gradient=i->second.newgradient;
+    }
+  }
+}
 
 void pointlist::maketriangles()
 {
