@@ -303,6 +303,21 @@ void triangle::writeXml(ofstream &ofile,pointlist &pl)
   ofile<<"\" />";
 }
 
+edge *triangle::checkBentContour()
+/* Check for the following conditions:
+ * • The triangle does not have any critical points.
+ * • The edges are all monotonic.
+ * • The gradient on two sides (at a place TBD) points in and on the third
+ *   points out, or vice versa.
+ * • The gradients on the two sides have an angle greater than 90° between them.
+ * These conditions may result in contours being drawn backward or tangled.
+ * The fix is to split the third side in half, which will add a subdivision
+ * line cutting the bent contours, hopefully preventing them from being misdrawn.
+ */
+{
+  return nullptr;
+}
+
 double deriv0(vector<double> xsect)
 {
   return (-xsect[3]+9*xsect[2]+9*xsect[1]-xsect[0])/16;
