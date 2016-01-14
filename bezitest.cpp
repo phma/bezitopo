@@ -2467,9 +2467,9 @@ void testfoldcontour()
   doc.pl[1].addpoint(3,point(234.44101498596137,119.28953213107889,211.83558242316485,"EP")); // 430
   doc.pl[1].maketin();
   doc.pl[1].makegrad(0.);
-  doc.pl[1].points[1].gradient=xy(.019183781520193895,-.03849948394793535);
-  doc.pl[1].points[2].gradient=xy(.015882042149802312,-.03014908783924382);
-  doc.pl[1].points[3].gradient=xy(.013672322600319966,-.02723434193323573);
+  doc.pl[1].points[1].gradient=xy(.023188005886758664,-.04617177625035849);
+  doc.pl[1].points[2].gradient=xy(.01926493749884871,-.035692258139347684);
+  doc.pl[1].points[3].gradient=xy(.012156892166327406,-.024249907326683827);
   doc.pl[1].maketriangles();
   /*doc.pl[1].triangles[0].ctrl[0]=207.35851092221836;
   doc.pl[1].triangles[0].ctrl[0]=210.57774846809454;
