@@ -75,6 +75,7 @@ int radtobin(double angle);
 #define DEG90 0x20000000
 #define DEG120 0x2aaaaaab
 #define DEG180 0x40000000
+#define DEG270 0x60000000
 #define DEG360 0x80000000
 
 std::string bintoangle(int angle,int unitp);

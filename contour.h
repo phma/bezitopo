@@ -17,4 +17,4 @@ polyline trace(uintptr_t edgep,double elev);
 polyline intrace(triangle *tri,double elev);
 bool ismarked(uintptr_t ep);
 void roughcontours(pointlist &pl,double conterval);
-void smoothcontours(pointlist &pl,double conterval);
+void smoothcontours(pointlist &pl,double conterval,bool log=false);

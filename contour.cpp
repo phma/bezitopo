@@ -19,6 +19,7 @@
 #include "contour.h"
 #include "pointlist.h"
 #include "relprime.h"
+#include "ps.h"
 using namespace std;
 
 float splittab[65]=
@@ -264,15 +265,26 @@ void roughcontours(pointlist &pl,double conterval)
   }
 }
 
-void smoothcontours(pointlist &pl,double conterval)
+void smoothcontours(pointlist &pl,double conterval,bool log)
 {
   int i,j,k,n=0,sz,origsz;
   double sp,wide;
+  double we,ea,so,no;
   xyz lpt,rpt,newpt;
   xy spt;
   segment splitseg;
   spiralarc sarc;
   triangle *midptri;
+  ofstream logfile;
+  we=pl.dirbound(0);
+  so=pl.dirbound(DEG90);
+  ea=-pl.dirbound(DEG180);
+  no=-pl.dirbound(DEG270);
+  if (log)
+  {
+    psopen("smoothcontours.ps");
+    psprolog();
+  }
   for (i=0;i<pl.contours.size();i++)
   {
     cout<<"smoothcontours "<<i<<'/'<<pl.contours.size()<<" elev "<<pl.contours[i].getElevation()<<" \r";
@@ -323,9 +335,24 @@ void smoothcontours(pointlist &pl,double conterval)
 	      sz++;
 	      j=0;
 	    }
+	    if (log)
+	    {
+	      startpage();
+	      setscale(we,so,ea,no,0);
+	      setcolor(0,0,0);
+	      spline(pl.contours[i].approx3d(0.1));
+	      setcolor(0,0,1);
+	      spline(splitseg.approx3d(0.1));
+	      endpage();
+	    }
 	  }
 	}
       }
     }
+  }
+  if (log)
+  {
+    pstrailer();
+    psclose();
   }
 }

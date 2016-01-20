@@ -2434,8 +2434,9 @@ void testcontour()
       spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
-  smoothcontours(doc.pl[1],conterval);
-  setcolor(0,0,0);
+  psclose();
+  smoothcontours(doc.pl[1],conterval,true);
+  /*setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
     //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
@@ -2443,7 +2444,7 @@ void testcontour()
   }
   endpage();
   pstrailer();
-  psclose();
+  psclose();*/
   doc.writeXml(ofile);
 }
 
