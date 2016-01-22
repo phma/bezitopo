@@ -33,6 +33,7 @@ using namespace std;
 
 bool cont=true;
 document doc;
+string savefilename;
 
 void indpark(string args)
 /* Concrete rectangle with apparent overlap: elevation 203.7
@@ -257,7 +258,7 @@ void contourdraw_i(string args)
       doc.pl[1].addperimeter();
       roughcontours(doc.pl[1],conterval);
       doc.pl[1].removeperimeter();
-      smoothcontours(doc.pl[1],conterval);
+      smoothcontours(doc.pl[1],conterval,true);
       w=doc.pl[1].dirbound(degtobin(0));
       s=doc.pl[1].dirbound(degtobin(90));
       e=-doc.pl[1].dirbound(degtobin(180));
@@ -298,6 +299,22 @@ void contourdraw_i(string args)
     cout<<"Contour interval should be between 5 µm and 10 km"<<endl;
 }
 
+void save_i(string args)
+{
+  ofstream ofile;
+  args=trim(args);
+  if (args.length())
+    savefilename=args;
+  if (savefilename.length())
+  {
+    ofile.open(savefilename);
+    doc.writeXml(ofile);
+    ofile.close();
+  }
+  else
+    cout<<"No filename specified"<<endl;
+}
+
 void help(string args)
 {
   int i;
@@ -325,6 +342,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("cvtmeas",cvtmeas_i,"Convert measurements"));
   commands.push_back(command("read",readpoints,"Read coordinate file in PNEZD format: filename"));
   commands.push_back(command("write",writepoints,"Write coordinate file in PNEZD format: filename"));
+  commands.push_back(command("save",save_i,"Write scene file: filename.bez"));
   commands.push_back(command("maketin",maketin_i,"Make triangulated irregular network"));
   commands.push_back(command("drawtin",drawtin_i,"Draw TIN: filename.ps"));
   commands.push_back(command("raster",rasterdraw_i,"Draw raster topo: filename.ppm"));
