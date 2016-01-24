@@ -476,6 +476,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
 	     edges[(n+1)%val+edgeoff].nexta=&edges[n+edgeoff];
 	     if (visible[n]->line)
 	     {
+	       assert(n+edgeoff<edges.size() && n+edgeoff>=0);
                edges[n+edgeoff].nextb=visible[n]->line->next(visible[n]); // crashes here
                visible[n]->line->setnext(visible[n],&edges[n+edgeoff]);
 	     }

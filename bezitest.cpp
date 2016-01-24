@@ -2434,7 +2434,7 @@ void testcontour()
       spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
-  psclose();
+  //psclose();
   smoothcontours(doc.pl[1],conterval,false);
   setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
@@ -2521,6 +2521,7 @@ void testfoldcontour()
 void testzigzagcontour()
 /* This is a test of one triangle from Sandymush (Burnt Chimney job 3608)
  * in which the contours are drawn with erroneous zigzags and cross.
+ * When isolated, this triangle is drawn correctly.
  */
 {
   int i,j;

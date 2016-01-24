@@ -1435,7 +1435,7 @@ int triangle::proceed(int subdir,double elevation)
     /*for (i=0;i<list.size();i++)
       cout<<i<<' '<<list[i].a<<' '<<setprecision(7)<<
 	" ("<<list[i].farend.east()<<','<<list[i].farend.north()<<')'<<endl;*/
-    for (i=0;i<list.size();i++)
+    for (i=j=0;i<list.size();i++)
       for (j=i+1;j<list.size() && list[i].a==list[j].a;j++)
 	if (list[i].farend==list[j].farend)
 	  goto found;

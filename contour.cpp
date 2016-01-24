@@ -110,7 +110,7 @@ polyline intrace(triangle *tri,double elev)
  */
 {
   polyline ret(elev);
-  int i,j,start;
+  int i,j=-610,start=-987;
   vector<int> sube;
   xy cept;
   for (i=0;i<tri->subdiv.size();i++)

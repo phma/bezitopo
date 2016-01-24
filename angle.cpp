@@ -226,7 +226,7 @@ string bintoangle(int angle,int unitp)
 
 int parseangle(string angstr,int unitp)
 {
-  double angmult,prec;
+  double angmult=0,prec;
   int i,ulen,angle;
   bool point,six;
   string uchar;
