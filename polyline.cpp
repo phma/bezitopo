@@ -517,7 +517,7 @@ void polyspiral::setspiral(int i)
   midbearings[i]=s.bearing(lengths[i]/2);
   midpoints[i]=s.station(lengths[i]/2);
   curvatures[i]=s.curvature(lengths[i]/2);
-  clothances[i]=s.clothance();
+  clothances[i]=s.clothance(); // BUG: this line is modifying *psfile
 }
 
 void polyspiral::smooth()

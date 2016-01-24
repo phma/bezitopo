@@ -2487,7 +2487,7 @@ void testfoldcontour()
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
       spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
-  rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
+  //rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"foldcontour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   conterval=0.1;
   roughcontours(doc.pl[1],conterval);
@@ -2503,7 +2503,68 @@ void testfoldcontour()
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
       spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
-  rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
+  //rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"foldcontour.ppm");
+  //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
+  smoothcontours(doc.pl[1],conterval);
+  setcolor(0,0,0);
+  for (i=0;i<doc.pl[1].contours.size();i++)
+  {
+    //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
+    spline(doc.pl[1].contours[i].approx3d(1));
+  }
+  endpage();
+  pstrailer();
+  psclose();
+  doc.writeXml(ofile);
+}
+
+void testzigzagcontour()
+/* This is a test of one triangle from Sandymush (Burnt Chimney job 3608)
+ * in which the contours are drawn with erroneous zigzags and cross.
+ */
+{
+  int i,j;
+  double conterval;
+  ofstream ofile("zigzagcontour.bez");
+  psopen("zigzagcontour.ps");
+  psprolog();
+  startpage();
+  setscale(15111,14793,15346,15108,0);
+  doc.pl[1].clear();
+  doc.pl[1].addpoint(1,point(15345.127559055116,15064.447223774447,281.5871780543561,"VRS DEL")); // 1009
+  doc.pl[1].addpoint(2,point(15202.258582677165,15107.048442976886,280.3079298958598,"OL PK397")); // 398
+  doc.pl[1].addpoint(3,point(15111.2489001778,14793.022799085598,280.59313182626363,"DEL 2004")); // 1
+  doc.pl[1].maketin();
+  doc.pl[1].makegrad(0.);
+  doc.pl[1].points[1].gradient=xy(.006568946045497389,.003201194208355324);
+  doc.pl[1].points[2].gradient=xy(-.000821970759633599,.007101097679719867);
+  doc.pl[1].points[3].gradient=xy(.0025853345946618457,-3.132437738730802e-5);
+  doc.pl[1].maketriangles();
+  doc.pl[1].setgradient();
+  doc.pl[1].makeqindex();
+  doc.pl[1].findcriticalpts();
+  doc.pl[1].addperimeter();
+  setcolor(0,1,1);
+  for (i=0;i<doc.pl[1].triangles.size();i++)
+    for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
+      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+  //rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"zigzagcontour.ppm");
+  //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
+  conterval=0.1;
+  roughcontours(doc.pl[1],conterval);
+  setcolor(0,0,0);
+  for (i=0;i<doc.pl[1].contours.size();i++)
+  {
+    spline(doc.pl[1].contours[i].approx3d(1));
+  }
+  endpage();
+  startpage();
+  setscale(15111,14793,15346,15108,0);
+  setcolor(0,1,1);
+  for (i=0;i<doc.pl[1].triangles.size();i++)
+    for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
+      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+  //rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"zigzagcontour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   smoothcontours(doc.pl[1],conterval);
   setcolor(0,0,0);
@@ -2869,6 +2930,7 @@ int main(int argc, char *argv[])
   testcolor();
   testcontour();
   testfoldcontour();
+  testzigzagcontour();
   testroscat();
   testabsorient();
   testhlattice();
