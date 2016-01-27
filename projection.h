@@ -21,3 +21,23 @@
  * it results in raising a complex number to the 0 power, subtracting 1, and
  * dividing by 0.
  */
+#include <array>
+#include "ellipsoid.h"
+
+struct latlong
+{
+  double lat;
+  double lon;
+};
+
+class Projection
+{
+public:
+  Projection();
+  virtual latlong gridToLatlong(xy grid)=0;
+  virtual xyz gridToGeocentric(xy grid)=0;
+  virtual xy geocentricToGrid(xyz geoc)=0;
+  virtual xy latlongToGrid(latlong ll)=0;
+protected:
+  ellipsoid *ellip;
+};
