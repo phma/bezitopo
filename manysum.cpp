@@ -47,11 +47,19 @@ void manysum::prune()
 
 manysum& manysum::operator+=(double x)
 {
-  int i,j;
+  int i=DBL_MAX_EXP+3,j=DBL_MAX_EXP+3;
   double d;
   while (x!=0)
   {
-    frexp(x,&i);
+    /* frexp(NAN) on Linux sets i to 0. On DragonFly BSD,
+     * it leaves i unchanged. This causes the program to hang
+     * if j>i. Setting it to DBL_MAX_EXP+5 insures that NAN
+     * uses a bucket separate from finite numbers.
+     */
+    if (std::isfinite(x))
+      frexp(x,&i);
+    else
+      i=DBL_MAX_EXP+5;
     bucket[i]+=x;
     frexp(d=bucket[i],&j);
     if (j>i)
