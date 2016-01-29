@@ -182,7 +182,7 @@ vector<double> segment::vextrema(bool withends)
   vector<double> ret;
   ret=::vextrema(start.elev(),control1,control2,end.elev());
   for (i=ret.size()-1;i>=0 && !withends;i--)
-    if (ret[i]==0 || ret[i]==1 || ::isnan(ret[i]))
+    if (ret[i]==0 || ret[i]==1 || std::isnan(ret[i]))
       ret.erase(ret.begin()+i);
   if (ret.size())
     len=length();

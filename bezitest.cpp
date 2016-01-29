@@ -1986,7 +1986,7 @@ void testpolyline()
   assert(fabs(r.length()-5*M_PI)<1e-6);
   q.open();
   assert(q.length()==7);
-  assert(::isnan(q.area()));
+  assert(std::isnan(q.area()));
   q.close();
   q.setlengths();
   assert(q.length()==12);
