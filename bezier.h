@@ -12,6 +12,7 @@
 #define M_SQRT_3_4 0.86602540378443864676372317
 #define M_SQRT_3 1.73205080756887729352744634
 #define M_SQRT_1_3 0.5773502691896257645091487805
+#define M_SQRT_432 20.78460969082652752232935609
 #define PT_MIN 0
 #define PT_FLAT 1
 #define PT_MAX 2
@@ -79,6 +80,7 @@ public:
   triangle *findt(xy pnt,bool clip=false);
   double area();
   double perimeter();
+  double acicularity();
   xy centroid();
   void setcentercp();
   void setgradmat();

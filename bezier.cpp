@@ -49,12 +49,22 @@ triangle::triangle()
 }
 
 double triangle::area()
-{return area3(*a,*b,*c);
- }
+{
+  return area3(*a,*b,*c);
+}
 
 double triangle::perimeter()
 {
   return dist(xy(*a),xy(*b))+dist(xy(*c),xy(*a))+dist(xy(*b),xy(*c));
+}
+
+double triangle::acicularity()
+/* The acicularity of an equilateral triangle is 1. An acicular triangle is
+ * one with at least one very small acute angle. Acicular triangles can mess up
+ * tracing of contours.
+ */
+{
+  return sqr(peri)/sarea/M_SQRT_432;
 }
 
 double triangle::elevation(xy pnt)
@@ -293,6 +303,7 @@ void triangle::writeXml(ofstream &ofile,pointlist &pl)
   int i;
   ofile<<"<triangle corners=\"";
   ofile<<pl.revpoints[a]<<' '<<pl.revpoints[b]<<' '<<pl.revpoints[c];
+  ofile<<"\" acicularity=\""<<acicularity();
   ofile<<"\" control=\"";
   for (i=0;i<7;i++)
   {
