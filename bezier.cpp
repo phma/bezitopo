@@ -193,7 +193,7 @@ double triangle::ctrlpt(xy pnt1,xy pnt2)
 {
   int which;
   double crit,ret;
-  crit=1/2.0*(1/dist(xy(*a),xy(*b))+1/dist(xy(*c),xy(*a))+1/dist(xy(*b),xy(*c)));
+  crit=1/(2.0*(1/dist(xy(*a),xy(*b))+1/dist(xy(*c),xy(*a))+1/dist(xy(*b),xy(*c))));
   which=(dist(pnt1,*a)<crit)+2*(dist(pnt1,*b)<crit)+3*(dist(pnt1,*c)<crit)
        +4*(dist(pnt2,*a)<crit)+8*(dist(pnt2,*b)<crit)+12*(dist(pnt2,*c)<crit);
   ret=ctrl[ctrlpttab[which]];
