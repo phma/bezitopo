@@ -223,6 +223,8 @@ void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
 	  sqerror+=sqr(corr[i]);
 	cout<<sqerror<<" after"<<endl;
       }
+      else
+	cout<<"numnums "<<numnums<<endl;
     }
   }
 }
