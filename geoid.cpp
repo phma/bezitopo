@@ -369,3 +369,17 @@ cubemap::cubemap()
   for (i=0;i<6;i++)
     faces[i].face=i+1;
 }
+
+double cubemap::undulation(int lat,int lon)
+{
+  return undulation(Sphere.geoc(lat,lon,0));
+}
+
+double cubemap::undulation(xyz dir)
+{
+  vball v=encodedir(dir);
+  if (v.face<1 || v.face>6)
+    return NAN;
+  else
+    return faces[v.face-1].undulation(v.x,v.y)*scale;
+}

@@ -238,6 +238,7 @@ void outund(string loc,int lat,int lon)
   cout<<"Undulation in "<<loc<<" is"<<endl;
   for (i=0;i<geo.size();i++)
     cout<<i<<": "<<geo[i].elev(lat,lon)<<endl;
+  cout<<"c: "<<cube.undulation(lat,lon)<<endl;
 }
 
 int main(int argc, char *argv[])
@@ -251,11 +252,6 @@ int main(int argc, char *argv[])
   readusngsbin(geo[3],"../g2012bg0.bin");
   readusngsbin(geo[4],"../g2012bp0.bin");
   readusngsbin(geo[5],"../g2012bs0.bin");
-  outund("Green Hill",degtobin(35.4),degtobin(-82.05));
-  outund("Charlotte",degtobin(35.22),degtobin(-80.84));
-  outund("Kitimat",degtobin(54.0547),degtobin(-128.6578)); // in the overlap of two files
-  outund("Denali",degtobin(63.0695),degtobin(-151.0074));
-  outund("Haleakala",degtobin(20.7097),degtobin(-156.2533));
   drawglobecube(1024,62,-7,1,0,"geoid.ppm");
   for (i=0;i<6;i++)
   {
@@ -268,6 +264,11 @@ int main(int argc, char *argv[])
       cout<<" is empty"<<endl;
     refine(cube.faces[i],cube.scale,0.01,1e5,1e5);
   }
+  outund("Green Hill",degtobin(35.4),degtobin(-82.05));
+  outund("Charlotte",degtobin(35.22),degtobin(-80.84));
+  outund("Kitimat",degtobin(54.0547),degtobin(-128.6578)); // in the overlap of two files
+  outund("Denali",degtobin(63.0695),degtobin(-151.0074));
+  outund("Haleakala",degtobin(20.7097),degtobin(-156.2533));
   psopen("geoid.ps");
   psprolog();
   startpage();
