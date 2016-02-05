@@ -78,7 +78,7 @@ void psprolog()
 %% A4 paper.\n\
 \n\
 /. %% ( x y )\n\
-{ newpath 0.3 0 360 arc fill } bind def\n\
+{ newpath 0.1 0 360 arc fill } bind def\n\
 \n\
 /- %% ( x1 y1 x2 y2 )\n\
 { newpath moveto lineto stroke } bind def\n\

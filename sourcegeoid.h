@@ -40,3 +40,4 @@ int readusngsbin(geolattice &geo,std::string filename);
 extern std::vector<geolattice> geo;
 double avgelev(xyz dir);
 std::array<double,6> correction(geoquad &quad,double qpoints[][16]);
+double maxerror(geoquad &quad,double qpoints[][16]);

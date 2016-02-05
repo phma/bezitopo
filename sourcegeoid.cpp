@@ -196,3 +196,21 @@ array<double,6> correction(geoquad &quad,double qpoints[][16])
   ret[5]=ret[5]*2304/51409;
   return ret;
 }
+
+double maxerror(geoquad &quad,double qpoints[][16])
+{
+  double ret=0;
+  int i,j;
+  double diff;
+  geoquad unitquad;
+  for (i=0;i<16;i++)
+    for (j=0;j<16;j++)
+      if (std::isfinite(qpoints[i][j]))
+      {
+	diff=fabs(qpoints[i][j]-quad.undulation(-0.9375+0.125*i,-0.9375+0.125*j));
+	if (diff>ret)
+	  ret=diff;
+      }
+  cout<<"maxerror "<<ret<<endl;
+  return ret;
+}

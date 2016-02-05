@@ -162,9 +162,9 @@ void interroquad(geoquad &quad,double spacing)
   }
 }
 
-void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
+void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double spacing)
 {
-  int i,j=0,numnums;
+  int i,j=0,numnums,ncorr;
   double area,qpoints[16][16],sqerror;
   array<double,6> corr;
   xyz pt;
@@ -186,7 +186,7 @@ void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
 	qpt=quad.center+xy(quad.scale,0)*(i-7.5)/8+xy(0,quad.scale)*(j-7.5)/8;
 	v=vball(quad.face,qpt);
 	pt=decodedir(v);
-	qpoints[i][j]=avgelev(pt);
+	qpoints[i][j]=avgelev(pt)/vscale;
 	if (std::isfinite(qpoints[i][j]))
 	  quad.nums.push_back(qpt);
 	else
@@ -194,19 +194,13 @@ void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
       }
   if (quad.scale>2)
     cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums after"<<endl;
-  if (area>=sqr(sublimit) && quad.isfull()==0)
-  {
-    quad.subdivide();
-    for (i=0;i<4;i++)
-      refine(*quad.sub[i],tolerance,sublimit,spacing);
-  }
-  else
+  if (area<sqr(sublimit) || quad.isfull()!=0)
   {
     for (numnums=i=0;i<16;i++)
       for (j=0;j<16;j++)
 	if (std::isfinite(qpoints[i][j]))
 	  numnums++;
-    if (numnums>1)
+    if (numnums>127)
     {
       if (quad.isnan())
 	quad.und[0]=0;
@@ -214,15 +208,27 @@ void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
       for (sqerror=i=0;i<6;i++)
 	sqerror+=sqr(corr[i]);
       cout<<"numnums "<<numnums<<" sqerror "<<sqerror<<" before ";
-      for (i=0;i<6;i++)
-	quad.und[i]+=rint(corr[i]);
-      corr=correction(quad,qpoints);
-      for (sqerror=i=0;i<6;i++)
-	sqerror+=sqr(corr[i]);
+      do
+      {
+	for (i=ncorr=0;i<6;i++)
+	{
+	  quad.und[i]+=rint(corr[i]);
+	  ncorr+=rint(corr[i])!=0;
+	}
+	corr=correction(quad,qpoints);
+	for (sqerror=i=0;i<6;i++)
+	  sqerror+=sqr(corr[i]);
+      } while (ncorr);
       cout<<sqerror<<" after"<<endl;
     }
     else
       cout<<"numnums "<<numnums<<endl;
+  }
+  if (area>=sqr(sublimit) && (quad.isfull()==0 || maxerror(quad,qpoints)>tolerance/vscale))
+  {
+    quad.subdivide();
+    for (i=0;i<4;i++)
+      refine(*quad.sub[i],vscale,tolerance,sublimit,spacing);
   }
 }
 
@@ -260,7 +266,7 @@ int main(int argc, char *argv[])
       cout<<" has data"<<endl;
     else
       cout<<" is empty"<<endl;
-    refine(cube.faces[i],0.01,1e5,1e5);
+    refine(cube.faces[i],cube.scale,0.01,1e5,1e5);
   }
   psopen("geoid.ps");
   psprolog();
