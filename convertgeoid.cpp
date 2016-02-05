@@ -172,60 +172,57 @@ void refine(geoquad &quad,double tolerance,double sublimit,double spacing)
   xy qpt;
   area=quad.apxarea();
   //cout<<"Area: exact "<<quad.area()<<" approx "<<area<<" ratio "<<quad.area()/area<<endl;
-  if (area>=sqr(sublimit))
+  if (quad.scale>2)
   {
-    if (quad.scale>2)
+    cout<<"face "<<quad.face<<" ctr "<<quad.center.getx()<<','<<quad.center.gety()<<endl;
+    cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums before"<<endl;
+  }
+  if (quad.nans.size()+quad.nums.size()==0 || (quad.isfull() && area/(quad.nans.size()+quad.nums.size())>sqr(spacing)))
+    interroquad(quad,spacing);
+  if (area<sqr(sublimit) || quad.isfull())
+    for (i=0;i<16;i++)
+      for (j=0;j<16;j++)
+      {
+	qpt=quad.center+xy(quad.scale,0)*(i-7.5)/8+xy(0,quad.scale)*(j-7.5)/8;
+	v=vball(quad.face,qpt);
+	pt=decodedir(v);
+	qpoints[i][j]=avgelev(pt);
+	if (std::isfinite(qpoints[i][j]))
+	  quad.nums.push_back(qpt);
+	else
+	  quad.nans.push_back(qpt);
+      }
+  if (quad.scale>2)
+    cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums after"<<endl;
+  if (area>=sqr(sublimit) && quad.isfull()==0)
+  {
+    quad.subdivide();
+    for (i=0;i<4;i++)
+      refine(*quad.sub[i],tolerance,sublimit,spacing);
+  }
+  else
+  {
+    for (numnums=i=0;i<16;i++)
+      for (j=0;j<16;j++)
+	if (std::isfinite(qpoints[i][j]))
+	  numnums++;
+    if (numnums>1)
     {
-      cout<<"face "<<quad.face<<" ctr "<<quad.center.getx()<<','<<quad.center.gety()<<endl;
-      cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums before"<<endl;
-    }
-    if (quad.nans.size()+quad.nums.size()==0 || (quad.isfull() && area/(quad.nans.size()+quad.nums.size())>sqr(spacing)))
-      interroquad(quad,spacing);
-    if (quad.isfull())
-      for (i=0;i<16;i++)
-	for (j=0;j<16;j++)
-	{
-	  qpt=quad.center+xy(quad.scale,0)*(i-7.5)/8+xy(0,quad.scale)*(j-7.5)/8;
-	  v=vball(quad.face,qpt);
-	  pt=decodedir(v);
-	  qpoints[i][j]=avgelev(pt);
-	  if (std::isfinite(qpoints[i][j]))
-	    quad.nums.push_back(qpt);
-	  else
-	    quad.nans.push_back(qpt);
-	}
-    if (quad.scale>2)
-      cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums after"<<endl;
-    if (quad.isfull()==0)
-    {
-      quad.subdivide();
-      for (i=0;i<4;i++)
-	refine(*quad.sub[i],tolerance,sublimit,spacing);
+      if (quad.isnan())
+	quad.und[0]=0;
+      corr=correction(quad,qpoints);
+      for (sqerror=i=0;i<6;i++)
+	sqerror+=sqr(corr[i]);
+      cout<<"numnums "<<numnums<<" sqerror "<<sqerror<<" before ";
+      for (i=0;i<6;i++)
+	quad.und[i]+=rint(corr[i]);
+      corr=correction(quad,qpoints);
+      for (sqerror=i=0;i<6;i++)
+	sqerror+=sqr(corr[i]);
+      cout<<sqerror<<" after"<<endl;
     }
     else
-    {
-      for (numnums=i=0;i<16;i++)
-	for (j=0;j<16;j++)
-	  if (std::isfinite(qpoints[i][j]))
-	    numnums++;
-      if (numnums>1)
-      {
-	if (quad.isnan())
-	  quad.und[0]=0;
-	corr=correction(quad,qpoints);
-	for (sqerror=i=0;i<6;i++)
-	  sqerror+=sqr(corr[i]);
-	cout<<"numnums "<<numnums<<" sqerror "<<sqerror<<" before ";
-	for (i=0;i<6;i++)
-	  quad.und[i]+=rint(corr[i]);
-	corr=correction(quad,qpoints);
-	for (sqerror=i=0;i<6;i++)
-	  sqerror+=sqr(corr[i]);
-	cout<<sqerror<<" after"<<endl;
-      }
-      else
-	cout<<"numnums "<<numnums<<endl;
-    }
+      cout<<"numnums "<<numnums<<endl;
   }
 }
 
