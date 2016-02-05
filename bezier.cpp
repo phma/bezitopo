@@ -183,12 +183,6 @@ void triangle::setgradient(xy pnt,xy grad)
 double triangle::ctrlpt(xy pnt1,xy pnt2)
 /* Returns the elevation of the control point 1/3 of the way from pnt1 to pnt2.
  * If they aren't different corners of the triangle, returns the one in the middle.
- * 
- * There is a heisenbug which results in contour tracing of Independence Park,
- * whose elevation is just over 200 meters, starting around 50 meters. I traced
- * it to this routine returning garbage numbers like 1e-317. The minimum of a
- * Bézier spline with control points (200,0,0,200) is 50. I inserted two lines
- * to alert me if it returned such a number. The bug disappeared.
  */
 {
   int which;
@@ -197,8 +191,8 @@ double triangle::ctrlpt(xy pnt1,xy pnt2)
   which=(dist(pnt1,*a)<crit)+2*(dist(pnt1,*b)<crit)+3*(dist(pnt1,*c)<crit)
        +4*(dist(pnt2,*a)<crit)+8*(dist(pnt2,*b)<crit)+12*(dist(pnt2,*c)<crit);
   ret=ctrl[ctrlpttab[which]];
-  if (fabs(ret)>0 && fabs(ret)<1e-20)
-    cerr<<"ctrlpt garbage"<<endl;
+  assert(which<16); // If this fails, there's a bug in ctrlpt. This bug has been fixed.
+  assert(ctrlpttab[which]!=3); // If this fails, there's a bug in the caller.
   return ret;
 }
 

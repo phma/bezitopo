@@ -201,6 +201,7 @@ polyline trace(uintptr_t edgep,double elev)
     }
     if (edgep==0)
     {
+      // This happens in Independence Park triangle (697 681 564) at elevation 205.6.
       ntri=nullptr;
       cout<<"Tracing stopped in middle of a triangle "<<ret.size()<<endl;
       subedge=tri->subdir(prevedgep);
