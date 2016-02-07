@@ -5,6 +5,7 @@
 /******************************************************/
 #include <cmath>
 #include "geoid.h"
+#include "binio.h"
 #include "angle.h"
 using namespace std;
 
@@ -330,6 +331,23 @@ int geoquad::isfull()
   return (nums.size()>0)-(nans.size()>0);
 }
 
+void geoquad::writeBinary(ofstream &ofile,int nesting)
+{
+  int i;
+  if (subdivided())
+    for (i=0;i<4;i++)
+    {
+      sub[i]->writeBinary(ofile,nesting+1);
+      nesting=-1;
+    }
+  else
+  {
+    ofile<<(char)nesting;
+    for (i=0;i<(isnan()?1:6);i++)
+      writegeint(ofile,und[i]);
+  }
+}
+
 unsigned byteswap(unsigned n)
 {
   return ((n&0xff000000)>>24)|((n&0xff0000)>>8)|((n&0xff00)<<8)|((n&0xff)<<24);
@@ -382,4 +400,11 @@ double cubemap::undulation(xyz dir)
     return NAN;
   else
     return faces[v.face-1].undulation(v.x,v.y)*scale;
+}
+
+void cubemap::writeBinary(ofstream &ofile)
+{
+  int i;
+  for (i=0;i<6;i++)
+    faces[i].writeBinary(ofile);
 }

@@ -56,6 +56,7 @@ public:
   double area();
   int isfull(); // -1 if empty, 0 if partly full or unknown, 1 if full
   std::array<unsigned,2> hash();
+  void writeBinary(std::ofstream &ofile,int nesting=0);
 };
 
 class cubemap
@@ -66,5 +67,6 @@ public:
   cubemap();
   double undulation(int lat,int lon);
   double undulation(xyz dir);
+  void writeBinary(std::ofstream &ofile);
 };
 #endif

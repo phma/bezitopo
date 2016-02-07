@@ -269,6 +269,8 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
       refine(*quad.sub[i],vscale,tolerance,sublimit,spacing);
   }
   progress(quad);
+  vector<xy>().swap(quad.nums);
+  vector<xy>().swap(quad.nans);
 }
 
 void outund(string loc,int lat,int lon)
@@ -282,6 +284,7 @@ void outund(string loc,int lat,int lon)
 
 int main(int argc, char *argv[])
 {
+  ofstream ofile;
   int i;
   cube.scale=1/65536.;
   geo.resize(6);
@@ -301,7 +304,7 @@ int main(int argc, char *argv[])
       cout<<" has data"<<endl;
     else
       cout<<" is empty"<<endl;*/
-    refine(cube.faces[i],cube.scale,0.1,3000,1e5);
+    refine(cube.faces[i],cube.scale,0.03,3000,1e5);
   }
   outProgress();
   cout<<endl;
@@ -320,5 +323,7 @@ int main(int argc, char *argv[])
   //endpage();
   pstrailer();
   psclose();
+  ofile.open("geoid.bol");
+  cube.writeBinary(ofile);
   return 0;
 }

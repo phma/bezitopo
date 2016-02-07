@@ -80,7 +80,7 @@ double readledouble(std::fstream &file)
   return *(double *)buf;
 }
 
-void writegeint(std::fstream &file,int i)
+void writegeint(std::ostream &file,int i)
 /* Numbers in Bezitopo's geoid files are in 65536ths of a meter and are less than 110 m
  * (7208960) in absolute value. They are encoded as follows:
  * gg xx xx where gg is 00-7f		00 gg xx xx
