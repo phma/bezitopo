@@ -4,6 +4,7 @@
 /*                                                    */
 /******************************************************/
 #include <iostream>
+#include <ctime>
 #include "geoid.h"
 #include "sourcegeoid.h"
 #include "document.h"
@@ -11,10 +12,13 @@
 #include "hlattice.h"
 #include "relprime.h"
 #include "ps.h"
+#include "manysum.h"
 using namespace std;
 
 document doc;
 cubemap cube;
+manysum dataArea,totalArea;
+time_t progressTime;
 
 /* The factors used when setting the six components of a geoquad are
  * 0: 1/1
@@ -68,6 +72,31 @@ void plotcenters()
   int i;
   for (i=0;i<6;i++)
     plotcenter(cube.faces[i]);
+}
+
+void outProgress()
+{
+  cout<<"Total area "<<totalArea.total()*1e-12<<" Data area "<<dataArea.total()*1e-12<<"    \r";
+  cout.flush();
+}
+
+void progress(geoquad &quad)
+{
+  double qarea;
+  time_t now;
+  qarea=quad.area();
+  if (!quad.subdivided())
+  {
+    if (!quad.isnan())
+      dataArea+=qarea;
+    totalArea+=qarea;
+  }
+  now=time(nullptr);
+  if (now!=progressTime)
+  {
+    progressTime=now;
+    outProgress();
+  }
 }
 
 void plotinter(geoquad &quad)
@@ -207,8 +236,17 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
       corr=correction(quad,qpoints);
       for (sqerror=i=0;i<6;i++)
 	sqerror+=sqr(corr[i]);
-      cout<<"numnums "<<numnums<<" sqerror "<<sqerror<<" before ";
-      do
+      //cout<<"numnums "<<numnums<<" sqerror "<<sqerror<<" before ";
+      /* The program can get into an infinite loop in which one of the corrections
+       * is 0.5 and another is -0.5, then on the next iteration one is -0.5 and
+       * another is 0.5, and so on forever. This happens with the USGS data
+       * at point (3,-0.58112335205078125,-0.69258880615234375), which is near
+       * the overlap of the Alaska and Lower 48 files, but not at the edge of
+       * either. It takes two iterations to arrive at the infinite loop. But if
+       * only half of the points have known undulation, it can take as many as
+       * 1498 iterations to converge, so stop the loop at 1536.
+       */
+      for (j=0,ncorr=6;ncorr && j<1536;j++)
       {
 	for (i=ncorr=0;i<6;i++)
 	{
@@ -218,11 +256,11 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
 	corr=correction(quad,qpoints);
 	for (sqerror=i=0;i<6;i++)
 	  sqerror+=sqr(corr[i]);
-      } while (ncorr);
-      cout<<sqerror<<" after"<<endl;
+      }
+      //cout<<sqerror<<" after"<<endl;
     }
-    else
-      cout<<"numnums "<<numnums<<endl;
+    //else
+      //cout<<"numnums "<<numnums<<endl;
   }
   if (area>=sqr(sublimit) && (quad.isfull()==0 || maxerror(quad,qpoints)>tolerance/vscale))
   {
@@ -230,6 +268,7 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
     for (i=0;i<4;i++)
       refine(*quad.sub[i],vscale,tolerance,sublimit,spacing);
   }
+  progress(quad);
 }
 
 void outund(string loc,int lat,int lon)
@@ -255,15 +294,17 @@ int main(int argc, char *argv[])
   drawglobecube(1024,62,-7,1,0,"geoid.ppm");
   for (i=0;i<6;i++)
   {
-    cout<<"Face "<<i+1;
-    cout.flush();
+    //cout<<"Face "<<i+1;
+    //cout.flush();
     interroquad(cube.faces[i],3e5);
-    if (cube.faces[i].isfull()>=0)
+    /*if (cube.faces[i].isfull()>=0)
       cout<<" has data"<<endl;
     else
-      cout<<" is empty"<<endl;
-    refine(cube.faces[i],cube.scale,0.01,1e5,1e5);
+      cout<<" is empty"<<endl;*/
+    refine(cube.faces[i],cube.scale,0.1,100,1e5);
   }
+  outProgress();
+  cout<<endl;
   outund("Green Hill",degtobin(35.4),degtobin(-82.05));
   outund("Charlotte",degtobin(35.22),degtobin(-80.84));
   outund("Kitimat",degtobin(54.0547),degtobin(-128.6578)); // in the overlap of two files

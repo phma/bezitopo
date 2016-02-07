@@ -211,6 +211,6 @@ double maxerror(geoquad &quad,double qpoints[][16])
 	if (diff>ret)
 	  ret=diff;
       }
-  cout<<"maxerror "<<ret<<endl;
+  //cout<<"maxerror "<<ret<<endl;
   return ret;
 }
