@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
       cout<<" has data"<<endl;
     else
       cout<<" is empty"<<endl;*/
-    refine(cube.faces[i],cube.scale,0.1,100,1e5);
+    refine(cube.faces[i],cube.scale,0.1,3000,1e5);
   }
   outProgress();
   cout<<endl;
@@ -315,9 +315,9 @@ int main(int argc, char *argv[])
   startpage();
   plotcenters();
   endpage();
-  startpage();
-  plotinters();
-  endpage();
+  //startpage();
+  //plotinters();
+  //endpage();
   pstrailer();
   psclose();
   return 0;
