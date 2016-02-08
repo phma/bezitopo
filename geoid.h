@@ -14,6 +14,10 @@
 #include "xyz.h"
 #include "ellipsoid.h"
 
+#define BOL_EARTH 0
+#define BOL_UNDULATION 0
+#define BOL_VARLENGTH 1
+
 struct vball // so called because a sphere so marked looks like a volleyball
 {
   int face;
@@ -56,7 +60,7 @@ public:
   double area();
   int isfull(); // -1 if empty, 0 if partly full or unknown, 1 if full
   std::array<unsigned,2> hash();
-  void writeBinary(std::ofstream &ofile,int nesting=0);
+  void writeBinary(std::ostream &ofile,int nesting=0);
 };
 
 class cubemap
@@ -67,6 +71,22 @@ public:
   cubemap();
   double undulation(int lat,int lon);
   double undulation(xyz dir);
-  void writeBinary(std::ofstream &ofile);
+  std::array<unsigned,2> hash();
+  void writeBinary(std::ostream &ofile);
+};
+
+struct geoheader
+{
+  std::array<unsigned,2> hash;
+  int planet;
+  int dataType;
+  int encoding;
+  int ncomponents;
+  int logScale;
+  double tolerance;
+  double sublimit;
+  double spacing;
+  std::vector<std::string> namesFormats;
+  void writeBinary(std::ostream &ofile);
 };
 #endif

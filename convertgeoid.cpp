@@ -19,6 +19,7 @@ document doc;
 cubemap cube;
 manysum dataArea,totalArea;
 time_t progressTime;
+geoheader hdr;
 
 /* The factors used when setting the six components of a geoquad are
  * 0: 1/1
@@ -81,6 +82,9 @@ void outProgress()
 }
 
 void progress(geoquad &quad)
+/* At the end, totalArea is 510.0645 Mm² (4*π*(6371 km)²).
+ * dataArea advances more smoothly, but depends on the files read in.
+ */
 {
   double qarea;
   time_t now;
@@ -269,7 +273,7 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
       refine(*quad.sub[i],vscale,tolerance,sublimit,spacing);
   }
   progress(quad);
-  vector<xy>().swap(quad.nums);
+  vector<xy>().swap(quad.nums); // deallocate vectors
   vector<xy>().swap(quad.nans);
 }
 
@@ -287,13 +291,29 @@ int main(int argc, char *argv[])
   ofstream ofile;
   int i;
   cube.scale=1/65536.;
-  geo.resize(6);
-  readusngsbin(geo[0],"../g2012bu0.bin");
-  readusngsbin(geo[1],"../g2012ba0.bin");
-  readusngsbin(geo[2],"../g2012bh0.bin");
-  readusngsbin(geo[3],"../g2012bg0.bin");
-  readusngsbin(geo[4],"../g2012bp0.bin");
-  readusngsbin(geo[5],"../g2012bs0.bin");
+  hdr.logScale=-16;
+  hdr.planet=BOL_EARTH;
+  hdr.dataType=BOL_UNDULATION;
+  hdr.encoding=BOL_VARLENGTH;
+  hdr.ncomponents=1;
+  hdr.tolerance=0.03;
+  hdr.sublimit=3000;
+  hdr.spacing=1e5;
+  hdr.namesFormats.push_back("../g2012bu0.bin");
+  hdr.namesFormats.push_back("usngs");
+  hdr.namesFormats.push_back("../g2012ba0.bin");
+  hdr.namesFormats.push_back("usngs");
+  hdr.namesFormats.push_back("../g2012bh0.bin");
+  hdr.namesFormats.push_back("usngs");
+  hdr.namesFormats.push_back("../g2012bg0.bin");
+  hdr.namesFormats.push_back("usngs");
+  hdr.namesFormats.push_back("../g2012bs0.bin");
+  hdr.namesFormats.push_back("usngs");
+  hdr.namesFormats.push_back("../g2012bp0.bin");
+  hdr.namesFormats.push_back("usngs");
+  geo.resize(hdr.namesFormats.size()/2);
+  for (i=0;i<geo.size();i++)
+    readusngsbin(geo[i],hdr.namesFormats[i*2]);
   drawglobecube(1024,62,-7,1,0,"geoid.ppm");
   for (i=0;i<6;i++)
   {
@@ -304,7 +324,7 @@ int main(int argc, char *argv[])
       cout<<" has data"<<endl;
     else
       cout<<" is empty"<<endl;*/
-    refine(cube.faces[i],cube.scale,0.03,3000,1e5);
+    refine(cube.faces[i],cube.scale,hdr.tolerance,hdr.sublimit,hdr.spacing);
   }
   outProgress();
   cout<<endl;
@@ -323,7 +343,10 @@ int main(int argc, char *argv[])
   //endpage();
   pstrailer();
   psclose();
+  //hdr.hash=cube.hash();
   ofile.open("geoid.bol");
+  hdr.hash=cube.hash();
+  hdr.writeBinary(ofile);
   cube.writeBinary(ofile);
   return 0;
 }

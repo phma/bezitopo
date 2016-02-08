@@ -236,6 +236,8 @@ void geoquad::subdivide()
   }
   nans.clear();
   nums.clear();
+  nans.shrink_to_fit();
+  nums.shrink_to_fit();
 }
 
 bool geoquad::in(xy pnt)
@@ -331,7 +333,7 @@ int geoquad::isfull()
   return (nums.size()>0)-(nans.size()>0);
 }
 
-void geoquad::writeBinary(ofstream &ofile,int nesting)
+void geoquad::writeBinary(ostream &ofile,int nesting)
 {
   int i;
   if (subdivided())
@@ -402,9 +404,47 @@ double cubemap::undulation(xyz dir)
     return faces[v.face-1].undulation(v.x,v.y)*scale;
 }
 
-void cubemap::writeBinary(ofstream &ofile)
+array<unsigned,2> cubemap::hash()
+{
+  array<unsigned,2> ret,subhash;
+  array<unsigned,12> subhashes;
+  int i;
+  for (i=0;i<6;i++)
+  {
+    subhash=faces[i].hash();
+    subhashes[2*i]=subhash[0];
+    subhashes[2*i+1]=subhash[1];
+  }
+  for (i=ret[0]=ret[1]=0;i<12;i++)
+  {
+    ret[0]=byteswap((ret[0]^subhashes[i])*7225);
+    ret[1]=byteswap((ret[1]^subhashes[11-i])*3937);
+  }
+  return ret;
+}
+
+void cubemap::writeBinary(ostream &ofile)
 {
   int i;
   for (i=0;i<6;i++)
     faces[i].writeBinary(ofile);
+}
+
+void geoheader::writeBinary(std::ostream &ofile)
+{
+  int i;
+  ofile<<"boldatni";
+  writebeint(ofile,hash[0]);
+  writebeint(ofile,hash[1]);
+  writebeshort(ofile,planet);
+  ofile.put(dataType);
+  ofile.put(encoding);
+  ofile.put(ncomponents);
+  writebeshort(ofile,logScale);
+  writebedouble(ofile,tolerance);
+  writebedouble(ofile,sublimit);
+  writebedouble(ofile,spacing);
+  writebeshort(ofile,namesFormats.size());
+  for (i=0;i<namesFormats.size();i++)
+    writeustring(ofile,namesFormats[i]);
 }

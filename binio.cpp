@@ -7,6 +7,8 @@
 #include "binio.h"
 #include "config.h"
 
+using namespace std;
+
 void endianflip(void *addr,int n)
 {
   int i;
@@ -18,6 +20,46 @@ void endianflip(void *addr,int n)
     addr2[n-1-i]^=addr2[i];
     addr2[i]^=addr2[n-1-i];
   }
+}
+
+void writebeshort(std::ostream &file,short i)
+{
+  char buf[2];
+  *(short *)buf=i;
+#ifndef BIGENDIAN
+  endianflip(buf,2);
+#endif
+  file.write(buf,2);
+}
+
+void writeleshort(std::ostream &file,short i)
+{
+  char buf[2];
+  *(short *)buf=i;
+#ifdef BIGENDIAN
+  endianflip(buf,2);
+#endif
+  file.write(buf,2);
+}
+
+void writebeint(std::ostream &file,int i)
+{
+  char buf[4];
+  *(int *)buf=i;
+#ifndef BIGENDIAN
+  endianflip(buf,4);
+#endif
+  file.write(buf,4);
+}
+
+void writeleint(std::ostream &file,int i)
+{
+  char buf[4];
+  *(int *)buf=i;
+#ifdef BIGENDIAN
+  endianflip(buf,4);
+#endif
+  file.write(buf,4);
 }
 
 int readbeint(std::fstream &file)
@@ -58,6 +100,16 @@ float readlefloat(std::fstream &file)
   endianflip(buf,4);
 #endif
   return *(float *)buf;
+}
+
+void writebedouble(std::ostream &file,double i)
+{
+  char buf[8];
+  *(double *)buf=i;
+#ifndef BIGENDIAN
+  endianflip(buf,8);
+#endif
+  file.write(buf,8);
 }
 
 double readbedouble(std::fstream &file)
@@ -154,3 +206,11 @@ int readgeint(std::fstream &file)
   }
   return ret;
 }
+
+void writeustring(ostream &file,string s)
+// FIXME: if s contains a null character, it should be written as c0 a0
+{
+  file.write(s.data(),s.length());
+  file.put(0);
+}
+
