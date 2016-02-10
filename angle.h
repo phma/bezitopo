@@ -48,6 +48,10 @@ int mintobin(double angle);
 int sectobin(double angle);
 int gontobin(double angle);
 int radtobin(double angle);
+double radtodeg(double angle);
+double degtorad(double angle);
+double radtogon(double angle);
+double gontorad(double angle);
 
 /* Angles, azimuths, and bearings are expressed in text as follows:
  * Hex integer  Angle, deg  Angle, gon  Azimuth, deg  Azimuth, gon  Bearing, deg  Bearing, gon

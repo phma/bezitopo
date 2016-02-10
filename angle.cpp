@@ -147,6 +147,26 @@ int radtobin(double angle)
   return rottobin(angle/M_PIl/2);
 }
 
+double radtodeg(double angle)
+{
+  return angle*180/M_PIl;
+}
+
+double degtorad(double angle)
+{
+  return angle/180*M_PIl;
+}
+
+double radtogon(double angle)
+{
+  return angle*200/M_PIl;
+}
+
+double gontorad(double angle)
+{
+  return angle/200*M_PIl;
+}
+
 string bintoangle(int angle,int unitp)
 {
   double angmult,prec;

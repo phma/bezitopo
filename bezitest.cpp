@@ -43,6 +43,7 @@
 #include "manysum.h"
 #include "ldecimal.h"
 #include "ellipsoid.h"
+#include "projection.h"
 #include "color.h"
 #include "document.h"
 #include "relprime.h"
@@ -2306,6 +2307,11 @@ void testellipsoid()
   assert(spole.getz()<-6370999);
 }
 
+void testprojection()
+{
+  LambertConicSphere sphereMercator;
+}
+
 void spotcheckcolor(int col0,int col1)
 {
   int col2;
@@ -2928,6 +2934,7 @@ int main(int argc, char *argv[])
   testcsvline();
   testldecimal();
   testellipsoid();
+  testprojection();
   testcolor();
   testcontour();
   testfoldcontour();

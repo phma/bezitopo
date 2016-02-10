@@ -20,6 +20,10 @@
  * Stereographic does not require checking, but Mercator does, otherwise
  * it results in raising a complex number to the 0 power, subtracting 1, and
  * dividing by 0.
+ * 
+ * The default constructor for a Lambert conic produces an axial Mercator
+ * centered in the Bight of Benin. The default constructor for a transverse
+ * Mercator produces one centered on the prime meridian.
  */
 #include <array>
 #include "ellipsoid.h"
@@ -38,6 +42,30 @@ public:
   virtual xyz gridToGeocentric(xy grid)=0;
   virtual xy geocentricToGrid(xyz geoc)=0;
   virtual xy latlongToGrid(latlong ll)=0;
+  /* The grid scale factor is the distance on the grid divided by the distance
+   * on the ellipsoid. It is smallest at the center of the grid (central parallel
+   * for Lambert conic, central meridian for transverse Mercator) and largest
+   * at the periphery.
+   */
+  virtual double scaleFactor(xy grid)=0;
+  virtual double scaleFactor(latlong ll)=0;
 protected:
   ellipsoid *ellip;
+  xy offset;
+  double scale;
+};
+
+class LambertConicSphere: public Projection
+{
+public:
+  LambertConicSphere();
+  virtual latlong gridToLatlong(xy grid);
+  virtual xyz gridToGeocentric(xy grid);
+  virtual xy geocentricToGrid(xyz geoc);
+  virtual xy latlongToGrid(latlong ll);
+  virtual double scaleFactor(xy grid);
+  virtual double scaleFactor(latlong ll);
+protected:
+  double centralParallel;
+  double centralMeridian;
 };
