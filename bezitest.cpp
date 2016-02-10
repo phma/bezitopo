@@ -2310,6 +2310,22 @@ void testellipsoid()
 void testprojection()
 {
   LambertConicSphere sphereMercator;
+  latlong ll;
+  xy grid;
+  cout<<"projection"<<endl;
+  ll.lat=0;
+  ll.lon=0;
+  grid=sphereMercator.latlongToGrid(ll);
+  cout<<grid.east()<<','<<grid.north()<<endl;
+  assert(dist(grid,xy(0,0))<0.001);
+  ll.lon=degtorad(1);
+  grid=sphereMercator.latlongToGrid(ll);
+  cout<<grid.east()<<','<<grid.north()<<endl;
+  assert(dist(grid,xy(111195,0))<1);
+  ll.lat=degtorad(1);
+  grid=sphereMercator.latlongToGrid(ll);
+  cout<<grid.east()<<','<<grid.north()<<endl;
+  assert(dist(grid,xy(111195,111196))<1);
 }
 
 void spotcheckcolor(int col0,int col1)

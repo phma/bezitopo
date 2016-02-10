@@ -3,6 +3,7 @@
 /* projection.cpp - map projections                   */
 /*                                                    */
 /******************************************************/
+#include <cmath>
 #include "projection.h"
 
 Projection::Projection()
@@ -16,6 +17,8 @@ LambertConicSphere::LambertConicSphere():Projection()
 {
   centralMeridian=0;
   centralParallel=0;
+  poleY=INFINITY;
+  exponent=0;
 }
 
 latlong LambertConicSphere::gridToLatlong(xy grid)
@@ -38,7 +41,19 @@ xy LambertConicSphere::geocentricToGrid(xyz geoc)
 
 xy LambertConicSphere::latlongToGrid(latlong ll)
 {
-  return xy(0,0);
+  double radius,angle,northing,easting;
+  radius=tan((M_PIl-ll.lat)/4);
+  angle=ll.lon-centralMeridian;
+  while(angle>M_PIl*2)
+    angle-=M_PIl*2;
+  while(angle<-M_PIl*2)
+    angle+=M_PIl*2;
+  if (exponent==0)
+  {
+    easting=angle*ellip->geteqr();
+    northing=-2*log(radius)*ellip->getpor();
+  }
+  return xy(easting,northing)*scale+offset;
 }
 
 double LambertConicSphere::scaleFactor(xy grid)

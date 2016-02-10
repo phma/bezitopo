@@ -46,6 +46,10 @@ public:
    * on the ellipsoid. It is smallest at the center of the grid (central parallel
    * for Lambert conic, central meridian for transverse Mercator) and largest
    * at the periphery.
+   * 
+   * The scale factor of Lambert is easier to calculate from the latlong, but
+   * that of the transverse Mercator may be easier to calculate from the
+   * grid coordinates.
    */
   virtual double scaleFactor(xy grid)=0;
   virtual double scaleFactor(latlong ll)=0;
@@ -68,4 +72,6 @@ public:
 protected:
   double centralParallel;
   double centralMeridian;
+  double poleY;
+  double exponent;
 };
