@@ -2307,6 +2307,19 @@ void testellipsoid()
   assert(spole.getz()<-6370999);
 }
 
+void test1projection(string projName,Projection &proj,latlong ll,xy grid)
+{
+  latlong ll1=proj.gridToLatlong(grid);
+  xy grid1=proj.latlongToGrid(ll);
+  xyz gridGeoc=proj.ellip->geoc(ll1,0);
+  xyz llGeoc=proj.ellip->geoc(ll,0);
+  cout<<setprecision(10);
+  cout<<projName<<" Latitude "<<radtodeg(ll1.lat)<<" Longitude "<<radtodeg(ll1.lon)<<
+  " Northing "<<grid1.north()<<" Easting "<<grid1.east()<<endl;
+  assert(dist(grid,grid1)<1.5);
+  assert(dist(gridGeoc,llGeoc)<1.75);
+}
+
 void testprojection()
 {
   LambertConicSphere sphereMercator;
@@ -2315,17 +2328,18 @@ void testprojection()
   cout<<"projection"<<endl;
   ll.lat=0;
   ll.lon=0;
-  grid=sphereMercator.latlongToGrid(ll);
-  cout<<grid.east()<<','<<grid.north()<<endl;
-  assert(dist(grid,xy(0,0))<0.001);
+  grid=xy(0,0);
+  test1projection("sphereMercator",sphereMercator,ll,grid);
   ll.lon=degtorad(1);
-  grid=sphereMercator.latlongToGrid(ll);
-  cout<<grid.east()<<','<<grid.north()<<endl;
-  assert(dist(grid,xy(111195,0))<1);
+  grid=xy(111195,0);
+  test1projection("sphereMercator",sphereMercator,ll,grid);
   ll.lat=degtorad(1);
-  grid=sphereMercator.latlongToGrid(ll);
-  cout<<grid.east()<<','<<grid.north()<<endl;
-  assert(dist(grid,xy(111195,111196))<1);
+  grid=xy(111195,111201);
+  test1projection("sphereMercator",sphereMercator,ll,grid);
+  ll.lat=degtorad(89);
+  ll.lon=degtorad(-45);
+  grid=xy(-5003772,30207133);
+  test1projection("sphereMercator",sphereMercator,ll,grid);
 }
 
 void spotcheckcolor(int col0,int col1)

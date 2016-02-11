@@ -62,6 +62,11 @@ xyz ellipsoid::geoc(int lat,int lon,int elev)
   return geoc(bintorad(lat),bintorad(lon),elev/65536.);
 }
 
+xyz ellipsoid::geoc(latlong ll,double elev)
+{
+  return geoc(ll.lat,ll.lon,elev);
+}
+
 double ellipsoid::avgradius()
 {
   return cbrt(eqr*eqr*por);

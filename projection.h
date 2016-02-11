@@ -28,19 +28,14 @@
 #include <array>
 #include "ellipsoid.h"
 
-struct latlong
-{
-  double lat;
-  double lon;
-};
-
 class Projection
 {
 public:
   Projection();
   virtual latlong gridToLatlong(xy grid)=0;
   virtual xyz gridToGeocentric(xy grid)=0;
-  virtual xy geocentricToGrid(xyz geoc)=0;
+  //virtual xy geocentricToGrid(xyz geoc)=0;
+  //geocentricToGrid is commented out until there's a method in ellipsoid to support it.
   virtual xy latlongToGrid(latlong ll)=0;
   /* The grid scale factor is the distance on the grid divided by the distance
    * on the ellipsoid. It is smallest at the center of the grid (central parallel
@@ -53,8 +48,8 @@ public:
    */
   virtual double scaleFactor(xy grid)=0;
   virtual double scaleFactor(latlong ll)=0;
-protected:
   ellipsoid *ellip;
+protected:
   xy offset;
   double scale;
 };
@@ -65,7 +60,7 @@ public:
   LambertConicSphere();
   virtual latlong gridToLatlong(xy grid);
   virtual xyz gridToGeocentric(xy grid);
-  virtual xy geocentricToGrid(xyz geoc);
+  //virtual xy geocentricToGrid(xyz geoc);
   virtual xy latlongToGrid(latlong ll);
   virtual double scaleFactor(xy grid);
   virtual double scaleFactor(latlong ll);

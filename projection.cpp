@@ -23,26 +23,33 @@ LambertConicSphere::LambertConicSphere():Projection()
 
 latlong LambertConicSphere::gridToLatlong(xy grid)
 {
+  double angle,radius;
   latlong ret;
-  ret.lat=0;
-  ret.lon=0;
+  grid=(grid-offset)/scale;
+  if (exponent==0)
+  {
+    angle=grid.east()/ellip->geteqr();
+    radius=exp(-grid.north()/ellip->getpor());
+  }
+  ret.lat=M_PIl/2-2*atan(radius);
+  ret.lon=angle+centralMeridian;
   return ret;
 }
 
 xyz LambertConicSphere::gridToGeocentric(xy grid)
 {
-  return xyz(6371e3,0,0);
+  return ellip->geoc(gridToLatlong(grid),0);
 }
 
-xy LambertConicSphere::geocentricToGrid(xyz geoc)
+/*xy LambertConicSphere::geocentricToGrid(xyz geoc)
 {
   return xy(0,0);
-}
+}*/
 
 xy LambertConicSphere::latlongToGrid(latlong ll)
 {
   double radius,angle,northing,easting;
-  radius=tan((M_PIl-ll.lat)/4);
+  radius=tan((M_PIl/2-ll.lat)/2);
   angle=ll.lon-centralMeridian;
   while(angle>M_PIl*2)
     angle-=M_PIl*2;
@@ -51,7 +58,7 @@ xy LambertConicSphere::latlongToGrid(latlong ll)
   if (exponent==0)
   {
     easting=angle*ellip->geteqr();
-    northing=-2*log(radius)*ellip->getpor();
+    northing=-log(radius)*ellip->getpor();
   }
   return xy(easting,northing)*scale+offset;
 }
