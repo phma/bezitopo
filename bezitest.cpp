@@ -2320,6 +2320,59 @@ void test1projection(string projName,Projection &proj,latlong ll,xy grid)
   assert(dist(gridGeoc,llGeoc)<1.75);
 }
 
+array<latlong,2> randomPointPair()
+/* Pick a point on the sphere according to the spherical asteraceous pattern.
+ * Then pick two points about a meter apart. The distance between them is
+ * 1±3e-9 m on the sphere.
+ */
+{
+  int r1,r2;
+  latlong midpoint;
+  double latoff,lonoff;
+  array<latlong,2> ret;
+  r1=rng.usrandom();
+  r2=rng.ucrandom();
+  midpoint.lat=asin((2*r1+1)/65536.-1);
+  midpoint.lon=M_1PHI*(2*r1+1)/2.;
+  midpoint.lon-=rint(midpoint.lon);
+  midpoint.lon*=2*M_PI;
+  latoff=sin(M_PI*r2/256)/12742e3;
+  lonoff=cos(M_PI*r2/256)/12742e3/cos(midpoint.lat);
+  ret[0].lat=midpoint.lat-latoff;
+  ret[0].lon=midpoint.lon-lonoff;
+  ret[1].lat=midpoint.lat+latoff;
+  ret[1].lon=midpoint.lon+lonoff;
+  return ret;
+}
+
+void testprojscale(string projName,Projection &proj)
+{
+  array<latlong,2> pointpair;
+  latlong midpoint;
+  array<xyz,2> xyzpair;
+  array<xy,2> xypair;
+  int i,nbad;
+  double scale;
+  for (i=nbad=0;i<16777216 && nbad>=trunc(sqrt(i)/16);i++)
+  {
+    pointpair=randomPointPair();
+    midpoint.lat=(pointpair[0].lat+pointpair[1].lat)/2;
+    midpoint.lon=(pointpair[0].lon+pointpair[1].lon)/2;
+    xyzpair[0]=proj.ellip->geoc(pointpair[0],0);
+    xyzpair[1]=proj.ellip->geoc(pointpair[1],0);
+    scale=proj.scaleFactor(midpoint);
+    xypair[0]=proj.latlongToGrid(pointpair[0]);
+    xypair[1]=proj.latlongToGrid(pointpair[1]);
+    if (fabs(dist(xypair[0],xypair[1])/scale/dist(xyzpair[0],xyzpair[1])-1)>1e-6)
+      nbad++;
+  }
+  cout<<projName<<" scale is ";
+  if (nbad>=trunc(sqrt(i)/16))
+    cout<<"bad"<<endl;
+  else
+    cout<<"good"<<endl;
+}
+
 void testprojection()
 {
   LambertConicSphere sphereMercator;
@@ -2340,6 +2393,7 @@ void testprojection()
   ll.lon=degtorad(-45);
   grid=xy(-5003772,30207133);
   test1projection("sphereMercator",sphereMercator,ll,grid);
+  testprojscale("sphereMercator",sphereMercator);
 }
 
 void spotcheckcolor(int col0,int col1)

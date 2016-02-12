@@ -19,6 +19,7 @@ LambertConicSphere::LambertConicSphere():Projection()
   centralParallel=0;
   poleY=INFINITY;
   exponent=0;
+  coneScale=INFINITY;
 }
 
 latlong LambertConicSphere::gridToLatlong(xy grid)
@@ -65,12 +66,16 @@ xy LambertConicSphere::latlongToGrid(latlong ll)
 
 double LambertConicSphere::scaleFactor(xy grid)
 {
-  return 1;
+  return scaleFactor(gridToLatlong(grid));
 }
 
 double LambertConicSphere::scaleFactor(latlong ll)
 {
-  return 1;
+  double coneradius,parradius,cenparradius;
+  coneradius=tan((M_PIl/2-ll.lat)/2);
+  parradius=(ellip->geoc(ll.lat,0.,0.)).getx()/ellip->geteqr();
+  cenparradius=(ellip->geoc(centralParallel,0.,0.)).getx()/ellip->geteqr();
+  return pow(coneradius,exponent)/parradius;
 }
 
 /* North Carolina state plane, original:

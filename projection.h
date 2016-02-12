@@ -69,4 +69,5 @@ protected:
   double centralMeridian;
   double poleY;
   double exponent;
+  double coneScale;
 };
