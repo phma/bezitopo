@@ -8,5 +8,9 @@
  */
 
 #include <array>
+#include "xyz.h"
 
-double beziersquare(array<double,16> controlPoints,double x,double y);
+double beziersquare(std::array<double,16> controlPoints,double x,double y);
+double bicubic(double swelev,xy swslope,double seelev,xy seslope,
+	       double nwelev,xy nwslope,double neelev,xy neslope,
+	       double x,double y);

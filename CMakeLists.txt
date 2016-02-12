@@ -9,15 +9,15 @@ add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                raster.cpp relprime.cpp spiral.cpp stl.cpp test.cpp segment.cpp tin.cpp
                vcurve.cpp)
 add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitest.cpp binio.cpp closure.cpp cogo.cpp cogospiral.cpp color.cpp
+               bezitest.cpp bicubic.cpp binio.cpp closure.cpp cogo.cpp cogospiral.cpp
                contour.cpp document.cpp drawobj.cpp ellipsoid.cpp geoid.cpp
-               halton.cpp hlattice.cpp layer.cpp ldecimal.cpp manysum.cpp
+               color.cpp halton.cpp hlattice.cpp layer.cpp ldecimal.cpp manysum.cpp
                measure.cpp objlist.cpp plot.cpp pnezd.cpp point.cpp pointlist.cpp
                polyline.cpp projection.cpp ps.cpp qindex.cpp random.cpp
                raster.cpp relprime.cpp sourcegeoid.cpp spiral.cpp stl.cpp test.cpp
                segment.cpp tin.cpp vcurve.cpp)
-add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp cogo.cpp
-               convertgeoid.cpp document.cpp drawobj.cpp ellipsoid.cpp
+add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
+               binio.cpp cogo.cpp convertgeoid.cpp document.cpp drawobj.cpp ellipsoid.cpp
                geoid.cpp hlattice.cpp ldecimal.cpp
                manysum.cpp measure.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp
                ps.cpp qindex.cpp random.cpp raster.cpp relprime.cpp segment.cpp

@@ -53,6 +53,7 @@
 #include "geoid.h"
 #include "binio.h"
 #include "sourcegeoid.h"
+#include "bicubic.h"
 
 #define psoutput false
 // affects only maketin
@@ -2346,6 +2347,11 @@ array<latlong,2> randomPointPair()
 }
 
 void testprojscale(string projName,Projection &proj)
+/* Tests the accuracy of a projection's scale. Implicitly tests conformality.
+ * Picks random pairs of points 1 meter apart and checks that the distance
+ * between the two points on the map is close to the map scale. Allows a few
+ * bad pairs, as the two points may straddle a cut in the map.
+ */
 {
   array<latlong,2> pointpair;
   latlong midpoint;
@@ -2364,7 +2370,12 @@ void testprojscale(string projName,Projection &proj)
     xypair[0]=proj.latlongToGrid(pointpair[0]);
     xypair[1]=proj.latlongToGrid(pointpair[1]);
     if (fabs(dist(xypair[0],xypair[1])/scale/dist(xyzpair[0],xyzpair[1])-1)>1e-6)
+    {
       nbad++;
+      if (nbad<256)
+	cout<<radtodeg(midpoint.lat)<<"° "<<radtodeg(midpoint.lon)<<"° computed scale "<<
+	scale<<" actual scale "<<dist(xypair[0],xypair[1])/dist(xyzpair[0],xyzpair[1])<<endl;
+      }
   }
   cout<<projName<<" scale is ";
   if (nbad>=trunc(sqrt(i)/16))
@@ -2832,6 +2843,23 @@ void testabsorient()
   assert(fabs(ssd-1000)<1e-9);
 }
 
+void test1bicubic(xy sw)
+{
+  xy se,nw,ne;
+  double vertex;
+  se=sw+xy(1,0);
+  nw=sw+xy(0,1);
+  ne=sw+xy(1,1);
+  vertex=bicubic(sqr(sw.length()),-2*sw,sqr(se.length()),-2*se,sqr(nw.length()),-2*nw,sqr(ne.length()),-2*ne,-sw.getx(),-sw.gety());
+  cout<<vertex<<endl;
+}
+
+void testbicubic()
+{
+  cout<<"bicubic"<<endl;
+  test1bicubic(xy(-0.5,-0.5));
+}
+
 void testgeoid()
 {
   vball v;
@@ -3026,6 +3054,7 @@ int main(int argc, char *argv[])
   testroscat();
   testabsorient();
   testhlattice();
+  testbicubic();
   testgeoid();
   testgeint();
   //clampcubic();
