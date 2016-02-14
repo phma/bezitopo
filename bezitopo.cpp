@@ -146,15 +146,29 @@ void indpark(string args)
 vector<command> commands;
 
 void readpoints(string args)
-// just pnezd for now
 {
-  doc.readpnezd(trim(args),false);
+  string filename,format;
+  filename=trim(firstarg(args));
+  format=trim(args);
+  if (format=="pnezd" || format=="")
+    doc.readpnezd(filename,false);
+  else if (format=="penzd")
+    doc.readpenzd(filename,false);
+  else
+    cout<<"Formats: pnezd (default), penzd"<<endl;
 }
 
 void writepoints(string args)
-// just pnezd for now
 {
-  doc.writepnezd(trim(args));
+  string filename,format;
+  filename=trim(firstarg(args));
+  format=trim(args);
+  if (format=="pnezd" || format=="")
+    doc.writepnezd(filename);
+  else if (format=="penzd")
+    doc.writepenzd(filename);
+  else
+    cout<<"Formats: pnezd (default), penzd"<<endl;
 }
 
 void maketin_i(string args)
@@ -340,8 +354,8 @@ int main(int argc, char *argv[])
   commands.push_back(command("setfoot",setfoot_i,"Set foot unit: int'l, US, Indian"));
   commands.push_back(command("setlunit",setlengthunit_i,"Set length unit: m, ft, ch"));
   commands.push_back(command("cvtmeas",cvtmeas_i,"Convert measurements"));
-  commands.push_back(command("read",readpoints,"Read coordinate file in PNEZD format: filename"));
-  commands.push_back(command("write",writepoints,"Write coordinate file in PNEZD format: filename"));
+  commands.push_back(command("read",readpoints,"Read coordinate file: filename format"));
+  commands.push_back(command("write",writepoints,"Write coordinate file: filename format"));
   commands.push_back(command("save",save_i,"Write scene file: filename.bez"));
   commands.push_back(command("maketin",maketin_i,"Make triangulated irregular network"));
   commands.push_back(command("drawtin",drawtin_i,"Draw TIN: filename.ps"));

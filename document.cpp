@@ -37,6 +37,16 @@ int document::writepnezd(string fname)
   ::writepnezd(this,fname);
 }
 
+int document::readpenzd(string fname,bool overwrite)
+{
+  return ::readpenzd(this,fname,overwrite);
+}
+
+int document::writepenzd(string fname)
+{
+  ::writepenzd(this,fname);
+}
+
 void document::addobject(drawobj *obj)
 // The drawobj must be created with new; it will be destroyed with delete.
 {

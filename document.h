@@ -37,6 +37,8 @@ public:
   void copytopopoints(criteria crit);
   int readpnezd(std::string fname,bool overwrite=false);
   int writepnezd(std::string fname);
+  int readpenzd(std::string fname,bool overwrite=false);
+  int writepenzd(std::string fname);
   void addobject(drawobj *obj); // obj must be created with new
   virtual void writeXml(std::ofstream &ofile);
   void changeOffset (xyz newOffset);
