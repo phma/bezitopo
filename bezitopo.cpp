@@ -115,7 +115,7 @@ void indpark(string args)
       spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
-    if (i<0 && doc.pl[1].contours[i].getElevation()>doc.pl[1].contours[i-1].getElevation())
+    if (i>0 && doc.pl[1].contours[i].getElevation()>doc.pl[1].contours[i-1].getElevation())
     {
       endpage();
       startpage();

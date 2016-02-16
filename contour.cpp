@@ -273,7 +273,8 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
   double we,ea,so,no;
   xyz lpt,rpt,newpt;
   xy spt;
-  segment splitseg;
+  segment splitseg,part0,part1;
+  vector<double> vex;
   spiralarc sarc;
   triangle *midptri;
   ofstream logfile;
@@ -304,7 +305,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
       for (j=0;j<sz;j++)
       {
 	n=(n+relprime(sz))%sz;
-	wide=((sz>2*origsz)?(sz/(double)origsz):1)*(k?0.5:0.1);
+	wide=((sz>2*(origsz+27))?(sz/(origsz+27.0)-1):1)*(k?0.5:0.1);
 	sarc=pl.contours[i].getspiralarc(n);
 	lpt=sarc.station(sarc.length()*CCHALONG);
 	rpt=sarc.station(sarc.length()*(1-CCHALONG));
@@ -329,6 +330,28 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	    //cout<<"segment "<<n<<" of "<<sz<<" of contour "<<i<<" needs splitting at "<<sp<<endl;
 	    spt=sarc.getstart()+sp*(sarc.getend()-sarc.getstart());
 	    splitseg=pl.qinx.findt(spt)->dirclip(spt,dir(xy(sarc.getend()),xy(sarc.getstart()))+DEG90);
+	    if (splitseg.getstart().elev()<splitseg.getend().elev())
+	    {
+	      /* This is the foldcontour bug. If the contour is folded, a splitseg
+	       * can intersect the contour twice. In that case, if the end is higher
+	       * than the start, contourcept picks the wrong intersection,
+	       * and part of the contour is traced three or more times. Since the
+	       * contour is always traced with the high side on the left, splitseg
+	       * should always be pointing downhill. If it isn't, it must have
+	       * an extremum. Split it there, and keep the downhill part.
+	       */
+	      vex=splitseg.vextrema(false);
+	      //assert(vex.size()<=1); // if it's ever 2, and there are two downhill parts, what to do?
+	      if (vex.size()==1)
+	      {
+		cout<<"splitseg backward"<<endl;
+		splitseg.split(vex[1],part0,part1);
+		if (part1.getstart().elev()>part1.getend().elev())
+		  splitseg=part1;
+		else
+		  splitseg=part0;
+	      }
+	    }
 	    newpt=splitseg.station(splitseg.contourcept(pl.contours[i].getElevation()));
 	    if (newpt.isfinite())
 	    {
