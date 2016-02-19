@@ -24,7 +24,7 @@ double beziersquare(array<double,16> controlPoints,double x,double y)
   memset(isum,0,sizeof(isum));
   for (i=0;i<4;i++)
     for (j=0;j<4;j++)
-      isum[i^j]+=controlPoints[(i<<2)+j]*yhill[j]*xhill[i];
+      isum[i^j]+=controlPoints[(i<<2)+j]*yhill[i]*xhill[j];
   for (ret=i=0;i<4;i++)
     ret+=isum[i];
   return ret;

@@ -2850,14 +2850,18 @@ void test1bicubic(xy sw)
   se=sw+xy(1,0);
   nw=sw+xy(0,1);
   ne=sw+xy(1,1);
-  vertex=bicubic(sqr(sw.length()),-2*sw,sqr(se.length()),-2*se,sqr(nw.length()),-2*nw,sqr(ne.length()),-2*ne,-sw.getx(),-sw.gety());
+  vertex=bicubic(sqr(sw.length()),2*sw,sqr(se.length()),2*se,sqr(nw.length()),2*nw,sqr(ne.length()),2*ne,-sw.getx(),-sw.gety());
   cout<<vertex<<endl;
+  assert(fabs(vertex)<1e-12);
 }
 
 void testbicubic()
 {
   cout<<"bicubic"<<endl;
   test1bicubic(xy(-0.5,-0.5));
+  test1bicubic(xy(-0.5,-0.3));
+  test1bicubic(xy(-0.5,0));
+  test1bicubic(xy(-0.4,-0.3));
 }
 
 void testgeoid()

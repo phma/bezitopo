@@ -116,6 +116,7 @@ void indpark(string args)
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
     if (i>0 && doc.pl[1].contours[i].getElevation()>doc.pl[1].contours[i-1].getElevation())
+    // debugging: "i>0" puts each contour elevation on a separate page; "i<0" disables
     {
       endpage();
       startpage();
