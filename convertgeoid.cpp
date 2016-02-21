@@ -16,7 +16,6 @@
 using namespace std;
 
 document doc;
-cubemap cube;
 manysum dataArea,totalArea;
 time_t progressTime;
 geoheader hdr;
@@ -315,6 +314,11 @@ int main(int argc, char *argv[])
   for (i=0;i<geo.size();i++)
     readusngsbin(geo[i],hdr.namesFormats[i*2]);
   drawglobecube(1024,62,-7,1,0,"geoid.ppm");
+  drawglobemicro(1024,xy(1.3429,0.2848),3e-4,1,0,"geowrangell.ppm");
+  /* (-.4304,-.3142,1) 143.86986°W 61.9475°N 143°52'12"W 61°56'51"
+   * This is a local maximum of the geoid in Alaska at Mount Wrangell.
+   * It clearly shows artifacts when interpolated bilinearly.
+   */
   for (i=0;i<6;i++)
   {
     //cout<<"Face "<<i+1;
@@ -333,6 +337,7 @@ int main(int argc, char *argv[])
   outund("Kitimat",degtobin(54.0547),degtobin(-128.6578)); // in the overlap of two files
   outund("Denali",degtobin(63.0695),degtobin(-151.0074));
   outund("Haleakala",degtobin(20.7097),degtobin(-156.2533));
+  drawglobemicro(1024,xy(1.3429,0.2848),3e-4,2,0,"geowrangellcvt.ppm");
   psopen("geoid.ps");
   psprolog();
   startpage();

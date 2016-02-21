@@ -89,4 +89,6 @@ struct geoheader
   std::vector<std::string> namesFormats;
   void writeBinary(std::ostream &ofile);
 };
+
+extern cubemap cube;
 #endif

@@ -49,6 +49,8 @@ using namespace std;
  * 01 8000 00 8000 00 8000 01 8000 00 8000 00 8000 00 8000
  */
 
+cubemap cube;
+
 vball::vball()
 {
   face=0;

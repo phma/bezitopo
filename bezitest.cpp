@@ -2857,11 +2857,18 @@ void test1bicubic(xy sw)
 
 void testbicubic()
 {
+  double bicube;
   cout<<"bicubic"<<endl;
   test1bicubic(xy(-0.5,-0.5));
   test1bicubic(xy(-0.5,-0.3));
   test1bicubic(xy(-0.5,0));
   test1bicubic(xy(-0.4,-0.3));
+  bicube=bicubic(0,xy(0,0),0,xy(0,0),0,xy(0,0),1,xy(3,3),2./3,5./7);
+  cout<<bicube<<endl;
+  /* This gives -800/9621, not 1000/9621. I don't know what's correct, but
+   * suspect that 1000/9621 is wrong because the inner control points don't
+   * have full freedom.
+   */
 }
 
 void testgeoid()

@@ -121,6 +121,53 @@ void rasterdraw(pointlist &pts,xy center,double width,double height,
   rclose();
 }
 
+vball foldcube(int panel,double x,double y)
+{
+  vball v;
+  switch (panel)
+  {
+    case 0:
+    case 2:
+    case 3:
+    case 8:
+    case 10:
+    case 11:
+      v.face=0;
+      break;
+    case 1:
+      v.face=3;
+      v.x=-y;
+      v.y=x;
+      break;
+    case 4:
+      v.face=5;
+      v.x=y;
+      v.y=-x;
+      break;
+    case 5:
+      v.face=1;
+      v.x=x;
+      v.y=y;
+      break;
+    case 6:
+      v.face=2;
+      v.x=y;
+      v.y=-x;
+      break;
+    case 7:
+      v.face=6;
+      v.x=-x;
+      v.y=-y;
+      break;
+    case 9:
+      v.face=4;
+      v.x=y;
+      v.y=-x;
+      break;
+  }
+  return v;
+}
+
 void drawglobecube(int side,double zscale,double zmid,int source,int imagetype,string filename)
 /* side is in pixels. Draws 4*side wide by 3*side high. imagetype is currently ignored.
  * source is 0 for xyz color (zscale is ignored), 1 for source geoid (only in
@@ -145,47 +192,7 @@ void drawglobecube(int side,double zscale,double zmid,int source,int imagetype,s
     {
       x=(((j%side)+0.5)/side)*2-1;
       panel=(i/side)*4+(j/side);
-      switch (panel)
-      {
-	case 0:
-	case 2:
-	case 3:
-	case 8:
-	case 10:
-	case 11:
-	  v.face=0;
-	  break;
-	case 1:
-	  v.face=3;
-	  v.x=-y;
-	  v.y=x;
-	  break;
-	case 4:
-	  v.face=5;
-	  v.x=y;
-	  v.y=-x;
-	  break;
-	case 5:
-	  v.face=1;
-	  v.x=x;
-	  v.y=y;
-	  break;
-	case 6:
-	  v.face=2;
-	  v.x=y;
-	  v.y=-x;
-	  break;
-	case 7:
-	  v.face=6;
-	  v.x=-x;
-	  v.y=-y;
-	  break;
-	case 9:
-	  v.face=4;
-	  v.x=y;
-	  v.y=-x;
-	  break;
-      }
+      v=foldcube(panel,x,y);
       if (v.face)
       {
 	sphloc=decodedir(v);
@@ -195,6 +202,8 @@ void drawglobecube(int side,double zscale,double zmid,int source,int imagetype,s
 #ifdef CONVERTGEOID
 	  if (source==1)
 	    z=avgelev(sphloc);
+	  if (source==2)
+	    z=cube.undulation(sphloc);
 #endif
 	  if (z<min)
 	    min=z;
@@ -217,4 +226,85 @@ void drawglobecube(int side,double zscale,double zmid,int source,int imagetype,s
   }
   rclose();
   cout<<"drawglobecube: max "<<max<<" min "<<min<<endl;
+}
+
+void drawglobemicro(int side,xy center,double size,int source,int imagetype,string filename)
+{
+  int i,j,panel;
+  string pixel;
+  double x,y,z,max,min,zmid,zscale;
+  xyz sphloc;
+  vball v;
+  char letter;
+  max=-INFINITY;
+  min=INFINITY;
+  ropen(filename);
+  ppmheader(side,side);
+  for (i=0;i<16;i++)
+  {
+    y=(((i+0.5)/16)*2-1)*size+center.gety();
+    for (j=0;j<16;j++)
+    {
+      x=(((j+0.5)/16)*2-1)*size+center.getx();
+      panel=floor(y)*4+floor(x);
+      v=foldcube(panel,(x-floor(x))*2-1,(floor(y)-y)*2+1);
+      if (v.face)
+      {
+	sphloc=decodedir(v);
+	if (source)
+	{
+	  z=0;
+#ifdef CONVERTGEOID
+	  if (source==1)
+	    z=avgelev(sphloc);
+	  if (source==2)
+	    z=cube.undulation(sphloc);
+#endif
+	  if (z<min)
+	    min=z;
+	  if (z>max)
+	    max=z;
+	}
+      }
+    }
+  }
+  zmid=(min+max)/2;
+  zscale=(max-min)/2;
+  for (i=0;i<side;i++)
+  {
+    y=(((i+0.5)/side)*2-1)*size+center.gety();
+    for (j=0;j<side;j++)
+    {
+      x=(((j+0.5)/side)*2-1)*size+center.getx();
+      panel=floor(y)*4+floor(x);
+      v=foldcube(panel,(x-floor(x))*2-1,(floor(y)-y)*2+1);
+      if (v.face)
+      {
+	sphloc=decodedir(v);
+	if (source)
+	{
+	  z=0;
+#ifdef CONVERTGEOID
+	  if (source==1)
+	    z=avgelev(sphloc);
+	  if (source==2)
+	    z=cube.undulation(sphloc);
+#endif
+	  pixel=gcolor((z-zmid)/zscale);
+	}
+	else
+	{
+	  pixel="rgb";
+	  pixel[0]=rint((sphloc.getx()+6371e3)*255/12742e3);
+	  pixel[1]=rint((sphloc.gety()+6371e3)*255/12742e3);
+	  pixel[2]=rint((sphloc.getz()+6371e3)*255/12742e3);
+	}
+      }
+      else
+	pixel="@@@";
+      rfile<<pixel;
+    }
+  }
+  rclose();
+  cout<<"drawglobemicro: max "<<max<<" min "<<min<<endl;
 }
