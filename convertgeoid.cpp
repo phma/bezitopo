@@ -289,6 +289,7 @@ int main(int argc, char *argv[])
 {
   ofstream ofile;
   int i;
+  vball v;
   cube.scale=1/65536.;
   hdr.logScale=-16;
   hdr.planet=BOL_EARTH;
@@ -296,7 +297,7 @@ int main(int argc, char *argv[])
   hdr.encoding=BOL_VARLENGTH;
   hdr.ncomponents=1;
   hdr.tolerance=0.03;
-  hdr.sublimit=3000;
+  hdr.sublimit=1000;
   hdr.spacing=1e5;
   hdr.namesFormats.push_back("../g2012bu0.bin");
   hdr.namesFormats.push_back("usngs");
@@ -319,6 +320,21 @@ int main(int argc, char *argv[])
    * This is a local maximum of the geoid in Alaska at Mount Wrangell.
    * It clearly shows artifacts when interpolated bilinearly.
    */
+  drawglobemicro(1024,xy(0.384566,1.27153),3e-3,1,0,"geonieves.ppm");
+  /* (-.230868,-1,0.45694) 103°W 24°N
+   * This is on the boundary of the Lower 48 file.
+   */
+  drawglobemicro(1024,xy(1.21676,0.294214),3e-3,1,0,"geogranisle.ppm");
+  /* (-.411572,-.56648,1) 126°W 55°N
+   * This is on the boundary of the overlap between the Alaska file
+   * and the Lower 48 file.
+   */
+  v=encodedir(Sphere.geoc(degtorad(62),degtorad(-144),0.));
+  cout<<"Wrangell "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
+  v=encodedir(Sphere.geoc(degtorad(24),degtorad(-103),0.));
+  cout<<"Nieves "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
+  v=encodedir(Sphere.geoc(degtorad(55),degtorad(-126),0.));
+  cout<<"Granisle "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
   for (i=0;i<6;i++)
   {
     //cout<<"Face "<<i+1;
@@ -338,6 +354,8 @@ int main(int argc, char *argv[])
   outund("Denali",degtobin(63.0695),degtobin(-151.0074));
   outund("Haleakala",degtobin(20.7097),degtobin(-156.2533));
   drawglobemicro(1024,xy(1.3429,0.2848),3e-4,2,0,"geowrangellcvt.ppm");
+  drawglobemicro(1024,xy(0.384566,1.27153),3e-3,2,0,"geonievescvt.ppm");
+  drawglobemicro(1024,xy(1.21676,0.294214),3e-3,2,0,"geogranislecvt.ppm");
   psopen("geoid.ps");
   psprolog();
   startpage();
