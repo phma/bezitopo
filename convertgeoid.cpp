@@ -296,7 +296,7 @@ int main(int argc, char *argv[])
   hdr.dataType=BOL_UNDULATION;
   hdr.encoding=BOL_VARLENGTH;
   hdr.ncomponents=1;
-  hdr.tolerance=0.03;
+  hdr.tolerance=0.003;
   hdr.sublimit=1000;
   hdr.spacing=1e5;
   hdr.namesFormats.push_back("../g2012bu0.bin");

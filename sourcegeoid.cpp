@@ -7,6 +7,7 @@
 #include <iostream>
 #include "sourcegeoid.h"
 #include "binio.h"
+#include "bicubic.h"
 
 using namespace std;
 vector<geolattice> geo;
@@ -15,6 +16,7 @@ double geolattice::elev(int lat,int lon)
 {
   int easting,northing,eint,nint;
   double epart,npart,ne,nw,se,sw,ret;
+  xy neslp,nwslp,seslp,swslp;
   easting=(lon-wbd)&0x7fffffff;
   northing=lat-sbd;
   epart=(double)easting*width/(ebd-wbd);
@@ -43,6 +45,10 @@ double geolattice::elev(int lat,int lon)
     se=undula[(width+1)*nint+eint+1];
     nw=undula[(width+1)*(nint+1)+eint];
     ne=undula[(width+1)*(nint+1)+eint+1];
+    swslp=xy(eslope[(width+1)*nint+eint],nslope[(width+1)*nint+eint])/2;
+    seslp=xy(eslope[(width+1)*nint+eint+1],nslope[(width+1)*nint+eint+1])/2;
+    nwslp=xy(eslope[(width+1)*(nint+1)+eint],nslope[(width+1)*(nint+1)+eint])/2;
+    neslp=xy(eslope[(width+1)*(nint+1)+eint+1],nslope[(width+1)*(nint+1)+eint+1])/2;
   }
   else
     sw=se=nw=ne=-2147483648;
@@ -54,7 +60,8 @@ double geolattice::elev(int lat,int lon)
     nw=1e30;
   if (ne==-2147483648)
     ne=1e30;
-  ret=((sw*(1-epart)+se*epart)*(1-npart)+(nw*(1-epart)+ne*epart)*npart)/65536;
+  //ret=((sw*(1-epart)+se*epart)*(1-npart)+(nw*(1-epart)+ne*epart)*npart)/65536;
+  ret=bicubic(sw,swslp,se,seslp,nw,nwslp,ne,neslp,epart,npart)/65536;
   if (ret>8850 || ret<-11000)
     ret=NAN;
   return ret;
@@ -63,6 +70,17 @@ double geolattice::elev(int lat,int lon)
 double geolattice::elev(xyz dir)
 {
   return elev(dir.lati(),dir.loni());
+}
+
+void geolattice::setslopes()
+{
+  int i,j;
+  for (i=0;i<height+1;i++)
+    for (j=1;j<width;j++)
+      eslope[i*(width+1)+j]=undula[i*(width+1)+j+1]-undula[i*(width+1)+j-1];
+  for (i=1;i<height;i++)
+    for (j=0;j<width+1;j++)
+      nslope[i*(width+1)+j]=undula[(i+1)*(width+1)+j]-undula[(i-1)*(width+1)+j];
 }
 
 void readusngsbinheaderbe(usngsheader &hdr,fstream &file)
@@ -109,6 +127,8 @@ void geolattice::setheader(usngsheader &hdr)
   width=hdr.nlong-1;
   height=hdr.nlat-1;
   undula.resize((width+1)*(height+1));
+  eslope.resize((width+1)*(height+1));
+  nslope.resize((width+1)*(height+1));
 }
 
 void readusngatxt(geolattice &geo,string filename)
@@ -149,6 +169,7 @@ int readusngsbin(geolattice &geo,string filename)
 	geo.undula[i*(geo.width+1)+j]=rint(65536*(bigendian?readbefloat(file):readlefloat(file)));
   }
   file.close();
+  geo.setslopes();
   return 0;
 }
 

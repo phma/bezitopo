@@ -30,9 +30,10 @@ public:
   int type; // not used yet - will distinguish lat-long grid from whatever is used at the poles
   int nbd,ebd,sbd,wbd; // fixed-point binary - 18 mm is good enough for geoid work
   int width,height;
-  std::vector<int> undula; // starts at southwest corner, heads east
+  std::vector<int> undula,eslope,nslope; // starts at southwest corner, heads east
   double elev(int lat,int lon);
   double elev(xyz dir);
+  void setslopes();
   void setheader(usngsheader &hdr);
 };
 
