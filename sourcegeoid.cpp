@@ -5,6 +5,7 @@
 /******************************************************/
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include "sourcegeoid.h"
 #include "binio.h"
 #include "bicubic.h"
@@ -21,8 +22,8 @@ double geolattice::elev(int lat,int lon)
   northing=lat-sbd;
   epart=(double)easting*width/(ebd-wbd);
   npart=(double)northing*height/(nbd-sbd);
-  eint=trunc(epart);
-  nint=trunc(npart);
+  eint=floor(epart);
+  nint=floor(npart);
   epart-=eint;
   npart-=nint;
   if (eint==width && epart==0)
@@ -72,15 +73,61 @@ double geolattice::elev(xyz dir)
   return elev(dir.lati(),dir.loni());
 }
 
+void geolattice::dump()
+{
+  int i,j;
+  cout<<"undula:"<<endl;
+  for (i=0;i<height+1;i++)
+  {
+    for (j=0;j<width+1;j++)
+      cout<<setw(11)<<undula[i*(width+1)+j];
+    cout<<endl;
+  }
+  cout<<"eslope:"<<endl;
+  for (i=0;i<height+1;i++)
+  {
+    for (j=0;j<width+1;j++)
+      cout<<setw(11)<<eslope[i*(width+1)+j];
+    cout<<endl;
+  }
+  cout<<"nslope:"<<endl;
+  for (i=0;i<height+1;i++)
+  {
+    for (j=0;j<width+1;j++)
+      cout<<setw(11)<<nslope[i*(width+1)+j];
+    cout<<endl;
+  }
+}
+
 void geolattice::setslopes()
+/* Given points a,b,c spaced 1 apart in order:
+ * Slope at b is sl(a,b)+sl(b,c)-sl(a,c). This is just sl(a,c)=(c-a)/2.
+ * (2b-2a+2c-2b+a-c)/2=(c-a)/2
+ * The division by 2 is done in elev.
+ * Slope at c (the edge) is sl(b,c)+sl(c,a)-sl(a,b). This is (c-b)+(c-a)/2-(b-a)
+ * =(2c-2b+c-a-2b+2a)/2=(3c-4b+a)/2
+ */
 {
   int i,j;
   for (i=0;i<height+1;i++)
     for (j=1;j<width;j++)
       eslope[i*(width+1)+j]=undula[i*(width+1)+j+1]-undula[i*(width+1)+j-1];
+  if (width>1) // TODO: handle the case of full 360° latitude
+    for (i=0;i<height+1;i++)
+    {
+      eslope[i*(width+1)]=4*undula[i*(width+1)+1]-undula[i*(width+1)+2]-3*undula[i*(width+1)];
+      eslope[(i+1)*(width+1)-1]=3*undula[(i+1)*(width+1)-1]-4*undula[(i+1)*(width+1)-2]+undula[(i+1)*(width+1)-3];
+    }
   for (i=1;i<height;i++)
     for (j=0;j<width+1;j++)
       nslope[i*(width+1)+j]=undula[(i+1)*(width+1)+j]-undula[(i-1)*(width+1)+j];
+  if (height>1)
+    for (j=0;j<width+1;j++)
+    {
+      nslope[j]=4*undula[(width+1)+j]-undula[2*(width+1)+j]-3*undula[j];
+      nslope[height*(width+1)+j]=3*undula[height*(width+1)+j]-4*undula[(height-1)*(width+1)+j]+undula[(height-2)*(width+1)+j];
+    }
+  //dump();
 }
 
 void readusngsbinheaderbe(usngsheader &hdr,fstream &file)
@@ -129,6 +176,21 @@ void geolattice::setheader(usngsheader &hdr)
   undula.resize((width+1)*(height+1));
   eslope.resize((width+1)*(height+1));
   nslope.resize((width+1)*(height+1));
+}
+
+void geolattice::settest()
+{
+  int i,j;
+  sbd=wbd=degtobin(-2);
+  nbd=ebd=degtobin(2);
+  width=height=4;
+  undula.resize((width+1)*(height+1));
+  eslope.resize((width+1)*(height+1));
+  nslope.resize((width+1)*(height+1));
+  for (i=0;i<5;i++)
+    for (j=0;j<5;j++)
+      undula[i+5*j]=67800*(i-2)+37700*(j-2);
+  setslopes();
 }
 
 void readusngatxt(geolattice &geo,string filename)

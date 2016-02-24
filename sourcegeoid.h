@@ -35,6 +35,8 @@ public:
   double elev(xyz dir);
   void setslopes();
   void setheader(usngsheader &hdr);
+  void settest();
+  void dump();
 };
 
 int readusngsbin(geolattice &geo,std::string filename);

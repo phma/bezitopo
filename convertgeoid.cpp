@@ -296,7 +296,7 @@ int main(int argc, char *argv[])
   hdr.dataType=BOL_UNDULATION;
   hdr.encoding=BOL_VARLENGTH;
   hdr.ncomponents=1;
-  hdr.tolerance=0.003;
+  hdr.tolerance=0.03;
   hdr.sublimit=1000;
   hdr.spacing=1e5;
   hdr.namesFormats.push_back("../g2012bu0.bin");
@@ -312,8 +312,9 @@ int main(int argc, char *argv[])
   hdr.namesFormats.push_back("../g2012bp0.bin");
   hdr.namesFormats.push_back("usngs");
   geo.resize(hdr.namesFormats.size()/2);
-  for (i=0;i<geo.size();i++)
+  for (i=0;i<geo.size()-1;i++)
     readusngsbin(geo[i],hdr.namesFormats[i*2]);
+  //geo[i].settest();
   drawglobecube(1024,62,-7,1,0,"geoid.ppm");
   drawglobemicro(1024,xy(1.3429,0.2848),3e-4,1,0,"geowrangell.ppm");
   /* (-.4304,-.3142,1) 143.86986°W 61.9475°N 143°52'12"W 61°56'51"
@@ -329,12 +330,25 @@ int main(int argc, char *argv[])
    * This is on the boundary of the overlap between the Alaska file
    * and the Lower 48 file.
    */
+  drawglobemicro(1024,xy(3.579192,1.5984015),1e-3,1,0,"geosamoan.ppm");
+  drawglobemicro(1024,xy(3.6062785,1.627449),1e-3,1,0,"geosamoae.ppm");
+  drawglobemicro(1024,xy(3.579192,1.654771),1e-3,1,0,"geosamoas.ppm");
+  drawglobemicro(1024,xy(3.552552,1.6253505),1e-3,1,0,"geosamoaw.ppm");
+  drawglobemicro(1024,xy(1.5,1.5),2e-2,1,0,"geotest.ppm");
   v=encodedir(Sphere.geoc(degtorad(62),degtorad(-144),0.));
   cout<<"Wrangell "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
   v=encodedir(Sphere.geoc(degtorad(24),degtorad(-103),0.));
   cout<<"Nieves "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
   v=encodedir(Sphere.geoc(degtorad(55),degtorad(-126),0.));
   cout<<"Granisle "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
+  v=encodedir(Sphere.geoc(degtorad(-11),degtorad(-171),0.));
+  cout<<"Samoa N "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
+  v=encodedir(Sphere.geoc(degtorad(-14),degtorad(-168),0.));
+  cout<<"Samoa E "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
+  v=encodedir(Sphere.geoc(degtorad(-17),degtorad(-171),0.));
+  cout<<"Samoa S "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
+  v=encodedir(Sphere.geoc(degtorad(-14),degtorad(-174),0.));
+  cout<<"Samoa W "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
   for (i=0;i<6;i++)
   {
     //cout<<"Face "<<i+1;
@@ -356,6 +370,11 @@ int main(int argc, char *argv[])
   drawglobemicro(1024,xy(1.3429,0.2848),3e-4,2,0,"geowrangellcvt.ppm");
   drawglobemicro(1024,xy(0.384566,1.27153),3e-3,2,0,"geonievescvt.ppm");
   drawglobemicro(1024,xy(1.21676,0.294214),3e-3,2,0,"geogranislecvt.ppm");
+  drawglobemicro(1024,xy(3.579192,1.5984015),1e-3,2,0,"geosamoancvt.ppm");
+  drawglobemicro(1024,xy(3.6062785,1.627449),1e-3,2,0,"geosamoaecvt.ppm");
+  drawglobemicro(1024,xy(3.579192,1.654771),1e-3,2,0,"geosamoascvt.ppm");
+  drawglobemicro(1024,xy(3.552552,1.6253505),1e-3,2,0,"geosamoawcvt.ppm");
+  drawglobemicro(1024,xy(1.5,1.5),2e-2,2,0,"geotestcvt.ppm");
   psopen("geoid.ps");
   psprolog();
   startpage();
