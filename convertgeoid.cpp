@@ -311,10 +311,10 @@ int main(int argc, char *argv[])
   hdr.namesFormats.push_back("usngs");
   hdr.namesFormats.push_back("../g2012bp0.bin");
   hdr.namesFormats.push_back("usngs");
-  geo.resize(hdr.namesFormats.size()/2);
+  geo.resize(hdr.namesFormats.size()/2+1);
   for (i=0;i<geo.size()-1;i++)
     readusngsbin(geo[i],hdr.namesFormats[i*2]);
-  //geo[i].settest();
+  geo[i].settest();
   drawglobecube(1024,62,-7,1,0,"geoid.ppm");
   drawglobemicro(1024,xy(1.3429,0.2848),3e-4,1,0,"geowrangell.ppm");
   /* (-.4304,-.3142,1) 143.86986°W 61.9475°N 143°52'12"W 61°56'51"

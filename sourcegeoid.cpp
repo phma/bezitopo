@@ -127,7 +127,8 @@ void geolattice::setslopes()
       nslope[j]=4*undula[(width+1)+j]-undula[2*(width+1)+j]-3*undula[j];
       nslope[height*(width+1)+j]=3*undula[height*(width+1)+j]-4*undula[(height-1)*(width+1)+j]+undula[(height-2)*(width+1)+j];
     }
-  //dump();
+  if (height<=16 && width<=16)
+    dump();
 }
 
 void readusngsbinheaderbe(usngsheader &hdr,fstream &file)
@@ -189,7 +190,7 @@ void geolattice::settest()
   nslope.resize((width+1)*(height+1));
   for (i=0;i<5;i++)
     for (j=0;j<5;j++)
-      undula[i+5*j]=67800*(i-2)+37700*(j-2);
+      undula[i+5*j]=61000*(i-2)+4096*sqr(i-2)+37700*(j-2)-2048*sqr(j-2);
   setslopes();
 }
 
