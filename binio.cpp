@@ -42,6 +42,26 @@ void writeleshort(std::ostream &file,short i)
   file.write(buf,2);
 }
 
+short readbeshort(std::istream &file)
+{
+  char buf[2];
+  file.read(buf,2);
+#ifndef BIGENDIAN
+  endianflip(buf,2);
+#endif
+  return *(short *)buf;
+}
+
+short readleshort(std::istream &file)
+{
+  char buf[2];
+  file.read(buf,2);
+#ifdef BIGENDIAN
+  endianflip(buf,2);
+#endif
+  return *(short *)buf;
+}
+
 void writebeint(std::ostream &file,int i)
 {
   char buf[4];
@@ -62,7 +82,7 @@ void writeleint(std::ostream &file,int i)
   file.write(buf,4);
 }
 
-int readbeint(std::fstream &file)
+int readbeint(std::istream &file)
 {
   char buf[4];
   file.read(buf,4);
@@ -72,7 +92,7 @@ int readbeint(std::fstream &file)
   return *(int *)buf;
 }
 
-int readleint(std::fstream &file)
+int readleint(std::istream &file)
 {
   char buf[4];
   file.read(buf,4);
@@ -112,7 +132,7 @@ void writebedouble(std::ostream &file,double i)
   file.write(buf,8);
 }
 
-double readbedouble(std::fstream &file)
+double readbedouble(std::istream &file)
 {
   char buf[8];
   file.read(buf,8);
@@ -122,7 +142,7 @@ double readbedouble(std::fstream &file)
   return *(double *)buf;
 }
 
-double readledouble(std::fstream &file)
+double readledouble(std::istream &file)
 {
   char buf[8];
   file.read(buf,8);
@@ -173,7 +193,7 @@ void writegeint(std::ostream &file,int i)
   }
 }
 
-int readgeint(std::fstream &file)
+int readgeint(std::istream &file)
 {
   char buf[8];
   int ret;
@@ -214,3 +234,15 @@ void writeustring(ostream &file,string s)
   file.put(0);
 }
 
+string readustring(istream &file)
+{
+  int ch;
+  string ret;
+  do
+  {
+    ch=file.get();
+    if (ch>0)
+      ret+=(char)ch;
+  } while (ch>0);
+  return ret;
+}

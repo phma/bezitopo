@@ -352,6 +352,32 @@ void geoquad::writeBinary(ostream &ofile,int nesting)
   }
 }
 
+void geoquad::readBinary(istream &ifile,int nesting)
+{
+  int i;
+  clear();
+  if (nesting<0)
+    nesting=ifile.get();
+  if (nesting<0)
+    throw baddata;
+  if (nesting>0)
+  {
+    subdivide();
+    for (i=0;i<4;i++)
+    {
+      sub[i]->readBinary(ifile,nesting-1);
+      nesting=0;
+    }
+  }
+  else
+  {
+    und[0]=readgeint(ifile);
+    if (isnan())
+      for (i=1;i<6;i++)
+	und[i]=readgeint(ifile);
+  }
+}
+
 unsigned byteswap(unsigned n)
 {
   return ((n&0xff000000)>>24)|((n&0xff0000)>>8)|((n&0xff00)<<8)|((n&0xff)<<24);
@@ -432,6 +458,13 @@ void cubemap::writeBinary(ostream &ofile)
     faces[i].writeBinary(ofile);
 }
 
+void cubemap::readBinary(istream &ifile)
+{
+  int i;
+  for (i=0;i<6;i++)
+    faces[i].readBinary(ifile);
+}
+
 void geoheader::writeBinary(std::ostream &ofile)
 {
   int i;
@@ -449,4 +482,27 @@ void geoheader::writeBinary(std::ostream &ofile)
   writebeshort(ofile,namesFormats.size());
   for (i=0;i<namesFormats.size();i++)
     writeustring(ofile,namesFormats[i]);
+}
+
+void geoheader::readBinary(std::istream &ifile)
+{
+  int i,nstrings;
+  char magic[8]="ABCDEFG";
+  ifile.read(magic,8);
+  if (memcmp(magic,"boldatni",8))
+    throw badheader;
+  hash[0]=readbeint(ifile);
+  hash[1]=readbeint(ifile);
+  planet=readbeshort(ifile);
+  dataType=ifile.get();
+  encoding=ifile.get();
+  ncomponents=ifile.get();
+  logScale=readbeshort(ifile);
+  tolerance=readbedouble(ifile);
+  sublimit=readbedouble(ifile);
+  spacing=readbedouble(ifile);
+  nstrings=readbeshort(ifile);
+  namesFormats.clear();
+  for (i=0;i<nstrings;i++)
+    namesFormats.push_back(readustring(ifile));
 }
