@@ -51,6 +51,7 @@
 #include "absorient.h"
 #include "hlattice.h"
 #include "geoid.h"
+#include "refinegeoid.h"
 #include "binio.h"
 #include "sourcegeoid.h"
 #include "bicubic.h"
@@ -2875,10 +2876,12 @@ void testgeoid()
 {
   vball v;
   int lat,lon,olat,olon,i,j,k;
-  double x,y,sum,qpoints[16][16];
+  double x,y,sum,qpoints[16][16],u0,u1;
   //vector<double> anga,apxa;
   xyz dir;
   geoquad gq,*pgq;
+  geoheader hdr;
+  fstream file;
   array<unsigned,2> ghash;
   array<double,6> corr;
   cout<<"Testing conversion to and from volleyball coordinates...";
@@ -2945,6 +2948,48 @@ void testgeoid()
     {
       assert(geo[0].eslope[5*i+j]==89232+16384*j);
       assert(geo[0].nslope[5*i+j]==91784-8192*i);
+    }
+  cube.scale=1/65536.;
+  hdr.logScale=-16;
+  hdr.planet=BOL_EARTH;
+  hdr.dataType=BOL_UNDULATION;
+  hdr.encoding=BOL_VARLENGTH;
+  hdr.ncomponents=1;
+  hdr.tolerance=0.1;
+  hdr.sublimit=1000;
+  hdr.spacing=1e5;
+  hdr.namesFormats.push_back("test");
+  hdr.namesFormats.push_back("test");
+  for (i=0;i<6;i++)
+  {
+    interroquad(cube.faces[i],3e5);
+    refine(cube.faces[i],cube.scale,hdr.tolerance,hdr.sublimit,hdr.spacing);
+  }
+  outProgress();
+  cout<<endl;
+  file.open("test.bol",ios::out|ios::binary);
+  hdr.hash=cube.hash();
+  hdr.writeBinary(file);
+  cube.writeBinary(file);
+  cube.clear();
+  file.close();
+  file.open("test.bol",ios::in|ios::binary);
+  hdr.readBinary(file);
+  cube.readBinary(file);
+  file.close();
+  /* Compare the geoquad approximation, which is almost exact since the original
+   * is quadratic, with the original geolattice. The geoquads have been written
+   * to a file and read back.
+   */
+  for (i=-12000000;i<=12000000;i+=1000000) // The test pattern extends from -2° to 2°.
+    for (j=-12000000;j<=12000000;j+=1000000) // 12000000 is just over 2°.
+    {
+      u0=geo[0].elev(i,j);
+      u1=cube.undulation(i,j);
+      if (std::isnan(u0))
+	assert(std::isnan(u1));
+      else
+	assert(fabs(u1-u0)<0.001);
     }
 }
 

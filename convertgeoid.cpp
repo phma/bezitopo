@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
   drawglobemicro(1024,xy(3.6062785,1.627449),1e-3,1,0,"geosamoae.ppm");
   drawglobemicro(1024,xy(3.579192,1.654771),1e-3,1,0,"geosamoas.ppm");
   drawglobemicro(1024,xy(3.552552,1.6253505),1e-3,1,0,"geosamoaw.ppm");
-  drawglobemicro(1024,xy(1.5,1.5),2e-2,1,0,"geotest.ppm");
+  //drawglobemicro(1024,xy(1.5,1.5),2e-2,1,0,"geotest.ppm");
   v=encodedir(Sphere.geoc(degtorad(62),degtorad(-144),0.));
   cout<<"Wrangell "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
   v=encodedir(Sphere.geoc(degtorad(24),degtorad(-103),0.));
@@ -196,7 +196,7 @@ int main(int argc, char *argv[])
   drawglobemicro(1024,xy(3.6062785,1.627449),1e-3,2,0,"geosamoaecvt.ppm");
   drawglobemicro(1024,xy(3.579192,1.654771),1e-3,2,0,"geosamoascvt.ppm");
   drawglobemicro(1024,xy(3.552552,1.6253505),1e-3,2,0,"geosamoawcvt.ppm");
-  drawglobemicro(1024,xy(1.5,1.5),2e-2,2,0,"geotestcvt.ppm");
+  //drawglobemicro(1024,xy(1.5,1.5),2e-2,2,0,"geotestcvt.ppm");
   psopen("geoid.ps");
   psprolog();
   startpage();

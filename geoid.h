@@ -72,10 +72,11 @@ class cubemap
 public:
   geoquad faces[6]; // note off-by-one: faces[0] is face 1, the Benin face
   double scale; // always a power of 2
+  std::array<unsigned,2> hash();
   cubemap();
+  void clear();
   double undulation(int lat,int lon);
   double undulation(xyz dir);
-  std::array<unsigned,2> hash();
   void writeBinary(std::ostream &ofile);
   void readBinary(std::istream &ifile);
 };

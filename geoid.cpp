@@ -4,6 +4,7 @@
 /*                                                    */
 /******************************************************/
 #include <cmath>
+#include <iostream>
 #include "geoid.h"
 #include "binio.h"
 #include "angle.h"
@@ -357,8 +358,11 @@ void geoquad::readBinary(istream &ifile,int nesting)
   int i;
   clear();
   if (nesting<0)
+  {
     nesting=ifile.get();
-  if (nesting<0)
+    //cout<<"Read nesting "<<nesting<<endl;
+  }
+  if (nesting<0 || nesting>56)
     throw baddata;
   if (nesting>0)
   {
@@ -372,7 +376,7 @@ void geoquad::readBinary(istream &ifile,int nesting)
   else
   {
     und[0]=readgeint(ifile);
-    if (isnan())
+    if (!isnan())
       for (i=1;i<6;i++)
 	und[i]=readgeint(ifile);
   }
@@ -416,6 +420,13 @@ cubemap::cubemap()
   int i;
   for (i=0;i<6;i++)
     faces[i].face=i+1;
+}
+
+void cubemap::clear()
+{
+  int i;
+  for (i=0;i<6;i++)
+    faces[i].clear();
 }
 
 double cubemap::undulation(int lat,int lon)
