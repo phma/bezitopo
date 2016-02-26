@@ -14,14 +14,14 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                color.cpp halton.cpp hlattice.cpp layer.cpp ldecimal.cpp manysum.cpp
                measure.cpp objlist.cpp plot.cpp pnezd.cpp point.cpp pointlist.cpp
                polyline.cpp projection.cpp ps.cpp qindex.cpp random.cpp
-               raster.cpp relprime.cpp sourcegeoid.cpp spiral.cpp stl.cpp test.cpp
-               segment.cpp tin.cpp vcurve.cpp)
+               raster.cpp refinegeoid.cpp relprime.cpp sourcegeoid.cpp spiral.cpp
+               stl.cpp test.cpp segment.cpp tin.cpp vcurve.cpp)
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
                binio.cpp cogo.cpp convertgeoid.cpp document.cpp drawobj.cpp ellipsoid.cpp
                geoid.cpp hlattice.cpp ldecimal.cpp
                manysum.cpp measure.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp
-               ps.cpp qindex.cpp random.cpp raster.cpp relprime.cpp segment.cpp
-               sourcegeoid.cpp spiral.cpp tin.cpp vcurve.cpp)
+               ps.cpp qindex.cpp random.cpp raster.cpp refinegeoid.cpp relprime.cpp
+               segment.cpp sourcegeoid.cpp spiral.cpp tin.cpp vcurve.cpp)
 target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID)
 
 include(TestBigEndian)
