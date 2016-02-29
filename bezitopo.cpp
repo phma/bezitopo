@@ -28,12 +28,14 @@
 #include "closure.h"
 #include "cvtmeas.h"
 #include "contour.h"
+#include "geoid.h"
 
 using namespace std;
 
 bool cont=true;
 document doc;
 string savefilename;
+geoheader ghead;
 
 void indpark(string args)
 /* Concrete rectangle with apparent overlap: elevation 203.7
@@ -366,6 +368,18 @@ int main(int argc, char *argv[])
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
   doc.pl.resize(1);
+  try
+  {
+    ifstream geofile("geoid.bol",ios::binary);
+    ghead.readBinary(geofile);
+    cube.scale=pow(2,ghead.logScale);
+    cube.readBinary(geofile);
+    cout<<"read geoid.bol"<<endl;
+  }
+  catch (int e)
+  {
+    cout<<"didn't read geoid.bol for reason "<<e<<endl;
+  }
   while (cont)
   {
     cout<<"? ";
