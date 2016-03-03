@@ -2271,6 +2271,7 @@ void testldecimal()
 
 void testellipsoid()
 {
+  double rad;
   xyz sealevel,kmhigh,noffset,soffset,diff,benin,bengal,howland,galapagos,npole,spole;
   ellipsoid test1(8026957,0,0.5),test2(8026957,4013478.5,0);
   assert(test1.geteqr()==test2.geteqr());
@@ -2307,6 +2308,16 @@ void testellipsoid()
   assert(galapagos.gety()<-6370999);
   assert(npole.getz()>6370999);
   assert(spole.getz()<-6370999);
+  rad=GRS80.radiusAtLatitude(latlong(0,0),0);
+  cout<<"Radius in prime at equator: "<<ldecimal(rad)<<endl;
+  assert(fabs(rad-6378137)<0.5);
+  rad=GRS80.radiusAtLatitude(latlong(0,0),DEG90);
+  cout<<"Radius in meridian at equator: "<<ldecimal(rad)<<endl;
+  assert(fabs(rad-6335439)<0.5);
+  rad=GRS80.radiusAtLatitude(latlong(degtorad(41+18./60+15.0132/3600),2.5),degtobin(-52-14./60-36./3600));
+  // Elementary Surveying, 11th ed., example 19.2, page 548
+  cout<<"Radius in azimuth 142°14'36\" at 41°18'15\": "<<ldecimal(rad)<<endl;
+  assert(fabs(rad-6372309.4)<0.5);
 }
 
 void test1projection(string projName,Projection &proj,latlong ll,xy grid)

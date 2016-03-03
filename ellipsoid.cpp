@@ -16,6 +16,23 @@
  * need double.
  */
 
+latlong::latlong()
+{
+  lat=lon=0;
+}
+
+latlong::latlong(int ilat,int ilon)
+{
+  lat=bintorad(ilat);
+  lon=bintorad(ilon);
+}
+
+latlong::latlong(double dlat,double dlon)
+{
+  lat=dlat;
+  lon=dlon;
+}
+
 ellipsoid::ellipsoid(double equradius,double polradius,double flattening)
 {
   if (polradius==0)
@@ -70,6 +87,24 @@ xyz ellipsoid::geoc(latlong ll,double elev)
 double ellipsoid::avgradius()
 {
   return cbrt(eqr*eqr*por);
+}
+
+double ellipsoid::eccentricity()
+{
+  return sqrt(1-por*por/eqr/eqr);
+}
+
+double ellipsoid::radiusAtLatitude(latlong ll,int bearing)
+{
+  double rprime; // radius in the prime (at east azimuth)
+  double rmerid; // radius in the meridian (at north azimuth)
+  double latfactor,bearfactor,ecc2;
+  ecc2=1-por*por/eqr/eqr;
+  latfactor=1-ecc2*sqr(sin(ll.lat));
+  bearfactor=sqr(sin(bearing));
+  rprime=eqr/sqrt(latfactor);
+  rmerid=rprime*(1-ecc2)/latfactor;
+  return 1/(bearfactor/rmerid+(1-bearfactor)/rprime);
 }
 
 ellipsoid Sphere(6371000,0,0);

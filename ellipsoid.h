@@ -11,6 +11,9 @@ struct latlong
 {
   double lat;
   double lon;
+  latlong();
+  latlong(int ilat,int ilon);
+  latlong(double dlat,double dlon); // Arguments are in radians.
 };
 
 class ellipsoid
@@ -33,6 +36,8 @@ public:
   {
     return por;
   };
+  double eccentricity();
+  double radiusAtLatitude(latlong ll,int bearing); // bearing is 0 for east; use DEG45 for average radius
 };
 
 extern ellipsoid Sphere,Clarke,GRS80,WGS84,ITRS;
