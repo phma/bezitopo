@@ -2344,8 +2344,10 @@ array<latlong,2> randomPointPair()
   double latoff,lonoff;
   array<latlong,2> ret;
   r1=rng.usrandom();
-  r2=rng.ucrandom();
-  midpoint.lat=asin((2*r1+1)/65536.-1);
+  r2=rng.usrandom();
+  r1=(r1<<8)+(r2>>8);
+  r2&=255;
+  midpoint.lat=asin((2*r1+1)/16777216.-1);
   midpoint.lon=M_1PHI*(2*r1+1)/2.;
   midpoint.lon-=rint(midpoint.lon);
   midpoint.lon*=2*M_PI;
