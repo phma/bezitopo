@@ -50,6 +50,7 @@
 #include "contour.h"
 #include "absorient.h"
 #include "hlattice.h"
+#include "histogram.h"
 #include "geoid.h"
 #include "refinegeoid.h"
 #include "binio.h"
@@ -2885,6 +2886,29 @@ void testbicubic()
    */
 }
 
+void testhistogram()
+{
+  histogram histo0(-1,1),histo1(-0.1,0.1),histo2(-10,10);
+  histobar bar;
+  int i,bartot;
+  double x;
+  for (i=0;i<1000;i++)
+  {
+    x=sin((double)i);
+    histo0<<x;
+    histo1<<x;
+    histo2<<x;
+  }
+  for (i=bartot=0;i<histo0.nbars();i++)
+  {
+    bar=histo0.getbar(i);
+    bartot+=bar.count;
+    cout<<bar.start<<endl<<setw(6)<<bar.count<<' '<<bar.count/(bar.end-bar.start)<<endl;
+  }
+  cout<<bar.end<<endl;
+  assert(histo0.gettotal()==bartot);
+}
+
 void testgeoid()
 {
   vball v;
@@ -3132,6 +3156,7 @@ int main(int argc, char *argv[])
   testabsorient();
   testhlattice();
   testbicubic();
+  testhistogram();
   testgeoid();
   testgeint();
   //clampcubic();

@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* histogram.h - adaptive histogram                   */
+/* histogram.h - streaming histogram                  */
 /*                                                    */
 /******************************************************/
 #include <vector>
@@ -28,4 +28,5 @@ public:
   histogram& operator<<(double val);
   unsigned nbars();
   histobar getbar(unsigned n);
+  unsigned gettotal();
 };

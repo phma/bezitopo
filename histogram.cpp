@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* histogram.cpp - adaptive histogram                 */
+/* histogram.cpp - streaming histogram                */
 /*                                                    */
 /******************************************************/
 #include <cstring>
@@ -60,10 +60,10 @@ void histogram::split(int n)
   bin.push_back(0);
   count.push_back(0);
   memmove(&bin[n+1],&bin[n],sizeof(double)*(bin.size()-n-1));
-  memmove(&count[n+1],&count[n],sizeof(double)*(count.size()-n-1));
+  memmove(&count[n+1],&count[n],sizeof(unsigned)*(count.size()-n-1));
   count[n+1]=count[n]/2;
   count[n]-=count[n+1];
-  bin[n+1]=(bin[n]+bin[n+2])/2;
+  bin[n+1]=(bin[n]*count[n+1]+bin[n+2]*count[n])/(count[n]+count[n+1]);
 }
 
 int histogram::find(double val)
@@ -72,7 +72,7 @@ int histogram::find(double val)
   if (val<bin[lower])
     return -1;
   else if (val>=bin[upper])
-    return upper+1;
+    return upper;
   else while (upper-lower>1)
   {
     if (val<bin[(upper+lower)/2])
@@ -88,7 +88,7 @@ histogram& histogram::operator<<(double val)
   int theBin;
   double newlimit;
   theBin=find(val);
-  if (theBin>count.size())
+  if (theBin>=count.size())
   {
     newlimit=val+(bin[count.size()]-bin[count.size()-1]);
     bin.push_back(newlimit);
@@ -100,14 +100,14 @@ histogram& histogram::operator<<(double val)
     bin.push_back(0);
     count.push_back(0);
     memmove(&bin[1],&bin[0],sizeof(double)*(bin.size()-1));
-    memmove(&count[1],&count[0],sizeof(double)*(count.size()-1));
+    memmove(&count[1],&count[0],sizeof(unsigned)*(count.size()-1));
     bin[0]=newlimit;
     count[0]=0;
     theBin=0;
   }
   count[theBin]++;
   total++;
-  if ((count[theBin]&1)==0 && sqr(count[theBin])>total)
+  if (sqr(count[theBin])>total)
     split(theBin);
   return *this;
 }
@@ -124,4 +124,9 @@ histobar histogram::getbar(unsigned n)
   ret.end=bin[n+1];
   ret.count=count[n];
   return ret;
+}
+
+unsigned histogram::gettotal()
+{
+  return total;
 }

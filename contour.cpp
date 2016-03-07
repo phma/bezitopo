@@ -345,7 +345,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	      if (vex.size()==1)
 	      {
 		cout<<"splitseg backward"<<endl;
-		splitseg.split(vex[1],part0,part1);
+		splitseg.split(vex[0],part0,part1);
 		if (part1.getstart().elev()>part1.getend().elev())
 		  splitseg=part1;
 		else
