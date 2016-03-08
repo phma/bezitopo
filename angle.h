@@ -83,7 +83,8 @@ double gontorad(double angle);
 #define DEG360 0x80000000
 
 std::string bintoangle(int angle,int unitp);
-int parseangle(std::string angstr,int unitp);
+double parseangle(std::string angstr,int unitp);
+int parseiangle(std::string angstr,int unitp);
 /* If parseangle is passed a string containing a degree or minus sign, it interprets
  * the string as degrees even if unitp is GON. If the string contains 'g',
  * it interprets it as gons.

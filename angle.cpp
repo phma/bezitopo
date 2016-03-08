@@ -244,10 +244,10 @@ string bintoangle(int angle,int unitp)
   return ret;
 }
 
-int parseangle(string angstr,int unitp)
+double parseangle(string angstr,int unitp)
 {
-  double angmult=0,prec;
-  int i,ulen,angle;
+  double angmult=0,prec,angle;
+  int i,ulen;
   bool point,six;
   string uchar;
   for (point=six=i=0,prec=1;i<angstr.length();i++)
@@ -289,13 +289,13 @@ int parseangle(string angstr,int unitp)
   switch (unitp&0xffffff00)
   {
     case DEGREE:
-      angle=degtobin(angmult/prec);
+      angle=degtorad(angmult/prec);
       break;
     case GON:
-      angle=gontobin(angmult/prec);
+      angle=gontorad(angmult/prec);
       break;
     case RADIAN:
-      angle=radtobin(angmult/prec);
+      angle=angmult/prec;
       break;
     default:
       throw badunits;
@@ -303,9 +303,14 @@ int parseangle(string angstr,int unitp)
   return angle;
 }
 
+int parseiangle(string angstr,int unitp)
+{
+  return radtobin(parseangle(angstr,unitp));
+}
+
 int parseazimuth(string angstr,int unitp)
 {
-  return DEG90-parseangle(angstr,unitp);
+  return DEG90-parseiangle(angstr,unitp);
 }
 
 int parsesignedangle(string angstr,int unitp)
@@ -316,7 +321,7 @@ int parsesignedangle(string angstr,int unitp)
     angstr.erase(0,1);
     sign=-1;
   }
-  return parseangle(angstr,unitp)*sign;
+  return parseiangle(angstr,unitp)*sign;
 }
 
 int parsebearing(string angstr,int unitp)
