@@ -1662,6 +1662,8 @@ void trianglecontours()
  * tri083194be44b7dace28 has a contour that does not touch the perimeter and
  * a contour at the same elevation that does.
  * So do tri2c7ae0064f1de9f5b2 and trie1fbf94c3a1f855e9c.
+ * tri714b40f2e8ee8c56b4 has three critical points clearly inside the triangle
+ * and one just outside the border.
  * 
  * Hypothesis to attack the minimax problem:
  * Every surface in a Bézier triangle can be stretched linearly and rotated
@@ -2189,10 +2191,23 @@ void testbezier3d()
   assert(nclose>=30);
 }
 
+void testangleconvcorner(string anglestr,xyz &totxyz)
+{
+  xyz corner;
+  latlong ll;
+  ll=parselatlong(anglestr,DEGREE);
+  corner=Sphere.geoc(ll,0);
+  assert(fabs(corner.getx())>3678296 && fabs(corner.gety())>3678296 && fabs(corner.getz())>3678296);
+  totxyz+=corner;
+}
+
 void testangleconv()
 {
   string strang,straz,strbear;
   int angle;
+  double distance;
+  xyz totxyz;
+  latlong ll,wrangell0,wrangell1;
   strang=bintoangle(0,DEGREE+SEXAG2);
   cout<<strang<<endl;
   assert(strang=="0°00′00″");
@@ -2220,6 +2235,30 @@ void testangleconv()
   cout<<hex<<angle<<dec<<endl;
   angle=parsebearing("N31°W",DEGREE);
   cout<<hex<<angle<<dec<<endl;
+  ll=parselatlong("126°W 55°N",DEGREE);
+  cout<<formatlatlong(ll,DEGREE)<<endl;
+  wrangell0=parselatlong("143°52'11.5\"W 61°56'51\"N",DEGREE);
+  cout<<formatlatlong(wrangell0,DEGREE+DEC5)<<endl;
+  wrangell1=parselatlong("143.86986°W 61.9475°N",DEGREE);
+  cout<<formatlatlong(wrangell1,DEGREE+SEXAG2P2)<<endl;
+  distance=dist(WGS84.geoc(wrangell0,0),WGS84.geoc(wrangell1,0));
+  cout<<"Distance between DMS and decimal: "<<distance<<endl;
+  assert(distance<1);
+  /* Add up the eight points where faces of volleyball coordinates meet
+   * (45°,135°E,W 35.26439°,35°15'52"N,S). The sum should be close to zero.
+   * The ones in the northern hemisphere have the latitude in DMS;
+   * the ones with longitude 135 have longitude first.
+   */
+  testangleconvcorner("35°15'52\"N45°E",totxyz);
+  testangleconvcorner("135°E35°15'52\"N",totxyz);
+  testangleconvcorner("135°W35°15'52\"N",totxyz);
+  testangleconvcorner("35°15'52\"N45°W",totxyz);
+  testangleconvcorner("35.26439°S45°E",totxyz);
+  testangleconvcorner("135°E35.26439°S",totxyz);
+  testangleconvcorner("135°W35.26439°S",totxyz);
+  testangleconvcorner("35.26439°S45°W",totxyz);
+  cout<<totxyz.length()<<endl;
+  assert(totxyz.length()<30);
 }
 
 void testcsvline()

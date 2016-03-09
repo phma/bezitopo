@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
   //geo[i].settest();
   drawglobecube(1024,62,-7,1,0,"geoid.ppm");
   drawglobemicro(1024,xy(1.3429,0.2848),3e-4,1,0,"geowrangell.ppm");
-  /* (-.4304,-.3142,1) 143.86986°W 61.9475°N 143°52'12"W 61°56'51"
+  /* (-.4304,-.3142,1) 143.86986°W 61.9475°N 143°52'12"W 61°56'51"N
    * This is a local maximum of the geoid in Alaska at Mount Wrangell.
    * It clearly shows artifacts when interpolated bilinearly.
    */

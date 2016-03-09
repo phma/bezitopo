@@ -18,6 +18,15 @@
 #define M_PIl M_PI
 #endif
 
+struct latlong
+{
+  double lat;
+  double lon;
+  latlong();
+  latlong(int ilat,int ilon);
+  latlong(double dlat,double dlon); // Arguments are in radians.
+};
+
 double sqr(double x);
 
 double sin(int angle);
@@ -82,6 +91,7 @@ double gontorad(double angle);
 #define DEG270 0x60000000
 #define DEG360 0x80000000
 
+std::string radtoangle(double angle,int unitp);
 std::string bintoangle(int angle,int unitp);
 double parseangle(std::string angstr,int unitp);
 int parseiangle(std::string angstr,int unitp);
@@ -92,7 +102,8 @@ int parseiangle(std::string angstr,int unitp);
 int parsesignedangle(std::string angstr,int unitp);
 int parseazimuth(std::string angstr,int unitp);
 int parsebearing(std::string angstr,int unitp);
-
+latlong parselatlong(std::string angstr,int unitp);
+std::string formatlatlong(latlong ll,int unitp);
 
 #define DEGREE 0x0038ed00
 #define GON 0x00383000

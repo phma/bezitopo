@@ -3,7 +3,6 @@
 /* ellipsoid.cpp - ellipsoids                         */
 /*                                                    */
 /******************************************************/
-#include "angle.h"
 #include "ellipsoid.h"
 
 /* Unlike most of the program, which represents angles as integers,
@@ -15,23 +14,6 @@
  * is sufficiently accurate, but the calculations for doing so
  * need double.
  */
-
-latlong::latlong()
-{
-  lat=lon=0;
-}
-
-latlong::latlong(int ilat,int ilon)
-{
-  lat=bintorad(ilat);
-  lon=bintorad(ilon);
-}
-
-latlong::latlong(double dlat,double dlon)
-{
-  lat=dlat;
-  lon=dlon;
-}
 
 ellipsoid::ellipsoid(double equradius,double polradius,double flattening)
 {

@@ -6,15 +6,7 @@
 #ifndef ELLIPSOID_H
 #define ELLIPSOID_H
 #include "point.h"
-
-struct latlong
-{
-  double lat;
-  double lon;
-  latlong();
-  latlong(int ilat,int ilon);
-  latlong(double dlat,double dlon); // Arguments are in radians.
-};
+#include "angle.h"
 
 class ellipsoid
 {
