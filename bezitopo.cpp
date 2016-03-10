@@ -27,6 +27,7 @@
 #include "mkpoint.h"
 #include "closure.h"
 #include "cvtmeas.h"
+#include "scalefactor.h"
 #include "contour.h"
 #include "geoid.h"
 
@@ -364,6 +365,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("drawtin",drawtin_i,"Draw TIN: filename.ps"));
   commands.push_back(command("raster",rasterdraw_i,"Draw raster topo: filename.ppm"));
   commands.push_back(command("contour",contourdraw_i,"Draw contour topo: interval filename.ps"));
+  commands.push_back(command("factor",scalefactor_i,"Compute map scale factor"));
   commands.push_back(command("trin",trin_i,"Find what triangle a point is in: x,y"));
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
