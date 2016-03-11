@@ -434,6 +434,11 @@ double cubemap::undulation(int lat,int lon)
   return undulation(Sphere.geoc(lat,lon,0));
 }
 
+double cubemap::undulation(latlong ll)
+{
+  return undulation(Sphere.geoc(ll,0));
+}
+
 double cubemap::undulation(xyz dir)
 {
   vball v=encodedir(dir);

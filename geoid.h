@@ -76,6 +76,7 @@ public:
   cubemap();
   void clear();
   double undulation(int lat,int lon);
+  double undulation(latlong ll);
   double undulation(xyz dir);
   void writeBinary(std::ostream &ofile);
   void readBinary(std::istream &ifile);
