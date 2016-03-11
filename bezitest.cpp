@@ -2673,6 +2673,68 @@ void testfoldcontour()
   doc.writeXml(ofile);
 }
 
+void testtracingstop()
+/* This is a test of one triangle from Independence Park in which the tracing
+ * of the contour of elevation 205.6 starts at the side and gets lost in a loop
+ * in the middle. Neither it nor any of its three neighbors are acicular.
+ */
+{
+  int i,j;
+  double conterval;
+  ofstream ofile("tracingstop.bez");
+  psopen("tracingstop.ps");
+  psprolog();
+  startpage();
+  setscale(144,51,147,54,0);
+  doc.pl[1].clear();
+  doc.pl[1].addpoint(1,point(146.51216865633614,53.34791973582469,205.6513304546609,"CENTER SW")); // 697
+  doc.pl[1].addpoint(2,point(144.90511658618925,51.606410972832236,205.68529743459484,"SW")); // 681
+  doc.pl[1].addpoint(3,point(145.5184577088803,51.65092405382893,205.6918171196342,"SW/STEP")); // 564
+  doc.pl[1].maketin();
+  doc.pl[1].makegrad(0.);
+  doc.pl[1].points[1].gradient=xy(.02316198872560679,.04076481613085247);
+  doc.pl[1].points[2].gradient=xy(-.10223642909422531,-.1520591866033225);
+  doc.pl[1].points[3].gradient=xy(-.21781342189999459,-.21611388062984482);
+  doc.pl[1].maketriangles();
+  doc.pl[1].setgradient();
+  doc.pl[1].makeqindex();
+  doc.pl[1].findcriticalpts();
+  doc.pl[1].addperimeter();
+  setcolor(0,1,1);
+  for (i=0;i<doc.pl[1].triangles.size();i++)
+    for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
+      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+  //rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"foldcontour.ppm");
+  //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
+  conterval=0.1;
+  roughcontours(doc.pl[1],conterval);
+  setcolor(0,0,0);
+  for (i=0;i<doc.pl[1].contours.size();i++)
+  {
+    spline(doc.pl[1].contours[i].approx3d(1));
+  }
+  endpage();
+  startpage();
+  setscale(144,51,147,54,0);
+  setcolor(0,1,1);
+  for (i=0;i<doc.pl[1].triangles.size();i++)
+    for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
+      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+  //rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"foldcontour.ppm");
+  //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
+  smoothcontours(doc.pl[1],conterval);
+  setcolor(0,0,0);
+  for (i=0;i<doc.pl[1].contours.size();i++)
+  {
+    //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
+    spline(doc.pl[1].contours[i].approx3d(1));
+  }
+  endpage();
+  pstrailer();
+  psclose();
+  doc.writeXml(ofile);
+}
+
 void testzigzagcontour()
 /* This is a test of one triangle from Sandymush (Burnt Chimney job 3608)
  * in which the contours are drawn with erroneous zigzags and cross.
@@ -3191,6 +3253,7 @@ int main(int argc, char *argv[])
   testcontour();
   testfoldcontour();
   testzigzagcontour();
+  testtracingstop();
   testroscat();
   testabsorient();
   testhlattice();

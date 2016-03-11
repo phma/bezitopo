@@ -143,6 +143,8 @@ polyline trace(uintptr_t edgep,double elev)
   bool wasmarked;
   xy lastcept,thiscept,firstcept;
   triangle *tri,*ntri;
+  if (fabs(elev-205.6)<0.0000001) // debugging, see below
+    cout<<"edgep "<<edgep<<" elev "<<elev<<endl;
   tri=((edge *)(edgep&-4))->tria;
   ntri=((edge *)(edgep&-4))->trib;
   if (tri==nullptr || !tri->upleft(tri->subdir(edgep)))
@@ -201,7 +203,10 @@ polyline trace(uintptr_t edgep,double elev)
     }
     if (edgep==0)
     {
-      // This happens in Independence Park triangle (697 681 564) at elevation 205.6.
+      /* This happens in Independence Park triangle (697 681 564) at elevation 205.6.
+       * The cause is that the control points in triangles (697 681 564) and
+       * (681 697 562) 1/3 of the way from 681 to 697 disagree by 99 mm.
+       */
       ntri=nullptr;
       cout<<"Tracing stopped in middle of a triangle "<<ret.size()<<endl;
       subedge=tri->subdir(prevedgep);
@@ -344,7 +349,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	      //assert(vex.size()<=1); // if it's ever 2, and there are two downhill parts, what to do?
 	      if (vex.size()==1)
 	      {
-		cout<<"splitseg backward"<<endl;
+		//cout<<"splitseg backward"<<endl;
 		splitseg.split(vex[0],part0,part1);
 		if (part1.getstart().elev()>part1.getend().elev())
 		  splitseg=part1;
