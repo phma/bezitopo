@@ -9,6 +9,7 @@
 #include <exception>
 #include <map>
 #include <vector>
+#include <array>
 #include <string>
 #include "cogo.h"
 #include "bezier.h"
@@ -49,6 +50,7 @@ public:
   void dump(pointlist *topopoints);
   double length();
   segment getsegment();
+  std::array<double,4> ctrlpts();
   xyz critpoint(int i);
   void findextrema();
   void clearmarks();

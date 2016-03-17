@@ -214,6 +214,26 @@ segment edge::getsegment()
   return ret;
 }
 
+array<double,4> edge::ctrlpts()
+{
+  array<double,4> ret;
+  if (tria)
+  {
+    ret[0]=tria->ctrlpt(*a,*b);
+    ret[2]=tria->ctrlpt(*b,*a);
+  }
+  else
+    ret[0]=ret[2]=NAN;
+  if (trib)
+  {
+    ret[1]=trib->ctrlpt(*a,*b);
+    ret[3]=trib->ctrlpt(*b,*a);
+  }
+  else
+    ret[1]=ret[3]=NAN;
+  return ret;
+}
+
 void edge::findextrema()
 {
   int i;

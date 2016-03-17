@@ -1,5 +1,5 @@
 Before 0.1.0 (first public release):
-•Read the sample data file topo0.asc and output a PostScript file of contours, drawn with spiralarcs.
+•Read the sample data file topo0.asc and output a PostScript file of contours, drawn with spiralarcs. ✓
 •Produce a 3D Bézier spline of all vertical and horizontal curves, for display purposes. ✓
 •Quickly find the triangle any point is in and return its elevation. ✓
 •Compute spirals of arbitrary curvature and clothance. ✓

@@ -158,7 +158,7 @@ void triangle::setgradient(xy pnt,xy grad)
 {
   int which;
   double crit;
-  crit=1/2.0*(1/dist(xy(*a),xy(*b))+1/dist(xy(*c),xy(*a))+1/dist(xy(*b),xy(*c)));
+  crit=1/(2.0*(1/dist(xy(*a),xy(*b))+1/dist(xy(*c),xy(*a))+1/dist(xy(*b),xy(*c))));
   grad/=3; // control points are 1/3 of the way along sides
   if (dist(pnt,*a)<crit)
   {

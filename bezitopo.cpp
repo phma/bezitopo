@@ -85,6 +85,7 @@ void indpark(string args)
   doc.pl[1].makegrad(0.15);
   doc.pl[1].maketriangles();
   doc.pl[1].setgradient(false);
+  checkedgediscrepancies(doc.pl[1]);
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();

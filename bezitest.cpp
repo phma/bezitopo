@@ -2564,6 +2564,7 @@ void testcontour()
   doc.pl[1].makegrad(0.);
   doc.pl[1].maketriangles();
   doc.pl[1].setgradient();
+  checkedgediscrepancies(doc.pl[1]);
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
