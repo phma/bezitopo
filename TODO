@@ -10,7 +10,9 @@ Before 0.1.0 (first public release):
  •start and end points and directions. ✓
 
 Before 0.1.1:
-TBD
+•Do basic matrix arithmetic, needed for least-squares traverse adjustment and coordinate transformation. Coordinate transformation uses fixed-size matrices, but least-squares matrices' sizes depend on the number of points.
+•Do quaternion arithmetic. Quaternions represent rotations (and nonnegative scaling) in 3-space.
+•TBD
 
 Before 0.2.0:
 •Save and open a file containing a scene.
