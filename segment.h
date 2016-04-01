@@ -44,6 +44,9 @@ public:
   virtual void setdelta(int d,int s=0)
   {
   }
+  virtual void setcurvature(double startc,double endc)
+  {
+  }
   double elev(double along) const;
   double slope(double along);
   double startslope();

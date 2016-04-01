@@ -57,6 +57,15 @@ void arc::setdelta(int d,int s) // s is for spirals and is ignored for circular 
   delta=d;
 }
 
+void arc::setcurvature(double startc,double endc)
+{
+  double sinhalfdelta=(startc+endc)/4*chordlength();
+  if (fabs(sinhalfdelta)>1)
+    delta=DEG360;
+  else
+    delta=twiceasini(sinhalfdelta);
+}
+
 xy arc::center()
 {
   return ((xy(start)+xy(end))/2+turn90((xy(end)-xy(start))/2/tanhalf(delta)));

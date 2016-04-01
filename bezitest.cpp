@@ -790,6 +790,9 @@ void testarc()
   assert(rint(sta.east()/xx)==8);
   assert(rint(sta1.east()/xx)==9);
   assert(rint(sta2.east()/xx)==8);
+  a.setcurvature(0.01,0.01);
+  cout<<"setcurvature: radius="<<a.radius(0)<<endl;
+  assert(abs(a.radius(0)-100)<0.0001);
 }
 
 void testspiralarc()

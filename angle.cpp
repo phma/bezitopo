@@ -44,12 +44,18 @@ double tanquarter(int angle)
  }
 
 int atan2i(double y,double x)
-{return rint(atan2(y,x)/M_PIl*1073741824.);
- }
+{
+  return rint(atan2(y,x)/M_PIl*1073741824.);
+}
 
 int atan2i(xy vect)
 {
   return atan2i(vect.north(),vect.east());
+}
+
+int twiceasini(double x)
+{
+  return rint(asin(x)/M_PIl*2147483648.);
 }
 
 xy cossin(double angle)
