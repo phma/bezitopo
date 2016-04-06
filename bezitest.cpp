@@ -835,6 +835,8 @@ void testspiralarc()
   printf("b.station %f,%f,%f %f\n",sta.east(),sta.north(),sta.elev(),b.length());
   assert(dist(b.station(123),a.station(123))<0.001);
   assert(dist(c.station(200),a.station(400))<0.001);
+  a.setcurvature(0.002,-0.001);
+  cout<<"setcurvature: length "<<a.length();
 }
 
 void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong,string fname,int scale=1)
@@ -2186,12 +2188,44 @@ void testbezier3d()
     }
     endpage();
   }
-  pstrailer();
-  psclose();
   cout<<ngood<<" good spirals"<<endl;
   cout<<nclose<<" with 1/3 point close"<<endl;
   assert(ngood>=107);
   assert(nclose>=30);
+  startpage();
+  setscale(-100,-180,100,180,degtobin(0));
+  for (i=-18,nclose=0;i<19;i+=2)
+  {
+    spiralarc0.setcurvature(i/1e3,i/1e3);
+    c=spiralarc0.approx3d(1);
+    cout<<i<<"/100 C curvature 1 m approx "<<c.size();
+    c=spiralarc0.approx3d(0.001);
+    cout<<" splines; 1 mm approx "<<c.size()<<" splines"<<endl;
+    pt=spiralarc0.station(arc0.length()/3);
+    pt1=c.station(c.size()/3.);
+    //cout<<"distance "<<dist(pt,pt1)<<endl;
+    nclose+=(dist(pt,pt1)<1);
+    spline(c);
+  }
+  endpage();
+  startpage();
+  setscale(-100,-180,100,180,degtobin(0));
+  for (i=-100,nclose=0;i<101;i+=5)
+  {
+    spiralarc0.setcurvature(i/1e3,-i/1e3);
+    c=spiralarc0.approx3d(1);
+    cout<<i<<"/100 S curvature 1 m approx "<<c.size();
+    c=spiralarc0.approx3d(0.001);
+    cout<<" splines; 1 mm approx "<<c.size()<<" splines"<<endl;
+    pt=spiralarc0.station(arc0.length()/3);
+    pt1=c.station(c.size()/3.);
+    //cout<<"distance "<<dist(pt,pt1)<<endl;
+    nclose+=(dist(pt,pt1)<1);
+    spline(c);
+  }
+  endpage();
+  pstrailer();
+  psclose();
 }
 
 void testangleconvcorner(string anglestr,xyz &totxyz)

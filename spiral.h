@@ -88,9 +88,11 @@ public:
    * Trying to offset a spiral arc will throw an error.
    */
   void _setdelta(int d,int s=0);
+  void _setcurvature(double startc,double endc);
   void _fixends(double p);
   void split(double along,spiralarc &a,spiralarc &b);
   void setdelta(int d,int s=0);
+  virtual void setcurvature(double startc,double endc);
   bool valid()
   {
     return (std::isfinite(cur) && std::isfinite(clo) && std::isfinite(len));

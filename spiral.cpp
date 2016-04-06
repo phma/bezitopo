@@ -255,6 +255,12 @@ void spiralarc::_setdelta(int d,int s)
   clo=4*bintorad(s)/len/len;
 }
 
+void spiralarc::_setcurvature(double startc,double endc)
+{
+  cur=(startc+endc)/2;
+  clo=(endc-startc)/len;
+}
+
 void spiralarc::_fixends(double p)
 {
   xy kra,fam;
@@ -325,6 +331,41 @@ void spiralarc::setdelta(int d,int s)
     lastmidbear=midbear;
     lastmid=mid;
     _setdelta(d,s+rot);
+    _fixends(1-i/257.);
+    i++;
+    //cout<<"iter "<<i<<" midbear "<<midbear<<" cur "<<cur<<" clo "<<clo<<endl;
+  }
+  while ((abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6) && i<256);
+  if (abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6)
+    cur=clo=len=NAN;
+}
+
+void spiralarc::setcurvature(double startc,double endc)
+{
+  int lastmidbear,chordbear,rot,i;
+  xy lastmid;
+  chordbear=chordbearing();
+  if (!valid())
+  {
+    cur=clo=0;
+    len=segment::length();
+    midbear=chordbearing();
+    mid=(start+end)/2;
+  }
+  i=0;
+  do
+  {
+    if (fabs(len*cur)>6.5)
+    {
+      cur=clo=0;
+      len=segment::length();
+      midbear=chordbearing();
+      mid=(start+end)/2;
+    }
+    rot=2*(chordbear-midbear);
+    lastmidbear=midbear;
+    lastmid=mid;
+    _setcurvature(startc,endc);
     _fixends(1-i/257.);
     i++;
     //cout<<"iter "<<i<<" midbear "<<midbear<<" cur "<<cur<<" clo "<<clo<<endl;

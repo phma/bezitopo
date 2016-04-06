@@ -18,6 +18,7 @@ Before 0.1.1:
 •Specify the geoid file when reading it into bezitopo.
 •Decide whether a point is inside a polyline/arc/spiral.
 •Compute the area of a polyline/arc/spiral.
+•Draw statistical graphs of geoid conversion.
 
 Before 0.1.2:
 •TBD
