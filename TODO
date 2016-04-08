@@ -6,7 +6,7 @@ Before 0.1.0 (first public release):
 •Create spiral objects (in 3D, so they also have specified start and end elevations)
  with specified
  •length and start and end curvatures;
- •start and end points and curvatures;
+ •start and end points and curvatures; ✓
  •start and end points and directions. ✓
 
 Before 0.1.1:

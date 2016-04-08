@@ -797,7 +797,7 @@ void testarc()
 
 void testspiralarc()
 {
-  int i;
+  int i,j,nfail;
   double bear[3],len;
   vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),sta;
@@ -835,8 +835,27 @@ void testspiralarc()
   printf("b.station %f,%f,%f %f\n",sta.east(),sta.north(),sta.elev(),b.length());
   assert(dist(b.station(123),a.station(123))<0.001);
   assert(dist(c.station(200),a.station(400))<0.001);
-  a.setcurvature(0.002,-0.001);
-  cout<<"setcurvature: length "<<a.length();
+  for (i=-20,nfail=0;i<=20;i++)
+  {
+    for (j=-20;j<=20;j++)
+    {
+      a.setcurvature(i/1000.,j/1000.);
+      if (a.valid())
+      {
+	assert(fabs(a.curvature(0)-i/1000.)<1e-6);
+	assert(fabs(a.curvature(a.length())-j/1000.)<1e-6);
+	cout<<'.';
+      }
+      else
+      {
+	nfail++;
+	cout<<' ';
+      }
+    }
+    cout<<endl;
+  }
+  cout<<"setcurvature: "<<nfail<<" failures"<<endl;
+  assert(nfail>656 && nfail<1066);
 }
 
 void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong,string fname,int scale=1)
@@ -2193,12 +2212,26 @@ void testbezier3d()
   assert(ngood>=107);
   assert(nclose>=30);
   startpage();
-  setscale(-100,-180,100,180,degtobin(0));
+  setscale(-30,-70,30,70,DEG90);
   for (i=-18,nclose=0;i<19;i+=2)
   {
+    switch (i%3)
+    {
+      case 0:
+	setcolor(1,0,0);
+	break;
+      case 1:
+      case -2:
+	setcolor(0,0.5,0);
+	break;
+      case -1:
+      case 2:
+	setcolor(0,0,1);
+	break;
+    }
     spiralarc0.setcurvature(i/1e3,i/1e3);
     c=spiralarc0.approx3d(1);
-    cout<<i<<"/100 C curvature 1 m approx "<<c.size();
+    cout<<i<<"/1000 C curvature 1 m approx "<<c.size();
     c=spiralarc0.approx3d(0.001);
     cout<<" splines; 1 mm approx "<<c.size()<<" splines"<<endl;
     pt=spiralarc0.station(arc0.length()/3);
@@ -2209,20 +2242,36 @@ void testbezier3d()
   }
   endpage();
   startpage();
-  setscale(-100,-180,100,180,degtobin(0));
+  setscale(-30,-70,30,70,DEG90);
   for (i=-100,nclose=0;i<101;i+=5)
   {
+    switch (i%3)
+    {
+      case 0:
+	setcolor(1,0,0);
+	break;
+      case 1:
+      case -2:
+	setcolor(0,0.5,0);
+	break;
+      case -1:
+      case 2:
+	setcolor(0,0,1);
+	break;
+    }
     spiralarc0.setcurvature(i/1e3,-i/1e3);
     c=spiralarc0.approx3d(1);
-    cout<<i<<"/100 S curvature 1 m approx "<<c.size();
+    cout<<i<<"/1000 S curvature 1 m approx "<<c.size();
     c=spiralarc0.approx3d(0.001);
     cout<<" splines; 1 mm approx "<<c.size()<<" splines"<<endl;
     pt=spiralarc0.station(arc0.length()/3);
     pt1=c.station(c.size()/3.);
     //cout<<"distance "<<dist(pt,pt1)<<endl;
     nclose+=(dist(pt,pt1)<1);
-    spline(c);
+    if (spiralarc0.valid())
+      spline(c);
   }
+  setcolor(0,0,0);
   endpage();
   pstrailer();
   psclose();

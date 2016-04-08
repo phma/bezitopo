@@ -40,10 +40,10 @@
 #include "vcurve.h"
 #include "manysum.h"
 using namespace std;
-#define MAXITER 64
-// The most iterations in an actual run is 45. This occurs at the ends of the
-// bendiest curves in spiraltest.
-
+#define MAXITER 128
+/* The most iterations in an actual run is 90 (was 45 before adding setcurvature).
+ * This occurs at the ends of the bendiest curves in testspiral.
+ */
 vector<int> cornuhisto;
 
 xy cornu(double t)
@@ -343,34 +343,39 @@ void spiralarc::setdelta(int d,int s)
 void spiralarc::setcurvature(double startc,double endc)
 {
   int lastmidbear,chordbear,rot,i;
+  double chordlen;
   xy lastmid;
   chordbear=chordbearing();
+  chordlen=segment::length();
   if (!valid())
   {
     cur=clo=0;
-    len=segment::length();
+    len=chordlen;
     midbear=chordbearing();
     mid=(start+end)/2;
   }
   i=0;
-  do
-  {
-    if (fabs(len*cur)>6.5)
+  if (signbit(startc)==signbit(endc) && fabs(startc*chordlen)>2 && fabs(endc*chordlen)>2)
+    lastmidbear=midbear+DEG180;
+  else
+    do
     {
-      cur=clo=0;
-      len=segment::length();
-      midbear=chordbearing();
-      mid=(start+end)/2;
+      if (fabs(len*cur)>6.5)
+      {
+	cur=clo=0;
+	len=chordlen;
+	midbear=chordbearing();
+	mid=(start+end)/2;
+      }
+      rot=2*(chordbear-midbear);
+      lastmidbear=midbear;
+      lastmid=mid;
+      _setcurvature(startc,endc);
+      _fixends(1-i/257.);
+      i++;
+      //cout<<"iter "<<i<<" midbear "<<midbear<<" cur "<<cur<<" clo "<<clo<<endl;
     }
-    rot=2*(chordbear-midbear);
-    lastmidbear=midbear;
-    lastmid=mid;
-    _setcurvature(startc,endc);
-    _fixends(1-i/257.);
-    i++;
-    //cout<<"iter "<<i<<" midbear "<<midbear<<" cur "<<cur<<" clo "<<clo<<endl;
-  }
-  while ((abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6) && i<256);
+    while ((abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6) && i<256);
   if (abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6)
     cur=clo=len=NAN;
 }
