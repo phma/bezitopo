@@ -19,6 +19,9 @@ Before 0.1.1:
 •Decide whether a point is inside a polyline/arc/spiral.
 •Compute the area of a polyline/arc/spiral.
 •Draw statistical graphs of geoid conversion.
+•Tell whether a spiralarc is too curly, i.e. there is a line that intersects it more than three times.
+•Make a list of drawing objects, with layers, and a way for drawing objects to refer to other drawing objects so that it can easily find out what refers to an object (e.g. a dimension label refers to a segment or arc).
+•Some of these may be moved to 0.1.2.
 
 Before 0.1.2:
 •TBD
@@ -41,3 +44,4 @@ For later:
 •Copy contours to two or three layers. If three, the contours in the finest layer are drawn only on very flat ground.
 •Implement at least one map projection (Lambert conic).
 •Given two pointlists and a list of points in one pointlist and corresponding points in the other pointlist, rotate and translate one pointlist to match the other.
+•Add an interior point to a TIN. This will be used to approximate a road surface with a TIN.
