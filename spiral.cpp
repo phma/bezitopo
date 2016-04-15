@@ -226,6 +226,11 @@ spiralarc::spiralarc(xyz kra,xyz fam)
   midbear=atan2i(xy(end-start));
 }
 
+spiralarc::spiralarc(xyz kra,double c1,double c2,xyz fam):spiralarc(kra,fam)
+{
+  setcurvature(c1,c2);
+}
+
 spiralarc::spiralarc(xyz kra,xyz mij,xyz fam,int mbear,double curvature,double clothance,double length)
 // This does NO checking and is intended for polyspiral and alignment.
 {

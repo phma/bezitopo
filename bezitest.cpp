@@ -802,9 +802,12 @@ void testspiralarc()
   vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),sta;
   xy ctr;
-  spiralarc a(beg,end),b,c;
+  spiralarc a(beg,end),b(beg,0.001,0.001,end),c;
   assert(fabs(a.length()-500)<0.001);
   assert(a.chordlength()==500);
+  cout<<b.length()<<' '<<b.curvature(200)<<endl;
+  assert(fabs(b.length()-505.361)<0.001);
+  assert(fabs(b.curvature(200)-0.001)<0.000001);
   a._setdelta(degtobin(60),degtobin(60));
   cout<<"chord bearing "<<bintodeg(a.chordbearing())<<endl;
   cout<<"bearing at beg "<<(bear[0]=bintodeg(a.bearing(0)))<<endl;
