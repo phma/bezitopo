@@ -42,6 +42,7 @@ public:
   spiralarc(const arc &b);
   spiralarc(xyz kra,xyz fam);
   spiralarc(xyz kra,double c1,double c2,xyz fam);
+  spiralarc(xyz kra,int sbear,double c1,double c2,double length,double famElev);
   spiralarc(xyz kra,xyz mij,xyz fam,int mbear,double curvature,double clothance,double length);
   double length() const
   {

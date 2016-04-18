@@ -5,7 +5,7 @@ Before 0.1.0 (first public release):
 •Compute spirals of arbitrary curvature and clothance. ✓
 •Create spiral objects (in 3D, so they also have specified start and end elevations)
  with specified
- •length and start and end curvatures;
+ •length, start bearing, and start and end curvatures; ✓
  •start and end points and curvatures; ✓
  •start and end points and directions. ✓
 
@@ -45,3 +45,4 @@ For later:
 •Implement at least one map projection (Lambert conic).
 •Given two pointlists and a list of points in one pointlist and corresponding points in the other pointlist, rotate and translate one pointlist to match the other.
 •Add an interior point to a TIN. This will be used to approximate a road surface with a TIN.
+•Make the PostScript output routine a class.

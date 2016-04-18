@@ -802,7 +802,10 @@ void testspiralarc()
   vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),sta;
   xy ctr;
-  spiralarc a(beg,end),b(beg,0.001,0.001,end),c;
+  spiralarc a(beg,end),b(beg,0.001,0.001,end),c,arch[10];
+  bezier3d a3d;
+  psopen("spiralarc.ps");
+  psprolog();
   assert(fabs(a.length()-500)<0.001);
   assert(a.chordlength()==500);
   cout<<b.length()<<' '<<b.curvature(200)<<endl;
@@ -859,6 +862,29 @@ void testspiralarc()
   }
   cout<<"setcurvature: "<<nfail<<" failures"<<endl;
   assert(nfail>656 && nfail<1066);
+  startpage();
+  setscale(-10,-10,10,10,degtobin(0));
+  // Make something that resembles an Archimedean spiral
+  //arch[0]=spiralarc(xyz(-0.5,0,0),2.,2/3.,xyz(1.5,0,0));
+  arch[0]=spiralarc(xyz(-0.5,0,0),-DEG90,2.,2/3.,M_PI,0);
+  for (i=1;i<10;i++)
+    arch[i]=spiralarc(arch[i-1].getend(),arch[i-1].endbearing(),1/(i+0.5),1/(i+1.5),M_PI*(i+1),0);
+  for (i=0;i<10;i++)
+    a3d+=arch[i].approx3d(0.01);
+  spline(a3d);
+  for (i=0;i<-10;i++)
+  {
+    if (i&1)
+      setcolor(1,0,0);
+    else
+      setcolor(0,0,1);
+    spline(arch[i].approx3d(0.01));
+  }
+  cout<<"Archimedes-like spiral ended on "<<arch[9].getend().getx()<<','<<arch[9].getend().gety()<<endl;
+  assert(dist(arch[9].getend(),xy(-0.752,-10.588))<0.001);
+  endpage();
+  pstrailer();
+  psclose();
 }
 
 void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong,string fname,int scale=1)

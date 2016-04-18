@@ -231,6 +231,20 @@ spiralarc::spiralarc(xyz kra,double c1,double c2,xyz fam):spiralarc(kra,fam)
   setcurvature(c1,c2);
 }
 
+spiralarc::spiralarc(xyz kra,int sbear,double c1,double c2,double length,double famElev)
+{
+  clo=(c2-c1)/length;
+  start=kra;
+  end=xyz(xy(kra),famElev);
+  mid=turn(cornu(length/2,c1,clo),sbear)+xy(kra);
+  midbear=sbear+ispiralbearing(length/2,c1,clo);
+  cur=spiralcurvature(length/2,c1,clo);
+  len=length;
+  control1=(2*start.elev()+end.elev())/3;
+  control2=(start.elev()+2*end.elev())/3;
+  end=station(length);
+}
+
 spiralarc::spiralarc(xyz kra,xyz mij,xyz fam,int mbear,double curvature,double clothance,double length)
 // This does NO checking and is intended for polyspiral and alignment.
 {
