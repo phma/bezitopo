@@ -3,6 +3,22 @@
 /* halton.h - Halton subrandom point generator        */
 /*                                                    */
 /******************************************************/
+/* Copyright 2014,2015 Pierre Abbat.
+ * This file is part of Bezitopo.
+ * 
+ * Bezitopo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Bezitopo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /* This class generates Halton sequences. The object has a 64-bit
  * number counting from 0 to 2^32*3^20-1. The number's bits and trits
