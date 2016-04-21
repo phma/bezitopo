@@ -43,7 +43,7 @@ include(TestBigEndian)
 include(CheckTypeSize)
 
 set(CMAKE_CXX_FLAGS "-std=c++11")
-install(TARGETS bezitopo DESTINATION bin)
+install(TARGETS bezitopo convertgeoid DESTINATION bin)
 
 test_big_endian(BIGENDIAN)
 check_type_size("unsigned long int" UNSIGNED_LONG_INT)

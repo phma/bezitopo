@@ -79,7 +79,7 @@ void indpark(string args)
  * of point 1112 are bent enough that tracing results in backtracking.
  */
 {
-  int i,j,itype;
+  int i,j,itype,npoints;
   double w,e,s,n;
   ofstream ofile("IndependencePark.bez");
   criteria crit;
@@ -87,8 +87,14 @@ void indpark(string args)
   doc.offset=xyz(0,0,0);
   setfoot(USSURVEY);
   set_length_unit(FOOT+DEC2);
-  if (doc.readpnezd("topo0.asc")<0)
-    doc.readpnezd("../topo0.asc");
+  npoints=doc.readpnezd("topo0.asc");
+  if (npoints<0)
+    npoints=doc.readpnezd("../topo0.asc");
+  if (npoints<0)
+  {
+    cerr<<"Can't read topo0.asc"<<endl;
+    return;
+  }
   crit1.str="";
   crit1.istopo=true;
   crit.push_back(crit1);
