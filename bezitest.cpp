@@ -1687,6 +1687,10 @@ void test1tri(string triname,int excrits)
 }
 
 void test1grad()
+/* Test the method triangle::gradient, which is in bezier.cpp .
+ * Compares the output of triangle::gradient with the gradient measured
+ * by sampling four points.
+ */
 {
   xyz grad3;
   xy pt,grad2;

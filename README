@@ -12,4 +12,6 @@ If you are developing the program:
 3. cmake <directory where the source code is>
 4. make
 
-Run the test! This program has shown unexpected behavior when run on a different architecture or a different operating system.
+Run the test! (./bezitest) This program has shown unexpected behavior when run on a different architecture or a different operating system.
+
+Bezitopo is an interactive program. When you get the ? prompt, type "help" for a list of commands.
