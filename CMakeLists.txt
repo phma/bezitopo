@@ -1,5 +1,5 @@
 project(bezitopo)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.12)
 # Copyright 2012,2013,2014,2015,2016 Pierre Abbat.
 # This file is part of Bezitopo.
 # 
