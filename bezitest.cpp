@@ -78,9 +78,12 @@
 
 #define CBRT2 1.2599210498948731647592197537
 
+using namespace std;
+
 char hexdig[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
 bool slowmanysum=false;
 document doc;
+vector<string> args;
 
 using namespace std;
 
@@ -3337,70 +3340,140 @@ void testhlattice()
   assert(a==b);
 }
 
+bool shoulddo(string testname)
+{
+  int i;
+  bool ret;
+  ret=args.size()==0;
+  for (i=0;i<args.size();i++)
+    if (testname==args[i])
+      ret=true;
+  return ret;
+}
+
 int main(int argc, char *argv[])
 {
+  int i;
+  for (i=1;i<argc;i++)
+    args.push_back(argv[i]);
   doc.pl.resize(2);
-  testarea3();
-  testrelprime();
-  testintersection();
-  testin();
-  testtriangle();
-  testcopytopopoints();
-  testinvalidintersectionlozenge();
-  testinvalidintersectionaster();
-  testmaketin123();
-  testmaketindouble();
-  testmaketinaster();
-  testmaketinbigaster();
-  testmaketinstraightrow();
-  testmaketinlongandthin();
-  testmaketinlozenge();
-  testmaketinring();
-  testmaketinellipse();
-  testmanysum();
-  testvcurve();
-  testintegertrig();
-  testminquad();
-  testsegment();
-  testarc();
-  testspiral();
-  testspiralarc();
-  testcogospiral();
-  testclosest();
-  testqindex();
-  testmakegrad();
-  testderivs();
-  trianglecontours();
+  if (shoulddo("area3"))
+    testarea3();
+  if (shoulddo("relprime"))
+    testrelprime();
+  if (shoulddo("intersection"))
+    testintersection();
+  if (shoulddo("in"))
+    testin();
+  if (shoulddo("triangle"))
+    testtriangle();
+  if (shoulddo("copytopopoints"))
+    testcopytopopoints();
+  if (shoulddo("invalidintersectionlozenge"))
+    testinvalidintersectionlozenge();
+  if (shoulddo("invalidintersectionaster"))
+    testinvalidintersectionaster();
+  if (shoulddo("maketin123"))
+    testmaketin123();
+  if (shoulddo("maketindouble"))
+    testmaketindouble();
+  if (shoulddo("maketinaster"))
+    testmaketinaster();
+  if (shoulddo("maketinbigaster"))
+    testmaketinbigaster();
+  if (shoulddo("maketinstraightrow"))
+    testmaketinstraightrow();
+  if (shoulddo("maketinlongandthin"))
+    testmaketinlongandthin();
+  if (shoulddo("maketinlozenge"))
+    testmaketinlozenge();
+  if (shoulddo("maketinring"))
+    testmaketinring();
+  if (shoulddo("maketinellipse"))
+    testmaketinellipse();
+  if (shoulddo("manysum"))
+    testmanysum();
+  if (shoulddo("vcurve"))
+    testvcurve();
+  if (shoulddo("integertrig"))
+    testintegertrig();
+  if (shoulddo("minquad"))
+    testminquad();
+  if (shoulddo("segment"))
+    testsegment();
+  if (shoulddo("arc"))
+    testarc();
+  if (shoulddo("spiral"))
+    testspiral();
+  if (shoulddo("spiralarc"))
+    testspiralarc();
+  if (shoulddo("cogospiral"))
+    testcogospiral();
+  if (shoulddo("closest"))
+    testclosest();
+  if (shoulddo("qindex"))
+    testqindex();
+  if (shoulddo("makegrad"))
+    testmakegrad();
+  if (shoulddo("derivs"))
+    testderivs();
+  if (shoulddo("trianglecontours"))
+    trianglecontours();
 #ifndef NDEBUG
-  testparabinter();
+  if (shoulddo("parabinter"))
+    testparabinter();
 #endif
-  testrasterdraw();
-  testdirbound();
-  teststl();
-  testhalton();
-  testpolyline();
-  testbezier3d();
-  testangleconv();
-  testgrad();
-  testcsvline();
-  testldecimal();
-  testellipsoid();
-  testprojection();
-  testcolor();
-  testcontour();
-  testfoldcontour();
-  testzigzagcontour();
-  testtracingstop();
-  testroscat();
-  testabsorient();
-  testhlattice();
-  testbicubic();
-  testhistogram();
-  testgeoid();
-  testgeint();
+  if (shoulddo("rasterdraw"))
+    testrasterdraw();
+  if (shoulddo("dirbound"))
+    testdirbound();
+  if (shoulddo("stl"))
+    teststl();
+  if (shoulddo("halton"))
+    testhalton();
+  if (shoulddo("polyline"))
+    testpolyline();
+  if (shoulddo("bezier3d"))
+    testbezier3d();
+  if (shoulddo("angleconv"))
+    testangleconv();
+  if (shoulddo("grad"))
+    testgrad();
+  if (shoulddo("csvline"))
+    testcsvline();
+  if (shoulddo("ldecimal"))
+    testldecimal();
+  if (shoulddo("ellipsoid"))
+    testellipsoid();
+  if (shoulddo("projection"))
+    testprojection();
+  if (shoulddo("color"))
+    testcolor();
+  if (shoulddo("contour"))
+    testcontour();
+  if (shoulddo("foldcontour"))
+    testfoldcontour();
+  if (shoulddo("zigzagcontour"))
+    testzigzagcontour();
+  if (shoulddo("tracingstop"))
+    testtracingstop();
+  if (shoulddo("roscat"))
+    testroscat();
+  if (shoulddo("absorient"))
+    testabsorient();
+  if (shoulddo("hlattice"))
+    testhlattice();
+  if (shoulddo("bicubic"))
+    testbicubic();
+  if (shoulddo("histogram"))
+    testhistogram();
+  if (shoulddo("geoid"))
+    testgeoid();
+  if (shoulddo("geint"))
+    testgeint();
   //clampcubic();
   //splitcubic();
-  printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
+  //printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //cornustats();
   //closure_i();
   return EXIT_SUCCESS;
