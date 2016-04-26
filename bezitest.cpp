@@ -78,10 +78,14 @@
 
 #define CBRT2 1.2599210498948731647592197537
 
+#define tassert(x) testfail|=(!(x))
+// so that tests still work in non-debug builds
+
 using namespace std;
 
 char hexdig[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
 bool slowmanysum=false;
+bool testfail=false;
 document doc;
 vector<string> args;
 
@@ -110,29 +114,29 @@ void testintegertrig()
   printf("total sine error=%e\n",totsinerror);
   printf("total cosine error=%e\n",totcoserror);
   printf("total cis error=%e\n",totciserror);
-  assert(totsinerror+totcoserror+totciserror<2e-29);
+  tassert(totsinerror+totcoserror+totciserror<2e-29);
   //On Linux, the total error is 2e-38 and the M_PIl makes a big difference.
   //On DragonFly BSD, the total error is 1.7e-29 and M_PIl is absent.
-  assert(bintodeg(0)==0);
-  assert(fabs(bintodeg(0x15555555)-60)<0.0000001);
-  assert(fabs(bintomin(0x08000000)==1350));
-  assert(fabs(bintosec(0x12345678)-184320)<0.001);
-  assert(fabs(bintogon(0x1999999a)-80)<0.0000001);
-  assert(fabs(bintorad(0x4f1bbcdd)-3.88322208)<0.00000001);
+  tassert(bintodeg(0)==0);
+  tassert(fabs(bintodeg(0x15555555)-60)<0.0000001);
+  tassert(fabs(bintomin(0x08000000)==1350));
+  tassert(fabs(bintosec(0x12345678)-184320)<0.001);
+  tassert(fabs(bintogon(0x1999999a)-80)<0.0000001);
+  tassert(fabs(bintorad(0x4f1bbcdd)-3.88322208)<0.00000001);
   for (i=-2147400000;i<2147400000;i+=rng.usrandom()+18000)
   {
     cout<<setw(11)<<i<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs;
     cout.flush();
-    assert(degtobin(bintodeg(i))==i);
-    assert(mintobin(bintomin(i))==i);
-    assert(sectobin(bintosec(i))==i);
-    assert(gontobin(bintogon(i))==i);
-    assert(radtobin(bintorad(i))==i);
+    tassert(degtobin(bintodeg(i))==i);
+    tassert(mintobin(bintomin(i))==i);
+    tassert(sectobin(bintosec(i))==i);
+    tassert(gontobin(bintogon(i))==i);
+    tassert(radtobin(bintorad(i))==i);
   }
-  assert(sectobin(1295999.9999)==-2147483648);
-  assert(sectobin(1296000.0001)==-2147483648);
-  assert(sectobin(-1295999.9999)==-2147483648);
-  assert(sectobin(-1296000.0001)==-2147483648);
+  tassert(sectobin(1295999.9999)==-2147483648);
+  tassert(sectobin(1296000.0001)==-2147483648);
+  tassert(sectobin(-1295999.9999)==-2147483648);
+  tassert(sectobin(-1296000.0001)==-2147483648);
   cout<<"           "<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs<<bs;
 }
 
@@ -146,11 +150,11 @@ void test1intersection(xy a,xy c,xy b,xy d,xy inte,int type)
   noint=itype==0 || itype==5 || itype==6;
   if ((!noint && inters!=inte) || itype!=type)
   {
-    printf("intersection is %f,%f, should be %f,%f\n",inters.east(),inters.north(),inte.east(),inte.north());
+    cout<<"intersection is "<<ldecimal(inters.east())<<','<<ldecimal(inters.north())<<", should be "<<ldecimal(inte.east())<<','<<ldecimal(inte.north())<<endl;
     printf("intersection type is %d, should be %d\n",itype,type);
   }
-  assert(noint || inters==inte);
-  assert(itype==type);
+  tassert(noint || inters==inte);
+  tassert(itype==type);
 }
 
 void testintersection()
@@ -190,7 +194,7 @@ void test1in(xy p,xy a,xy b,xy c,int windnum)
       c.east()<<','<<c.north()<<"): ("<<
       p.east()<<','<<p.north()<<")'s winding number is "<<wind<<
       ", should be "<<windnum<<endl;
-  assert(wind==windnum);
+  tassert(wind==windnum);
   wind=in3(p,c,b,a);
   if (windnum<10 && windnum>-10)
     windnum=-windnum;
@@ -200,7 +204,7 @@ void test1in(xy p,xy a,xy b,xy c,int windnum)
       a.east()<<','<<a.north()<<"): ("<<
       p.east()<<','<<p.north()<<")'s winding number is "<<wind<<
       ", should be "<<windnum<<endl;
-  assert(wind==windnum);
+  tassert(wind==windnum);
 }
 
 void testin()
@@ -233,7 +237,7 @@ void testcopytopopoints()
   criterion crit1;
   doc.pl[0].clear();
   doc.copytopopoints(crit);
-  assert(doc.pl[1].points.size()==0);
+  tassert(doc.pl[1].points.size()==0);
   doc.pl[0].addpoint(1,point(0,0,0,"eip"));
   doc.pl[0].addpoint(1,point(25,0,0,"eip"));
   doc.pl[0].addpoint(1,point(25,40,0,"eip"));
@@ -251,7 +255,7 @@ void testcopytopopoints()
   crit1.istopo=true;
   crit.push_back(crit1);
   doc.copytopopoints(crit);
-  assert(doc.pl[1].points.size()==3);
+  tassert(doc.pl[1].points.size()==3);
 }
 
 void checkimpos(int itype,xy a,xy c,xy b,xy d)
@@ -260,7 +264,7 @@ void checkimpos(int itype,xy a,xy c,xy b,xy d)
     fprintf(stderr,"Impossible intersection type\n(%e,%e)=(%e,%e) × (%e,%e)=(%e,%e)\n(%a,%a)=(%a,%a) × (%a,%a)=(%a,%a)\n",
             a.east(),a.north(),c.east(),c.north(),b.east(),b.north(),d.east(),d.north(),
             a.east(),a.north(),c.east(),c.north(),b.east(),b.north(),d.east(),d.north());
-  assert(itype!=IMPOS);
+  tassert(itype!=IMPOS);
 }
 
 void testinvalidintersectionlozenge()
@@ -358,7 +362,7 @@ void testpointedg()
       cout<<"Two sides of triangle "<<i<<" are the same"<<endl;
     if (sa==NULL || sb==NULL || sc==NULL)
       cout<<"A side of triangle "<<i<<" is NULL"<<endl;
-    assert(sa!=sb && sb!=sc && sc !=sa && sa!=NULL && sb!=NULL && sc!=NULL);
+    tassert(sa!=sb && sb!=sc && sc !=sa && sa!=NULL && sb!=NULL && sc!=NULL);
     if (sa->a==doc.pl[1].triangles[i].b || sa->b==doc.pl[1].triangles[i].b)
       cout<<"sa is not opposite b"<<endl;
   }
@@ -378,7 +382,7 @@ void testmaketin123()
   {
     i=e;
   }
-  assert(i==notri);
+  tassert(i==notri);
   doc.pl[1].clear();
   aster(doc,2);
   i=0;
@@ -390,7 +394,7 @@ void testmaketin123()
   {
     i=e;
   }
-  assert(i==notri);
+  tassert(i==notri);
   doc.pl[1].clear();
   aster(doc,3);
   i=0;
@@ -402,7 +406,7 @@ void testmaketin123()
   {
     i=e;
   }
-  assert(i==0);
+  tassert(i==0);
 }
 
 void testmaketindouble()
@@ -433,10 +437,10 @@ void testmaketinaster()
   doc.pl[1].clear();
   aster(doc,100);
   doc.pl[1].maketin(psoutput?"aster.ps":"",false);
-  assert(doc.pl[1].edges.size()==284);
+  tassert(doc.pl[1].edges.size()==284);
   for (totallength=i=0;i<doc.pl[1].edges.size();i++)
     totallength+=doc.pl[1].edges[i].length();
-  assert(fabs(totallength-600.689)<0.001);
+  tassert(fabs(totallength-600.689)<0.001);
 }
 
 void testmaketinbigaster()
@@ -446,11 +450,11 @@ void testmaketinbigaster()
   doc.pl[1].clear();
   aster(doc,5972);
   doc.pl[1].maketin(psoutput?"bigaster.ps":"",true);
-  //assert(doc.pl[1].edges.size()==284);
+  //tassert(doc.pl[1].edges.size()==284);
   for (totallength=i=0;i<doc.pl[1].edges.size();i++)
     totallength+=doc.pl[1].edges[i].length();
   //dumppointsvalence();
-  //assert(fabs(totallength-600.689)<0.001);
+  //tassert(fabs(totallength-600.689)<0.001);
   /* Flip zones:
    * 34-46 55-67
    * 102-122 136-156
@@ -477,7 +481,7 @@ void testmaketinstraightrow()
   {
     i=e;
   }
-  assert(i==flattri);
+  tassert(i==flattri);
 }
 
 void testmaketinlongandthin()
@@ -488,11 +492,11 @@ void testmaketinlongandthin()
   longandthin(doc,100);
   rotate(doc,30);
   doc.pl[1].maketin(psoutput?"longandthin.ps":"");
-  assert(doc.pl[1].edges.size()==197);
+  tassert(doc.pl[1].edges.size()==197);
   for (totallength=i=0;i<doc.pl[1].edges.size();i++)
     totallength+=doc.pl[1].edges[i].length();
   printf("longandthin %ld edges total length %f\n",doc.pl[1].edges.size(),totallength);
-  assert(fabs(totallength-123.499)<0.001);
+  tassert(fabs(totallength-123.499)<0.001);
 }
 
 void testmaketinlozenge()
@@ -503,11 +507,11 @@ void testmaketinlozenge()
   lozenge(doc,100);
   rotate(doc,30);
   doc.pl[1].maketin(psoutput?"lozenge.ps":"");
-  assert(doc.pl[1].edges.size()==299);
+  tassert(doc.pl[1].edges.size()==299);
   for (totallength=i=0;i<doc.pl[1].edges.size();i++)
     totallength+=doc.pl[1].edges[i].length();
   printf("lozenge %ld edges total length %f\n",doc.pl[1].edges.size(),totallength);
-  assert(fabs(totallength-2111.8775)<0.001);
+  tassert(fabs(totallength-2111.8775)<0.001);
 }
 
 void testmaketinring()
@@ -518,11 +522,11 @@ void testmaketinring()
   ring(doc,100);
   rotate(doc,30);
   doc.pl[1].maketin(psoutput?"ring.ps":"");
-  assert(doc.pl[1].edges.size()==197);
+  tassert(doc.pl[1].edges.size()==197);
   for (totallength=i=0;i<doc.pl[1].edges.size();i++)
     totallength+=doc.pl[1].edges[i].length();
   printf("ring edges total length %f\n",totallength);
-  //Don't assert the total length. There are over 10^56 (2^189) right answers to that.
+  //Don't tassert the total length. There are over 10^56 (2^189) right answers to that.
 }
 
 void testmaketinellipse()
@@ -532,31 +536,31 @@ void testmaketinellipse()
   doc.pl[1].clear();
   ellipse(doc,100);
   doc.pl[1].maketin(psoutput?"ellipse.ps":"");
-  assert(doc.pl[1].edges.size()==197);
+  tassert(doc.pl[1].edges.size()==197);
   for (totallength=i=0;i<doc.pl[1].edges.size();i++)
     totallength+=doc.pl[1].edges[i].length();
   printf("ellipse edges total length %f\n",totallength);
-  assert(fabs(totallength-1329.4675)<0.001);
+  tassert(fabs(totallength-1329.4675)<0.001);
 }
 
 void testrelprime()
 {
-  assert(relprime(987)==610);
-  assert(relprime(610)==377);
-  assert(relprime(377)==233);
-  assert(relprime(233)==144);
-  assert(relprime(144)==89);
-  assert(relprime(89)==55);
-  assert(relprime(55)==34);
-  assert(relprime(100000)==61803);
-  assert(relprime(100)==61);
-  assert(relprime(0)==1);
-  assert(relprime(1)==1);
-  assert(relprime(2)==1);
-  assert(relprime(3)==2);
-  assert(relprime(4)==3);
-  assert(relprime(5)==3);
-  assert(relprime(6)==5);
+  tassert(relprime(987)==610);
+  tassert(relprime(610)==377);
+  tassert(relprime(377)==233);
+  tassert(relprime(233)==144);
+  tassert(relprime(144)==89);
+  tassert(relprime(89)==55);
+  tassert(relprime(55)==34);
+  tassert(relprime(100000)==61803);
+  tassert(relprime(100)==61);
+  tassert(relprime(0)==1);
+  tassert(relprime(1)==1);
+  tassert(relprime(2)==1);
+  tassert(relprime(3)==2);
+  tassert(relprime(4)==3);
+  tassert(relprime(5)==3);
+  tassert(relprime(6)==5);
 }
 
 void testmanysum()
@@ -590,10 +594,10 @@ void testmanysum()
   ms.prune();
   backwardsum=ms.total();
   cout<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<endl;
-  assert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
-  assert(fabs((forwardsum-naiveforwardsum)/(forwardsum+naiveforwardsum))<1000000*DBL_EPSILON);
-  assert(fabs((backwardsum-naivebackwardsum)/(backwardsum+naivebackwardsum))<1000*DBL_EPSILON);
-  assert(fabs((naiveforwardsum-naivebackwardsum)/(naiveforwardsum+naivebackwardsum))>30*DBL_EPSILON);
+  tassert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
+  tassert(fabs((forwardsum-naiveforwardsum)/(forwardsum+naiveforwardsum))<1000000*DBL_EPSILON);
+  tassert(fabs((backwardsum-naivebackwardsum)/(backwardsum+naivebackwardsum))<1000*DBL_EPSILON);
+  tassert(fabs((naiveforwardsum-naivebackwardsum)/(naiveforwardsum+naivebackwardsum))>30*DBL_EPSILON);
   ms.clear();
   h=slowmanysum?1:16;
   for (naiveforwardsum=i=0;i>-0x360000;i-=h)
@@ -614,10 +618,10 @@ void testmanysum()
   ms.prune();
   backwardsum=ms.total();
   cout<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<endl;
-  assert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
-  assert(fabs((forwardsum-naiveforwardsum)/(forwardsum+naiveforwardsum))<1000000*DBL_EPSILON);
-  assert(fabs((backwardsum-naivebackwardsum)/(backwardsum+naivebackwardsum))<1000*DBL_EPSILON);
-  assert(fabs((naiveforwardsum-naivebackwardsum)/(naiveforwardsum+naivebackwardsum))>30*DBL_EPSILON);
+  tassert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
+  tassert(fabs((forwardsum-naiveforwardsum)/(forwardsum+naiveforwardsum))<1000000*DBL_EPSILON);
+  tassert(fabs((backwardsum-naivebackwardsum)/(backwardsum+naivebackwardsum))<1000*DBL_EPSILON);
+  tassert(fabs((naiveforwardsum-naivebackwardsum)/(naiveforwardsum+naivebackwardsum))>30*DBL_EPSILON);
 }
 
 void testvcurve()
@@ -625,78 +629,78 @@ void testvcurve()
   double result,b1,c1,d1a2,b2,c2,epsilon;
   int i;
   vector<double> extrema,xs;
-  assert(vcurve(0,0,0,0,0)==0);
-  assert(vcurve(0,1,2,3,0.5)==1.5);
-  assert(vcurve(0,4,4,0,0.5)==3);
-  assert(vcurve(0,1,-1,0,0.5)==0);
-  assert(vcurve(0,0,0,64,0)==0);
-  assert(vcurve(0,0,0,64,0.25)==1);
-  assert(vcurve(0,0,0,64,0.5)==8);
-  assert(vcurve(0,0,0,64,0.75)==27);
-  assert(vcurve(0,0,0,64,1)==64);
-  assert(vslope(0,0,0,0,0)==0);
-  assert(vslope(0,1,2,3,0.5)==3);
-  assert(vslope(0,1,2,3,0.25)==3);
-  assert(vslope(0,4,4,0,0.5)==0);
-  assert(vslope(0,4,4,0,0)==12);
-  assert(vslope(0,0,0,64,0)==0);
-  assert(vslope(0,0,0,64,0.25)==12);
-  assert(vslope(0,0,0,64,0.5)==48);
-  assert(vslope(0,0,0,64,0.75)==108);
-  assert(vslope(0,0,0,64,1)==192);
-  assert(vaccel(0,0,0,0,0)==0);
-  assert(vaccel(0,1,2,3,0.5)==0);
-  assert(vaccel(0,1,2,3,0.25)==0);
-  assert(vaccel(0,4,4,0,0.5)==-24);
-  assert(vaccel(0,4,4,0,0)==-24);
-  assert(vaccel(0,0,0,64,0)==0);
-  assert(vaccel(0,0,0,64,0.25)==96);
-  assert(vaccel(0,0,0,64,0.5)==192);
-  assert(vaccel(0,0,0,64,0.75)==288);
-  assert(vaccel(0,0,0,64,1)==384);
-  assert(fabs(vlength(0,1,2,3,7.2)-7.8)<1e-6);
+  tassert(vcurve(0,0,0,0,0)==0);
+  tassert(vcurve(0,1,2,3,0.5)==1.5);
+  tassert(vcurve(0,4,4,0,0.5)==3);
+  tassert(vcurve(0,1,-1,0,0.5)==0);
+  tassert(vcurve(0,0,0,64,0)==0);
+  tassert(vcurve(0,0,0,64,0.25)==1);
+  tassert(vcurve(0,0,0,64,0.5)==8);
+  tassert(vcurve(0,0,0,64,0.75)==27);
+  tassert(vcurve(0,0,0,64,1)==64);
+  tassert(vslope(0,0,0,0,0)==0);
+  tassert(vslope(0,1,2,3,0.5)==3);
+  tassert(vslope(0,1,2,3,0.25)==3);
+  tassert(vslope(0,4,4,0,0.5)==0);
+  tassert(vslope(0,4,4,0,0)==12);
+  tassert(vslope(0,0,0,64,0)==0);
+  tassert(vslope(0,0,0,64,0.25)==12);
+  tassert(vslope(0,0,0,64,0.5)==48);
+  tassert(vslope(0,0,0,64,0.75)==108);
+  tassert(vslope(0,0,0,64,1)==192);
+  tassert(vaccel(0,0,0,0,0)==0);
+  tassert(vaccel(0,1,2,3,0.5)==0);
+  tassert(vaccel(0,1,2,3,0.25)==0);
+  tassert(vaccel(0,4,4,0,0.5)==-24);
+  tassert(vaccel(0,4,4,0,0)==-24);
+  tassert(vaccel(0,0,0,64,0)==0);
+  tassert(vaccel(0,0,0,64,0.25)==96);
+  tassert(vaccel(0,0,0,64,0.5)==192);
+  tassert(vaccel(0,0,0,64,0.75)==288);
+  tassert(vaccel(0,0,0,64,1)==384);
+  tassert(fabs(vlength(0,1,2,3,7.2)-7.8)<1e-6);
   result=vlength(0,10,0,20,200);
   printf("vertical curve length=%f\n",result);
-  assert(result>201 && result<204.427);
+  tassert(result>201 && result<204.427);
   extrema=vextrema(0,1,2,3);
-  assert(extrema.size()==0);
+  tassert(extrema.size()==0);
   extrema=vextrema(0,4,4,0);
-  assert(extrema.size()==1);
+  tassert(extrema.size()==1);
   printf("0,4,4,0: extrema[0]=%f\n",extrema[0]);
-  assert(extrema[0]==0.5);
+  tassert(extrema[0]==0.5);
   extrema=vextrema(2,4,0,2);
-  assert(extrema.size()==2);
+  tassert(extrema.size()==2);
   printf("2,4,0,2: extrema[0]=%f, extrema[1]=%f\n",extrema[0],extrema[1]);
-  assert(fabs(vslope(2,4,0,2,extrema[0]))<0.001);
+  tassert(fabs(vslope(2,4,0,2,extrema[0]))<0.001);
   extrema=vextrema(0,4,3,0);
-  assert(extrema.size()==1);
+  tassert(extrema.size()==1);
   printf("0,4,3,0: extrema[0]=%f\n",extrema[0]);
-  assert(fabs(vslope(0,4,3,0,extrema[0]))<0.001);
+  tassert(fabs(vslope(0,4,3,0,extrema[0]))<0.001);
   extrema=vextrema(M_PI,M_PI,M_E,M_E);
-  assert(extrema.size()==2);
+  tassert(extrema.size()==2);
   printf("π,π,e,e: extrema[0]=%f,%f\n",extrema[0],extrema[1]);
-  assert(extrema[0]==0 && extrema[1]==1);
+  tassert(extrema[0]==0 && extrema[1]==1);
   extrema=vextrema(M_PI,M_PI,M_E,3);
-  assert(extrema.size()==2);
+  tassert(extrema.size()==2);
   printf("π,π,e,3: extrema[0]=%f,%f\n",extrema[0],extrema[1]);
-  assert(extrema[0]==0);
+  tassert(extrema[0]==0);
   for (epsilon=1/128.;epsilon>1e-15;epsilon*=0.5)
   {
     extrema=vextrema(0,1-epsilon,1+epsilon,0);
-    assert(extrema.size()==1);
+    tassert(extrema.size()==1);
     printf("0,1-ε,1+ε,0 ε=%.3e: extrema[0]-0.5=%f*ε\n",epsilon,(extrema[0]-0.5)/epsilon);
-    assert(fabs((extrema[0]-0.5)/epsilon-0.25)<0.001);
+    tassert(fabs((extrema[0]-0.5)/epsilon-0.25)<0.001);
     xs.clear();
     for (i=-3;i<4;i+=2)
       xs.push_back(vcurve(0,1-epsilon,1+epsilon,0,(1-i*epsilon)/2));
     //printf("vertex=%f*ε deriv3=%f\n",paravertex(xs),deriv3(xs));
-    //assert(extrema[0]==0.5);
+    //tassert(extrema[0]==0.5);
   }
   vsplit(1,2,2,1,4./8,b1,c1,d1a2,b2,c2);
-  assert(vcurve(1,2,2,1,3./8)==vcurve(1,b1,c1,d1a2,3./4));
-  assert(vcurve(1,2,2,1,5./8)==vcurve(d1a2,b2,c2,1,1./4));
+  tassert(vcurve(1,2,2,1,3./8)==vcurve(1,b1,c1,d1a2,3./4));
+  tassert(vcurve(1,2,2,1,5./8)==vcurve(d1a2,b2,c2,1,1./4));
   vsplit(0,1,2,0,3./8,b1,c1,d1a2,b2,c2);
-  assert(vcurve(0,1,2,0,15./64)==vcurve(0,b1,c1,d1a2,5./8));
+  tassert(vcurve(0,1,2,0,15./64)==vcurve(0,b1,c1,d1a2,5./8));
 }
 
 void testsegment()
@@ -706,32 +710,32 @@ void testsegment()
   vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),sta;
   segment a(beg,end),b,c;
-  assert(a.length()==500);
-  assert(a.chordlength()==500);
-  assert(a.chordbearing()==316933406);
+  tassert(a.length()==500);
+  tassert(a.chordlength()==500);
+  tassert(a.chordbearing()==316933406);
   a.setslope(START,0.3+a.avgslope());
   a.setslope(END,-0.1+a.avgslope());
-  assert(fabs(a.elev(1)-3.3)<0.05);
-  assert(fabs(a.slope(250)+0.042)<0.001);
+  tassert(fabs(a.elev(1)-3.3)<0.05);
+  tassert(fabs(a.slope(250)+0.042)<0.001);
   cept=a.contourcept(5);
   cout<<"a crosses 5 at "<<cept<<"; a.elev()="<<a.elev(cept)<<endl;
-  assert(fabs(a.elev(cept)-5)<1e-6);
+  tassert(fabs(a.elev(cept)-5)<1e-6);
   cept=a.contourcept(2);
-  assert(std::isnan(cept));
+  tassert(std::isnan(cept));
   sta=a.station(200);
-  assert(sta==xyz(120,160,31));
-  assert(std::isinf(a.radius(0)));
-  assert(a.curvature(0)==0);
-  assert(!isfinite(a.center().east()));
+  tassert(sta==xyz(120,160,31));
+  tassert(std::isinf(a.radius(0)));
+  tassert(a.curvature(0)==0);
+  tassert(!isfinite(a.center().east()));
   a.split(200,b,c);
-  assert(dist(b.station(123),a.station(123))<0.001);
-  assert(dist(c.station(200),a.station(400))<0.001);
+  tassert(dist(b.station(123),a.station(123))<0.001);
+  tassert(dist(c.station(200),a.station(400))<0.001);
   a.setslope(START,0);
   extrema=a.vextrema(true);
   cout<<extrema.size()<<" extrema"<<endl;
-  assert(extrema.size()==2);
+  tassert(extrema.size()==2);
   extrema=a.vextrema(false);
-  assert(extrema.size()==1);
+  tassert(extrema.size()==1);
 }
 
 void testarc()
@@ -742,61 +746,61 @@ void testarc()
   xyz beg(0,0,3),end(300,400,7),beg1(0,-15,0),end1(0,15,0),sta,sta1,sta2;
   xy ctr;
   arc a(beg,end),b,c;
-  assert(fabs(a.length()-500)<0.001);
-  assert(a.chordlength()==500);
+  tassert(fabs(a.length()-500)<0.001);
+  tassert(a.chordlength()==500);
   a.setdelta(degtobin(60));
-  assert(fabs(a.length()-523.599)<0.001);
-  assert(a.chordlength()==500);
+  tassert(fabs(a.length()-523.599)<0.001);
+  tassert(a.chordlength()==500);
   a.setslope(START,0.3+a.avgslope());
   a.setslope(END,-0.1+a.avgslope());
   //printf("slope(250) %f\n",a.slope(250));
   //printf("slope(261.8) %f\n",a.slope(261.8));
-  assert(fabs(a.elev(1)-3.3)<0.05);
-  assert(fabs(a.slope(261.8)+0.042)<0.001);
+  tassert(fabs(a.elev(1)-3.3)<0.05);
+  tassert(fabs(a.slope(261.8)+0.042)<0.001);
   sta=a.station(200);
   //printf("sta.x=%.17f sta.y=%.17f sta.z=%.17f \n",sta.east(),sta.north(),sta.elev());
-  assert(dist(sta,xyz(163.553,112.7825,32.167))<0.001);
+  tassert(dist(sta,xyz(163.553,112.7825,32.167))<0.001);
   //printf("arc radius %f\n",a.radius(1));
-  assert(fabs(a.radius(0)-500)<0.001);
-  assert(fabs(a.curvature(0)-0.002)<0.000001);
+  tassert(fabs(a.radius(0)-500)<0.001);
+  tassert(fabs(a.curvature(0)-0.002)<0.000001);
   //printf("arc center %f,%f\n",a.center().east(),a.center().north());
   ctr=a.center();
   //printf("distance %f\n",dist(xy(sta),ctr));
-  assert(fabs(dist(xy(sta),ctr)-500)<0.001);
-  assert(fabs(ctr.east()+196.410)<0.001);
-  assert(fabs(ctr.north()-459.8075)<0.001);
+  tassert(fabs(dist(xy(sta),ctr)-500)<0.001);
+  tassert(fabs(ctr.east()+196.410)<0.001);
+  tassert(fabs(ctr.north()-459.8075)<0.001);
   a.split(200,b,c);
   sta=a.station(200);
   //printf("a.station %f,%f,%f\n",sta.east(),sta.north(),sta.elev());
   sta=b.station(200);
   printf("b.station %f,%f,%f %f\n",sta.east(),sta.north(),sta.elev(),b.length());
-  assert(dist(b.station(123),a.station(123))<0.001);
-  assert(dist(c.station(200),a.station(400))<0.001);
+  tassert(dist(b.station(123),a.station(123))<0.001);
+  tassert(dist(c.station(200),a.station(400))<0.001);
   a.setslope(START,0);
   a.setslope(END,0);
   extrema=a.vextrema(true);
-  assert(extrema.size()==2);
+  tassert(extrema.size()==2);
   for (i=0;i<extrema.size();i++)
     cout<<"extrema["<<i<<"]="<<extrema[i]<<endl;
-  assert(extrema[1]>523 && extrema[1]<524);
+  tassert(extrema[1]>523 && extrema[1]<524);
   extrema=a.vextrema(false);
-  assert(extrema.size()==0);
+  tassert(extrema.size()==0);
   sta=xyz(150,200,5);
   b=arc(beg,sta,end);
   sta2=b.station(250);
   cout<<"arc3 "<<sta2.elev()<<endl;
-  assert(sta2.elev()==5);
+  tassert(sta2.elev()==5);
   sta=xyz(150,200,10);
   b=arc(beg,sta,end);
   sta2=b.station(250);
   cout<<"arc3 "<<sta2.elev()<<endl;
-  assert(sta2.elev()==10);
+  tassert(sta2.elev()==10);
   sta=xyz(200,150,10);
   b=arc(beg,sta,end);
   sta2=b.station(252.905);
   cout<<"arc3 "<<sta2.east()<<' '<<sta2.north()<<' '<<sta2.elev()<<endl;
   //cout<<dist(sta,sta2)<<endl;
-  assert(dist(sta,sta2)<0.001);
+  tassert(dist(sta,sta2)<0.001);
   a=arc(beg1,end1,3);
   sta=a.station(10);
   sta1=a.station(15);
@@ -805,13 +809,13 @@ void testarc()
   cout<<"arc4 "<<sta1.east()<<' '<<sta1.north()<<endl;
   cout<<"arc4 "<<sta2.east()<<' '<<sta2.north()<<endl;
   xx=(sta.east()+sta1.east()+sta2.east())/25;
-  assert(xx>3.6e-9 && xx<3.7e-9);
-  assert(rint(sta.east()/xx)==8);
-  assert(rint(sta1.east()/xx)==9);
-  assert(rint(sta2.east()/xx)==8);
+  tassert(xx>3.6e-9 && xx<3.7e-9);
+  tassert(rint(sta.east()/xx)==8);
+  tassert(rint(sta1.east()/xx)==9);
+  tassert(rint(sta2.east()/xx)==8);
   a.setcurvature(0.01,0.01);
   cout<<"setcurvature: radius="<<a.radius(0)<<endl;
-  assert(abs(a.radius(0)-100)<0.0001);
+  tassert(abs(a.radius(0)-100)<0.0001);
 }
 
 void testspiralarc()
@@ -825,11 +829,11 @@ void testspiralarc()
   bezier3d a3d;
   psopen("spiralarc.ps");
   psprolog();
-  assert(fabs(a.length()-500)<0.001);
-  assert(a.chordlength()==500);
+  tassert(fabs(a.length()-500)<0.001);
+  tassert(a.chordlength()==500);
   cout<<b.length()<<' '<<b.curvature(200)<<endl;
-  assert(fabs(b.length()-505.361)<0.001);
-  assert(fabs(b.curvature(200)-0.001)<0.000001);
+  tassert(fabs(b.length()-505.361)<0.001);
+  tassert(fabs(b.curvature(200)-0.001)<0.000001);
   a._setdelta(degtobin(60),degtobin(60));
   cout<<"chord bearing "<<bintodeg(a.chordbearing())<<endl;
   cout<<"bearing at beg "<<(bear[0]=bintodeg(a.bearing(0)))<<endl;
@@ -849,8 +853,8 @@ void testspiralarc()
   cout<<"bearing at mid "<<(bear[1]=bintodeg(a.bearing(len/2)))<<endl;
   cout<<"bearing at end "<<(bear[2]=bintodeg(a.bearing(len)))<<endl;
   cout<<"delta "<<bear[2]-bear[0]<<" skew "<<bear[0]+bear[2]-2*bear[1]<<endl;
-  assert(fabs(bear[2]-bear[0]-26)<1e-5);
-  assert(fabs(bear[0]+bear[2]-2*bintodeg(a.chordbearing())-8)<1e-5);
+  tassert(fabs(bear[2]-bear[0]-26)<1e-5);
+  tassert(fabs(bear[0]+bear[2]-2*bintodeg(a.chordbearing())-8)<1e-5);
   cout<<"curvature at beg "<<a.curvature(0)<<endl;
   cout<<"curvature at end "<<a.curvature(len)<<endl;
   a.split(200,b,c);
@@ -858,8 +862,8 @@ void testspiralarc()
   printf("a.station %f,%f,%f\n",sta.east(),sta.north(),sta.elev());
   sta=b.station(123);
   printf("b.station %f,%f,%f %f\n",sta.east(),sta.north(),sta.elev(),b.length());
-  assert(dist(b.station(123),a.station(123))<0.001);
-  assert(dist(c.station(200),a.station(400))<0.001);
+  tassert(dist(b.station(123),a.station(123))<0.001);
+  tassert(dist(c.station(200),a.station(400))<0.001);
   for (i=-20,nfail=0;i<=20;i++)
   {
     for (j=-20;j<=20;j++)
@@ -867,8 +871,8 @@ void testspiralarc()
       a.setcurvature(i/1000.,j/1000.);
       if (a.valid())
       {
-	assert(fabs(a.curvature(0)-i/1000.)<1e-6);
-	assert(fabs(a.curvature(a.length())-j/1000.)<1e-6);
+	tassert(fabs(a.curvature(0)-i/1000.)<1e-6);
+	tassert(fabs(a.curvature(a.length())-j/1000.)<1e-6);
 	cout<<'.';
       }
       else
@@ -880,7 +884,7 @@ void testspiralarc()
     cout<<endl;
   }
   cout<<"setcurvature: "<<nfail<<" failures"<<endl;
-  assert(nfail>656 && nfail<1066);
+  tassert(nfail>656 && nfail<1066);
   startpage();
   setscale(-10,-10,10,10,degtobin(0));
   // Make something that resembles an Archimedean spiral
@@ -900,7 +904,7 @@ void testspiralarc()
     spline(arch[i].approx3d(0.01));
   }
   cout<<"Archimedes-like spiral ended on "<<arch[9].getend().getx()<<','<<arch[9].getend().gety()<<endl;
-  assert(dist(arch[9].getend(),xy(-0.752,-10.588))<0.001);
+  tassert(dist(arch[9].getend(),xy(-0.752,-10.588))<0.001);
   endpage();
   pstrailer();
   psclose();
@@ -1010,7 +1014,7 @@ void testcogospiral1(spiralarc a,double a0,double a1,spiralarc b,double b0,doubl
   }
   intpoint/=i;
   if (inter.isfinite())
-    assert(dist(intpoint,inter)<1e-5);
+    tassert(dist(intpoint,inter)<1e-5);
   if (fname.length() && intlist.size())
     spiralmicroscope(a,intlist[0].along,b,intlist[1].along,"spiralmicro");
 }
@@ -1045,7 +1049,7 @@ void testcogospiral()
     intpoint+=intlist[i].station;
   }
   intpoint/=i;
-  assert(dist(intpoint,xy(7,11))<1e-5);
+  tassert(dist(intpoint,xy(7,11))<1e-5);
   testcogospiral1(spiralarc(a),0,a.length(),spiralarc(b),0,b.length(),false,xy(7,11),"straightmicro");
   /* The distances along the curves are in the hundreds, but the midpoints
    * are closer to the origin, so the two intersection points do not exactly
@@ -1125,7 +1129,7 @@ void testclosest()
     }
     endpage();
     cout<<"Minimum distance that is calculated inaccurately is "<<minquick<<endl;
-    assert(minquick>15);
+    tassert(minquick>15);
   }
   pstrailer();
   psclose();
@@ -1143,7 +1147,7 @@ void testspiral()
   bezier3d a3d;
   spiralarc sarc;
   a=cornu(0);
-  assert(a==xy(0,0));
+  tassert(a==xy(0,0));
   psopen("spiral.ps");
   psprolog();
   startpage();
@@ -1189,7 +1193,7 @@ void testspiral()
    * Running under Valgrind, the program says there are 10 bad bearings.
    */
   printf("%d bad bearings out of 118\n",badcount);
-  assert(badcount<=15);
+  tassert(badcount<=15);
   for (bearing=i=0,lastbearing=1;i<100 && bearing!=lastbearing;i++)
   {
     t=bintorad(bearing);
@@ -1223,7 +1227,7 @@ void testspiral()
       if (i>-20)
       {
 	line2p(c,b);
-	assert(dist(c,b)>0.049 && dist(c,b)<=0.05);
+	tassert(dist(c,b)>0.049 && dist(c,b)<=0.05);
 	//cout<<dist(c,b)<<' ';
       }
       c=b;
@@ -1242,16 +1246,16 @@ void testspiral()
     b=cornu(i/20.,0,2);
     c=cornu(i/20.);
     //cout<<i<<' '<<dist(b,c)<<endl;
-    assert(dist(b,c)<1e-12); // it's less than 6e-17 on 64-bit
+    tassert(dist(b,c)<1e-12); // it's less than 6e-17 on 64-bit
     b=cornu(i/20.,sqrt(M_PI*8),2);
     c=cornu(i/20.+sqrt(M_PI*2))-a;
     //cout<<i<<' '<<dist(b,c)<<endl;
-    assert(dist(b,c)<1e-12); // it's less than 1.1e-15 on 64-bit
+    tassert(dist(b,c)<1e-12); // it's less than 1.1e-15 on 64-bit
     //line2p(b,c);
     b=cornu(i/20.,1,0);
     c=xy(0,1);
     //cout<<i<<' '<<dist(b,c)-1<<endl;
-    assert(fabs(dist(b,c)-1)<1e-12); // it's 0 or -1.11e-16 on 64-bit
+    tassert(fabs(dist(b,c)-1)<1e-12); // it's 0 or -1.11e-16 on 64-bit
   }
   //endpage();
   startpage();
@@ -1284,7 +1288,7 @@ void testspiral()
   endpage();
   pstrailer();
   psclose();
-  assert(bearing==162105696);
+  tassert(bearing==162105696);
   printf("Maximum useful t of spiral is %f\n",sqrt(t+M_PI/2));
 }
 
@@ -1292,7 +1296,7 @@ void testarea3()
 {
   int i,j,itype;
   xy a(0,0),b(4,0),c(0,3),d(4,4),e;
-  assert(area3(c,a,b)==6);
+  tassert(area3(c,a,b)==6);
 }
 
 void testtriangle()
@@ -1314,7 +1318,7 @@ void testtriangle()
     tri.ctrl[i]=0;
   elev=tri.elevation(o);
   printf("elevation=%f\n",elev);
-  assert(elev==0);
+  tassert(elev==0);
   // Now make a constant surface at elevation 1.
   doc.pl[0].points[1].setelev(1);
   doc.pl[0].points[2].setelev(1);
@@ -1323,7 +1327,7 @@ void testtriangle()
     tri.ctrl[i]=1;
   elev=tri.elevation(o);
   printf("elevation=%f\n",elev);
-  assert(elev==1);
+  tassert(elev==1);
   // Now make a linear surface.
   doc.pl[0].points[1].setelev(1);
   doc.pl[0].points[2].setelev(0);
@@ -1334,7 +1338,7 @@ void testtriangle()
   tri.setcentercp();
   elev=tri.elevation(o);
   printf("ctrl[3]=%f elevation=%f\n",tri.ctrl[3],elev);
-  assert(abs(elev*3-1)<1e-7);
+  tassert(abs(elev*3-1)<1e-7);
   // Now make a quadratic surface. It is a paraboloid z=r². Check that the cubic component is 0.
   doc.pl[0].points[1].setelev(1);
   doc.pl[0].points[2].setelev(1);
@@ -1347,7 +1351,7 @@ void testtriangle()
   elevg=tri.elevation(g);
   eleva=tri.elevation(a);
   printf("ctrl[3]=%f elevation=%f %f %f %f\n",tri.ctrl[3],elevd,elev,elevg,eleva);
-  assert(abs(elevd-elev*3+elevg*3-eleva)<1e-7);
+  tassert(abs(elevd-elev*3+elevg*3-eleva)<1e-7);
   // Now turn the quadratic surface upside-down, using setgradient.
   doc.pl[0].points[1].setelev(0);
   doc.pl[0].points[2].setelev(0);
@@ -1361,8 +1365,8 @@ void testtriangle()
   elevg=tri.elevation(g);
   eleva=tri.elevation(a);
   printf("ctrl[3]=%f elevation=%f %f %f %f\n",tri.ctrl[3],elevd,elev,elevg,eleva);
-  assert(abs(elevd-elev*3+elevg*3-eleva)<1e-7);
-  assert(abs(elev-1)<1e-7);
+  tassert(abs(elevd-elev*3+elevg*3-eleva)<1e-7);
+  tassert(abs(elev-1)<1e-7);
 }
 
 void testqindex()
@@ -1383,11 +1387,11 @@ void testqindex()
     plist.push_back(doc.pl[1].points[i+1]+offset);
   qinx.sizefit(plist);
   printf("side=%f x=%f y=%f\n",qinx.side,qinx.x,qinx.y);
-  assert(qinx.side==1);
+  tassert(qinx.side==1);
   doc.pl[1].maketin();
   doc.pl[1].maketriangles();
   printf("%d triangle, should be 1\n",(int)doc.pl[1].triangles.size());
-  assert(doc.pl[1].triangles.size()==1);
+  tassert(doc.pl[1].triangles.size()==1);
   qinx.clear();
   doc.pl[1].clear();
   plist.clear();
@@ -1410,12 +1414,12 @@ void testqindex()
   qs=qs*3/4; // convert to number of leaves of the tree (undivided squares in the drawing)
   qs++;
   printf("%d leaves\n",qs);
-  assert(qs>=79 && qs<=133);
+  tassert(qs>=79 && qs<=133);
   qinx.draw();
   endpage();
   startpage();
   hilbertpath=qinx.traverse();
-  assert(hilbertpath.size()==qs);
+  tassert(hilbertpath.size()==qs);
   setscale(1,-7,31,23);
   qinx.draw();
   setcolor(0,0,1);
@@ -1425,7 +1429,7 @@ void testqindex()
     pathlength+=dist(hilbertpath[i-1]->middle(),hilbertpath[i]->middle());
   }
   printf("pathlength %f\n",pathlength);
-  assert(pathlength>100 && pathlength<400);
+  tassert(pathlength>100 && pathlength<400);
   endpage();
   startpage();
   setscale(-15,-15,15,15);
@@ -1444,26 +1448,26 @@ void testqindex()
       line2p(doc.pl[1].edges[i].midpoint(),doc.pl[1].edges[i].trib->centroid());
   }
   printf("%d edges ntri=%d\n",i,ntri);
-  assert(ntri>i/2);
+  tassert(ntri>i/2);
   setcolor(1,0,0);
   for (i=0;i<doc.pl[1].triangles.size();i++)
   {
-    assert(doc.pl[1].triangles[i].area()>0);
+    tassert(doc.pl[1].triangles[i].area()>0);
     //printf("tri %d area %f\n",i,doc.pl[1].triangles[i].area());
     dot(doc.pl[1].triangles[i].centroid());
   }
   printf("%d triangles\n",i);
-  assert(ntri==i*3); // ntri is the number of sides of edges which are linked to a triangle
+  tassert(ntri==i*3); // ntri is the number of sides of edges which are linked to a triangle
   endpage();
   ptri=&doc.pl[1].triangles[0];
   ptri=ptri->findt(bone1);
-  assert(ptri->in(bone1));
-  assert(!ptri->in(bone2));
+  tassert(ptri->in(bone1));
+  tassert(!ptri->in(bone2));
   ptri=ptri->findt(bone2);
-  assert(ptri->in(bone2));
-  assert(!ptri->in(bone1));
-  assert(ptri->findt(bone3,true));
-  assert(!ptri->findt(bone3,false));
+  tassert(ptri->in(bone2));
+  tassert(!ptri->in(bone1));
+  tassert(ptri->findt(bone3,true));
+  tassert(!ptri->findt(bone3,false));
   startpage();
   setscale(-15,-15,15,15);
   plist.clear();
@@ -1483,16 +1487,16 @@ void testqindex()
     pathlength+=dist(hilbertpath[i]->tri->centroid(),hilbertpath[i]->middle());
   }
   printf("settri: pathlength=%f\n",pathlength);
-  assert(pathlength>50 && pathlength<250);
+  tassert(pathlength>50 && pathlength<250);
   endpage();
   ptri=qinx.findt(bone1);
-  assert(ptri->in(bone1));
-  assert(!ptri->in(bone2));
+  tassert(ptri->in(bone1));
+  tassert(!ptri->in(bone2));
   ptri=qinx.findt(bone2);
-  assert(ptri->in(bone2));
-  assert(!ptri->in(bone1));
-  assert(qinx.findt(bone3,true));
-  assert(!qinx.findt(bone3,false));
+  tassert(ptri->in(bone2));
+  tassert(!ptri->in(bone1));
+  tassert(qinx.findt(bone3,true));
+  tassert(!qinx.findt(bone3,false));
   pstrailer();
   psclose();
 }
@@ -1540,7 +1544,7 @@ void testmakegrad()
   doc.pl[1].makegrad(0.15);
   grad63half=doc.pl[1].points[63].gradient;
   printf("grad63 %f %f grad63half %f %f\n",grad63.east(),grad63.north(),grad63half.east(),grad63half.north());
-  assert(grad63==grad63half*2);
+  tassert(grad63==grad63half*2);
   enlarge(doc,0.5);
   psopen("gradient.ps");
   psprolog();
@@ -1651,7 +1655,7 @@ void test1tri(string triname,int excrits)
     ptype=doc.pl[1].triangles[0].pointtype(crits[j]);
     cout<<crits[j].east()<<','<<crits[j].north()<<" type="<<ptype<<endl;
     ofile<<crits[j].east()<<','<<crits[j].north()<<" type="<<ptype<<endl;
-    assert(ptype!=PT_SLOPE && ptype!=PT_GRASS);
+    tassert(ptype!=PT_SLOPE && ptype!=PT_GRASS);
     // On the Raspberry Pi, doing slope, this fails with ptype==PT_GRASS for reasons not yet known.
   }
   for (j=0;j<3;j++)
@@ -1672,7 +1676,7 @@ void test1tri(string triname,int excrits)
   }*/
   doc.pl[1].triangles[0].removeperimeter();
   size2=doc.pl[1].triangles[0].subdiv.size();
-  assert(size0==size2);
+  tassert(size0==size2);
   cout<<size1-size0<<" monotonic segments in perimeter"<<endl;
   lh=doc.pl[1].triangles[0].lohi();
   cout<<"lohi: "<<setprecision(7)<<lh[0]<<' '<<lh[1]<<' '<<lh[2]<<' '<<lh[3]<<endl;
@@ -1686,7 +1690,7 @@ void test1tri(string triname,int excrits)
   cout<<fname<<endl;
   if (crits.size()!=excrits && excrits>=0)
     cout<<crits.size()<<" critical points found, "<<excrits<<" expected"<<endl;
-  assert(crits.size()==excrits || excrits<0);
+  tassert(crits.size()==excrits || excrits<0);
   testpointedg();
 }
 
@@ -1720,7 +1724,7 @@ void test1grad()
       ysect.push_back(i->second.elevation(pt+xy(0,j*0.5)));
     }
     cout<<"Actual gradient: "<<deriv1(xsect)<<','<<deriv1(ysect)<<endl;
-    assert(dist(xy(deriv1(xsect),deriv1(ysect)),grad2)<1e-6);
+    tassert(dist(xy(deriv1(xsect),deriv1(ysect)),grad2)<1e-6);
   }
 }
 
@@ -1884,22 +1888,22 @@ void testderivs()
     quad.push_back(i*i);
     cub.push_back(i*i*i);
   }
-  assert(deriv3(con)==0);
-  assert(deriv3(lin)==0);
-  assert(deriv3(quad)==0);
-  assert(deriv3(cub)==6);
-  assert(deriv2(con)==0);
-  assert(deriv2(lin)==0);
-  assert(deriv2(quad)==2);
-  assert(deriv2(cub)==0);
-  assert(deriv1(con)==0);
-  assert(deriv1(lin)==1);
-  assert(deriv1(quad)==0);
-  assert(deriv1(cub)==0);
-  assert(deriv0(con)==1);
-  assert(deriv0(lin)==0);
-  assert(deriv0(quad)==0);
-  assert(deriv0(cub)==0);
+  tassert(deriv3(con)==0);
+  tassert(deriv3(lin)==0);
+  tassert(deriv3(quad)==0);
+  tassert(deriv3(cub)==6);
+  tassert(deriv2(con)==0);
+  tassert(deriv2(lin)==0);
+  tassert(deriv2(quad)==2);
+  tassert(deriv2(cub)==0);
+  tassert(deriv1(con)==0);
+  tassert(deriv1(lin)==1);
+  tassert(deriv1(quad)==0);
+  tassert(deriv1(cub)==0);
+  tassert(deriv0(con)==1);
+  tassert(deriv0(lin)==0);
+  tassert(deriv0(quad)==0);
+  tassert(deriv0(cub)==0);
   cout<<"Zeroth derivative of constant "<<deriv0(con)<<endl;
   cout<<"First derivative of line "<<deriv1(lin)<<endl;
   cout<<"Second derivative of square "<<deriv2(quad)<<endl;
@@ -1909,7 +1913,7 @@ void testderivs()
   para1.push_back(0);
   para1.push_back(1);
   cout<<"Vertex "<<paravertex(para1)<<endl;
-  assert(paravertex(para1)==0.5);
+  tassert(paravertex(para1)==0.5);
 }
 
 void teststl()
@@ -1938,26 +1942,26 @@ void testdirbound()
   for (i=1;i<=100;i++)
     if (bound==doc.pl[1].points[i].east())
       printf("westernmost point is %d\n",i);
-  assert(bound==doc.pl[1].points[94].east());
+  tassert(bound==doc.pl[1].points[94].east());
   bound=doc.pl[1].dirbound(degtobin(90));
   for (i=1;i<=100;i++)
     if (bound==doc.pl[1].points[i].north())
       printf("southernmost point is %d\n",i);
-  assert(bound==doc.pl[1].points[96].north());
+  tassert(bound==doc.pl[1].points[96].north());
   s.setdelta(DEG180,0);
   bound=s.dirbound(0);
   cout<<"westernmost bound of semicircle is "<<ldecimal(bound)<<endl;
-  assert(fabs(bound+5)<1e-8);
+  tassert(fabs(bound+5)<1e-8);
   bound=s.dirbound(DEG90);
   cout<<"southernmost bound of semicircle is "<<ldecimal(bound)<<endl;
-  assert(fabs(bound+5)<1e-8);
+  tassert(fabs(bound+5)<1e-8);
   s.setdelta(0,DEG180);
   bound=s.dirbound(0);
   cout<<"westernmost bound of spiral is "<<ldecimal(bound)<<endl;
-  assert(fabs(bound+3)<1e-8);
+  tassert(fabs(bound+3)<1e-8);
   bound=s.dirbound(DEG90);
   cout<<"southernmost bound of spiral is "<<ldecimal(bound)<<endl;
-  assert(fabs(bound+4.29208)<1e-6);
+  tassert(fabs(bound+4.29208)<1e-6);
 }
 
 void print16_9(unsigned long long n,int size)
@@ -2019,14 +2023,14 @@ void testhalton()
   initbtreverse();
   for (i=0;i<30;i++)
     printf("%7d ",btreversetable[i]);
-  assert(btreversetable[13]==37296);
+  tassert(btreversetable[13]==37296);
   /* 13 is 00001101 (2) and 00111 (3).
    * 37296%256=176
    * 37296%243=117
    * 176 is 10110000 (2); 117 is 11100 (3).
    */
   for (i=0;i<62208;i++)
-    assert(btreversetable[btreversetable[i]]==i);
+    tassert(btreversetable[btreversetable[i]]==i);
   print16_9(4294967296,8);
   putchar('\n');
   print16_9(3486784401,8);
@@ -2056,23 +2060,23 @@ void testpolyline()
   q.insert(xy(3,0));
   r.insert(xy(3,0));
   cout<<p.length()<<' '<<r.length()<<endl;
-  assert(p.length()==6);
-  assert(fabs(r.length()-3*M_PI)<1e-6);
+  tassert(p.length()==6);
+  tassert(fabs(r.length()-3*M_PI)<1e-6);
   p.insert(xy(3,4));
   q.insert(xy(3,4));
   r.insert(xy(3,4));
   cout<<p.length()<<endl;
-  assert(p.length()==12);
+  tassert(p.length()==12);
   q.setlengths();
-  assert(q.length()==12);
-  assert(q.area()==6);
-  assert(fabs(r.length()-5*M_PI)<1e-6);
+  tassert(q.length()==12);
+  tassert(q.area()==6);
+  tassert(fabs(r.length()-5*M_PI)<1e-6);
   q.open();
-  assert(q.length()==7);
-  assert(std::isnan(q.area()));
+  tassert(q.length()==7);
+  tassert(std::isnan(q.area()));
   q.close();
   q.setlengths();
-  assert(q.length()==12);
+  tassert(q.length()==12);
   q.setdelta(0,439875013);
   q.setdelta(1,633866811);
   q.setdelta(2,1073741824);
@@ -2084,8 +2088,8 @@ void testpolyline()
    * 1.0219 is on the 3 side.
    */
   cout<<"testpolyline: area of circle is "<<q.area()<<endl;
-  assert(fabs(q.length()-M_PI*5)<0.0005);
-  assert(fabs(q.area()-M_PI*6.25)<0.0005);
+  tassert(fabs(q.length()-M_PI*5)<0.0005);
+  tassert(fabs(q.area()-M_PI*6.25)<0.0005);
   cout<<q.getarc(0).center().north()<<endl;
   cout<<q.length()<<endl;
   bendlimit=DEG120;
@@ -2134,18 +2138,18 @@ void testbezier3d()
   arc0.setslope(END,0.2);
   spiralarc0.setslope(START,-0.1);
   spiralarc0.setslope(END,0.2);
-  assert(a.size()==1);
+  tassert(a.size()==1);
   pt=a.station(0.4);
   pt1=xyz(1.2,1.44,1.728);
-  assert(dist(pt,pt1)<1e-6);
+  tassert(dist(pt,pt1)<1e-6);
   pt=a.station(1);
   pt1=xyz(3,9,27);
-  assert(dist(pt,pt1)<1e-6);
+  tassert(dist(pt,pt1)<1e-6);
   c=a+b;
   pt=c.station(1.5);
   pt1=b.station(.5);
   cout<<pt.east()<<' '<<pt.north()<<' '<<pt.elev()<<endl;
-  assert(pt==pt1);
+  tassert(pt==pt1);
   psopen("bezier3d.ps");
   psprolog();
   for (curvature=-1;curvature<1.1;curvature+=0.125)
@@ -2219,7 +2223,7 @@ void testbezier3d()
       circle(xy(curvature,clothance/6),sqrt(dists[clothance*M_PI+curvature]));
       if (dists[clothance*M_PI+curvature]>ests[clothance*M_PI+curvature])
 	cout<<"estimate too small crv="<<curvature<<" clo="<<clothance<<endl;
-      assert(dists[clothance*M_PI+curvature]<=ests[clothance*M_PI+curvature]);
+      tassert(dists[clothance*M_PI+curvature]<=ests[clothance*M_PI+curvature]);
     }
   endpage();
   startpage();
@@ -2262,8 +2266,8 @@ void testbezier3d()
   }
   cout<<ngood<<" good spirals"<<endl;
   cout<<nclose<<" with 1/3 point close"<<endl;
-  assert(ngood>=107);
-  assert(nclose>=30);
+  tassert(ngood>=107);
+  tassert(nclose>=30);
   startpage();
   setscale(-30,-70,30,70,DEG90);
   for (i=-18,nclose=0;i<19;i+=2)
@@ -2336,7 +2340,7 @@ void testangleconvcorner(string anglestr,xyz &totxyz)
   latlong ll;
   ll=parselatlong(anglestr,DEGREE);
   corner=Sphere.geoc(ll,0);
-  assert(fabs(corner.getx())>3678296 && fabs(corner.gety())>3678296 && fabs(corner.getz())>3678296);
+  tassert(fabs(corner.getx())>3678296 && fabs(corner.gety())>3678296 && fabs(corner.getz())>3678296);
   totxyz+=corner;
 }
 
@@ -2349,13 +2353,13 @@ void testangleconv()
   latlong ll,wrangell0,wrangell1;
   strang=bintoangle(0,DEGREE+SEXAG2);
   cout<<strang<<endl;
-  assert(strang=="0°00′00″");
+  tassert(strang=="0°00′00″");
   strang=bintoangle(degtobin(90),DEGREE+SEXAG2);
   cout<<strang<<endl;
-  assert(strang=="90°00′00″");
+  tassert(strang=="90°00′00″");
   strang=bintoangle(degtobin(-80),DEGREE+SEXAG2);
   cout<<strang<<endl;
-  assert(strang=="-80°00′00″");
+  tassert(strang=="-80°00′00″");
   strang=bintoangle(atan2i(2,1),DEGREE+SEXAG2);
   cout<<strang<<endl;
   strang=bintoangle(atan2i(2,1),DEGREE+SEXAG2P2);
@@ -2382,7 +2386,7 @@ void testangleconv()
   cout<<formatlatlong(wrangell1,DEGREE+SEXAG2P2)<<endl;
   distance=dist(WGS84.geoc(wrangell0,0),WGS84.geoc(wrangell1,0));
   cout<<"Distance between DMS and decimal: "<<distance<<endl;
-  assert(distance<1);
+  tassert(distance<1);
   /* Add up the eight points where faces of volleyball coordinates meet
    * (45°,135°E,W 35.26439°,35°15'52"N,S). The sum should be close to zero.
    * The ones in the northern hemisphere have the latitude in DMS;
@@ -2397,7 +2401,7 @@ void testangleconv()
   testangleconvcorner("135°W35.26439°S",totxyz);
   testangleconvcorner("35.26439°S45°W",totxyz);
   cout<<totxyz.length()<<endl;
-  assert(totxyz.length()<30);
+  tassert(totxyz.length()<30);
 }
 
 void testcsvline()
@@ -2405,18 +2409,18 @@ void testcsvline()
   vector<string> words;
   string line;
   words=parsecsvline(line="");
-  assert(words.size()==0);
-  assert(makecsvline(words)==line);
+  tassert(words.size()==0);
+  tassert(makecsvline(words)==line);
   words=parsecsvline(line="\"\"");
-  assert(words.size()==1);
+  tassert(words.size()==1);
   //cout<<makecsvline(words)<<endl;
-  assert(makecsvline(words)==line);
+  tassert(makecsvline(words)==line);
   words=parsecsvline(line="\"pote\"\"mkin\"");
-  assert(words[0].length()==9);
-  assert(makecsvline(words)==line);
+  tassert(words[0].length()==9);
+  tassert(makecsvline(words)==line);
   words=parsecsvline(line="\"3,4\",\"5,12\"");
-  assert(words.size()==2);
-  assert(makecsvline(words)==line);
+  tassert(words.size()==2);
+  tassert(makecsvline(words)==line);
 }
 
 void testldecimal()
@@ -2438,14 +2442,14 @@ void testldecimal()
   }
   cout<<ldecimal(0)<<' '<<ldecimal(INFINITY)<<' '<<ldecimal(NAN)<<' '<<ldecimal(-5.67)<<endl;
   cout<<ldecimal(3628800)<<' '<<ldecimal(1296000)<<' '<<ldecimal(0.000016387064)<<endl;
-  assert(ldecimal(0)=="0");
-  assert(ldecimal(1)=="1");
-  assert(ldecimal(-1)=="-1");
-  assert(ldecimal(1.7320508)=="1.7320508");
-  assert(ldecimal(-0.00064516)=="-.00064516");
-  assert(ldecimal(3628800)=="3628800");
-  assert(ldecimal(1296000)=="1296e3");
-  assert(ldecimal(0.000016387064)=="1.6387064e-5");
+  tassert(ldecimal(0)=="0");
+  tassert(ldecimal(1)=="1");
+  tassert(ldecimal(-1)=="-1");
+  tassert(ldecimal(1.7320508)=="1.7320508");
+  tassert(ldecimal(-0.00064516)=="-.00064516");
+  tassert(ldecimal(3628800)=="3628800");
+  tassert(ldecimal(1296000)=="1296e3");
+  tassert(ldecimal(0.000016387064)=="1.6387064e-5");
 }
 
 void testellipsoid()
@@ -2453,21 +2457,21 @@ void testellipsoid()
   double rad;
   xyz sealevel,kmhigh,noffset,soffset,diff,benin,bengal,howland,galapagos,npole,spole;
   ellipsoid test1(8026957,0,0.5),test2(8026957,4013478.5,0);
-  assert(test1.geteqr()==test2.geteqr());
-  assert(test1.getpor()==test2.getpor());
+  tassert(test1.geteqr()==test2.geteqr());
+  tassert(test1.getpor()==test2.getpor());
   sealevel=test1.geoc(degtobin(45),0,0);
   kmhigh=test1.geoc(degtobin(45),0,65536000);
   diff=kmhigh-sealevel;
   cout<<diff.east()<<' '<<diff.north()<<' '<<diff.elev()<<endl;
-  assert(abs(diff.east()-707.107)<0.001);
-  assert(abs(diff.elev()-707.107)<0.001);
+  tassert(abs(diff.east()-707.107)<0.001);
+  tassert(abs(diff.elev()-707.107)<0.001);
   cout<<sealevel.east()<<' '<<sealevel.north()<<' '<<sealevel.elev()<<' '<<ldecimal(sealevel.east()/sealevel.elev())<<endl;
-  assert(fabs(sealevel.east()/sealevel.elev()-4)<1e-9);
+  tassert(fabs(sealevel.east()/sealevel.elev()-4)<1e-9);
   noffset=test1.geoc(degtobin(45)+1,0,0);
   soffset=test1.geoc(degtobin(45)-1,0,0);
   diff=noffset-soffset;
   cout<<diff.east()<<' '<<diff.north()<<' '<<diff.elev()<<endl;
-  assert(abs(diff.east()+diff.elev())<1e-6);
+  tassert(abs(diff.east()+diff.elev())<1e-6);
   cout<<"average radius "<<ldecimal(test1.avgradius())<<endl;
   benin=Sphere.geoc(0,0,0);
   bengal=Sphere.geoc(0,DEG90,0);
@@ -2481,22 +2485,22 @@ void testellipsoid()
   cout<<"Galápagos y  "<<galapagos.gety()<<endl;
   cout<<"North Pole z "<<npole.getz()<<endl;
   cout<<"South Pole z "<<spole.getz()<<endl;
-  assert(benin.getx()>6370999);
-  assert(howland.getx()<-6370999);
-  assert(bengal.gety()>6370999);
-  assert(galapagos.gety()<-6370999);
-  assert(npole.getz()>6370999);
-  assert(spole.getz()<-6370999);
+  tassert(benin.getx()>6370999);
+  tassert(howland.getx()<-6370999);
+  tassert(bengal.gety()>6370999);
+  tassert(galapagos.gety()<-6370999);
+  tassert(npole.getz()>6370999);
+  tassert(spole.getz()<-6370999);
   rad=GRS80.radiusAtLatitude(latlong(0,0),0);
   cout<<"Radius in prime at equator: "<<ldecimal(rad)<<endl;
-  assert(fabs(rad-6378137)<0.5);
+  tassert(fabs(rad-6378137)<0.5);
   rad=GRS80.radiusAtLatitude(latlong(0,0),DEG90);
   cout<<"Radius in meridian at equator: "<<ldecimal(rad)<<endl;
-  assert(fabs(rad-6335439)<0.5);
+  tassert(fabs(rad-6335439)<0.5);
   rad=GRS80.radiusAtLatitude(latlong(degtorad(41+18./60+15.0132/3600),2.5),degtobin(-52-14./60-36./3600));
   // Elementary Surveying, 11th ed., example 19.2, page 548
   cout<<"Radius in azimuth 142°14'36\" at 41°18'15\": "<<ldecimal(rad)<<endl;
-  assert(fabs(rad-6372309.4)<0.5);
+  tassert(fabs(rad-6372309.4)<0.5);
 }
 
 void test1projection(string projName,Projection &proj,latlong ll,xy grid)
@@ -2508,8 +2512,8 @@ void test1projection(string projName,Projection &proj,latlong ll,xy grid)
   cout<<setprecision(10);
   cout<<projName<<" Latitude "<<radtodeg(ll1.lat)<<" Longitude "<<radtodeg(ll1.lon)<<
   " Northing "<<grid1.north()<<" Easting "<<grid1.east()<<endl;
-  assert(dist(grid,grid1)<1.5);
-  assert(dist(gridGeoc,llGeoc)<1.75);
+  tassert(dist(grid,grid1)<1.5);
+  tassert(dist(gridGeoc,llGeoc)<1.75);
 }
 
 array<latlong,2> randomPointPair()
@@ -2606,7 +2610,7 @@ void spotcheckcolor(int col0,int col1)
   col2=printingcolor(col0,4);
   if (col2!=col1)
     cout<<hex<<col0<<" gives "<<col2<<", should be "<<col1<<endl<<dec;
-  assert(col1==col2);
+  tassert(col1==col2);
 }
 
 void testcolor()
@@ -2628,13 +2632,13 @@ void testcolor()
     //cout<<hex<<cint<<' '<<cint1<<dec<<endl;
   }
   for (i=0;i<41;i++)
-    assert(hist[i]==0);
+    tassert(hist[i]==0);
   // fliphue is the identity function on the gray axis.
   for (i=0;i<256;i++)
   {
     cint=i*0x010101;
     cint1=printingcolor(cint,4);
-    assert(cint==cint1);
+    tassert(cint==cint1);
   }
   for (i=0;i<1000;i++)
   {
@@ -2642,16 +2646,16 @@ void testcolor()
     cint1=cint^16777215;
     csht=colorshort(cint);
     csht1=colorshort(cint1);
-    assert(csht+csht1==63999);
+    tassert(csht+csht1==63999);
     csht=rng.usrandom();
     csht1=colorshort(colorint(csht));
-    assert(csht==csht1);
+    tassert(csht==csht1);
     if (csht<64000)
     {
       csht1=63999-csht;
       cint=colorint(csht);
       cint1=colorint(csht1);
-      assert(cint+cint1==16777215);
+      tassert(cint+cint1==16777215);
     }
   }
   /* 09 1b 27 3 0 e e n3 i
@@ -3044,19 +3048,19 @@ void testminquad()
   double m;
   m=minquad(-1,1,0,0,1,1);
   cout<<"m="<<m<<endl;
-  assert(m==0);
+  tassert(m==0);
   m=minquad(0,0,1,1,2,4);
   cout<<"m="<<m<<endl;
-  assert(m==0);
+  tassert(m==0);
   m=minquad(0,0,2,4,4,16);
   cout<<"m="<<m<<endl;
-  assert(m==0);
+  tassert(m==0);
   m=minquad(0,0,1,1,3,9);
   cout<<"m="<<m<<endl;
-  assert(m==0);
+  tassert(m==0);
   m=minquad(-8,64,13,169,21,441);
   cout<<"m="<<m<<endl;
-  assert(m==0);
+  tassert(m==0);
 }
 
 void testroscat()
@@ -3065,19 +3069,19 @@ void testroscat()
      org(0,0),piv0(27,27),piv1(12,12);
   point pt0(32,27,99,""),pt1(16,15,99,""),pt2(46,58,99,""),pt3(58,73,99,"");
   xy0.roscat(piv0,AT34,1,piv1);
-  assert(dist(xy0,xy1)<1e-6);
+  tassert(dist(xy0,xy1)<1e-6);
   cout<<"roscat dist "<<dist(xy0,xy1)<<endl;
   xy2.roscat(org,0,CBRT2,org);
-  assert(dist(xy2,xy3)<1e-1);
+  tassert(dist(xy2,xy3)<1e-1);
   cout<<"roscat dist "<<dist(xy2,xy3)<<endl;
   xy4.roscat(org,AT0512,13/12.,org);
-  assert(dist(xy4,xy5)<1e-6);
+  tassert(dist(xy4,xy5)<1e-6);
   cout<<"roscat dist "<<dist(xy4,xy5)<<endl;
   pt0.roscat(piv0,AT34,1,piv1);
-  assert(dist(pt0,pt1)<1e-6);
+  tassert(dist(pt0,pt1)<1e-6);
   cout<<"roscat dist "<<dist(pt0,pt1)<<endl;
   pt2.roscat(org,0,CBRT2,org);
-  assert(dist(pt2,pt3)<1e-1);
+  tassert(dist(pt2,pt3)<1e-1);
   cout<<"roscat dist "<<dist(pt2,pt3)<<endl;
 }
 
@@ -3096,7 +3100,7 @@ void testabsorient()
   }
   ssd=sumsqdist(a,b);
   cout<<"sumsqdist="<<ldecimal(ssd)<<endl;
-  assert(fabs(ssd-1000)<1e-9);
+  tassert(fabs(ssd-1000)<1e-9);
 }
 
 void test1bicubic(xy sw)
@@ -3108,7 +3112,7 @@ void test1bicubic(xy sw)
   ne=sw+xy(1,1);
   vertex=bicubic(sqr(sw.length()),2*sw,sqr(se.length()),2*se,sqr(nw.length()),2*nw,sqr(ne.length()),2*ne,-sw.getx(),-sw.gety());
   cout<<vertex<<endl;
-  assert(fabs(vertex)<1e-12);
+  tassert(fabs(vertex)<1e-12);
 }
 
 void testbicubic()
@@ -3147,7 +3151,7 @@ void testhistogram()
     cout<<bar.start<<endl<<setw(6)<<bar.count<<' '<<bar.count/(bar.end-bar.start)<<endl;
   }
   cout<<bar.end<<endl;
-  assert(histo0.gettotal()==bartot);
+  tassert(histo0.gettotal()==bartot);
 }
 
 void testgeoid()
@@ -3177,7 +3181,7 @@ void testgeoid()
       olon=dir.loni();
       if (olat!=lat || olon!=lon)
 	cout<<endl<<"should be "<<bintodeg(lat)<<','<<bintodeg(lon)<<" is "<<bintodeg(olat)<<','<<bintodeg(olon)<<endl;
-      assert(olat==lat && olon==lon);
+      tassert(olat==lat && olon==lon);
     }
     //cout<<endl;
   }
@@ -3224,8 +3228,8 @@ void testgeoid()
   for (i=0;i<5;i++)
     for (j=0;j<5;j++)
     {
-      assert(geo[0].eslope[5*i+j]==89232+16384*j);
-      assert(geo[0].nslope[5*i+j]==91784-8192*i);
+      tassert(geo[0].eslope[5*i+j]==89232+16384*j);
+      tassert(geo[0].nslope[5*i+j]==91784-8192*i);
     }
   cube.scale=1/65536.;
   hdr.logScale=-16;
@@ -3265,9 +3269,9 @@ void testgeoid()
       u0=geo[0].elev(i,j);
       u1=cube.undulation(i,j);
       if (std::isnan(u0))
-	assert(std::isnan(u1));
+	tassert(std::isnan(u1));
       else
-	assert(fabs(u1-u0)<0.001);
+	tassert(fabs(u1-u0)<0.001);
     }
 }
 
@@ -3288,21 +3292,21 @@ void testgeint()
   {
     j=readgeint(geintf);
     //cout<<setw(9)<<hex<<i<<setw(9)<<j;
-    assert(i==j);
+    tassert(i==j);
     j=readgeint(geintf);
     //cout<<setw(9)<<hex<<i+0x40000000<<setw(9)<<j;
-    assert(i+0x40000000==j);
+    tassert(i+0x40000000==j);
     j=readgeint(geintf);
     //cout<<setw(9)<<hex<<i+0x80000000<<setw(9)<<j;
-    assert(i+0x80000000==j || j==(int)0x80000000);
+    tassert(i+0x80000000==j || j==(int)0x80000000);
     if (j==(int)0x80000000)
       nancount++;
     j=readgeint(geintf);
     //cout<<setw(9)<<hex<<i+0xc0000000<<setw(9)<<j<<endl;
-    assert(i+0xc0000000==j);
+    tassert(i+0xc0000000==j);
   }
   cout<<dec<<nancount<<" NANs"<<endl;
-  assert(nancount==175);
+  tassert(nancount==175);
   cout<<"done."<<endl;
 }
 
@@ -3313,31 +3317,31 @@ void testhlattice()
   a=nthhvec(1488,31,2977);
   b=latt.nthhvec(1488);
   cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
-  assert(a==b);
+  tassert(a==b);
   a=nthhvec(1457,31,2977);
   b=latt.nthhvec(1457);
   cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
-  assert(a==b);
+  tassert(a==b);
   a=nthhvec(1456,31,2977);
   b=latt.nthhvec(1456);
   cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
-  assert(a==b);
+  tassert(a==b);
   a=nthhvec(1024,31,2977);
   b=latt.nthhvec(1024);
   cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
-  assert(a==b);
+  tassert(a==b);
   a=nthhvec(2048,31,2977);
   b=latt.nthhvec(2048);
   cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
-  assert(a==b);
+  tassert(a==b);
   a=nthhvec(0,31,2977);
   b=latt.nthhvec(0);
   cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
-  assert(a==b);
+  tassert(a==b);
   a=nthhvec(2976,31,2977);
   b=latt.nthhvec(2976);
   cout<<a.getx()<<' '<<a.gety()<<' '<<b.getx()<<' '<<b.gety()<<endl;
-  assert(a==b);
+  tassert(a==b);
 }
 
 bool shoulddo(string testname)
@@ -3476,5 +3480,6 @@ int main(int argc, char *argv[])
   //printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //cornustats();
   //closure_i();
-  return EXIT_SUCCESS;
+  cout<<"\nTest "<<(testfail?"failed":"passed")<<endl;
+  return testfail;
 }
