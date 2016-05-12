@@ -17,7 +17,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 #cmakedefine BIGENDIAN
-#cmakedefine __ISAAC64
 #define VERSION "@BEZITOPO_VERSION@"
 #endif
 

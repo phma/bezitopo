@@ -46,13 +46,6 @@ set(CMAKE_CXX_FLAGS "-std=c++11")
 install(TARGETS bezitopo convertgeoid DESTINATION bin)
 
 test_big_endian(BIGENDIAN)
-check_type_size("unsigned long int" UNSIGNED_LONG_INT)
-if(UNSIGNED_LONG_INT EQUAL 8)
-  set(__ISAAC64 1)
-elseif(UNSIGNED_LONG_INT EQUAL 4)
-else()
-  message(SEND_ERROR "unsigned long int doesn't have right size for ISAAC")
-endif()
 check_type_size("int" INT)
 check_type_size("int *" INT_POINTER)
 
