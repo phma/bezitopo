@@ -18,6 +18,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * Literal PostScript code in this file, which is written to Bezitopo's
+ * output, is in the public domain.
  */
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -179,34 +182,34 @@ void line(document &doc,edge lin,int num,bool colorfibaster,bool directed)
       switch (fibmod3(abs(doc.pl[1].revpoints[lin.a]-doc.pl[1].revpoints[lin.b])))
       {
 	case -1:
-	  rgb=".3 .3 .3"; // FIXME call setcolor
+	  setcolor(0.3,0.3,0.3);
 	  break;
 	case 0:
-	  rgb="1 .3 .3";
+	  setcolor(1,0.3,0.3);
 	  break;
 	case 1:
-	  rgb="0 1 0";
+	  setcolor(0,1,0);
 	  break;
 	case 2:
-	  rgb=".3 .3 1";
+	  setcolor(0.3,0.3,1);
 	  break;
       }
     else
-      rgb="0 0 1";
+      setcolor(0,0,1);
   else
-    rgb="0 0 0";
+    setcolor(0,0,0);
   if (directed)
   {
     disp=b-a;
     base=xy(disp.north()/40,disp.east()/-40);
     ab1=a+base;
     ab2=a-base;
-    fprintf(psfile,"%s setrgbcolor newpath %7.3f %7.3f moveto %7.3f %7.3f lineto %7.3f %7.3f lineto closepath fill\n",
-	    rgb,xscale(b.east()),yscale(b.north()),xscale(ab1.east()),yscale(ab1.north()),xscale(ab2.east()),yscale(ab2.north()));
+    fprintf(psfile,"newpath %7.3f %7.3f moveto %7.3f %7.3f lineto %7.3f %7.3f lineto closepath fill\n",
+	    xscale(b.east()),yscale(b.north()),xscale(ab1.east()),yscale(ab1.north()),xscale(ab2.east()),yscale(ab2.north()));
   }
   else
-    fprintf(psfile,"%s setrgbcolor %7.3f %7.3f %7.3f %7.3f -\n",
-            rgb,xscale(a.east()),yscale(a.north()),xscale(b.east()),yscale(b.north()));
+    fprintf(psfile,"%7.3f %7.3f %7.3f %7.3f -\n",
+            xscale(a.east()),yscale(a.north()),xscale(b.east()),yscale(b.north()));
   mid=(a+b)/2;
   //fprintf(psfile,"%7.3f %7.3f moveto (%d) show\n",xscale(mid.east()),yscale(mid.north()),num);
 }
