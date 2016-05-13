@@ -20,11 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifdef HAVE_CONFIG_H
 #include <config.h>
-#endif
-
 #include <iostream>
 #include <cstdlib>
 #include "point.h"
@@ -393,6 +389,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
   doc.pl.resize(1);
+  cout<<"Bezitopo version "<<VERSION<<" © 2016 Pierre Abbat\nDistributed under GPL v3. This is free software with no warranty."<<endl;
   try
   {
     ifstream geofile("geoid.bol",ios::binary);
