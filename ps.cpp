@@ -148,6 +148,11 @@ void dot(xy pnt,string comment)
   }
 }
 
+void pscomment(string text)
+{
+  fprintf(psfile," %%%s\n",text.c_str());
+}
+
 void circle(xy pnt,double radius)
 {
   pnt=turn(pnt,orientation);

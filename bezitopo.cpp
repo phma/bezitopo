@@ -42,6 +42,7 @@
 #include "scalefactor.h"
 #include "contour.h"
 #include "geoid.h"
+#include "ldecimal.h"
 
 using namespace std;
 
@@ -155,6 +156,7 @@ void indpark(string args)
       default:
 	setcolor(0,0,0);
     }
+    pscomment("Elevation "+ldecimal(doc.pl[1].contours[i].getElevation())+" Contour #"+to_string(i));
     spline(doc.pl[1].contours[i].approx3d(0.1));
   }
   endpage();
@@ -324,6 +326,7 @@ void contourdraw_i(string args)
 	  default:
 	    setcolor(0,0,0);
 	}
+	pscomment("Elevation "+ldecimal(doc.pl[1].contours[i].getElevation())+" Contour #"+to_string(i));
 	spline(doc.pl[1].contours[i].approx3d(0.1));
       }
       endpage();

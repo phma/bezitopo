@@ -40,3 +40,4 @@ void widen(double factor);
 void setcolor(double r,double g,double b);
 void setscale(double minx,double miny,double maxx,double maxy,int ori=0);
 void pswrite(xy pnt,std::string text);
+void pscomment(string text);
