@@ -21,6 +21,7 @@
  */
 #include <iostream>
 #include <ctime>
+#include "config.h"
 #include "geoid.h"
 #include "sourcegeoid.h"
 #include "refinegeoid.h"
@@ -128,6 +129,8 @@ int main(int argc, char *argv[])
   ofstream ofile;
   int i;
   vball v;
+  cout<<"Convertgeoid, part of Bezitopo version "<<VERSION<<" © 2016 Pierre Abbat\n"
+  <<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
   cube.scale=1/65536.;
   hdr.logScale=-16;
   hdr.planet=BOL_EARTH;

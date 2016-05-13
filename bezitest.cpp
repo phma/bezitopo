@@ -20,11 +20,6 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <iostream>
 #include <fstream>
 #include <iomanip>
@@ -32,6 +27,7 @@
 #include <csignal>
 #include <cfloat>
 #include <cstring>
+#include "config.h"
 #include "point.h"
 #include "cogo.h"
 #include "bezitopo.h"

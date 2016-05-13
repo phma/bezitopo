@@ -22,10 +22,6 @@
  * Literal PostScript code in this file, which is written to Bezitopo's
  * output, is in the public domain.
  */
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <cstdio>
 #include <iostream>
 #include <cmath>
@@ -33,6 +29,7 @@
 #include <cstring>
 #include <string>
 #include <unistd.h>
+#include "config.h"
 #include "point.h"
 #include "tin.h"
 #include "pointlist.h"
