@@ -29,7 +29,7 @@
  * This file has two codes for the foot: one for the international foot, and
  * one whose conversion factor can be switched.
  * 
- * This module follows http://phma.optus.nu/Metric/unit-codes.html, except
+ * This module follows http://bezitopo.org/~phma/Metric/unit-codes.html, except
  * for having some units with variable conversion factors. All such units
  * are non-metric units based on the foot and have codes of the form
  * 0x****f***. They may or may not be equal to other unit codes' conversion
