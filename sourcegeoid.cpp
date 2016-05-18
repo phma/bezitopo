@@ -216,6 +216,14 @@ void readusngatxt(geolattice &geo,string filename)
  * the geoid from the coefficients; this requires making sense of a
  * Fortran program.
  * http://earth-info.nga.mil/GandG/wgs84/gravitymod/egm96/egm96.html
+ * http://earth-info.nga.mil/GandG/wgs84/gravitymod/egm2008/egm08_wgs84.html
+ */
+{
+}
+
+void readgsf(geolattice &geo,string filename)
+/* This is a text file used by Carlson software.
+ * https://update.carlsonsw.com/kbase_attach/716/Geoid Separation File Format.pdf
  */
 {
 }
