@@ -68,6 +68,7 @@
 #include "binio.h"
 #include "sourcegeoid.h"
 #include "bicubic.h"
+#include "matrix.h"
 
 #define psoutput false
 // affects only maketin
@@ -225,6 +226,17 @@ void testin()
   test1in(b,a,b,c,IN_AT_CORNER);
   test1in(c,a,b,c,IN_AT_CORNER);
   test1in(b,c,h,n,0);
+}
+
+void testmatrix()
+{
+  matrix m1(3,4),m2(4,3);
+  m1[2][0]=5;
+  m1[1][3]=7;
+  tassert(m1[2][0]==5);
+  m2[2][0]=9;
+  m2[1][4]=6;
+  tassert(m2[2][0]==9);
 }
 
 void testcopytopopoints()
@@ -3374,6 +3386,8 @@ int main(int argc, char *argv[])
     testin();
   if (shoulddo("triangle"))
     testtriangle();
+  if (shoulddo("matrix"))
+    testmatrix();
   if (shoulddo("copytopopoints"))
     testcopytopopoints();
   if (shoulddo("invalidintersectionlozenge"))
