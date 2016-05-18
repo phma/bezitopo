@@ -267,6 +267,7 @@ void testinvalidintersectionlozenge()
 {
   int i,j,k,l,m,itype;
   char rightanswers[9][9][9][9];
+  cout<<"Checking for invalid intersections (lozenge)";
   doc.pl[1].clear();
   lozenge(doc,7);
   for (j=1;j<=9;j++)
@@ -282,6 +283,11 @@ void testinvalidintersectionlozenge()
   {
     movesideways(doc,cos((double)i)/16);
     rotate(doc,1);
+    if (!(i&7))
+    {
+      cout<<".";
+      cout.flush();
+    }
     for (j=1;j<=9;j++)
       for (k=1;k<=9;k++)
 	for (l=1;l<=9;l++)
@@ -295,6 +301,7 @@ void testinvalidintersectionlozenge()
 	      printf("Iter %i, %d %d %d %d, %d should be %d\n",i,j,k,l,m,itype,rightanswers[j-1][k-1][l-1][m-1]);*/
 	  }
   }
+  cout<<endl;
 }
 
 void testinvalidintersectionaster()
@@ -302,7 +309,7 @@ void testinvalidintersectionaster()
   int i,j,k,l,m,itype,nmisses;
   char rightanswers[9][9][9][9];
   double shift;
-  cout<<"Checking for invalid intersections";
+  cout<<"Checking for invalid intersections (aster)";
   doc.pl[1].clear();
   aster(doc,9);
   for (j=1;j<=9;j++)
