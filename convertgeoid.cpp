@@ -124,6 +124,21 @@ void outund(string loc,int lat,int lon)
   cout<<"c: "<<cube.undulation(lat,lon)<<endl;
 }
 
+/* Command line syntax:
+ * -f format		Puts format first on the list of formats to try.
+ * -i file		Reads file.
+ * -o file		Sets the output filename. The file is written after
+ * 			all input files are read.
+ * -c lat long radius	Excerpts a circle from the geoid file.
+ * Outputting the KML file is automatic; there is no option for it.
+ * 
+ * Example:
+ * convertgeoid -f ngs -i g2012bu0.bin -c 38N99W 150 -f gsf -o Macksville.gsf
+ * Reads the Lower 48 file in NGS format, outputs an excerpt called Macksville.gsf
+ * containing a circle of radius 150 km centered at 38N99W in GSF format,
+ * and outputs the boundary to file Macksville.gsf.kml .
+ */
+
 int main(int argc, char *argv[])
 {
   ofstream ofile;
