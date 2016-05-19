@@ -12,17 +12,18 @@ Before 0.1.0 (first public release):
 Before 0.1.1:
 •Do basic matrix arithmetic, needed for least-squares traverse adjustment and coordinate transformation. Coordinate transformation uses fixed-size matrices, but least-squares matrices' sizes depend on the number of points.
 •Do quaternion arithmetic. Quaternions represent rotations (and nonnegative scaling) in 3-space.
-•Compute all intersections of two spirals.
 •Read geoid files and convert them to a common format. ✓
 •Add a command-line interface to convertgeoid.
 •Specify the geoid file when reading it into bezitopo.
 •Read NGA EGM geoid files and Carlson GSF files.
-•Write a geolattice to any geolattice file it can read.
+•Write a geolattice to any geolattice file it can read, if the format allows representing part of the earth.
 •Output a KML file depicting the outline of a geoid file.
 •Write an excerpt of a geoid file with specified center and distance.
 •Draw statistical graphs of geoid conversion.
 
 Before 0.1.2:
+•Implement type-0 breaklines.
+•Compute all intersections of two spirals.
 •Decide whether a point is inside a polyline/arc/spiral.
 •Compute the area of a polyline/arc/spiral.
 •Tell whether a spiralarc is too curly, i.e. there is a line that intersects it more than three times.
