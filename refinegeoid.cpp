@@ -29,6 +29,7 @@ using namespace std;
 
 manysum dataArea,totalArea;
 time_t progressTime;
+int avgelev_interrocount=0,avgelev_refinecount=0;
 
 void outProgress()
 {
@@ -118,6 +119,7 @@ void interroquad(geoquad &quad,double spacing)
 	quad.nums.push_back(v.getxy());
       else
 	quad.nans.push_back(v.getxy());
+      avgelev_interrocount++;
     }
     n-=rp;
     if (n<0)
@@ -143,6 +145,7 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
   if (quad.nans.size()+quad.nums.size()==0 || (quad.isfull() && area/(quad.nans.size()+quad.nums.size())>sqr(spacing)))
     interroquad(quad,spacing);
   if (area<sqr(sublimit) || quad.isfull())
+  {
     for (i=0;i<16;i++)
       for (j=0;j<16;j++)
       {
@@ -155,6 +158,8 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
 	else
 	  quad.nans.push_back(qpt);
       }
+    avgelev_refinecount+=256;
+  }
   if (quad.scale>2)
     cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums after"<<endl;
   if (area<sqr(sublimit) || quad.isfull()!=0)

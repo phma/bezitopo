@@ -246,5 +246,6 @@ int main(int argc, char *argv[])
   hdr.hash=cube.hash();
   hdr.writeBinary(ofile);
   cube.writeBinary(ofile);
+  cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
   return 0;
 }
