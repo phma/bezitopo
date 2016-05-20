@@ -27,6 +27,7 @@
 #include <csignal>
 #include <cfloat>
 #include <cstring>
+#include <unistd.h>
 #include "config.h"
 #include "point.h"
 #include "cogo.h"
@@ -3363,6 +3364,11 @@ bool shoulddo(string testname)
 {
   int i;
   bool ret;
+  if (testfail)
+  {
+    cout<<"failed before "<<testname<<endl;
+    //sleep(2);
+  }
   ret=args.size()==0;
   for (i=0;i<args.size();i++)
     if (testname==args[i])
