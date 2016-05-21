@@ -29,6 +29,24 @@
 using namespace std;
 vector<geolattice> geo;
 
+bool smooth5(unsigned n)
+/* Used for deciding the number of divisions of a circle in a lat-long grid.
+ * This is in practice always a 5-smooth number, such as 21600.
+ * 21600 (1 arc minute) is between 20736 and 21870.
+ * 1440 (1/4 degree, 1 time minute) is between 1350 and 1458.
+ */
+{
+  if (n==0)
+    n=7; // 0 is not smooth, as it is divisible by all primes. It also cannot be the number of divisions.
+  while ((n%2)==0)
+    n/=2;
+  while ((n%3)==0)
+    n/=3;
+  while ((n%5)==0)
+    n/=5;
+  return n==1;
+}
+
 double geolattice::elev(int lat,int lon)
 {
   int easting,northing,eint,nint;

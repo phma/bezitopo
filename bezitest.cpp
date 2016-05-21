@@ -3170,6 +3170,21 @@ void testhistogram()
   tassert(histo0.gettotal()==bartot);
 }
 
+void testsmooth5()
+{
+  int i,nsmooth=0;
+  for (i=17711;i<=28657;i++)
+  {
+    if (smooth5(i))
+    {
+      nsmooth++;
+      cout<<i<<' ';
+    }
+  }
+  cout<<endl<<nsmooth<<" smooth numbers"<<endl;
+  tassert(nsmooth==26);
+}
+
 void testgeoid()
 {
   vball v;
@@ -3494,6 +3509,8 @@ int main(int argc, char *argv[])
     testbicubic();
   if (shoulddo("histogram"))
     testhistogram();
+  if (shoulddo("smooth5"))
+    testsmooth5();
   if (shoulddo("geoid"))
     testgeoid();
   if (shoulddo("geint"))
