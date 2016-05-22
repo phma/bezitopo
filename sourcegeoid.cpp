@@ -47,6 +47,40 @@ bool smooth5(unsigned n)
   return n==1;
 }
 
+string readword(istream &file)
+{
+  int ch;
+  string ret;
+  int state=0;
+  do
+  {
+    ch=file.get();
+    switch (state)
+    {
+      case 0:
+	if (!isspace(ch))
+	  state=1;
+	if (ch<0)
+	  state=2;
+	break;
+      case 1:
+	if (isspace(ch) || ch<0)
+	  state=2;
+    }
+    if (state==1)
+      ret+=ch;
+  } while (state<2);
+  return ret;
+}
+
+double readdouble(istream &file)
+// This can throw.
+{
+  string str;
+  str=readword(file);
+  return stod(str);
+}
+
 double geolattice::elev(int lat,int lon)
 {
   int easting,northing,eint,nint;
@@ -237,6 +271,31 @@ void readusngatxt(geolattice &geo,string filename)
  * http://earth-info.nga.mil/GandG/wgs84/gravitymod/egm2008/egm08_wgs84.html
  */
 {
+}
+
+void readcarlsongsfheader(carlsongsfheader &hdr,istream &file)
+{
+  double dnlong,dnlat;
+  try
+  {
+    hdr.south=readdouble(file);
+    hdr.west=readdouble(file);
+    hdr.north=readdouble(file);
+    hdr.east=readdouble(file);
+    dnlong=readdouble(file);
+    dnlat=readdouble(file);
+    /* The numbers of rows and columns must be integers,
+     * but are written as 118.0 in gsf files.
+     */
+    hdr.nlong=dnlong;
+    hdr.nlat=dnlat;
+  }
+  catch (...)
+  {
+    throw badheader;
+  }
+  if (hdr.nlong!=dnlong || hdr.nlat!=dnlat)
+    throw badheader;
 }
 
 void readgsf(geolattice &geo,string filename)

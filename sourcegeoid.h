@@ -35,6 +35,12 @@ struct usngsheader
   int nlat,nlong,dtype;
 };
 
+struct carlsongsfheader
+{
+  double south,west,north,east;
+  int nlong,nlat;
+};
+
 class geolattice
 {
   /* nbd must be greater than sbd; both must be in [-DEG90,DEG90].
@@ -56,6 +62,8 @@ public:
 };
 
 bool smooth5(unsigned n);
+std::string readword(std::istream &file);
+double readdouble(std::istream &file);
 int readusngsbin(geolattice &geo,std::string filename);
 extern std::vector<geolattice> geo;
 double avgelev(xyz dir);
