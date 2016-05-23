@@ -155,10 +155,10 @@ int main(int argc, char *argv[])
   hdr.tolerance=0.03;
   hdr.sublimit=1000;
   hdr.spacing=1e5;
-  hdr.namesFormats.push_back("../g2012bu0.bin");
+  /*hdr.namesFormats.push_back("../g2012bu0.bin");
   hdr.namesFormats.push_back("usngs");
   hdr.namesFormats.push_back("../g2012ba0.bin");
-  hdr.namesFormats.push_back("usngs");
+  hdr.namesFormats.push_back("usngs");*/
   hdr.namesFormats.push_back("../g2012bh0.bin");
   hdr.namesFormats.push_back("usngs");
   hdr.namesFormats.push_back("../g2012bg0.bin");
@@ -171,25 +171,25 @@ int main(int argc, char *argv[])
   for (i=0;i<geo.size()-1;i++)
     readusngsbin(geo[i],hdr.namesFormats[i*2]);
   //geo[i].settest();
-  drawglobecube(1024,62,-7,1,0,"geoid.ppm");
-  drawglobemicro(1024,xy(1.3429,0.2848),3e-4,1,0,"geowrangell.ppm");
+  //drawglobecube(1024,62,-7,1,0,"geoid.ppm");
+  //drawglobemicro(1024,xy(1.3429,0.2848),3e-4,1,0,"geowrangell.ppm");
   /* (-.4304,-.3142,1) 143.86986°W 61.9475°N 143°52'12"W 61°56'51"N
    * This is a local maximum of the geoid in Alaska at Mount Wrangell.
    * It clearly shows artifacts when interpolated bilinearly.
    */
-  drawglobemicro(1024,xy(0.384566,1.27153),3e-3,1,0,"geonieves.ppm");
+  //drawglobemicro(1024,xy(0.384566,1.27153),3e-3,1,0,"geonieves.ppm");
   /* (-.230868,-1,0.45694) 103°W 24°N
    * This is on the boundary of the Lower 48 file.
    */
-  drawglobemicro(1024,xy(1.21676,0.294214),3e-3,1,0,"geogranisle.ppm");
+  //drawglobemicro(1024,xy(1.21676,0.294214),3e-3,1,0,"geogranisle.ppm");
   /* (-.411572,-.56648,1) 126°W 55°N
    * This is on the boundary of the overlap between the Alaska file
    * and the Lower 48 file.
    */
-  drawglobemicro(1024,xy(3.579192,1.5984015),1e-3,1,0,"geosamoan.ppm");
-  drawglobemicro(1024,xy(3.6062785,1.627449),1e-3,1,0,"geosamoae.ppm");
-  drawglobemicro(1024,xy(3.579192,1.654771),1e-3,1,0,"geosamoas.ppm");
-  drawglobemicro(1024,xy(3.552552,1.6253505),1e-3,1,0,"geosamoaw.ppm");
+  //drawglobemicro(1024,xy(3.579192,1.5984015),1e-3,1,0,"geosamoan.ppm");
+  //drawglobemicro(1024,xy(3.6062785,1.627449),1e-3,1,0,"geosamoae.ppm");
+  //drawglobemicro(1024,xy(3.579192,1.654771),1e-3,1,0,"geosamoas.ppm");
+  //drawglobemicro(1024,xy(3.552552,1.6253505),1e-3,1,0,"geosamoaw.ppm");
   //drawglobemicro(1024,xy(1.5,1.5),2e-2,1,0,"geotest.ppm");
   v=encodedir(Sphere.geoc(degtorad(62),degtorad(-144),0.));
   cout<<"Wrangell "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
@@ -223,15 +223,15 @@ int main(int argc, char *argv[])
   outund("Kitimat",degtobin(54.0547),degtobin(-128.6578)); // in the overlap of two files
   outund("Denali",degtobin(63.0695),degtobin(-151.0074));
   outund("Haleakala",degtobin(20.7097),degtobin(-156.2533));
-  drawglobemicro(1024,xy(1.3429,0.2848),3e-4,2,0,"geowrangellcvt.ppm");
+  /*drawglobemicro(1024,xy(1.3429,0.2848),3e-4,2,0,"geowrangellcvt.ppm");
   drawglobemicro(1024,xy(0.384566,1.27153),3e-3,2,0,"geonievescvt.ppm");
   drawglobemicro(1024,xy(1.21676,0.294214),3e-3,2,0,"geogranislecvt.ppm");
   drawglobemicro(1024,xy(3.579192,1.5984015),1e-3,2,0,"geosamoancvt.ppm");
   drawglobemicro(1024,xy(3.6062785,1.627449),1e-3,2,0,"geosamoaecvt.ppm");
   drawglobemicro(1024,xy(3.579192,1.654771),1e-3,2,0,"geosamoascvt.ppm");
-  drawglobemicro(1024,xy(3.552552,1.6253505),1e-3,2,0,"geosamoawcvt.ppm");
+  drawglobemicro(1024,xy(3.552552,1.6253505),1e-3,2,0,"geosamoawcvt.ppm");*/
   //drawglobemicro(1024,xy(1.5,1.5),2e-2,2,0,"geotestcvt.ppm");
-  psopen("geoid.ps");
+  /*psopen("geoid.ps");
   psprolog();
   startpage();
   plotcenters();
@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
   //plotinters();
   //endpage();
   pstrailer();
-  psclose();
+  psclose();*/
   //hdr.hash=cube.hash();
   ofile.open("geoid.bol");
   hdr.hash=cube.hash();
