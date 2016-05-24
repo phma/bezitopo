@@ -20,6 +20,8 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <cstring>
+#include <iostream>
+#include <iomanip>
 #include "angle.h"
 #include "histogram.h"
 using namespace std;
@@ -29,6 +31,7 @@ histogram::histogram()
   bin.push_back(0);
   bin.push_back(1);
   count.push_back(0);
+  discrete=0;
   total=0;
 }
 
@@ -37,6 +40,7 @@ histogram::histogram(double least,double most)
   bin.push_back(least);
   bin.push_back(most);
   count.push_back(0);
+  discrete=0;
   total=0;
 }
 
@@ -51,6 +55,11 @@ void histogram::clear()
   bin.push_back(most);
   count.push_back(0);
   total=0;
+}
+
+void histogram::setdiscrete(double d)
+{
+  discrete=d;
 }
 
 void histogram::clear(double least,double most)
@@ -123,7 +132,7 @@ histogram& histogram::operator<<(double val)
   }
   count[theBin]++;
   total++;
-  if (sqr(count[theBin])>total)
+  if (sqr(count[theBin])>total && bin[theBin+1]-bin[theBin]>discrete)
     split(theBin);
   return *this;
 }
@@ -145,4 +154,17 @@ histobar histogram::getbar(unsigned n)
 unsigned histogram::gettotal()
 {
   return total;
+}
+
+void histogram::dump()
+{
+  int i,n;
+  histobar bar;
+  n=nbars();
+  for (i=0;i<n;i++)
+  {
+    bar=getbar(i);
+    cout<<setw(10)<<bar.start<<setw(10)<<bar.end<<setw(10)<<bar.count
+    <<setw(10)<<bar.count/(bar.end-bar.start)<<endl;
+  }
 }

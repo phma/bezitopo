@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef HISTOGRAM_H
+#define HISTOGRAM_H
 #include <vector>
 
 struct histobar
@@ -32,11 +34,13 @@ class histogram
 private:
   std::vector<double> bin;
   std::vector<unsigned> count;
+  double discrete;
   unsigned total;
   void split(int n);
 public:
   histogram();
   histogram(double least,double most);
+  void setdiscrete(double d);
   void clear(); // leaves least and most intact, makes a single empty bin
   void clear(double least,double most);
   void clearcount(); // leaves bin widths intact, just clears all their counts
@@ -45,4 +49,6 @@ public:
   unsigned nbars();
   histobar getbar(unsigned n);
   unsigned gettotal();
+  void dump();
 };
+#endif

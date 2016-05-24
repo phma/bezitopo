@@ -20,7 +20,10 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "geoid.h"
+#include "histogram.h"
+
 extern int avgelev_interrocount,avgelev_refinecount;
+extern histogram correctionHist;
 
 void outProgress();
 void interroquad(geoquad &quad,double spacing);

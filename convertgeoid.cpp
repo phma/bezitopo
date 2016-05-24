@@ -155,6 +155,7 @@ int main(int argc, char *argv[])
   hdr.tolerance=0.03;
   hdr.sublimit=1000;
   hdr.spacing=1e5;
+  correctionHist.setdiscrete(1);
   /*hdr.namesFormats.push_back("../g2012bu0.bin");
   hdr.namesFormats.push_back("usngs");
   hdr.namesFormats.push_back("../g2012ba0.bin");
@@ -247,5 +248,6 @@ int main(int argc, char *argv[])
   hdr.writeBinary(ofile);
   cube.writeBinary(ofile);
   cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
+  correctionHist.dump();
   return 0;
 }

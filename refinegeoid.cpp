@@ -30,6 +30,7 @@ using namespace std;
 manysum dataArea,totalArea;
 time_t progressTime;
 int avgelev_interrocount=0,avgelev_refinecount=0;
+histogram correctionHist(1,2);
 
 void outProgress()
 {
@@ -210,4 +211,5 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
   progress(quad);
   vector<xy>().swap(quad.nums); // deallocate vectors
   vector<xy>().swap(quad.nans);
+  correctionHist<<j;
 }
