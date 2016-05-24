@@ -3165,9 +3165,28 @@ void testhistogram()
     bar=histo0.getbar(i);
     bartot+=bar.count;
     cout<<bar.start<<endl<<setw(6)<<bar.count<<' '<<bar.count/(bar.end-bar.start)<<endl;
+    tassert(bar.start<bar.end);
   }
   cout<<bar.end<<endl;
   tassert(histo0.gettotal()==bartot);
+  for (i=bartot=0;i<histo1.nbars();i++)
+  {
+    bar=histo1.getbar(i);
+    bartot+=bar.count;
+    cout<<bar.start<<endl<<setw(6)<<bar.count<<' '<<bar.count/(bar.end-bar.start)<<endl;
+    tassert(bar.start<bar.end);
+  }
+  cout<<bar.end<<endl;
+  tassert(histo1.gettotal()==bartot);
+  for (i=bartot=0;i<histo2.nbars();i++)
+  {
+    bar=histo2.getbar(i);
+    bartot+=bar.count;
+    cout<<bar.start<<endl<<setw(6)<<bar.count<<' '<<bar.count/(bar.end-bar.start)<<endl;
+    tassert(bar.start<bar.end);
+  }
+  cout<<bar.end<<endl;
+  tassert(histo2.gettotal()==bartot);
 }
 
 void testsmooth5()

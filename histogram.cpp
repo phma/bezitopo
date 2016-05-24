@@ -113,7 +113,7 @@ histogram& histogram::operator<<(double val)
   int theBin;
   double newlimit;
   theBin=find(val);
-  if (theBin>=count.size())
+  if (theBin>=count.size() && theBin>0) // count.size() is unsigned; comparing -1 to it results in error
   {
     newlimit=val+(bin[count.size()]-bin[count.size()-1]);
     bin.push_back(newlimit);
