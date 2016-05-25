@@ -131,7 +131,7 @@ void interroquad(geoquad &quad,double spacing)
 void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double spacing)
 {
   int i,j=0,numnums,ncorr;
-  double area,qpoints[16][16],sqerror;
+  double area,qpoints[16][16],sqerror,lastsqerror,mult=1;
   array<double,6> corr;
   xyz pt;
   vball v;
@@ -163,12 +163,14 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
   }
   if (quad.scale>2)
     cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums after"<<endl;
+  j=0;
   if (area<sqr(sublimit) || quad.isfull()!=0)
   {
     for (numnums=i=0;i<16;i++)
       for (j=0;j<16;j++)
 	if (std::isfinite(qpoints[i][j]))
 	  numnums++;
+    j=0;
     if (numnums>127)
     {
       if (quad.isnan())
@@ -188,16 +190,28 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
        */
       for (j=0,ncorr=6;ncorr && j<1536;j++)
       {
+	lastsqerror=sqerror;
 	for (i=ncorr=0;i<6;i++)
 	{
-	  quad.und[i]+=rint(corr[i]);
-	  ncorr+=rint(corr[i])!=0;
+	  quad.und[i]+=rint(corr[i]*mult);
+	  ncorr+=rint(corr[i]*mult)!=0;
 	}
 	corr=correction(quad,qpoints);
 	for (sqerror=i=0;i<6;i++)
 	  sqerror+=sqr(corr[i]);
+	if (j>2 && (j%2)==0)
+	{ // Speed up conversion a little. This really needs matrices.
+	  if (lastsqerror>sqerror && lastsqerror*0.9<sqerror)
+	    mult*=1.25;
+	  if (sqerror>lastsqerror)
+	    mult*=0.75;
+	  if (sqerror>2*lastsqerror)
+	    mult*=0.5;
+	  if (mult<1)
+	    mult=1;
+	  //cout<<lastsqerror<<' '<<sqerror<<' '<<mult<<endl;
+	}
       }
-      //cout<<sqerror<<" after"<<endl;
     }
     //else
       //cout<<"numnums "<<numnums<<endl;
