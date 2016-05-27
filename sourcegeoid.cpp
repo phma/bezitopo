@@ -234,6 +234,19 @@ bool sanitycheck(usngsheader &hdr)
   return ssane && wsane && latsane && longsane && nlatsane && nlongsane && typesane;
 }
 
+bool sanitycheck(carlsongsfheader &hdr)
+{
+  bool ssane,wsane,nsane,esane,latsane,nlatsane,nlongsane;
+  ssane=hdr.south>-360.0001 && hdr.south<360.0001 && (hdr.south==0 || fabs(hdr.south)>0.000001);
+  wsane=hdr.west>-360.0001 && hdr.west<360.0001 && (hdr.west==0 || fabs(hdr.west)>0.000001);
+  nsane=hdr.north>-360.0001 && hdr.north<360.0001 && (hdr.north==0 || fabs(hdr.north)>0.000001);
+  esane=hdr.east>-360.0001 && hdr.east<360.0001 && (hdr.east==0 || fabs(hdr.east)>0.000001);
+  latsane=hdr.south<hdr.north;
+  nlatsane=hdr.nlat>0 && hdr.nlat<=2000000;
+  nlongsane=hdr.nlong>0 && hdr.nlong<=4000000;
+  return ssane && wsane && latsane && nlatsane && nlongsane;
+}
+
 void geolattice::setheader(usngsheader &hdr)
 {
   sbd=degtobin(hdr.south);
@@ -242,6 +255,21 @@ void geolattice::setheader(usngsheader &hdr)
   ebd=degtobin(hdr.west+(hdr.nlong-1)*hdr.longspace);
   width=hdr.nlong-1;
   height=hdr.nlat-1;
+  undula.resize((width+1)*(height+1));
+  eslope.resize((width+1)*(height+1));
+  nslope.resize((width+1)*(height+1));
+}
+
+void geolattice::setheader(carlsongsfheader &hdr)
+{
+  sbd=degtobin(hdr.south);
+  wbd=degtobin(hdr.west);
+  nbd=degtobin(hdr.north);
+  ebd=degtobin(hdr.east);
+  if (wbd-ebd>=0)
+    ebd+=DEG360;
+  width=hdr.nlong;
+  height=hdr.nlat;
   undula.resize((width+1)*(height+1));
   eslope.resize((width+1)*(height+1));
   nslope.resize((width+1)*(height+1));
@@ -298,43 +326,84 @@ void readcarlsongsfheader(carlsongsfheader &hdr,istream &file)
     throw badheader;
 }
 
-void readgsf(geolattice &geo,string filename)
+int readcarlsongsf(geolattice &geo,string filename)
 /* This is a text file used by Carlson software.
  * https://update.carlsonsw.com/kbase_attach/716/Geoid Separation File Format.pdf
  */
 {
+  int i,j,ret;
+  fstream file;
+  carlsongsfheader hdr;
+  file.open(filename,fstream::in|fstream::binary);
+  if (file.is_open())
+  {
+    readcarlsongsfheader(hdr,file);
+    if (sanitycheck(hdr))
+    {
+      cout<<"Header sane"<<endl;
+      cout<<"South "<<hdr.south<<" West "<<hdr.west<<endl;
+      cout<<"North "<<hdr.north<<" East "<<hdr.east<<endl;
+      cout<<"Rows "<<hdr.nlat<<" Columns "<<hdr.nlong<<endl;
+      geo.setheader(hdr);
+      for (i=0;i<geo.height+1;i++)
+	for (j=0;j<geo.width+1;j++)
+	  geo.undula[i*(geo.width+1)+j]=rint(65536*(readdouble(file)));
+      if (file.fail())
+	ret=1;
+      else
+	ret=2;
+    }
+    else
+      ret=1;
+    file.close();
+    geo.setslopes();
+  }
+  else
+    ret=0;
+  return ret;
 }
 
 int readusngsbin(geolattice &geo,string filename)
 {
-  int i,j;
+  int i,j,ret;
   fstream file;
   usngsheader hdr;
   bool bigendian;
   file.open(filename,fstream::in|fstream::binary);
-  readusngsbinheaderle(hdr,file);
-  if (sanitycheck(hdr))
-    bigendian=false;
+  if (file.is_open())
+  {
+    readusngsbinheaderle(hdr,file);
+    if (sanitycheck(hdr))
+      bigendian=false;
+    else
+    {
+      file.seekg(0);
+      readusngsbinheaderbe(hdr,file);
+      bigendian=true;
+    }
+    if (sanitycheck(hdr))
+    {
+      cout<<"Header sane"<<endl;
+      cout<<"South "<<hdr.south<<" West "<<hdr.west<<endl;
+      cout<<"Latitude spacing "<<hdr.latspace<<" Longitude spacing "<<hdr.longspace<<endl;
+      cout<<"Rows "<<hdr.nlat<<" Columns "<<hdr.nlong<<endl;
+      geo.setheader(hdr);
+      for (i=0;i<geo.height+1;i++)
+	for (j=0;j<geo.width+1;j++)
+	  geo.undula[i*(geo.width+1)+j]=rint(65536*(bigendian?readbefloat(file):readlefloat(file)));
+      if (file.fail())
+	ret=1;
+      else
+	ret=2;
+    }
+    else
+      ret=1;
+    file.close();
+    geo.setslopes();
+  }
   else
-  {
-    file.seekg(0);
-    readusngsbinheaderbe(hdr,file);
-    bigendian=true;
-  }
-  if (sanitycheck(hdr))
-  {
-    cout<<"Header sane"<<endl;
-    cout<<"South "<<hdr.south<<" West "<<hdr.west<<endl;
-    cout<<"Latitude spacing "<<hdr.latspace<<" Longitude spacing "<<hdr.longspace<<endl;
-    cout<<"Rows "<<hdr.nlat<<" Columns "<<hdr.nlong<<endl;
-    geo.setheader(hdr);
-    for (i=0;i<geo.height+1;i++)
-      for (j=0;j<geo.width+1;j++)
-	geo.undula[i*(geo.width+1)+j]=rint(65536*(bigendian?readbefloat(file):readlefloat(file)));
-  }
-  file.close();
-  geo.setslopes();
-  return 0;
+    ret=0;
+  return ret;
 }
 
 double avgelev(xyz dir)

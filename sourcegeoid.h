@@ -57,6 +57,7 @@ public:
   double elev(xyz dir);
   void setslopes();
   void setheader(usngsheader &hdr);
+  void setheader(carlsongsfheader &hdr);
   void settest();
   void dump();
 };
@@ -64,6 +65,11 @@ public:
 bool smooth5(unsigned n);
 std::string readword(std::istream &file);
 double readdouble(std::istream &file);
+/* The read<geoidformat> functions return:
+ * 0 if the file could not be opened for reading
+ * 1 if the file could be opened, but is not of that format
+ * 2 if they succeed.
+ */
 int readusngsbin(geolattice &geo,std::string filename);
 extern std::vector<geolattice> geo;
 double avgelev(xyz dir);
