@@ -35,6 +35,7 @@ using namespace std;
 
 document doc;
 geoheader hdr;
+vector<geoformat> formatlist;
 
 /* The factors used when setting the six components of a geoquad are
  * 0: 1/1
@@ -124,6 +125,41 @@ void outund(string loc,int lat,int lon)
   cout<<"c: "<<cube.undulation(lat,lon)<<endl;
 }
 
+void initformat(string cmd,string ext,string desc,int readfunc(geolattice&,string))
+{
+  geoformat gf;
+  gf.cmd=cmd;
+  gf.ext=ext;
+  gf.desc=desc;
+  gf.readfunc=readfunc;
+  formatlist.push_back(gf);
+}
+
+int readgeoid(string filename)
+/* Returns 0, 1, or 2 like the geoformat.readfunc functions.
+ * If it returns 2, it pushes a geolattice back onto geo
+ * and the filename and format onto hdr.
+ */
+{
+  int i,ret;
+  geolattice gl;
+  for (i=0,ret=1;i<formatlist.size() && ret==1;i++)
+    ret=formatlist[i].readfunc(gl,filename);
+  i--;
+  if (ret==2)
+  {
+    geo.push_back(gl);
+    hdr.namesFormats.push_back(filename);
+    hdr.namesFormats.push_back(formatlist[i].cmd);
+    cout<<"Read "<<filename<<" in format "<<formatlist[i].cmd<<endl;
+  }
+  if (ret==1)
+    cout<<filename<<" does not appear to be a geoid file."<<endl;
+  if (ret==0)
+    cout<<"Could not read "<<filename<<endl;
+  return ret;
+}
+
 /* Command line syntax:
  * -f format		Puts format first on the list of formats to try.
  * -i file		Reads file.
@@ -146,6 +182,8 @@ int main(int argc, char *argv[])
   vball v;
   cout<<"Convertgeoid, part of Bezitopo version "<<VERSION<<" © 2016 Pierre Abbat\n"
   <<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
+  initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin);
+  initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf);
   cube.scale=1/65536.;
   hdr.logScale=-16;
   hdr.planet=BOL_EARTH;
@@ -156,21 +194,16 @@ int main(int argc, char *argv[])
   hdr.sublimit=1000;
   hdr.spacing=1e5;
   correctionHist.setdiscrete(1);
-  /*hdr.namesFormats.push_back("../g2012bu0.bin");
-  hdr.namesFormats.push_back("usngs");
-  hdr.namesFormats.push_back("../g2012ba0.bin");
-  hdr.namesFormats.push_back("usngs");*/
-  hdr.namesFormats.push_back("../g2012bh0.bin");
-  hdr.namesFormats.push_back("usngs");
-  hdr.namesFormats.push_back("../g2012bg0.bin");
-  hdr.namesFormats.push_back("usngs");
-  hdr.namesFormats.push_back("../g2012bs0.bin");
-  hdr.namesFormats.push_back("usngs");
-  hdr.namesFormats.push_back("../g2012bp0.bin");
-  hdr.namesFormats.push_back("usngs");
-  geo.resize(hdr.namesFormats.size()/2);
-  for (i=0;i<geo.size()-1;i++)
-    readusngsbin(geo[i],hdr.namesFormats[i*2]);
+  readgeoid("../g2012bu0.bin");
+  readgeoid("../g2012ba0.bin");
+  readgeoid("../g2012bh0.bin");
+  readgeoid("../g2012bg0.bin");
+  readgeoid("../g2012bs0.bin");
+  readgeoid("../g2012bp0.bin");
+  readgeoid("NCGreenHill150KM.gsf");
+  readgeoid("NCAsheville100M.gsf");
+  readgeoid("contour.ps");
+  readgeoid("ceiling.txt");
   //geo[i].settest();
   //drawglobecube(1024,62,-7,1,0,"geoid.ppm");
   //drawglobemicro(1024,xy(1.3429,0.2848),3e-4,1,0,"geowrangell.ppm");

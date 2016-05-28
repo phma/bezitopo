@@ -62,6 +62,17 @@ public:
   void dump();
 };
 
+struct geoformat
+{
+  /* cmd is the argument to -f on the command line; ext is the file extension.
+   * They are often the same, but ".bin" is used for many types of binary
+   * files, so that format has cmd set to "ngs".
+   * readfunc will need changing when I add boldatni to the list of formats.
+   */
+  std::string cmd,ext,desc;
+  int (*readfunc)(geolattice&,std::string);
+};
+
 bool smooth5(unsigned n);
 std::string readword(std::istream &file);
 double readdouble(std::istream &file);
@@ -71,6 +82,7 @@ double readdouble(std::istream &file);
  * 2 if they succeed.
  */
 int readusngsbin(geolattice &geo,std::string filename);
+int readcarlsongsf(geolattice &geo,string filename);
 extern std::vector<geolattice> geo;
 double avgelev(xyz dir);
 std::array<double,6> correction(geoquad &quad,double qpoints[][16]);

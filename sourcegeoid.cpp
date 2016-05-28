@@ -331,14 +331,21 @@ int readcarlsongsf(geolattice &geo,string filename)
  * https://update.carlsonsw.com/kbase_attach/716/Geoid Separation File Format.pdf
  */
 {
-  int i,j,ret;
+  int i,j,ret=0;
   fstream file;
   carlsongsfheader hdr;
   file.open(filename,fstream::in|fstream::binary);
   if (file.is_open())
   {
-    readcarlsongsfheader(hdr,file);
-    if (sanitycheck(hdr))
+    try
+    {
+      readcarlsongsfheader(hdr,file);
+    }
+    catch (int e)
+    {
+      ret=-e;
+    }
+    if (ret==0 && sanitycheck(hdr))
     {
       cout<<"Header sane"<<endl;
       cout<<"South "<<hdr.south<<" West "<<hdr.west<<endl;
@@ -351,12 +358,14 @@ int readcarlsongsf(geolattice &geo,string filename)
       if (file.fail())
 	ret=1;
       else
+      {
 	ret=2;
+	geo.setslopes();
+      }
     }
     else
       ret=1;
     file.close();
-    geo.setslopes();
   }
   else
     ret=0;
@@ -394,12 +403,14 @@ int readusngsbin(geolattice &geo,string filename)
       if (file.fail())
 	ret=1;
       else
+      {
 	ret=2;
+	geo.setslopes();
+      }
     }
     else
       ret=1;
     file.close();
-    geo.setslopes();
   }
   else
     ret=0;
