@@ -36,6 +36,34 @@ using namespace std;
 document doc;
 geoheader hdr;
 vector<geoformat> formatlist;
+int verbosity=1;
+bool helporversion=false;
+
+struct option
+{
+  char shopt;
+  string lopt;
+  string args;
+  string desc;
+};
+
+struct token
+{
+  int optnum;
+  string nonopt;
+};
+
+vector<option> options(
+  {
+    {'h',"help","","Help using the program"},
+    {'\0',"version","","Output version number"},
+    {'v',"verbose","","Increase verbosity"},
+    {'f',"format","e.g. ngs","Format of the geoid file"},
+    {'o',"output","filename","Output geoid file"},
+    {'c',"circle","lat long radius","Excerpt a region"}
+  });
+
+vector<token> cmdline;
 
 /* The factors used when setting the six components of a geoquad are
  * 0: 1/1
@@ -160,16 +188,104 @@ int readgeoid(string filename)
   return ret;
 }
 
+void argpass1(int argc, char *argv[])
+{
+  int i,j;
+  token tok;
+  for (i=1;i<argc;i++)
+  {
+    tok.optnum=-1;
+    tok.nonopt=argv[i];
+    for (j=0;j<options.size();j++)
+    {
+      if (options[j].shopt && argv[i]==string("-")+options[j].shopt)
+      {
+	tok.optnum=j;
+	tok.nonopt="";
+	cmdline.push_back(tok);
+      }
+      else if (options[j].lopt.length() && argv[i]=="--"+options[j].lopt)
+      {
+	tok.optnum=j;
+	tok.nonopt="";
+	cmdline.push_back(tok);
+      }
+    }
+    if (tok.optnum<0)
+      cmdline.push_back(tok);
+  }
+}
+
+void argpass2()
+{
+  int i,j;
+  for (i=0;i<cmdline.size();i++)
+    switch (cmdline[i].optnum)
+    {
+      case 0:
+	helporversion=true;
+	cout<<"Help"<<endl;
+	break;
+      case 1:
+	helporversion=true;
+	cout<<"Convertgeoid, part of Bezitopo version "<<VERSION<<" © 2016 Pierre Abbat\n"
+	<<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
+	break;
+      case 2:
+	++verbosity;
+	cout<<"verbosity "<<verbosity<<endl;
+	break;
+      case 3:
+	if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+	  cout<<"Setting format to "<<cmdline[i].nonopt<<endl;
+	}
+	else
+	{
+	  cout<<"-f / --format requires an argument, one of:"<<endl;
+	  for (j=0;j<formatlist.size();j++)
+	    cout<<formatlist[j].cmd<<'\t'<<formatlist[j].desc<<endl;
+	}
+	break;
+      case 4:
+	if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+	  cout<<"Geoid will be output to "<<cmdline[i].nonopt<<endl;
+	}
+	else
+	{
+	  cout<<"-o / --output requires an argument, a filename"<<endl;
+	}
+	break;
+      case 5:
+	if (i+2<cmdline.size() && cmdline[i+1].optnum<0 && cmdline[i+2].optnum<0)
+	{
+	  i++;
+	  cout<<"Excerpt will be centered on "<<cmdline[i].nonopt<<" with radius "<<cmdline[i+1].nonopt<<endl;
+	  i++;
+	}
+	else
+	{
+	  cout<<"-c / --circle requires two arguments, a center (latitude/longitude) and a radius"<<endl;
+	}
+	break;
+      default:
+	cout<<"Read file "<<cmdline[i].nonopt<<endl;
+    }
+}
+	
 /* Command line syntax:
  * -f format		Puts format first on the list of formats to try.
- * -i file		Reads file.
  * -o file		Sets the output filename. The file is written after
  * 			all input files are read.
  * -c lat long radius	Excerpts a circle from the geoid file.
  * Outputting the KML file is automatic; there is no option for it.
+ * Arguments not tagged by an option are input files.
  * 
  * Example:
- * convertgeoid -f ngs -i g2012bu0.bin -c 38N99W 150 -f gsf -o Macksville.gsf
+ * convertgeoid -f ngs g2012bu0.bin -c 38N99W 150 -f gsf -o Macksville.gsf
  * Reads the Lower 48 file in NGS format, outputs an excerpt called Macksville.gsf
  * containing a circle of radius 150 km centered at 38N99W in GSF format,
  * and outputs the boundary to file Macksville.gsf.kml .
@@ -180,8 +296,6 @@ int main(int argc, char *argv[])
   ofstream ofile;
   int i;
   vball v;
-  cout<<"Convertgeoid, part of Bezitopo version "<<VERSION<<" © 2016 Pierre Abbat\n"
-  <<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
   initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin);
   initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf);
   cube.scale=1/65536.;
@@ -194,7 +308,9 @@ int main(int argc, char *argv[])
   hdr.sublimit=1000;
   hdr.spacing=1e5;
   correctionHist.setdiscrete(1);
-  readgeoid("../g2012bu0.bin");
+  argpass1(argc,argv);
+  argpass2();
+  /*readgeoid("../g2012bu0.bin");
   readgeoid("../g2012ba0.bin");
   readgeoid("../g2012bh0.bin");
   readgeoid("../g2012bg0.bin");
@@ -203,7 +319,7 @@ int main(int argc, char *argv[])
   readgeoid("NCGreenHill150KM.gsf");
   readgeoid("NCAsheville100M.gsf");
   readgeoid("contour.ps");
-  readgeoid("ceiling.txt");
+  readgeoid("ceiling.txt");*/
   //geo[i].settest();
   //drawglobecube(1024,62,-7,1,0,"geoid.ppm");
   //drawglobemicro(1024,xy(1.3429,0.2848),3e-4,1,0,"geowrangell.ppm");
