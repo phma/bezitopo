@@ -188,6 +188,16 @@ int readgeoid(string filename)
   return ret;
 }
 
+void frontformat(string fmt)
+{
+  int i;
+  for (i=formatlist.size()-1;i>0;i--)
+    if (formatlist[i].cmd==fmt)
+      swap(formatlist[i],formatlist[i-1]);
+  if (fmt!=formatlist[0].cmd)
+    cout<<"Unrecognized format: "<<fmt<<endl;
+}
+
 void argpass1(int argc, char *argv[])
 {
   int i,j;
@@ -239,7 +249,7 @@ void argpass2()
 	if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
 	  i++;
-	  cout<<"Setting format to "<<cmdline[i].nonopt<<endl;
+	  frontformat(cmdline[i].nonopt);
 	}
 	else
 	{
@@ -272,7 +282,8 @@ void argpass2()
 	}
 	break;
       default:
-	cout<<"Read file "<<cmdline[i].nonopt<<endl;
+	if (!helporversion)
+	  readgeoid(cmdline[i].nonopt);
     }
 }
 	
