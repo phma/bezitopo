@@ -21,7 +21,11 @@
  */
 
 #include <cassert>
+#include <cstring>
+#include <utility>
 #include "matrix.h"
+
+using namespace std;
 
 matrix::matrix()
 {
@@ -36,9 +40,28 @@ matrix::matrix(unsigned r,unsigned c)
   entry=new double[r*c];
 }
 
+matrix::matrix(const matrix &b)
+{
+  rows=b.rows;
+  columns=b.columns;
+  entry=new double[rows*columns];
+  memcpy(entry,b.entry,sizeof(double)*rows*columns);
+}
+
 matrix::~matrix()
 {
   delete[] entry;
+}
+
+matrix &matrix::operator=(const matrix &b)
+{
+  if (this!=&b)
+  {
+    matrix c(b);
+    swap(rows,c.rows);
+    swap(columns,c.columns);
+    swap(entry,c.entry);
+  }
 }
 
 double *matrix::operator[](unsigned row)

@@ -31,6 +31,9 @@ protected:
 public:
   matrix();
   matrix(unsigned r,unsigned c);
+  matrix(const matrix &b);
   ~matrix();
+  matrix &operator=(const matrix &b);
   double *operator[](unsigned row);
+  matrix operator+(matrix& b);
 };

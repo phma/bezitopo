@@ -231,13 +231,15 @@ void testin()
 
 void testmatrix()
 {
-  matrix m1(3,4),m2(4,3);
+  int i,j;
+  matrix m1(3,4),m2(4,3),m3(4,3),m4(4,3);
   m1[2][0]=5;
   m1[1][3]=7;
   tassert(m1[2][0]==5);
   m2[2][0]=9;
   m2[1][4]=6;
   tassert(m2[2][0]==9);
+  
 }
 
 void testcopytopopoints()
