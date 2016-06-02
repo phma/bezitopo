@@ -256,6 +256,11 @@ void testmatrix()
     for (j=0;j<3;j++)
       chk4=(50*chk4+(int)m4[i][j])%83;
   tassert(chk4==(chk2+chk3)%83);
+  m4=m2-m3;
+  for (chk4=i=0;i<4;i++)
+    for (j=0;j<3;j++)
+      chk4=(50*chk4+(int)m4[i][j]+332)%83;
+  tassert(chk4==(chk2-chk3+83)%83);
 }
 
 void testcopytopopoints()

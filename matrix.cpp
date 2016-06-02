@@ -80,3 +80,14 @@ matrix matrix::operator+(matrix& b)
     ret.entry[i]+=b.entry[i];
   return ret;
 }
+
+matrix matrix::operator-(matrix& b)
+{
+  if (rows!=b.rows || columns!=b.columns)
+    throw matrixmismatch;
+  matrix ret(*this);
+  int i;
+  for (i=0;i<rows*columns;i++)
+    ret.entry[i]-=b.entry[i];
+  return ret;
+}

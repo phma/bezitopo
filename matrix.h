@@ -36,4 +36,5 @@ public:
   matrix &operator=(const matrix &b);
   double *operator[](unsigned row);
   matrix operator+(matrix& b);
+  matrix operator-(matrix& b);
 };
