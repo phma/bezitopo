@@ -29,6 +29,9 @@
 #include "angle.h"
 #include "geoid.h"
 
+#define HASHPRIME 45605213
+// Used for hashing 256-bit patterns of which samples in a geoquad are valid.
+
 struct usngsheader
 {
   double south,west,latspace,longspace;
@@ -87,3 +90,4 @@ extern std::vector<geolattice> geo;
 double avgelev(xyz dir);
 std::array<double,6> correction(geoquad &quad,double qpoints[][16]);
 double maxerror(geoquad &quad,double qpoints[][16]);
+int quadhash(double qpoints[][16]);

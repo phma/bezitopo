@@ -462,6 +462,23 @@ array<double,6> correction(geoquad &quad,double qpoints[][16])
   return ret;
 }
 
+int quadhash(double qpoints[][16])
+/* Used to remember inverses of matrices for patterns of points in a geoquad
+ * inside and outside the area being converted. Most of them can be formed by
+ * running a straight line through a 16×16 lattice of points and taking all
+ * those on one side.
+ */
+{
+  int i,j,ret;
+  for (ret=i=0;i<16;i++)
+    for (j=0;j<16;j++)
+      if (std::isfinite(qpoints[i][j]))
+	ret=(2*ret)%HASHPRIME;
+      else
+	ret=(2*ret+1)%HASHPRIME;
+  return ret;
+}
+
 double maxerror(geoquad &quad,double qpoints[][16])
 {
   double ret=0;
