@@ -231,7 +231,7 @@ void testin()
 
 void testmatrix()
 {
-  int i,j;
+  int i,j,chk2,chk3,chk4;
   matrix m1(3,4),m2(4,3),m3(4,3),m4(4,3);
   m1[2][0]=5;
   m1[1][3]=7;
@@ -239,7 +239,23 @@ void testmatrix()
   m2[2][0]=9;
   m2[1][4]=6;
   tassert(m2[2][0]==9);
-  
+  for (i=0;i<4;i++)
+    for (j=0;j<3;j++)
+    {
+      m2[i][j]=rng.ucrandom();
+      m3[i][j]=rng.ucrandom();
+    }
+  for (chk2=chk3=i=0;i<4;i++)
+    for (j=0;j<3;j++)
+    {
+      chk2=(50*chk2+(int)m2[i][j])%83;
+      chk3=(50*chk3+(int)m3[i][j])%83;
+    }
+  m4=m2+m3;
+  for (chk4=i=0;i<4;i++)
+    for (j=0;j<3;j++)
+      chk4=(50*chk4+(int)m4[i][j])%83;
+  tassert(chk4==(chk2+chk3)%83);
 }
 
 void testcopytopopoints()
