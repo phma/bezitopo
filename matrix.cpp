@@ -24,6 +24,13 @@
 #include <cstring>
 #include <utility>
 #include "matrix.h"
+#include "manysum.h"
+#include "random.h"
+
+#define BYTERMS 104.51076499576490995918
+/* square root of 10922.5, which is the root-mean-square of a random byte
+ * doubled and offset to center
+ */
 
 using namespace std;
 
@@ -90,4 +97,40 @@ matrix matrix::operator-(matrix& b)
   for (i=0;i<rows*columns;i++)
     ret.entry[i]-=b.entry[i];
   return ret;
+}
+
+matrix matrix::operator*(matrix &b)
+{
+  if (columns!=b.rows)
+    throw matrixmismatch;
+  matrix ret(rows,b.columns);
+  int i,j,k;
+  manysum sum;
+  for (i=0;i<rows;i++)
+    for (j=0;j<b.columns;j++)
+    {
+      sum.clear();
+      for (k=0;k<columns;k++)
+	sum+=(*this)[i][k]*b[k][j];
+      ret[i][j]=sum.total();
+    }
+  return ret;
+}
+
+double matrix::trace()
+{
+  if (columns!=rows)
+    throw matrixmismatch;
+  manysum ret;
+  int i;
+  for (i=0;i<rows;i++)
+    ret+=(*this)[i][i];
+  return ret.total();
+}
+
+void matrix::randomize_c()
+{
+  int i;
+  for (i=0;i<rows*columns;i++)
+    entry[i]=(rng.ucrandom()*2-255)/BYTERMS;
 }

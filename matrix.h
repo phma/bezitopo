@@ -37,4 +37,7 @@ public:
   double *operator[](unsigned row);
   matrix operator+(matrix& b);
   matrix operator-(matrix& b);
+  matrix operator*(matrix& b);
+  double trace();
+  void randomize_c();
 };
