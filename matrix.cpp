@@ -104,19 +104,20 @@ matrix matrix::operator*(matrix &b)
   if (columns!=b.rows)
     throw matrixmismatch;
   matrix ret(rows,b.columns);
-  int i,j,k;
-  manysum sum;
-  //double sum;
+  int h,i,j,k;
+  double *sum;
+  sum=new double[columns];
   for (i=0;i<rows;i++)
     for (j=0;j<b.columns;j++)
     {
-      sum.clear();
-      //sum=0;
       for (k=0;k<columns;k++)
-	sum+=(*this)[i][k]*b[k][j];
-      ret[i][j]=sum.total();
-      //ret[i][j]=sum;
+	sum[k]=(*this)[i][k]*b[k][j];
+      for (h=1;h<columns;h*=2)
+	for (k=0;k+h<columns;k+=2*h)
+	  sum[k]+=sum[k+h];
+      ret[i][j]=sum[0];
     }
+  delete[] sum;
   return ret;
 }
 
