@@ -106,13 +106,16 @@ matrix matrix::operator*(matrix &b)
   matrix ret(rows,b.columns);
   int i,j,k;
   manysum sum;
+  //double sum;
   for (i=0;i<rows;i++)
     for (j=0;j<b.columns;j++)
     {
       sum.clear();
+      //sum=0;
       for (k=0;k<columns;k++)
 	sum+=(*this)[i][k]*b[k][j];
       ret[i][j]=sum.total();
+      //ret[i][j]=sum;
     }
   return ret;
 }
