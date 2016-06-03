@@ -3244,6 +3244,38 @@ void testsmooth5()
   tassert(nsmooth==26);
 }
 
+void testquadhash()
+{
+  int i,j,lastang=-1;
+  map<double,int> langles;
+  map<double,int>::iterator k;
+  vector<int> btangles;
+  for (i=1;i<16;i++)
+    for (j=1;j<=i;j++)
+      if (gcd(j,i)==1)
+      {
+	//cout<<j<<"/"<<i<<endl;
+	langles[j/(double)i]=atan2i(j,i);
+      }
+  langles[0]=0;
+  for (k=langles.begin();k!=langles.end();k++)
+  {
+    //cout<<k->first<<' '<<k->second<<endl;
+    if (lastang>=0)
+    {
+      cout<<(lastang+k->second)/2<<endl;
+      btangles.push_back((lastang+k->second)/2);
+    }
+    lastang=k->second;
+  }
+  for (i=71;i>=0;i--)
+    btangles.push_back(DEG90-btangles[i]);
+  for (i=0;i<432;i++)
+    btangles.push_back(btangles[i]+DEG90);
+  // The total number of between angles is 576.
+  cout<<btangles.size()<<endl;
+}
+
 void testgeoid()
 {
   vball v;
@@ -3570,6 +3602,8 @@ int main(int argc, char *argv[])
     testhistogram();
   if (shoulddo("smooth5"))
     testsmooth5();
+  if (shoulddo("quadhash"))
+    testquadhash();
   if (shoulddo("geoid"))
     testgeoid();
   if (shoulddo("geint"))

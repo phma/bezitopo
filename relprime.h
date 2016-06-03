@@ -22,4 +22,5 @@
 
 #define M_1PHI 0.6180339887498948482046
 
+unsigned gcd(unsigned a,unsigned b);
 unsigned relprime(unsigned n);
