@@ -3246,10 +3246,14 @@ void testsmooth5()
 
 void testquadhash()
 {
-  int i,j,lastang=-1;
+  int i,j,l,lastang=-1,hash;
+  int n,lastn=300;
   map<double,int> langles;
   map<double,int>::iterator k;
+  map<int,double> hashmap;
   vector<int> btangles;
+  double all256[16][16],some256[16][16];
+  double x,y,ofs,s,c,sum;
   for (i=1;i<16;i++)
     for (j=1;j<=i;j++)
       if (gcd(j,i)==1)
@@ -3263,7 +3267,7 @@ void testquadhash()
     //cout<<k->first<<' '<<k->second<<endl;
     if (lastang>=0)
     {
-      cout<<(lastang+k->second)/2<<endl;
+      //cout<<(lastang+k->second)/2<<endl;
       btangles.push_back((lastang+k->second)/2);
     }
     lastang=k->second;
@@ -3274,6 +3278,44 @@ void testquadhash()
     btangles.push_back(btangles[i]+DEG90);
   // The total number of between angles is 576.
   cout<<btangles.size()<<endl;
+  for (i=0;i<16;i++)
+    for (j=0;j<16;j++)
+      all256[i][j]=sin(i-7.5+(j-7.5)*M_1PHI+M_PI/4);
+  for (l=0;l<576;l++)
+  {
+    s=sin(btangles[l]);
+    c=cos(btangles[l]);
+    for (ofs=0;ofs<10.6;ofs+=0.0234375)
+    {
+      sum=n=0;
+      for (i=0;i<16;i++)
+      {
+	y=i-7.5;
+	for (j=0;j<16;j++)
+	{
+	  x=j-7.5;
+	  if (c*x+s*y>ofs)
+	    some256[i][j]=NAN;
+	  else
+	  {
+	    sum+=some256[i][j]=all256[i][j];
+	    n++;
+	  }
+	}
+      }
+      if (n-lastn>1)
+	cout<<"Skipped in direction "<<l<<endl;
+      lastn=n;
+      hash=quadhash(some256);
+      if (hashmap[hash]!=0 && hashmap[hash]!=sum)
+      {
+	cout<<"Hash collision: "<<hash<<' '<<l<<' '<<ofs<<endl;
+      }
+      hashmap[hash]=sum;
+    }
+  }
+  cout<<hashmap.size()<<" different hashes"<<endl;
+  tassert(hashmap.size()==20173);
 }
 
 void testgeoid()

@@ -466,7 +466,9 @@ int quadhash(double qpoints[][16])
 /* Used to remember inverses of matrices for patterns of points in a geoquad
  * inside and outside the area being converted. Most of them can be formed by
  * running a straight line through a 16×16 lattice of points and taking all
- * those on one side.
+ * those on one side. There are 20173 such patterns, all of which have different
+ * hashes. This fills the hash table only 0.00044, so other patterns will
+ * probably not collide with them.
  */
 {
   int i,j,ret;

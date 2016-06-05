@@ -29,7 +29,7 @@
 #include "angle.h"
 #include "geoid.h"
 
-#define HASHPRIME 45605213
+#define HASHPRIME 45605221
 // Used for hashing 256-bit patterns of which samples in a geoquad are valid.
 
 struct usngsheader
