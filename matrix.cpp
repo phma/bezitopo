@@ -138,3 +138,94 @@ void matrix::randomize_c()
   for (i=0;i<rows*columns;i++)
     entry[i]=(rng.ucrandom()*2-255)/BYTERMS;
 }
+
+rowsult matrix::rowop(matrix &b,int row0,int row1)
+/* Does 0 or more of the elementary row operations:
+ * 0: swap row0 and row1
+ * 1: divide row0 by the number in the pivot column
+ * 2: subtract row0 multiplied by the number in the
+ *    pivot column of row1 from row1.
+ * Bits 0, 1, or 2 of flags are set to tell what it did.
+ * The pivot of row 0 is returned as detfactor, negated if it swapped rows.
+ * If b is *this, it is ignored. If not, its rows are swapped, divided,
+ * and subtracted along with this's rows.
+ */
+{
+  rowsult ret;
+  int i;
+  double *temp,*rw0,*rw1,*rwb0,*rwb1;
+  double slope,minslope=2;
+  i=columns;
+  if (b.columns>i)
+    i=b.columns;
+  temp=new double[i];
+  rw0=(*this)[row0];
+  rw1=(*this)[row1];
+  if (this==&b)
+    rwb0=rwb1=nullptr;
+  else
+  {
+    rwb0=b[row0];
+    rwb1=b[row1];
+  }
+  ret.pivot=-1;
+  slope=ret.flags=0;
+  for (i=0;i<columns;i++)
+    if (rw0[i]!=0 && rw1[i]!=0)
+    {
+      if (fabs(rw0[i])>fabs(rw1[i]))
+      {
+	slope=fabs(rw1[i]/rw0[i]);
+	ret.flags&=~8;
+      }
+      else
+      {
+	slope=fabs(rw0[i]/rw1[i]);
+	ret.flags|=8;
+      }
+      if (slope<minslope)
+      {
+	minslope=slope;
+	ret.flags=(ret.flags>>3)*9;
+	ret.pivot=i;
+      }
+    }
+  ret.flags&=1;
+  if (ret.flags)
+  {
+    memcpy(temp,rw0,sizeof(double)*columns);
+    memcpy(rw0,rw1,sizeof(double)*columns);
+    memcpy(rw1,temp,sizeof(double)*columns);
+    if (rwb0)
+    {
+      memcpy(temp,rwb0,sizeof(double)*b.columns);
+      memcpy(rwb0,rwb1,sizeof(double)*b.columns);
+      memcpy(rwb1,temp,sizeof(double)*b.columns);
+    }
+  }
+  if (ret.pivot<1)
+    ret.detfactor=0;
+  else
+    ret.detfactor=rw0[ret.pivot];
+  if (ret.detfactor!=0 && ret.detfactor!=1)
+  {
+    for (i=0;i<columns;i++)
+      rw0[i]/=ret.detfactor;
+    for (i=0;rwb0 && i<b.columns;i++)
+      rwb0[i]/=ret.detfactor;
+    ret.flags+=2;
+  }
+  if (ret.pivot>=0)
+    slope=rw1[ret.pivot];
+  if (slope!=0)
+  {
+    for (i=0;i<columns;i++)
+      rw1[i]-=rw0[i]*slope;
+    for (i=0;rwb0 && i<b.columns;i++)
+      rwb1[i]-=rwb0[i]*slope;
+    ret.flags+=4;
+  }
+  if (ret.flags&1)
+    ret.detfactor=-ret.detfactor;
+  return ret;
+}

@@ -23,11 +23,19 @@
 #define matrixmismatch 7
 #define singularmatrix 8
 
+struct rowsult
+{
+  int pivot; // which column was selected for the pivot, or -1 if the rows are all 0
+  int flags; // which of the three elementary row operations were done
+  double detfactor; // these are multiplied together to compute the determinant
+};
+
 class matrix
 {
 protected:
   unsigned rows,columns;
   double *entry;
+  rowsult rowop(matrix &b,int row0,int row1);
 public:
   matrix();
   matrix(unsigned r,unsigned c);
