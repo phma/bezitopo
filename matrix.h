@@ -41,6 +41,14 @@ public:
   matrix(unsigned r,unsigned c);
   matrix(const matrix &b);
   ~matrix();
+  unsigned getrows()
+  {
+    return rows;
+  }
+  unsigned getcolumns()
+  {
+    return columns;
+  }
   void setidentity();
   void dump();
   matrix &operator=(const matrix &b);
@@ -52,3 +60,5 @@ public:
   void gausselim(matrix &b);
   void randomize_c();
 };
+
+matrix invert(matrix m);

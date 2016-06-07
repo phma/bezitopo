@@ -257,21 +257,31 @@ rowsult matrix::rowop(matrix &b,int row0,int row1)
 void matrix::gausselim(matrix &b)
 {
   int i,j;
-  dump();
+  //dump();
   for (i=0;i<rows;i++)
   {
     for (j=0;j<rows;j++)
       rowop(b,i,j);
-    cout<<endl;
-    dump();
+    //cout<<endl;
+    //dump();
   }
   for (i=rows-1;i>=0;i--)
   {
     for (j=0;j<i;j++)
       rowop(b,i,j);
-    cout<<endl;
-    dump();
+    //cout<<endl;
+    //dump();
   }
-  cout<<endl;
-  b.dump();
+  //cout<<endl;
+  //b.dump();
+}
+
+matrix invert(matrix m)
+{
+  matrix x(m),ret(m);
+  ret.setidentity();
+  x.gausselim(ret);
+  if (x.getrows()>0 && x[x.getrows()-1][x.getrows()-1]==0)
+    ret[0][0]=NAN;
+  return ret;
 }

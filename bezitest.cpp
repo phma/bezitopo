@@ -234,9 +234,10 @@ void testmatrix()
   int i,j,chk2,chk3,chk4;
   matrix m1(3,4),m2(4,3),m3(4,3),m4(4,3);
   matrix t1(37,41),t2(41,43),t3(43,37),p1,p2,p3;
-  matrix hil(8,8),lih(8,8);
+  matrix hil(8,8),lih(8,8),hilprod;
   double tr1,tr2,tr3;
   double toler=8e-13;
+  manysum lihsum;
   m1[2][0]=5;
   m1[1][3]=7;
   tassert(m1[2][0]==5);
@@ -282,8 +283,18 @@ void testmatrix()
   for (i=0;i<8;i++)
     for (j=0;j<8;j++)
       hil[i][j]=1./(i+j+1);
-  lih.setidentity();
-  hil.gausselim(lih);
+  lih=invert(hil);
+  for (i=0;i<8;i++)
+    for (j=0;j<i;j++)
+      lihsum+=fabs(lih[i][j]-lih[j][i]);
+  cout<<"Total asymmetry of inverse of Hilbert matrix is "<<lihsum.total()<<endl;
+  hilprod=hil*lih;
+  lihsum.clear();
+  for (i=0;i<8;i++)
+    for (j=0;j<8;j++)
+      lihsum+=fabs(hilprod[i][j]-(i==j));
+  cout<<"Total error of Hilbert matrix * inverse is "<<lihsum.total()<<endl;
+  tassert(lihsum.total()<1e-6 && lihsum.total()>1e-15);
 }
 
 void testcopytopopoints()
