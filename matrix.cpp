@@ -178,7 +178,7 @@ rowsult matrix::rowop(matrix &b,int row0,int row1)
   rowsult ret;
   int i;
   double *temp,*rw0,*rw1,*rwb0,*rwb1;
-  double slope,minslope=2;
+  double slope,minslope=INFINITY;
   i=columns;
   if (b.columns>i)
     i=b.columns;
@@ -197,7 +197,7 @@ rowsult matrix::rowop(matrix &b,int row0,int row1)
   for (i=0;i<columns;i++)
     if (rw0[i]!=0 && rw1[i]!=0)
     {
-      if (fabs(rw0[i])>fabs(rw1[i]))
+      if (fabs(rw0[i])>fabs(rw1[i]) || row0>=row1)
       {
 	slope=fabs(rw1[i]/rw0[i]);
 	ret.flags&=~8;
@@ -241,7 +241,7 @@ rowsult matrix::rowop(matrix &b,int row0,int row1)
   }
   if (ret.pivot>=0)
     slope=rw1[ret.pivot];
-  if (slope!=0)
+  if (slope!=0 && row0!=row1)
   {
     for (i=0;i<columns;i++)
       rw1[i]-=rw0[i]*slope;
@@ -258,12 +258,20 @@ void matrix::gausselim(matrix &b)
 {
   int i,j;
   dump();
-  for (i=1;i<rows;i*=2);
-  for (;i>0;i/=2)
+  for (i=0;i<rows;i++)
   {
-    for (j=0;j+i<rows;j++)
-      rowop(b,j,j+i);
+    for (j=0;j<rows;j++)
+      rowop(b,i,j);
     cout<<endl;
     dump();
   }
+  for (i=rows-1;i>=0;i--)
+  {
+    for (j=0;j<i;j++)
+      rowop(b,i,j);
+    cout<<endl;
+    dump();
+  }
+  cout<<endl;
+  b.dump();
 }
