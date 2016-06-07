@@ -23,6 +23,8 @@
 #include <cassert>
 #include <cstring>
 #include <utility>
+#include <iostream>
+#include <iomanip>
 #include "matrix.h"
 #include "manysum.h"
 #include "random.h"
@@ -58,6 +60,28 @@ matrix::matrix(const matrix &b)
 matrix::~matrix()
 {
   delete[] entry;
+}
+
+void matrix::setidentity()
+{
+  int i;
+  if (rows!=columns)
+    throw matrixmismatch;
+  memset(entry,0,rows*columns*sizeof(double));
+  for (i=0;i<rows;i++)
+    (*this)[i][i]=1;
+}
+
+void matrix::dump()
+{
+  int i,j,wid=10,prec=3;
+  cout<<scientific;
+  for (i=0;i<rows;i++)
+  {
+    for (j=0;j<columns;j++)
+      cout<<setw(wid)<<setprecision(prec)<<(*this)[i][j];
+    cout<<endl;
+  }
 }
 
 matrix &matrix::operator=(const matrix &b)
@@ -203,7 +227,7 @@ rowsult matrix::rowop(matrix &b,int row0,int row1)
       memcpy(rwb1,temp,sizeof(double)*b.columns);
     }
   }
-  if (ret.pivot<1)
+  if (ret.pivot<0)
     ret.detfactor=0;
   else
     ret.detfactor=rw0[ret.pivot];
@@ -228,4 +252,18 @@ rowsult matrix::rowop(matrix &b,int row0,int row1)
   if (ret.flags&1)
     ret.detfactor=-ret.detfactor;
   return ret;
+}
+
+void matrix::gausselim(matrix &b)
+{
+  int i,j;
+  dump();
+  for (i=1;i<rows;i*=2);
+  for (;i>0;i/=2)
+  {
+    for (j=0;j+i<rows;j++)
+      rowop(b,j,j+i);
+    cout<<endl;
+    dump();
+  }
 }

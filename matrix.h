@@ -41,11 +41,14 @@ public:
   matrix(unsigned r,unsigned c);
   matrix(const matrix &b);
   ~matrix();
+  void setidentity();
+  void dump();
   matrix &operator=(const matrix &b);
   double *operator[](unsigned row);
   matrix operator+(matrix& b);
   matrix operator-(matrix& b);
   matrix operator*(matrix& b);
   double trace();
+  void gausselim(matrix &b);
   void randomize_c();
 };
