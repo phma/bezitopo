@@ -20,6 +20,8 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <vector>
+
 #define matrixmismatch 7
 #define singularmatrix 8
 
@@ -36,6 +38,7 @@ protected:
   unsigned rows,columns;
   double *entry;
   rowsult rowop(matrix &b,int row0,int row1);
+  double _determinant();
 public:
   matrix();
   matrix(unsigned r,unsigned c);
@@ -59,6 +62,7 @@ public:
   double trace();
   void gausselim(matrix &b);
   void randomize_c();
+  double determinant();
 };
 
 matrix invert(matrix m);

@@ -276,6 +276,25 @@ void matrix::gausselim(matrix &b)
   //b.dump();
 }
 
+double matrix::_determinant()
+{
+  int i,j;
+  vector<double> factors;
+  for (i=0;i<rows;i++)
+  {
+    for (j=0;j<rows;j++)
+      factors.push_back(rowop(*this,i,j).detfactor);
+  }
+  if (rows)
+    factors.push_back((*this)[rows-1][columns-1]);
+  else
+    factors.push_back(1);
+  for (i=1;i<factors.size();i*=2)
+    for (j=0;j+i<factors.size();j+=2*i)
+      factors[j]*=factors[j+i];
+  return factors[0];
+}
+
 matrix invert(matrix m)
 {
   matrix x(m),ret(m);
@@ -284,4 +303,12 @@ matrix invert(matrix m)
   if (x.getrows()>0 && x[x.getrows()-1][x.getrows()-1]==0)
     ret[0][0]=NAN;
   return ret;
+}
+
+double matrix::determinant()
+{
+  if (rows!=columns)
+    throw matrixmismatch;
+  matrix b(*this);
+  return b._determinant();
 }

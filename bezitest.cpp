@@ -235,7 +235,7 @@ void testmatrix()
   matrix m1(3,4),m2(4,3),m3(4,3),m4(4,3);
   matrix t1(37,41),t2(41,43),t3(43,37),p1,p2,p3;
   matrix hil(8,8),lih(8,8),hilprod;
-  double tr1,tr2,tr3;
+  double tr1,tr2,tr3,de1,de2,de3;
   double toler=8e-13;
   manysum lihsum;
   m1[2][0]=5;
@@ -275,11 +275,17 @@ void testmatrix()
   tr1=p1.trace();
   tr2=p2.trace();
   tr3=p3.trace();
+  de1=p1.determinant();
+  de2=p2.determinant();
+  de3=p3.determinant();
   cout<<"trace1 "<<ldecimal(tr1)
       <<" trace2 "<<ldecimal(tr2)
       <<" trace3 "<<ldecimal(tr3)<<endl;
   tassert(fabs(tr1-tr2)<toler && fabs(tr2-tr3)<toler && fabs(tr3-tr1)<toler);
   tassert(tr1!=0);
+  cout<<"det1 "<<ldecimal(de1)
+      <<" det2 "<<ldecimal(de2)
+      <<" det3 "<<ldecimal(de3)<<endl;
   for (i=0;i<8;i++)
     for (j=0;j<8;j++)
       hil[i][j]=1./(i+j+1);
