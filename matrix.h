@@ -22,6 +22,11 @@
 
 #include <vector>
 
+#define BYTERMS 104.51076499576490995918
+/* square root of 10922.5, which is the root-mean-square of a random byte
+ * doubled and offset to center
+ */
+
 #define matrixmismatch 7
 #define singularmatrix 8
 
@@ -37,7 +42,7 @@ class matrix
 protected:
   unsigned rows,columns;
   double *entry;
-  rowsult rowop(matrix &b,int row0,int row1);
+  rowsult rowop(matrix &b,int row0,int row1,int piv);
   double _determinant();
 public:
   matrix();
@@ -52,6 +57,7 @@ public:
   {
     return columns;
   }
+  void setzero();
   void setidentity();
   void dump();
   matrix &operator=(const matrix &b);
@@ -60,6 +66,8 @@ public:
   matrix operator-(matrix& b);
   matrix operator*(matrix& b);
   double trace();
+  void swaprows(unsigned r0,unsigned r1);
+  void swapcolumns(unsigned c0,unsigned c1);
   void gausselim(matrix &b);
   void randomize_c();
   double determinant();

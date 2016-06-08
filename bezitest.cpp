@@ -229,14 +229,52 @@ void testin()
   test1in(b,c,h,n,0);
 }
 
+void knowndet(matrix &mat)
+/* Sets mat to a triangular matrix with ones on the diagonal, which is known
+ * to have determinant 1, then permutes the rows and columns so that Gaussian
+ * elimination will mess up the entries.
+ *
+ * The number of rows should be 40 at most. More than that, and it will not
+ * be shuffled well.
+ */
+{
+  int i,j,ran,rr,rc,cc,flipcount,size;
+  mat.setidentity();
+  size=mat.getrows();
+  for (i=0;i<size;i++)
+    for (j=0;j<i;j++)
+      mat[i][j]=(rng.ucrandom()*2-255)/BYTERMS;
+  for (flipcount=0;flipcount<2*size || (flipcount&1);)
+  { // If flipcount were odd, the determinant would be -1 instead of 1.
+    ran=rng.usrandom();
+    rr=ran%size;
+    ran/=size;
+    rc=ran%size;
+    ran/=size;
+    cc=ran%size;
+    if (rr!=rc)
+    {
+      flipcount++;
+      mat.swaprows(rr,rc);
+    }
+    if (rc!=cc)
+    {
+      flipcount++;
+      mat.swapcolumns(rc,cc);
+    }
+  }
+}
+
 void testmatrix()
 {
   int i,j,chk2,chk3,chk4;
   matrix m1(3,4),m2(4,3),m3(4,3),m4(4,3);
   matrix t1(37,41),t2(41,43),t3(43,37),p1,p2,p3;
   matrix hil(8,8),lih(8,8),hilprod;
+  matrix kd(7,7);
   double tr1,tr2,tr3,de1,de2,de3;
   double toler=8e-13;
+  double kde;
   manysum lihsum;
   m1[2][0]=5;
   m1[1][3]=7;
@@ -283,9 +321,11 @@ void testmatrix()
       <<" trace3 "<<ldecimal(tr3)<<endl;
   tassert(fabs(tr1-tr2)<toler && fabs(tr2-tr3)<toler && fabs(tr3-tr1)<toler);
   tassert(tr1!=0);
-  cout<<"det1 "<<ldecimal(de1)
-      <<" det2 "<<ldecimal(de2)
-      <<" det3 "<<ldecimal(de3)<<endl;
+  cout<<"det1 "<<de1
+      <<" det2 "<<de2
+      <<" det3 "<<de3<<endl;
+  tassert(fabs(de1)>1e83 && fabs(de2)<1e45 && fabs(de3)<1e23);
+  // de2 and de3 would actually be 0 with exact arithmetic.
   for (i=0;i<8;i++)
     for (j=0;j<8;j++)
       hil[i][j]=1./(i+j+1);
@@ -300,7 +340,12 @@ void testmatrix()
     for (j=0;j<8;j++)
       lihsum+=fabs(hilprod[i][j]-(i==j));
   cout<<"Total error of Hilbert matrix * inverse is "<<lihsum.total()<<endl;
-  tassert(lihsum.total()<1e-6 && lihsum.total()>1e-15);
+  tassert(lihsum.total()<2e-5 && lihsum.total()>1e-15);
+  knowndet(kd);
+  kd.dump();
+  kde=kd.determinant();
+  cout<<"Determinant of shuffled matrix is "<<ldecimal(kde)<<endl;
+  tassert(fabs(kde-1)<5e-15);
 }
 
 void testcopytopopoints()

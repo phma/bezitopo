@@ -29,11 +29,6 @@
 #include "manysum.h"
 #include "random.h"
 
-#define BYTERMS 104.51076499576490995918
-/* square root of 10922.5, which is the root-mean-square of a random byte
- * doubled and offset to center
- */
-
 using namespace std;
 
 matrix::matrix()
@@ -62,12 +57,17 @@ matrix::~matrix()
   delete[] entry;
 }
 
+void matrix::setzero()
+{
+  memset(entry,0,rows*columns*sizeof(double));
+}
+
 void matrix::setidentity()
 {
   int i;
   if (rows!=columns)
     throw matrixmismatch;
-  memset(entry,0,rows*columns*sizeof(double));
+  setzero();
   for (i=0;i<rows;i++)
     (*this)[i][i]=1;
 }
@@ -156,6 +156,22 @@ double matrix::trace()
   return ret.total();
 }
 
+void matrix::swaprows(unsigned r0,unsigned r1)
+{
+  double *temp;
+  temp=new double[columns];
+  memcpy(temp,(*this)[r0],sizeof(double)*columns);
+  memcpy((*this)[r0],(*this)[r1],sizeof(double)*columns);
+  memcpy((*this)[r1],temp,sizeof(double)*columns);
+}
+
+void matrix::swapcolumns(unsigned c0,unsigned c1)
+{
+  unsigned i;
+  for (i=0;i<rows;i++)
+    swap((*this)[i][c0],(*this)[i][c1]);
+}
+
 void matrix::randomize_c()
 {
   int i;
@@ -163,7 +179,7 @@ void matrix::randomize_c()
     entry[i]=(rng.ucrandom()*2-255)/BYTERMS;
 }
 
-rowsult matrix::rowop(matrix &b,int row0,int row1)
+rowsult matrix::rowop(matrix &b,int row0,int row1,int piv)
 /* Does 0 or more of the elementary row operations:
  * 0: swap row0 and row1
  * 1: divide row0 by the number in the pivot column
@@ -192,9 +208,13 @@ rowsult matrix::rowop(matrix &b,int row0,int row1)
     rwb0=b[row0];
     rwb1=b[row1];
   }
-  ret.pivot=-1;
   slope=ret.flags=0;
-  for (i=0;i<columns;i++)
+  if (piv>=0 && rw0[piv]==0 && rw1[piv]==0)
+    piv=-1;
+  ret.pivot=piv;
+  if (piv>=0 && rw0[piv]==0)
+    ret.flags=9;
+  for (i=0;piv<0 && i<columns;i++) // Find a pivot if none was given.
     if (rw0[i]!=0 && rw1[i]!=0)
     {
       if (fabs(rw0[i])>fabs(rw1[i]) || row0>=row1)
@@ -258,17 +278,21 @@ void matrix::gausselim(matrix &b)
 {
   int i,j;
   //dump();
+  /*for (i=1;i<rows;i*=2)
+    for (j=0;j+i<rows;j++)
+      if ((j&i)==0)
+	rowop(b,j,j+i,-1);*/
   for (i=0;i<rows;i++)
   {
     for (j=0;j<rows;j++)
-      rowop(b,i,j);
+      rowop(b,i,j,i);
     //cout<<endl;
     //dump();
   }
   for (i=rows-1;i>=0;i--)
   {
     for (j=0;j<i;j++)
-      rowop(b,i,j);
+      rowop(b,i,j,i);
     //cout<<endl;
     //dump();
   }
@@ -278,12 +302,26 @@ void matrix::gausselim(matrix &b)
 
 double matrix::_determinant()
 {
-  int i,j;
+  int i,j,lastpivot,runlen;
   vector<double> factors;
+  rowsult rsult;
   for (i=0;i<rows;i++)
   {
-    for (j=0;j<rows;j++)
-      factors.push_back(rowop(*this,i,j).detfactor);
+    for (j=i;j<rows;j++)
+    {
+      rsult=rowop(*this,i,j,i);
+      factors.push_back(rsult.detfactor);
+      if (i!=j)
+      {
+	if (rsult.pivot==lastpivot)
+	  runlen++;
+	else
+	  runlen=0;
+	lastpivot=rsult.pivot;
+      }
+    }
+    //cout<<endl;
+    //dump();
   }
   if (rows)
     factors.push_back((*this)[rows-1][columns-1]);
