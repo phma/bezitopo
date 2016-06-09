@@ -215,7 +215,7 @@ rowsult matrix::rowop(matrix &b,int row0,int row1,int piv)
   if (piv>=0 && rw0[piv]==0)
     ret.flags=9;
   for (i=0;piv<0 && i<columns;i++) // Find a pivot if none was given.
-    if (rw0[i]!=0 && rw1[i]!=0)
+    if (rw0[i]!=0 || rw1[i]!=0)
     {
       if (fabs(rw0[i])>fabs(rw1[i]) || row0>=row1)
       {
@@ -310,7 +310,8 @@ double matrix::_determinant()
     for (j=i;j<rows;j++)
     {
       rsult=rowop(*this,i,j,i);
-      factors.push_back(rsult.detfactor);
+      if (rsult.detfactor!=1)
+	factors.push_back(rsult.detfactor);
       if (i!=j)
       {
 	if (rsult.pivot==lastpivot)

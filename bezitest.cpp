@@ -265,6 +265,45 @@ void knowndet(matrix &mat)
   }
 }
 
+void dumpknowndet(matrix &mat)
+{
+  int i,j,byte;
+  for (i=0;i<mat.getrows();i++)
+    for (j=0;j<mat.getcolumns();j++)
+    {
+      if (mat[i][j]==0)
+	cout<<"z0";
+      else if (mat[i][j]==1)
+	cout<<"z1";
+      else
+      {
+	byte=rint(mat[i][j]*BYTERMS/2+127.5);
+	cout<<hexdig[byte>>4]<<hexdig[byte&15];
+      }
+    }
+  cout<<endl;
+}
+
+void loadknowndet(matrix &mat,string dump)
+{
+  int i,j,byte;
+  string item;
+  for (i=0;i<mat.getrows();i++)
+    for (j=0;j<mat.getcolumns();j++)
+    {
+      item=dump.substr(0,2);
+      dump.erase(0,2);
+      if (item[0]=='z')
+	mat[i][j]=item[1]-'0';
+      else
+      {
+	byte=stoi(item,0,16);
+	mat[i][j]=(byte*2-255)/BYTERMS;
+      }
+    }
+  cout<<endl;
+}
+
 void testmatrix()
 {
   int i,j,chk2,chk3,chk4;
@@ -342,7 +381,9 @@ void testmatrix()
   cout<<"Total error of Hilbert matrix * inverse is "<<lihsum.total()<<endl;
   tassert(lihsum.total()<2e-5 && lihsum.total()>1e-15);
   knowndet(kd);
+  //loadknowndet(kd,"z0z0z0z1c9dd28z0z1z03c46c35cz0z0z0z0z1z0z0aa74z169f635e3z0z0z0z003z0z1z0z0z0z0fcz146z160z000f50091");
   kd.dump();
+  dumpknowndet(kd);
   kde=kd.determinant();
   cout<<"Determinant of shuffled matrix is "<<ldecimal(kde)<<endl;
   tassert(fabs(kde-1)<5e-15);
