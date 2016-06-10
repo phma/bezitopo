@@ -163,6 +163,7 @@ void matrix::swaprows(unsigned r0,unsigned r1)
   memcpy(temp,(*this)[r0],sizeof(double)*columns);
   memcpy((*this)[r0],(*this)[r1],sizeof(double)*columns);
   memcpy((*this)[r1],temp,sizeof(double)*columns);
+  delete[] temp;
 }
 
 void matrix::swapcolumns(unsigned c0,unsigned c1)
@@ -271,6 +272,7 @@ rowsult matrix::rowop(matrix &b,int row0,int row1,int piv)
   }
   if (ret.flags&1)
     ret.detfactor=-ret.detfactor;
+  delete[] temp;
   return ret;
 }
 

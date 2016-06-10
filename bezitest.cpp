@@ -77,6 +77,7 @@
 #define CBRT2 1.2599210498948731647592197537
 
 #define tassert(x) testfail|=(!(x))
+//#define tassert(x) if (!(x)) {testfail=true; sleep(10);}
 // so that tests still work in non-debug builds
 
 using namespace std;
@@ -312,8 +313,9 @@ void testmatrix()
   matrix hil(8,8),lih(8,8),hilprod;
   matrix kd(7,7);
   double tr1,tr2,tr3,de1,de2,de3;
-  double toler=8e-13;
+  double toler=1.2e-12;
   double kde;
+  double lo,hi;
   manysum lihsum;
   m1[2][0]=5;
   m1[1][3]=7;
@@ -343,28 +345,38 @@ void testmatrix()
     for (j=0;j<3;j++)
       chk4=(50*chk4+(int)m4[i][j]+332)%83;
   tassert(chk4==(chk2-chk3+83)%83);
-  t1.randomize_c();
-  t2.randomize_c();
-  t3.randomize_c();
-  p1=t1*t2*t3;
-  p2=t2*t3*t1;
-  p3=t3*t1*t2;
-  tr1=p1.trace();
-  tr2=p2.trace();
-  tr3=p3.trace();
-  de1=p1.determinant();
-  de2=p2.determinant();
-  de3=p3.determinant();
-  cout<<"trace1 "<<ldecimal(tr1)
-      <<" trace2 "<<ldecimal(tr2)
-      <<" trace3 "<<ldecimal(tr3)<<endl;
-  tassert(fabs(tr1-tr2)<toler && fabs(tr2-tr3)<toler && fabs(tr3-tr1)<toler);
-  tassert(tr1!=0);
-  cout<<"det1 "<<de1
-      <<" det2 "<<de2
-      <<" det3 "<<de3<<endl;
-  tassert(fabs(de1)>1e83 && fabs(de2)<1e45 && fabs(de3)<1e23);
-  // de2 and de3 would actually be 0 with exact arithmetic.
+  lo=INFINITY;
+  hi=0;
+  for (i=0;i<1;i++)
+  {
+    t1.randomize_c();
+    t2.randomize_c();
+    t3.randomize_c();
+    p1=t1*t2*t3;
+    p2=t2*t3*t1;
+    p3=t3*t1*t2;
+    tr1=p1.trace();
+    tr2=p2.trace();
+    tr3=p3.trace();
+    de1=p1.determinant();
+    de2=p2.determinant();
+    de3=p3.determinant();
+    cout<<"trace1 "<<ldecimal(tr1)
+	<<" trace2 "<<ldecimal(tr2)
+	<<" trace3 "<<ldecimal(tr3)<<endl;
+    tassert(fabs(tr1-tr2)<toler && fabs(tr2-tr3)<toler && fabs(tr3-tr1)<toler);
+    tassert(tr1!=0);
+    cout<<"det1 "<<de1
+	<<" det2 "<<de2
+	<<" det3 "<<de3<<endl;
+    tassert(fabs(de1)>1e80 && fabs(de2)<1e60 && fabs(de3)<1e52);
+    // de2 and de3 would actually be 0 with exact arithmetic.
+    if (fabs(de2)>hi)
+      hi=fabs(de2);
+    if (fabs(de2)<lo)
+      lo=fabs(de2);
+  }
+  cout<<"Lowest det2 "<<lo<<" Highest det2 "<<hi<<endl;
   for (i=0;i<8;i++)
     for (j=0;j<8;j++)
       hil[i][j]=1./(i+j+1);
@@ -380,13 +392,17 @@ void testmatrix()
       lihsum+=fabs(hilprod[i][j]-(i==j));
   cout<<"Total error of Hilbert matrix * inverse is "<<lihsum.total()<<endl;
   tassert(lihsum.total()<2e-5 && lihsum.total()>1e-15);
-  knowndet(kd);
-  //loadknowndet(kd,"z0z0z0z1c9dd28z0z1z03c46c35cz0z0z0z0z1z0z0aa74z169f635e3z0z0z0z003z0z1z0z0z0z0fcz146z160z000f50091");
-  kd.dump();
-  dumpknowndet(kd);
-  kde=kd.determinant();
-  cout<<"Determinant of shuffled matrix is "<<ldecimal(kde)<<endl;
-  tassert(fabs(kde-1)<5e-15);
+  for (i=0;i<1;i++)
+  {
+    knowndet(kd);
+    //loadknowndet(kd,"z0z0z0z1c9dd28z0z1z03c46c35cz0z0z0z0z1z0z0aa74z169f635e3z0z0z0z003z0z1z0z0z0z0fcz146z160z000f50091");
+    //loadknowndet(kd,"a6z1fc7ce056d6d1z0z0z0z0z1b49ez0z0z1z02f53z1z0z0z0z0z0z0e2z0z097z1230488z0z19b25484e1ez0z0z0z0z0z1");
+    kd.dump();
+    dumpknowndet(kd);
+    kde=kd.determinant();
+    cout<<"Determinant of shuffled matrix is "<<ldecimal(kde)<<" diff "<<kde-1<<endl;
+    tassert(fabs(kde-1)<4e-12);
+  }
 }
 
 void testcopytopopoints()
@@ -3542,9 +3558,13 @@ void testgeoid()
       u0=geo[0].elev(i,j);
       u1=cube.undulation(i,j);
       if (std::isnan(u0))
+      {
 	tassert(std::isnan(u1));
+      }
       else
+      {
 	tassert(fabs(u1-u0)<0.001);
+      }
     }
 }
 
