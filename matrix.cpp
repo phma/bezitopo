@@ -287,6 +287,7 @@ void matrix::gausselim(matrix &b)
 	rowop(b,j,j+i,-1);*/
   for (i=0;i<rows;i++)
   {
+    findpivot(b,i,i);
     for (j=0;j<rows;j++)
       rowop(b,i,j,i);
     //cout<<endl;

@@ -394,9 +394,9 @@ void testmatrix()
   tassert(lihsum.total()<2e-5 && lihsum.total()>1e-15);
   for (i=0;i<1;i++)
   {
-    //knowndet(kd);
+    knowndet(kd);
     //loadknowndet(kd,"z0z0z0z1c9dd28z0z1z03c46c35cz0z0z0z0z1z0z0aa74z169f635e3z0z0z0z003z0z1z0z0z0z0fcz146z160z000f50091");
-    loadknowndet(kd,"a6z1fc7ce056d6d1z0z0z0z0z1b49ez0z0z1z02f53z1z0z0z0z0z0z0e2z0z097z1230488z0z19b25484e1ez0z0z0z0z0z1");
+    //loadknowndet(kd,"a6z1fc7ce056d6d1z0z0z0z0z1b49ez0z0z1z02f53z1z0z0z0z0z0z0e2z0z097z1230488z0z19b25484e1ez0z0z0z0z0z1");
     kd.dump();
     dumpknowndet(kd);
     kde=kd.determinant();
