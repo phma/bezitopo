@@ -28,6 +28,7 @@
 #include "matrix.h"
 #include "manysum.h"
 #include "random.h"
+#include "angle.h"
 
 using namespace std;
 
@@ -302,6 +303,48 @@ void matrix::gausselim(matrix &b)
   //b.dump();
 }
 
+bool matrix::findpivot(matrix &b,int row,int column)
+/* Finds a pivot element in column, at or below row. If all elements are 0,
+ * tries the next column to the right, until it runs out of matrix.
+ * If the pivot element is not in row, it swaps two rows and returns true.
+ * This tells _determinant to multiply by -1.
+ */
+{
+  int i,j,k,pivotrow;
+  double *squares,*ratios,*thisrow,maxratio;
+  squares=new double[columns];
+  ratios=new double[rows];
+  for (pivotrow=-1,maxratio=0;pivotrow<row && column<columns;column++)
+  {
+    memset(ratios,0,rows*sizeof(double));
+    for (i=row;i<rows;i++)
+    {
+      thisrow=(*this)[i];
+      memset(squares,0,columns*sizeof(double));
+      for (j=column+1;j<columns;j++)
+	squares[j-column-1]=sqr(thisrow[j]);
+      for (k=1;k<columns;k*=2)
+	for (j=0;j<columns-column;j+=2*k)
+	  squares[j]+=squares[j+k];
+      ratios[i]=sqr(thisrow[column])/squares[0];
+      if (ratios[i]>maxratio)
+      {
+	pivotrow=i;
+	maxratio=ratios[i];
+      }
+    }
+  }
+  if (pivotrow>row)
+  {
+    swaprows(pivotrow,row);
+    if (&b!=this)
+      b.swaprows(pivotrow,row);
+  }
+  delete[] ratios;
+  delete[] squares;
+  return pivotrow>row;
+}
+
 double matrix::_determinant()
 {
   int i,j,lastpivot,runlen;
@@ -309,7 +352,9 @@ double matrix::_determinant()
   rowsult rsult;
   for (i=0;i<rows;i++)
   {
-    for (j=i;j<rows;j++)
+    if (findpivot(*this,i,i))
+      factors.push_back(-1);
+    for (j=i+1;j<rows;j++)
     {
       rsult=rowop(*this,i,j,i);
       if (rsult.detfactor!=1)

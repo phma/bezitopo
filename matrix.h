@@ -44,6 +44,7 @@ protected:
   double *entry;
   rowsult rowop(matrix &b,int row0,int row1,int piv);
   double _determinant();
+  bool findpivot(matrix &b,int row,int column);
 public:
   matrix();
   matrix(unsigned r,unsigned c);
