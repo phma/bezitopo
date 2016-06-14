@@ -29,6 +29,12 @@
  * at the low end. This can happen only when adding numbers of opposite sign,
  * which does not happen when computing volumes, as positive and negative
  * volumes are added separately so that compaction of dirt can be computed.
+ * 
+ * manysum is suited to sums where the number of addends is large and not known
+ * in advance and computing each one takes a long time. If the number of addends
+ * is known, or a bound is known, in advance and the addends are calculated
+ * quickly, it is better to allocate an array and use pairwise summation.
+ * See matrix.cpp and spiral.cpp for examples.
  */
 
 class manysum
