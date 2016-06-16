@@ -58,6 +58,26 @@ matrix::~matrix()
   delete[] entry;
 }
 
+void matrix::resize(unsigned newrows,unsigned newcolumns)
+{
+  unsigned fewrows,fewcolumns,i;
+  double *newentry;
+  newentry=new double[newrows*newcolumns];
+  if (newrows<rows)
+    fewrows=newrows;
+  else
+    fewrows=rows;
+  if (newcolumns<columns)
+    fewcolumns=newcolumns;
+  else
+    fewcolumns=columns;
+  memset(newentry,0,sizeof(double)*newrows*newcolumns);
+  for (i=0;i<fewrows;i++)
+    memcpy(newentry+i*newcolumns*sizeof(double),entry+i*columns*sizeof(double),fewcolumns*sizeof(double));
+  swap(newentry,entry);
+  delete[] newentry;
+}
+
 void matrix::setzero()
 {
   memset(entry,0,rows*columns*sizeof(double));

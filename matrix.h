@@ -50,6 +50,7 @@ public:
   matrix(unsigned r,unsigned c);
   matrix(const matrix &b);
   ~matrix();
+  void resize(unsigned newrows,unsigned newcolumns);
   unsigned getrows()
   {
     return rows;
