@@ -239,13 +239,13 @@ void knowndet(matrix &mat)
  * be shuffled well.
  */
 {
-  int i,j,ran,rr,rc,cc,flipcount,size;
+  int i,j,ran,rr,rc,cc,flipcount,size,giveup;
   mat.setidentity();
   size=mat.getrows();
   for (i=0;i<size;i++)
     for (j=0;j<i;j++)
       mat[i][j]=(rng.ucrandom()*2-255)/BYTERMS;
-  for (flipcount=0;flipcount<2*size || (flipcount&1);)
+  for (flipcount=giveup=0;(flipcount<2*size || (flipcount&1)) && giveup<10000;giveup++)
   { // If flipcount were odd, the determinant would be -1 instead of 1.
     ran=rng.usrandom();
     rr=ran%size;
