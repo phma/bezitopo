@@ -25,6 +25,7 @@
 #include "sourcegeoid.h"
 #include "binio.h"
 #include "bicubic.h"
+#include "manysum.h"
 
 using namespace std;
 vector<geolattice> geo;
@@ -431,6 +432,33 @@ double avgelev(xyz dir)
     }
   }
   return sum/n;
+}
+
+matrix autocorr(double qpoints[][16])
+/* Autocorrelation of the six undulation components, masked by which of qpoints
+ * are finite. When all are finite, the matrix is diagonal-dominant, but when
+ * only half are finite, it often isn't.
+ */
+{
+  geoquad unitquad[6];
+  int i,j,k,l;
+  matrix ret(6,6);
+  manysum sum;
+  for (i=0;i<6;i++)
+    for (j=0;j<6;j++)
+      unitquad[i].und[j]=i==j;
+  for (i=0;i<6;i++)
+    for (j=0;j<=i;j++)
+    {
+      sum.clear();
+      for (k=0;k<16;k++)
+	for (l=0;l<16;l++)
+	  if (std::isfinite(qpoints[k][l]))
+	    sum+=unitquad[i].undulation(-0.9375+0.125*k,-0.9375+0.125*l)
+	        *unitquad[j].undulation(-0.9375+0.125*k,-0.9375+0.125*l);
+      ret[i][j]=ret[j][i]=sum.total();
+    }
+  return ret;
 }
 
 array<double,6> correction(geoquad &quad,double qpoints[][16])

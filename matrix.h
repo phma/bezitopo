@@ -20,6 +20,8 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef MATRIX_H
+#define MATRIX_H
 #include <vector>
 
 #define BYTERMS 104.51076499576490995918
@@ -76,3 +78,4 @@ public:
 };
 
 matrix invert(matrix m);
+#endif

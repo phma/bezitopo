@@ -28,6 +28,7 @@
 #include <array>
 #include "angle.h"
 #include "geoid.h"
+#include "matrix.h"
 
 #define HASHPRIME 45605221
 // Used for hashing 256-bit patterns of which samples in a geoquad are valid.
@@ -91,3 +92,4 @@ double avgelev(xyz dir);
 std::array<double,6> correction(geoquad &quad,double qpoints[][16]);
 double maxerror(geoquad &quad,double qpoints[][16]);
 int quadhash(double qpoints[][16]);
+matrix autocorr(double qpoints[][16]);
