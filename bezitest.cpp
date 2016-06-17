@@ -206,6 +206,74 @@ void test1in(xy p,xy a,xy b,xy c,int windnum)
   tassert(wind==windnum);
 }
 
+latlong randomPoint()
+/* Pick a point on the sphere according to the spherical asteraceous pattern.
+ * This is used for testing usrandom.
+ */
+{
+  int r1;
+  latlong ret;
+  r1=rng.usrandom();
+  ret.lat=asin((2*r1+1)/65536.-1);
+  ret.lon=M_1PHI*(2*r1+1)/2.;
+  ret.lon-=rint(ret.lon);
+  ret.lon*=2*M_PI;
+  return ret;
+}
+
+void testrandom()
+{
+  int hist[256],i;
+  int done=0,max,min,maxstep=0;
+  manysum xsum,ysum,zsum;
+  double distsq;
+  latlong ll;
+  memset(hist,0,sizeof(hist));
+  while (!done)
+  {
+    hist[rng.ucrandom()]++;
+    for (max=i=0,min=16777777;i<256;i++)
+    {
+      if (hist[i]>max)
+	max=hist[i];
+      if (hist[i]<min)
+	min=hist[i];
+    }
+    if (max>16777215)
+      done=-1;
+    if (max-min>1.1*pow(max,1/3.) && max-min<0.9*pow(max,2/3.))
+      done=1;
+    if (max-maxstep>=16384)
+    {
+      maxstep=max;
+      //cout<<max<<' '<<min<<endl;
+    }
+  }
+  tassert(done==1);
+  cout<<"Random test: max "<<max<<" min "<<min<<endl;
+  for (i=done=0;i<16777216 && !done;i++)
+  {
+    ll=randomPoint();
+    xsum+=cos(ll.lat)*cos(ll.lon);
+    ysum+=cos(ll.lat)*sin(ll.lon);
+    zsum+=sin(ll.lat);
+    distsq=sqr(xsum.total())+sqr(ysum.total())+sqr(zsum.total());
+    if (i%65536==65535)
+      cout<<i<<' '<<distsq/(i+1)<<endl;
+    if (i>1024)
+    {
+      if (fabs(distsq/(i+1)-1)<0.0005)
+	done=1;
+      if (distsq<1)
+	done=-1;
+      if (distsq>sqr(i+1)/3)
+	done=-2;
+    }
+  }
+  cout<<i<<' '<<distsq/(i+1)<<endl;
+  tassert(done==1);
+}
+
 void testin()
 {
   xy a(0,0),b(4,0),c(0,3),d(4/3.,1),e(4,3),f(5,0),g(7,-1),h(8,-3),
@@ -3663,6 +3731,8 @@ int main(int argc, char *argv[])
     testarea3();
   if (shoulddo("relprime"))
     testrelprime();
+  if (shoulddo("random"))
+    testrandom();
   if (shoulddo("intersection"))
     testintersection();
   if (shoulddo("in"))

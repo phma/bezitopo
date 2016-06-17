@@ -25,7 +25,7 @@
 
 randm::randm()
 {
-  randfil=fopen("/dev/zero","rb");
+  randfil=fopen("/dev/urandom","rb");
 }
 
 randm::~randm()
