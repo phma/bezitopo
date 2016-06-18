@@ -93,3 +93,4 @@ std::array<double,6> correction(geoquad &quad,double qpoints[][16]);
 double maxerror(geoquad &quad,double qpoints[][16]);
 int quadhash(double qpoints[][16]);
 matrix autocorr(double qpoints[][16]);
+void dump256(double qpoints[][16]);

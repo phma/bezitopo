@@ -3445,6 +3445,7 @@ void testquadhash()
   map<double,int>::iterator k;
   map<int,double> hashmap;
   vector<int> btangles;
+  matrix acorr,invcorr;
   double all256[16][16],some256[16][16];
   double x,y,ofs,s,c,sum;
   for (i=1;i<16;i++)
@@ -3503,6 +3504,15 @@ void testquadhash()
       if (hashmap[hash]!=0 && hashmap[hash]!=sum)
       {
 	cout<<"Hash collision: "<<hash<<' '<<l<<' '<<ofs<<endl;
+      }
+      if (hashmap[hash]==0 && n==129 && l%32==0)
+      {
+	acorr=autocorr(some256);
+	invcorr=invert(acorr);
+	acorr.dump();
+	dump256(some256);
+	invcorr.dump();
+	cout<<endl;
       }
       hashmap[hash]=sum;
     }

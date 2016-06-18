@@ -461,6 +461,20 @@ matrix autocorr(double qpoints[][16])
   return ret;
 }
 
+void dump256(double qpoints[][16])
+{
+  int i,j;
+  for (i=0;i<16;i++)
+  {
+    for (j=0;j<16;j++)
+      if (std::isfinite(qpoints[i][j]))
+	cout<<" *";
+      else
+	cout<<" -";
+    cout<<endl;
+  }
+}
+
 array<double,6> correction(geoquad &quad,double qpoints[][16])
 {
   array<double,6> ret;
