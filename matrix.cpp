@@ -43,6 +43,7 @@ matrix::matrix(unsigned r,unsigned c)
   rows=r;
   columns=c;
   entry=new double[r*c];
+  memset(entry,0,sizeof(double)*r*c);
 }
 
 matrix::matrix(const matrix &b)

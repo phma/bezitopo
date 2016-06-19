@@ -3505,7 +3505,7 @@ void testquadhash()
       {
 	cout<<"Hash collision: "<<hash<<' '<<l<<' '<<ofs<<endl;
       }
-      if (hashmap[hash]==0 && n==129 && l%32==0)
+      if (hashmap[hash]==0 && n==256 /*&& l%32==0*/)
       {
 	acorr=autocorr(some256);
 	invcorr=invert(acorr);

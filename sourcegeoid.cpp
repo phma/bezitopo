@@ -29,6 +29,7 @@
 
 using namespace std;
 vector<geolattice> geo;
+map<int,matrix> quadinv;
 
 bool smooth5(unsigned n)
 /* Used for deciding the number of divisions of a circle in a lat-long grid.
@@ -478,9 +479,13 @@ void dump256(double qpoints[][16])
 array<double,6> correction(geoquad &quad,double qpoints[][16])
 {
   array<double,6> ret;
-  int i,j,k;
+  matrix preret(6,1);
+  int i,j,k,qhash;
   double diff;
   geoquad unitquad;
+  qhash=quadhash(qpoints);
+  if (quadinv.count(qhash)==0)
+    quadinv[qhash]=invert(autocorr(qpoints));
   for (i=0;i<6;i++)
     ret[i]=0;
   for (i=0;i<16;i++)
@@ -492,15 +497,18 @@ array<double,6> correction(geoquad &quad,double qpoints[][16])
 	{
 	  unitquad.und[k]=1;
 	  unitquad.und[(k+5)%6]=0;
-	  ret[k]+=diff*unitquad.undulation(-0.9375+0.125*i,-0.9375+0.125*j);
+	  preret[k][0]+=diff*unitquad.undulation(-0.9375+0.125*i,-0.9375+0.125*j);
 	}
       }
-  ret[0]=ret[0]/256;
-  ret[1]=ret[1]/85;
-  ret[2]=ret[2]/85;
-  ret[3]=ret[3]*2304/51409;
-  ret[4]=ret[4]*256/7225;
-  ret[5]=ret[5]*2304/51409;
+  /*ret[0]=preret[0][0]/256;
+  ret[1]=preret[1][0]/85;
+  ret[2]=preret[2][0]/85;
+  ret[3]=preret[3][0]*2304/51409;
+  ret[4]=preret[4][0]*256/7225;
+  ret[5]=preret[5][0]*2304/51409;*/
+  preret=quadinv[qhash]*preret;
+  for (i=0;i<6;i++)
+    ret[i]=preret[i][0];
   return ret;
 }
 
