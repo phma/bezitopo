@@ -462,12 +462,12 @@ matrix autocorr(double qpoints[][16])
   return ret;
 }
 
-void dump256(double qpoints[][16])
+void dump256(double qpoints[][16],int qsz)
 {
   int i,j;
-  for (i=0;i<16;i++)
+  for (i=0;i<qsz;i++)
   {
-    for (j=0;j<16;j++)
+    for (j=0;j<qsz;j++)
       if (std::isfinite(qpoints[i][j]))
 	cout<<" *";
       else
@@ -480,10 +480,10 @@ array<double,6> correction(geoquad &quad,double qpoints[][16])
 {
   array<double,6> ret;
   matrix preret(6,1);
-  int i,j,k,qhash;
+  int i,j,k,qhash,qsz=16;
   double diff;
   geoquad unitquad;
-  qhash=quadhash(qpoints);
+  qhash=quadhash(qpoints,qsz);
   if (quadinv.count(qhash)==0)
     quadinv[qhash]=invert(autocorr(qpoints));
   for (i=0;i<6;i++)
@@ -512,18 +512,18 @@ array<double,6> correction(geoquad &quad,double qpoints[][16])
   return ret;
 }
 
-int quadhash(double qpoints[][16])
+int quadhash(double qpoints[][16],int qsz)
 /* Used to remember inverses of matrices for patterns of points in a geoquad
  * inside and outside the area being converted. Most of them can be formed by
  * running a straight line through a 16×16 lattice of points and taking all
  * those on one side. There are 20173 such patterns, all of which have different
- * hashes. This fills the hash table only 0.00044, so other patterns will
+ * hashes. This fills the hash table only 0.0000276, so other patterns will
  * probably not collide with them.
  */
 {
   int i,j,ret;
-  for (ret=i=0;i<16;i++)
-    for (j=0;j<16;j++)
+  for (ret=i=0;i<qsz;i++)
+    for (j=0;j<qsz;j++)
       if (std::isfinite(qpoints[i][j]))
 	ret=(2*ret)%HASHPRIME;
       else

@@ -30,7 +30,7 @@
 #include "geoid.h"
 #include "matrix.h"
 
-#define HASHPRIME 45605221
+#define HASHPRIME 729683249
 // Used for hashing 256-bit patterns of which samples in a geoquad are valid.
 
 struct usngsheader
@@ -91,6 +91,10 @@ extern std::vector<geolattice> geo;
 double avgelev(xyz dir);
 std::array<double,6> correction(geoquad &quad,double qpoints[][16]);
 double maxerror(geoquad &quad,double qpoints[][16]);
-int quadhash(double qpoints[][16]);
+/* qsz is the number of points on the side of the square used for
+ * sampling the geoid for converting to a geoquad. It must be
+ * in [4,16]. It can't be 3 because 9/2<6.
+ */
+int quadhash(double qpoints[][16],int qsz);
 matrix autocorr(double qpoints[][16]);
-void dump256(double qpoints[][16]);
+void dump256(double qpoints[][16],int qsz);

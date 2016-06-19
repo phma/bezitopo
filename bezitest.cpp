@@ -3439,8 +3439,9 @@ void testsmooth5()
 
 void testquadhash()
 {
-  int i,j,l,lastang=-1,hash;
+  int i,j,l,lastang=-1,hash,qsz=16;
   int n,lastn=300;
+  int nhashes[17]={1,1,9,29,93,201,433,749,1309,2041,3145,4493,6453,8745,11905,15557,20173};
   map<double,int> langles;
   map<double,int>::iterator k;
   map<int,double> hashmap;
@@ -3472,53 +3473,57 @@ void testquadhash()
     btangles.push_back(btangles[i]+DEG90);
   // The total number of between angles is 576.
   cout<<btangles.size()<<endl;
-  for (i=0;i<16;i++)
-    for (j=0;j<16;j++)
-      all256[i][j]=sin(i-7.5+(j-7.5)*M_1PHI+M_PI/4);
-  for (l=0;l<576;l++)
+  for (qsz=4;qsz<=16;qsz++)
   {
-    s=sin(btangles[l]);
-    c=cos(btangles[l]);
-    for (ofs=0;ofs<10.6;ofs+=0.0234375)
+    hashmap.clear();
+    for (i=0;i<qsz;i++)
+      for (j=0;j<qsz;j++)
+	all256[i][j]=sin(i-(qsz-1)*0.5+(j-(qsz-1)*0.5)*M_1PHI+M_PI/4);
+    for (l=0;l<576;l++)
     {
-      sum=n=0;
-      for (i=0;i<16;i++)
+      s=sin(btangles[l]);
+      c=cos(btangles[l]);
+      for (ofs=0;ofs<10.6;ofs+=0.0234375)
       {
-	y=i-7.5;
-	for (j=0;j<16;j++)
+	sum=n=0;
+	for (i=0;i<qsz;i++)
 	{
-	  x=j-7.5;
-	  if (c*x+s*y>ofs)
-	    some256[i][j]=NAN;
-	  else
+	  y=i-(qsz-1)*0.5;
+	  for (j=0;j<qsz;j++)
 	  {
-	    sum+=some256[i][j]=all256[i][j];
-	    n++;
+	    x=j-(qsz-1)*0.5;
+	    if (c*x+s*y>ofs)
+	      some256[i][j]=NAN;
+	    else
+	    {
+	      sum+=some256[i][j]=all256[i][j];
+	      n++;
+	    }
 	  }
 	}
+	if (n-lastn>1)
+	  cout<<"Skipped in direction "<<l<<endl;
+	lastn=n;
+	hash=quadhash(some256,qsz);
+	if (hashmap[hash]!=0 && hashmap[hash]!=sum)
+	{
+	  cout<<"Hash collision: "<<hash<<' '<<l<<' '<<ofs<<endl;
+	}
+	if (hashmap[hash]==0 && n==256 /*&& l%32==0*/)
+	{
+	  acorr=autocorr(some256);
+	  invcorr=invert(acorr);
+	  acorr.dump();
+	  dump256(some256,qsz);
+	  invcorr.dump();
+	  cout<<endl;
+	}
+	hashmap[hash]=sum;
       }
-      if (n-lastn>1)
-	cout<<"Skipped in direction "<<l<<endl;
-      lastn=n;
-      hash=quadhash(some256);
-      if (hashmap[hash]!=0 && hashmap[hash]!=sum)
-      {
-	cout<<"Hash collision: "<<hash<<' '<<l<<' '<<ofs<<endl;
-      }
-      if (hashmap[hash]==0 && n==256 /*&& l%32==0*/)
-      {
-	acorr=autocorr(some256);
-	invcorr=invert(acorr);
-	acorr.dump();
-	dump256(some256);
-	invcorr.dump();
-	cout<<endl;
-      }
-      hashmap[hash]=sum;
     }
+    cout<<hashmap.size()<<" different hashes"<<endl;
+    tassert(hashmap.size()==nhashes[qsz]);
   }
-  cout<<hashmap.size()<<" different hashes"<<endl;
-  tassert(hashmap.size()==20173);
 }
 
 void testgeoid()
