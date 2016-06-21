@@ -75,7 +75,10 @@ public:
   void gausselim(matrix &b);
   void randomize_c();
   double determinant();
+  operator std::vector<double>() const;
 };
 
 matrix invert(matrix m);
+matrix rowvector(const std::vector<double> v);
+matrix columnvector(const std::vector<double> v);
 #endif

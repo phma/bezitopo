@@ -420,3 +420,25 @@ double matrix::determinant()
   matrix b(*this);
   return b._determinant();
 }
+
+matrix::operator vector<double>() const
+{
+  vector<double> ret;
+  ret.resize(rows*columns);
+  memcpy(&ret[0],entry,sizeof(double)*rows*columns);
+  return ret;
+}
+
+matrix rowvector(const vector<double> v)
+{
+  matrix ret(1,v.size());
+  memcpy(ret[0],&v[0],sizeof(double)*v.size());
+  return ret;
+}
+
+matrix columnvector(const vector<double> v)
+{
+  matrix ret(v.size(),1);
+  memcpy(ret[0],&v[0],sizeof(double)*v.size());
+  return ret;
+}
