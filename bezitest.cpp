@@ -380,6 +380,9 @@ void testmatrix()
   matrix t1(37,41),t2(41,43),t3(43,37),p1,p2,p3;
   matrix hil(8,8),lih(8,8),hilprod;
   matrix kd(7,7);
+  matrix r0,c0,p11;
+  matrix rs1(3,4),rs2,rs3,rs4;
+  vector<double> rv,cv;
   double tr1,tr2,tr3,de1,de2,de3;
   double toler=1.2e-12;
   double kde;
@@ -471,6 +474,34 @@ void testmatrix()
     cout<<"Determinant of shuffled matrix is "<<ldecimal(kde)<<" diff "<<kde-1<<endl;
     tassert(fabs(kde-1)<4e-12);
   }
+  for (i=0;i<11;i++)
+  {
+    rv.push_back((i*i*i)%11);
+    cv.push_back((i*3+7)%11);
+  }
+  r0=rowvector(rv);
+  c0=columnvector(cv);
+  p1=r0*c0;
+  p11=c0*r0;
+  tassert(p1.trace()==253);
+  tassert(p11.trace()==253);
+  tassert(p1.determinant()==253);
+  tassert(p11.determinant()==0);
+  for (i=0;i<3;i++)
+    for (j=0;j<4;j++)
+      rs1[i][j]=(j+1.)/(i+1)-(i^j);
+  rs2=rs1;
+  rs2.resize(4,3);
+  rs3=rs1*rs2;
+  rs4=rs2*rs1;
+  for (i=0;i<3;i++)
+    for (j=0;j<3;j++)
+      tassert(rs1[i][j]==rs2[i][j]);
+  cout<<"det rs3="<<ldecimal(rs3.determinant())<<endl;
+  tassert(fabs(rs3.determinant()*9-100)<1e-12);
+  tassert(rs4.determinant()==0);
+  rs4[3][3]=1;
+  tassert(fabs(rs4.determinant()*9-100)<1e-12);
 }
 
 void testcopytopopoints()

@@ -74,8 +74,10 @@ void matrix::resize(unsigned newrows,unsigned newcolumns)
     fewcolumns=columns;
   memset(newentry,0,sizeof(double)*newrows*newcolumns);
   for (i=0;i<fewrows;i++)
-    memcpy(newentry+i*newcolumns*sizeof(double),entry+i*columns*sizeof(double),fewcolumns*sizeof(double));
+    memcpy(newentry+i*newcolumns,entry+i*columns,fewcolumns*sizeof(double));
   swap(newentry,entry);
+  rows=newrows;
+  columns=newcolumns;
   delete[] newentry;
 }
 
