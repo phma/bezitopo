@@ -823,6 +823,123 @@ void testmaketinellipse()
   tassert(fabs(totallength-1329.4675)<0.001);
 }
 
+void testbreak0()
+{
+  criteria crit;
+  criterion crit1;
+  doc.pl[0].clear();
+  doc.copytopopoints(crit);
+  tassert(doc.pl[1].points.size()==0);
+  doc.pl[0].addpoint( 20,point(42.088,86.580,271.739,"TCR 30 CONCRETE"));
+  doc.pl[0].addpoint( 22,point(45.789,86.320,271.322,"P11"));
+  doc.pl[0].addpoint( 23,point(45.794,86.365,271.373,"TP11"));
+  doc.pl[0].addpoint( 24,point(48.355,86.366,271.192,"TP11"));
+  doc.pl[0].addpoint( 25,point(48.355,86.320,271.166,"P11"));
+  doc.pl[0].addpoint( 26,point(50.847,86.328,271.006,"P11"));
+  doc.pl[0].addpoint( 27,point(50.726,86.386,271.071,"TP11"));
+  doc.pl[0].addpoint( 28,point(50.858,86.398,271.116,"TP11"));
+  doc.pl[0].addpoint( 29,point(50.902,86.529,271.192,"TCL69"));
+  doc.pl[0].addpoint( 30,point(50.212,87.894,271.298,"SW69"));
+  doc.pl[0].addpoint( 31,point(56.770,87.911,270.893,"SW69"));
+  doc.pl[0].addpoint( 32,point(56.758,86.515,270.846,"TCL69"));
+  doc.pl[0].addpoint( 39,point(63.792,86.516,270.411,"TCL69"));
+  doc.pl[0].addpoint( 40,point(63.873,87.864,270.451,"SW69"));
+  doc.pl[0].addpoint( 41,point(75.374,87.828,269.770,"SW69"));
+  doc.pl[0].addpoint( 42,point(75.333,86.449,269.689,"TCL69"));
+  doc.pl[0].addpoint( 43,point(82.548,86.418,269.252,"TCL69"));
+  doc.pl[0].addpoint( 44,point(82.749,87.772,269.303,"SW69"));
+  doc.pl[0].addpoint( 47,point(87.423,86.382,268.947,"TCL69 30 CONCRETE"));
+  doc.pl[0].addpoint( 48,point(83.860,86.691,269.190,"WM"));
+  doc.pl[0].addpoint( 49,point(83.886,86.954,269.194,""));
+  doc.pl[0].addpoint( 50,point(50.832,85.760,271.075,"EP1"));
+  doc.pl[0].addpoint( 51,point(45.758,85.818,271.379,"EP1"));
+  doc.pl[0].addpoint( 52,point(49.792,89.456,271.394,"EP70"));
+  doc.pl[0].addpoint( 53,point(49.876,92.374,272.001,"EP70"));
+  doc.pl[0].addpoint( 54,point(50.885,92.320,272.206,"G"));
+  doc.pl[0].addpoint( 55,point(48.322,92.259,272.001,"P"));
+  doc.pl[0].addpoint( 56,point(48.339,89.467,271.459,"P"));
+  doc.pl[0].addpoint( 57,point(48.313,86.899,271.237,"P"));
+  doc.pl[0].addpoint( 58,point(53.060,92.227,272.098,"G"));
+  doc.pl[0].addpoint( 59,point(56.850,92.421,271.912,"G"));
+  doc.pl[0].addpoint( 60,point(56.782,89.427,270.920,"SW70"));
+  doc.pl[0].addpoint( 61,point(63.139,89.389,270.525,"SW70"));
+  doc.pl[0].addpoint( 62,point(62.410,91.055,271.211,"G"));
+  doc.pl[0].addpoint( 63,point(71.086,89.356,270.040,"SW70"));
+  doc.pl[0].addpoint( 64,point(70.181,90.998,270.628,"G"));
+  doc.pl[0].addpoint( 65,point(75.105,91.009,270.377,"G"));
+  doc.pl[0].addpoint( 66,point(79.181,91.104,270.246,"G"));
+  doc.pl[0].addpoint( 67,point(80.366,91.013,270.197,"BW30"));
+  doc.pl[0].addpoint( 68,point(80.321,89.332,269.487,"BW30 R 0.65 BRICK"));
+  doc.pl[0].addpoint( 69,point(80.345,89.321,269.485,"STP31"));
+  doc.pl[0].addpoint( 70,point(81.566,90.579,270.005,"BW31"));
+  doc.pl[0].addpoint( 71,point(81.533,89.330,269.420,"STP31"));
+  doc.pl[0].addpoint( 72,point(80.068,89.313,269.505,"SW70"));
+  doc.pl[0].addpoint( 73,point(80.088,91.023,270.134,"TOE70"));
+  doc.pl[0].addpoint( 74,point(81.788,89.289,269.404,"SW50"));
+  doc.pl[0].addpoint( 75,point(81.833,91.001,270.109,"TOE50"));
+  doc.pl[0].addpoint( 76,point(84.429,90.994,270.056,"G"));
+  doc.pl[0].addpoint( 77,point(86.767,91.123,269.866,"G"));
+  doc.pl[0].addpoint(118,point(83.281,81.680,269.239,"P1"));
+  doc.pl[0].addpoint(119,point(72.835,81.736,269.863,"P1"));
+  doc.pl[0].addpoint(120,point(61.643,81.829,270.535,"P1"));
+  doc.pl[0].addpoint(121,point(51.118,81.881,271.152,"P1"));
+  doc.pl[0].addpoint(122,point(42.016,81.912,271.682,"P1"));
+  doc.pl[0].addpoint(123,point(41.926,81.914,271.687,"PS1 DOUBLE YELLOW LINE"));
+  doc.pl[0].addpoint(124,point(41.993,77.924,271.515,"EP20"));
+  doc.pl[0].addpoint(125,point(46.228,77.861,271.252,"EP20"));
+  doc.pl[0].addpoint(126,point(42.063,77.312,271.461,"TP20"));
+  doc.pl[0].addpoint(127,point(42.051,77.357,271.424,"P20"));
+  doc.pl[0].addpoint(128,point(44.804,77.328,271.270,"P20"));
+  doc.pl[0].addpoint(129,point(44.801,77.296,271.306,"TP20"));
+  doc.pl[0].addpoint(130,point(45.344,77.285,271.298,"TP20"));
+  doc.pl[0].addpoint(131,point(46.243,77.249,271.379,"TP20"));
+  doc.pl[0].addpoint(132,point(46.220,77.344,271.190,"P20"));
+  doc.pl[0].addpoint(133,point(46.259,77.150,271.379,"TCR30"));
+  doc.pl[0].addpoint(134,point(45.735,75.773,271.491,"SW30"));
+  doc.pl[0].addpoint(135,point(54.018,75.750,270.992,"SW30"));
+  doc.pl[0].addpoint(136,point(54.215,77.107,270.910,"TCR30"));
+  doc.pl[0].addpoint(137,point(61.062,77.072,270.496,"TCR30"));
+  doc.pl[0].addpoint(140,point(60.831,75.715,270.588,"SW30"));
+  doc.pl[0].addpoint(141,point(71.361,75.623,269.858,"SW30"));
+  doc.pl[0].addpoint(142,point(71.317,76.987,269.824,"TCR30"));
+  doc.pl[0].addpoint(143,point(80.194,76.961,269.353,"TCR30"));
+  doc.pl[0].addpoint(144,point(80.308,75.588,269.340,"SW30"));
+  doc.pl[0].addpoint(145,point(85.448,75.581,269.031,"SW30"));
+  doc.pl[0].addpoint(146,point(84.935,76.947,269.049,"SW30"));
+  doc.pl[0].addpoint(147,point(84.977,77.682,268.966,"EP30"));
+  doc.pl[0].addpoint(154,point(84.956,77.040,269.031,"TP20"));
+  doc.pl[0].addpoint(155,point(85.258,77.063,268.945,"TP20"));
+  doc.pl[0].addpoint(156,point(85.193,77.120,268.931,"P20"));
+  doc.pl[0].addpoint(157,point(84.966,77.140,268.919,"P20"));
+  doc.pl[0].addpoint(194,point(85.639,72.427,268.966,"EP23"));
+  doc.pl[0].addpoint(195,point(85.842,74.031,269.005,"EP23"));
+  doc.pl[0].addpoint(196,point(75.043,74.113,269.699,"SW23"));
+  doc.pl[0].addpoint(197,point(64.980,74.183,270.359,"SW23"));
+  doc.pl[0].addpoint(198,point(56.561,74.250,270.921,"SW23"));
+  doc.pl[0].addpoint(199,point(48.573,74.250,271.326,"SW23"));
+  doc.pl[0].addpoint(200,point(45.010,74.292,271.625,"BW20"));
+  doc.pl[0].addpoint(201,point(44.951,72.682,272.021,"BW20 L 0.5 CONCRETE"));
+  doc.pl[0].addpoint(202,point(45.208,72.673,272.140,"TOE"));
+  doc.pl[0].addpoint(203,point(45.219,74.028,271.737,"TOE"));
+  doc.pl[0].addpoint(204,point(47.375,74.041,271.580,"TOE"));
+  doc.pl[0].addpoint(205,point(48.557,74.072,271.410,"TOE"));
+  doc.pl[0].addpoint(206,point(42.289,72.461,272.167,"P"));
+  doc.pl[0].addpoint(207,point(46.420,73.085,272.229,"TCM 4"));
+  doc.pl[0].addpoint(208,point(47.098,72.614,272.234,"G"));
+  doc.pl[0].addpoint(209,point(50.676,72.600,271.518,"G"));
+  doc.pl[0].addpoint(210,point(59.436,72.935,270.946,"G"));
+  doc.pl[0].addpoint(211,point(68.815,73.038,270.250,"G"));
+  doc.pl[0].addpoint(220,point(75.304,72.656,269.885,"G"));
+  doc.pl[0].addpoint(221,point(83.154,72.543,269.327,"G"));
+  /* Breakline 1
+   * 029,032,039,042,043,047
+   * Breakline 2
+   * 133,136,137,142,143,146
+   * Breakline 3
+   * 019,020
+   */
+}
+
 void testrelprime()
 {
   tassert(relprime(987)==610);
@@ -3811,6 +3928,8 @@ int main(int argc, char *argv[])
     testmaketinring();
   if (shoulddo("maketinellipse"))
     testmaketinellipse();
+  if (shoulddo("break0"))
+    testbreak0();
   if (shoulddo("manysum"))
     testmanysum();
   if (shoulddo("vcurve"))
