@@ -65,6 +65,7 @@ public:
   bool isnan();
   geoquad();
   ~geoquad();
+  // TODO needs copy constructor
   vball vcenter();
   void clear();
   void subdivide();

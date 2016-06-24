@@ -28,7 +28,7 @@
 #include "manysum.h"
 
 using namespace std;
-vector<geolattice> geo;
+vector<geoid> geo;
 map<int,matrix> quadinv;
 
 bool smooth5(unsigned n)
@@ -374,6 +374,13 @@ int readcarlsongsf(geolattice &geo,string filename)
   return ret;
 }
 
+int readcarlsongsf(geoid &geo,string filename)
+{
+  delete geo.glat;
+  geo.glat=new geolattice;
+  return readcarlsongsf(*geo.glat,filename);
+}
+
 int readusngsbin(geolattice &geo,string filename)
 {
   int i,j,ret;
@@ -419,6 +426,13 @@ int readusngsbin(geolattice &geo,string filename)
   return ret;
 }
 
+int readusngsbin(geoid &geo,string filename)
+{
+  delete geo.glat;
+  geo.glat=new geolattice;
+  return readusngsbin(*geo.glat,filename);
+}
+
 double avgelev(xyz dir)
 {
   int i,n;
@@ -433,6 +447,62 @@ double avgelev(xyz dir)
     }
   }
   return sum/n;
+}
+
+geoid::geoid()
+{
+  cmap=nullptr;
+  glat=nullptr;
+  ghdr=nullptr;
+}
+
+geoid::~geoid()
+{
+  delete cmap;
+  delete glat;
+  delete ghdr;
+}
+
+geoid::geoid(const geoid &b)
+{
+  cmap=nullptr;
+  glat=nullptr;
+  ghdr=nullptr;
+  if (b.cmap)
+  {
+    cmap=new cubemap;
+    *cmap=*b.cmap;
+  }
+  if (b.glat)
+  {
+    glat=new geolattice;
+    *glat=*b.glat;
+  }
+  if (b.ghdr)
+  {
+    ghdr=new geoheader;
+    *ghdr=*b.ghdr;
+  }
+}
+
+double geoid::elev(int lat,int lon)
+{
+  if (cmap)
+    return cmap->undulation(lat,lon);
+  else if (glat)
+    return glat->elev(lat,lon);
+  else
+    return NAN;
+}
+
+double geoid::elev(xyz dir)
+{
+  if (cmap)
+    return cmap->undulation(dir);
+  else if (glat)
+    return glat->elev(dir);
+  else
+    return NAN;
 }
 
 matrix autocorr(double qpoints[][16])

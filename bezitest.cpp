@@ -3744,12 +3744,13 @@ void testgeoid()
     pgq=pgq->sub[i&3];
   }
   geo.resize(1);
-  geo[0].settest();
+  geo[0].glat=new geolattice;
+  geo[0].glat->settest();
   for (i=0;i<5;i++)
     for (j=0;j<5;j++)
     {
-      tassert(geo[0].eslope[5*i+j]==89232+16384*j);
-      tassert(geo[0].nslope[5*i+j]==91784-8192*i);
+      tassert(geo[0].glat->eslope[5*i+j]==89232+16384*j);
+      tassert(geo[0].glat->nslope[5*i+j]==91784-8192*i);
     }
   cube.scale=1/65536.;
   hdr.logScale=-16;

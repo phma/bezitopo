@@ -153,7 +153,7 @@ void outund(string loc,int lat,int lon)
   cout<<"c: "<<cube.undulation(lat,lon)<<endl;
 }
 
-void initformat(string cmd,string ext,string desc,int readfunc(geolattice&,string))
+void initformat(string cmd,string ext,string desc,int readfunc(geoid&,string))
 {
   geoformat gf;
   gf.cmd=cmd;
@@ -165,18 +165,18 @@ void initformat(string cmd,string ext,string desc,int readfunc(geolattice&,strin
 
 int readgeoid(string filename)
 /* Returns 0, 1, or 2 like the geoformat.readfunc functions.
- * If it returns 2, it pushes a geolattice back onto geo
+ * If it returns 2, it pushes a geoid back onto geo
  * and the filename and format onto hdr.
  */
 {
   int i,ret;
-  geolattice gl;
+  geoid gd;
   for (i=0,ret=1;i<formatlist.size() && ret==1;i++)
-    ret=formatlist[i].readfunc(gl,filename);
+    ret=formatlist[i].readfunc(gd,filename);
   i--;
   if (ret==2)
   {
-    geo.push_back(gl);
+    geo.push_back(gd);
     hdr.namesFormats.push_back(filename);
     hdr.namesFormats.push_back(formatlist[i].cmd);
     cout<<"Read "<<filename<<" in format "<<formatlist[i].cmd<<endl;

@@ -53,7 +53,6 @@ class geolattice
    * size of undula is (width+1)*(height+1) - note fencepost!
    */
 public:
-  int type; // not used yet - will distinguish lat-long grid from whatever is used at the poles
   int nbd,ebd,sbd,wbd; // fixed-point binary - 18 mm is good enough for geoid work
   int width,height;
   std::vector<int> undula,eslope,nslope; // starts at southwest corner, heads east
@@ -66,6 +65,18 @@ public:
   void dump();
 };
 
+struct geoid
+{
+  geoheader *ghdr;
+  cubemap *cmap;
+  geolattice *glat;
+  geoid();
+  ~geoid();
+  geoid(const geoid &b);
+  double elev(int lat,int lon);
+  double elev(xyz dir);
+};
+
 struct geoformat
 {
   /* cmd is the argument to -f on the command line; ext is the file extension.
@@ -74,7 +85,7 @@ struct geoformat
    * readfunc will need changing when I add boldatni to the list of formats.
    */
   std::string cmd,ext,desc;
-  int (*readfunc)(geolattice&,std::string);
+  int (*readfunc)(geoid&,std::string);
 };
 
 bool smooth5(unsigned n);
@@ -86,8 +97,10 @@ double readdouble(std::istream &file);
  * 2 if they succeed.
  */
 int readusngsbin(geolattice &geo,std::string filename);
-int readcarlsongsf(geolattice &geo,string filename);
-extern std::vector<geolattice> geo;
+int readusngsbin(geoid &geo,std::string filename);
+int readcarlsongsf(geolattice &geo,std::string filename);
+int readcarlsongsf(geoid &geo,std::string filename);
+extern std::vector<geoid> geo;
 double avgelev(xyz dir);
 std::array<double,6> correction(geoquad &quad,double qpoints[][16]);
 double maxerror(geoquad &quad,double qpoints[][16]);
