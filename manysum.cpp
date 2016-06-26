@@ -126,3 +126,18 @@ double pairwisesum(double *a,unsigned n)
   else
     return 0;
 }
+
+long double pairwisesum(long double *a,unsigned n)
+// a is clobbered.
+{
+  unsigned i,j;
+  if (n)
+  {
+    for (i=1;i<n;i*=2)
+      for (j=0;j+i<n;j+=2*i)
+	a[j]+=a[j+i];
+    return a[0];
+  }
+  else
+    return 0;
+}

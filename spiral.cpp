@@ -86,15 +86,15 @@ xy cornu(double t)
   if (i>=cornuhisto.size())
     cornuhisto.resize(i+1);
   cornuhisto[i]++;
-  for (i=realparts.size()-1,rsum=isum=bigpart=0;i>=0;i--)
+  for (i=realparts.size()-1,bigpart=0;i>=0;i--)
   {
-    rsum+=realparts[i];
-    isum+=imagparts[i];
     if (fabsl(realparts[i])>bigpart)
       bigpart=fabsl(realparts[i]);
     if (fabsl(imagparts[i])>bigpart)
       bigpart=fabsl(imagparts[i]);
   }
+  rsum=pairwisesum(&realparts[0],realparts.size());
+  isum=pairwisesum(&imagparts[0],imagparts.size());
   precision=nextafterl(bigpart,2*bigpart)-bigpart;
   //printf("precision %e\n",precision);
   if (precision>1e-6)
@@ -156,14 +156,8 @@ xy cornu(double t,double curvature,double clothance)
   cornuhisto[i]++;*/
   if (i>=MAXITER-1)
     cerr<<"cornu needs more iterations"<<endl;
-  for (i=1;i<rinx;i*=2) // pairwise summation
-    for (j=0;j+i<rinx;j+=2*i)
-      realparts[j]+=realparts[j+i];
-  for (i=1;i<iinx;i*=2)
-    for (j=0;j+i<iinx;j+=2*i)
-      imagparts[j]+=imagparts[j+i];
-  rsum=realparts[0];
-  isum=imagparts[0];
+  rsum=pairwisesum(realparts,rinx);
+  isum=pairwisesum(imagparts,iinx);
   precision=nextafterl(bigpart,2*bigpart)-bigpart;
   //printf("precision %e\n",precision);
   if (precision>1e-6)

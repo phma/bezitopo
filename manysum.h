@@ -52,3 +52,4 @@ public:
 };
 
 double pairwisesum(double *a,unsigned n);
+long double pairwisesum(long double *a,unsigned n);

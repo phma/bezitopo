@@ -160,10 +160,7 @@ matrix matrix::operator*(matrix &b)
     {
       for (k=0;k<columns;k++)
 	sum[k]=(*this)[i][k]*b[k][j];
-      for (h=1;h<columns;h*=2)
-	for (k=0;k+h<columns;k+=2*h)
-	  sum[k]+=sum[k+h];
-      ret[i][j]=sum[0];
+      ret[i][j]=pairwisesum(sum,columns);
     }
   delete[] sum;
   return ret;
@@ -347,10 +344,7 @@ bool matrix::findpivot(matrix &b,int row,int column)
       memset(squares,0,columns*sizeof(double));
       for (j=column+1;j<columns;j++)
 	squares[j-column-1]=sqr(thisrow[j]);
-      for (k=1;k<columns;k*=2)
-	for (j=0;j<columns-column;j+=2*k)
-	  squares[j]+=squares[j+k];
-      ratios[i]=sqr(thisrow[column])/squares[0];
+      ratios[i]=sqr(thisrow[column])/pairwisesum(squares,columns-column);
       if (ratios[i]>maxratio)
       {
 	pivotrow=i;
