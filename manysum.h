@@ -50,3 +50,5 @@ public:
   manysum& operator+=(double x);
   manysum& operator-=(double x);
 };
+
+double pairwisesum(double *a,unsigned n);

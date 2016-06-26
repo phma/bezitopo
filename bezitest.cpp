@@ -964,9 +964,12 @@ void testmanysum()
 {
   manysum ms;
   int i,j,h;
-  double x,naiveforwardsum,forwardsum,naivebackwardsum,backwardsum;
+  double x,naiveforwardsum,forwardsum,pairforwardsum,naivebackwardsum,backwardsum,pairbackwardsum;
+  vector<double> summands;
   cout<<"manysum"<<endl;
   ms.clear();
+  summands.clear();
+  tassert(pairwisesum(&summands[0],summands.size())==0);
   for (naiveforwardsum=i=0;i>-7;i--)
   {
     x=pow(1000,i);
@@ -974,11 +977,14 @@ void testmanysum()
     {
       naiveforwardsum+=x;
       ms+=x;
+      summands.push_back(x);
     }
   }
   ms.prune();
   forwardsum=ms.total();
+  pairforwardsum=pairwisesum(&summands[0],summands.size());
   ms.clear();
+  summands.clear();
   for (naivebackwardsum=0,i=-6;i<1;i++)
   {
     x=pow(1000,i);
@@ -986,36 +992,52 @@ void testmanysum()
     {
       naivebackwardsum+=x;
       ms+=x;
+      summands.push_back(x);
     }
   }
   ms.prune();
   backwardsum=ms.total();
-  cout<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<endl;
+  pairbackwardsum=pairwisesum(&summands[0],summands.size());
+  cout<<"Forward: "<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(pairforwardsum)<<endl;
+  cout<<"Backward: "<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<' '<<ldecimal(pairbackwardsum)<<endl;
   tassert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
+  tassert(fabs((pairforwardsum-pairbackwardsum)/(pairforwardsum+pairbackwardsum))<DBL_EPSILON);
+  tassert(fabs((forwardsum-pairforwardsum)/(forwardsum+pairforwardsum))<DBL_EPSILON);
+  tassert(fabs((backwardsum-pairbackwardsum)/(backwardsum+pairbackwardsum))<DBL_EPSILON);
   tassert(fabs((forwardsum-naiveforwardsum)/(forwardsum+naiveforwardsum))<1000000*DBL_EPSILON);
   tassert(fabs((backwardsum-naivebackwardsum)/(backwardsum+naivebackwardsum))<1000*DBL_EPSILON);
   tassert(fabs((naiveforwardsum-naivebackwardsum)/(naiveforwardsum+naivebackwardsum))>30*DBL_EPSILON);
   ms.clear();
+  summands.clear();
   h=slowmanysum?1:16;
   for (naiveforwardsum=i=0;i>-0x360000;i-=h)
   {
     x=exp(i/65536.);
     naiveforwardsum+=x;
     ms+=x;
+    summands.push_back(x);
   }
   ms.prune();
   forwardsum=ms.total();
+  pairforwardsum=pairwisesum(&summands[0],summands.size());
   ms.clear();
+  summands.clear();
   for (naivebackwardsum=0,i=-0x35ffff&-h;i<1;i+=h)
   {
     x=exp(i/65536.);
     naivebackwardsum+=x;
     ms+=x;
+    summands.push_back(x);
   }
   ms.prune();
   backwardsum=ms.total();
-  cout<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<endl;
+  pairbackwardsum=pairwisesum(&summands[0],summands.size());
+  cout<<"Forward: "<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(pairforwardsum)<<endl;
+  cout<<"Backward: "<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<' '<<ldecimal(pairbackwardsum)<<endl;
   tassert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
+  tassert(fabs((pairforwardsum-pairbackwardsum)/(pairforwardsum+pairbackwardsum))<DBL_EPSILON);
+  tassert(fabs((forwardsum-pairforwardsum)/(forwardsum+pairforwardsum))<DBL_EPSILON);
+  tassert(fabs((backwardsum-pairbackwardsum)/(backwardsum+pairbackwardsum))<DBL_EPSILON);
   tassert(fabs((forwardsum-naiveforwardsum)/(forwardsum+naiveforwardsum))<1000000*DBL_EPSILON);
   tassert(fabs((backwardsum-naivebackwardsum)/(backwardsum+naivebackwardsum))<1000*DBL_EPSILON);
   tassert(fabs((naiveforwardsum-naivebackwardsum)/(naiveforwardsum+naivebackwardsum))>30*DBL_EPSILON);
