@@ -128,7 +128,7 @@ void interroquad(geoquad &quad,double spacing)
   }
 }
 
-void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double spacing)
+void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double spacing,int qsz)
 {
   int i,j=0,numnums,ncorr;
   double area,qpoints[16][16],sqerror,lastsqerror,mult=1;
@@ -147,10 +147,10 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
     interroquad(quad,spacing);
   if (area<sqr(sublimit) || quad.isfull())
   {
-    for (i=0;i<16;i++)
-      for (j=0;j<16;j++)
+    for (i=0;i<qsz;i++)
+      for (j=0;j<qsz;j++)
       {
-	qpt=quad.center+xy(quad.scale,0)*(i-7.5)/8+xy(0,quad.scale)*(j-7.5)/8;
+	qpt=quad.center+xy(quad.scale,0)*qscale(i,qsz)+xy(0,quad.scale)*qscale(j,qsz);
 	v=vball(quad.face,qpt);
 	pt=decodedir(v);
 	qpoints[i][j]=avgelev(pt)/vscale;
@@ -159,23 +159,23 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
 	else
 	  quad.nans.push_back(qpt);
       }
-    avgelev_refinecount+=256;
+    avgelev_refinecount+=sqr(qsz);
   }
   if (quad.scale>2)
     cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums after"<<endl;
   j=0;
   if (area<sqr(sublimit) || quad.isfull()!=0)
   {
-    for (numnums=i=0;i<16;i++)
-      for (j=0;j<16;j++)
+    for (numnums=i=0;i<qsz;i++)
+      for (j=0;j<qsz;j++)
 	if (std::isfinite(qpoints[i][j]))
 	  numnums++;
     j=0;
-    if (numnums>127)
+    if (numnums*2>=sqr(qsz))
     {
       if (quad.isnan())
 	quad.und[0]=0;
-      corr=correction(quad,qpoints);
+      corr=correction(quad,qpoints,qsz);
       for (sqerror=i=0;i<6;i++)
 	sqerror+=sqr(corr[i]);
       //cout<<"numnums "<<numnums<<" sqerror "<<sqerror<<" before ";
@@ -196,7 +196,7 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
 	  quad.und[i]+=rint(corr[i]*mult);
 	  ncorr+=rint(corr[i]*mult)!=0;
 	}
-	corr=correction(quad,qpoints);
+	corr=correction(quad,qpoints,qsz);
 	for (sqerror=i=0;i<6;i++)
 	  sqerror+=sqr(corr[i]);
 	if (j>2 && (j%2)==0)
@@ -216,11 +216,11 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
     //else
       //cout<<"numnums "<<numnums<<endl;
   }
-  if (area>=sqr(sublimit) && (quad.isfull()==0 || maxerror(quad,qpoints)>tolerance/vscale))
+  if (area>=sqr(sublimit) && (quad.isfull()==0 || maxerror(quad,qpoints,qsz)>tolerance/vscale))
   {
     quad.subdivide();
     for (i=0;i<4;i++)
-      refine(*quad.sub[i],vscale,tolerance,sublimit,spacing);
+      refine(*quad.sub[i],vscale,tolerance,sublimit,spacing,qsz);
   }
   progress(quad);
   vector<xy>().swap(quad.nums); // deallocate vectors

@@ -3699,7 +3699,7 @@ void testquadhash()
 void testgeoid()
 {
   vball v;
-  int lat,lon,olat,olon,i,j,k;
+  int lat,lon,olat,olon,i,j,k,qsz=16;
   double x,y,sum,qpoints[16][16],u0,u1;
   //vector<double> anga,apxa;
   xyz dir;
@@ -3747,7 +3747,7 @@ void testgeoid()
       for (j=0;j<16;j++)
 	qpoints[i][j]=gq.undulation(-0.9375+0.125*i,-0.9375+0.125*j);
     gq.und[k]=0;
-    corr=correction(gq,qpoints);
+    corr=correction(gq,qpoints,qsz);
     for (i=0;i<6;i++)
       cout<<corr[i]<<' ';
     cout<<endl;
@@ -3788,7 +3788,7 @@ void testgeoid()
   for (i=0;i<6;i++)
   {
     interroquad(cube.faces[i],3e5);
-    refine(cube.faces[i],cube.scale,hdr.tolerance,hdr.sublimit,hdr.spacing);
+    refine(cube.faces[i],cube.scale,hdr.tolerance,hdr.sublimit,hdr.spacing,qsz);
   }
   outProgress();
   cout<<endl;

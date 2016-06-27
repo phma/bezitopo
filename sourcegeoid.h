@@ -102,8 +102,9 @@ int readcarlsongsf(geolattice &geo,std::string filename);
 int readcarlsongsf(geoid &geo,std::string filename);
 extern std::vector<geoid> geo;
 double avgelev(xyz dir);
-std::array<double,6> correction(geoquad &quad,double qpoints[][16]);
-double maxerror(geoquad &quad,double qpoints[][16]);
+double qscale(int i,int qsz);
+std::array<double,6> correction(geoquad &quad,double qpoints[][16],int qsz);
+double maxerror(geoquad &quad,double qpoints[][16],int qsz);
 /* qsz is the number of points on the side of the square used for
  * sampling the geoid for converting to a geoquad. It must be
  * in [4,16]. It can't be 3 because 9/2<6.

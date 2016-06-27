@@ -375,7 +375,7 @@ int main(int argc, char *argv[])
       cout<<" has data"<<endl;
     else
       cout<<" is empty"<<endl;*/
-    refine(cube.faces[i],cube.scale,hdr.tolerance,hdr.sublimit,hdr.spacing);
+    refine(cube.faces[i],cube.scale,hdr.tolerance,hdr.sublimit,hdr.spacing,16);
   }
   outProgress();
   cout<<endl;

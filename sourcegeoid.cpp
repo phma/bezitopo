@@ -546,11 +546,19 @@ void dump256(double qpoints[][16],int qsz)
   }
 }
 
-array<double,6> correction(geoquad &quad,double qpoints[][16])
+double qscale(int i,int qsz)
+/* Input: i is in [0,qsz-1]
+ * Output: in (-1,1)
+ */
+{
+  return (2*i+1-qsz)/(double)qsz;
+}
+
+array<double,6> correction(geoquad &quad,double qpoints[][16],int qsz)
 {
   array<double,6> ret;
   matrix preret(6,1);
-  int i,j,k,qhash,qsz=16;
+  int i,j,k,qhash;
   double diff;
   geoquad unitquad;
   qhash=quadhash(qpoints,qsz);
@@ -601,17 +609,17 @@ int quadhash(double qpoints[][16],int qsz)
   return ret;
 }
 
-double maxerror(geoquad &quad,double qpoints[][16])
+double maxerror(geoquad &quad,double qpoints[][16],int qsz)
 {
   double ret=0;
   int i,j;
   double diff;
   geoquad unitquad;
-  for (i=0;i<16;i++)
-    for (j=0;j<16;j++)
+  for (i=0;i<qsz;i++)
+    for (j=0;j<qsz;j++)
       if (std::isfinite(qpoints[i][j]))
       {
-	diff=fabs(qpoints[i][j]-quad.undulation(-0.9375+0.125*i,-0.9375+0.125*j));
+	diff=fabs(qpoints[i][j]-quad.undulation(qscale(i,qsz),qscale(j,qsz)));
 	if (diff>ret)
 	  ret=diff;
       }
