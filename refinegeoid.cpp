@@ -131,7 +131,8 @@ void interroquad(geoquad &quad,double spacing)
 void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double spacing,int qsz)
 {
   int i,j=0,numnums,ncorr;
-  double area,qpoints[16][16],sqerror,lastsqerror,mult=1;
+  bool biginterior;
+  double area,qpoints[16][16],sqerror,lastsqerror,mult=1,maxerr;
   array<double,6> corr;
   xyz pt;
   vball v;
@@ -145,6 +146,9 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
   }
   if (quad.nans.size()+quad.nums.size()==0 || (quad.isfull() && area/(quad.nans.size()+quad.nums.size())>sqr(spacing)))
     interroquad(quad,spacing);
+  biginterior=area>=sqr(sublimit) && quad.isfull()>0;
+  if (biginterior)
+    cout<<"big interior quad ";
   if (area<sqr(sublimit) || quad.isfull())
   {
     for (i=0;i<qsz;i++)
@@ -216,7 +220,23 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
     //else
       //cout<<"numnums "<<numnums<<endl;
   }
-  if (area>=sqr(sublimit) && (quad.isfull()==0 || maxerror(quad,qpoints,qsz)>tolerance/vscale))
+  maxerr=maxerror(quad,qpoints,qsz);
+  if (biginterior)
+  {
+    switch (quad.isfull())
+    {
+      case -1:
+	cout<<"empty";
+	break;
+      case 0:
+	cout<<"partly full";
+	break;
+      case 1:
+	cout<<"full";
+    }
+    cout<<" maxerror "<<maxerr*vscale<<endl;
+  }
+  if (area>=sqr(sublimit) && (quad.isfull()==0 || maxerr>tolerance/vscale))
   {
     quad.subdivide();
     for (i=0;i<4;i++)
