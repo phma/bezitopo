@@ -3700,6 +3700,9 @@ void testgeoid()
 {
   vball v;
   int lat,lon,olat,olon,i,j,k,qsz=16;
+  /* qsz is the size of the square lattice used to sample a geoquad.
+   * It can range from 4 to 16, but values below 9 cause this test to fail.
+   */
   double x,y,sum,qpoints[16][16],u0,u1;
   //vector<double> anga,apxa;
   xyz dir;

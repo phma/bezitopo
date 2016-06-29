@@ -566,16 +566,16 @@ array<double,6> correction(geoquad &quad,double qpoints[][16],int qsz)
     quadinv[qhash]=invert(autocorr(qpoints));
   for (i=0;i<6;i++)
     ret[i]=0;
-  for (i=0;i<16;i++)
-    for (j=0;j<16;j++)
+  for (i=0;i<qsz;i++)
+    for (j=0;j<qsz;j++)
       if (std::isfinite(qpoints[i][j]))
       {
-	diff=qpoints[i][j]-quad.undulation(-0.9375+0.125*i,-0.9375+0.125*j);
+	diff=qpoints[i][j]-quad.undulation(qscale(i,qsz),qscale(j,qsz));
 	for (k=0;k<6;k++)
 	{
 	  unitquad.und[k]=1;
 	  unitquad.und[(k+5)%6]=0;
-	  preret[k][0]+=diff*unitquad.undulation(-0.9375+0.125*i,-0.9375+0.125*j);
+	  preret[k][0]+=diff*unitquad.undulation(qscale(i,qsz),qscale(j,qsz));
 	}
       }
   /*ret[0]=preret[0][0]/256;
