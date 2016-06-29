@@ -505,7 +505,7 @@ double geoid::elev(xyz dir)
     return NAN;
 }
 
-matrix autocorr(double qpoints[][16])
+matrix autocorr(double qpoints[][16],int qsz)
 /* Autocorrelation of the six undulation components, masked by which of qpoints
  * are finite. When all are finite, the matrix is diagonal-dominant, but when
  * only half are finite, it often isn't.
@@ -522,11 +522,11 @@ matrix autocorr(double qpoints[][16])
     for (j=0;j<=i;j++)
     {
       sum.clear();
-      for (k=0;k<16;k++)
-	for (l=0;l<16;l++)
+      for (k=0;k<qsz;k++)
+	for (l=0;l<qsz;l++)
 	  if (std::isfinite(qpoints[k][l]))
-	    sum+=unitquad[i].undulation(-0.9375+0.125*k,-0.9375+0.125*l)
-	        *unitquad[j].undulation(-0.9375+0.125*k,-0.9375+0.125*l);
+	    sum+=unitquad[i].undulation(qscale(k,qsz),qscale(l,qsz))
+	        *unitquad[j].undulation(qscale(k,qsz),qscale(l,qsz));
       ret[i][j]=ret[j][i]=sum.total();
     }
   return ret;
@@ -563,7 +563,7 @@ array<double,6> correction(geoquad &quad,double qpoints[][16],int qsz)
   geoquad unitquad;
   qhash=quadhash(qpoints,qsz);
   if (quadinv.count(qhash)==0)
-    quadinv[qhash]=invert(autocorr(qpoints));
+    quadinv[qhash]=invert(autocorr(qpoints,qsz));
   for (i=0;i<6;i++)
     ret[i]=0;
   for (i=0;i<qsz;i++)

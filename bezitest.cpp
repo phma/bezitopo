@@ -3681,7 +3681,7 @@ void testquadhash()
 	}
 	if (hashmap[hash]==0 && n==256 /*&& l%32==0*/)
 	{
-	  acorr=autocorr(some256);
+	  acorr=autocorr(some256,qsz);
 	  invcorr=invert(acorr);
 	  acorr.dump();
 	  dump256(some256,qsz);

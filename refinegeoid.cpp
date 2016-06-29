@@ -146,7 +146,8 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
   }
   if (quad.nans.size()+quad.nums.size()==0 || (quad.isfull() && area/(quad.nans.size()+quad.nums.size())>sqr(spacing)))
     interroquad(quad,spacing);
-  biginterior=area>=sqr(sublimit) && quad.isfull()>0;
+  //biginterior=area>=sqr(sublimit) && quad.isfull()>0;
+  biginterior=false;
   if (biginterior)
     cout<<"big interior quad ";
   if (area<sqr(sublimit) || quad.isfull())

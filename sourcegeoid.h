@@ -110,5 +110,5 @@ double maxerror(geoquad &quad,double qpoints[][16],int qsz);
  * in [4,16]. It can't be 3 because 9/2<6.
  */
 int quadhash(double qpoints[][16],int qsz);
-matrix autocorr(double qpoints[][16]);
+matrix autocorr(double qpoints[][16],int qsz);
 void dump256(double qpoints[][16],int qsz);

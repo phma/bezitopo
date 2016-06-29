@@ -38,6 +38,7 @@ geoheader hdr;
 vector<geoformat> formatlist;
 int verbosity=1;
 bool helporversion=false;
+int qsz=4;
 
 struct option
 {
@@ -315,12 +316,16 @@ int main(int argc, char *argv[])
   hdr.dataType=BOL_UNDULATION;
   hdr.encoding=BOL_VARLENGTH;
   hdr.ncomponents=1;
-  hdr.tolerance=0.03;
+  hdr.tolerance=0.003;
   hdr.sublimit=1000;
   hdr.spacing=1e5;
   correctionHist.setdiscrete(1);
   argpass1(argc,argv);
   argpass2();
+  if (qsz<4)
+    qsz=4;
+  if (qsz>16)
+    qsz=16;
   /*readgeoid("../g2012bu0.bin");
   readgeoid("../g2012ba0.bin");
   readgeoid("../g2012bh0.bin");
@@ -375,7 +380,7 @@ int main(int argc, char *argv[])
       cout<<" has data"<<endl;
     else
       cout<<" is empty"<<endl;*/
-    refine(cube.faces[i],cube.scale,hdr.tolerance,hdr.sublimit,hdr.spacing,16);
+    refine(cube.faces[i],cube.scale,hdr.tolerance,hdr.sublimit,hdr.spacing,qsz);
   }
   outProgress();
   cout<<endl;
