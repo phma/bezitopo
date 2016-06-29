@@ -176,7 +176,7 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
 	if (std::isfinite(qpoints[i][j]))
 	  numnums++;
     j=0;
-    if (numnums*2>=sqr(qsz))
+    if (numnums*2>sqr(qsz))
     {
       if (quad.isnan())
 	quad.und[0]=0;
