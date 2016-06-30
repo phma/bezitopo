@@ -132,7 +132,7 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
 {
   int i,j=0,numnums,ncorr;
   bool biginterior;
-  double area,qpoints[16][16],sqerror,lastsqerror,mult=1,maxerr;
+  double area,qpoints[16][16],sqerror,lastsqerror,maxerr;
   array<double,6> corr;
   xyz pt;
   vball v;
@@ -198,24 +198,12 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
 	lastsqerror=sqerror;
 	for (i=ncorr=0;i<6;i++)
 	{
-	  quad.und[i]+=rint(corr[i]*mult);
-	  ncorr+=rint(corr[i]*mult)!=0;
+	  quad.und[i]+=rint(corr[i]);
+	  ncorr+=rint(corr[i])!=0;
 	}
 	corr=correction(quad,qpoints,qsz);
 	for (sqerror=i=0;i<6;i++)
 	  sqerror+=sqr(corr[i]);
-	if (j>2 && (j%2)==0)
-	{ // Speed up conversion a little. This really needs matrices.
-	  if (lastsqerror>sqerror && lastsqerror*0.9<sqerror)
-	    mult*=1.25;
-	  if (sqerror>lastsqerror)
-	    mult*=0.75;
-	  if (sqerror>2*lastsqerror)
-	    mult*=0.5;
-	  if (mult<1)
-	    mult=1;
-	  //cout<<lastsqerror<<' '<<sqerror<<' '<<mult<<endl;
-	}
       }
     }
     //else
