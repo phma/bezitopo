@@ -467,6 +467,16 @@ bool smallcircle::in(xyz pt)
   return farin(pt)>0;
 }
 
+cylinterval boundrect(smallcircle c)
+/* Returns the smallest rectangle in cylindrical projection which contains c.
+ * This is done by computing where the complement of c intersects the equator.
+ * If c contains a pole, the east and west bounds differ by 360°, and the north
+ * or south bound is ±90°. If c passes through a pole, the east and west bounds
+ * differ by 180°.
+ */
+{
+}
+
 geoid::geoid()
 {
   cmap=nullptr;

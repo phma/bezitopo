@@ -3825,6 +3825,19 @@ void testgeoid()
     }
 }
 
+void testsmallcircle()
+{
+  smallcircle avl150,eho150,clt150; // Asheville, Shelby, Charlotte
+  avl150.center=Sphere.geoc(degtobin(35.58),degtobin(-82.56),0);
+  eho150.center=Sphere.geoc(degtobin(35.29),degtobin(-81.54),0);
+  clt150.center=Sphere.geoc(degtobin(35.23),degtobin(-80.84),0);
+  avl150.radius=eho150.radius=clt150.radius=radtobin(15e4/6371e3);
+  tassert(eho150.farin(clt150.center)>eho150.farin(avl150.center));
+  tassert(avl150.in(eho150.center));
+  tassert(!avl150.in(clt150.center));
+  tassert(eho150.in(clt150.center));
+}
+
 void testgeint()
 {
   int i,j,nancount;
@@ -4036,6 +4049,8 @@ int main(int argc, char *argv[])
     testsmooth5();
   if (shoulddo("quadhash"))
     testquadhash();
+  if (shoulddo("smallcircle"))
+    testsmallcircle();
   if (shoulddo("geoid"))
     testgeoid();
   if (shoulddo("geint"))
