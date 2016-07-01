@@ -98,6 +98,7 @@ public:
   friend class xy;
   friend class triangle;
   friend double dist(xyz a,xyz b);
+  friend double dot(xyz a,xyz b);
   friend bool operator==(const xyz &l,const xyz &r);
   friend xyz operator/(const xyz &l,const double r);
   friend xyz operator*=(xyz &l,double r);

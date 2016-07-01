@@ -280,6 +280,11 @@ void xyz::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
   y=ty+tto.y;
 }
 
+double dot(xyz a,xyz b)
+{
+  return a.x*b.x+a.y*b.y+a.z*b.z;
+}
+
 void xyz::roscat(xy tfrom,int ro,double sca,xy tto)
 {
   _roscat(tfrom,ro,sca,cossin(ro)*sca,tto);

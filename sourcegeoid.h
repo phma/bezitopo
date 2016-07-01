@@ -65,6 +65,24 @@ public:
   void dump();
 };
 
+struct cylinterval
+/* A rectangle on a cylindrical map. Used when excerpting
+ * a geoid file into a geolattice.
+ */
+{
+  int nbd,ebd,sbd,wbd;
+};
+
+struct smallcircle
+// Used to express "within 200 km of Philadelphia" and the like.
+{
+  xyz center;
+  int radius; // angle
+  smallcircle complement();
+  double farin(xyz pt);
+  bool in(xyz pt);
+};
+
 struct geoid
 {
   geoheader *ghdr;

@@ -449,6 +449,24 @@ double avgelev(xyz dir)
   return sum/n;
 }
 
+smallcircle smallcircle::complement()
+{
+  smallcircle ret;
+  ret.center=center;
+  ret.radius=DEG90-radius;
+  return ret;
+}
+
+double smallcircle::farin(xyz pt)
+{
+  return dot(pt,center)-cos(radius)*pt.length()*center.length();
+}
+
+bool smallcircle::in(xyz pt)
+{
+  return farin(pt)>0;
+}
+
 geoid::geoid()
 {
   cmap=nullptr;
