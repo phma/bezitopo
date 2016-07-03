@@ -449,17 +449,23 @@ double avgelev(xyz dir)
   return sum/n;
 }
 
+void smallcircle::setradius(int r)
+{
+  radius=r;
+  cosrad=cos(r);
+}
+  
 smallcircle smallcircle::complement()
 {
   smallcircle ret;
   ret.center=center;
-  ret.radius=DEG90-radius;
+  ret.setradius(DEG90-radius);
   return ret;
 }
 
 double smallcircle::farin(xyz pt)
 {
-  return dot(pt,center)-cos(radius)*pt.length()*center.length();
+  return dot(pt,center)-cosrad*pt.length()*center.length();
 }
 
 bool smallcircle::in(xyz pt)

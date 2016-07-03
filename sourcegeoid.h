@@ -77,7 +77,9 @@ struct smallcircle
 // Used to express "within 200 km of Philadelphia" and the like.
 {
   xyz center;
+  double cosrad;
   int radius; // angle
+  void setradius(int r);
   smallcircle complement();
   double farin(xyz pt);
   bool in(xyz pt);
