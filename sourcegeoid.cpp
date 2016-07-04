@@ -473,6 +473,23 @@ bool smallcircle::in(xyz pt)
   return farin(pt)>0;
 }
 
+/* To determine whether a smallcircle and a geoquad overlap:
+ * • If the center of either is inside the other, then they overlap; return true.
+ * • Find the intersections of the great circles which bound the geoquad
+ *   with the smallcircle. There are anywhere from 0 to 8 of them.
+ * • If there are 7 or 8, the smallcircle's antipode overlaps the geoquad.
+ *   If the smallcircle overlapped the geoquad, one's center would be inside
+ *   the other, which would have been noticed already. Return false.
+ * • If there are 0 or 1, the smallcircle is outside the geoquad or tangent
+ *   to its outside. Again, if they overlapped, it would have been noticed. Return false.
+ * • If there are 3-6, check the point halfway between each pair whether it
+ *   is in the geoquad. Return true if any is inside, else false.
+ * • If there are 2, halfway between them may be on a side of the geoquad.
+ *   Points on two sides of the geoquad are considered outside. Therefore,
+ *   find the ends of the diameter of the smallcircle which bisects the two
+ *   points, and check whether they are in the geoquad.
+ */
+
 cylinterval boundrect(smallcircle c)
 /* Returns the smallest rectangle in cylindrical projection which contains c.
  * This is done by computing where the complement of c intersects the equator.
