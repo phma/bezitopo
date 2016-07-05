@@ -371,6 +371,11 @@ xyz operator-(const xyz &l,const xyz &r)
   return xyz(l.x-r.x,l.y-r.y,l.z-r.z);
 }
 
+xyz operator-(const xyz &r)
+{
+  return xyz(-r.x,-r.y,-r.z);
+}
+
 double dist(xyz a,xyz b)
 {return hypot(hypot(a.x-b.x,a.y-b.y),a.z-b.z);
  }

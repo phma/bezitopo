@@ -473,6 +473,37 @@ bool smallcircle::in(xyz pt)
   return farin(pt)>0;
 }
 
+vector<xyz> gscsint(xyz gc,smallcircle sc)
+/* Compute the intersections of a great circle, represented by its pole,
+ * and a small circle. The result has length 1; multiply by 8371 km
+ * to put it on the spherical earth's surface.
+ */
+{
+  xyz nearest; // nearest point on gc to center of sc
+  double nearestin,farthestin;
+  double x,y;
+  xyz sidebeam;
+  vector<xyz> ret;
+  sidebeam=cross(gc,sc.center);
+  nearest=cross(sidebeam,gc);
+  if (nearest.length())
+  {
+    nearest/=nearest.length();
+    sidebeam/=sidebeam.length();
+    nearestin=sc.farin(nearest);
+    farthestin=sc.farin(-nearest);
+    x=(farthestin+nearestin)/(farthestin-nearestin);
+    if (x>=-1 && x<=1)
+    {
+      y=sqrt(1-sqr(x));
+      ret.push_back(x*nearest+y*sidebeam);
+      if (y)
+	ret.push_back(x*nearest-y*sidebeam);
+    }
+  }
+  return ret;
+}
+
 /* To determine whether a smallcircle and a geoquad overlap:
  * • If the center of either is inside the other, then they overlap; return true.
  * • Find the intersections of the great circles which bound the geoquad

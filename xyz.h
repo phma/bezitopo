@@ -111,6 +111,7 @@ public:
   friend xyz operator*(const xyz &l,const xyz &r); // cross product
   friend xyz operator+(const xyz &l,const xyz &r);
   friend xyz operator-(const xyz &l,const xyz &r);
+  friend xyz operator-(const xyz &r);
 protected:
   double x,y,z;
 };
