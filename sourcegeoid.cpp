@@ -473,7 +473,7 @@ bool smallcircle::in(xyz pt)
   return farin(pt)>0;
 }
 
-vector<xyz> gscsint(xyz gc,smallcircle sc)
+vector<xyz> gcscint(xyz gc,smallcircle sc)
 /* Compute the intersections of a great circle, represented by its pole,
  * and a small circle. The result has length 1; multiply by 8371 km
  * to put it on the spherical earth's surface.

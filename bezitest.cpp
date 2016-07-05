@@ -3827,11 +3827,15 @@ void testgeoid()
 
 void testsmallcircle()
 {
-  int r;
+  int r,i;
   smallcircle avl150,eho150,clt150; // Asheville, Shelby, Charlotte
+  xyz xprod,qaraqoga;
+  // Qaraqoğa, Pavlodar, Kazakhstan, is 10 Mm from both Asheville and Charlotte.
+  vector<xyz> avlint,ehoint,cltint;
   avl150.center=Sphere.geoc(degtobin(35.58),degtobin(-82.56),0);
   eho150.center=Sphere.geoc(degtobin(35.29),degtobin(-81.54),0);
   clt150.center=Sphere.geoc(degtobin(35.23),degtobin(-80.84),0);
+  qaraqoga=Sphere.geoc(degtobin(52.43),degtobin(75.07),0);
   r=radtobin(15e4/6371e3);
   avl150.setradius(r);
   eho150.setradius(r);
@@ -3840,6 +3844,26 @@ void testsmallcircle()
   tassert(avl150.in(eho150.center));
   tassert(!avl150.in(clt150.center));
   tassert(eho150.in(clt150.center));
+  xprod=cross(avl150.center,clt150.center);
+  xprod*=6371e3/xprod.length();
+  cout<<radtodeg(xprod.lat())<<' '<<radtodeg(xprod.lon())<<' '<<dist(xprod,qaraqoga)<<endl;
+  tassert(dist(xprod,qaraqoga)<2e4);
+  avlint=gcscint(xprod,avl150);
+  ehoint=gcscint(xprod,eho150);
+  cltint=gcscint(xprod,clt150);
+  tassert(avlint.size()==2);
+  tassert(ehoint.size()==2);
+  tassert(cltint.size()==2);
+  for (i=0;i<2;i++)
+  {
+    avlint[i]*=6371e3;
+    ehoint[i]*=6371e3;
+    cltint[i]*=6371e3;
+  }
+  cout<<dist(avlint[0],avlint[1])<<' '<<dist(ehoint[0],ehoint[1])<<' '<<dist(cltint[0],cltint[1])<<endl;
+  tassert(dist(avlint[0],avlint[1])>299792); // The distance < 300 km because
+  tassert(dist(ehoint[0],ehoint[1])<299792); // it's straight through the earth.
+  tassert(dist(cltint[0],cltint[1])>299792); // Shelby is off the great circle.
 }
 
 void testgeint()
