@@ -285,6 +285,15 @@ double dot(xyz a,xyz b)
   return a.x*b.x+a.y*b.y+a.z*b.z;
 }
 
+xyz cross(xyz a,xyz b)
+{
+  xyz ret;
+  ret.x=a.y*b.z-b.y*a.z;
+  ret.y=a.z*b.x-b.z*a.x;
+  ret.z=a.x*b.y-b.x*a.y;
+  return ret;
+}
+
 void xyz::roscat(xy tfrom,int ro,double sca,xy tto)
 {
   _roscat(tfrom,ro,sca,cossin(ro)*sca,tto);
