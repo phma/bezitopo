@@ -3825,13 +3825,22 @@ void testgeoid()
     }
 }
 
+void outcyl(cylinterval c)
+{
+  cout<<"latitude "<<bintodeg(c.sbd)<<'-'<<bintodeg(c.nbd);
+  cout<<" longitude "<<bintodeg(c.wbd)<<'-'<<bintodeg(c.ebd);
+}
+
 void testsmallcircle()
 {
   int r,i;
   smallcircle avl150,eho150,clt150; // Asheville, Shelby, Charlotte
+  smallcircle athwi45d; // Athens, Wisconsin, 45°N, to test a circle passing through the pole
+  smallcircle ush4000; // circle encloses the pole
   xyz xprod,qaraqoga;
   // Qaraqoğa, Pavlodar, Kazakhstan, is 10 Mm from both Asheville and Charlotte.
   vector<xyz> avlint,ehoint,cltint;
+  cylinterval avlcyl,ehocyl,cltcyl,athwicyl,ushcyl;
   avl150.center=Sphere.geoc(degtobin(35.58),degtobin(-82.56),0);
   eho150.center=Sphere.geoc(degtobin(35.29),degtobin(-81.54),0);
   clt150.center=Sphere.geoc(degtobin(35.23),degtobin(-80.84),0);
@@ -3864,6 +3873,45 @@ void testsmallcircle()
   tassert(dist(avlint[0],avlint[1])>299792); // The distance < 300 km because
   tassert(dist(ehoint[0],ehoint[1])<299792); // it's straight through the earth.
   tassert(dist(cltint[0],cltint[1])>299792); // Shelby is off the great circle.
+  athwi45d.center=xyz(0,-4504977.3,4504977.3);
+  ush4000.center=Sphere.geoc(degtobin(-54.8),degtobin(-68.3),0);
+  athwi45d.setradius(DEG45);
+  ush4000.setradius(radtobin(4e6/6371e3));
+  avlcyl=boundrect(avl150);
+  ehocyl=boundrect(eho150);
+  cltcyl=boundrect(clt150);
+  athwicyl=boundrect(athwi45d);
+  ushcyl=boundrect(ush4000);
+  cout<<"Asheville ";
+  outcyl(avlcyl);
+  cout<<endl<<"Shelby ";
+  outcyl(ehocyl);
+  cout<<endl<<"Charlotte ";
+  outcyl(cltcyl);
+  cout<<endl<<"Athens, WI ";
+  outcyl(athwicyl);
+  cout<<endl<<"Ushuaia ";
+  outcyl(ushcyl);
+  cout<<endl;
+  tassert(avlcyl.sbd==204195973);
+  tassert(avlcyl.nbd==220289961);
+  tassert(avlcyl.wbd==-502384254);
+  tassert(avlcyl.ebd==-482594912);
+  tassert(ehocyl.sbd==202466056);
+  tassert(ehocyl.nbd==218560044);
+  tassert(ehocyl.wbd==-496264134);
+  tassert(ehocyl.ebd==-476545958);
+  tassert(cltcyl.sbd==202108142);
+  tassert(cltcyl.nbd==218202130);
+  tassert(cltcyl.wbd==-492081173);
+  tassert(cltcyl.ebd==-472377595);
+  tassert(athwicyl.sbd==0);
+  tassert(athwicyl.nbd==DEG90);
+  tassert(athwicyl.wbd==-DEG180);
+  tassert(athwicyl.ebd==0);
+  tassert(ushcyl.sbd==-DEG90);
+  tassert(ushcyl.nbd==-112308239);
+  tassert(ushcyl.ebd-ushcyl.wbd==DEG360);
 }
 
 void testgeint()

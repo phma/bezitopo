@@ -554,10 +554,10 @@ cylinterval boundrect(smallcircle c)
   {
     intersections=gcscint(xyz(0,0,6371e3),comp);
     assert(intersections.size()==2);
-    ret.ebd=intersections[0].lon();
-    ret.wbd=intersections[1].lon();
-    ret.ebd=clat+foldangle(ret.ebd-clat);
-    ret.wbd=clat+foldangle(ret.wbd-clat);
+    ret.ebd=radtobin(intersections[0].lon());
+    ret.wbd=radtobin(intersections[1].lon());
+    ret.ebd=clon+foldangle(ret.ebd-clon);
+    ret.wbd=clon+foldangle(ret.wbd-clon);
     if (ret.ebd-ret.wbd>0)
       swap(ret.ebd,ret.wbd);
     ret.ebd+=DEG90;
