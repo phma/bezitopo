@@ -22,6 +22,7 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
+#include <cassert>
 #include "sourcegeoid.h"
 #include "binio.h"
 #include "bicubic.h"
@@ -529,6 +530,40 @@ cylinterval boundrect(smallcircle c)
  * differ by 180°.
  */
 {
+  smallcircle comp=c.complement();
+  cylinterval ret;
+  vector<xyz> intersections;
+  int clat=c.center.lati(),clon=c.center.loni();
+  ret.nbd=clat+c.radius;
+  ret.sbd=clat-c.radius;
+  if (ret.nbd==DEG90 || ret.sbd==-DEG90)
+  {
+    ret.ebd=clon+DEG90;
+    ret.wbd=clon-DEG90;
+  }
+  else if (ret.nbd>DEG90 || ret.sbd<-DEG90)
+  {
+    if (ret.nbd>DEG90)
+      ret.nbd=DEG90;
+    if (ret.sbd<-DEG90)
+      ret.sbd=-DEG90;
+    ret.ebd=clon+DEG180;
+    ret.wbd=clon-DEG180;
+  }
+  else
+  {
+    intersections=gcscint(xyz(0,0,6371e3),comp);
+    assert(intersections.size()==2);
+    ret.ebd=intersections[0].lon();
+    ret.wbd=intersections[1].lon();
+    ret.ebd=clat+foldangle(ret.ebd-clat);
+    ret.wbd=clat+foldangle(ret.wbd-clat);
+    if (ret.ebd-ret.wbd>0)
+      swap(ret.ebd,ret.wbd);
+    ret.ebd+=DEG90;
+    ret.wbd-=DEG90;
+  }
+  return ret;
 }
 
 geoid::geoid()
