@@ -208,6 +208,16 @@ latlong::latlong(double dlat,double dlon)
   lon=dlon;
 }
 
+int latlong::valid()
+{
+  int ret=0;
+  if (std::isfinite(lat))
+    ret++;
+  if (std::isfinite(lon))
+    ret++;
+  return ret;
+}
+
 string radtoangle(double angle,int unitp)
 {
   double angmult,prec;

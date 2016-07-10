@@ -41,6 +41,7 @@ struct latlong
   latlong();
   latlong(int ilat,int ilon);
   latlong(double dlat,double dlon); // Arguments are in radians.
+  int valid(); // 0, 1, or 2
 };
 
 double sqr(double x);

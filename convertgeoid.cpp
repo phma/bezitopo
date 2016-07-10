@@ -39,6 +39,7 @@ vector<geoformat> formatlist;
 int verbosity=1;
 bool helporversion=false;
 int qsz=4;
+vector<smallcircle> excerptcircles;
 
 struct option
 {
@@ -230,6 +231,10 @@ void argpass1(int argc, char *argv[])
 void argpass2()
 {
   int i,j;
+  string centerstr;
+  latlong ll;
+  double radius;
+  smallcircle cir;
   for (i=0;i<cmdline.size();i++)
     switch (cmdline[i].optnum)
     {
@@ -271,16 +276,30 @@ void argpass2()
 	}
 	break;
       case 5:
-	if (i+2<cmdline.size() && cmdline[i+1].optnum<0 && cmdline[i+2].optnum<0)
+	centerstr="";
+	radius=NAN;
+	ll=parselatlong(centerstr,DEGREE); // sets it to NAN,NAN
+	for (j=1;ll.valid()<2 && i+j<cmdline.size() && cmdline[i+j].optnum<0;j++)
 	{
-	  i++;
-	  cout<<"Excerpt will be centered on "<<cmdline[i].nonopt<<" with radius "<<cmdline[i+1].nonopt<<endl;
-	  i++;
+	  centerstr+=cmdline[i+j].nonopt+" ";
+	  ll=parselatlong(centerstr,DEGREE);
+	}
+	i+=j;
+	if (ll.valid()==2 && i<cmdline.size() && cmdline[i].optnum<0)
+	  radius=stod(cmdline[i++].nonopt)*1000;
+	if (radius>0 && radius<=1e7)
+	{
+	  cout<<"Excerpt will be centered on "<<radtodeg(ll.lat)<<','<<radtodeg(ll.lon)<<" with radius "<<radius<<endl;
+	  cir.center=Sphere.geoc(ll,0);
+	  cir.radius=radtobin(radius/Sphere.avgradius());
+	  excerptcircles.push_back(cir);
 	}
 	else
 	{
 	  cout<<"-c / --circle requires two arguments, a center (latitude/longitude) and a radius"<<endl;
+	  cout<<"radius is 10000 max, in kilometers"<<endl;
 	}
+	i--;
 	break;
       default:
 	if (!helporversion)
