@@ -46,19 +46,26 @@ xy paper(210,297),modelcenter;
 char rscales[]={10,12,15,20,25,30,40,50,60,80};
 
 void setscale(double minx,double miny,double maxx,double maxy,int ori)
-{double xsize,ysize;
- int i;
- orientation=ori;
- modelcenter=xy(minx+maxx,miny+maxy)/2;
- xsize=fabs(minx-maxx);
- ysize=fabs(miny-maxy);
- for (scale=1;scale*xsize/10<paper.east() && scale*ysize/10<paper.north();scale*=10);
- for (;scale*xsize/80>paper.east()*0.9 || scale*ysize/80>paper.north()*0.9;scale/=10);
- for (i=0;i<9 && (scale*xsize/rscales[i]>paper.east()*0.9 || scale*ysize/rscales[i]>paper.north()*0.9);i++);
- scale/=rscales[i];
- //printf("scale=%f\n",scale);
- //sleep(3);
- }
+/* To compute minx etc. using dirbound on e.g. a pointlist pl:
+ * minx=pl.dirbound(-ori);
+ * miny=pl.dirbound(DEG90-ori);
+ * maxx=-pl.dirbound(DEG180-ori);
+ * maxy=-pl.dirbound(DEG270-ori);
+ */
+{
+  double xsize,ysize;
+  int i;
+  orientation=ori;
+  modelcenter=xy(minx+maxx,miny+maxy)/2;
+  xsize=fabs(minx-maxx);
+  ysize=fabs(miny-maxy);
+  for (scale=1;scale*xsize/10<paper.east() && scale*ysize/10<paper.north();scale*=10);
+  for (;scale*xsize/80>paper.east()*0.9 || scale*ysize/80>paper.north()*0.9;scale/=10);
+  for (i=0;i<9 && (scale*xsize/rscales[i]>paper.east()*0.9 || scale*ysize/rscales[i]>paper.north()*0.9);i++);
+  scale/=rscales[i];
+  //printf("scale=%f\n",scale);
+  //sleep(3);
+}
 
 void widen(double factor)
 {fprintf(psfile,"currentlinewidth %f mul setlinewidth\n",factor);

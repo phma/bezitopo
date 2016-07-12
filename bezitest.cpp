@@ -825,11 +825,16 @@ void testmaketinellipse()
 
 void testbreak0()
 {
+  double leftedge,bottomedge,rightedge,topedge,conterval;
+  int rotation=DEG90,i;
   criteria crit;
   criterion crit1;
   doc.pl[0].clear();
   doc.copytopopoints(crit);
   tassert(doc.pl[1].points.size()==0);
+  crit1.str="";
+  crit1.istopo=true;
+  crit.push_back(crit1);
   doc.pl[0].addpoint( 20,point(42.088,86.580,271.739,"TCR 30 CONCRETE"));
   doc.pl[0].addpoint( 22,point(45.789,86.320,271.322,"P11"));
   doc.pl[0].addpoint( 23,point(45.794,86.365,271.373,"TP11"));
@@ -938,6 +943,42 @@ void testbreak0()
    * Breakline 3
    * 019,020
    */
+  leftedge=doc.pl[0].dirbound(-rotation);
+  bottomedge=doc.pl[0].dirbound(-rotation+DEG90);
+  rightedge=-doc.pl[0].dirbound(-rotation+DEG180);
+  topedge=-doc.pl[0].dirbound(-rotation-DEG90);
+  doc.copytopopoints(crit);
+  doc.pl[1].maketin();
+  // TODO: Insert breakline code here
+  doc.pl[1].makegrad(0.);
+  doc.pl[1].maketriangles();
+  doc.pl[1].setgradient();
+  checkedgediscrepancies(doc.pl[1]);
+  doc.pl[1].makeqindex();
+  doc.pl[1].findcriticalpts();
+  doc.pl[1].addperimeter();
+  psopen("break0.ps");
+  psprolog();
+  startpage();
+  setscale(leftedge,bottomedge,rightedge,topedge,rotation);
+  conterval=0.2;
+  roughcontours(doc.pl[1],conterval);
+  smoothcontours(doc.pl[1],conterval,false);
+  setcolor(0,0,0);
+  for (i=0;i<doc.pl[1].contours.size();i++)
+  {
+    spline(doc.pl[1].contours[i].approx3d(1));
+  }
+  endpage();
+  startpage();
+  setscale(leftedge,bottomedge,rightedge,topedge,rotation);
+  for (i=0;i<doc.pl[1].edges.size();i++)
+  {
+    line(doc,doc.pl[1].edges[i],i,false);
+  }
+  endpage();
+  pstrailer();
+  psclose();
 }
 
 void testrelprime()
