@@ -566,6 +566,68 @@ cylinterval boundrect(smallcircle c)
   return ret;
 }
 
+cylinterval combine(cylinterval a,cylinterval b)
+/* Given two cylintervals, returns the smallest cylinterval containing both.
+ * Order is ignored except in the following cases:
+ * • a and b are both empty. Returns b.
+ * • a and b both have 360° longitude intervals. Returns the longitude interval of a.
+ * • a's central meridian is 180° from b's.
+ */
+{
+  cylinterval ret;
+  assert(a.sbd>=-DEG90);
+  assert(a.nbd>=a.sbd);
+  assert(a.nbd<=DEG90);
+  assert(a.wbd-a.ebd<1);
+  assert(b.sbd>=-DEG90);
+  assert(b.nbd>=b.sbd);
+  assert(b.nbd<=DEG90);
+  assert(b.wbd-b.ebd<1);
+  if (a.nbd>b.nbd)
+    ret.nbd=a.nbd;
+  else
+    ret.nbd=b.nbd;
+  if (a.sbd<b.sbd)
+    ret.sbd=a.sbd;
+  else
+    ret.sbd=b.sbd;
+  if (a.ebd==a.wbd || a.nbd==a.sbd)
+    ret=b;
+  else if (b.ebd==b.wbd || b.nbd==b.sbd)
+    ret=a;
+  else if ((a.ebd^a.wbd)==DEG360)
+  {
+    ret.ebd=a.ebd;
+    ret.wbd=a.wbd;
+  }
+  else if ((b.ebd^b.wbd)==DEG360)
+  {
+    ret.ebd=b.ebd;
+    ret.wbd=b.wbd;
+  }
+  else
+  {
+    if (a.ebd+a.wbd-b.ebd-b.wbd>0)
+      swap(a,b);
+    if ((double)(b.ebd-a.ebd)+(double)(b.wbd-a.wbd)<0)
+    {
+      b.ebd+=DEG360;
+      b.wbd+=DEG360;
+    }
+    if (b.ebd-a.ebd>0)
+      ret.ebd=b.ebd;
+    else
+      ret.ebd=a.ebd;
+    if (b.wbd-a.wbd>0)
+      ret.wbd=b.wbd;
+    else
+      ret.wbd=a.wbd;
+    if (ret.wbd-ret.ebd>0)
+      ret.ebd=ret.wbd+DEG360;
+  }
+  return ret;
+}
+
 geoid::geoid()
 {
   cmap=nullptr;

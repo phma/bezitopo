@@ -122,6 +122,7 @@ int readcarlsongsf(geolattice &geo,std::string filename);
 int readcarlsongsf(geoid &geo,std::string filename);
 cylinterval boundrect(smallcircle c);
 std::vector<xyz> gcscint(xyz gc,smallcircle sc);
+cylinterval combine(cylinterval a,cylinterval b);
 extern std::vector<geoid> geo;
 double avgelev(xyz dir);
 double qscale(int i,int qsz);
