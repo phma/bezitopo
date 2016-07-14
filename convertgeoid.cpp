@@ -66,6 +66,7 @@ vector<option> options(
   });
 
 vector<token> cmdline;
+geoid outputgeoid;
 
 /* The factors used when setting the six components of a geoquad are
  * 0: 1/1
@@ -329,15 +330,18 @@ int main(int argc, char *argv[])
   vball v;
   initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin);
   initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf);
-  cube.scale=1/65536.;
-  hdr.logScale=-16;
-  hdr.planet=BOL_EARTH;
-  hdr.dataType=BOL_UNDULATION;
-  hdr.encoding=BOL_VARLENGTH;
-  hdr.ncomponents=1;
-  hdr.tolerance=0.003;
-  hdr.sublimit=1000;
-  hdr.spacing=1e5;
+  outputgeoid.cmap=new cubemap;
+  outputgeoid.ghdr=new geoheader;
+  outputgeoid.glat=new geolattice;
+  outputgeoid.cmap->scale=1/65536.;
+  outputgeoid.ghdr->logScale=-16;
+  outputgeoid.ghdr->planet=BOL_EARTH;
+  outputgeoid.ghdr->dataType=BOL_UNDULATION;
+  outputgeoid.ghdr->encoding=BOL_VARLENGTH;
+  outputgeoid.ghdr->ncomponents=1;
+  outputgeoid.ghdr->tolerance=0.003;
+  outputgeoid.ghdr->sublimit=1000;
+  outputgeoid.ghdr->spacing=1e5;
   correctionHist.setdiscrete(1);
   argpass1(argc,argv);
   argpass2();
@@ -394,12 +398,12 @@ int main(int argc, char *argv[])
   {
     //cout<<"Face "<<i+1;
     //cout.flush();
-    interroquad(cube.faces[i],3e5);
+    interroquad(outputgeoid.cmap->faces[i],3e5);
     /*if (cube.faces[i].isfull()>=0)
       cout<<" has data"<<endl;
     else
       cout<<" is empty"<<endl;*/
-    refine(cube.faces[i],cube.scale,hdr.tolerance,hdr.sublimit,hdr.spacing,qsz);
+    refine(outputgeoid.cmap->faces[i],outputgeoid.cmap->scale,outputgeoid.ghdr->tolerance,outputgeoid.ghdr->sublimit,outputgeoid.ghdr->spacing,qsz);
   }
   outProgress();
   cout<<endl;
@@ -428,9 +432,9 @@ int main(int argc, char *argv[])
   psclose();*/
   //hdr.hash=cube.hash();
   ofile.open("geoid.bol");
-  hdr.hash=cube.hash();
-  hdr.writeBinary(ofile);
-  cube.writeBinary(ofile);
+  outputgeoid.ghdr->hash=outputgeoid.cmap->hash();
+  outputgeoid.ghdr->writeBinary(ofile);
+  outputgeoid.cmap->writeBinary(ofile);
   cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
   correctionHist.dump();
   return 0;
