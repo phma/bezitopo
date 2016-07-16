@@ -263,6 +263,16 @@ void geolattice::setheader(usngsheader &hdr)
   nslope.resize((width+1)*(height+1));
 }
 
+cylinterval geolattice::boundrect()
+{
+  cylinterval ret;
+  ret.sbd=sbd;
+  ret.wbd=wbd;
+  ret.nbd=nbd;
+  ret.ebd=ebd;
+  return ret;
+}
+
 void geolattice::setheader(carlsongsfheader &hdr)
 {
   sbd=degtobin(hdr.south);
