@@ -532,7 +532,7 @@ vector<xyz> gcscint(xyz gc,smallcircle sc)
  *   points, and check whether they are in the geoquad.
  */
 
-cylinterval boundrect(smallcircle c)
+cylinterval smallcircle::boundrect()
 /* Returns the smallest rectangle in cylindrical projection which contains c.
  * This is done by computing where the complement of c intersects the equator.
  * If c contains a pole, the east and west bounds differ by 360°, and the north
@@ -540,12 +540,12 @@ cylinterval boundrect(smallcircle c)
  * differ by 180°.
  */
 {
-  smallcircle comp=c.complement();
+  smallcircle comp=complement();
   cylinterval ret;
   vector<xyz> intersections;
-  int clat=c.center.lati(),clon=c.center.loni();
-  ret.nbd=clat+c.radius;
-  ret.sbd=clat-c.radius;
+  int clat=center.lati(),clon=center.loni();
+  ret.nbd=clat+radius;
+  ret.sbd=clat-radius;
   if (ret.nbd==DEG90 || ret.sbd==-DEG90)
   {
     ret.ebd=clon+DEG90;

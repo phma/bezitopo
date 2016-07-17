@@ -3918,11 +3918,11 @@ void testsmallcircle()
   ush4000.center=Sphere.geoc(degtobin(-54.8),degtobin(-68.3),0);
   athwi45d.setradius(DEG45);
   ush4000.setradius(radtobin(4e6/6371e3));
-  avlcyl=boundrect(avl150);
-  ehocyl=boundrect(eho150);
-  cltcyl=boundrect(clt150);
-  athwicyl=boundrect(athwi45d);
-  ushcyl=boundrect(ush4000);
+  avlcyl=avl150.boundrect();
+  ehocyl=eho150.boundrect();
+  cltcyl=clt150.boundrect();
+  athwicyl=athwi45d.boundrect();
+  ushcyl=ush4000.boundrect();
   cout<<"Asheville ";
   outcyl(avlcyl);
   cout<<endl<<"Shelby ";
