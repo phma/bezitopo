@@ -326,7 +326,7 @@ double anglexs(xy pnt)
 double geoquad::angarea()
 {
   xy ne(scale,scale),nw(-scale,scale);
-  return ((anglexs(center+ne)+anglexs(center-ne))-(anglexs(center+nw)+anglexs(center-nw)))*4.0589641e13;
+  return ((anglexs(center+ne)+anglexs(center-ne))-(anglexs(center+nw)+anglexs(center-nw)))*EARTHRADSQ;
 }
 
 double geoquad::area()

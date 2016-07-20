@@ -36,6 +36,8 @@
 #define BOL_VARLENGTH 1
 #define badheader 5
 #define baddata 6
+#define EARTHRAD 6371e3
+#define EARTHRADSQ 4.0589641e13
 
 struct vball // so called because a sphere so marked looks like a volleyball
 {

@@ -51,6 +51,7 @@ struct cylinterval
  */
 {
   int nbd,ebd,sbd,wbd;
+  double area();
 };
 
 class geolattice

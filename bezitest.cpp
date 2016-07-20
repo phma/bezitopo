@@ -3957,8 +3957,12 @@ void testsmallcircle()
 
 void testcylinterval()
 {
-  cylinterval lougou,howland;
+  cylinterval globe,lougou,howland;
   cylinterval res0,res1;
+  globe.ebd=DEG180;
+  globe.wbd=-DEG180;
+  globe.nbd=DEG90;
+  globe.sbd=-DEG90;
   howland.ebd=degtobin(-175.6);
   howland.wbd=degtobin(-177.6);
   howland.nbd=degtobin(1.8);
@@ -3967,12 +3971,19 @@ void testcylinterval()
   lougou.wbd=degtobin(2.9);
   lougou.nbd=degtobin(11.6);
   lougou.sbd=degtobin(10.6);
+  cout<<"Area of globe "<<globe.area()<<endl;
+  tassert(fabs(globe.area()-510e12)<0.1e12);
+  cout<<"Area of Howland "<<howland.area()<<" Lougou "<<lougou.area()<<endl;
   res0=combine(howland,lougou);
   res1=combine(lougou,howland);
   tassert(res0.nbd==res1.nbd);
   tassert(res0.sbd==res1.sbd);
   tassert(res0.ebd!=res1.ebd);
   tassert(res0.nbd!=res1.wbd);
+  tassert(res0.area()==res1.area());
+  tassert(fabs(res0.area()-26.3e12)<0.1e12);
+  cout<<"Area of combine(howland,lougou) "<<res0.area()<<endl;
+  cout<<"Area of combine(lougou,howland) "<<res1.area()<<endl;
 }
 
 void testgeint()
