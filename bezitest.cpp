@@ -3955,6 +3955,26 @@ void testsmallcircle()
   tassert(ushcyl.ebd-ushcyl.wbd==DEG360);
 }
 
+void testcylinterval()
+{
+  cylinterval lougou,howland;
+  cylinterval res0,res1;
+  howland.ebd=degtobin(-175.6);
+  howland.wbd=degtobin(-177.6);
+  howland.nbd=degtobin(1.8);
+  howland.sbd=degtobin(-0.2);
+  lougou.ebd=degtobin(3.9);
+  lougou.wbd=degtobin(2.9);
+  lougou.nbd=degtobin(11.6);
+  lougou.sbd=degtobin(10.6);
+  res0=combine(howland,lougou);
+  res1=combine(lougou,howland);
+  tassert(res0.nbd==res1.nbd);
+  tassert(res0.sbd==res1.sbd);
+  tassert(res0.ebd!=res1.ebd);
+  tassert(res0.nbd!=res1.wbd);
+}
+
 void testgeint()
 {
   int i,j,nancount;
@@ -4168,6 +4188,8 @@ int main(int argc, char *argv[])
     testquadhash();
   if (shoulddo("smallcircle"))
     testsmallcircle();
+  if (shoulddo("cylinterval"))
+    testcylinterval();
   if (shoulddo("geoid"))
     testgeoid();
   if (shoulddo("geint"))
