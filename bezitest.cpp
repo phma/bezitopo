@@ -3957,8 +3957,8 @@ void testsmallcircle()
 
 void testcylinterval()
 {
-  cylinterval globe,lougou,howland;
-  cylinterval res0,res1;
+  cylinterval globe,lougou,howland,udallgu,udallvi,rec0,rec60,empty;
+  cylinterval res0,res1,res2;
   globe.ebd=DEG180;
   globe.wbd=-DEG180;
   globe.nbd=DEG90;
@@ -3971,19 +3971,73 @@ void testcylinterval()
   lougou.wbd=degtobin(2.9);
   lougou.nbd=degtobin(11.6);
   lougou.sbd=degtobin(10.6);
+  udallgu.ebd=862681133;
+  udallgu.wbd=862681132;
+  udallgu.nbd=80217794;
+  udallgu.sbd=80217793;
+  udallvi.ebd=-385146884;
+  udallvi.wbd=-385146885;
+  udallvi.nbd=105916015;
+  udallvi.sbd=105916014;
+  rec0.ebd=degtobin(0.1);
+  rec0.wbd=degtobin(-0.1);
+  rec0.nbd=degtobin(0.1);
+  rec0.sbd=degtobin(-0.1);
+  rec60.ebd=degtobin(0.1);
+  rec60.wbd=degtobin(-0.1);
+  rec60.nbd=degtobin(60.1);
+  rec60.sbd=degtobin(59.9);
+  empty.ebd=DEG120;
+  empty.wbd=DEG120;
+  empty.nbd=DEG30;
+  empty.sbd=DEG30;
   cout<<"Area of globe "<<globe.area()<<endl;
   tassert(fabs(globe.area()-510e12)<0.1e12);
   cout<<"Area of Howland "<<howland.area()<<" Lougou "<<lougou.area()<<endl;
   res0=combine(howland,lougou);
   res1=combine(lougou,howland);
+  res2=combine(res1,res0);
   tassert(res0.nbd==res1.nbd);
   tassert(res0.sbd==res1.sbd);
   tassert(res0.ebd!=res1.ebd);
-  tassert(res0.nbd!=res1.wbd);
+  tassert(res0.wbd!=res1.wbd);
+  tassert(res2.ebd==res2.wbd+DEG360);
   tassert(res0.area()==res1.area());
   tassert(fabs(res0.area()-26.3e12)<0.1e12);
   cout<<"Area of combine(howland,lougou) "<<res0.area()<<endl;
   cout<<"Area of combine(lougou,howland) "<<res1.area()<<endl;
+  res0=combine(udallvi,udallgu);
+  res1=combine(udallgu,udallvi);
+  tassert(res0.nbd==res1.nbd);
+  tassert(res0.sbd==res1.sbd);
+  tassert(res0.ebd==res1.ebd);
+  tassert(res0.wbd==res1.wbd);
+  cout<<"Area of combine(udallvi,udallgu) "<<res0.area()<<endl;
+  cout<<"Longitude interval of combine(udallvi,udallgu) "<<bintodeg(res0.ebd-res0.wbd)<<endl;
+  tassert(fabs(res0.area()-7.7e12)<0.1e12);
+  tassert(res0.ebd-res0.wbd==899655632);
+  cout<<"Area(rec0)/area(rec60) "<<ldecimal(rec0.area()/rec60.area())<<endl;
+  tassert(fabs(rec0.area()/rec60.area()-2)<2e-6);
+  res0=combine(howland,empty);
+  res1=combine(empty,howland);
+  tassert(res0.nbd==res1.nbd);
+  tassert(res0.sbd==res1.sbd);
+  tassert(res0.ebd==res1.ebd);
+  tassert(res0.wbd==res1.wbd);
+  tassert(res0.nbd==howland.nbd);
+  tassert(res0.sbd==howland.sbd);
+  tassert(res0.ebd==howland.ebd);
+  tassert(res0.wbd==howland.wbd);
+  res0=combine(howland,globe);
+  res1=combine(globe,howland);
+  tassert(res0.nbd==res1.nbd);
+  tassert(res0.sbd==res1.sbd);
+  tassert(res0.ebd==res1.ebd);
+  tassert(res0.wbd==res1.wbd);
+  tassert(res0.nbd==globe.nbd);
+  tassert(res0.sbd==globe.sbd);
+  tassert(res0.ebd==globe.ebd);
+  tassert(res0.wbd==globe.wbd);
 }
 
 void testgeint()
