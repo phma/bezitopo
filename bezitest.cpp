@@ -4016,6 +4016,7 @@ void testcylinterval()
   cout<<"Longitude interval of combine(udallvi,udallgu) "<<bintodeg(res0.ebd-res0.wbd)<<endl;
   tassert(fabs(res0.area()-7.7e12)<0.1e12);
   tassert(res0.ebd-res0.wbd==899655632);
+  tassert(gap(udallgu,udallvi)==899655630);
   cout<<"Area(rec0)/area(rec60) "<<ldecimal(rec0.area()/rec60.area())<<endl;
   tassert(fabs(rec0.area()/rec60.area()-2)<2e-6);
   res0=combine(howland,empty);

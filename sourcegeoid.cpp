@@ -644,6 +644,21 @@ cylinterval combine(cylinterval a,cylinterval b)
   return ret;
 }
 
+int gap(cylinterval a,cylinterval b)
+/* Returns the smaller gap between the longitudes of a and b.
+ * If the longitudes overlap, the gap is negative.
+ */
+{
+  if (a.ebd+a.wbd-b.ebd-b.wbd>0)
+    swap(a,b);
+  if ((double)(b.ebd-a.ebd)+(double)(b.wbd-a.wbd)<0)
+  {
+    b.ebd+=DEG360;
+    b.wbd+=DEG360;
+  }
+  return b.wbd-a.ebd;
+}
+
 geoid::geoid()
 {
   cmap=nullptr;
