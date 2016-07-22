@@ -4055,11 +4055,15 @@ void testcylinterval()
   }
   res0.ebd=DEG180+rng.usrandom()-32767;
   res0.wbd=DEG150-rng.usrandom()*268435456;
+  res0.sbd=degtobin(-8);
+  res0.nbd=degtobin(-6);
   manycyl.push_back(res0);
   res0.wbd=~res0.wbd;
   res0.ebd=~res0.ebd;
   swap(res0.ebd,res0.wbd);
   manycyl.push_back(res0);
+  res0=combine(manycyl);
+  outcyl(res0);
 }
 
 void testgeint()

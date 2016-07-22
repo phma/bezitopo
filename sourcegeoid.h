@@ -126,6 +126,8 @@ int readcarlsongsf(geoid &geo,std::string filename);
 std::vector<xyz> gcscint(xyz gc,smallcircle sc);
 cylinterval combine(cylinterval a,cylinterval b);
 int gap(cylinterval a,cylinterval b);
+bool westof(cylinterval a,cylinterval b);
+cylinterval combine(std::vector<cylinterval> cyls);
 extern std::vector<geoid> geo;
 double avgelev(xyz dir);
 double qscale(int i,int qsz);

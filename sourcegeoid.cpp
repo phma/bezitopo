@@ -23,6 +23,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cassert>
+#include <algorithm>
 #include "sourcegeoid.h"
 #include "binio.h"
 #include "bicubic.h"
@@ -657,6 +658,54 @@ int gap(cylinterval a,cylinterval b)
     b.wbd+=DEG360;
   }
   return b.wbd-a.ebd;
+}
+
+bool westof(cylinterval a,cylinterval b)
+// This is a linear, not circular, comparison, for sorting.
+{
+  return a.ebd+a.wbd<b.ebd-b.wbd;
+}
+
+cylinterval combine(vector<cylinterval> cyls)
+{
+  vector<cylinterval> cyls1;
+  int biggap,littlegap,ibiggap,i,thisgap,csize;
+  if (cyls.size()==0)
+  {
+    cylinterval cyl{0,0,0,0};
+    cyls.push_back(cyl);
+  }
+  stable_sort(cyls.begin(),cyls.end(),westof); // sort() makes the program crash
+  do
+  {
+    csize=cyls.size();
+    for (biggap=DEG360,littlegap=~DEG360,ibiggap=0;i<cyls.size();i++)
+    {
+      thisgap=gap(cyls[i],cyls[(i+1)%csize]);
+      if (thisgap>biggap)
+      {
+	biggap=thisgap;
+	ibiggap=i+1;
+      }
+      if (thisgap<littlegap)
+        littlegap=thisgap;
+    }
+    cyls1.clear();
+    if (littlegap<0)
+      littlegap=0;
+    for (i=0;i<csize;i++)
+    {
+      if (i<csize-1 && gap(cyls[(i+ibiggap)%csize],cyls[(i+1)%csize])<=littlegap)
+      {
+	cyls1.push_back(combine(cyls[(i+ibiggap)%csize],cyls[(i+1)%csize]));
+	i++;
+      }
+      else
+	cyls1.push_back(cyls[(i+ibiggap)%csize]);
+    }
+    swap(cyls,cyls1);
+  } while (cyls.size()>1);
+  return cyls[0];
 }
 
 geoid::geoid()
