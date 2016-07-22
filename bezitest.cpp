@@ -3959,6 +3959,8 @@ void testcylinterval()
 {
   cylinterval globe,lougou,howland,udallgu,udallvi,rec0,rec60,empty;
   cylinterval res0,res1,res2;
+  vector<cylinterval> manycyl;
+  int i;
   globe.ebd=DEG180;
   globe.wbd=-DEG180;
   globe.nbd=DEG90;
@@ -4039,6 +4041,25 @@ void testcylinterval()
   tassert(res0.sbd==globe.sbd);
   tassert(res0.ebd==globe.ebd);
   tassert(res0.wbd==globe.wbd);
+  for (i=0;i<8;i++)
+  {
+    res0.nbd=degtobin(i)+1;
+    res0.sbd=degtobin(i)-1;
+    res0.wbd=degtobin(23*i+12)-1;
+    res0.ebd=degtobin(23*i+12)+rng.usrandom();
+    manycyl.push_back(res0);
+    res0.wbd=~res0.wbd;
+    res0.ebd=~res0.ebd;
+    swap(res0.ebd,res0.wbd);
+    manycyl.push_back(res0);
+  }
+  res0.ebd=DEG180+rng.usrandom()-32767;
+  res0.wbd=DEG150-rng.usrandom()*268435456;
+  manycyl.push_back(res0);
+  res0.wbd=~res0.wbd;
+  res0.ebd=~res0.ebd;
+  swap(res0.ebd,res0.wbd);
+  manycyl.push_back(res0);
 }
 
 void testgeint()
