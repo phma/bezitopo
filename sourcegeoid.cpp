@@ -699,14 +699,15 @@ cylinterval combine(vector<cylinterval> cyls)
     {
       if (i)
 	cout<<' ';
-      cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd)<<'-'<<bintodeg(cyls[(i+ibiggap)%csize].ebd);
+      //cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd)<<'-'<<bintodeg(cyls[(i+ibiggap)%csize].ebd);
+      cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd+cyls[(i+ibiggap)%csize].ebd)/2;
     }
     cout<<endl;
     for (i=0;i<csize;i++)
     {
-      if (i<csize-1 && gap(cyls[(i+ibiggap)%csize],cyls[(i+1)%csize])<=littlegap)
+      if (i<csize-1 && gap(cyls[(i+ibiggap)%csize],cyls[(i+1+ibiggap)%csize])<=littlegap)
       {
-	cyls1.push_back(combine(cyls[(i+ibiggap)%csize],cyls[(i+1)%csize]));
+	cyls1.push_back(combine(cyls[(i+ibiggap)%csize],cyls[(i+1+ibiggap)%csize]));
 	i++;
 	cout<<"<>";
       }
