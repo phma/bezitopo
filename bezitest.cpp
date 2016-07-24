@@ -4041,12 +4041,12 @@ void testcylinterval()
   tassert(res0.sbd==globe.sbd);
   tassert(res0.ebd==globe.ebd);
   tassert(res0.wbd==globe.wbd);
-  for (i=0;i<8;i++)
+  for (i=0;i<10;i++)
   {
     res0.nbd=degtobin(i)+1;
     res0.sbd=degtobin(i)-1;
-    res0.wbd=degtobin(23*i+12)-1;
-    res0.ebd=degtobin(23*i+12)+rng.usrandom();
+    res0.wbd=degtobin(17*i+12)-1;
+    res0.ebd=degtobin(17*i+12)+rng.usrandom();
     manycyl.push_back(res0);
     res0.wbd=~res0.wbd;
     res0.ebd=~res0.ebd;
