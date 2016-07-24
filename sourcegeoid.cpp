@@ -642,6 +642,7 @@ cylinterval combine(cylinterval a,cylinterval b)
     if (ret.wbd-ret.ebd>0)
       ret.ebd=ret.wbd+DEG360;
   }
+  assert(ret.wbd-ret.ebd<1);
   return ret;
 }
 
@@ -679,7 +680,7 @@ cylinterval combine(vector<cylinterval> cyls)
   do
   {
     csize=cyls.size();
-    for (biggap=DEG360,littlegap=~DEG360,ibiggap=0;i<cyls.size();i++)
+    for (biggap=DEG360,littlegap=~DEG360,ibiggap=i=0;i<csize;i++)
     {
       thisgap=gap(cyls[i],cyls[(i+1)%csize]);
       if (thisgap>biggap)
@@ -693,16 +694,29 @@ cylinterval combine(vector<cylinterval> cyls)
     cyls1.clear();
     if (littlegap<0)
       littlegap=0;
+    cout<<"biggap "<<bintodeg(biggap)<<" at "<<ibiggap<<"; littlegap "<<bintodeg(littlegap)<<endl;
+    for (i=0;i<csize;i++)
+    {
+      if (i)
+	cout<<' ';
+      cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd)<<'-'<<bintodeg(cyls[(i+ibiggap)%csize].ebd);
+    }
+    cout<<endl;
     for (i=0;i<csize;i++)
     {
       if (i<csize-1 && gap(cyls[(i+ibiggap)%csize],cyls[(i+1)%csize])<=littlegap)
       {
 	cyls1.push_back(combine(cyls[(i+ibiggap)%csize],cyls[(i+1)%csize]));
 	i++;
+	cout<<"<>";
       }
       else
+      {
 	cyls1.push_back(cyls[(i+ibiggap)%csize]);
+	cout<<'*';
+      }
     }
+    cout<<endl;
     swap(cyls,cyls1);
   } while (cyls.size()>1);
   return cyls[0];
