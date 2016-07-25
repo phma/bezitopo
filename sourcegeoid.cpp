@@ -664,12 +664,14 @@ int gap(cylinterval a,cylinterval b)
 bool westof(cylinterval a,cylinterval b)
 // This is a linear, not circular, comparison, for sorting.
 {
-  return a.ebd+a.wbd<b.ebd-b.wbd;
+  return a.ebd+a.wbd<b.ebd+b.wbd;
 }
 
 cylinterval combine(vector<cylinterval> cyls)
 {
   vector<cylinterval> cyls1;
+  multimap<int,cylinterval> sortcyl;
+  multimap<int,cylinterval>::iterator cyli;
   int biggap,littlegap,ibiggap,i,thisgap,csize;
   if (cyls.size()==0)
   {
@@ -699,8 +701,8 @@ cylinterval combine(vector<cylinterval> cyls)
     {
       if (i)
 	cout<<' ';
-      //cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd)<<'-'<<bintodeg(cyls[(i+ibiggap)%csize].ebd);
-      cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd+cyls[(i+ibiggap)%csize].ebd)/2;
+      cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd)<<'-'<<bintodeg(cyls[(i+ibiggap)%csize].ebd);
+      //cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd+cyls[(i+ibiggap)%csize].ebd)/2;
     }
     cout<<endl;
     for (i=0;i<csize;i++)
