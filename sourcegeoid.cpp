@@ -533,12 +533,6 @@ vector<xyz> gcscint(xyz gc,smallcircle sc)
  *   points, and check whether they are in the geoquad.
  */
 
-double cylinterval::area()
-{
-  return -(sin(nbd)-sin(sbd))*bintorad(wbd-ebd)*EARTHRADSQ;
-  // -(wbd-ebd) because DEG360 is negative as a signed integer
-}
-
 cylinterval smallcircle::boundrect()
 /* Returns the smallest rectangle in cylindrical projection which contains c.
  * This is done by computing where the complement of c intersects the equator.

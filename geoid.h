@@ -51,6 +51,15 @@ struct vball // so called because a sphere so marked looks like a volleyball
 vball encodedir(xyz dir);
 xyz decodedir(vball code);
 
+struct cylinterval
+/* A rectangle on a cylindrical map. Used when excerpting
+ * a geoid file into a geolattice.
+ */
+{
+  int nbd,ebd,sbd,wbd;
+  double area();
+};
+
 class geoquad
 {
 public:

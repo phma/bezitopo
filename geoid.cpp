@@ -169,6 +169,12 @@ xyz decodedir(vball code)
   return ret;
 }
 
+double cylinterval::area()
+{
+  return -(sin(nbd)-sin(sbd))*bintorad(wbd-ebd)*EARTHRADSQ;
+  // -(wbd-ebd) because DEG360 is negative as a signed integer
+}
+
 bool geoquad::subdivided()
 /* Unlike qindex, this is architecture-dependent.
  * On 64-bit Intel/AMD architecture, pointer is 8 bytes and int is 4.

@@ -45,15 +45,6 @@ struct carlsongsfheader
   int nlong,nlat;
 };
 
-struct cylinterval
-/* A rectangle on a cylindrical map. Used when excerpting
- * a geoid file into a geolattice.
- */
-{
-  int nbd,ebd,sbd,wbd;
-  double area();
-};
-
 class geolattice
 {
   /* nbd must be greater than sbd; both must be in [-DEG90,DEG90].
