@@ -4064,6 +4064,7 @@ void testcylinterval()
   manycyl.push_back(res0);
   res0=combine(manycyl);
   outcyl(res0);
+  tassert(res0.ebd-res0.wbd==degtobin(336)+2);
 }
 
 void testgeint()

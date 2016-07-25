@@ -696,30 +696,30 @@ cylinterval combine(vector<cylinterval> cyls)
     cyls1.clear();
     if (littlegap<0)
       littlegap=0;
-    cout<<"biggap "<<bintodeg(biggap)<<" at "<<ibiggap<<"; littlegap "<<bintodeg(littlegap)<<endl;
+    //cout<<"biggap "<<bintodeg(biggap)<<" at "<<ibiggap<<"; littlegap "<<bintodeg(littlegap)<<endl;
     for (i=0;i<csize;i++)
     {
-      if (i)
-	cout<<' ';
-      cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd)<<'-'<<bintodeg(cyls[(i+ibiggap)%csize].ebd);
+      //if (i)
+	//cout<<' ';
+      //cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd)<<'-'<<bintodeg(cyls[(i+ibiggap)%csize].ebd);
       //cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd+cyls[(i+ibiggap)%csize].ebd)/2;
     }
-    cout<<endl;
+    //cout<<endl;
     for (i=0;i<csize;i++)
     {
       if (i<csize-1 && gap(cyls[(i+ibiggap)%csize],cyls[(i+1+ibiggap)%csize])<=littlegap)
       {
 	cyls1.push_back(combine(cyls[(i+ibiggap)%csize],cyls[(i+1+ibiggap)%csize]));
 	i++;
-	cout<<"<>";
+	//cout<<"<>";
       }
       else
       {
 	cyls1.push_back(cyls[(i+ibiggap)%csize]);
-	cout<<'*';
+	//cout<<'*';
       }
     }
-    cout<<endl;
+    //cout<<endl;
     swap(cyls,cyls1);
   } while (cyls.size()>1);
   return cyls[0];
