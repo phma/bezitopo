@@ -91,6 +91,7 @@ public:
   double area();
   int isfull(); // -1 if empty, 0 if partly full or unknown, 1 if full
   std::array<unsigned,2> hash();
+  std::vector<cylinterval> boundrects();
   void writeBinary(std::ostream &ofile,int nesting=0);
   void readBinary(std::istream &ifile,int nesting=-1);
 };
@@ -106,6 +107,8 @@ public:
   double undulation(int lat,int lon);
   double undulation(latlong ll);
   double undulation(xyz dir);
+  std::vector<cylinterval> boundrects();
+  cylinterval boundrect();
   void writeBinary(std::ostream &ofile);
   void readBinary(std::istream &ifile);
 };
@@ -125,6 +128,11 @@ struct geoheader
   void writeBinary(std::ostream &ofile);
   void readBinary(std::istream &ifile);
 };
+
+cylinterval combine(cylinterval a,cylinterval b);
+int gap(cylinterval a,cylinterval b);
+bool westof(cylinterval a,cylinterval b);
+cylinterval combine(std::vector<cylinterval> cyls);
 
 extern cubemap cube;
 #endif

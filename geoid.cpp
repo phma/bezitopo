@@ -21,6 +21,9 @@
  */
 #include <cmath>
 #include <iostream>
+#include <algorithm>
+#include <cassert>
+#include <map>
 #include "geoid.h"
 #include "binio.h"
 #include "angle.h"
@@ -173,6 +176,148 @@ double cylinterval::area()
 {
   return -(sin(nbd)-sin(sbd))*bintorad(wbd-ebd)*EARTHRADSQ;
   // -(wbd-ebd) because DEG360 is negative as a signed integer
+}
+
+cylinterval combine(cylinterval a,cylinterval b)
+/* Given two cylintervals, returns the smallest cylinterval containing both.
+ * Order is ignored except in the following cases:
+ * • a and b are both empty. Returns b.
+ * • a and b both have 360° longitude intervals. Returns the longitude interval of a.
+ * • a's central meridian is 180° from b's.
+ */
+{
+  cylinterval ret;
+  assert(a.sbd>=-DEG90);
+  assert(a.nbd>=a.sbd);
+  assert(a.nbd<=DEG90);
+  assert(a.wbd-a.ebd<1);
+  assert(b.sbd>=-DEG90);
+  assert(b.nbd>=b.sbd);
+  assert(b.nbd<=DEG90);
+  assert(b.wbd-b.ebd<1);
+  if (a.nbd>b.nbd)
+    ret.nbd=a.nbd;
+  else
+    ret.nbd=b.nbd;
+  if (a.sbd<b.sbd)
+    ret.sbd=a.sbd;
+  else
+    ret.sbd=b.sbd;
+  if (a.ebd==a.wbd || a.nbd==a.sbd)
+    ret=b;
+  else if (b.ebd==b.wbd || b.nbd==b.sbd)
+    ret=a;
+  else if ((a.ebd^a.wbd)==DEG360)
+  {
+    ret.ebd=a.ebd;
+    ret.wbd=a.wbd;
+  }
+  else if ((b.ebd^b.wbd)==DEG360)
+  {
+    ret.ebd=b.ebd;
+    ret.wbd=b.wbd;
+  }
+  else
+  {
+    if (a.ebd+a.wbd-b.ebd-b.wbd>0)
+      swap(a,b);
+    if ((double)(b.ebd-a.ebd)+(double)(b.wbd-a.wbd)<0)
+    {
+      b.ebd+=DEG360;
+      b.wbd+=DEG360;
+    }
+    if (b.ebd-a.ebd>0)
+      ret.ebd=b.ebd;
+    else
+      ret.ebd=a.ebd;
+    if (b.wbd-a.wbd>0)
+      ret.wbd=a.wbd;
+    else
+      ret.wbd=b.wbd;
+    if (ret.wbd-ret.ebd>0)
+      ret.ebd=ret.wbd+DEG360;
+  }
+  assert(ret.wbd-ret.ebd<1);
+  return ret;
+}
+
+int gap(cylinterval a,cylinterval b)
+/* Returns the smaller gap between the longitudes of a and b.
+ * If the longitudes overlap, the gap is negative.
+ */
+{
+  if (a.ebd+a.wbd-b.ebd-b.wbd>0)
+    swap(a,b);
+  if ((double)(b.ebd-a.ebd)+(double)(b.wbd-a.wbd)<0)
+  {
+    b.ebd+=DEG360;
+    b.wbd+=DEG360;
+  }
+  return b.wbd-a.ebd;
+}
+
+bool westof(cylinterval a,cylinterval b)
+// This is a linear, not circular, comparison, for sorting.
+{
+  return a.ebd+a.wbd<b.ebd+b.wbd;
+}
+
+cylinterval combine(vector<cylinterval> cyls)
+{
+  vector<cylinterval> cyls1;
+  multimap<int,cylinterval> sortcyl;
+  multimap<int,cylinterval>::iterator cyli;
+  int biggap,littlegap,ibiggap,i,thisgap,csize;
+  if (cyls.size()==0)
+  {
+    cylinterval cyl{0,0,0,0};
+    cyls.push_back(cyl);
+  }
+  stable_sort(cyls.begin(),cyls.end(),westof); // sort() makes the program crash
+  do
+  {
+    csize=cyls.size();
+    for (biggap=DEG360,littlegap=~DEG360,ibiggap=i=0;i<csize;i++)
+    {
+      thisgap=gap(cyls[i],cyls[(i+1)%csize]);
+      if (thisgap>biggap)
+      {
+	biggap=thisgap;
+	ibiggap=i+1;
+      }
+      if (thisgap<littlegap)
+        littlegap=thisgap;
+    }
+    cyls1.clear();
+    if (littlegap<0)
+      littlegap=0;
+    //cout<<"biggap "<<bintodeg(biggap)<<" at "<<ibiggap<<"; littlegap "<<bintodeg(littlegap)<<endl;
+    for (i=0;i<csize;i++)
+    {
+      //if (i)
+	//cout<<' ';
+      //cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd)<<'-'<<bintodeg(cyls[(i+ibiggap)%csize].ebd);
+      //cout<<bintodeg(cyls[(i+ibiggap)%csize].wbd+cyls[(i+ibiggap)%csize].ebd)/2;
+    }
+    //cout<<endl;
+    for (i=0;i<csize;i++)
+    {
+      if (i<csize-1 && gap(cyls[(i+ibiggap)%csize],cyls[(i+1+ibiggap)%csize])<=littlegap)
+      {
+	cyls1.push_back(combine(cyls[(i+ibiggap)%csize],cyls[(i+1+ibiggap)%csize]));
+	i++;
+	//cout<<"<>";
+      }
+      else
+      {
+	cyls1.push_back(cyls[(i+ibiggap)%csize]);
+	//cout<<'*';
+      }
+    }
+    //cout<<endl;
+    swap(cyls,cyls1);
+  } while (cyls.size()>1);
+  return cyls[0];
 }
 
 bool geoquad::subdivided()
@@ -358,6 +503,53 @@ int geoquad::isfull()
   return (nums.size()>0)-(nans.size()>0);
 }
 
+vector<cylinterval> geoquad::boundrects()
+{
+  vector<cylinterval> ret,subret;
+  int i,j;
+  vector<int> lats,lons;
+  vball v;
+  xyz pnt;
+  cylinterval cyl;
+  if (subdivided())
+    for (i=0;i<4;i++)
+    {
+      subret=sub[i]->boundrects();
+      for (j=0;j<subret.size();j++)
+	ret.push_back(subret[j]);
+    }
+  else if (!isnan())
+  {
+    for (i=-1;i<=1;i++)
+      for (j=-1;j<=1;j++)
+      {
+	v=vball(face,center+xy(j*scale,i*scale));
+	pnt=decodedir(v);
+	lats.push_back(pnt.lati());
+	lons.push_back(pnt.loni());
+      }
+    for (i=0;i<9;i++)
+      lons[i]=lons[4]+foldangle(lons[i]-lons[4]);
+    cyl.nbd=cyl.ebd=-DEG270;
+    cyl.sbd=cyl.wbd=DEG270;
+    for (i=0;i<9;i++)
+    {
+      if (lats[i]>cyl.nbd)
+	cyl.nbd=lats[i];
+      if (lats[i]<cyl.sbd)
+	cyl.sbd=lats[i];
+      if (lons[i]>cyl.ebd)
+	cyl.ebd=lons[i];
+      if (lons[i]<cyl.wbd)
+	cyl.wbd=lons[i];
+    }
+    if (cyl.ebd-cyl.wbd>DEG180) // This happens ONLY if it's the entire Arctic or Antarctic face.
+      cyl.ebd=cyl.wbd+DEG360;
+    ret.push_back(cyl);
+  }
+  return ret;
+}
+
 void geoquad::writeBinary(ostream &ofile,int nesting)
 {
   int i;
@@ -487,6 +679,24 @@ array<unsigned,2> cubemap::hash()
     ret[1]=byteswap((ret[1]^subhashes[11-i])*3937);
   }
   return ret;
+}
+
+vector<cylinterval> cubemap::boundrects()
+{
+  vector<cylinterval> ret,subret;
+  int i,j;
+  for (i=0;i<6;i++)
+  {
+    subret=faces[i].boundrects();
+    for (j=0;j<subret.size();j++)
+      ret.push_back(subret[j]);
+  }
+  return ret;
+}
+
+cylinterval cubemap::boundrect()
+{
+  return combine(boundrects());
 }
 
 void cubemap::writeBinary(ostream &ofile)
