@@ -31,6 +31,8 @@
  * 3422420992
  * 11843673103869673473 86814856300000000000 a45d2df000000001 CRT
  * 3131951866628276224 22771617240000000001 2b76eda100000000 CRT
+ * 2654435769 6758708286 9e3779b9 2^32/φ
+ * 340573321 781756681 144cbc89 inverse mod 2^32 of  2^32/φ
  */
 #include <cstring>
 #include <iostream>
@@ -189,3 +191,19 @@ double halton::scalar(double x)
   return _scalar(x);
 }
 
+latlong halton::_onearth()
+{
+  latlong ret;
+  int ilon;
+  ilon=breverse(n&4294967295);
+  ret.lon=bintorad(ilon);
+  ilon*=0x144cbc89;
+  ret.lat=asin(((int)(treverse(n%3486784401)-1743392200)+(ilon+0.5)/4294967296)/3486784401);
+  return ret;
+}
+
+latlong halton::onearth()
+{
+  operator++();
+  return _onearth();
+}
