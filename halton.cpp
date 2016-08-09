@@ -198,7 +198,7 @@ latlong halton::_onearth()
   ilon=breverse(n&4294967295);
   ret.lon=bintorad(ilon);
   ilon*=0x144cbc89;
-  ret.lat=asin(((int)(treverse(n%3486784401)-1743392200)+(ilon+0.5)/4294967296)/3486784401);
+  ret.lat=asin(((int)(treverse(n%3486784401)-1743392200)+(ilon+0.5)/4294967296)/3486784401*2);
   return ret;
 }
 

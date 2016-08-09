@@ -2480,6 +2480,10 @@ void testhalton()
 {
   unsigned int i;
   halton h;
+  latlong ll;
+  xyz pt;
+  double toler,expected;
+  manysum xsqsum,ysqsum,zsqsum;
   initbtreverse();
   for (i=0;i<30;i++)
     printf("%7d ",btreversetable[i]);
@@ -2503,6 +2507,20 @@ void testhalton()
   testbtreverse(588235294117647);
   for (i=0;i<56;i++)
     printf("%9.7f ",h.scalar(1));
+  for (i=0;i<746496;i++)
+  {
+    ll=h.onearth();
+    pt=Sphere.geoc(ll,0);
+    xsqsum+=sqr(pt.getx());
+    ysqsum+=sqr(pt.gety());
+    zsqsum+=sqr(pt.getz());
+  }
+  cout<<xsqsum.total()<<' '<<ysqsum.total()<<' '<<zsqsum.total()<<endl;
+  expected=EARTHRADSQ*i/3;
+  toler=EARTHRADSQ*log(i+3);
+  tassert(fabs(xsqsum.total()-expected)<toler);
+  tassert(fabs(ysqsum.total()-expected)<toler);
+  tassert(fabs(zsqsum.total()-expected)<toler);
 }
 
 void testpolyline()
