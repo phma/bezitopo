@@ -410,6 +410,7 @@ int main(int argc, char *argv[])
   {
     cout<<"? ";
     cout.flush();
+    cmdline="";
     getline(cin,cmdline);
     chpos=cmdline.find_first_of(' '); // split the string at the first space
     if (chpos>cmdline.length())

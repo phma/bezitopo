@@ -48,6 +48,8 @@ void closure_i(string args)
     if (chpos>0 && chpos!=string::npos)
     {
       chpos=input.find_last_of(' '); // split the string at the last space before the last digit
+      if (chpos>input.length())
+	chpos=input.length();
       bearingstr=input.substr(0,chpos);
       distancestr=input.substr(chpos);
       bearing=parsebearing(bearingstr,DEGREE);

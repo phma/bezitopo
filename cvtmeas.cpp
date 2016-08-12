@@ -57,6 +57,8 @@ void cvtmeas_i(string args)
     cout<<"cv> ";
     cout.flush();
     getline(cin,input);
+    if (!cin.good() && !input.length())
+      input="x";
     chpos=input.find(' ');
     if (chpos>0 && chpos!=string::npos)
     {
