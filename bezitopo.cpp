@@ -416,6 +416,8 @@ int main(int argc, char *argv[])
       chpos=cmdline.length();
     cmdword=cmdline.substr(0,chpos);
     cmdargs=cmdline.substr(chpos);
+    if (!cin.good() && !cmdword.length())
+      cmdword="exit";
     for (cmd=-1,i=0;i<commands.size();i++)
       if (commands[i].word==cmdword)
 	cmd=i;
