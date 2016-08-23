@@ -47,7 +47,7 @@ void closure_i(string args)
     chpos=input.find_last_of("0123456789");
     if (chpos>0 && chpos!=string::npos)
     {
-      chpos=input.find_last_of(' '); // split the string at the last space before the last digit
+      chpos=input.find_last_of(' ',chpos); // split the string at the last space before the last digit
       if (chpos>input.length())
 	chpos=input.length();
       bearingstr=input.substr(0,chpos);
