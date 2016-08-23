@@ -38,6 +38,7 @@ void closure_i(string args)
   double distance;
   char *distcpy=NULL;
   string input,bearingstr,distancestr;
+  bool validbearing;
   perimeter=area=0;
   do
   {
@@ -52,15 +53,28 @@ void closure_i(string args)
 	chpos=input.length();
       bearingstr=input.substr(0,chpos);
       distancestr=input.substr(chpos);
-      bearing=parsebearing(bearingstr,DEGREE);
+      validbearing=true;
+      try
+      {
+	bearing=parsebearing(bearingstr,DEGREE);
+      }
+      catch(int e)
+      {
+	validbearing=false;
+      }
       distcpy=(char *)realloc(distcpy,distancestr.length()+1);
       strcpy(distcpy,distancestr.c_str());
       distance=parse_length(distcpy);
-      vector=cossin(bearing)*distance;
-      area+=area3(origin,displacement,displacement+vector);
-      perimeter+=vector.length();
-      displacement+=vector;
-      cout<<displacement.east()<<' '<<displacement.north()<<' '<<bintoangle(atan2i(displacement),DEGREE+SEXAG1)<<' '<<displacement.length()<<endl;
+      if (validbearing)
+      {
+	vector=cossin(bearing)*distance;
+	area+=area3(origin,displacement,displacement+vector);
+	perimeter+=vector.length();
+	displacement+=vector;
+	cout<<displacement.east()<<' '<<displacement.north()<<' '<<bintoangle(atan2i(displacement),DEGREE+SEXAG1)<<' '<<displacement.length()<<endl;
+      }
+      else
+	cout<<"Could not parse \""<<bearingstr<<"\" as a bearing"<<endl;
     }
   }
   while (input.length());

@@ -382,7 +382,7 @@ int parsesignedangle(string angstr,int unitp)
 
 int parsebearing(string angstr,int unitp)
 {
-  int ns,ew,quadrant,angle;
+  int ns,ew,quadrant=-1,angle;
   ns=tolower(angstr[0]);
   angstr.erase(0,1);
   ew=tolower(angstr[angstr.length()-1]);
@@ -407,6 +407,8 @@ int parsebearing(string angstr,int unitp)
     case 4:
       angle=0x40000000-angle;
       break;
+    case -1:
+      throw badunits;
   }
   return angle;
 }
