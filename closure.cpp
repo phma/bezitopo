@@ -23,28 +23,61 @@
 #include <cstring>
 #include <iostream>
 #include <cstdlib>
+#include <vector>
+#include "icommon.h"
 #include "closure.h"
 #include "point.h"
 #include "cogo.h"
 #include "angle.h"
 using namespace std;
+vector<command> clcommands;
+
+void help_cl(string args)
+{
+  int i;
+  for (i=0;i<clcommands.size();i++)
+  {
+    cout<<clcommands[i].word<<"  "<<clcommands[i].desc<<endl;
+  }
+  cout<<"bearing distance (e.g. n30-20e 234.5): add call to traverse"<<endl;
+  cout<<"Blank line exits."<<endl;
+}
 
 void closure_i(string args)
 {
   xy displacement,vector,origin(0,0);
   double perimeter,area,misclosure;
   size_t chpos;
-  int bearing,unitp;
+  int bearing,unitp,i,cmd;
   double distance;
   char *distcpy=NULL;
-  string input,bearingstr,distancestr;
+  string input,bearingstr,distancestr,cmdstr,argstr;
   bool validbearing;
+  clcommands.clear();
+  //clcommands.push_back(command("p",setpt_cl,"Set the start or end point: e,n"));
+  //clcommands.push_back(command("u",undo_cl,"Undo"));
+  clcommands.push_back(command("help",help_cl,"List commands"));
   perimeter=area=0;
   do
   {
     cout<<"cl> ";
     cout.flush();
     getline(cin,input);
+    bearingstr=distancestr=cmdstr=argstr="";
+    chpos=input.find(' ');
+    if (chpos>0 && chpos!=string::npos)
+    {
+      cmdstr=input.substr(0,chpos);
+      argstr=input.substr(chpos);
+    }
+    else
+    {
+      cmdstr=input;
+      argstr="";
+    }
+    for (cmd=-1,i=0;i<clcommands.size();i++)
+      if (clcommands[i].word==cmdstr)
+	cmd=i;
     chpos=input.find_last_of("0123456789");
     if (chpos>0 && chpos!=string::npos)
     {
@@ -65,6 +98,11 @@ void closure_i(string args)
       distcpy=(char *)realloc(distcpy,distancestr.length()+1);
       strcpy(distcpy,distancestr.c_str());
       distance=parse_length(distcpy);
+    }
+    if (cmd>=0)
+      clcommands[cmd].fun(argstr);
+    else
+    {
       if (validbearing)
       {
 	vector=cossin(bearing)*distance;
