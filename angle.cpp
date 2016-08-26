@@ -383,10 +383,20 @@ int parsesignedangle(string angstr,int unitp)
 int parsebearing(string angstr,int unitp)
 {
   int ns,ew,quadrant=-1,angle;
-  ns=tolower(angstr[0]);
-  angstr.erase(0,1);
-  ew=tolower(angstr[angstr.length()-1]);
-  angstr.erase(angstr.length()-1,1);
+  if (angstr.length())
+  {
+    ns=tolower(angstr[0]);
+    angstr.erase(0,1);
+  }
+  else
+    ns=0;
+  if (angstr.length())
+  {
+    ew=tolower(angstr[angstr.length()-1]);
+    angstr.erase(angstr.length()-1,1);
+  }
+  else
+    ew=0;
   if (ns=='n' && ew=='e')
     quadrant=1;
   if (ns=='s' && ew=='e')

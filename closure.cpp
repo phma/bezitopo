@@ -31,6 +31,8 @@
 #include "angle.h"
 using namespace std;
 vector<command> clcommands;
+xy startpoint,endpoint;
+int spstatus;
 
 void help_cl(string args)
 {
@@ -45,7 +47,7 @@ void help_cl(string args)
 
 void closure_i(string args)
 {
-  xy displacement,vector,origin(0,0);
+  xy displacement,vector;
   double perimeter,area,misclosure;
   size_t chpos;
   int bearing,unitp,i,cmd;
@@ -53,6 +55,7 @@ void closure_i(string args)
   char *distcpy=NULL;
   string input,bearingstr,distancestr,cmdstr,argstr;
   bool validbearing;
+  endpoint=startpoint=xy(0,0);
   clcommands.clear();
   //clcommands.push_back(command("p",setpt_cl,"Set the start or end point: e,n"));
   //clcommands.push_back(command("u",undo_cl,"Undo"));
@@ -106,7 +109,7 @@ void closure_i(string args)
       if (validbearing)
       {
 	vector=cossin(bearing)*distance;
-	area+=area3(origin,displacement,displacement+vector);
+	area+=area3(startpoint,displacement,displacement+vector);
 	perimeter+=vector.length();
 	displacement+=vector;
 	cout<<displacement.east()<<' '<<displacement.north()<<' '<<bintoangle(atan2i(displacement),DEGREE+SEXAG1)<<' '<<displacement.length()<<endl;
@@ -116,7 +119,7 @@ void closure_i(string args)
     }
   }
   while (input.length());
-  cout<<"Misclosure: "<<format_meas_unit(displacement.length(),METER+DEC3)<<endl;
+  cout<<"Misclosure: "<<format_meas_unit((displacement-endpoint).length(),METER+DEC3)<<endl;
   cout<<"Perimeter: "<<perimeter<<endl;
   cout<<"Area: "<<area<<endl;
   cout<<"Ratio of precision: 1:"<<perimeter/displacement.length()<<endl;
