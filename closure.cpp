@@ -143,7 +143,7 @@ void closure_i(string args)
 	if (!spstatus)
 	  spstatus++;
       }
-      else
+      else if (input.length())
 	cout<<"Could not parse \""<<bearingstr<<"\" as a bearing"<<endl;
     }
   }
