@@ -410,7 +410,7 @@ double parse_meas(char *meas,int unitp,int *found_unit)
      }
  if (unitp<0)
     {fprintf(stderr,"Unknown unit symbol: %s\n",unitstr);
-     factor=0/0;
+     factor=NAN;
      unitp=0;
      }
  else

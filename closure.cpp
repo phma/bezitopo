@@ -45,6 +45,32 @@ void help_cl(string args)
   cout<<"Blank line exits."<<endl;
 }
 
+void setpt_cl(string args)
+/* If spstatus==0, sets both startpoint and endpoint to args;
+ * If spstatus>0, sets endpoint to args and sets spstatus to 2.
+ * spstatus is set to 1 when a call is traversed.
+ */
+{
+  xy point;
+  point=parsexy(args);
+  if (point.isfinite())
+  {
+    if (spstatus)
+    {
+      endpoint=point;
+      spstatus=2;
+      cout<<"Endpoint: "<<endpoint.getx()<<','<<endpoint.gety()<<endl;
+    }
+    else
+    {
+      endpoint=startpoint=point;
+      cout<<"Startpoint: "<<startpoint.getx()<<','<<startpoint.gety()<<endl;
+    }
+  }
+  else
+    cout<<"Could not parse \""<<args<<"\" as a 2D point"<<endl;
+}
+
 void closure_i(string args)
 {
   xy displacement,vector;
@@ -56,8 +82,9 @@ void closure_i(string args)
   string input,bearingstr,distancestr,cmdstr,argstr;
   bool validbearing;
   endpoint=startpoint=xy(0,0);
+  spstatus=0;
   clcommands.clear();
-  //clcommands.push_back(command("p",setpt_cl,"Set the start or end point: e,n"));
+  clcommands.push_back(command("p",setpt_cl,"Set the start or end point: e,n"));
   //clcommands.push_back(command("u",undo_cl,"Undo"));
   clcommands.push_back(command("help",help_cl,"List commands"));
   perimeter=area=0;
@@ -109,19 +136,22 @@ void closure_i(string args)
       if (validbearing)
       {
 	vector=cossin(bearing)*distance;
-	area+=area3(startpoint,displacement,displacement+vector);
+	area+=area3(xy(0,0),displacement,displacement+vector);
 	perimeter+=vector.length();
 	displacement+=vector;
-	cout<<displacement.east()<<' '<<displacement.north()<<' '<<bintoangle(atan2i(displacement),DEGREE+SEXAG1)<<' '<<displacement.length()<<endl;
+	cout<<(startpoint+displacement).east()<<' '<<(startpoint+displacement).north()<<' '<<bintoangle(atan2i(displacement),DEGREE+SEXAG1)<<' '<<displacement.length()<<endl;
+	if (!spstatus)
+	  spstatus++;
       }
       else
 	cout<<"Could not parse \""<<bearingstr<<"\" as a bearing"<<endl;
     }
   }
   while (input.length());
-  cout<<"Misclosure: "<<format_meas_unit((displacement-endpoint).length(),METER+DEC3)<<endl;
+  misclosure=(startpoint+displacement-endpoint).length();
+  cout<<"Misclosure: "<<format_meas_unit(misclosure,METER+DEC3)<<endl;
   cout<<"Perimeter: "<<perimeter<<endl;
   cout<<"Area: "<<area<<endl;
-  cout<<"Ratio of precision: 1:"<<perimeter/displacement.length()<<endl;
+  cout<<"Ratio of precision: 1:"<<perimeter/misclosure<<endl;
   free(distcpy);
 }
