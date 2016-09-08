@@ -38,6 +38,18 @@ LambertConicSphere::LambertConicSphere():Projection()
   coneScale=INFINITY;
 }
 
+LambertConicSphere::LambertConicSphere(double Meridian,double Parallel):Projection()
+{
+  latlong maporigin;
+  centralMeridian=Meridian;
+  centralParallel=Parallel;
+  poleY=0;
+  exponent=sin(Parallel);
+  coneScale=INFINITY;
+  maporigin=latlong(Meridian,Parallel);
+  poleY=-latlongToGrid(maporigin).gety();
+}
+
 latlong LambertConicSphere::gridToLatlong(xy grid)
 {
   double angle,radius;
@@ -76,6 +88,13 @@ xy LambertConicSphere::latlongToGrid(latlong ll)
   {
     easting=angle*ellip->geteqr();
     northing=-log(radius)*ellip->getpor();
+  }
+  else
+  {
+    radius=pow(radius,exponent)*ellip->getpor();
+    angle*=exponent;
+    easting=radius*sin(angle);
+    northing=poleY-radius*cos(angle);
   }
   return xy(easting,northing)*scale+offset;
 }

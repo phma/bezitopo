@@ -74,6 +74,7 @@ class LambertConicSphere: public Projection
 {
 public:
   LambertConicSphere();
+  LambertConicSphere(double Meridian,double Parallel);
   virtual latlong gridToLatlong(xy grid);
   virtual xyz gridToGeocentric(xy grid);
   //virtual xy geocentricToGrid(xyz geoc);
