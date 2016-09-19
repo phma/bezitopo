@@ -351,27 +351,39 @@ double polyarc::area()
 double polyline::dirbound(int angle)
 {
   int i;
-  double boundsofar=INFINITY;
+  double boundsofar=INFINITY,bound;
   for (i=0;i<lengths.size();i++)
-    boundsofar=getsegment(i).dirbound(angle,boundsofar);
+  {
+    bound=getsegment(i).dirbound(angle,boundsofar);
+    if (bound<boundsofar)
+      boundsofar=bound;
+  }
   return boundsofar;
 }
 
 double polyarc::dirbound(int angle)
 {
   int i;
-  double boundsofar=INFINITY;
+  double boundsofar=INFINITY,bound;
   for (i=0;i<lengths.size();i++)
-    boundsofar=getarc(i).dirbound(angle,boundsofar);
+  {
+    bound=getarc(i).dirbound(angle,boundsofar);
+    if (bound<boundsofar)
+      boundsofar=bound;
+  }
   return boundsofar;
 }
 
 double polyspiral::dirbound(int angle)
 {
   int i;
-  double boundsofar=INFINITY;
+  double boundsofar=INFINITY,bound;
   for (i=0;i<lengths.size();i++)
-    boundsofar=getspiralarc(i).dirbound(angle,boundsofar);
+  {
+    bound=getspiralarc(i).dirbound(angle,boundsofar);
+    if (bound<boundsofar)
+      boundsofar=bound;
+  }
   return boundsofar;
 }
 

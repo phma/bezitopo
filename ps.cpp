@@ -63,6 +63,7 @@ void setscale(double minx,double miny,double maxx,double maxy,int ori)
   for (;scale*xsize/80>paper.east()*0.9 || scale*ysize/80>paper.north()*0.9;scale/=10);
   for (i=0;i<9 && (scale*xsize/rscales[i]>paper.east()*0.9 || scale*ysize/rscales[i]>paper.north()*0.9);i++);
   scale/=rscales[i];
+  fprintf(psfile,"%% minx=%f miny=%f maxx=%f maxy=%f scale=%f\n",minx,miny,maxx,maxy,scale);
   //printf("scale=%f\n",scale);
   //sleep(3);
 }
