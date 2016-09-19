@@ -67,6 +67,7 @@ public:
   virtual void close();
   virtual double length();
   virtual double area();
+  virtual double dirbound(int angle);
   virtual void writeXml(std::ofstream &ofile);
   virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
 };
@@ -89,6 +90,7 @@ public:
   virtual void close();
   //virtual double length();
   virtual double area();
+  virtual double dirbound(int angle);
   virtual void writeXml(std::ofstream &ofile);
 };
 
@@ -117,6 +119,7 @@ public:
   virtual void close();
   //virtual double length();
   //virtual double area();
+  virtual double dirbound(int angle);
   virtual void writeXml(std::ofstream &ofile);
   virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
 };

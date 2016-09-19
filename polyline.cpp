@@ -348,6 +348,33 @@ double polyarc::area()
   return a.total();
 }
 
+double polyline::dirbound(int angle)
+{
+  int i;
+  double boundsofar=INFINITY;
+  for (i=0;i<lengths.size();i++)
+    boundsofar=getsegment(i).dirbound(angle,boundsofar);
+  return boundsofar;
+}
+
+double polyarc::dirbound(int angle)
+{
+  int i;
+  double boundsofar=INFINITY;
+  for (i=0;i<lengths.size();i++)
+    boundsofar=getarc(i).dirbound(angle,boundsofar);
+  return boundsofar;
+}
+
+double polyspiral::dirbound(int angle)
+{
+  int i;
+  double boundsofar=INFINITY;
+  for (i=0;i<lengths.size();i++)
+    boundsofar=getspiralarc(i).dirbound(angle,boundsofar);
+  return boundsofar;
+}
+
 void polyline::open()
 {
   lengths.resize(endpoints.size()-1);

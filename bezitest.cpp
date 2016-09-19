@@ -2996,6 +2996,31 @@ float BeninBoundary[][2]=
   {1.422,11.456},{0.97,11.075},{0.778,10.442}
 };
 
+void drawproj(string projName,Projection &proj)
+{
+  int i,ori=0;
+  double minx,maxx,miny,maxy;
+  latlong ll;
+  polyline outline;
+  for (i=0;i<sizeof(BeninBoundary)/sizeof(BeninBoundary[0]);i++)
+  {
+    ll=latlong(degtorad(BeninBoundary[i][0]),degtorad(BeninBoundary[i][1]));
+    outline.insert(proj.latlongToGrid(ll));
+  }
+  minx=outline.dirbound(-ori);
+  miny=outline.dirbound(-ori+DEG90);
+  maxx=-outline.dirbound(-ori+DEG180);
+  maxy=-outline.dirbound(-ori-DEG90);
+  psopen((projName+".ps").c_str());
+  psprolog();
+  startpage();
+  setscale(minx,miny,maxx,maxy,ori);
+  spline(outline.approx3d(1));
+  endpage();
+  pstrailer();
+  psclose();
+}
+
 void test1projection(string projName,Projection &proj,latlong ll,xy grid)
 {
   latlong ll1=proj.gridToLatlong(grid);
@@ -3007,6 +3032,7 @@ void test1projection(string projName,Projection &proj,latlong ll,xy grid)
   " Northing "<<grid1.north()<<" Easting "<<grid1.east()<<endl;
   tassert(dist(grid,grid1)<1.5);
   tassert(dist(gridGeoc,llGeoc)<1.75);
+  drawproj(projName,proj);
 }
 
 array<latlong,2> randomPointPair()
