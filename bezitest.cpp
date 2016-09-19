@@ -3004,7 +3004,7 @@ void drawproj(string projName,Projection &proj)
   polyline outline;
   for (i=0;i<sizeof(BeninBoundary)/sizeof(BeninBoundary[0]);i++)
   {
-    ll=latlong(degtorad(BeninBoundary[i][0]),degtorad(BeninBoundary[i][1]));
+    ll=latlong(degtorad(BeninBoundary[i][1]),degtorad(BeninBoundary[i][0]));
     outline.insert(proj.latlongToGrid(ll));
   }
   minx=outline.dirbound(-ori);
