@@ -3032,7 +3032,6 @@ void test1projection(string projName,Projection &proj,latlong ll,xy grid)
   " Northing "<<grid1.north()<<" Easting "<<grid1.east()<<endl;
   tassert(dist(grid,grid1)<1.5);
   tassert(dist(gridGeoc,llGeoc)<1.75);
-  drawproj(projName,proj);
 }
 
 array<latlong,2> randomPointPair()
@@ -3102,7 +3101,7 @@ void testprojscale(string projName,Projection &proj)
 
 void testprojection()
 {
-  LambertConicSphere sphereMercator;
+  LambertConicSphere sphereMercator,sphereConic10(0,degtorad(10));
   latlong ll;
   xy grid;
   cout<<"projection"<<endl;
@@ -3121,6 +3120,9 @@ void testprojection()
   grid=xy(-5003772,30207133);
   test1projection("sphereMercator",sphereMercator,ll,grid);
   testprojscale("sphereMercator",sphereMercator);
+  drawproj("sphereMercator",sphereMercator);
+  drawproj("sphereConic10",sphereConic10);
+  //testprojscale("sphereConic10",sphereConic10);
 }
 
 void spotcheckcolor(int col0,int col1)
