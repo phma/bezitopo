@@ -3101,7 +3101,9 @@ void testprojscale(string projName,Projection &proj)
 
 void testprojection()
 {
-  LambertConicSphere sphereMercator,sphereConic10(0,degtorad(10));
+  LambertConicSphere sphereMercator,sphereConic10(0,degtorad(10)),
+    sphereConic20(0,degtorad(20)),sphereConic80(0,degtorad(80)),
+    sphereConicm80(0,degtorad(-80));
   latlong ll;
   xy grid;
   cout<<"projection"<<endl;
@@ -3122,6 +3124,9 @@ void testprojection()
   testprojscale("sphereMercator",sphereMercator);
   drawproj("sphereMercator",sphereMercator);
   drawproj("sphereConic10",sphereConic10);
+  drawproj("sphereConic20",sphereConic20);
+  drawproj("sphereConic80",sphereConic80);
+  drawproj("sphereConic-80",sphereConicm80);
   //testprojscale("sphereConic10",sphereConic10);
 }
 

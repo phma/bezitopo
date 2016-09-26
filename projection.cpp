@@ -91,7 +91,7 @@ xy LambertConicSphere::latlongToGrid(latlong ll)
   }
   else
   {
-    radius=pow(radius,exponent)*ellip->getpor();
+    radius=pow(radius,exponent)*ellip->getpor()/exponent;
     angle*=exponent;
     easting=radius*sin(angle);
     northing=poleY-radius*cos(angle);
