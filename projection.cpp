@@ -29,23 +29,27 @@ Projection::Projection()
   scale=1;
 }
 
+void LambertConicSphere::setParallel(double Parallel)
+{
+  centralParallel=Parallel;
+  exponent=sin(Parallel);
+}
+
 LambertConicSphere::LambertConicSphere():Projection()
 {
   centralMeridian=0;
-  centralParallel=0;
+  setParallel(0);
   poleY=INFINITY;
-  exponent=0;
-  coneScale=INFINITY;
+  coneScale=1;
 }
 
 LambertConicSphere::LambertConicSphere(double Meridian,double Parallel):Projection()
 {
   latlong maporigin;
   centralMeridian=Meridian;
-  centralParallel=Parallel;
+  setParallel(Parallel);
   poleY=0;
-  exponent=sin(Parallel);
-  coneScale=INFINITY;
+  coneScale=1;
   maporigin=latlong(Meridian,Parallel);
   poleY=-latlongToGrid(maporigin).gety();
 }

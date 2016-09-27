@@ -87,4 +87,5 @@ protected:
   double poleY;
   double exponent;
   double coneScale;
+  void setParallel(double Parallel);
 };
