@@ -3097,6 +3097,7 @@ void testprojscale(string projName,Projection &proj)
     cout<<"bad"<<endl;
   else
     cout<<"good"<<endl;
+  tassert(nbad<trunc(sqrt(i)/16));
 }
 
 void testprojection()
@@ -3121,13 +3122,16 @@ void testprojection()
   ll.lon=degtorad(-45);
   grid=xy(-5003772,30207133);
   test1projection("sphereMercator",sphereMercator,ll,grid);
-  testprojscale("sphereMercator",sphereMercator);
+  //testprojscale("sphereMercator",sphereMercator);
   drawproj("sphereMercator",sphereMercator);
-  drawproj("sphereConic10",sphereConic10);
-  drawproj("sphereConic20",sphereConic20);
-  drawproj("sphereConic80",sphereConic80);
-  drawproj("sphereConic-80",sphereConicm80);
   //testprojscale("sphereConic10",sphereConic10);
+  drawproj("sphereConic10",sphereConic10);
+  //testprojscale("sphereConic20",sphereConic20);
+  drawproj("sphereConic20",sphereConic20);
+  testprojscale("sphereConic80",sphereConic80);
+  drawproj("sphereConic80",sphereConic80);
+  //testprojscale("sphereConic-80",sphereConicm80);
+  drawproj("sphereConic-80",sphereConicm80);
 }
 
 void spotcheckcolor(int col0,int col1)

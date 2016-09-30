@@ -110,11 +110,12 @@ double LambertConicSphere::scaleFactor(xy grid)
 
 double LambertConicSphere::scaleFactor(latlong ll)
 {
-  double coneradius,parradius,cenparradius;
+  double coneradius,cenconeradius,parradius,cenparradius;
   coneradius=tan((M_PIl/2-ll.lat)/2);
+  cenconeradius=tan((M_PIl/2-centralParallel)/2);
   parradius=(ellip->geoc(ll.lat,0.,0.)).getx()/ellip->geteqr();
   cenparradius=(ellip->geoc(centralParallel,0.,0.)).getx()/ellip->geteqr();
-  return pow(coneradius,exponent)/parradius;
+  return pow(coneradius/cenconeradius,exponent)*cenparradius/parradius;
 }
 
 /* North Carolina state plane, original:
