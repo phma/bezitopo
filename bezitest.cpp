@@ -33,6 +33,7 @@
 #include "cogo.h"
 #include "bezitopo.h"
 #include "bezier.h"
+#include "brent.h"
 #include "test.h"
 #include "tin.h"
 #include "measure.h"
@@ -999,6 +1000,19 @@ void testrelprime()
   tassert(relprime(4)==3);
   tassert(relprime(5)==3);
   tassert(relprime(6)==5);
+}
+
+void testbrent()
+{
+  double x,y,res;
+  x=6;
+  y=M_1PHI;
+  res=invquad(5,-1,x,y,7,1);
+  tassert(fabs(res-5)<1e-15);
+  y=0.5;
+  res=invquad(5,-1,x,y,7,1);
+  tassert(fabs(res-16/3.)<1e-15);
+  cout<<"brent "<<res<<endl;
 }
 
 void testmanysum()
@@ -4272,6 +4286,8 @@ int main(int argc, char *argv[])
     testmaketinellipse();
   if (shoulddo("break0"))
     testbreak0();
+  if (shoulddo("brent"))
+    testbrent();
   if (shoulddo("manysum"))
     testmanysum();
   if (shoulddo("vcurve"))

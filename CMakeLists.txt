@@ -65,7 +65,7 @@ include(CPack)
 
 include(CTest)
 add_test(geom bezitest area3 in intersection invalidintersectionlozenge invalidintersectionaster)
-add_test(arith bezitest relprime manysum)
+add_test(arith bezitest relprime manysum brent)
 add_test(calculus bezitest parabinter derivs)
 add_test(random bezitest random)
 add_test(matrix bezitest matrix)
