@@ -20,7 +20,10 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <cmath>
+#include <iostream>
 #include "projection.h"
+
+using namespace std;
 
 Projection::Projection()
 {
@@ -33,6 +36,13 @@ void LambertConicSphere::setParallel(double Parallel)
 {
   centralParallel=Parallel;
   exponent=sin(Parallel);
+  if (exponent==0)
+    coneScale=1;
+  else if (fabs(exponent)==1)
+    coneScale=2;
+  else
+    coneScale=cos(Parallel)/pow(tan((M_PIl/2-Parallel)/2),exponent);
+  //cout<<"Parallel "<<radtodeg(Parallel)<<" coneScale "<<coneScale<<endl;
 }
 
 LambertConicSphere::LambertConicSphere():Projection()
@@ -40,7 +50,6 @@ LambertConicSphere::LambertConicSphere():Projection()
   centralMeridian=0;
   setParallel(0);
   poleY=INFINITY;
-  coneScale=1;
 }
 
 LambertConicSphere::LambertConicSphere(double Meridian,double Parallel):Projection()
@@ -49,7 +58,6 @@ LambertConicSphere::LambertConicSphere(double Meridian,double Parallel):Projecti
   centralMeridian=Meridian;
   setParallel(Parallel);
   poleY=0;
-  coneScale=1;
   maporigin=latlong(Meridian,Parallel);
   poleY=-latlongToGrid(maporigin).gety();
 }
@@ -88,6 +96,9 @@ xy LambertConicSphere::latlongToGrid(latlong ll)
     angle-=M_PIl*2;
   while(angle<-M_PIl*2)
     angle+=M_PIl*2;
+  /* TODO: if exponent is small, say less than 1/64, then use a complex
+   * function similar to expm1 on the Mercator coordinates.
+   */
   if (exponent==0)
   {
     easting=angle*ellip->geteqr();
@@ -95,7 +106,7 @@ xy LambertConicSphere::latlongToGrid(latlong ll)
   }
   else
   {
-    radius=pow(radius,exponent)*ellip->getpor()/exponent;
+    radius=pow(radius,exponent)*ellip->getpor()/exponent*coneScale;
     angle*=exponent;
     easting=radius*sin(angle);
     northing=poleY-radius*cos(angle);

@@ -3100,6 +3100,10 @@ void testprojscale(string projName,Projection &proj)
   tassert(nbad<trunc(sqrt(i)/16));
 }
 
+/* 80° 1.9126888
+ * 60° 1.56419578
+ * 30° 1.13975353
+ */
 void testprojection()
 {
   LambertConicSphere sphereMercator,sphereConic10(0,degtorad(10)),
@@ -3122,15 +3126,15 @@ void testprojection()
   ll.lon=degtorad(-45);
   grid=xy(-5003772,30207133);
   test1projection("sphereMercator",sphereMercator,ll,grid);
-  //testprojscale("sphereMercator",sphereMercator);
+  testprojscale("sphereMercator",sphereMercator);
   drawproj("sphereMercator",sphereMercator);
-  //testprojscale("sphereConic10",sphereConic10);
+  testprojscale("sphereConic10",sphereConic10);
   drawproj("sphereConic10",sphereConic10);
-  //testprojscale("sphereConic20",sphereConic20);
+  testprojscale("sphereConic20",sphereConic20);
   drawproj("sphereConic20",sphereConic20);
   testprojscale("sphereConic80",sphereConic80);
   drawproj("sphereConic80",sphereConic80);
-  //testprojscale("sphereConic-80",sphereConicm80);
+  testprojscale("sphereConic-80",sphereConicm80);
   drawproj("sphereConic-80",sphereConicm80);
 }
 
