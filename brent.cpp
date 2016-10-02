@@ -21,6 +21,7 @@
  */
 #include <utility>
 #include <iostream>
+#include <cmath>
 #include "ldecimal.h"
 #include "brent.h"
 
@@ -54,4 +55,35 @@ double invquad(double x0,double y0,double x1,double y1,double x2,double y2)
   z1=x1*y2*y0/(y1-y2)/(y1-y0);
   z2=x2*y0*y1/(y2-y0)/(y2-y1);
   return (z0+z1+z2)+offx;
+}
+
+bool brent::between(double s)
+{
+  double g=(3*a+b)/4;
+  return (g<s && s<b) || (b<s && s<g);
+}
+
+double brent::init(double x0,double y0,double x1,double y1)
+{
+  if (fabs(y0)>fabs(y1))
+  {
+    a=x0;
+    fa=y0;
+    b=x1;
+    fb=y1;
+  }
+  else
+  {
+    a=x1;
+    fa=y1;
+    b=x0;
+    fb=y0;
+  }
+  mflag=true;
+  x=b-fb*(a-b)/(fa-fb);
+  if (!between(x))
+    x=(a+b)/2;
+  if ((y0>0 && y1>0) || (y0<0 && y1<0))
+    x=NAN;
+  return x;
 }

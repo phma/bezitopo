@@ -1002,10 +1002,16 @@ void testrelprime()
   tassert(relprime(6)==5);
 }
 
+double brentfun0(double x)
+{
+  return (x+3)*sqr(x-1); // example function in Wikipedia
+}
+
 void testbrent()
 {
   double x,y,res;
   int i;
+  brent br;
   x=6;
   y=M_1PHI;
   res=invquad(5,-1,x,y,7,1);
@@ -1016,6 +1022,8 @@ void testbrent()
   cout<<"brent "<<res<<endl;
   for (i=0;i<10;i++)
     res=invquad(tan((double)rng.usrandom()),-5,tan((double)rng.usrandom()),2,tan((double)rng.usrandom()),3);
+  x=br.init(-4,brentfun0(-4),4/3.,brentfun0(4/3.));
+  cout<<"init iter "<<ldecimal(x)<<endl;
 }
 
 void testmanysum()

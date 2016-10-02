@@ -21,3 +21,14 @@
  */
 
 double invquad(double x0,double y0,double x1,double y1,double x2,double y2);
+
+class brent
+{
+public:
+  double init(double x0,double y0,double x1,double y1);
+  double step(double y);
+private:
+  double a,fa,b,fb,x;
+  bool mflag;
+  bool between(double s);
+};
