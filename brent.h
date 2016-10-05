@@ -27,8 +27,13 @@ class brent
 public:
   double init(double x0,double y0,double x1,double y1);
   double step(double y);
+  bool finished()
+  {
+    return !side;
+  }
 private:
   double a,fa,b,fb,x;
+  int side;
   bool mflag;
   bool between(double s);
 };

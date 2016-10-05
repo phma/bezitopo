@@ -22,10 +22,28 @@
 #include <utility>
 #include <iostream>
 #include <cmath>
+#include "cogo.h"
 #include "ldecimal.h"
 #include "brent.h"
 
 using namespace std;
+
+/* Input:
+ * 9s trit is the sign of the contrapoint,
+ * 3s trit is the sign of the new point,
+ * 1s trit is the sign of the old point.
+ * Output:
+ * 0: done
+ * 1: new point becomes old point
+ * 2: new point becomes contrapoint
+ * 3: should never happen.
+ */
+char sidetable[27]=
+{
+  3,3,2, 3,0,0, 3,3,1,
+  3,3,3, 3,0,3, 3,3,3,
+  1,3,3, 0,0,3, 2,3,3
+};
 
 double invquad(double x0,double y0,double x1,double y1,double x2,double y2)
 {
@@ -86,4 +104,51 @@ double brent::init(double x0,double y0,double x1,double y1)
   if ((y0>0 && y1>0) || (y0<0 && y1<0))
     x=NAN;
   return x;
+}
+
+double brent::step(double y)
+{
+  double s;
+  if (fa==fb || fb==y || y==fa)
+    s=x-y*(b-x)/(fb-y);
+  else
+    s=invquad(a,fa,b,fb,x,y);
+  if (between(s))
+    mflag=false;
+  else
+  {
+    mflag=true;
+    s=(a+b)/2;
+  }
+  side=sidetable[9*sign(fa)+3*sign(y)+sign(fb)+13];
+  switch (side)
+  {
+    case 0:
+      s=x;
+      break;
+    case 1:
+      b=x;
+      fb=y;
+      break;
+    case 2:
+      a=x;
+      fa=y;
+      break;
+    case 3:
+      s=NAN;
+  }
+  if (mflag && (s==a || s==b)) // interval [a,b] is too small to bisect, we're done
+  {
+    s=b;
+    side=0;
+  }
+  if (side%3)
+  {
+    if (fabs(fb)>fabs(fa))
+    {
+      swap(fa,fb);
+      swap(a,b);
+    }
+  }
+  return s;
 }
