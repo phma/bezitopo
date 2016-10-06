@@ -108,7 +108,7 @@ double brent::init(double x0,double y0,double x1,double y1)
 
 double brent::step(double y)
 {
-  double s;
+  double s,bsave=b,fbsave=fb;
   if (fa==fb || fb==y || y==fa)
     s=x-y*(b-x)/(fb-y);
   else
@@ -149,6 +149,11 @@ double brent::step(double y)
       swap(fa,fb);
       swap(a,b);
     }
+    d=c;
+    c=bsave;
+    x=s;
+    fd=fc;
+    fc=fbsave;
   }
   return s;
 }

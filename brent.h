@@ -32,7 +32,7 @@ public:
     return !side;
   }
 private:
-  double a,fa,b,fb,x;
+  double a,fa,b,fb,c,fc,d,fd,x;
   int side;
   bool mflag;
   bool between(double s);
