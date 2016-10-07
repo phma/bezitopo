@@ -99,6 +99,7 @@ double brent::init(double x0,double y0,double x1,double y1,bool intmode)
     fb=y0;
   }
   mflag=true;
+  side=1;
   x=b-fb*(a-b)/(fa-fb);
   if (imode)
     x=rint(x);

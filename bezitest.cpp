@@ -3142,6 +3142,7 @@ void testprojection()
   LambertConicSphere sphereMercator,sphereConic10(0,degtorad(10)),
     sphereConic20(0,degtorad(20)),sphereConic80(0,degtorad(80)),
     sphereConicm80(0,degtorad(-80));
+  LambertConicSphere sphereConicBenin(degtorad(8/3.),degtorad(7.5),degtorad(11.5));
   latlong ll;
   xy grid;
   cout<<"projection"<<endl;
@@ -3169,6 +3170,8 @@ void testprojection()
   drawproj("sphereConic80",sphereConic80);
   testprojscale("sphereConic-80",sphereConicm80);
   drawproj("sphereConic-80",sphereConicm80);
+  testprojscale("sphereConicBenin",sphereConicBenin);
+  drawproj("sphereConicBenin",sphereConicBenin);
 }
 
 void spotcheckcolor(int col0,int col1)

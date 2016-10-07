@@ -75,6 +75,7 @@ class LambertConicSphere: public Projection
 public:
   LambertConicSphere();
   LambertConicSphere(double Meridian,double Parallel);
+  LambertConicSphere(double Meridian,double Parallel0,double Parallel1);
   virtual latlong gridToLatlong(xy grid);
   virtual xyz gridToGeocentric(xy grid);
   //virtual xy geocentricToGrid(xyz geoc);
@@ -88,4 +89,5 @@ protected:
   double exponent;
   double coneScale;
   void setParallel(double Parallel);
+  double scaleRatioLog(double Parallel0,double Parallel1);
 };

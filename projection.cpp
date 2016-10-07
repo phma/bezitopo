@@ -22,6 +22,8 @@
 #include <cmath>
 #include <iostream>
 #include "projection.h"
+#include "brent.h"
+#include "ldecimal.h"
 
 using namespace std;
 
@@ -60,6 +62,45 @@ LambertConicSphere::LambertConicSphere(double Meridian,double Parallel):Projecti
   poleY=0;
   maporigin=latlong(Meridian,Parallel);
   poleY=-latlongToGrid(maporigin).gety();
+}
+
+LambertConicSphere::LambertConicSphere(double Meridian,double Parallel0,double Parallel1):Projection()
+{
+  latlong maporigin;
+  brent br;
+  latlong ll;
+  double ratiolog0,ratiolog1,Parallel;
+  centralMeridian=Meridian;
+  setParallel(Parallel0);
+  ratiolog0=scaleRatioLog(Parallel0,Parallel1);
+  setParallel(Parallel1);
+  ratiolog1=scaleRatioLog(Parallel0,Parallel1);
+  Parallel=br.init(Parallel0,ratiolog0,Parallel1,ratiolog1,false);
+  while (!br.finished())
+  {
+    cout<<"Parallel "<<ldecimal(radtodeg(Parallel))<<endl;
+    setParallel(Parallel);
+    Parallel=br.step(scaleRatioLog(Parallel0,Parallel1));
+  }
+  setParallel(Parallel);
+  ll.lon=centralMeridian;
+  ll.lat=Parallel0;
+  scale=1/scaleFactor(ll);
+  poleY=0;
+  maporigin=latlong(Meridian,Parallel);
+  poleY=-latlongToGrid(maporigin).gety();
+}
+
+double LambertConicSphere::scaleRatioLog(double Parallel0,double Parallel1)
+{
+  latlong ll;
+  double ret;
+  ll.lon=centralMeridian;
+  ll.lat=Parallel0;
+  ret=log(scaleFactor(ll));
+  ll.lat=Parallel1;
+  ret-=log(scaleFactor(ll));
+  return ret;
 }
 
 latlong LambertConicSphere::gridToLatlong(xy grid)
@@ -126,7 +167,7 @@ double LambertConicSphere::scaleFactor(latlong ll)
   cenconeradius=tan((M_PIl/2-centralParallel)/2);
   parradius=(ellip->geoc(ll.lat,0.,0.)).getx()/ellip->geteqr();
   cenparradius=(ellip->geoc(centralParallel,0.,0.)).getx()/ellip->geteqr();
-  return pow(coneradius/cenconeradius,exponent)*cenparradius/parradius;
+  return pow(coneradius/cenconeradius,exponent)*cenparradius/parradius*scale;
 }
 
 /* North Carolina state plane, original:
