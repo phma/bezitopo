@@ -81,8 +81,9 @@ bool brent::between(double s)
   return (g<s && s<b) || (b<s && s<g);
 }
 
-double brent::init(double x0,double y0,double x1,double y1)
+double brent::init(double x0,double y0,double x1,double y1,bool intmode)
 {
+  imode=intmode;
   if (fabs(y0)>fabs(y1))
   {
     c=a=x0;
@@ -99,8 +100,12 @@ double brent::init(double x0,double y0,double x1,double y1)
   }
   mflag=true;
   x=b-fb*(a-b)/(fa-fb);
+  if (imode)
+    x=rint(x);
   if (!between(x))
     x=(a+b)/2;
+  if (imode)
+    x=rint(x);
   if ((y0>0 && y1>0) || (y0<0 && y1<0))
     x=NAN;
   return x;
@@ -113,6 +118,8 @@ double brent::step(double y)
     s=x-y*(b-x)/(fb-y);
   else
     s=invquad(a,fa,b,fb,x,y);
+  if (imode)
+    s=rint(s);
   if (between(s) && fabs(s-x)<fabs(mflag?x-b:b-c)/2)
     mflag=false;
   else
@@ -120,6 +127,8 @@ double brent::step(double y)
     mflag=true;
     s=(a+b)/2;
   }
+  if (imode)
+    s=rint(s);
   side=sidetable[9*sign(fa)+3*sign(y)+sign(fb)+13];
   switch (side)
   {
