@@ -1024,13 +1024,14 @@ void testbrent()
     res=invquad(tan((double)rng.usrandom()),-5,tan((double)rng.usrandom()),2,tan((double)rng.usrandom()),3);
   x=br.init(-4,brentfun0(-4),4/3.,brentfun0(4/3.));
   cout<<"init "<<ldecimal(x)<<' ';
-  for (i=0;i<10;i++)
+  for (i=0;i<20;i++)
   {
     y=brentfun0(x);
     x=br.step(y);
     cout<<ldecimal(y)<<endl<<"step "<<ldecimal(x)<<' ';
   }
   cout<<endl;
+  tassert(x==-3);
 }
 
 void testmanysum()

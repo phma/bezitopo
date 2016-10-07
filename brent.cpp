@@ -85,15 +85,15 @@ double brent::init(double x0,double y0,double x1,double y1)
 {
   if (fabs(y0)>fabs(y1))
   {
-    a=x0;
-    fa=y0;
+    c=a=x0;
+    fc=fa=y0;
     b=x1;
     fb=y1;
   }
   else
   {
-    a=x1;
-    fa=y1;
+    c=a=x1;
+    fc=fa=y1;
     b=x0;
     fb=y0;
   }
@@ -113,7 +113,7 @@ double brent::step(double y)
     s=x-y*(b-x)/(fb-y);
   else
     s=invquad(a,fa,b,fb,x,y);
-  if (between(s))
+  if (between(s) && fabs(s-x)<fabs(mflag?x-b:b-c)/2)
     mflag=false;
   else
   {
