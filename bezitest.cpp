@@ -1007,11 +1007,16 @@ double brentfun0(double x)
   return (x+3)*sqr(x-1); // example function in Wikipedia
 }
 
+double ibrentfun0(int x)
+{
+  return (x+3000000)*sqr(x-1000000)/1e18;
+}
+
 void testbrent()
 {
   double x,y,res;
   int i;
-  brent br;
+  brent br,ibr;
   x=6;
   y=M_1PHI;
   res=invquad(5,-1,x,y,7,1);
@@ -1032,6 +1037,16 @@ void testbrent()
   }
   cout<<endl;
   tassert(x==-3);
+  x=ibr.init(-4000000,ibrentfun0(-4000000),1333333,ibrentfun0(1333333),true);
+  cout<<"init "<<ldecimal(x)<<' ';
+  for (i=0;i<20;i++)
+  {
+    y=ibrentfun0(x);
+    x=ibr.step(y);
+    cout<<ldecimal(y)<<endl<<"step "<<ldecimal(x)<<' ';
+  }
+  cout<<endl;
+  tassert(x==-3e6);
 }
 
 void testmanysum()
