@@ -29,6 +29,7 @@
 #include "angle.h"
 #include "ldecimal.h"
 #include "tin.h"
+#include "brent.h"
 using namespace std;
 
 const char ctrlpttab[16]=
@@ -450,14 +451,83 @@ int triangle::findnocubedir()
   return nocubedir;
 }
 
+int triangle::findnocubedir0()
+/* The range of atan2i is [-0x40000000,0x40000000] ([-180°,180°]).
+ * nocubedir is found by adding 0x15555555 (60°) and 0x2aaaaaab (120°)
+ * to atan2i (direction of 1st harmonic of 3rd derivative) and searching
+ * between them. It is therefore in [-0x2aaaaaab,0x6aaaaaab] and cannot
+ * be 0x7fffffff, hence nocubedir is set to 0x7fffffff (MAXINT) to
+ * indicate that it has not been computed.
+ * 
+ * The 3rd derivative as a function of angle has the form a×sin(θ-b)+c×sin(3θ-d).
+ * 1. Find b.
+ * 2. Compute 3rd deriv at b+60° and b+120°. These add up to 0. Normally they
+ * will be opposite in sign, in which case you can look for the zero between them.
+ * But if they have the same sign, try b+30 and b+90° If those still have
+ * the same sign, try b+90° and b+150. If even those have the same sign,
+ * the 3d deriv is identically 0 and you're seeing roundoff error; return b+90°.
+ * 
+ * This uses Brent's root-finding algorithm.
+ */
+{
+  int i,b,d,beg,mid,end;
+  double d3a45[4],begderiv,midderiv,endderiv,crit;
+  brent br;
+  //cout<<"findnocubedir ";
+  for (i=0;i<4;i++)
+  {
+    d3a45[i]=deriv3(xsect(i<<28,0)); // every 45°
+    //cout<<d3a45[i]<<' ';
+  }
+  //cout<<hex<<degtobin(330)<<endl;
+  b=atan2i(d3a45[2]+M_SQRT1_2*(d3a45[1]+d3a45[3]),d3a45[0]-M_SQRT1_2*(d3a45[3]-d3a45[1]));
+  d=atan2i(d3a45[2]-M_SQRT1_2*(d3a45[1]+d3a45[3]),d3a45[0]-M_SQRT1_2*(d3a45[1]-d3a45[3]));
+  beg=b+0x15555555;
+  end=b+0x2aaaaaab;
+  begderiv=deriv3(xsect(beg,0));
+  endderiv=deriv3(xsect(end,0));
+  if (begderiv*endderiv>0)
+  {
+    beg=b+0xaaaaaab;
+    end=b+0x20000000;
+    begderiv=deriv3(xsect(beg,0));
+    endderiv=deriv3(xsect(end,0));
+  }
+  if (begderiv*endderiv>0)
+  {
+    beg=b+0x20000000;
+    end=b+0x35555555;
+    begderiv=deriv3(xsect(beg,0));
+    endderiv=deriv3(xsect(end,0));
+  }
+  if (begderiv*endderiv>0)
+  {
+    beg=end=b+0x10000000;
+    begderiv=endderiv=deriv3(xsect(end,0));
+  }
+  nocubedir=br.init(0,begderiv,end-beg,endderiv,true);
+  if (end==beg)
+    nocubedir=0;
+  while (end!=beg && !br.finished())
+    nocubedir=br.step(deriv3(xsect(beg+nocubedir,0)));
+  nocubedir+=beg;
+  return nocubedir;
+}
+
 double triangle::flatoffset()
 /* The offset at which the cross-section in the nocubedir direction has zero quadratic component.
  * If it's in the range [-1.5,1.5], it is valid. If outside this range, it may be made up.
  */
 {
   double minusquad,plusquad,offset;
+  int cdir0,cdir1;
   if (nocubedir==INT_MAX)
-    findnocubedir();
+  {
+    cdir0=findnocubedir0();
+    cdir1=findnocubedir();
+    if (cdir0!=cdir1)
+      cout<<"Cubedirs don't match"<<endl;
+  }
   minusquad=deriv2(xsect(nocubedir,-1.5));
   plusquad=deriv2(xsect(nocubedir,1.5));
   offset=1.5*(minusquad+plusquad)/(minusquad-plusquad);

@@ -29,7 +29,7 @@ public:
   double step(double y);
   bool finished()
   {
-    return !side;
+    return !(side%3);
   }
 private:
   double a,fa,b,fb,c,fc,d,fd,x;

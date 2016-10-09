@@ -2075,7 +2075,7 @@ void test1tri(string triname,int excrits)
   vector<double> xs,lh;
   vector<xyz> slice;
   vector<xy> crits;
-  int i,j,side,cubedir,ptype,size0,size1,size2;
+  int i,j,side,cubedir,cubedir0,ptype,size0,size1,size2;
   double vertex,offset,arearatio;
   string fname,tfname,psfname;
   segment clipped;
@@ -2094,7 +2094,10 @@ void test1tri(string triname,int excrits)
   setscale(-17,-17,17,17);
   for (j=0;j<doc.pl[1].edges.size();j++)
     line(doc,doc.pl[1].edges[j],j,false);
+  cubedir0=doc.pl[1].triangles[0].findnocubedir0();
   cubedir=doc.pl[1].triangles[0].findnocubedir();
+  if (cubedir!=cubedir0)
+    cout<<"Cubedirs don't match"<<endl;
   ofile<<"Zero cube dir "<<cubedir<<' '<<bintodeg(cubedir)<<"°"<<endl;
   ofile<<"Zero quad offset "<<doc.pl[1].triangles[0].flatoffset()<<endl;
   for (j=30;j>=-30;j--)

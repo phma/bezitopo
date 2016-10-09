@@ -32,6 +32,7 @@
 #include "spiral.h"
 #include "ldecimal.h"
 #include "vcurve.h"
+#include "brent.h"
 
 using namespace std;
 
@@ -142,7 +143,7 @@ xyz segment::station(double along) const
 	     elev(along));
 }
 
-double segment::contourcept(double e)
+double segment::contourcept0(double e)
 /* Finds ret such that elev(ret)=e. Used for tracing a contour from one subedge
  * to the next within a triangle.
  * 
@@ -188,6 +189,25 @@ double segment::contourcept(double e)
     ret=lst;
   else
     ret=beg;
+  return ret;
+}
+
+double segment::contourcept(double e)
+/* Finds ret such that elev(ret)=e. Used for tracing a contour from one subedge
+ * to the next within a triangle.
+ * 
+ * This uses Brent's method.
+ * 
+ * This needs to be tested when e=0. 3*DBL_EPSILON is apparently too small.
+ */
+{
+  double ret;
+  brent br;
+  ret=br.init(0,elev(0)-e,length(),elev(length())-e,false);
+  while (!br.finished())
+  {
+    ret=br.step(elev(ret)-e);
+  }
   return ret;
 }
 
