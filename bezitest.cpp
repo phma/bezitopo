@@ -1028,22 +1028,26 @@ void testbrent()
   for (i=0;i<10;i++)
     res=invquad(tan((double)rng.usrandom()),-5,tan((double)rng.usrandom()),2,tan((double)rng.usrandom()),3);
   x=br.init(-4,brentfun0(-4),4/3.,brentfun0(4/3.));
+  br.setdebug(true);
   cout<<"init "<<ldecimal(x)<<' ';
   for (i=0;i<20;i++)
   {
     y=brentfun0(x);
+    cout<<ldecimal(y)<<endl;
     x=br.step(y);
-    cout<<ldecimal(y)<<endl<<"step "<<ldecimal(x)<<' ';
+    cout<<"step "<<ldecimal(x)<<' ';
   }
   cout<<endl;
   tassert(x==-3);
   x=ibr.init(-4000000,ibrentfun0(-4000000),1333333,ibrentfun0(1333333),true);
+  ibr.setdebug(true);
   cout<<"init "<<ldecimal(x)<<' ';
   for (i=0;i<20;i++)
   {
     y=ibrentfun0(x);
+    cout<<ldecimal(y)<<endl;
     x=ibr.step(y);
-    cout<<ldecimal(y)<<endl<<"step "<<ldecimal(x)<<' ';
+    cout<<"step "<<ldecimal(x)<<' ';
   }
   cout<<endl;
   tassert(x==-3e6);

@@ -31,9 +31,13 @@ public:
   {
     return !(side%3);
   }
+  void setdebug(bool dbg)
+  {
+    debug=dbg;
+  }
 private:
   double a,fa,b,fb,c,fc,d,fd,x;
   int side;
-  bool mflag,imode;
+  bool mflag,imode,debug;
   bool between(double s);
 };

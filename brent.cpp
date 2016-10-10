@@ -21,6 +21,7 @@
  */
 #include <utility>
 #include <iostream>
+#include <iomanip>
 #include <cmath>
 #include "cogo.h"
 #include "ldecimal.h"
@@ -84,6 +85,7 @@ bool brent::between(double s)
 double brent::init(double x0,double y0,double x1,double y1,bool intmode)
 {
   imode=intmode;
+  debug=false;
   if (fabs(y0)>fabs(y1))
   {
     c=a=x0;
@@ -115,12 +117,25 @@ double brent::init(double x0,double y0,double x1,double y1,bool intmode)
 double brent::step(double y)
 {
   double s,bsave=b,fbsave=fb;
+  bool iq;
   if (fa==fb || fb==y || y==fa)
+  {
     s=x-y*(b-x)/(fb-y);
+    iq=false;
+  }
   else
+  {
     s=invquad(a,fa,b,fb,x,y);
+    iq=true;
+  }
   if (imode)
     s=rint(s);
+  if (debug)
+  {
+    cout<<setw(21)<<ldecimal(a)<<setw(21)<<ldecimal(b)<<setw(21)<<ldecimal(x)<<' '<<iq<<endl;
+    cout<<setw(21)<<ldecimal(fa)<<setw(21)<<ldecimal(fb)<<setw(21)<<ldecimal(y)<<endl;
+    cout<<"s="<<ldecimal(s);
+  }
   if (between(s) && fabs(s-x)<fabs(mflag?x-b:b-c)/2)
     mflag=false;
   else
@@ -130,6 +145,8 @@ double brent::step(double y)
   }
   if (imode)
     s=rint(s);
+  if (debug)
+    cout<<' '<<ldecimal(s);
   side=sidetable[9*sign(fa)+3*sign(y)+sign(fb)+13];
   switch (side)
   {
@@ -165,5 +182,7 @@ double brent::step(double y)
     fd=fc;
     fc=fbsave;
   }
+  if (debug)
+    cout<<" side="<<side<<endl;
   return s;
 }
