@@ -132,8 +132,8 @@ double brent::step(double y)
     s=rint(s);
   if (debug)
   {
-    cout<<setw(21)<<ldecimal(a)<<setw(21)<<ldecimal(b)<<setw(21)<<ldecimal(x)<<' '<<iq<<endl;
-    cout<<setw(21)<<ldecimal(fa)<<setw(21)<<ldecimal(fb)<<setw(21)<<ldecimal(y)<<endl;
+    cout<<setw(23)<<ldecimal(a)<<setw(23)<<ldecimal(b)<<setw(23)<<ldecimal(x)<<' '<<iq<<endl;
+    cout<<setw(23)<<ldecimal(fa)<<setw(23)<<ldecimal(fb)<<setw(23)<<ldecimal(y)<<endl;
     cout<<"s="<<ldecimal(s);
   }
   if (between(s) && fabs(s-x)<fabs(mflag?x-b:b-c)/2)

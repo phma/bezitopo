@@ -1007,9 +1007,30 @@ double brentfun0(double x)
   return (x+3)*sqr(x-1); // example function in Wikipedia
 }
 
+double brentfun1(double x)
+{
+  return sqr(x)-3; // No exact solution in 8-byte floating point.
+}
+
+double brentfun2(double x)
+/* From Steven Stage. Brent's method should find the exact root in a finite number of steps.
+ * However, in 8-byte floating point, f(2/3.+0.1) is 4.16e-17, not 0.
+ */
+{
+  if (x>2/3.)
+    return sqrt(x-2/3.)-0.1;
+  else
+    return -sqrt(2/3.-x)-0.1;
+}
+
 double ibrentfun0(int x)
 {
   return (x+3000000)*sqr(x-1000000)/1e18;
+}
+
+double ibrentfun1(double x)
+{
+  return (sqr(x)-3e12)/1e12;
 }
 
 void testbrent()
@@ -1030,7 +1051,7 @@ void testbrent()
   x=br.init(-4,brentfun0(-4),4/3.,brentfun0(4/3.));
   br.setdebug(true);
   cout<<"init "<<ldecimal(x)<<' ';
-  for (i=0;i<20;i++)
+  for (i=0;i<20 && !br.finished();i++)
   {
     y=brentfun0(x);
     cout<<ldecimal(y)<<endl;
@@ -1039,6 +1060,28 @@ void testbrent()
   }
   cout<<endl;
   tassert(x==-3);
+  x=br.init(-1.7,brentfun1(-1.7),1.8,brentfun1(1.8));
+  br.setdebug(true);
+  cout<<"init "<<ldecimal(x)<<' ';
+  for (i=0;i<20 && !br.finished();i++)
+  {
+    y=brentfun1(x);
+    cout<<ldecimal(y)<<endl;
+    x=br.step(y);
+    cout<<"step "<<ldecimal(x)<<' ';
+  }
+  cout<<endl;
+  x=br.init(-10,brentfun2(-10),10,brentfun1(10));
+  br.setdebug(true);
+  cout<<"init "<<ldecimal(x)<<' ';
+  for (i=0;i<20 && !br.finished();i++)
+  {
+    y=brentfun2(x);
+    cout<<ldecimal(y)<<endl;
+    x=br.step(y);
+    cout<<"step "<<ldecimal(x)<<' ';
+  }
+  cout<<endl;
   x=ibr.init(-4000000,ibrentfun0(-4000000),1333333,ibrentfun0(1333333),true);
   ibr.setdebug(true);
   cout<<"init "<<ldecimal(x)<<' ';
@@ -1051,6 +1094,17 @@ void testbrent()
   }
   cout<<endl;
   tassert(x==-3e6);
+  x=ibr.init(-1.7e6,ibrentfun1(-1.7e6),1.8e6,ibrentfun1(1.8e6),true);
+  ibr.setdebug(true);
+  cout<<"init "<<ldecimal(x)<<' ';
+  for (i=0;i<20 && !ibr.finished();i++)
+  {
+    y=ibrentfun1(x);
+    cout<<ldecimal(y)<<endl;
+    x=ibr.step(y);
+    cout<<"step "<<ldecimal(x)<<' ';
+  }
+  cout<<endl;
 }
 
 void testmanysum()
@@ -2284,7 +2338,7 @@ void trianglecontours()
   fname="tri";
   for (j=0;j<9;j++)
   {
-    bytes[j]=rng.ucrandom();
+    //bytes[j]=rng.ucrandom();
     fname+=hexdig[bytes[j]>>4];
     fname+=hexdig[bytes[j]&15];
   }

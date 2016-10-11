@@ -506,6 +506,7 @@ int triangle::findnocubedir0()
     begderiv=endderiv=deriv3(xsect(end,0));
   }
   nocubedir=br.init(0,begderiv,end-beg,endderiv,true);
+  br.setdebug(true);
   if (end==beg)
     nocubedir=0;
   while (end!=beg && !br.finished())
