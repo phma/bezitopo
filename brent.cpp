@@ -177,6 +177,18 @@ double brent::step(double y)
   {
     mflag=true;
     s=(a+b)/2;
+    /* In tolted, init is fed two angles 60° apart, with values (the 3rd derivative,
+     * whose zero is being sought) -907.24943 and +907.24943. It produces the
+     * midpoint, 30° between them. The first iter also produces s=30°. This causes
+     * premature termination by the "same as last time" rule. To prevent this,
+     * if s==x, check y (which is 826.96926) and set s to the midpoint of
+     * the interval with opposite signs.
+     */
+    if (s==x)
+      if (sign(y)==sign(fa))
+        s=(b+x)/2;
+      else
+        s=(a+x)/2;
   }
   if (imode)
     s=rint(s);

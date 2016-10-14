@@ -527,7 +527,7 @@ double triangle::flatoffset()
     cdir0=findnocubedir0();
     cdir1=findnocubedir();
     if (cdir0!=cdir1)
-      cout<<"Cubedirs don't match"<<endl;
+      cout<<"Cdirs don't match "<<cdir0<<"!="<<cdir1<<endl;
   }
   minusquad=deriv2(xsect(nocubedir,-1.5));
   plusquad=deriv2(xsect(nocubedir,1.5));

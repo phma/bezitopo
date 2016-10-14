@@ -2170,7 +2170,7 @@ void test1tri(string triname,int excrits)
   cubedir0=doc.pl[1].triangles[0].findnocubedir0();
   cubedir=doc.pl[1].triangles[0].findnocubedir();
   if (cubedir!=cubedir0)
-    cout<<"Cubedirs don't match"<<endl;
+    cout<<"Cubedirs don't match "<<cubedir0<<"!="<<cubedir<<endl;
   ofile<<"Zero cube dir "<<cubedir<<' '<<bintodeg(cubedir)<<"°"<<endl;
   ofile<<"Zero quad offset "<<doc.pl[1].triangles[0].flatoffset()<<endl;
   for (j=30;j>=-30;j--)
