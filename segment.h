@@ -68,7 +68,6 @@ public:
   double startslope();
   double endslope();
   double contourcept(double e);
-  double contourcept0(double e);
   bool crosses(double e)
   {
     return (end.elev()<e)^(start.elev()<e);

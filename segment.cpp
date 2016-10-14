@@ -143,55 +143,6 @@ xyz segment::station(double along) const
 	     elev(along));
 }
 
-double segment::contourcept0(double e)
-/* Finds ret such that elev(ret)=e. Used for tracing a contour from one subedge
- * to the next within a triangle.
- * 
- * This uses a combination of bisection and false position. It's the same algorithm
- * used in triangle::findnocubedir in bezier.cpp. I'll replace it with Brent's
- * or Dekker's method when I figure out how those work.
- * 
- * This needs to be tested when e=0. 3*DBL_EPSILON is apparently too small.
- */
-{
-  double beg,mdp,lst,begelev,mdpelev,lstelev,crit,fincrit=999,ret;
-  beg=0;
-  lst=length();
-  begelev=elev(beg)-e;
-  lstelev=elev(lst)-e;
-  while ((lst-beg)/(fabs(lst)+fabs(beg))>31*DBL_EPSILON)
-  {
-    if (fabs(lstelev)>=10*fabs(begelev) || fabs(begelev)>=10*fabs(lstelev) || (lst-beg)/(fabs(lst)+fabs(beg))>30*DBL_EPSILON)
-      mdp=(lst+beg)/2;
-    else
-      mdp=(beg*lstelev-lst*begelev)/(lstelev-begelev);
-    mdpelev=elev(mdp)-e;
-    //cout<<beg<<' '<<begderiv<<' '<<mdp<<' '<<mdpderiv<<' '<<end<<' '<<endderiv<<endl;
-    crit=mdpelev/(lstelev-begelev);
-    if (std::isnan(crit))
-      crit=0;
-    else
-      fincrit=crit;
-    if (crit>=0)
-    {
-      lst=mdp;
-      lstelev=mdpelev;
-    }
-    if (crit<=0)
-    {
-      beg=mdp;
-      begelev=mdpelev;
-    }
-  }
-  if (fabs(fincrit)>100)
-    ret=NAN;
-  else if (abs(begelev)>abs(lstelev))
-    ret=lst;
-  else
-    ret=beg;
-  return ret;
-}
-
 double segment::contourcept(double e)
 /* Finds ret such that elev(ret)=e. Used for tracing a contour from one subedge
  * to the next within a triangle.

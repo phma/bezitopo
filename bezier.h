@@ -103,7 +103,6 @@ public:
   std::vector<double> xsect(int angle,double offset);
   double spelevation(int angle,double x,double y);
   int findnocubedir();
-  int findnocubedir0();
   double flatoffset();
   std::vector<xyz> slices(bool side);
   //void setctrl(bool flat);
