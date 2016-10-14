@@ -2167,10 +2167,10 @@ void test1tri(string triname,int excrits)
   setscale(-17,-17,17,17);
   for (j=0;j<doc.pl[1].edges.size();j++)
     line(doc,doc.pl[1].edges[j],j,false);
-  cubedir0=doc.pl[1].triangles[0].findnocubedir0();
+  //cubedir0=doc.pl[1].triangles[0].findnocubedir0();
   cubedir=doc.pl[1].triangles[0].findnocubedir();
-  if (cubedir!=cubedir0)
-    cout<<"Cubedirs don't match "<<cubedir0<<"!="<<cubedir<<endl;
+  //if (cubedir!=cubedir0)
+  //  cout<<"Cubedirs don't match "<<cubedir0<<"!="<<cubedir<<endl;
   ofile<<"Zero cube dir "<<cubedir<<' '<<bintodeg(cubedir)<<"°"<<endl;
   ofile<<"Zero quad offset "<<doc.pl[1].triangles[0].flatoffset()<<endl;
   for (j=30;j>=-30;j--)

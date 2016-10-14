@@ -369,7 +369,7 @@ double paravertex(vector<double> xsect)
   return -d1/d2;
 }
 
-int triangle::findnocubedir()
+int triangle::findnocubedir0()
 /* The range of atan2i is [-0x40000000,0x40000000] ([-180°,180°]).
  * nocubedir is found by adding 0x15555555 (60°) and 0x2aaaaaab (120°)
  * to atan2i (direction of 1st harmonic of 3rd derivative) and searching
@@ -451,7 +451,7 @@ int triangle::findnocubedir()
   return nocubedir;
 }
 
-int triangle::findnocubedir0()
+int triangle::findnocubedir()
 /* The range of atan2i is [-0x40000000,0x40000000] ([-180°,180°]).
  * nocubedir is found by adding 0x15555555 (60°) and 0x2aaaaaab (120°)
  * to atan2i (direction of 1st harmonic of 3rd derivative) and searching
@@ -506,7 +506,7 @@ int triangle::findnocubedir0()
     begderiv=endderiv=deriv3(xsect(end,0));
   }
   nocubedir=br.init(0,begderiv,end-beg,endderiv,true);
-  br.setdebug(true);
+  //br.setdebug(true);
   if (end==beg)
     nocubedir=0;
   while (end!=beg && !br.finished())
@@ -521,13 +521,13 @@ double triangle::flatoffset()
  */
 {
   double minusquad,plusquad,offset;
-  int cdir0,cdir1;
+  //int cdir0,cdir1;
   if (nocubedir==INT_MAX)
   {
-    cdir0=findnocubedir0();
-    cdir1=findnocubedir();
-    if (cdir0!=cdir1)
-      cout<<"Cdirs don't match "<<cdir0<<"!="<<cdir1<<endl;
+    //cdir0=findnocubedir0();
+    nocubedir=findnocubedir();
+    //if (cdir0!=cdir1)
+    //  cout<<"Cdirs don't match "<<cdir0<<"!="<<cdir1<<endl;
   }
   minusquad=deriv2(xsect(nocubedir,-1.5));
   plusquad=deriv2(xsect(nocubedir,1.5));
