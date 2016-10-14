@@ -34,16 +34,18 @@ using namespace std;
  * 3s trit is the sign of the new point,
  * 1s trit is the sign of the old point.
  * Output:
+ * Bits 0 and 1:
  * 0: done
  * 1: new point becomes old point
  * 2: new point becomes contrapoint
  * 3: should never happen.
+ * Bit 2: true if new point should be moved one ulp toward old point, if s==x.
  */
 char sidetable[27]=
 {
-  3,3,2, 3,0,0, 3,3,1,
-  3,3,3, 3,0,3, 3,3,3,
-  1,3,3, 0,0,3, 2,3,3
+  3,7,6, 3,0,0, 3,3,1,
+  3,3,7, 3,0,3, 7,3,3,
+  1,3,3, 0,0,3, 6,7,3
 };
 
 double invquad(double x0,double y0,double x1,double y1,double x2,double y2)
@@ -79,7 +81,11 @@ double invquad(double x0,double y0,double x1,double y1,double x2,double y2)
 bool brent::between(double s)
 {
   double g=(3*a+b)/4;
-  return (g<s && s<b) || (b<s && s<g);
+  return (g<s && s<=b) || (b<=s && s<g);
+  /* <= to make sqrt(3) compute faster, since 1.7320508075688774
+   * and 1.7320508075688772 have equal and opposite errors, resulting
+   * in repeated unnecessary bisection if the test is b<s
+   */
 }
 
 double brent::init(double x0,double y0,double x1,double y1,bool intmode)
@@ -101,6 +107,7 @@ double brent::init(double x0,double y0,double x1,double y1,bool intmode)
     fb=y0;
   }
   mflag=true;
+  lflag=false;
   side=1;
   x=b-fb*(a-b)/(fa-fb);
   if (imode)
@@ -117,7 +124,12 @@ double brent::init(double x0,double y0,double x1,double y1,bool intmode)
 double brent::step(double y)
 {
   double s,bsave=b,fbsave=fb;
-  bool iq;
+  bool iq,lf=false;
+  if (lflag)
+    if (sign(y)*sign(fb)<=0)
+      lf=true;
+    else
+      lflag=false;
   if (fa==fb || fb==y || y==fa)
   {
     s=x-y*(b-x)/(fb-y);
@@ -130,13 +142,36 @@ double brent::step(double y)
   }
   if (imode)
     s=rint(s);
+  if (x==s)
+  {
+    if (debug)
+      cout<<"Same as last time"<<endl;
+    side=sidetable[9*sign(fa)+3*sign(y)+sign(fb)+13]&4;
+    if (imode)
+    {
+      if (b<x)
+        side^=4;
+      if (side)
+        s++;
+      else
+        s--;
+    }
+    else
+      s=nextafter(s,side?b:a);
+    lflag=true;
+  }
   if (debug)
   {
     cout<<setw(23)<<ldecimal(a)<<setw(23)<<ldecimal(b)<<setw(23)<<ldecimal(x)<<' '<<iq<<endl;
     cout<<setw(23)<<ldecimal(fa)<<setw(23)<<ldecimal(fb)<<setw(23)<<ldecimal(y)<<endl;
     cout<<"s="<<ldecimal(s);
   }
-  if (between(s) && fabs(s-x)<fabs(mflag?x-b:b-c)/2)
+  if (lf)
+  {
+    mflag=true;
+    s=(b+x)/2;
+  }
+  else if (between(s) && fabs(s-x)<fabs(mflag?x-b:b-c)/2)
     mflag=false;
   else
   {
@@ -147,7 +182,7 @@ double brent::step(double y)
     s=rint(s);
   if (debug)
     cout<<' '<<ldecimal(s);
-  side=sidetable[9*sign(fa)+3*sign(y)+sign(fb)+13];
+  side=sidetable[9*sign(fa)+3*sign(y)+sign(fb)+13]&3;
   switch (side)
   {
     case 0:
