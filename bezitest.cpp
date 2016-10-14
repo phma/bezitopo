@@ -1049,7 +1049,7 @@ void testbrent()
   for (i=0;i<10;i++)
     res=invquad(tan((double)rng.usrandom()),-5,tan((double)rng.usrandom()),2,tan((double)rng.usrandom()),3);
   x=br.init(-4,brentfun0(-4),4/3.,brentfun0(4/3.));
-  br.setdebug(true);
+  //br.setdebug(true);
   cout<<"fun0 init "<<ldecimal(x)<<' ';
   for (i=0;i<200 && !br.finished();i++)
   {
@@ -1061,7 +1061,7 @@ void testbrent()
   cout<<endl;
   tassert(x==-3);
   x=br.init(-1.7,brentfun1(-1.7),1.8,brentfun1(1.8));
-  br.setdebug(true);
+  //br.setdebug(true);
   cout<<"fun1 init "<<ldecimal(x)<<' ';
   for (i=0;i<200 && !br.finished();i++)
   {
@@ -1072,7 +1072,7 @@ void testbrent()
   }
   cout<<endl;
   x=br.init(-10,brentfun2(-10),10,brentfun2(10));
-  br.setdebug(true);
+  //br.setdebug(true);
   cout<<"fun2 init "<<ldecimal(x)<<' ';
   for (i=0;i<200 && !br.finished();i++)
   {
@@ -1083,7 +1083,7 @@ void testbrent()
   }
   cout<<endl;
   x=ibr.init(-4000000,ibrentfun0(-4000000),1333333,ibrentfun0(1333333),true);
-  ibr.setdebug(true);
+  //ibr.setdebug(true);
   cout<<"ifun0 init "<<ldecimal(x)<<' ';
   for (i=0;i<200 && !ibr.finished();i++)
   {
@@ -1095,7 +1095,7 @@ void testbrent()
   cout<<endl;
   tassert(x==-3e6);
   x=ibr.init(-1.7e6,ibrentfun1(-1.7e6),1.8e6,ibrentfun1(1.8e6),true);
-  ibr.setdebug(true);
+  //ibr.setdebug(true);
   cout<<"ifun1 init "<<ldecimal(x)<<' ';
   for (i=0;i<200 && !ibr.finished();i++)
   {
