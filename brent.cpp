@@ -195,6 +195,12 @@ double brent::step(double y)
   if (debug)
     cout<<' '<<ldecimal(s);
   side=sidetable[9*sign(fa)+3*sign(y)+sign(fb)+13]&3;
+  /* The following pathological case came up running testcontour on the Raspberry Pi:
+   * a=1.477900881127366 (hereinafter 3660), b and x alternate between 3657 and 3662.
+   * f(3660)=2.22e-16 (hereinafter ε), f(3662)=f(3657)=-ε.
+   */
+  //if (side%3 && ((b<a && a<x) || (x<a && a<b)))
+  //  side=0;
   switch (side)
   {
     case 0:
