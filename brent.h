@@ -29,7 +29,7 @@ public:
   double step(double y);
   bool finished()
   {
-    return !(side%3);
+    return !((side&3)%3);
   }
   void setdebug(bool dbg)
   {

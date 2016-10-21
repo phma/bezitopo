@@ -123,85 +123,14 @@ double brent::init(double x0,double y0,double x1,double y1,bool intmode)
 
 double brent::step(double y)
 {
-  double s,bsave=b,fbsave=fb;
+  double s,bsave=b,asave=a;
   bool iq,lf=false;
-  if (lflag)
-    if (sign(y)*sign(fb)<=0)
-      lf=true;
-    else
-      lflag=false;
-  if (fa==fb || fb==y || y==fa)
-  {
-    s=x-y*(b-x)/(fb-y);
-    iq=false;
-  }
-  else
-  {
-    s=invquad(a,fa,b,fb,x,y);
-    iq=true;
-  }
-  if (imode)
-    s=rint(s);
-  if (x==s)
-  {
-    if (debug)
-      cout<<"Same as last time"<<endl;
-    side=sidetable[9*sign(fa)+3*sign(y)+sign(fb)+13]&4;
-    if (imode)
-    {
-      if (b<x)
-        side^=4;
-      if (side)
-        s++;
-      else
-        s--;
-    }
-    else
-      s=nextafter(s,side?b:a);
-    lflag=true;
-  }
-  if (debug)
-  {
-    cout<<setw(23)<<ldecimal(a)<<setw(23)<<ldecimal(b)<<setw(23)<<ldecimal(x)<<' '<<iq<<endl;
-    cout<<setw(23)<<ldecimal(fa)<<setw(23)<<ldecimal(fb)<<setw(23)<<ldecimal(y)<<endl;
-    cout<<"s="<<ldecimal(s);
-  }
-  if (lf)
-  {
-    mflag=true;
-    s=(b+x)/2;
-  }
-  else if (between(s) && fabs(s-x)<fabs(mflag?x-b:b-c)/2)
-    mflag=false;
-  else
-  {
-    mflag=true;
-    s=(a+b)/2;
-    /* In tolted, init is fed two angles 60° apart, with values (the 3rd derivative,
-     * whose zero is being sought) -907.24943 and +907.24943. It produces the
-     * midpoint, 30° between them. The first iter also produces s=30°. This causes
-     * premature termination by the "same as last time" rule. To prevent this,
-     * if s==x, check y (which is 826.96926) and set s to the midpoint of
-     * the interval with opposite signs.
-     */
-    if (s==x)
-      if (sign(y)==sign(fa))
-        s=(b+x)/2;
-      else
-        s=(a+x)/2;
-  }
-  if (imode)
-    s=rint(s);
-  if (debug)
-    cout<<' '<<ldecimal(s);
-  side=sidetable[9*sign(fa)+3*sign(y)+sign(fb)+13]&3;
-  /* The following pathological case came up running testcontour on the Raspberry Pi:
-   * a=1.477900881127366 (hereinafter 3660), b and x alternate between 3657 and 3662.
-   * f(3660)=2.22e-16 (hereinafter ε), f(3662)=f(3657)=-ε.
-   */
-  //if (side%3 && ((b<a && a<x) || (x<a && a<b)))
-  //  side=0;
-  switch (side)
+  d=c;
+  c=b;
+  fd=fc;
+  fc=fb;
+  side=sidetable[9*sign(fa)+3*sign(y)+sign(fb)+13];
+  switch (side&3)
   {
     case 0:
       s=x;
@@ -217,25 +146,90 @@ double brent::step(double y)
     case 3:
       s=NAN;
   }
-  if (mflag && (s==a || s==b)) // interval [a,b] is too small to bisect, we're done
-  {
-    s=b;
-    side=0;
-  }
-  if (side%3)
+  /*if (lflag)
+    if (sign(y)*sign(fb)<=0)
+      lf=true;
+    else
+      lflag=false;*/
+  if ((side&3)%3)
   {
     if (fabs(fb)>fabs(fa))
     {
       swap(fa,fb);
       swap(a,b);
     }
-    d=c;
-    c=bsave;
-    x=s;
-    fd=fc;
-    fc=fbsave;
+  }
+  if (fa==fb || fb==fc || fc==fa)
+  {
+    s=b-fb*(b-a)/(fb-fa);
+    iq=false;
+  }
+  else
+  {
+    s=invquad(a,fa,b,fb,c,fc);
+    iq=true;
+  }
+  if (imode)
+    s=rint(s);
+  if ((side&3)%3 && x==s)
+  {
+    if (debug)
+      cout<<"Same as last time"<<endl;
+    if (imode)
+    {
+      if (bsave<x)
+        side^=4;
+      if (side&4)
+        s++;
+      else
+        s--;
+    }
+    else
+      s=nextafter(s,(side&4)?bsave:asave);
+    lflag=true;
+  }
+  if (debug)
+  {
+    cout<<setw(23)<<ldecimal(a)<<setw(23)<<ldecimal(b)<<setw(23)<<ldecimal(x)<<' '<<iq<<endl;
+    cout<<setw(23)<<ldecimal(fa)<<setw(23)<<ldecimal(fb)<<setw(23)<<ldecimal(y)<<endl;
+    cout<<"s="<<ldecimal(s);
+  }
+  /*if (lf)
+  {
+    mflag=true;
+    s=(b+x)/2;
+  }
+  else*/ if (between(s) && fabs(s-b)<fabs(mflag?b-c:c-d)/2)
+    mflag=false;
+  else
+  {
+    mflag=true;
+    s=(a+b)/2;
+    /* In tolted, init is fed two angles 60° apart, with values (the 3rd derivative,
+     * whose zero is being sought) -907.24943 and +907.24943. It produces the
+     * midpoint, 30° between them. The first iter also produces s=30°. This causes
+     * premature termination by the "same as last time" rule. To prevent this,
+     * if s==x, check y (which is 826.96926) and set s to the midpoint of
+     * the interval with opposite signs.
+     */
+    /*if (s==x)
+      if (sign(y)==sign(fa))
+        s=(b+x)/2;
+      else
+        s=(a+x)/2;*/
+  }
+  if (imode)
+    s=rint(s);
+  if (debug)
+    cout<<' '<<ldecimal(s);
+  if (mflag && (s==a || s==b)) // interval [a,b] is too small to bisect, we're done
+  {
+    s=b;
+    side=0;
   }
   if (debug)
     cout<<" side="<<side<<endl;
+  if ((side&3)%3)
+    x=s;
   return s;
 }
