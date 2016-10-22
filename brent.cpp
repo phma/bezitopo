@@ -117,7 +117,10 @@ double brent::init(double x0,double y0,double x1,double y1,bool intmode)
   if (imode)
     x=rint(x);
   if ((y0>0 && y1>0) || (y0<0 && y1<0))
+  {
     x=NAN;
+    side=3;
+  }
   return x;
 }
 
