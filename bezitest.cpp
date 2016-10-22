@@ -1049,7 +1049,7 @@ void testbrent()
   for (i=0;i<10;i++)
     res=invquad(tan((double)rng.usrandom()),-5,tan((double)rng.usrandom()),2,tan((double)rng.usrandom()),3);
   x=br.init(-4,brentfun0(-4),4/3.,brentfun0(4/3.));
-  //br.setdebug(true);
+  br.setdebug(true);
   cout<<"fun0 init "<<ldecimal(x)<<' ';
   for (i=0;i<200 && !br.finished();i++)
   {

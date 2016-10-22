@@ -125,11 +125,14 @@ double brent::step(double y)
 {
   double s,bsave=b,asave=a;
   bool iq,lf=false;
-  d=c;
-  c=b;
-  fd=fc;
-  fc=fb;
   side=sidetable[9*sign(fa)+3*sign(y)+sign(fb)+13];
+  if ((side&3)%3)
+  {
+    d=c;
+    c=b;
+    fd=fc;
+    fc=fb;
+  }
   switch (side&3)
   {
     case 0:
@@ -146,6 +149,8 @@ double brent::step(double y)
     case 3:
       s=NAN;
   }
+  if (debug)
+    cout<<"side="<<side<<endl;
   /*if (lflag)
     if (sign(y)*sign(fb)<=0)
       lf=true;
@@ -190,8 +195,8 @@ double brent::step(double y)
   }
   if (debug)
   {
-    cout<<setw(23)<<ldecimal(a)<<setw(23)<<ldecimal(b)<<setw(23)<<ldecimal(x)<<' '<<iq<<endl;
-    cout<<setw(23)<<ldecimal(fa)<<setw(23)<<ldecimal(fb)<<setw(23)<<ldecimal(y)<<endl;
+    cout<<setw(23)<<ldecimal(a)<<setw(23)<<ldecimal(b)<<setw(23)<<ldecimal(c)<<' '<<iq<<endl;
+    cout<<setw(23)<<ldecimal(fa)<<setw(23)<<ldecimal(fb)<<setw(23)<<ldecimal(fc)<<endl;
     cout<<"s="<<ldecimal(s);
   }
   /*if (lf)
@@ -221,14 +226,12 @@ double brent::step(double y)
   if (imode)
     s=rint(s);
   if (debug)
-    cout<<' '<<ldecimal(s);
+    cout<<' '<<ldecimal(s)<<endl;
   if (mflag && (s==a || s==b)) // interval [a,b] is too small to bisect, we're done
   {
     s=b;
     side=0;
   }
-  if (debug)
-    cout<<" side="<<side<<endl;
   if ((side&3)%3)
     x=s;
   return s;
