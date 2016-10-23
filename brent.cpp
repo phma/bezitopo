@@ -60,8 +60,6 @@ double invquad(double x0,double y0,double x1,double y1,double x2,double y2)
     swap(z1,z2);
   if (z0>z1)
     swap(z0,z1);
-  //cout<<"Brent: "<<ldecimal(x0)<<' '<<ldecimal(x1)<<' '<<ldecimal(x2)<<endl;
-  //cout<<"Before: "<<ldecimal(x0-x1)<<' '<<ldecimal(x1-x2)<<' '<<ldecimal(x2-x0)<<endl;
   if (z0<0 && z2>0)
     offx=0;
   if (z0>=0)
@@ -71,7 +69,6 @@ double invquad(double x0,double y0,double x1,double y1,double x2,double y2)
   x0-=offx;
   x1-=offx;
   x2-=offx;
-  //cout<<"After:  "<<ldecimal(x0-x1)<<' '<<ldecimal(x1-x2)<<' '<<ldecimal(x2-x0)<<endl;
   z0=x0*y1*y2/(y0-y1)/(y0-y2);
   z1=x1*y2*y0/(y1-y2)/(y1-y0);
   z2=x2*y0*y1/(y2-y0)/(y2-y1);
@@ -81,11 +78,7 @@ double invquad(double x0,double y0,double x1,double y1,double x2,double y2)
 bool brent::between(double s)
 {
   double g=(3*a+b)/4;
-  return (g<s && s<=b) || (b<=s && s<g);
-  /* <= to make sqrt(3) compute faster, since 1.7320508075688774
-   * and 1.7320508075688772 have equal and opposite errors, resulting
-   * in repeated unnecessary bisection if the test is b<s
-   */
+  return (g<s && s<b) || (b<s && s<g);
 }
 
 double brent::init(double x0,double y0,double x1,double y1,bool intmode)
@@ -106,14 +99,16 @@ double brent::init(double x0,double y0,double x1,double y1,bool intmode)
     b=x0;
     fb=y0;
   }
-  mflag=true;
-  lflag=false;
+  mflag=false;
   side=1;
   x=b-fb*(a-b)/(fa-fb);
   if (imode)
     x=rint(x);
   if (!between(x))
+  {
     x=(a+b)/2;
+    mflag=true;
+  }
   if (imode)
     x=rint(x);
   if ((y0>0 && y1>0) || (y0<0 && y1<0))
@@ -127,7 +122,7 @@ double brent::init(double x0,double y0,double x1,double y1,bool intmode)
 double brent::step(double y)
 {
   double s,bsave=b,asave=a;
-  bool iq,lf=false;
+  bool iq;
   side=sidetable[9*sign(fa)+3*sign(y)+sign(fb)+13];
   if ((side&3)%3)
   {
@@ -154,11 +149,6 @@ double brent::step(double y)
   }
   if (debug)
     cout<<"side="<<side<<endl;
-  /*if (lflag)
-    if (sign(y)*sign(fb)<=0)
-      lf=true;
-    else
-      lflag=false;*/
   if ((side&3)%3)
   {
     if (fabs(fb)>fabs(fa))
@@ -194,7 +184,6 @@ double brent::step(double y)
     }
     else
       s=nextafter(s,(side&4)?bsave:asave);
-    lflag=true;
   }
   if (debug)
   {
@@ -202,29 +191,12 @@ double brent::step(double y)
     cout<<setw(23)<<ldecimal(fa)<<setw(23)<<ldecimal(fb)<<setw(23)<<ldecimal(fc)<<endl;
     cout<<"s="<<ldecimal(s);
   }
-  /*if (lf)
-  {
-    mflag=true;
-    s=(b+x)/2;
-  }
-  else*/ if (between(s) && fabs(s-b)<fabs(mflag?b-c:c-d)/2)
+  if (between(s) && fabs(s-b)<fabs(mflag?b-c:c-d)/2)
     mflag=false;
   else
   {
     mflag=true;
     s=(a+b)/2;
-    /* In tolted, init is fed two angles 60° apart, with values (the 3rd derivative,
-     * whose zero is being sought) -907.24943 and +907.24943. It produces the
-     * midpoint, 30° between them. The first iter also produces s=30°. This causes
-     * premature termination by the "same as last time" rule. To prevent this,
-     * if s==x, check y (which is 826.96926) and set s to the midpoint of
-     * the interval with opposite signs.
-     */
-    /*if (s==x)
-      if (sign(y)==sign(fa))
-        s=(b+x)/2;
-      else
-        s=(a+x)/2;*/
   }
   if (imode)
     s=rint(s);

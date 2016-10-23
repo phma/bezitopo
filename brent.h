@@ -38,6 +38,6 @@ public:
 private:
   double a,fa,b,fb,c,fc,d,fd,x;
   int side;
-  bool mflag,lflag,imode,debug;
+  bool mflag,imode,debug;
   bool between(double s);
 };

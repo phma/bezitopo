@@ -739,7 +739,7 @@ vector<xy> triangle::criticalpts_axis()
       around[3]=spelevation(nocubedir,dvertex+0.000070,flat-0.000169)-velev;
       around[4]=spelevation(nocubedir,dvertex-0.000070,flat-0.000169)-velev;
       around[5]=spelevation(nocubedir,dvertex-0.000169,flat-0.000070)-velev;
-      around[6]=spelevation(nocubedir,dvertex-0.000160,flat+0.000070)-velev;
+      around[6]=spelevation(nocubedir,dvertex-0.000169,flat+0.000070)-velev;
       around[7]=spelevation(nocubedir,dvertex-0.000070,flat+0.000169)-velev;
       for (i=signflips=0;i<8;i++)
 	signflips+=around[i]*around[(i+1)&7]<0;
@@ -753,6 +753,10 @@ vector<xy> triangle::criticalpts_axis()
 }
 
 void triangle::findcriticalpts()
+/* On the Raspberry Pi, this has in the past found critical points
+ * on a flat table. An unititalized variable may be involved.
+ * See https://github.com/phma/bezitopo/issues/1 .
+ */
 {
   vector<xy> critpts,ret;
   int i;
