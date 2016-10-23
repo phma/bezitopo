@@ -92,6 +92,7 @@ public:
   int isfull(); // -1 if empty, 0 if partly full or unknown, 1 if full
   std::array<unsigned,2> hash();
   std::vector<cylinterval> boundrects();
+  std::array<vball,4> bounds();
   void writeBinary(std::ostream &ofile,int nesting=0);
   void readBinary(std::istream &ifile,int nesting=-1);
 };

@@ -550,6 +550,71 @@ vector<cylinterval> geoquad::boundrects()
   return ret;
 }
 
+array<vball,4> geoquad::bounds()
+/* The four sides of a geoquad are segments of great circles.
+ * This returns them as the centers of the great circles.
+ */
+{
+  array<vball,4> ret;
+  switch (face)
+  {
+    case 1:
+      ret[0].face=2;
+      ret[1].face=3;
+      ret[2].face=5;
+      ret[3].face=4;
+      break;
+    case 2:
+      ret[0].face=3;
+      ret[1].face=1;
+      ret[2].face=4;
+      ret[3].face=6;
+      break;
+    case 3:
+      ret[0].face=1;
+      ret[1].face=2;
+      ret[2].face=6;
+      ret[3].face=4;
+      break;
+    case 6:
+      ret[0].face=5;
+      ret[1].face=4;
+      ret[2].face=2;
+      ret[3].face=3;
+      break;
+    case 5:
+      ret[0].face=4;
+      ret[1].face=6;
+      ret[2].face=3;
+      ret[3].face=1;
+      break;
+    case 4:
+      ret[0].face=6;
+      ret[1].face=5;
+      ret[2].face=1;
+      ret[3].face=2;
+      break;
+    default:
+      ret[0].face=ret[1].face=ret[2].face=ret[3].face=face;
+  }
+  if (face&4)
+  {
+    ret[0].y=center.getx()-scale;
+    ret[1].x=center.gety()+scale;
+    ret[2].y=center.getx()+scale;
+    ret[3].x=-center.gety()+scale;
+  }
+  else
+  {
+    ret[0].y=-center.getx()-scale;
+    ret[1].x=-center.gety()-scale;
+    ret[2].y=-center.getx()+scale;
+    ret[3].x=center.gety()-scale;
+  }
+  ret[0].x=ret[1].y=ret[2].x=ret[3].y=0;
+  return ret;
+}
+
 void geoquad::writeBinary(ostream &ofile,int nesting)
 {
   int i;
