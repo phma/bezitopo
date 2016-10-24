@@ -235,9 +235,9 @@ void drawglobecube(int side,double zscale,double zmid,int source,int imagetype,s
 	else
 	{
 	  pixel="rgb";
-	  pixel[0]=rint((sphloc.getx()+6371e3)*255/12742e3);
-	  pixel[1]=rint((sphloc.gety()+6371e3)*255/12742e3);
-	  pixel[2]=rint((sphloc.getz()+6371e3)*255/12742e3);
+	  pixel[0]=rint((sphloc.getx()+EARTHRAD)*255/(2*EARTHRAD));
+	  pixel[1]=rint((sphloc.gety()+EARTHRAD)*255/(2*EARTHRAD));
+	  pixel[2]=rint((sphloc.getz()+EARTHRAD)*255/(2*EARTHRAD));
 	}
       }
       else
@@ -316,9 +316,9 @@ void drawglobemicro(int side,xy center,double size,int source,int imagetype,stri
 	else
 	{
 	  pixel="rgb";
-	  pixel[0]=rint((sphloc.getx()+6371e3)*255/12742e3);
-	  pixel[1]=rint((sphloc.gety()+6371e3)*255/12742e3);
-	  pixel[2]=rint((sphloc.getz()+6371e3)*255/12742e3);
+	  pixel[0]=rint((sphloc.getx()+EARTHRAD)*255/(2*EARTHRAD));
+	  pixel[1]=rint((sphloc.gety()+EARTHRAD)*255/(2*EARTHRAD));
+	  pixel[2]=rint((sphloc.getz()+EARTHRAD)*255/(2*EARTHRAD));
 	}
       }
       else

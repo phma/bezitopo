@@ -486,7 +486,7 @@ bool smallcircle::in(xyz pt)
 
 vector<xyz> gcscint(xyz gc,smallcircle sc)
 /* Compute the intersections of a great circle, represented by its pole,
- * and a small circle. The result has length 1; multiply by 8371 km
+ * and a small circle. The result has length 1; multiply by EARTHRAD
  * to put it on the spherical earth's surface.
  */
 {

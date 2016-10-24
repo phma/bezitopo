@@ -4072,7 +4072,7 @@ void testsmallcircle()
   eho150.center=Sphere.geoc(degtobin(35.29),degtobin(-81.54),0);
   clt150.center=Sphere.geoc(degtobin(35.23),degtobin(-80.84),0);
   qaraqoga=Sphere.geoc(degtobin(52.43),degtobin(75.07),0);
-  r=radtobin(15e4/6371e3);
+  r=radtobin(15e4/EARTHRAD);
   avl150.setradius(r);
   eho150.setradius(r);
   clt150.setradius(r);
@@ -4081,7 +4081,7 @@ void testsmallcircle()
   tassert(!avl150.in(clt150.center));
   tassert(eho150.in(clt150.center));
   xprod=cross(avl150.center,clt150.center);
-  xprod*=6371e3/xprod.length();
+  xprod*=EARTHRAD/xprod.length();
   cout<<radtodeg(xprod.lat())<<' '<<radtodeg(xprod.lon())<<' '<<dist(xprod,qaraqoga)<<endl;
   tassert(dist(xprod,qaraqoga)<2e4);
   avlint=gcscint(xprod,avl150);
@@ -4092,9 +4092,9 @@ void testsmallcircle()
   tassert(cltint.size()==2);
   for (i=0;i<2;i++)
   {
-    avlint[i]*=6371e3;
-    ehoint[i]*=6371e3;
-    cltint[i]*=6371e3;
+    avlint[i]*=EARTHRAD;
+    ehoint[i]*=EARTHRAD;
+    cltint[i]*=EARTHRAD;
   }
   cout<<dist(avlint[0],avlint[1])<<' '<<dist(ehoint[0],ehoint[1])<<' '<<dist(cltint[0],cltint[1])<<endl;
   tassert(dist(avlint[0],avlint[1])>299792); // The distance < 300 km because
@@ -4103,7 +4103,7 @@ void testsmallcircle()
   athwi45d.center=xyz(0,-4504977.3,4504977.3);
   ush4000.center=Sphere.geoc(degtobin(-54.8),degtobin(-68.3),0);
   athwi45d.setradius(DEG45);
-  ush4000.setradius(radtobin(4e6/6371e3));
+  ush4000.setradius(radtobin(4e6/EARTHRAD));
   avlcyl=avl150.boundrect();
   ehocyl=eho150.boundrect();
   cltcyl=clt150.boundrect();

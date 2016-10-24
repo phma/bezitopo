@@ -168,7 +168,7 @@ xyz decodedir(vball code)
       break;
   }
   if ((code.face&7)%7)
-    ret=ret*(6371e3/ret.length());
+    ret=ret*(EARTHRAD/ret.length());
   return ret;
 }
 
@@ -450,14 +450,14 @@ double geoquad::length()
 {
   double r;
   r=xyz(center,1).length();
-  return 6371e3*2*scale/r;
+  return EARTHRAD*2*scale/r;
 }
 
 double geoquad::width()
 {
   double r;
   r=xyz(center,1).length();
-  return 6371e3*2*scale/sqr(r);
+  return EARTHRAD*2*scale/sqr(r);
 }
 
 double geoquad::apxarea()
