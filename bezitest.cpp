@@ -3220,6 +3220,7 @@ void testprojection()
     sphereConicm80(0,degtorad(-80));
   LambertConicSphere sphereConicBenin(degtorad(8/3.),degtorad(7.5),degtorad(11.5));
   LambertConicSphere sphereConic4590(0,degtorad(45),degtorad(90));
+  LambertConicSphere sphereConic4590m(0,degtorad(45),bintorad(DEG90-1));
   // One parallel 90° and the other not is an invalid condition.
   // This is a test to see what the object does with it.
   latlong ll;
