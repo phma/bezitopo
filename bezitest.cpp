@@ -71,6 +71,7 @@
 #include "sourcegeoid.h"
 #include "bicubic.h"
 #include "matrix.h"
+#include "quaternion.h"
 
 #define psoutput false
 // affects only maketin
@@ -503,6 +504,15 @@ void testmatrix()
   tassert(rs4.determinant()==0);
   rs4[3][3]=1;
   tassert(fabs(rs4.determinant()*9-100)<1e-12);
+}
+
+void testquaternion()
+{
+  Quaternion q0(0,0,0,0),q1(1,0,0,0),qh(0.5,0.5,0.5,0.5),qsum(1.5,0.5,0.5,0.5);
+  Quaternion res;
+  res=q1+qh;
+  tassert(res==qsum);
+  tassert(res!=q0);
 }
 
 void testcopytopopoints()
@@ -4362,6 +4372,8 @@ int main(int argc, char *argv[])
     testtriangle();
   if (shoulddo("matrix"))
     testmatrix();
+  if (shoulddo("quaternion"))
+    testquaternion();
   if (shoulddo("copytopopoints"))
     testcopytopopoints();
   if (shoulddo("invalidintersectionlozenge"))
