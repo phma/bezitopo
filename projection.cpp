@@ -75,20 +75,41 @@ LambertConicSphere::LambertConicSphere(double Meridian,double Parallel0,double P
   ratiolog0=scaleRatioLog(Parallel0,Parallel1);
   setParallel(Parallel1);
   ratiolog1=scaleRatioLog(Parallel0,Parallel1);
-  Parallel=br.init(Parallel0,ratiolog0,Parallel1,ratiolog1,false);
-  while (!br.finished())
+  /* Setting one parallel to ±90° and the other to something else, or either
+   * or both to ±(>90°), is an error. I'm not sure whether to throw an exception
+   * or set the state to invalid. I'm now setting it to invalid.
+   * If the parallels are 45° and 90°, different computers give wildly different
+   * results: 84.714395 on Linux/Intel, but 67.5° on Linux/ARM and DFBSD.
+   * This is because M_PIl!=M_PI, resulting in M_PIl/2-ll.lat being tiny but
+   * positive when ll.lat is M_PIl rounded to double.
+   * If the parallels are 45° and DEG90-1 (89.999999832°), the three computers
+   * agree that Parallel is 82.686083 (but no more precisely), so that is not
+   * an error.
+   */
+  if ((Parallel0!=Parallel1 && (radtobin(fabs(Parallel0))==DEG90 || radtobin(fabs(Parallel1))==DEG90))
+      || fabs(Parallel0)>M_PIl/2
+      || fabs(Parallel1)>M_PIl/2)
   {
-    cout<<"Parallel "<<ldecimal(radtodeg(Parallel))<<endl;
-    setParallel(Parallel);
-    Parallel=br.step(scaleRatioLog(Parallel0,Parallel1));
+    centralParallel=poleY=exponent=coneScale=NAN;
+    cerr<<"Invalid parallels in LambertConicSphere"<<endl;
   }
-  setParallel(Parallel);
-  ll.lon=centralMeridian;
-  ll.lat=Parallel0;
-  scale=1/scaleFactor(ll);
-  poleY=0;
-  maporigin=latlong(Meridian,Parallel);
-  poleY=-latlongToGrid(maporigin).gety();
+  else
+  {
+    Parallel=br.init(Parallel0,ratiolog0,Parallel1,ratiolog1,false);
+    while (!br.finished())
+    {
+      cout<<"Parallel "<<ldecimal(radtodeg(Parallel))<<endl;
+      setParallel(Parallel);
+      Parallel=br.step(scaleRatioLog(Parallel0,Parallel1));
+    }
+    setParallel(Parallel);
+    ll.lon=centralMeridian;
+    ll.lat=Parallel0;
+    scale=1/scaleFactor(ll);
+    poleY=0;
+    maporigin=latlong(Meridian,Parallel);
+    poleY=-latlongToGrid(maporigin).gety();
+  }
 }
 
 double LambertConicSphere::scaleRatioLog(double Parallel0,double Parallel1)
