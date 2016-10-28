@@ -26,6 +26,8 @@ public:
   Quaternion();
   Quaternion(double r,double i,double j,double k);
   double getcomp(int n);
+  double normsq();
+  double norm();
   friend bool operator!=(const Quaternion &l,const Quaternion &r);
   friend bool operator==(const Quaternion &l,const Quaternion &r);
   friend Quaternion operator+(const Quaternion &l,const Quaternion &r);

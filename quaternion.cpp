@@ -20,6 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
 #include "quaternion.h"
 
 /* Quaternions are used in least-squares adjustment to represent the
@@ -55,6 +56,16 @@ double Quaternion::getcomp(int n)
   }
 }
 
+double Quaternion::normsq()
+{
+  return (w*w+x*x)+(y*y+z*z);
+}
+
+double Quaternion::norm()
+{
+  return sqrt(normsq());
+}
+
 bool operator!=(const Quaternion &l,const Quaternion &r)
 {
   return l.w!=r.w || l.x!=r.x || l.y!=r.y || l.z!=r.z;
@@ -78,10 +89,10 @@ Quaternion operator+(const Quaternion &l,const Quaternion &r)
 Quaternion operator-(const Quaternion &l,const Quaternion &r)
 {
   Quaternion ret;
-  ret.w=l.w+r.w;
-  ret.x=l.x+r.x;
-  ret.y=l.y+r.y;
-  ret.z=l.z+r.z;
+  ret.w=l.w-r.w;
+  ret.x=l.x-r.x;
+  ret.y=l.y-r.y;
+  ret.z=l.z-r.z;
   return ret;
 }
 

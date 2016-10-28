@@ -510,6 +510,7 @@ void testquaternion()
 {
   Quaternion q0(0,0,0,0),q1(1,0,0,0),qr2(0,1,0,0),qr3(0.5,0.5,0.5,0.5);
   Quaternion qr5(M_1PHI/2+0.5,0.5,M_1PHI/2,0),qsum(1.5,0.5,0.5,0.5);
+  Quaternion qprod(-0.5,0,-M_1PHI/2,M_1PHI/2+0.5);
   /* qr2, qr3, and qr5 generate the group of order 120 which is the group
    * of rotations of an icosahedron (or dodecahedron) times 2.
    */
@@ -518,6 +519,11 @@ void testquaternion()
   res=q1+qr3;
   tassert(res==qsum);
   tassert(res!=q0);
+  res=qr2*qr3*qr5; // 1/3 rotation about (0,1/φ,-φ)
+  for (j=0;j<4;j++)
+    cout<<setprecision(6)<<res.getcomp(j)<<' ';
+  cout<<endl;
+  tassert((qprod-res).norm()<1e-12);
   res=q1;
   for (i=0;i<10;i++)
   {
