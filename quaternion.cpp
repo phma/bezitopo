@@ -40,6 +40,21 @@ Quaternion::Quaternion(double r,double i,double j,double k)
   z=k;
 }
 
+double Quaternion::getcomp(int n)
+{
+  switch (n&3)
+  {
+    case 0:
+      return w;
+    case 1:
+      return x;
+    case 2:
+      return y;
+    case 3:
+      return z;
+  }
+}
+
 bool operator!=(const Quaternion &l,const Quaternion &r)
 {
   return l.w!=r.w || l.x!=r.x || l.y!=r.y || l.z!=r.z;
@@ -67,5 +82,16 @@ Quaternion operator-(const Quaternion &l,const Quaternion &r)
   ret.x=l.x+r.x;
   ret.y=l.y+r.y;
   ret.z=l.z+r.z;
+  return ret;
+}
+
+Quaternion operator*(const Quaternion &l,const Quaternion &r)
+// THAT DOES NOT COMMUTE :)
+{
+  Quaternion ret;
+  ret.w=(l.w*r.w-l.x*r.x)-(l.y*r.y+l.z*r.z);
+  ret.x=(l.w*r.x+l.x*r.w)+(l.y*r.z-l.z*r.y);
+  ret.y=(l.w*r.y+l.y*r.w)+(l.z*r.x-l.x*r.z);
+  ret.z=(l.w*r.z+l.z*r.w)+(l.x*r.y-l.y*r.x);
   return ret;
 }
