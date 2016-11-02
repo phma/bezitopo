@@ -29,6 +29,8 @@
 
 class xyz;
 
+#include "quaternion.h"
+
 class xy
 {
 public:
@@ -112,6 +114,8 @@ public:
   friend xyz operator+(const xyz &l,const xyz &r);
   friend xyz operator-(const xyz &l,const xyz &r);
   friend xyz operator-(const xyz &r);
+  friend Quaternion versor(xyz vec);
+  friend Quaternion versor(xyz vec,int angle);
 protected:
   double x,y,z;
 };

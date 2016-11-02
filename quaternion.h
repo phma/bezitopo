@@ -20,19 +20,40 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef QUATERNION_H
+#define QUATERNION_H
+
+class Quaternion;
+
+#include "xyz.h"
+
 class Quaternion
 {
 public:
   Quaternion();
+  Quaternion(double r);
   Quaternion(double r,double i,double j,double k);
   double getcomp(int n);
   double normsq();
   double norm();
+  void normalize();
   friend bool operator!=(const Quaternion &l,const Quaternion &r);
   friend bool operator==(const Quaternion &l,const Quaternion &r);
   friend Quaternion operator+(const Quaternion &l,const Quaternion &r);
   friend Quaternion operator-(const Quaternion &l,const Quaternion &r);
   friend Quaternion operator*(const Quaternion &l,const Quaternion &r);
+  friend Quaternion operator*(const Quaternion &l,double r);
+  friend Quaternion operator/(const Quaternion &l,double r);
+  // operator/ for two quaternions is not defined.
+  // Multiply by the reciprocal on the appropriate side.
+  Quaternion& operator+=(double r);
+  Quaternion& operator-=(double r);
+  Quaternion& operator*=(double r);
+  Quaternion& operator/=(double r);
+  friend Quaternion versor(xyz vec);
+  friend Quaternion versor(xyz vec,int angle);
 protected:
   double w,x,y,z;
 };
+
+#endif
