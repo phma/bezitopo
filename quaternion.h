@@ -33,12 +33,16 @@ public:
   Quaternion();
   Quaternion(double r);
   Quaternion(double r,double i,double j,double k);
+  Quaternion(double r,xyz i);
   double getcomp(int n);
   double getreal();
   xyz getimag();
   double normsq();
   double norm();
   void normalize();
+  Quaternion conj();
+  Quaternion inv();
+  xyz rotate(xyz vec);
   friend bool operator!=(const Quaternion &l,const Quaternion &r);
   friend bool operator==(const Quaternion &l,const Quaternion &r);
   friend Quaternion operator+(const Quaternion &l,const Quaternion &r);

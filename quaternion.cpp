@@ -48,6 +48,14 @@ Quaternion::Quaternion(double r,double i,double j,double k)
   z=k;
 }
 
+Quaternion::Quaternion(double r,xyz i)
+{
+  w=r;
+  x=i.x;
+  y=i.y;
+  z=i.z;
+}
+
 double Quaternion::getcomp(int n)
 {
   switch (n&3)
@@ -89,6 +97,28 @@ void Quaternion::normalize()
   operator/=(norm());
 }
 
+Quaternion Quaternion::conj()
+{
+  Quaternion ret(w,-x,-y,-z);
+  return ret;
+}
+
+Quaternion Quaternion::inv()
+{
+  return conj()/normsq();
+}
+
+xyz Quaternion::rotate(xyz vec)
+// TODO; expand the multiplication, as this has some multiplications by 0
+/* If *this is (0.5,0.5,0.5,0.5), it rotates vec 120° clockwise as seen
+ * from (0,0,0) looking toward (0.5,0.5,0.5); i.e. (x,y,z) becomes (z,x,y).
+ */
+{
+  Quaternion qvec(0,vec);
+  qvec=*this*qvec*conj();
+  return qvec.getimag();
+}
+  
 bool operator!=(const Quaternion &l,const Quaternion &r)
 {
   return l.w!=r.w || l.x!=r.x || l.y!=r.y || l.z!=r.z;
