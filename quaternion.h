@@ -34,6 +34,8 @@ public:
   Quaternion(double r);
   Quaternion(double r,double i,double j,double k);
   double getcomp(int n);
+  double getreal();
+  xyz getimag();
   double normsq();
   double norm();
   void normalize();

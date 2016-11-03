@@ -63,6 +63,17 @@ double Quaternion::getcomp(int n)
   }
 }
 
+double Quaternion::getreal()
+{
+  return w;
+}
+
+xyz Quaternion::getimag()
+{
+  xyz ret(x,y,z);
+  return ret;
+}
+
 double Quaternion::normsq()
 {
   return (w*w+x*x)+(y*y+z*z);
