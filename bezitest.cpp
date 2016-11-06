@@ -23,6 +23,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <algorithm>
 #include <cstdlib>
 #include <csignal>
 #include <cfloat>
@@ -3974,12 +3975,16 @@ void testquadhash()
 void testgeoid()
 {
   vball v;
+  array<vball,4> bounds;
+  array<double,4> bdist;
   int lat,lon,olat,olon,i,j,k,qsz=16;
   /* qsz is the size of the square lattice used to sample a geoquad.
    * It can range from 4 to 16, but values below 9 cause this test to fail.
    */
   double x,y,sum,qpoints[16][16],u0,u1;
   //vector<double> anga,apxa;
+  double areadiff,minareadiff;
+  int minareasub;
   xyz dir;
   geoquad gq,*pgq;
   geoheader hdr;
@@ -4030,19 +4035,56 @@ void testgeoid()
       cout<<corr[i]<<' ';
     cout<<endl;
   }
+  cout<<"done."<<endl;
+  cout<<"Testing area of geoquad..."<<endl;
   gq.clear();
   pgq=&gq;
+  minareadiff=INFINITY;
   for (i=0;i<24;i++)
   {
+    areadiff=(pgq->apxarea()-pgq->angarea())/sqr(pgq->scale);
     cout<<setw(2)<<i<<setprecision(10)
     <<setw(18)<<pgq->apxarea()/sqr(pgq->scale)
     <<setw(18)<<pgq->angarea()/sqr(pgq->scale)
     <<setw(18)<<pgq->area()/sqr(pgq->scale)
-    <<setw(18)<<setprecision(6)<<(pgq->apxarea()-pgq->angarea())/sqr(pgq->scale)
+    <<setw(18)<<setprecision(6)<<areadiff
     <<endl;
+    if (fabs(areadiff)<minareadiff)
+    {
+      minareadiff=fabs(areadiff);
+      minareasub=i;
+    }
     pgq->subdivide();
-    pgq=pgq->sub[i&3];
+    pgq=pgq->sub[rng.ucrandom()&3];
   }
+  cout<<"angarea and apxarea are closest at subdivision level "<<minareasub<<endl;
+  cout<<"done."<<endl;
+  cout<<"Testing geoquad bounds..."<<endl;
+  gq.clear();
+  gq.center=xy(0.125,0.375);
+  gq.scale=0.5;
+  for (i=1;i<7;i++)
+  {
+    gq.face=i;
+    v=gq.vcenter();
+    bounds=gq.bounds();
+    /* The bounds are the four great circles whose arcs bound the geoquad.
+     * They are returned as the farther centers of the great circles.
+     * They should be about 12.5 Mm from the center of the geoquad,
+     * measured along the surface of the earth. Measured through the earth,
+     * that is 10.6 Mm. Actual values range from 10.468 to 10.892 Mm.
+     */
+    for (j=0;j<4;j++)
+      bdist[j]=dist(decodedir(v),decodedir(bounds[j]));
+    stable_sort(bdist.begin(),bdist.end());
+    for (j=0;j<4;j++)
+      cout<<bdist[j]<<' ';
+    cout<<endl;
+    tassert(bdist[0]>10.45e6);
+    tassert(bdist[3]<10.9e6);
+  }
+  cout<<"done."<<endl;
+  cout<<"Testing conversion from geolattice to geoquad and I/O..."<<endl;
   geo.resize(1);
   geo[0].glat=new geolattice;
   geo[0].glat->settest();
@@ -4098,6 +4140,7 @@ void testgeoid()
 	tassert(fabs(u1-u0)<0.001);
       }
     }
+  cout<<"done."<<endl;
 }
 
 void outcyl(cylinterval c)
