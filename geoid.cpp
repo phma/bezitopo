@@ -574,7 +574,7 @@ array<vball,4> geoquad::bounds()
       ret[0].face=1;
       ret[1].face=2;
       ret[2].face=6;
-      ret[3].face=4;
+      ret[3].face=5;
       break;
     case 6:
       ret[0].face=5;
