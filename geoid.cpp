@@ -379,7 +379,7 @@ void geoquad::clear()
   und[0]=0x80000000;
 }
 
-vball geoquad::vcenter()
+vball geoquad::vcenter() const
 {
   return vball(face,center);
 }
@@ -410,12 +410,12 @@ void geoquad::subdivide()
   nums.shrink_to_fit();
 }
 
-bool geoquad::in(xy pnt)
+bool geoquad::in(xy pnt) const
 {
   return fabs(pnt.east()-center.east())<=scale && fabs(pnt.north()-center.north())<=scale;
 }
 
-bool geoquad::in(vball pnt)
+bool geoquad::in(vball pnt) const
 {
   return face==pnt.face && in(xy(pnt.x,pnt.y));
 }
@@ -550,7 +550,7 @@ vector<cylinterval> geoquad::boundrects()
   return ret;
 }
 
-array<vball,4> geoquad::bounds()
+array<vball,4> geoquad::bounds() const
 /* The four sides of a geoquad are segments of great circles.
  * This returns them as the centers of the great circles.
  */

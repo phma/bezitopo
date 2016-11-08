@@ -515,6 +515,7 @@ vector<xyz> gcscint(xyz gc,smallcircle sc)
   return ret;
 }
 
+bool overlap(smallcircle sc,const geoquad &gq)
 /* To determine whether a smallcircle and a geoquad overlap:
  * • If the center of either is inside the other, then they overlap; return true.
  * • Find the intersections of the great circles which bound the geoquad
@@ -531,6 +532,34 @@ vector<xyz> gcscint(xyz gc,smallcircle sc)
  *   find the ends of the diameter of the smallcircle which bisects the two
  *   points, and check whether they are in the geoquad.
  */
+{
+  vball scc=encodedir(sc.center);
+  xyz gqc=decodedir(gq.vcenter());
+  bool ret=sc.in(gqc)||gq.in(scc);
+  array<vball,4> gqvbounds=gq.bounds();
+  array<xyz,4> gqbounds;
+  vector<xyz> intersections,ints1;
+  int i,j;
+  if (!ret)
+  {
+    for (i=0;i<4;i++)
+    {
+      gqbounds[i]=decodedir(gqvbounds[i]);
+      ints1=gcscint(gqbounds[i],sc);
+      for (j=0;j<ints1.size();j++)
+        intersections.push_back(ints1[j]);
+    }
+    // code for intersections.size()==2 goes here
+    if (intersections.size()>1 && intersections.size()<7)
+    {
+      for (i=0;i<intersections.size();i++)
+        for (j=0;j<i;j++)
+          if (gq.in(encodedir(intersections[i]+intersections[j])))
+            ret=true;
+    }
+  }
+  return ret;
+}
 
 cylinterval smallcircle::boundrect()
 /* Returns the smallest rectangle in cylindrical projection which contains c.

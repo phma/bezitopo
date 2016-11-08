@@ -127,3 +127,4 @@ double maxerror(geoquad &quad,double qpoints[][16],int qsz);
 int quadhash(double qpoints[][16],int qsz);
 matrix autocorr(double qpoints[][16],int qsz);
 void dump256(double qpoints[][16],int qsz);
+bool overlap(smallcircle sc,const geoquad &gq);

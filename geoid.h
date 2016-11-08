@@ -77,11 +77,11 @@ public:
   geoquad();
   ~geoquad();
   // TODO needs copy constructor
-  vball vcenter();
+  vball vcenter() const;
   void clear();
   void subdivide();
-  bool in(xy pnt); // does not check whether it's on the right face
-  bool in(vball pnt); // does check
+  bool in(xy pnt) const; // does not check whether it's on the right face
+  bool in(vball pnt) const; // does check
   double undulation(double x,double y);
   xyz centeronearth();
   double length(); // length, width, and apxarea are accurate only for small squares
@@ -92,7 +92,7 @@ public:
   int isfull(); // -1 if empty, 0 if partly full or unknown, 1 if full
   std::array<unsigned,2> hash();
   std::vector<cylinterval> boundrects();
-  std::array<vball,4> bounds();
+  std::array<vball,4> bounds() const;
   void writeBinary(std::ostream &ofile,int nesting=0);
   void readBinary(std::istream &ifile,int nesting=-1);
 };
