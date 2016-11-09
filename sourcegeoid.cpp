@@ -520,17 +520,13 @@ bool overlap(smallcircle sc,const geoquad &gq)
  * • If the center of either is inside the other, then they overlap; return true.
  * • Find the intersections of the great circles which bound the geoquad
  *   with the smallcircle. There are anywhere from 0 to 8 of them.
- * • If there are 7 or 8, the smallcircle's antipode overlaps the geoquad.
- *   If the smallcircle overlapped the geoquad, one's center would be inside
- *   the other, which would have been noticed already. Return false.
- * • If there are 0 or 1, the smallcircle is outside the geoquad or tangent
- *   to its outside. Again, if they overlapped, it would have been noticed. Return false.
- * • If there are 3-6, check the point halfway between each pair whether it
- *   is in the geoquad. Return true if any is inside, else false.
- * • If there are 2, halfway between them may be on a side of the geoquad.
- *   Points on two sides of the geoquad are considered outside. Therefore,
- *   find the ends of the diameter of the smallcircle which bisects the two
- *   points, and check whether they are in the geoquad.
+ *   It is possible for the smallcircle to intersect the bounds eight times
+ *   and overlap the geoquad, yet no point halfway between the intersections
+ *   is inside the geoquad. For instance, the geoquad is the entire Benin face,
+ *   the smallcircle is centered at Galápagos, and the radius is 5311 km.
+ * • For every pair of intersections, find the ends of the diameter of the
+ *   smallcircle which bisects the two points, and check whether they are
+ *   in the geoquad. If any are, return true.
  */
 {
   vball scc=encodedir(sc.center);
@@ -538,8 +534,8 @@ bool overlap(smallcircle sc,const geoquad &gq)
   bool ret=sc.in(gqc)||gq.in(scc);
   array<vball,4> gqvbounds=gq.bounds();
   array<xyz,4> gqbounds;
-  vector<xyz> intersections,ints1;
-  int i,j;
+  vector<xyz> intersections,ints1,bisectors;
+  int i,j,k;
   if (!ret)
   {
     for (i=0;i<4;i++)
@@ -549,14 +545,13 @@ bool overlap(smallcircle sc,const geoquad &gq)
       for (j=0;j<ints1.size();j++)
         intersections.push_back(ints1[j]);
     }
-    // code for intersections.size()==2 goes here
-    if (intersections.size()>1 && intersections.size()<7)
-    {
-      for (i=0;i<intersections.size();i++)
-        for (j=0;j<i;j++)
-          if (gq.in(encodedir(intersections[i]+intersections[j])))
+    for (i=0;i<intersections.size();i++)
+      for (j=0;!ret && j<i;j++)
+      {
+        bisectors=gcscint(intersections[i]-intersections[j],sc);
+        for (k=0;k<bisectors.size();k++)
+          if (gq.in(encodedir(bisectors[k])))
             ret=true;
-    }
   }
   return ret;
 }
