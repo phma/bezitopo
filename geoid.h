@@ -80,6 +80,7 @@ public:
   vball vcenter() const;
   void clear();
   void subdivide();
+  void filldepth(int depth);
   bool in(xy pnt) const; // does not check whether it's on the right face
   bool in(vball pnt) const; // does check
   double undulation(double x,double y);

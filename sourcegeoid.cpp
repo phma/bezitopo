@@ -552,6 +552,7 @@ bool overlap(smallcircle sc,const geoquad &gq)
         for (k=0;k<bisectors.size();k++)
           if (gq.in(encodedir(bisectors[k])))
             ret=true;
+      }
   }
   return ret;
 }

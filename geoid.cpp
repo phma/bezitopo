@@ -410,6 +410,21 @@ void geoquad::subdivide()
   nums.shrink_to_fit();
 }
 
+void geoquad::filldepth(int depth)
+/* Makes all subdivisions at depth depth exist, if they don't already.
+ * The number of leaves after this operation is at least 4**depth.
+ */
+{
+  int i;
+  if (depth>0)
+  {
+    if (!subdivided())
+      subdivide();
+    for (i=0;i<4;i++)
+      sub[i]->filldepth(depth-1);
+  }
+}
+
 bool geoquad::in(xy pnt) const
 {
   return fabs(pnt.east()-center.east())<=scale && fabs(pnt.north()-center.north())<=scale;
