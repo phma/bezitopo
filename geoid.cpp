@@ -723,6 +723,11 @@ void cubemap::clear()
     faces[i].clear();
 }
 
+cubemap::~cubemap()
+{
+  clear();
+}
+
 double cubemap::undulation(int lat,int lon)
 {
   return undulation(Sphere.geoc(lat,lon,0));

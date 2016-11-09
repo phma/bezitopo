@@ -105,6 +105,7 @@ public:
   double scale; // always a power of 2
   std::array<unsigned,2> hash();
   cubemap();
+  ~cubemap();
   void clear();
   double undulation(int lat,int lon);
   double undulation(latlong ll);
