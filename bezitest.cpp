@@ -4149,12 +4149,82 @@ void outcyl(cylinterval c)
   cout<<" longitude "<<bintodeg(c.wbd)<<'-'<<bintodeg(c.ebd);
 }
 
+xy unfold(vball pnt)
+{
+  xy ret(-2,-2);
+  switch (pnt.face)
+  {
+    case 1:
+      ret=xy(pnt.x,pnt.y);
+      break;
+    case 2:
+      ret=xy(2-pnt.y,pnt.x);
+      break;
+    case 3:
+      ret=xy(pnt.y,2-pnt.x);
+      break;
+    case 4:
+      ret=xy(-pnt.y,pnt.x-2);
+      break;
+    case 5:
+      ret=xy(-2-pnt.y,pnt.x);
+      break;
+    case 6:
+      ret=xy(4-pnt.x,-pnt.y);
+      break;
+  }
+  return ret;
+}
+
+array<int,2> plotcenter(geoquad &quad,smallcircle sc)
+{
+  int i;
+  array<int,2> ret,subcount;
+  bool ovlp,centerin;
+  centerin=sc.in(decodedir(quad.vcenter()));
+  ovlp=overlap(sc,quad);
+  ret[0]=ovlp;
+  ret[1]=centerin;
+  if (ovlp && quad.subdivided())
+    for (i=0;i<4;i++)
+    {
+      subcount=plotcenter(*quad.sub[i],sc);
+      ret[0]+=subcount[0];
+      ret[1]+=subcount[1];
+    }
+  if (centerin)
+    setcolor(0,0,0);
+  else
+    setcolor(0.5,0.5,1);
+  dot(unfold(quad.vcenter()));
+  return ret;
+}
+
+array<int,2> plotcenters(string name,smallcircle sc)
+{
+  array<int,2> ret,subcount;
+  ret[0]=ret[1]=0;
+  setscale(-3,-3,3,5,DEG90);
+  int i;
+  for (i=0;i<6;i++)
+  {
+    subcount=plotcenter(cube.faces[i],sc);
+    ret[0]+=subcount[0];
+    ret[1]+=subcount[1];
+  }
+  cout<<name<<' '<<ret[0]<<" overlap, "<<ret[1]<<" centers in"<<endl;
+  return ret;
+}
+
 void testsmallcircle()
 {
   int r,i;
+  array<int,2> count;
   smallcircle avl150,eho150,clt150; // Asheville, Shelby, Charlotte
   smallcircle athwi45d; // Athens, Wisconsin, 45°N, to test a circle passing through the pole
   smallcircle ush4000; // circle encloses the pole
+  smallcircle gps5311; // circle intersects five faces
+  smallcircle cham8000; // centered near Chamchamal, circle intersects all six faces
   xyz xprod,qaraqoga;
   // Qaraqoğa, Pavlodar, Kazakhstan, is 10 Mm from both Asheville and Charlotte.
   vector<xyz> avlint,ehoint,cltint;
@@ -4230,6 +4300,51 @@ void testsmallcircle()
   tassert(ushcyl.sbd==-DEG90);
   tassert(ushcyl.nbd==-112308239);
   tassert(ushcyl.ebd-ushcyl.wbd==DEG360);
+  gps5311.center=xyz(0,-EARTHRAD,0);
+  cham8000.center=xyz(EARTHRAD,EARTHRAD,EARTHRAD)/M_SQRT_3;
+  r=radtobin(8e6/EARTHRAD);
+  cham8000.setradius(r);
+  r=radtobin(5311111/EARTHRAD);
+  gps5311.setradius(r);
+  cube.clear();
+  for (i=0;i<6;i++)
+    cube.faces[i].filldepth(6);
+  /* 64×64; as each face is a little less than 70 mm square, that's
+   * about 1 dot per millimeter when printed
+   */
+  psopen("smallcircle.ps");
+  psprolog();
+  startpage();
+  count=plotcenters("Asheville",avl150);
+  tassert(count[0]==25 && count[1]==5);
+  endpage();
+  startpage();
+  count=plotcenters("Shelby",eho150);
+  tassert(count[0]==22 && count[1]==5);
+  endpage();
+  startpage();
+  count=plotcenters("Charlotte",clt150);
+  tassert(count[0]==21 && count[1]==5);
+  endpage();
+  startpage();
+  count=plotcenters("Athens, WI",athwi45d);
+  tassert(count[0]==5188 && count[1]==4968);
+  endpage();
+  startpage();
+  count=plotcenters("Ushuaia",ush4000);
+  tassert(count[0]==3501 && count[1]==3275);
+  endpage();
+  startpage();
+  count=plotcenters("Galápagos",gps5311);
+  tassert(count[0]==5437 && count[1]==5157);
+  endpage();
+  startpage();
+  count=plotcenters("Chamchamal",cham8000);
+  tassert(count[0]==11085 && count[1]==10689);
+  endpage();
+  pstrailer();
+  psclose();
+  
 }
 
 void testcylinterval()
