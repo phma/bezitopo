@@ -90,6 +90,7 @@ public:
   int lati();
   int loni();
   double length();
+  void normalize();
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto);
   virtual void writeXml(std::ofstream &ofile);

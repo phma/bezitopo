@@ -534,7 +534,10 @@ bool overlap(smallcircle sc,const geoquad &gq)
   bool ret=sc.in(gqc)||gq.in(scc);
   array<vball,4> gqvbounds=gq.bounds();
   array<xyz,4> gqbounds;
-  vector<xyz> intersections,ints1,bisectors;
+  vector<xyz> intersections,ints1,bisectors,intspole;
+  xyz crossrot;
+  int rotangle;
+  Quaternion unrot; // puts sc.center at the pole to sort intersections circularly
   int i,j,k;
   if (!ret)
   {
@@ -545,6 +548,19 @@ bool overlap(smallcircle sc,const geoquad &gq)
       for (j=0;j<ints1.size();j++)
         intersections.push_back(ints1[j]);
     }
+    if (sc.center.getz()>0)
+    {
+      crossrot=sc.center*xyz(0,0,1);
+      rotangle=DEG90-sc.center.lati();
+    }
+    else
+    {
+      crossrot=sc.center*xyz(0,0,-1);
+      rotangle=DEG90+sc.center.lati();
+    }
+    unrot=versor(crossrot,rotangle);
+    for (i=0;i<intersections.size();i++)
+      intspole.push_back(unrot.rotate(intersections[i]));
     for (i=0;i<intersections.size();i++)
       for (j=0;!ret && j<i;j++)
       {

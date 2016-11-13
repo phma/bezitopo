@@ -265,9 +265,17 @@ double xyz::length()
   return sqrt(x*x+y*y+z*z);
 }
 
+void xyz::normalize()
+{
+  double len=length();
+  if (len)
+    *this/=(len);
+}
+
 xyz::xyz()
-{x=y=z=0;
- }
+{
+  x=y=z=0;
+}
 
 void xyz::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
 {
