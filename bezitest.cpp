@@ -4180,9 +4180,15 @@ array<int,2> plotcenter(geoquad &quad,smallcircle sc)
 {
   int i;
   array<int,2> ret,subcount;
-  bool ovlp,centerin;
+  bool ovlp,ovlp0,centerin;
   centerin=sc.in(decodedir(quad.vcenter()));
   ovlp=overlap(sc,quad);
+  /*ovlp0=overlap0(sc,quad);
+  if (ovlp!=ovlp0)
+  {
+    ovlp=overlap(sc,quad);
+    ovlp0=overlap0(sc,quad);
+  }*/
   ret[0]=ovlp;
   ret[1]=centerin;
   if (ovlp && quad.subdivided())
@@ -4328,7 +4334,12 @@ void testsmallcircle()
   endpage();
   startpage();
   count=plotcenters("Athens, WI",athwi45d);
-  tassert(count[0]==5188 && count[1]==4968);
+  tassert(count[0]>=5164 && count[0]<=5188 && count[1]==4968);
+  /* Depending on implementation, count[0] could be 5164 or 5188. The geoquads
+   * in the difference are tangent at one corner to the North Pole or
+   * Galápagos; the intersections computed in the overlap function include
+   * two points 222 pm apart, which have the same bearing from Athens.
+   */
   endpage();
   startpage();
   count=plotcenters("Ushuaia",ush4000);

@@ -527,6 +527,15 @@ bool overlap(smallcircle sc,const geoquad &gq)
  * • For every pair of intersections, find the ends of the diameter of the
  *   smallcircle which bisects the two points, and check whether they are
  *   in the geoquad. If any are, return true.
+ * 
+ * If sc passes through a corner of gq, and intspole is a multimap, overlap
+ * returns true, but if intspole is a map, it returns false. This occurs for
+ * 24 geoquads and the athwi45d circle, which is tangent to those geoquads
+ * at their corners, the North Pole for 12 and Galápagos for the other 12.
+ * The intersections include the corner twice. With a multimap, both occurrences
+ * of the corner remain, and halfway between them is the same corner, which
+ * may be inside the geoquad depending on roundoff error. With a map, only one
+ * occurrence of the corner remains, and no halfway point is in the geoquad.
  */
 {
   vball scc=encodedir(sc.center);
@@ -534,7 +543,9 @@ bool overlap(smallcircle sc,const geoquad &gq)
   bool ret=sc.in(gqc)||gq.in(scc);
   array<vball,4> gqvbounds=gq.bounds();
   array<xyz,4> gqbounds;
-  vector<xyz> intersections,ints1,bisectors,intspole;
+  vector<xyz> intersections,ints1,bisectors;
+  map<double,xyz> intspole;
+  map<double,xyz>::iterator h;
   xyz crossrot;
   int rotangle;
   Quaternion unrot; // puts sc.center at the pole to sort intersections circularly
@@ -560,15 +571,20 @@ bool overlap(smallcircle sc,const geoquad &gq)
     }
     unrot=versor(crossrot,rotangle);
     for (i=0;i<intersections.size();i++)
-      intspole.push_back(unrot.rotate(intersections[i]));
+    {
+      crossrot=unrot.rotate(intersections[i]);
+      intspole[crossrot.lon()]=intersections[i];
+    }
+    intersections.clear();
+    for (h=intspole.begin();h!=intspole.end();h++)
+      intersections.push_back(h->second);
     for (i=0;i<intersections.size();i++)
-      for (j=0;!ret && j<i;j++)
-      {
-        bisectors=gcscint(intersections[i]-intersections[j],sc);
-        for (k=0;k<bisectors.size();k++)
-          if (gq.in(encodedir(bisectors[k])))
-            ret=true;
-      }
+    {
+      bisectors=gcscint(intersections[i]-intersections[(i+1)%intersections.size()],sc);
+      for (k=0;k<bisectors.size();k++)
+        if (gq.in(encodedir(bisectors[k])))
+          ret=true;
+    }
   }
   return ret;
 }
