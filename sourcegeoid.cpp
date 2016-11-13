@@ -559,25 +559,28 @@ bool overlap(smallcircle sc,const geoquad &gq)
       for (j=0;j<ints1.size();j++)
         intersections.push_back(ints1[j]);
     }
-    if (sc.center.getz()>0)
+    if (intersections.size()>3)
     {
-      crossrot=sc.center*xyz(0,0,1);
-      rotangle=DEG90-sc.center.lati();
+      if (sc.center.getz()>0)
+      {
+        crossrot=sc.center*xyz(0,0,1);
+        rotangle=DEG90-sc.center.lati();
+      }
+      else
+      {
+        crossrot=sc.center*xyz(0,0,-1);
+        rotangle=DEG90+sc.center.lati();
+      }
+      unrot=versor(crossrot,rotangle);
+      for (i=0;i<intersections.size();i++)
+      {
+        crossrot=unrot.rotate(intersections[i]);
+        intspole[crossrot.lon()]=intersections[i];
+      }
+      intersections.clear();
+      for (h=intspole.begin();h!=intspole.end();h++)
+        intersections.push_back(h->second);
     }
-    else
-    {
-      crossrot=sc.center*xyz(0,0,-1);
-      rotangle=DEG90+sc.center.lati();
-    }
-    unrot=versor(crossrot,rotangle);
-    for (i=0;i<intersections.size();i++)
-    {
-      crossrot=unrot.rotate(intersections[i]);
-      intspole[crossrot.lon()]=intersections[i];
-    }
-    intersections.clear();
-    for (h=intspole.begin();h!=intspole.end();h++)
-      intersections.push_back(h->second);
     for (i=0;i<intersections.size();i++)
     {
       bisectors=gcscint(intersections[i]-intersections[(i+1)%intersections.size()],sc);
