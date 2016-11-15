@@ -40,6 +40,8 @@ int verbosity=1;
 bool helporversion=false;
 int qsz=4;
 vector<smallcircle> excerptcircles;
+vector<string> infilebasenames;
+string outfilename;
 
 struct option
 {
@@ -62,11 +64,28 @@ vector<option> options(
     {'v',"verbose","","Increase verbosity"},
     {'f',"format","e.g. ngs","Format of the geoid file"},
     {'o',"output","filename","Output geoid file"},
-    {'c',"circle","lat long radius","Excerpt a region"}
+    {'c',"circle","lat long radius","Excerpt a region"},
+    {'q',"quadsample","n 4-16","Geoquad sampling fineness"}
   });
 
 vector<token> cmdline;
 geoid outputgeoid;
+
+void outhelp()
+{
+  int i,j;
+  for (i=0;i<options.size();i++)
+  {
+    cout<<(options[i].shopt?options[i].shopt:' ')<<' ';
+    cout<<options[i].lopt;
+    for (j=options[i].lopt.length();j<14;j++)
+      cout<<' ';
+    cout<<options[i].args;
+    for (j=options[i].args.length();j<20;j++)
+      cout<<' ';
+    cout<<options[i].desc<<endl;
+  }
+}
 
 /* The factors used when setting the six components of a geoquad are
  * 0: 1/1
@@ -173,6 +192,8 @@ int readgeoid(string filename)
  */
 {
   int i,ret;
+  size_t extpos;
+  string basename;
   geoid gd;
   for (i=0,ret=1;i<formatlist.size() && ret==1;i++)
     ret=formatlist[i].readfunc(gd,filename);
@@ -183,6 +204,13 @@ int readgeoid(string filename)
     hdr.namesFormats.push_back(filename);
     hdr.namesFormats.push_back(formatlist[i].cmd);
     cout<<"Read "<<filename<<" in format "<<formatlist[i].cmd<<endl;
+    extpos=filename.rfind("."+formatlist[i].ext);
+    if (extpos+formatlist[i].ext.length()+1==filename.length())
+      basename=filename.substr(0,extpos);
+    else
+      basename=filename;
+    //cout<<"basename="<<basename<<endl;
+    infilebasenames.push_back(basename);
   }
   if (ret==1)
     cout<<filename<<" does not appear to be a geoid file."<<endl;
@@ -241,7 +269,7 @@ void argpass2()
     {
       case 0:
 	helporversion=true;
-	cout<<"Help"<<endl;
+	outhelp();
 	break;
       case 1:
 	helporversion=true;
@@ -269,7 +297,8 @@ void argpass2()
 	if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
 	  i++;
-	  cout<<"Geoid will be output to "<<cmdline[i].nonopt<<endl;
+          outfilename=cmdline[i].nonopt;
+	  //cout<<"Geoid will be output to "<<cmdline[i].nonopt<<endl;
 	}
 	else
 	{
@@ -302,6 +331,18 @@ void argpass2()
 	}
 	i--;
 	break;
+      case 6:
+	if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+          qsz=stod(cmdline[i].nonopt);
+	}
+	else
+	{
+	  cout<<"-q / --quadsample requires an argument, an integer from 4 to 16"<<endl;
+	}
+	break;
+        
       default:
 	if (!helporversion)
 	  readgeoid(cmdline[i].nonopt);
@@ -394,19 +435,22 @@ int main(int argc, char *argv[])
   cout<<"Samoa S "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
   v=encodedir(Sphere.geoc(degtorad(-14),degtorad(-174),0.));
   cout<<"Samoa W "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
-  for (i=0;i<6;i++)
+  if (!helporversion)
   {
-    //cout<<"Face "<<i+1;
-    //cout.flush();
-    interroquad(outputgeoid.cmap->faces[i],3e5);
-    /*if (cube.faces[i].isfull()>=0)
-      cout<<" has data"<<endl;
-    else
-      cout<<" is empty"<<endl;*/
-    refine(outputgeoid.cmap->faces[i],outputgeoid.cmap->scale,outputgeoid.ghdr->tolerance,outputgeoid.ghdr->sublimit,outputgeoid.ghdr->spacing,qsz);
+    for (i=0;i<6;i++)
+    {
+      //cout<<"Face "<<i+1;
+      //cout.flush();
+      interroquad(outputgeoid.cmap->faces[i],3e5);
+      /*if (cube.faces[i].isfull()>=0)
+        cout<<" has data"<<endl;
+      else
+        cout<<" is empty"<<endl;*/
+      refine(outputgeoid.cmap->faces[i],outputgeoid.cmap->scale,outputgeoid.ghdr->tolerance,outputgeoid.ghdr->sublimit,outputgeoid.ghdr->spacing,qsz);
+    }
+    outProgress();
+    cout<<endl;
   }
-  outProgress();
-  cout<<endl;
   outund("Green Hill",degtobin(35.4),degtobin(-82.05));
   outund("Charlotte",degtobin(35.22),degtobin(-80.84));
   outund("Kitimat",degtobin(54.0547),degtobin(-128.6578)); // in the overlap of two files
@@ -431,11 +475,24 @@ int main(int argc, char *argv[])
   pstrailer();
   psclose();*/
   //hdr.hash=cube.hash();
-  ofile.open("geoid.bol");
-  outputgeoid.ghdr->hash=outputgeoid.cmap->hash();
-  outputgeoid.ghdr->writeBinary(ofile);
-  outputgeoid.cmap->writeBinary(ofile);
-  cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
-  correctionHist.dump();
+  if (!helporversion)
+  {
+    if (!outfilename.length())
+    {
+      if (infilebasenames.size()==1)
+      {
+        outfilename=infilebasenames[0]+"."+formatlist[0].ext;
+        cout<<"Writing "<<outfilename<<endl;
+      }
+      else
+        cout<<"Please specify a filename with -o"<<endl;
+    }
+    ofile.open(outfilename);
+    outputgeoid.ghdr->hash=outputgeoid.cmap->hash();
+    outputgeoid.ghdr->writeBinary(ofile);
+    outputgeoid.cmap->writeBinary(ofile);
+    cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
+    correctionHist.dump();
+  }
   return 0;
 }
