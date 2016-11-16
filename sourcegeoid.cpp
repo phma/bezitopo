@@ -31,6 +31,8 @@
 using namespace std;
 vector<geoid> geo;
 map<int,matrix> quadinv;
+vector<smallcircle> excerptcircles;
+cylinterval excerptinterval;
 
 bool smooth5(unsigned n)
 /* Used for deciding the number of divisions of a circle in a lat-long grid.

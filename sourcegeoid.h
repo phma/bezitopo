@@ -116,6 +116,8 @@ int readcarlsongsf(geolattice &geo,std::string filename);
 int readcarlsongsf(geoid &geo,std::string filename);
 std::vector<xyz> gcscint(xyz gc,smallcircle sc);
 extern std::vector<geoid> geo;
+extern std::vector<smallcircle> excerptcircles;
+extern cylinterval excerptinterval;
 double avgelev(xyz dir);
 double qscale(int i,int qsz);
 std::array<double,6> correction(geoquad &quad,double qpoints[][16],int qsz);

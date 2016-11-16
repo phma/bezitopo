@@ -39,8 +39,6 @@ vector<geoformat> formatlist;
 int verbosity=1;
 bool helporversion=false;
 int qsz=4;
-vector<smallcircle> excerptcircles;
-cylinterval excerptinterval;
 vector<string> infilebasenames;
 string outfilename;
 
@@ -322,7 +320,7 @@ void argpass2()
 	{
 	  cout<<"Excerpt will be centered on "<<radtodeg(ll.lat)<<','<<radtodeg(ll.lon)<<" with radius "<<radius<<endl;
 	  cir.center=Sphere.geoc(ll,0);
-	  cir.radius=radtobin(radius/Sphere.avgradius());
+	  cir.setradius(radtobin(radius/Sphere.avgradius()));
 	  excerptcircles.push_back(cir);
 	}
 	else
