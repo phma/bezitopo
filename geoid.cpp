@@ -178,6 +178,19 @@ double cylinterval::area()
   // -(wbd-ebd) because DEG360 is negative as a signed integer
 }
 
+void cylinterval::setfull()
+{
+  sbd=-DEG90;
+  nbd=DEG90;
+  wbd=-DEG180;
+  ebd=DEG180;
+}
+
+void cylinterval::setempty()
+{
+  sbd=nbd=wbd=ebd=0;
+}
+
 cylinterval combine(cylinterval a,cylinterval b)
 /* Given two cylintervals, returns the smallest cylinterval containing both.
  * Order is ignored except in the following cases:

@@ -40,6 +40,7 @@ int verbosity=1;
 bool helporversion=false;
 int qsz=4;
 vector<smallcircle> excerptcircles;
+cylinterval excerptinterval;
 vector<string> infilebasenames;
 string outfilename;
 
@@ -369,6 +370,7 @@ int main(int argc, char *argv[])
   ofstream ofile;
   int i;
   vball v;
+  vector<cylinterval> excerptintervals;
   initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin);
   initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf);
   outputgeoid.cmap=new cubemap;
@@ -390,6 +392,12 @@ int main(int argc, char *argv[])
     qsz=4;
   if (qsz>16)
     qsz=16;
+  for (i=0;i<excerptcircles.size();i++)
+    excerptintervals.push_back(excerptcircles[i].boundrect());
+  if (excerptintervals.size())
+    excerptinterval=combine(excerptintervals);
+  else
+    excerptinterval.setfull();
   /*readgeoid("../g2012bu0.bin");
   readgeoid("../g2012ba0.bin");
   readgeoid("../g2012bh0.bin");

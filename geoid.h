@@ -58,6 +58,8 @@ struct cylinterval
 {
   int nbd,ebd,sbd,wbd;
   double area();
+  void setfull();
+  void setempty();
 };
 
 class geoquad
