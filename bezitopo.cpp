@@ -355,6 +355,32 @@ void save_i(string args)
     cout<<"No filename specified"<<endl;
 }
 
+void readgeoid_i(string args)
+// Attempting to read a non-geoid file leaves the geoid unchanged.
+{
+  string geoidfilename;
+  args=trim(args);
+  if (args.length())
+    geoidfilename=args;
+  if (geoidfilename.length())
+  {
+    try
+    {
+      ifstream geofile(geoidfilename,ios::binary);
+      ghead.readBinary(geofile);
+      cube.scale=pow(2,ghead.logScale);
+      cube.readBinary(geofile);
+      cout<<"read "<<geoidfilename<<endl;
+    }
+    catch (int e)
+    {
+      cout<<"didn't read "<<geoidfilename<<" for reason "<<e<<endl;
+    }
+  }
+  else
+    cout<<"No filename specified"<<endl;
+}
+
 void help(string args)
 {
   int i;
@@ -380,6 +406,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("setfoot",setfoot_i,"Set foot unit: int'l, US, Indian"));
   commands.push_back(command("setlunit",setlengthunit_i,"Set length unit: m, ft, ch"));
   commands.push_back(command("cvtmeas",cvtmeas_i,"Convert measurements"));
+  commands.push_back(command("geoid",readgeoid_i,"Read geoid file: filename"));
   commands.push_back(command("read",readpoints,"Read coordinate file: filename format"));
   commands.push_back(command("write",writepoints,"Write coordinate file: filename format"));
   commands.push_back(command("save",save_i,"Write scene file: filename.bez"));
@@ -394,18 +421,6 @@ int main(int argc, char *argv[])
   doc.pl.resize(1);
   cout<<"Bezitopo version "<<VERSION<<" © 2016 Pierre Abbat\n"
   <<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
-  try
-  {
-    ifstream geofile("geoid.bol",ios::binary);
-    ghead.readBinary(geofile);
-    cube.scale=pow(2,ghead.logScale);
-    cube.readBinary(geofile);
-    cout<<"read geoid.bol"<<endl;
-  }
-  catch (int e)
-  {
-    cout<<"didn't read geoid.bol for reason "<<e<<endl;
-  }
   while (cont)
   {
     cout<<"? ";
