@@ -34,7 +34,6 @@
 using namespace std;
 
 document doc;
-geoheader hdr;
 vector<geoformat> formatlist;
 int verbosity=1;
 bool helporversion=false;
@@ -200,8 +199,8 @@ int readgeoid(string filename)
   if (ret==2)
   {
     geo.push_back(gd);
-    hdr.namesFormats.push_back(filename);
-    hdr.namesFormats.push_back(formatlist[i].cmd);
+    outputgeoid.ghdr->namesFormats.push_back(filename);
+    outputgeoid.ghdr->namesFormats.push_back(formatlist[i].cmd);
     cout<<"Read "<<filename<<" in format "<<formatlist[i].cmd<<endl;
     extpos=filename.rfind("."+formatlist[i].ext);
     if (extpos+formatlist[i].ext.length()+1==filename.length())
