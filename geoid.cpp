@@ -89,6 +89,58 @@ xy vball::getxy()
   return xy(x,y);
 }
 
+char vballcompare[8][8]=
+{
+  {00,77,77,77,77,77,77,77},
+  {77,66,12,21,14,36,77,77},
+  {77,21,66,12,36,77,14,77},
+  {77,12,21,66,77,14,36,77},
+  {77,41,63,77,66,45,54,77},
+  {77,63,77,41,54,66,45,77},
+  {77,77,41,63,45,54,66,77},
+  {77,77,77,77,77,77,77,77}
+};
+
+bool operator==(const vball &a,const vball &b)
+{
+  int edgetype=vballcompare[a.face][b.face];
+  bool ret=false;
+  switch (edgetype)
+  {
+    case 00:
+      ret=true;
+      break;
+    case 12:
+      //
+      break;
+    case 21:
+      //
+      break;
+    case 14:
+      //
+      break;
+    case 41:
+      //
+      break;
+    case 36:
+      //
+      break;
+    case 63:
+      //
+      break;
+    case 45:
+      //
+      break;
+    case 54:
+      //
+      break;
+    case 66:
+      ret=a.x==b.x && a.y==b.y;
+      break;
+  }
+  return ret;
+}
+
 vball encodedir(xyz dir)
 {
   vball ret;

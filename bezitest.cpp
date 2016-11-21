@@ -3972,25 +3972,11 @@ void testquadhash()
   }
 }
 
-void testgeoid()
+void testvball()
 {
-  vball v;
-  array<vball,4> bounds;
-  array<double,4> bdist;
-  int lat,lon,olat,olon,i,j,k,qsz=16;
-  /* qsz is the size of the square lattice used to sample a geoquad.
-   * It can range from 4 to 16, but values below 9 cause this test to fail.
-   */
-  double x,y,sum,qpoints[16][16],u0,u1;
-  //vector<double> anga,apxa;
-  double areadiff,minareadiff;
-  int minareasub;
+  int lat,lon,olat,olon,i,j;
+  vball v,places[24];
   xyz dir;
-  geoquad gq,*pgq;
-  geoheader hdr;
-  fstream file;
-  array<unsigned,2> ghash;
-  array<double,6> corr;
   cout<<"Testing conversion to and from volleyball coordinates...";
   cout.flush();
   for (lon=-0x3f800000;lon<=0x3f800000;lon+=0x1000000) // every 2.8125°
@@ -4011,6 +3997,36 @@ void testgeoid()
     //cout<<endl;
   }
   cout<<"done."<<endl;
+  places[0]=vball(1,xy(-1,-0.51473)); // Divinópolis, Minas Gerais
+  places[1]=vball(5,xy(-0.51473,-1));
+  for (i=0;i<sizeof(places)/sizeof(places[0]);i++)
+  {
+    for (j=0;j<sizeof(places)/sizeof(places[0]);j++)
+    {
+      cout<<((places[i]==places[j])?"* ":"  ");
+    }
+    cout<<endl;
+  }
+}
+
+void testgeoid()
+{
+  array<vball,4> bounds;
+  array<double,4> bdist;
+  int i,j,k,qsz=16;
+  /* qsz is the size of the square lattice used to sample a geoquad.
+   * It can range from 4 to 16, but values below 9 cause this test to fail.
+   */
+  double x,y,sum,qpoints[16][16],u0,u1;
+  //vector<double> anga,apxa;
+  double areadiff,minareadiff;
+  int minareasub;
+  vball v;
+  geoquad gq,*pgq;
+  geoheader hdr;
+  fstream file;
+  array<unsigned,2> ghash;
+  array<double,6> corr;
   for (i=0;i<6;i++)
   {
     for (j=0;j<6;j++)
@@ -4689,6 +4705,8 @@ int main(int argc, char *argv[])
     testsmallcircle();
   if (shoulddo("cylinterval"))
     testcylinterval();
+  if (shoulddo("vball"))
+    testvball();
   if (shoulddo("geoid"))
     testgeoid();
   if (shoulddo("geint"))
