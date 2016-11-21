@@ -111,28 +111,28 @@ bool operator==(const vball &a,const vball &b)
       ret=true;
       break;
     case 12:
-      //
+      ret=a.x==1 && a.y==b.x && b.y==1;
       break;
     case 21:
-      //
+      ret=a.y==1 && a.x==b.y && b.x==1;
       break;
     case 14:
-      //
+      ret=a.y==-1 && a.x==-b.y && b.x==1;
       break;
     case 41:
-      //
+      ret=a.x==1 && a.y==-b.x && b.y==-1;
       break;
     case 36:
-      //
+      ret=a.x==-1 && a.y==b.x && b.y==-1;
       break;
     case 63:
-      //
+      ret=a.y==-1 && a.x==b.y && b.x==-1;
       break;
     case 45:
-      //
+      ret=a.y==1 && a.x==-b.y && b.x==-1;
       break;
     case 54:
-      //
+      ret=a.x==-1 && a.y==-b.x && b.y==1;
       break;
     case 66:
       ret=a.x==b.x && a.y==b.y;

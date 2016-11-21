@@ -3976,6 +3976,7 @@ void testvball()
 {
   int lat,lon,olat,olon,i,j;
   vball v,places[24];
+  string placenames[24];
   xyz dir;
   cout<<"Testing conversion to and from volleyball coordinates...";
   cout.flush();
@@ -3997,8 +3998,23 @@ void testvball()
     //cout<<endl;
   }
   cout<<"done."<<endl;
-  places[0]=vball(1,xy(-1,-0.51473)); // Divinópolis, Minas Gerais
+  places[0]=vball(1,xy(-1,-0.51473));
   places[1]=vball(5,xy(-0.51473,-1));
+  placenames[0]=placenames[1]="Divinópolis, Minas Gerais";
+  places[2]=vball(5,xy(-0.60349,1));
+  places[3]=vball(6,xy(-1,0.60349));
+  placenames[2]=placenames[3]="Mangareva, French Polynesia";
+  places[4]=vball(6,xy(1,0.86386));
+  places[5]=vball(2,xy(-0.86386,-1));
+  placenames[4]=placenames[5]="Lake Everard, South Australia";
+  places[6]=vball(2,xy(0.32052,1));
+  places[7]=vball(1,xy(1,0.32052));
+  placenames[6]=placenames[7]="Aden, Yemen";
+  for (i=0;i<sizeof(places)/sizeof(places[0]);i++)
+  {
+    dir=decodedir(places[i]);
+    cout<<dir.getx()<<' '<<dir.gety()<<' '<<dir.getz()<<' '<<placenames[i]<<endl;
+  }
   for (i=0;i<sizeof(places)/sizeof(places[0]);i++)
   {
     for (j=0;j<sizeof(places)/sizeof(places[0]);j++)
