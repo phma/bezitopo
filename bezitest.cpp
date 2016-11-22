@@ -3976,6 +3976,7 @@ void testvball()
 {
   int lat,lon,olat,olon,i,j;
   vball v,places[24];
+  bool vequal,xyzequal;
   string placenames[24];
   xyz dir;
   cout<<"Testing conversion to and from volleyball coordinates...";
@@ -3998,6 +3999,7 @@ void testvball()
     //cout<<endl;
   }
   cout<<"done."<<endl;
+  cout<<"Testing equality of volleyball coordinates..."<<endl;
   places[0]=vball(1,xy(-1,-0.51473));
   places[1]=vball(5,xy(-0.51473,-1));
   placenames[0]=placenames[1]="Divinópolis, Minas Gerais";
@@ -4010,19 +4012,48 @@ void testvball()
   places[6]=vball(2,xy(0.32052,1));
   places[7]=vball(1,xy(1,0.32052));
   placenames[6]=placenames[7]="Aden, Yemen";
+  places[8]=vball(1,xy(0.43136,1));
+  places[9]=vball(3,xy(1,0.43136));
+  placenames[8]=placenames[9]="Sofia, Bulgaria";
+  places[10]=vball(2,xy(1,-0.71990));
+  places[11]=vball(3,xy(-0.71990,1));
+  placenames[10]=placenames[11]="Pyongyang, North Korea";
+  places[12]=vball(6,xy(0.89463,-1));
+  places[13]=vball(3,xy(-1,0.89463));
+  placenames[12]=placenames[13]="Nagano, Japan";
+  places[14]=vball(5,xy(1,0.05405));
+  places[15]=vball(3,xy(-0.05405,-1));
+  placenames[14]=placenames[15]="St. Paul, Minnesota";
+  places[16]=vball(1,xy(0.06993,-1));
+  places[17]=vball(4,xy(1,-0.06993));
+  placenames[16]=placenames[17]="Meteor Rise Seamount";
+  places[18]=vball(2,xy(-1,-0.06993));
+  places[19]=vball(4,xy(-0.06993,-1));
+  placenames[18]=placenames[19]="point on Southeast Indian Ocean Ridge";
+  places[20]=vball(6,xy(0.15385,1));
+  places[21]=vball(4,xy(-1,-0.15385));
+  placenames[20]=placenames[21]="Mount Taylor, South Island";
+  places[22]=vball(5,xy(-1,-0.33266));
+  places[23]=vball(4,xy(0.33266,1));
+  placenames[22]=placenames[23]="Corcovado, Chubut";
   for (i=0;i<sizeof(places)/sizeof(places[0]);i++)
   {
     dir=decodedir(places[i]);
-    cout<<dir.getx()<<' '<<dir.gety()<<' '<<dir.getz()<<' '<<placenames[i]<<endl;
+    cout<<radtoangle(dir.lat(),DEGREE+SEXAG1)<<' '<<radtoangle(dir.lon(),DEGREE+SEXAG1)<<' ';
+    cout<<placenames[i]<<endl;
   }
   for (i=0;i<sizeof(places)/sizeof(places[0]);i++)
   {
     for (j=0;j<sizeof(places)/sizeof(places[0]);j++)
     {
-      cout<<((places[i]==places[j])?"* ":"  ");
+      vequal=places[i]==places[j];
+      xyzequal=decodedir(places[i])==decodedir(places[j]);
+      cout<<((vequal)?"* ":"  ");
+      tassert(vequal==xyzequal);
     }
     cout<<endl;
   }
+  cout<<"done."<<endl;
 }
 
 void testgeoid()
