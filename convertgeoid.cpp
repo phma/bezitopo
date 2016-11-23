@@ -406,7 +406,6 @@ int main(int argc, char *argv[])
   readgeoid("contour.ps");
   readgeoid("ceiling.txt");*/
   //geo[i].settest();
-  //drawglobecube(1024,62,-7,1,0,"geoid.ppm");
   //drawglobemicro(1024,xy(1.3429,0.2848),3e-4,1,0,"geowrangell.ppm");
   /* (-.4304,-.3142,1) 143.86986°W 61.9475°N 143°52'12"W 61°56'51"N
    * This is a local maximum of the geoid in Alaska at Mount Wrangell.
@@ -496,6 +495,7 @@ int main(int argc, char *argv[])
     outputgeoid.ghdr->hash=outputgeoid.cmap->hash();
     outputgeoid.ghdr->writeBinary(ofile);
     outputgeoid.cmap->writeBinary(ofile);
+    drawglobecube(1024,62,-7,outputgeoid.cmap,0,"geoid.ppm");
     cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
     correctionHist.dump();
   }

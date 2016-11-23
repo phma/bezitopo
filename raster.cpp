@@ -25,7 +25,6 @@
 #include <cmath>
 #include <stdexcept>
 #include "raster.h"
-#include "geoid.h"
 #ifdef CONVERTGEOID
 #include "sourcegeoid.h"
 #endif
@@ -189,10 +188,10 @@ vball foldcube(int panel,double x,double y)
   return v;
 }
 
-void drawglobecube(int side,double zscale,double zmid,int source,int imagetype,string filename)
+void drawglobecube(int side,double zscale,double zmid,cubemap *source,int imagetype,string filename)
 /* side is in pixels. Draws 4*side wide by 3*side high. imagetype is currently ignored.
- * source is 0 for xyz color (zscale is ignored), 1 for source geoid (only in
- * convertgeoid; in bezitest or bezitopo it is same as 2), 2 for converted geoid.
+ * source is nullptr for xyz color (zscale is ignored), else its geoquads
+ * are plotted.
  */
 {
   int i,j,panel;
@@ -219,13 +218,11 @@ void drawglobecube(int side,double zscale,double zmid,int source,int imagetype,s
 	sphloc=decodedir(v);
 	if (source)
 	{
-	  z=0;
-#ifdef CONVERTGEOID
-	  if (source==1)
+	  z=source->undulation(sphloc);
+	  /*if (source==1)
 	    z=avgelev(sphloc);
 	  if (source==2)
-	    z=cube.undulation(sphloc);
-#endif
+	    z=outputgeoid.cmap->undulation(sphloc);*/
 	  if (z<min)
 	    min=z;
 	  if (z>max)

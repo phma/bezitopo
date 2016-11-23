@@ -20,8 +20,9 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "pointlist.h"
+#include "geoid.h"
 
 void rasterdraw(pointlist &pts,xy center,double width,double height,
 	    double scale,int imagetype,double zscale,string filename);
-void drawglobecube(int side,double zscale,double zmid,int source,int imagetype,string filename);
+void drawglobecube(int side,double zscale,double zmid,cubemap *source,int imagetype,string filename);
 void drawglobemicro(int side,xy center,double size,int source,int imagetype,string filename);
