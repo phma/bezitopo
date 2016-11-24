@@ -45,6 +45,11 @@ struct carlsongsfheader
   int nlong,nlat;
 };
 
+struct usngatxtheader
+{
+  double south,west,north,east,latspace,longspace;
+};
+
 class geolattice
 {
   /* nbd must be greater than sbd; both must be in [-DEG90,DEG90].
@@ -61,6 +66,7 @@ public:
   void setslopes();
   void setheader(usngsheader &hdr);
   void setheader(carlsongsfheader &hdr);
+  void setheader(usngatxtheader &hdr);
   void settest();
   void dump();
   cylinterval boundrect();
@@ -114,6 +120,7 @@ int readusngsbin(geolattice &geo,std::string filename);
 int readusngsbin(geoid &geo,std::string filename);
 int readcarlsongsf(geolattice &geo,std::string filename);
 int readcarlsongsf(geoid &geo,std::string filename);
+int readusngatxt(geoid &geo,string filename);
 std::vector<xyz> gcscint(xyz gc,smallcircle sc);
 extern std::vector<geoid> geo;
 extern std::vector<smallcircle> excerptcircles;

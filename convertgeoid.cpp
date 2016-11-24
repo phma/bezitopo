@@ -370,6 +370,7 @@ int main(int argc, char *argv[])
   vector<cylinterval> excerptintervals;
   initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin);
   initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf);
+  initformat("ngatxt","grd","US National Geospatial-Intelligence Agency text",readusngatxt);
   outputgeoid.cmap=new cubemap;
   outputgeoid.ghdr=new geoheader;
   outputgeoid.glat=new geolattice;

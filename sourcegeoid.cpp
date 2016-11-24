@@ -93,7 +93,7 @@ double geolattice::elev(int lat,int lon)
   xy neslp,nwslp,seslp,swslp;
   easting=(lon-wbd)&0x7fffffff;
   northing=lat-sbd;
-  epart=(double)easting*width/(ebd-wbd);
+  epart=-(double)easting*width/(wbd-ebd);
   npart=(double)northing*height/(nbd-sbd);
   eint=floor(epart);
   nint=floor(npart);
@@ -252,6 +252,18 @@ bool sanitycheck(carlsongsfheader &hdr)
   return ssane && wsane && latsane && nlatsane && nlongsane;
 }
 
+bool sanitycheck(usngatxtheader &hdr)
+{
+  bool ssane,wsane,nsane,esane,latsane,longsane;
+  ssane=hdr.south>-360.0001 && hdr.south<360.0001 && (hdr.south==0 || fabs(hdr.south)>0.000001);
+  wsane=hdr.west>-360.0001 && hdr.west<360.0001 && (hdr.west==0 || fabs(hdr.west)>0.000001);
+  nsane=hdr.north>-360.0001 && hdr.north<360.0001 && (hdr.north==0 || fabs(hdr.north)>0.000001);
+  esane=hdr.east>-360.0001 && hdr.east<360.0001 && (hdr.east==0 || fabs(hdr.east)>0.000001);
+  latsane=hdr.south<hdr.north && hdr.latspace>0.000001 && hdr.latspace<190;
+  longsane=hdr.longspace>0.000001 && hdr.longspace<190;
+  return ssane && wsane && latsane && longsane;
+}
+
 void geolattice::setheader(usngsheader &hdr)
 {
   sbd=degtobin(hdr.south);
@@ -290,6 +302,21 @@ void geolattice::setheader(carlsongsfheader &hdr)
   nslope.resize((width+1)*(height+1));
 }
 
+void geolattice::setheader(usngatxtheader &hdr)
+{
+  sbd=degtobin(hdr.south);
+  wbd=degtobin(hdr.west);
+  nbd=degtobin(hdr.north);
+  ebd=degtobin(hdr.east);
+  if (wbd-ebd>=0)
+    ebd+=DEG360;
+  width=rint((hdr.east-hdr.west)/hdr.longspace);
+  height=rint((hdr.north-hdr.south)/hdr.latspace);
+  undula.resize((width+1)*(height+1));
+  eslope.resize((width+1)*(height+1));
+  nslope.resize((width+1)*(height+1));
+}
+
 void geolattice::settest()
 {
   int i,j;
@@ -305,7 +332,25 @@ void geolattice::settest()
   setslopes();
 }
 
-void readusngatxt(geolattice &geo,string filename)
+void readusngatxtheader(usngatxtheader &hdr,istream &file)
+{
+  double dnlong,dnlat;
+  try
+  {
+    hdr.south=readdouble(file);
+    hdr.north=readdouble(file);
+    hdr.west=readdouble(file);
+    hdr.east=readdouble(file);
+    hdr.latspace=readdouble(file);
+    hdr.longspace=readdouble(file);
+  }
+  catch (...)
+  {
+    throw badheader;
+  }
+}
+
+int readusngatxt(geolattice &geo,string filename)
 /* This geoid file has order-360 harmonics, but is sampled every 0.25°,
  * so it may not interpolate accurately. It would be better to compute
  * the geoid from the coefficients; this requires making sense of a
@@ -314,6 +359,52 @@ void readusngatxt(geolattice &geo,string filename)
  * http://earth-info.nga.mil/GandG/wgs84/gravitymod/egm2008/egm08_wgs84.html
  */
 {
+  int i,j,ret=0;
+  fstream file;
+  usngatxtheader hdr;
+  file.open(filename,fstream::in|fstream::binary);
+  if (file.is_open())
+  {
+    try
+    {
+      readusngatxtheader(hdr,file);
+    }
+    catch (int e)
+    {
+      ret=-e;
+    }
+    if (ret==0 && sanitycheck(hdr))
+    {
+      cout<<"Header sane"<<endl;
+      cout<<"South "<<hdr.south<<" West "<<hdr.west<<endl;
+      cout<<"North "<<hdr.north<<" East "<<hdr.east<<endl;
+      cout<<"Latitude spacing "<<hdr.latspace<<" Longitude spacing "<<hdr.longspace<<endl;
+      geo.setheader(hdr);
+      for (i=0;i<geo.height+1;i++)
+	for (j=0;j<geo.width+1;j++)
+	  geo.undula[(geo.height-i)*(geo.width+1)+j]=rint(65536*(readdouble(file)));
+      if (file.fail())
+	ret=1;
+      else
+      {
+	ret=2;
+	geo.setslopes();
+      }
+    }
+    else
+      ret=1;
+    file.close();
+  }
+  else
+    ret=0;
+  return ret;
+}
+
+int readusngatxt(geoid &geo,string filename)
+{
+  delete geo.glat;
+  geo.glat=new geolattice;
+  return readusngatxt(*geo.glat,filename);
 }
 
 void readcarlsongsfheader(carlsongsfheader &hdr,istream &file)
