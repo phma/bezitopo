@@ -404,12 +404,12 @@ bool geoquad::subdivided()
   if (sizeof(geoquad *)*3>=sizeof(int)*6)
     return sub[3]!=nullptr;
   if (sizeof(int)*5>=sizeof(geoquad *)*4)
-    return und[5]>8850*256 || und[5]<-11000*256;
+    return und[5]>8850*65536 || und[5]<-11000*65536;
 }
 
 bool geoquad::isnan()
 {
-  return und[0]>8850*256 || und[0]<-11000*256;
+  return und[0]>8850*65536 || und[0]<-11000*65536;
 }
 
 geoquad::geoquad()
