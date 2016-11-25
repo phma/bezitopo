@@ -380,10 +380,17 @@ int readusngatxt(geolattice &geo,string filename)
       cout<<"North "<<hdr.north<<" East "<<hdr.east<<endl;
       cout<<"Latitude spacing "<<hdr.latspace<<" Longitude spacing "<<hdr.longspace<<endl;
       geo.setheader(hdr);
-      for (i=0;i<geo.height+1;i++)
-	for (j=0;j<geo.width+1;j++)
-	  geo.undula[(geo.height-i)*(geo.width+1)+j]=rint(65536*(readdouble(file)));
-      if (file.fail())
+      try
+      {
+        for (i=0;i<geo.height+1;i++)
+          for (j=0;j<geo.width+1;j++)
+            geo.undula[(geo.height-i)*(geo.width+1)+j]=rint(65536*(readdouble(file)));
+      }
+      catch (...)
+      {
+        ret=1;
+      }
+      if (file.fail() || ret==1)
 	ret=1;
       else
       {
@@ -403,6 +410,10 @@ int readusngatxt(geolattice &geo,string filename)
 int readusngatxt(geoid &geo,string filename)
 {
   delete geo.glat;
+  delete geo.ghdr;
+  delete geo.cmap;
+  geo.ghdr=nullptr;
+  geo.cmap=nullptr;
   geo.glat=new geolattice;
   return readusngatxt(*geo.glat,filename);
 }
@@ -479,6 +490,10 @@ int readusngabin(geolattice &geo,string filename)
 int readusngabin(geoid &geo,string filename)
 {
   delete geo.glat;
+  delete geo.ghdr;
+  delete geo.cmap;
+  geo.ghdr=nullptr;
+  geo.cmap=nullptr;
   geo.glat=new geolattice;
   return readusngabin(*geo.glat,filename);
 }
@@ -534,10 +549,17 @@ int readcarlsongsf(geolattice &geo,string filename)
       cout<<"North "<<hdr.north<<" East "<<hdr.east<<endl;
       cout<<"Rows "<<hdr.nlat<<" Columns "<<hdr.nlong<<endl;
       geo.setheader(hdr);
-      for (i=0;i<geo.height+1;i++)
-	for (j=0;j<geo.width+1;j++)
-	  geo.undula[i*(geo.width+1)+j]=rint(65536*(readdouble(file)));
-      if (file.fail())
+      try
+      {
+        for (i=0;i<geo.height+1;i++)
+          for (j=0;j<geo.width+1;j++)
+            geo.undula[i*(geo.width+1)+j]=rint(65536*(readdouble(file)));
+      }
+      catch (...)
+      {
+        ret=1;
+      }
+      if (file.fail() || ret==1)
 	ret=1;
       else
       {
@@ -557,6 +579,10 @@ int readcarlsongsf(geolattice &geo,string filename)
 int readcarlsongsf(geoid &geo,string filename)
 {
   delete geo.glat;
+  delete geo.ghdr;
+  delete geo.cmap;
+  geo.ghdr=nullptr;
+  geo.cmap=nullptr;
   geo.glat=new geolattice;
   return readcarlsongsf(*geo.glat,filename);
 }
@@ -609,8 +635,41 @@ int readusngsbin(geolattice &geo,string filename)
 int readusngsbin(geoid &geo,string filename)
 {
   delete geo.glat;
+  delete geo.ghdr;
+  delete geo.cmap;
+  geo.ghdr=nullptr;
+  geo.cmap=nullptr;
   geo.glat=new geolattice;
   return readusngsbin(*geo.glat,filename);
+}
+
+int readboldatni(geoid &geo,string filename)
+{
+  delete geo.glat;
+  delete geo.ghdr;
+  delete geo.cmap;
+  geo.glat=nullptr;
+  geo.ghdr=new geoheader;
+  geo.cmap=new cubemap;
+  ifstream file;
+  int ret;
+  file.open(filename,fstream::in|fstream::binary);
+  if (file.is_open())
+  {
+    ret=2;
+    try
+    {
+      geo.ghdr->readBinary(file);
+      geo.cmap->readBinary(file);
+    }
+    catch (...)
+    {
+      ret=1;
+    }
+  }
+  else
+    ret=0;
+  return ret;
 }
 
 double avgelev(xyz dir)

@@ -368,6 +368,7 @@ int main(int argc, char *argv[])
   int i;
   vball v;
   vector<cylinterval> excerptintervals;
+  initformat("bol","bol","Bezitopo Boldatni",readboldatni);
   initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin);
   initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf);
   initformat("ngatxt","grd","US National Geospatial-Intelligence Agency text",readusngatxt);
