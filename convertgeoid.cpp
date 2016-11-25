@@ -371,6 +371,7 @@ int main(int argc, char *argv[])
   initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin);
   initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf);
   initformat("ngatxt","grd","US National Geospatial-Intelligence Agency text",readusngatxt);
+  initformat("ngabin","","US National Geospatial-Intelligence Agency binary",readusngabin);
   outputgeoid.cmap=new cubemap;
   outputgeoid.ghdr=new geoheader;
   outputgeoid.glat=new geolattice;

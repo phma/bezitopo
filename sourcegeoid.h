@@ -121,6 +121,7 @@ int readusngsbin(geoid &geo,std::string filename);
 int readcarlsongsf(geolattice &geo,std::string filename);
 int readcarlsongsf(geoid &geo,std::string filename);
 int readusngatxt(geoid &geo,string filename);
+int readusngabin(geoid &geo,string filename);
 std::vector<xyz> gcscint(xyz gc,smallcircle sc);
 extern std::vector<geoid> geo;
 extern std::vector<smallcircle> excerptcircles;

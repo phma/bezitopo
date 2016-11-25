@@ -407,6 +407,82 @@ int readusngatxt(geoid &geo,string filename)
   return readusngatxt(*geo.glat,filename);
 }
 
+int readusngabin(geolattice &geo,string filename)
+/* Like the usngatxt format, this covers the whole earth, but it has no header.
+ * The file consists of lines in this format:
+ * n e e e e e e e e e e ... e e e e e e e e e e e n
+ * where n is the total number of bytes of e's (i.e. 4 times the number of e's).
+ * The first line is the South Pole, the last is the North Pole, and the first
+ * number in each line has to be repeated at the end when reading it in.
+ */
+{
+  int i,j,ret=0,endian,linelen0,linelen1;
+  double firstund,und;
+  fstream file;
+  file.open(filename,fstream::in|fstream::binary);
+  if (file.is_open())
+  {
+    for (endian=0;endian<2 && ret<2;endian++)
+    {
+      file.seekg(0);
+      ret=0;
+      geo.undula.clear();
+      for (i=0;!file.eof() && ret==0;i++)
+      {
+        linelen0=endian?readbeint(file):readleint(file);
+        if ((linelen0!=linelen1 && i>0) || linelen0&3)
+          ret=1;
+        for (j=0;!file.eof() && ret==0 && j<linelen0/4;j++)
+        {
+          und=(endian?readbefloat(file):readlefloat(file))*65536;
+          if (j==0)
+            firstund=und;
+	  geo.undula.push_back(und);
+        }
+        geo.undula.push_back(firstund);
+        linelen1=endian?readbeint(file):readleint(file);
+        if (linelen0!=linelen1)
+          ret=1;
+        file.peek(); // set file.eof if at end of file
+      }
+      if (file.fail())
+	ret=1;
+      else if (ret==0)
+      {
+	ret=2;
+        geo.nbd=DEG90;
+        geo.sbd=-DEG90;
+        geo.wbd=0;
+        geo.ebd=DEG360;
+        geo.height=i-1;
+        geo.width=linelen0/4;
+        if (geo.height>0 && geo.width>0)
+        {
+          for (i=0;2*i<geo.height;i++)
+            for (j=0;j<=geo.width;j++)
+              swap(geo.undula[i*(geo.width+1)+j],geo.undula[(geo.height-i)*(geo.width+1)+j]);
+          geo.eslope.resize(geo.undula.size());
+          geo.nslope.resize(geo.undula.size());
+          geo.setslopes();
+        }
+        else
+          ret=1;
+      }
+    }
+    file.close();
+  }
+  else
+    ret=0;
+  return ret;
+}
+
+int readusngabin(geoid &geo,string filename)
+{
+  delete geo.glat;
+  geo.glat=new geolattice;
+  return readusngabin(*geo.glat,filename);
+}
+
 void readcarlsongsfheader(carlsongsfheader &hdr,istream &file)
 {
   double dnlong,dnlat;
