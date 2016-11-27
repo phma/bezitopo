@@ -465,6 +465,7 @@ geoquad geoquad::operator=(geoquad b)
   swap(face,b.face);
   swap(nums,b.nums);
   swap(nans,b.nans);
+  return *this;
 }
 
 void geoquad::clear()
