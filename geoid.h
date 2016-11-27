@@ -75,11 +75,12 @@ public:
   float scale; // always a power of 2
   int face;
   std::vector<xy> nans,nums;
-  bool subdivided();
+  bool subdivided() const;
   bool isnan();
   geoquad();
   ~geoquad();
-  // TODO needs copy constructor
+  geoquad(const geoquad& b);
+  geoquad operator=(geoquad b);
   vball vcenter() const;
   void clear();
   void subdivide();
@@ -105,7 +106,7 @@ class cubemap
 {
 public:
   geoquad faces[6]; // note off-by-one: faces[0] is face 1, the Benin face
-  double scale; // always a power of 2
+  double scale; // vertical scale, e.g. 1 means 1/65536 m. always a power of 2
   std::array<unsigned,2> hash();
   cubemap();
   ~cubemap();

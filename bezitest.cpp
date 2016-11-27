@@ -4069,7 +4069,7 @@ void testgeoid()
   double areadiff,minareadiff;
   int minareasub;
   vball v;
-  geoquad gq,*pgq;
+  geoquad gq,gq1,*pgq;
   geoheader hdr;
   fstream file;
   array<unsigned,2> ghash;
@@ -4100,6 +4100,7 @@ void testgeoid()
   }
   cout<<"done."<<endl;
   cout<<"Testing area of geoquad..."<<endl;
+  gq1=gq;
   gq.clear();
   pgq=&gq;
   minareadiff=INFINITY;
@@ -4121,6 +4122,7 @@ void testgeoid()
     pgq=pgq->sub[rng.ucrandom()&3];
   }
   cout<<"angarea and apxarea are closest at subdivision level "<<minareasub<<endl;
+  gq1=gq;
   cout<<"done."<<endl;
   cout<<"Testing geoquad bounds..."<<endl;
   gq.clear();
@@ -4146,6 +4148,7 @@ void testgeoid()
     tassert(bdist[0]>10.45e6);
     tassert(bdist[3]<10.9e6);
   }
+  gq1=gq;
   cout<<"done."<<endl;
   cout<<"Testing conversion from geolattice to geoquad and I/O..."<<endl;
   geo.resize(1);

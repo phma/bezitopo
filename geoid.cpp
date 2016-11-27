@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <climits>
 #include <cmath>
 #include <iostream>
 #include <algorithm>
@@ -385,7 +386,7 @@ cylinterval combine(vector<cylinterval> cyls)
   return cyls[0];
 }
 
-bool geoquad::subdivided()
+bool geoquad::subdivided() const
 /* Unlike qindex, this is architecture-dependent.
  * On 64-bit Intel/AMD architecture, pointer is 8 bytes and int is 4.
  * SSSSSSSSssssssssSSSSSSSSssssssss
@@ -419,7 +420,7 @@ geoquad::geoquad()
     sub[i]=nullptr;
   for (i=1;i<6;i++)
     und[i]=0;
-  und[0]=0x80000000;
+  und[0]=INT_MIN;
   scale=1;
 }
 
@@ -429,6 +430,41 @@ geoquad::~geoquad()
   if (subdivided())
     for (i=0;i<4;i++)
       delete(sub[i]);
+}
+
+geoquad::geoquad(const geoquad& b)
+{
+  int i;
+  if (b.subdivided())
+  {
+    und[5]=INT_MIN;
+    for (i=0;i<4;i++)
+      sub[i]=new geoquad(*b.sub[i]);
+  }
+  else
+  {
+    sub[3]=nullptr;
+    for (i=1;i<6;i++)
+      und[i]=b.und[i];
+  }
+  center=b.center;
+  scale=b.scale;
+  face=b.face;
+  nums=b.nums;
+  nans=b.nans;
+}
+
+geoquad geoquad::operator=(geoquad b)
+{
+  if (sizeof(sub)>sizeof(und))
+    swap(sub,b.sub);
+  else
+    swap(und,b.und);
+  swap(center,b.center);
+  swap(scale,b.scale);
+  swap(face,b.face);
+  swap(nums,b.nums);
+  swap(nans,b.nans);
 }
 
 void geoquad::clear()
