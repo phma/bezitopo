@@ -661,6 +661,7 @@ int readboldatni(geoid &geo,string filename)
     {
       geo.ghdr->readBinary(file);
       geo.cmap->readBinary(file);
+      geo.cmap->scale=ldexp(1,geo.ghdr->logScale);
     }
     catch (...)
     {

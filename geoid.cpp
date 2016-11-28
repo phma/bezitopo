@@ -454,7 +454,7 @@ geoquad::geoquad(const geoquad& b)
   nans=b.nans;
 }
 
-geoquad geoquad::operator=(geoquad b)
+geoquad& geoquad::operator=(geoquad b)
 {
   if (sizeof(sub)>sizeof(und))
     swap(sub,b.sub);

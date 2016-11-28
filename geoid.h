@@ -80,7 +80,7 @@ public:
   geoquad();
   ~geoquad();
   geoquad(const geoquad& b);
-  geoquad operator=(geoquad b);
+  geoquad& operator=(geoquad b);
   vball vcenter() const;
   void clear();
   void subdivide();
