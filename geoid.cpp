@@ -446,7 +446,7 @@ geoquad::geoquad(const geoquad& b)
   else
   {
     sub[3]=nullptr;
-    for (i=1;i<6;i++)
+    for (i=0;i<6;i++)
       und[i]=b.und[i];
   }
   center=b.center;

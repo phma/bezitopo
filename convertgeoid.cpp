@@ -203,6 +203,11 @@ int readgeoid(string filename)
     outputgeoid.ghdr->namesFormats.push_back(filename);
     outputgeoid.ghdr->namesFormats.push_back(formatlist[i].cmd);
     cout<<"Read "<<filename<<" in format "<<formatlist[i].cmd<<endl;
+    /*if (formatlist[i].cmd=="bol")
+    {
+      ofstream gdump("gd.dump");
+      geo.back().cmap->dump(gdump);
+    }*/
     extpos=filename.rfind("."+formatlist[i].ext);
     if (extpos+formatlist[i].ext.length()+1==filename.length())
       basename=filename.substr(0,extpos);

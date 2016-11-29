@@ -371,6 +371,8 @@ void readgeoid_i(string args)
       cube.scale=pow(2,ghead.logScale);
       cube.readBinary(geofile);
       cout<<"read "<<geoidfilename<<endl;
+      //ofstream geodump("readgeoid.dump");
+      //cube.dump(geodump);
     }
     catch (int e)
     {
