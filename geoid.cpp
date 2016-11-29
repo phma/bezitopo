@@ -805,6 +805,7 @@ void geoquad::dump(ostream &ofile,int nesting)
     ll=centeronearth().latlon();
     ofile<<formatlatlong(ll,DEGREE+SEXAG2);
     ofile<<' '<<face<<' '<<ldecimal(center.getx())<<' '<<ldecimal(center.gety());
+    ofile<<" 1/"<<1/scale;
     for (i=0;i<(isnan()?1:6);i++)
       ofile<<' '<<und[i];
     ofile<<endl;
