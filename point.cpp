@@ -250,6 +250,11 @@ double xyz::lon()
   return atan2(y,x);
 }
 
+latlong xyz::latlon()
+{
+  return latlong(lat(),lon());
+}
+
 int xyz::lati()
 {
   return atan2i(z,hypot(x,y));

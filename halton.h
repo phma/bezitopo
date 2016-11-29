@@ -40,6 +40,7 @@
 #include <vector>
 #include "point.h"
 #include "angle.h"
+#include "latlong.h"
 
 extern unsigned short btreversetable[62208];
 void initbtreverse();

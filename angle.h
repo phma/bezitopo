@@ -27,22 +27,15 @@
 #define ANGLE_H
 #include <cmath>
 #include <string>
+
+class xy;
+
 #include "measure.h"
 #include "point.h"
 
 #ifndef M_PIl
 #define M_PIl M_PI
 #endif
-
-struct latlong
-{
-  double lat;
-  double lon;
-  latlong();
-  latlong(int ilat,int ilon);
-  latlong(double dlat,double dlon); // Arguments are in radians.
-  int valid(); // 0, 1, or 2
-};
 
 double sqr(double x);
 
@@ -121,8 +114,6 @@ int parseiangle(std::string angstr,int unitp);
 int parsesignedangle(std::string angstr,int unitp);
 int parseazimuth(std::string angstr,int unitp);
 int parsebearing(std::string angstr,int unitp);
-latlong parselatlong(std::string angstr,int unitp);
-std::string formatlatlong(latlong ll,int unitp);
 
 #define DEGREE 0x0038ed00
 #define GON 0x00383000

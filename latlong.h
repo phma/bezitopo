@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* ellipsoid.h - ellipsoids                           */
+/* latlong.h - latitude-longitude structure           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2016 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -19,35 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef ELLIPSOID_H
-#define ELLIPSOID_H
-#include "point.h"
-#include "angle.h"
-#include "latlong.h"
 
-class ellipsoid
+#ifndef LATLONG_H
+#define LATLONG_H
+
+struct latlong
 {
-private:
-  double eqr,por;
-public:
-  ellipsoid *sphere;
-  ellipsoid(double equradius,double polradius,double flattening);
-  ~ellipsoid();
-  xyz geoc(double lat,double lon,double elev);
-  xyz geoc(latlong ll,double elev);
-  xyz geoc(int lat,int lon,int elev); // elev is in 1/65536 meter; for lat and long see angle.h
-  double avgradius();
-  double geteqr()
-  {
-    return eqr;
-  };
-  double getpor()
-  {
-    return por;
-  };
-  double eccentricity();
-  double radiusAtLatitude(latlong ll,int bearing); // bearing is 0 for east; use DEG45 for average radius
+  double lat;
+  double lon;
+  latlong();
+  latlong(int ilat,int ilon);
+  latlong(double dlat,double dlon); // Arguments are in radians.
+  int valid(); // 0, 1, or 2
 };
 
-extern ellipsoid Sphere,Clarke,GRS80,WGS84,ITRS;
+latlong parselatlong(std::string angstr,int unitp);
+std::string formatlatlong(latlong ll,int unitp);
+
 #endif

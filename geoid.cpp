@@ -22,12 +22,14 @@
 #include <climits>
 #include <cmath>
 #include <iostream>
+#include <iomanip>
 #include <algorithm>
 #include <cassert>
 #include <map>
 #include "geoid.h"
 #include "binio.h"
 #include "angle.h"
+#include "ldecimal.h"
 using namespace std;
 
 /* face=0: point is the center of the earth
@@ -778,6 +780,27 @@ void geoquad::readBinary(istream &ifile,int nesting)
   }
 }
 
+void geoquad::dump(ostream &ofile,int nesting)
+{
+  int i;
+  latlong ll;
+  if (subdivided())
+    for (i=0;i<4;i++)
+    {
+      sub[i]->dump(ofile,nesting+1);
+      nesting=-1;
+    }
+  else
+  {
+    ll=centeronearth().latlon();
+    ofile<<formatlatlong(ll,DEGREE+SEXAG2);
+    ofile<<' '<<face<<' '<<ldecimal(center.getx())<<' '<<ldecimal(center.gety());
+    for (i=0;i<(isnan()?1:6);i++)
+      ofile<<' '<<und[i];
+    ofile<<endl;
+  }
+}
+
 unsigned byteswap(unsigned n)
 {
   return ((n&0xff000000)>>24)|((n&0xff0000)>>8)|((n&0xff00)<<8)|((n&0xff)<<24);
@@ -898,6 +921,18 @@ void cubemap::readBinary(istream &ifile)
   int i;
   for (i=0;i<6;i++)
     faces[i].readBinary(ifile);
+}
+
+void cubemap::dump(ostream &ofile)
+{
+  int i;
+  ofile<<"Scale ";
+  if (scale>0 && scale<1)
+    ofile<<"1/"<<1/scale<<endl;
+  else
+    ofile<<scale<<endl;
+  for (i=0;i<6;i++)
+    faces[i].dump(ofile);
 }
 
 void geoheader::writeBinary(std::ostream &ofile)

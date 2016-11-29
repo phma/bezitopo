@@ -31,6 +31,7 @@
 #include "relprime.h"
 #include "ps.h"
 #include "manysum.h"
+#include "latlong.h"
 using namespace std;
 
 document doc;

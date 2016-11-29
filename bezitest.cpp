@@ -4206,6 +4206,9 @@ void testgeoid()
 	tassert(fabs(u1-u0)<0.001);
       }
     }
+  file.open("test.bol.dump",ios::out);
+  cube.dump(file);
+  file.close();
   cout<<"done."<<endl;
 }
 
