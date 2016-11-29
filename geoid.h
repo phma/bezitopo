@@ -74,7 +74,9 @@ public:
   xy center;
   float scale; // always a power of 2
   int face;
+#ifdef NONUMSGEOID
   std::vector<xy> nans,nums;
+#endif
   bool subdivided() const;
   bool isnan();
   geoquad();
@@ -94,7 +96,9 @@ public:
   double apxarea(); // displacement from the center of the face.
   double angarea();
   double area();
+#ifdef NONUMSGEOID
   int isfull(); // -1 if empty, 0 if partly full or unknown, 1 if full
+#endif
   std::array<unsigned,2> hash();
   std::vector<cylinterval> boundrects();
   std::array<vball,4> bounds() const;
