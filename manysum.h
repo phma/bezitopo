@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef MANYSUM_H
+#define MANYSUM_H
 #include <map>
 #include <cmath>
 /* Adds together many numbers (like millions) accurately.
@@ -53,3 +55,4 @@ public:
 
 double pairwisesum(double *a,unsigned n);
 long double pairwisesum(long double *a,unsigned n);
+#endif

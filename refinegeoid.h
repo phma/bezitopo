@@ -21,9 +21,11 @@
  */
 #include "geoid.h"
 #include "histogram.h"
+#include "manysum.h"
 
 extern int avgelev_interrocount,avgelev_refinecount;
 extern histogram correctionHist;
+extern manysum dataArea,totalArea;
 
 void outProgress();
 void interroquad(geoquad &quad,double spacing);

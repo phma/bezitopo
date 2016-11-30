@@ -24,7 +24,6 @@
 #include "hlattice.h"
 #include "relprime.h"
 #include "sourcegeoid.h"
-#include "manysum.h"
 using namespace std;
 
 manysum dataArea,totalArea;

@@ -174,6 +174,37 @@ void outund(string loc,int lat,int lon)
   cout<<"c: "<<cube.undulation(lat,lon)<<endl;
 }
 
+void test360seam()
+/* Tests for continuity of the derivative across the seam in a geoid file
+ * that covers the whole earth.
+ */
+{
+  int i,j,seamlong,bigpos;
+  double bigdiff;
+  vector<double> elevs,diff2;
+  for (i=0;i<geo.size();i++)
+    if (geo[i].glat && geo[i].glat->wbd-geo[i].glat->ebd==DEG360)
+      seamlong=geo[i].glat->wbd;
+  for (i=-60*DEG1;i<=60*DEG1;i+=DEG1)
+  {
+    elevs.clear();
+    diff2.clear();
+    for (j=-561000;j<=561000;j+=33000) // apx -5'40" to 5'40" by 20"
+      elevs.push_back(avgelev(Sphere.geoc(i,j+seamlong,0)));
+    for (j=1;j<elevs.size()-1;j++)
+      diff2.push_back(elevs[j-1]+elevs[j+1]-2*elevs[j]);
+    for (bigdiff=bigpos=j=0;j<diff2.size();j++)
+      if (fabs(diff2[j])>bigdiff)
+      {
+        bigpos=j;
+        bigdiff=fabs(diff2[j]);
+      }
+    for (j=0;j<diff2.size();j++)
+      cout<<((bigpos==j)?'*':' ');
+    cout<<endl;
+  }
+}
+
 void initformat(string cmd,string ext,string desc,int readfunc(geoid&,string))
 {
   geoformat gf;
@@ -463,6 +494,8 @@ int main(int argc, char *argv[])
     }
     outProgress();
     cout<<endl;
+    if (dataArea.total()>510e12)
+      test360seam();
   }
   outund("Green Hill",degtobin(35.4),degtobin(-82.05));
   outund("Charlotte",degtobin(35.22),degtobin(-80.84));
