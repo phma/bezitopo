@@ -185,12 +185,18 @@ void geolattice::setslopes()
   for (i=0;i<height+1;i++)
     for (j=1;j<width;j++)
       eslope[i*(width+1)+j]=undula[i*(width+1)+j+1]-undula[i*(width+1)+j-1];
-  if (width>1) // TODO: handle the case of full 360° latitude
-    for (i=0;i<height+1;i++)
-    {
-      eslope[i*(width+1)]=4*undula[i*(width+1)+1]-undula[i*(width+1)+2]-3*undula[i*(width+1)];
-      eslope[(i+1)*(width+1)-1]=3*undula[(i+1)*(width+1)-1]-4*undula[(i+1)*(width+1)-2]+undula[(i+1)*(width+1)-3];
-    }
+  if (width>1)
+    if (ebd-wbd==DEG360)
+      for (i=0;i<height+1;i++)
+      {
+        eslope[i*(width+1)]=eslope[(i+1)*(width+1)-1]=undula[i*(width+1)+1]-undula[(i+1)*(width+1)-2];
+      }
+    else
+      for (i=0;i<height+1;i++)
+      {
+        eslope[i*(width+1)]=4*undula[i*(width+1)+1]-undula[i*(width+1)+2]-3*undula[i*(width+1)];
+        eslope[(i+1)*(width+1)-1]=3*undula[(i+1)*(width+1)-1]-4*undula[(i+1)*(width+1)-2]+undula[(i+1)*(width+1)-3];
+      }
   for (i=1;i<height;i++)
     for (j=0;j<width+1;j++)
       nslope[i*(width+1)+j]=undula[(i+1)*(width+1)+j]-undula[(i-1)*(width+1)+j];

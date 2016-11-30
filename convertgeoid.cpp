@@ -179,7 +179,7 @@ void test360seam()
  * that covers the whole earth.
  */
 {
-  int i,j,seamlong,bigpos;
+  int i,j,seamlong,bigpos,creasecount=0;
   double bigdiff;
   vector<double> elevs,diff2;
   for (i=0;i<geo.size();i++)
@@ -199,10 +199,15 @@ void test360seam()
         bigpos=j;
         bigdiff=fabs(diff2[j]);
       }
-    for (j=0;j<diff2.size();j++)
-      cout<<((bigpos==j)?'*':' ');
-    cout<<endl;
+    //for (j=0;j<diff2.size();j++)
+    //  cout<<((bigpos==j)?'*':' ');
+    //cout<<endl;
+    if (bigpos==diff2.size()/2)
+      creasecount++;
   }
+  cout<<"creasecount "<<creasecount<<endl;
+  if (creasecount>40)
+    cout<<"The seam of the whole-earth geoid file is not smoothed properly."<<endl;
 }
 
 void initformat(string cmd,string ext,string desc,int readfunc(geoid&,string))
