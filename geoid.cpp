@@ -452,7 +452,7 @@ geoquad::geoquad(const geoquad& b)
   center=b.center;
   scale=b.scale;
   face=b.face;
-#ifdef NONUMSGEOID
+#ifdef NUMSGEOID
   nums=b.nums;
   nans=b.nans;
 #endif
@@ -467,7 +467,7 @@ geoquad& geoquad::operator=(geoquad b)
   swap(center,b.center);
   swap(scale,b.scale);
   swap(face,b.face);
-#ifdef NONUMSGEOID
+#ifdef NUMSGEOID
   swap(nums,b.nums);
   swap(nans,b.nans);
 #endif
@@ -505,7 +505,7 @@ void geoquad::subdivide()
     sub[i]->scale=scale/2;
     sub[i]->face=face;
     sub[i]->center=xy(center.east()+scale/((i&1)?2:-2),center.north()+scale/((i&2)?2:-2));
-#ifdef NONUMSGEOID
+#ifdef NUMSGEOID
     for (j=0;j<nans.size();j++)
       if (sub[i]->in(nans[j]))
 	sub[i]->nans.push_back(nans[j]);
@@ -514,7 +514,7 @@ void geoquad::subdivide()
 	sub[i]->nums.push_back(nums[j]);
 #endif
   }
-#ifdef NONUMSGEOID
+#ifdef NUMSGEOID
   nans.clear();
   nums.clear();
   nans.shrink_to_fit();
@@ -621,7 +621,7 @@ double geoquad::area()
     return apxarea();
 }
 
-#ifdef NONUMSGEOID
+#ifdef NUMSGEOID
 int geoquad::isfull()
 /* Returns -1 if the square has been interrogated and all points found to have no geoid data.
  * Returns 0 if some points have geoid data and some do not, or if no points have been tested.

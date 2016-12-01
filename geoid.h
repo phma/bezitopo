@@ -74,7 +74,7 @@ public:
   xy center;
   float scale; // always a power of 2
   int face;
-#ifdef NONUMSGEOID
+#ifdef NUMSGEOID
   std::vector<xy> nans,nums;
 #endif
   bool subdivided() const;
@@ -96,7 +96,7 @@ public:
   double apxarea(); // displacement from the center of the face.
   double angarea();
   double area();
-#ifdef NONUMSGEOID
+#ifdef NUMSGEOID
   int isfull(); // -1 if empty, 0 if partly full or unknown, 1 if full
 #endif
   std::array<unsigned,2> hash();
