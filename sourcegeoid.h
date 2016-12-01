@@ -97,6 +97,7 @@ struct geoid
   geoid(const geoid &b);
   double elev(int lat,int lon);
   double elev(xyz dir);
+  cylinterval boundrect();
 };
 
 struct geoformat

@@ -971,6 +971,18 @@ double geoid::elev(xyz dir)
     return NAN;
 }
 
+cylinterval geoid::boundrect()
+{
+  cylinterval ret;
+  if (cmap)
+    ret=cmap->boundrect();
+  else if (glat)
+    ret=glat->boundrect();
+  else
+    ret.setempty();
+  return ret;
+}
+
 matrix autocorr(double qpoints[][16],int qsz)
 /* Autocorrelation of the six undulation components, masked by which of qpoints
  * are finite. When all are finite, the matrix is diagonal-dominant, but when

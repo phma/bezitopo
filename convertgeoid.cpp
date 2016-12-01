@@ -410,7 +410,8 @@ int main(int argc, char *argv[])
   ofstream ofile;
   int i;
   vball v;
-  vector<cylinterval> excerptintervals;
+  vector<cylinterval> excerptintervals,inputbounds;
+  cylinterval latticebound;
   initformat("bol","bol","Bezitopo Boldatni",readboldatni,nullptr);
   initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin,nullptr);
   initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf,writecarlsongsf);
@@ -437,10 +438,15 @@ int main(int argc, char *argv[])
     qsz=16;
   for (i=0;i<excerptcircles.size();i++)
     excerptintervals.push_back(excerptcircles[i].boundrect());
+  for (i=0;i<geo.size();i++)
+    inputbounds.push_back(geo[i].boundrect());
   if (excerptintervals.size())
     excerptinterval=combine(excerptintervals);
   else
     excerptinterval.setfull();
+  latticebound=intersect(excerptinterval,combine(inputbounds));
+  cout<<"latticebound "<<formatlatlong(latlong(latticebound.sbd,latticebound.wbd),DEGREE+SEXAG2);
+  cout<<' '<<formatlatlong(latlong(latticebound.nbd,latticebound.ebd),DEGREE+SEXAG2)<<endl;
   /*readgeoid("../g2012bu0.bin");
   readgeoid("../g2012ba0.bin");
   readgeoid("../g2012bh0.bin");
@@ -487,21 +493,24 @@ int main(int argc, char *argv[])
   cout<<"Samoa W "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
   if (!helporversion)
   {
-    for (i=0;i<6;i++)
+    if (formatlist[0].cmd=="bol")
     {
-      //cout<<"Face "<<i+1;
-      //cout.flush();
-      interroquad(outputgeoid.cmap->faces[i],3e5);
-      /*if (cube.faces[i].isfull()>=0)
-        cout<<" has data"<<endl;
-      else
-        cout<<" is empty"<<endl;*/
-      refine(outputgeoid.cmap->faces[i],outputgeoid.cmap->scale,outputgeoid.ghdr->tolerance,outputgeoid.ghdr->sublimit,outputgeoid.ghdr->spacing,qsz);
+      for (i=0;i<6;i++)
+      {
+        //cout<<"Face "<<i+1;
+        //cout.flush();
+        interroquad(outputgeoid.cmap->faces[i],3e5);
+        /*if (cube.faces[i].isfull()>=0)
+          cout<<" has data"<<endl;
+        else
+          cout<<" is empty"<<endl;*/
+        refine(outputgeoid.cmap->faces[i],outputgeoid.cmap->scale,outputgeoid.ghdr->tolerance,outputgeoid.ghdr->sublimit,outputgeoid.ghdr->spacing,qsz);
+      }
+      outProgress();
+      cout<<endl;
+      if (dataArea.total()>510e12)
+        test360seam();
     }
-    outProgress();
-    cout<<endl;
-    if (dataArea.total()>510e12)
-      test360seam();
   }
   outund("Green Hill",degtobin(35.4),degtobin(-82.05));
   outund("Charlotte",degtobin(35.22),degtobin(-80.84));
