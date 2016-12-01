@@ -32,6 +32,7 @@
 
 #define HASHPRIME 729683249
 // Used for hashing 256-bit patterns of which samples in a geoquad are valid.
+#define unsetgeoid 8
 
 struct usngsheader
 {
@@ -66,6 +67,7 @@ public:
   void setslopes();
   void setheader(usngsheader &hdr);
   void setheader(carlsongsfheader &hdr);
+  void cvtheader(carlsongsfheader &hdr);
   void setheader(usngatxtheader &hdr);
   void settest();
   void dump();
@@ -123,6 +125,8 @@ int readcarlsongsf(geoid &geo,std::string filename);
 int readusngatxt(geoid &geo,string filename);
 int readusngabin(geoid &geo,string filename);
 int readboldatni(geoid &geo,string filename);
+void writecarlsongsf(geolattice &geo,std::string filename);
+void writecarlsongsf(geoid &geo,std::string filename);
 std::vector<xyz> gcscint(xyz gc,smallcircle sc);
 extern std::vector<geoid> geo;
 extern std::vector<smallcircle> excerptcircles;

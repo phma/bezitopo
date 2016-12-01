@@ -4209,6 +4209,7 @@ void testgeoid()
   file.open("test.bol.dump",ios::out);
   cube.dump(file);
   file.close();
+  writecarlsongsf(geo[0],"test.gsf");
   cout<<"done."<<endl;
 }
 

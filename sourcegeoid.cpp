@@ -27,6 +27,7 @@
 #include "binio.h"
 #include "bicubic.h"
 #include "manysum.h"
+#include "ldecimal.h"
 
 using namespace std;
 vector<geoid> geo;
@@ -308,6 +309,20 @@ void geolattice::setheader(carlsongsfheader &hdr)
   nslope.resize((width+1)*(height+1));
 }
 
+void geolattice::cvtheader(carlsongsfheader &hdr)
+{
+  hdr.south=bintodeg(sbd);
+  hdr.west=bintodeg(wbd);
+  hdr.north=bintodeg(nbd);
+  hdr.east=bintodeg(ebd);
+  if (hdr.west<0)
+    hdr.west+=360;
+  if (hdr.east<0)
+    hdr.east+=360;
+  hdr.nlong=width;
+  hdr.nlat=height;
+}
+
 void geolattice::setheader(usngatxtheader &hdr)
 {
   sbd=degtobin(hdr.south);
@@ -529,6 +544,13 @@ void readcarlsongsfheader(carlsongsfheader &hdr,istream &file)
     throw badheader;
 }
 
+void writecarlsongsfheader(carlsongsfheader &hdr,ostream &file)
+{
+  file<<fixed<<setprecision(7)<<hdr.south<<endl<<hdr.west<<endl;
+  file<<fixed<<setprecision(7)<<hdr.north<<endl<<hdr.east<<endl;
+  file<<hdr.nlong<<endl<<hdr.nlat<<endl;
+}
+
 int readcarlsongsf(geolattice &geo,string filename)
 /* This is a text file used by Carlson software.
  * https://update.carlsonsw.com/kbase_attach/716/Geoid Separation File Format.pdf
@@ -582,6 +604,20 @@ int readcarlsongsf(geolattice &geo,string filename)
   return ret;
 }
 
+void writecarlsongsf(geolattice &geo,string filename)
+{
+  int i,j;
+  fstream file;
+  carlsongsfheader hdr;
+  geo.cvtheader(hdr);
+  file.open(filename,fstream::out);
+  writecarlsongsfheader(hdr,file);
+  for (i=0;i<geo.height+1;i++)
+    for (j=0;j<geo.width+1;j++)
+      file<<fixed<<setprecision(5)<<geo.undula[i*(geo.width+1)+j]/65536.<<endl;
+  file.close();
+}
+
 int readcarlsongsf(geoid &geo,string filename)
 {
   delete geo.glat;
@@ -591,6 +627,14 @@ int readcarlsongsf(geoid &geo,string filename)
   geo.cmap=nullptr;
   geo.glat=new geolattice;
   return readcarlsongsf(*geo.glat,filename);
+}
+
+void writecarlsongsf(geoid &geo,string filename)
+{
+  if (geo.glat)
+    writecarlsongsf(*geo.glat,filename);
+  else
+    throw unsetgeoid;
 }
 
 int readusngsbin(geolattice &geo,string filename)
