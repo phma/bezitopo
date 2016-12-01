@@ -4431,6 +4431,7 @@ void testsmallcircle()
 void testcylinterval()
 {
   cylinterval globe,lougou,howland,udallgu,udallvi,rec0,rec60,empty;
+  cylinterval alaska,lower48;
   cylinterval res0,res1,res2;
   vector<cylinterval> manycyl;
   int i;
@@ -4466,6 +4467,14 @@ void testcylinterval()
   empty.wbd=DEG120;
   empty.nbd=DEG30;
   empty.sbd=DEG30;
+  alaska.ebd=1395864371;
+  alaska.wbd=1026019965;
+  alaska.nbd=429496730;
+  alaska.sbd=292296385;
+  lower48.ebd=1789569707;
+  lower48.wbd=1372003442;
+  lower48.nbd=345983477;
+  lower48.sbd=143165577;
   cout<<"Area of globe "<<globe.area()<<endl;
   tassert(fabs(globe.area()-510e12)<0.1e12);
   cout<<"Area of Howland "<<howland.area()<<" Lougou "<<lougou.area()<<endl;
@@ -4492,6 +4501,8 @@ void testcylinterval()
   tassert(fabs(res0.area()-7.7e12)<0.1e12);
   tassert(res0.ebd-res0.wbd==899655632);
   tassert(gap(udallgu,udallvi)==899655630);
+  res0=intersect(udallgu,udallvi);
+  tassert(res0.area()==0);
   cout<<"Area(rec0)/area(rec60) "<<ldecimal(rec0.area()/rec60.area())<<endl;
   tassert(fabs(rec0.area()/rec60.area()-2)<2e-6);
   res0=combine(howland,empty);
@@ -4514,6 +4525,16 @@ void testcylinterval()
   tassert(res0.sbd==globe.sbd);
   tassert(res0.ebd==globe.ebd);
   tassert(res0.wbd==globe.wbd);
+  cout<<"Area of Alaska "<<alaska.area()<<" Lower 48 "<<lower48.area()<<endl;
+  /* These are the areas of NGS geoid files. The areas of Alaska and
+   * Lower 48 are only 1.7 Mm² and 8.1 Mm², respectively.
+   */
+  res0=intersect(alaska,lower48);
+  cout<<"Area of intersect(alaska,lower48) "<<res0.area()<<endl;
+  tassert(res0.nbd=lower48.nbd);
+  tassert(res0.sbd=alaska.sbd);
+  tassert(res0.ebd=alaska.ebd);
+  tassert(res0.wbd=lower48.wbd);
   for (i=0;i<10;i++)
   {
     res0.nbd=degtobin(i)+1;
