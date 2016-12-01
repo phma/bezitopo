@@ -210,13 +210,14 @@ void test360seam()
     cout<<"The seam of the whole-earth geoid file is not smoothed properly."<<endl;
 }
 
-void initformat(string cmd,string ext,string desc,int readfunc(geoid&,string))
+void initformat(string cmd,string ext,string desc,int readfunc(geoid&,string),void writefunc(geoid&,string))
 {
   geoformat gf;
   gf.cmd=cmd;
   gf.ext=ext;
   gf.desc=desc;
   gf.readfunc=readfunc;
+  gf.writefunc=writefunc;
   formatlist.push_back(gf);
 }
 
@@ -410,11 +411,11 @@ int main(int argc, char *argv[])
   int i;
   vball v;
   vector<cylinterval> excerptintervals;
-  initformat("bol","bol","Bezitopo Boldatni",readboldatni);
-  initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin);
-  initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf);
-  initformat("ngatxt","grd","US National Geospatial-Intelligence Agency text",readusngatxt);
-  initformat("ngabin","","US National Geospatial-Intelligence Agency binary",readusngabin);
+  initformat("bol","bol","Bezitopo Boldatni",readboldatni,nullptr);
+  initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin,nullptr);
+  initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf,writecarlsongsf);
+  initformat("ngatxt","grd","US National Geospatial-Intelligence Agency text",readusngatxt,nullptr);
+  initformat("ngabin","","US National Geospatial-Intelligence Agency binary",readusngabin,nullptr);
   outputgeoid.cmap=new cubemap;
   outputgeoid.ghdr=new geoheader;
   outputgeoid.glat=new geolattice;

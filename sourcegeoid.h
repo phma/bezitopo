@@ -104,10 +104,10 @@ struct geoformat
   /* cmd is the argument to -f on the command line; ext is the file extension.
    * They are often the same, but ".bin" is used for many types of binary
    * files, so that format has cmd set to "ngs".
-   * readfunc will need changing when I add boldatni to the list of formats.
    */
   std::string cmd,ext,desc;
   int (*readfunc)(geoid&,std::string);
+  void (*writefunc)(geoid&,std::string);
 };
 
 bool smooth5(unsigned n);
