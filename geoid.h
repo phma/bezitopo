@@ -143,6 +143,7 @@ struct geoheader
 };
 
 cylinterval combine(cylinterval a,cylinterval b);
+cylinterval intersect(cylinterval a,cylinterval b);
 int gap(cylinterval a,cylinterval b);
 bool westof(cylinterval a,cylinterval b);
 cylinterval combine(std::vector<cylinterval> cyls);

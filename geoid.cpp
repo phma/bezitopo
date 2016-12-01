@@ -309,6 +309,71 @@ cylinterval combine(cylinterval a,cylinterval b)
   return ret;
 }
 
+cylinterval intersect(cylinterval a,cylinterval b)
+/* Given two cylintervals, returns the largest cylinterval contained in both.
+ * Order is ignored except in the following cases:
+ * • a and b are both empty. Returns a.
+ * • a and b both have 360° longitude intervals. Returns the longitude interval of b.
+ * • a's central meridian is 180° from b's.
+ */
+{
+  cylinterval ret;
+  assert(a.sbd>=-DEG90);
+  assert(a.nbd>=a.sbd);
+  assert(a.nbd<=DEG90);
+  assert(a.wbd-a.ebd<1);
+  assert(b.sbd>=-DEG90);
+  assert(b.nbd>=b.sbd);
+  assert(b.nbd<=DEG90);
+  assert(b.wbd-b.ebd<1);
+  if (a.nbd>b.nbd)
+    ret.nbd=b.nbd;
+  else
+    ret.nbd=a.nbd;
+  if (a.sbd<b.sbd)
+    ret.sbd=b.sbd;
+  else
+    ret.sbd=a.sbd;
+  if (a.ebd==a.wbd || a.nbd==a.sbd)
+    ret=a;
+  else if (b.ebd==b.wbd || b.nbd==b.sbd)
+    ret=b;
+  else if ((a.ebd^a.wbd)==DEG360)
+  {
+    ret.ebd=b.ebd;
+    ret.wbd=b.wbd;
+  }
+  else if ((b.ebd^b.wbd)==DEG360)
+  {
+    ret.ebd=a.ebd;
+    ret.wbd=a.wbd;
+  }
+  else
+  {
+    if (a.ebd+a.wbd-b.ebd-b.wbd>0)
+      swap(a,b);
+    if ((double)(b.ebd-a.ebd)+(double)(b.wbd-a.wbd)<0)
+    {
+      b.ebd+=DEG360;
+      b.wbd+=DEG360;
+    }
+    if (b.ebd-a.ebd>0)
+      ret.ebd=a.ebd;
+    else
+      ret.ebd=b.ebd;
+    if (b.wbd-a.wbd>0)
+      ret.wbd=b.wbd;
+    else
+      ret.wbd=a.wbd;
+    if (ret.wbd-ret.ebd>0)
+      ret.ebd=ret.wbd;
+    if (ret.nbd<ret.sbd)
+      ret.nbd=ret.sbd;
+  }
+  assert(ret.wbd-ret.ebd<1);
+  return ret;
+}
+
 int gap(cylinterval a,cylinterval b)
 /* Returns the smaller gap between the longitudes of a and b.
  * If the longitudes overlap, the gap is negative.
