@@ -118,7 +118,7 @@ int readleint(std::istream &file)
   return *(int *)buf;
 }
 
-float readbefloat(std::fstream &file)
+float readbefloat(std::istream &file)
 {
   char buf[4];
   file.read(buf,4);
@@ -128,7 +128,7 @@ float readbefloat(std::fstream &file)
   return *(float *)buf;
 }
 
-float readlefloat(std::fstream &file)
+float readlefloat(std::istream &file)
 {
   char buf[4];
   file.read(buf,4);
@@ -136,6 +136,16 @@ float readlefloat(std::fstream &file)
   endianflip(buf,4);
 #endif
   return *(float *)buf;
+}
+
+void writebefloat(std::ostream &file,float i)
+{
+  char buf[4];
+  *(float *)buf=i;
+#ifndef BIGENDIAN
+  endianflip(buf,4);
+#endif
+  file.write(buf,4);
 }
 
 void writebedouble(std::ostream &file,double i)

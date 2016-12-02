@@ -233,6 +233,17 @@ void readusngsbinheaderle(usngsheader &hdr,fstream &file)
   hdr.dtype=readleint(file);
 }
 
+void writeusngsbinheader(usngsheader &hdr,ostream &file)
+{
+  writebedouble(file,hdr.south);
+  writebedouble(file,hdr.west);
+  writebedouble(file,hdr.latspace);
+  writebedouble(file,hdr.longspace);
+  writebeint(file,hdr.nlat);
+  writebeint(file,hdr.nlong);
+  writebeint(file,hdr.dtype);
+}
+
 bool sanitycheck(usngsheader &hdr)
 {
   bool ssane,wsane,latsane,longsane,nlatsane,nlongsane,typesane;
@@ -271,6 +282,13 @@ bool sanitycheck(usngatxtheader &hdr)
   return ssane && wsane && latsane && longsane;
 }
 
+void geolattice::resize()
+{
+  undula.resize((width+1)*(height+1));
+  eslope.resize((width+1)*(height+1));
+  nslope.resize((width+1)*(height+1));
+}
+
 void geolattice::setheader(usngsheader &hdr)
 {
   sbd=degtobin(hdr.south);
@@ -279,9 +297,18 @@ void geolattice::setheader(usngsheader &hdr)
   ebd=degtobin(hdr.west+(hdr.nlong-1)*hdr.longspace);
   width=hdr.nlong-1;
   height=hdr.nlat-1;
-  undula.resize((width+1)*(height+1));
-  eslope.resize((width+1)*(height+1));
-  nslope.resize((width+1)*(height+1));
+  resize();
+}
+
+void geolattice::cvtheader(usngsheader &hdr)
+{
+  hdr.south=bintodeg(sbd);
+  hdr.west=bintodeg(wbd);
+  hdr.latspace=bintodeg(nbd-sbd)/width;
+  hdr.longspace=-bintodeg(wbd-ebd)/height;
+  hdr.nlong=width+1;
+  hdr.nlat=height+1;
+  hdr.dtype=1; // 1 means float. Don't know what anything else would mean.
 }
 
 cylinterval geolattice::boundrect()
@@ -294,6 +321,14 @@ cylinterval geolattice::boundrect()
   return ret;
 }
 
+void geolattice::setbound(cylinterval bound)
+{
+  sbd=bound.sbd;
+  wbd=bound.wbd;
+  nbd=bound.nbd;
+  ebd=bound.ebd;
+}
+
 void geolattice::setheader(carlsongsfheader &hdr)
 {
   sbd=degtobin(hdr.south);
@@ -304,9 +339,7 @@ void geolattice::setheader(carlsongsfheader &hdr)
     ebd+=DEG360;
   width=hdr.nlong;
   height=hdr.nlat;
-  undula.resize((width+1)*(height+1));
-  eslope.resize((width+1)*(height+1));
-  nslope.resize((width+1)*(height+1));
+  resize();
 }
 
 void geolattice::cvtheader(carlsongsfheader &hdr)
@@ -333,9 +366,19 @@ void geolattice::setheader(usngatxtheader &hdr)
     ebd+=DEG360;
   width=rint((hdr.east-hdr.west)/hdr.longspace);
   height=rint((hdr.north-hdr.south)/hdr.latspace);
-  undula.resize((width+1)*(height+1));
-  eslope.resize((width+1)*(height+1));
-  nslope.resize((width+1)*(height+1));
+  resize();
+}
+
+void geolattice::cvtheader(usngatxtheader &hdr)
+{
+  hdr.south=bintodeg(sbd);
+  hdr.west=bintodeg(wbd);
+  hdr.north=bintodeg(nbd);
+  hdr.east=bintodeg(ebd);
+  if (hdr.east<=hdr.west)
+    hdr.east+=720;
+  hdr.longspace=(hdr.east-hdr.west)/width;
+  hdr.latspace=(hdr.north-hdr.south)/height;
 }
 
 void geolattice::settest()
@@ -344,13 +387,21 @@ void geolattice::settest()
   sbd=wbd=degtobin(-2);
   nbd=ebd=degtobin(2);
   width=height=4;
-  undula.resize((width+1)*(height+1));
-  eslope.resize((width+1)*(height+1));
-  nslope.resize((width+1)*(height+1));
+  resize();
   for (i=0;i<5;i++)
     for (j=0;j<5;j++)
       undula[i+5*j]=61000*(i-2)+4096*sqr(i-2)+37700*(j-2)-2048*sqr(j-2);
   setslopes();
+}
+
+void geolattice::setfineness(int fineness)
+/* fineness is units per 180°. Doing this on a geolattice that already has
+ * data in it will shear the data.
+ */
+{
+  width=-rint((double)(wbd-ebd)/fineness);
+  height=-rint((double)(sbd-nbd)/fineness);
+  resize();
 }
 
 void readusngatxtheader(usngatxtheader &hdr,istream &file)
@@ -369,6 +420,13 @@ void readusngatxtheader(usngatxtheader &hdr,istream &file)
   {
     throw badheader;
   }
+}
+
+void writeusngatxtheader(usngatxtheader &hdr,ostream &file)
+{
+  file<<fixed<<setprecision(7)<<hdr.south<<' '<<hdr.north<<' ';
+  file<<fixed<<setprecision(7)<<hdr.west<<' '<<hdr.east<<endl;
+  file<<ldecimal(hdr.latspace)<<' '<<ldecimal(hdr.longspace);
 }
 
 int readusngatxt(geolattice &geo,string filename)
@@ -428,6 +486,27 @@ int readusngatxt(geolattice &geo,string filename)
   return ret;
 }
 
+void writeusngatxt(geolattice &geo,string filename)
+{
+  int i,j;
+  fstream file;
+  usngatxtheader hdr;
+  geo.cvtheader(hdr);
+  file.open(filename,fstream::out);
+  writeusngatxtheader(hdr,file);
+  for (i=geo.height;i>=0;i--)
+    for (j=0;j<geo.width+1;j++)
+    {
+      if (j%16==0)
+        file<<endl;
+      else
+        file<<' ';
+      file<<fixed<<setprecision(5)<<geo.undula[i*(geo.width+1)+j]/65536.;
+    }
+  file<<endl;
+  file.close();
+}
+
 int readusngatxt(geoid &geo,string filename)
 {
   delete geo.glat;
@@ -437,6 +516,14 @@ int readusngatxt(geoid &geo,string filename)
   geo.cmap=nullptr;
   geo.glat=new geolattice;
   return readusngatxt(*geo.glat,filename);
+}
+
+void writeusngatxt(geoid &geo,string filename)
+{
+  if (geo.glat)
+    writeusngatxt(*geo.glat,filename);
+  else
+    throw unsetgeoid;
 }
 
 int readusngabin(geolattice &geo,string filename)
@@ -493,8 +580,7 @@ int readusngabin(geolattice &geo,string filename)
           for (i=0;2*i<geo.height;i++)
             for (j=0;j<=geo.width;j++)
               swap(geo.undula[i*(geo.width+1)+j],geo.undula[(geo.height-i)*(geo.width+1)+j]);
-          geo.eslope.resize(geo.undula.size());
-          geo.nslope.resize(geo.undula.size());
+          geo.resize();
           geo.setslopes();
         }
         else
@@ -682,6 +768,20 @@ int readusngsbin(geolattice &geo,string filename)
   return ret;
 }
 
+void writeusngsbin(geolattice &geo,string filename)
+{
+  int i,j;
+  fstream file;
+  usngsheader hdr;
+  geo.cvtheader(hdr);
+  file.open(filename,fstream::out|fstream::binary);
+  writeusngsbinheader(hdr,file);
+  for (i=0;i<geo.height+1;i++)
+    for (j=0;j<geo.width+1;j++)
+      writebefloat(file,geo.undula[i*(geo.width+1)+j]/65536.);
+  file.close();
+}
+
 int readusngsbin(geoid &geo,string filename)
 {
   delete geo.glat;
@@ -691,6 +791,14 @@ int readusngsbin(geoid &geo,string filename)
   geo.cmap=nullptr;
   geo.glat=new geolattice;
   return readusngsbin(*geo.glat,filename);
+}
+
+void writeusngsbin(geoid &geo,string filename)
+{
+  if (geo.glat)
+    writeusngsbin(*geo.glat,filename);
+  else
+    throw unsetgeoid;
 }
 
 int readboldatni(geoid &geo,string filename)

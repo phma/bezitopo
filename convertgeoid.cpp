@@ -412,6 +412,7 @@ int main(int argc, char *argv[])
   vball v;
   vector<cylinterval> excerptintervals,inputbounds;
   cylinterval latticebound;
+  int fineness=10800;
   initformat("bol","bol","Bezitopo Boldatni",readboldatni,nullptr);
   initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin,nullptr);
   initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf,writecarlsongsf);
@@ -444,6 +445,7 @@ int main(int argc, char *argv[])
     excerptinterval=combine(excerptintervals);
   else
     excerptinterval.setfull();
+  excerptinterval.round(fineness);
   latticebound=intersect(excerptinterval,combine(inputbounds));
   cout<<"latticebound "<<formatlatlong(latlong(latticebound.sbd,latticebound.wbd),DEGREE+SEXAG2);
   cout<<' '<<formatlatlong(latlong(latticebound.nbd,latticebound.ebd),DEGREE+SEXAG2)<<endl;
@@ -510,6 +512,11 @@ int main(int argc, char *argv[])
       cout<<endl;
       if (dataArea.total()>510e12)
         test360seam();
+    }
+    else
+    {
+      outputgeoid.glat->setbound(latticebound);
+      outputgeoid.glat->setfineness(fineness);
     }
   }
   outund("Green Hill",degtobin(35.4),degtobin(-82.05));

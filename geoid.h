@@ -61,6 +61,7 @@ struct cylinterval
   double area();
   void setfull();
   void setempty();
+  void round(int fineness);
 };
 
 class geoquad

@@ -246,6 +246,18 @@ void cylinterval::setempty()
   sbd=nbd=wbd=ebd=0;
 }
 
+void cylinterval::round(int fineness)
+/* fineness is the number of units in a half circle, typically 10800 (1 minute).
+ * Rounding is done to the excerptinterval. Rounding the inputbounds could
+ * result in extra columns or rows of NaN at the border.
+ */
+{
+  sbd=rottobin(rint(bintorot(sbd)*2*fineness)/2/fineness);
+  nbd=rottobin(rint(bintorot(nbd)*2*fineness)/2/fineness);
+  wbd=rottobin(rint(bintorot(wbd)*2*fineness)/2/fineness);
+  ebd=rottobin(rint(bintorot(ebd)*2*fineness)/2/fineness);
+}
+
 cylinterval combine(cylinterval a,cylinterval b)
 /* Given two cylintervals, returns the smallest cylinterval containing both.
  * Order is ignored except in the following cases:
