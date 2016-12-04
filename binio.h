@@ -39,9 +39,7 @@ void writeledouble(std::ostream &file,double f);
 double readbedouble(std::istream &file);
 double readledouble(std::istream &file);
 void writegeint(std::ostream &file,int i); // for Bezitopo's geoid files
-void writegeint0(std::ostream &file,int i); // for Bezitopo's geoid files
 int readgeint(std::istream &file);
-int readgeint0(std::istream &file);
 void writeustring(std::ostream &file,std::string s);
 std::string readustring(std::istream &file);
 
