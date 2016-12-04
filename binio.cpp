@@ -238,7 +238,7 @@ void writegeint0(std::ostream &file,int i)
  */
 {
   char buf[8];
-  if (i=0x80000000)
+  if (i==0x80000000)
   {
     buf[0]=0x20;
     file.write(buf,1);
@@ -269,7 +269,7 @@ void writegeint0(std::ostream &file,int i)
   }
   else if (i<0 && i>-0x2020)
   {
-    *(int *)buf=i+0x20-0x6000;
+    *(int *)buf=i+0x20+0x7fff;
 #ifndef BIGENDIAN
     endianflip(buf,4);
 #endif
@@ -285,7 +285,7 @@ void writegeint0(std::ostream &file,int i)
   }
   else if (i<0 && i>-0x202020)
   {
-    *(int *)buf=i+0x2020-0xa00000;
+    *(int *)buf=i+0x2020+0xbfffff;
 #ifndef BIGENDIAN
     endianflip(buf,4);
 #endif
@@ -297,15 +297,15 @@ void writegeint0(std::ostream &file,int i)
 #ifndef BIGENDIAN
     endianflip(buf,4);
 #endif
-    file.write(buf+1,3);
+    file.write(buf,4);
   }
   else if (i<0 && i>-0x1f202020)
   {
-    *(int *)buf=i+0x202020-0xe0000000;
+    *(int *)buf=i+0x202020+0xffffffff;
 #ifndef BIGENDIAN
     endianflip(buf,4);
 #endif
-    file.write(buf+1,3);
+    file.write(buf,4);
   }
   else
   {
