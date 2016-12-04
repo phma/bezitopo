@@ -411,6 +411,8 @@ int main(int argc, char *argv[])
   int i;
   vball v;
   vector<cylinterval> excerptintervals,inputbounds;
+  array<int,6> undrange;
+  array<int,5> undhisto;
   cylinterval latticebound;
   int fineness=10800;
   initformat("bol","bol","Bezitopo Boldatni",readboldatni,nullptr);
@@ -510,6 +512,12 @@ int main(int argc, char *argv[])
       }
       outProgress();
       cout<<endl;
+      undrange=outputgeoid.cmap->undrange();
+      cout<<"Undulation range: constant "<<undrange[0]<<'-'<<undrange[1];
+      cout<<" linear "<<undrange[2]<<'-'<<undrange[3];
+      cout<<" quadratic "<<undrange[4]<<'-'<<undrange[5]<<endl;
+      undhisto=outputgeoid.cmap->undhisto();
+      cout<<"1 byte "<<undhisto[0]<<"; 2 bytes "<<undhisto[1]<<"; 3 bytes "<<undhisto[2]<<"; 4 bytes "<<undhisto[3]<<endl;
       if (dataArea.total()>510e12)
         test360seam();
     }

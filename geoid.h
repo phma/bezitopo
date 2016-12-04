@@ -106,6 +106,8 @@ public:
   void writeBinary(std::ostream &ofile,int nesting=0);
   void readBinary(std::istream &ifile,int nesting=-1);
   void dump(std::ostream &ofile,int nesting=0);
+  std::array<int,6> undrange();
+  std::array<int,5> undhisto();
 };
 
 class cubemap
@@ -125,6 +127,8 @@ public:
   void writeBinary(std::ostream &ofile);
   void readBinary(std::istream &ifile);
   void dump(std::ostream &ofile);
+  std::array<int,6> undrange();
+  std::array<int,5> undhisto();
 };
 
 struct geoheader

@@ -4060,6 +4060,8 @@ void testgeoid()
 {
   array<vball,4> bounds;
   array<double,4> bdist;
+  array<int,6> undrange;
+  array<int,5> undhisto;
   int i,j,k,qsz=16;
   /* qsz is the size of the square lattice used to sample a geoquad.
    * It can range from 4 to 16, but values below 9 cause this test to fail.
@@ -4209,6 +4211,12 @@ void testgeoid()
   file.open("test.bol.dump",ios::out);
   cube.dump(file);
   file.close();
+  undrange=cube.undrange();
+  cout<<"Undulation range: constant "<<undrange[0]<<'-'<<undrange[1];
+  cout<<" linear "<<undrange[2]<<'-'<<undrange[3];
+  cout<<" quadratic "<<undrange[4]<<'-'<<undrange[5]<<endl;
+  undhisto=cube.undhisto();
+  cout<<"1 byte "<<undhisto[0]<<"; 2 bytes "<<undhisto[1]<<"; 3 bytes "<<undhisto[2]<<"; 4 bytes "<<undhisto[3]<<endl;
   writeusngsbin(geo[0],"test.bin");
   writecarlsongsf(geo[0],"test.gsf");
   writeusngatxt(geo[0],"test.grd");

@@ -922,6 +922,78 @@ array<unsigned,2> geoquad::hash()
   return ret;
 }
 
+array<int,6> geoquad::undrange()
+/* The first two are the minimum and maximum of the constant term,
+ * the middle two are the range of the linear terms, and the last
+ * two are the range of the quadratic terms.
+ */
+{
+  int i,j;
+  array<int,6> ret,subret;
+  ret[0]=ret[2]=ret[4]=INT_MAX;
+  ret[1]=ret[3]=ret[5]=INT_MIN;
+  if (subdivided())
+    for (i=0;i<4;i++)
+    {
+      subret=sub[i]->undrange();
+      for (j=0;j<6;j+=2)
+      {
+        if (subret[j]<ret[j])
+          ret[j]=subret[j];
+        if (subret[j+1]>ret[j+1])
+          ret[j+1]=subret[j+1];
+      }
+    }
+  else if (!isnan())
+  {
+    ret[0]=ret[1]=und[0];
+    for (i=1;i<6;i++)
+    {
+      if (und[i]<ret[(i/3)*2+2])
+        ret[(i/3)*2+2]=und[i];
+      if (und[i]>ret[(i/3)*2+3])
+        ret[(i/3)*2+3]=und[i];
+    }
+  }
+  return ret;
+}
+
+array<int,5> geoquad::undhisto()
+/* Count how many undulation values would take 1, 2, 3, or 4 bytes in
+ * a certain encoding.
+ */
+{
+  int i,j;
+  array<int,5> ret,subret;
+  ret.fill(0);
+  if (subdivided())
+    for (i=0;i<4;i++)
+    {
+      subret=sub[i]->undhisto();
+      for (j=0;j<5;j++)
+        ret[j]+=subret[j];
+    }
+  else if (!isnan())
+  {
+    for (i=0;i<6;i++)
+    {
+      if (abs(und[i])<32)
+        ret[0]++;
+      else if (abs(und[i])<8224)
+        ret[1]++;
+      else if (abs(und[i])<2105376)
+        ret[2]++;
+      else if (abs(und[i])<538976288)
+        ret[3]++;
+      else
+        ret[4]++; // This never happens in geoid files; it means >8224 m.
+    }
+  }
+  else
+    ret[0]=1;
+  return ret;
+}
+
 cubemap::cubemap()
 {
   int i;
@@ -1021,6 +1093,42 @@ void cubemap::dump(ostream &ofile)
     ofile<<scale<<endl;
   for (i=0;i<6;i++)
     faces[i].dump(ofile);
+}
+
+array<int,6> cubemap::undrange()
+{
+  int i,j;
+  array<int,6> ret,subret;
+  ret[0]=ret[2]=ret[4]=INT_MAX;
+  ret[1]=ret[3]=ret[5]=INT_MIN;
+  for (i=0;i<6;i++)
+  {
+    subret=faces[i].undrange();
+    for (j=0;j<6;j+=2)
+    {
+      if (subret[j]<ret[j])
+        ret[j]=subret[j];
+      if (subret[j+1]>ret[j+1])
+        ret[j+1]=subret[j+1];
+    }
+  }
+  return ret;
+}
+
+array<int,5> cubemap::undhisto()
+{
+  int i,j;
+  array<int,5> ret,subret;
+  ret.fill(0);
+  for (i=0;i<6;i++)
+  {
+    subret=faces[i].undhisto();
+    for (j=0;j<5;j++)
+    {
+      ret[j]+=subret[j];
+    }
+  }
+  return ret;
 }
 
 void geoheader::writeBinary(std::ostream &ofile)
