@@ -4583,6 +4583,18 @@ void testgeint()
     writegeint(geintf,i+0x80000000);
     writegeint(geintf,i+0xc0000000);
   }
+  for (i=-40;i<=40;i++)
+  {
+    writegeint(geintf,i-0x1f202020);
+    writegeint(geintf,i-0x202020);
+    writegeint(geintf,i-0x2020);
+    writegeint(geintf,i-0x20);
+    writegeint(geintf,i);
+    writegeint(geintf,i+0x20);
+    writegeint(geintf,i+0x2020);
+    writegeint(geintf,i+0x202020);
+    writegeint(geintf,i+0x1f202020);
+  }
   geintf.seekg(0);
   for (i=-8388625;i<=8388625;i+=47935)
   {
@@ -4600,6 +4612,27 @@ void testgeint()
     j=readgeint(geintf);
     //cout<<setw(9)<<hex<<i+0xc0000000<<setw(9)<<j<<endl;
     tassert(i+0xc0000000==j);
+  }
+  for (i=-40;i<=40;i++)
+  {
+    j=readgeint(geintf);
+    tassert(i==j+0x1f202020);
+    j=readgeint(geintf);
+    tassert(i==j+0x202020);
+    j=readgeint(geintf);
+    tassert(i==j+0x2020);
+    j=readgeint(geintf);
+    tassert(i==j+0x20);
+    j=readgeint(geintf);
+    tassert(i==j);
+    j=readgeint(geintf);
+    tassert(i==j-0x20);
+    j=readgeint(geintf);
+    tassert(i==j-0x2020);
+    j=readgeint(geintf);
+    tassert(i==j-0x202020);
+    j=readgeint(geintf);
+    tassert(i==j-0x1f202020);
   }
   cout<<dec<<nancount<<" NANs"<<endl;
   tassert(nancount==175);

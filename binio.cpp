@@ -219,6 +219,106 @@ void writegeint(std::ostream &file,int i)
   }
 }
 
+void writegeint0(std::ostream &file,int i)
+/* Numbers in Bezitopo's geoid files are in 65536ths of a meter and are less than 110 m
+ * (7208960) in absolute value. They are encoded as follows:
+ * 20					80 00 00 00, which means NaN
+ * gg where gg is 00-1f			00 00 00 gg
+ * gg where gg is 21-3f			ff ff ff hh where hh is gg+c0
+ * gg xx where gg is 40-5f		00 00 hh xx + 20 where hh is gg-40
+ * gg xx where gg is 60-7f		ff ff hh xx - 1f where hh is gg+80
+ * gg xx xx where gg is 80-9f		00 hh xx xx + 2020 where hh is gg-80
+ * gg xx xx where gg is a0-bf		ff hh xx xx - 201f where hh is gg+40
+ * gg xx xx xx where gg is c0-de	hh xx xx xx + 202020 where hh is gg-c0
+ * gg xx xx xx where gg is e1-ff	gg xx xx xx - 20201f
+ * gg xx xx xx xx where gg is df-e0	xx xx xx xx
+ * Numbers encoded in five bytes mean elevations higher than 8224 m, which is
+ * higher than anything in a geoid file, but can occur in a DEM of a tall
+ * mountain or deep trench.
+ */
+{
+  char buf[8];
+  if (i=0x80000000)
+  {
+    buf[0]=0x20;
+    file.write(buf,1);
+  }
+  else if (i>=0 && i<0x20)
+  {
+    *(int *)buf=i;
+#ifndef BIGENDIAN
+    endianflip(buf,4);
+#endif
+    file.write(buf+3,1);
+  }
+  else if (i<0 && i>-0x20)
+  {
+    *(int *)buf=i-0xc0;
+#ifndef BIGENDIAN
+    endianflip(buf,4);
+#endif
+    file.write(buf+3,1);
+  }
+  else if (i>=0 && i<0x2020)
+  {
+    *(int *)buf=i-0x20+0x4000;
+#ifndef BIGENDIAN
+    endianflip(buf,4);
+#endif
+    file.write(buf+2,2);
+  }
+  else if (i<0 && i>-0x2020)
+  {
+    *(int *)buf=i+0x20-0x6000;
+#ifndef BIGENDIAN
+    endianflip(buf,4);
+#endif
+    file.write(buf+2,2);
+  }
+  else if (i>=0 && i<0x202020)
+  {
+    *(int *)buf=i-0x2020+0x800000;
+#ifndef BIGENDIAN
+    endianflip(buf,4);
+#endif
+    file.write(buf+1,3);
+  }
+  else if (i<0 && i>-0x202020)
+  {
+    *(int *)buf=i+0x2020-0xa00000;
+#ifndef BIGENDIAN
+    endianflip(buf,4);
+#endif
+    file.write(buf+1,3);
+  }
+  else if (i>=0 && i<0x1f202020)
+  {
+    *(int *)buf=i-0x202020+0xc0000000;
+#ifndef BIGENDIAN
+    endianflip(buf,4);
+#endif
+    file.write(buf+1,3);
+  }
+  else if (i<0 && i>-0x1f202020)
+  {
+    *(int *)buf=i+0x202020-0xe0000000;
+#ifndef BIGENDIAN
+    endianflip(buf,4);
+#endif
+    file.write(buf+1,3);
+  }
+  else
+  {
+    *(int *)buf=i;
+#ifndef BIGENDIAN
+    endianflip(buf,4);
+#endif
+    memmove(buf+1,buf,4);
+    buf[0]=(i<0)?0xdf:0xe0;
+    file.write(buf,5);
+  }
+}
+
 int readgeint(std::istream &file)
 {
   char buf[8];
