@@ -4635,7 +4635,7 @@ void testgeint()
     tassert(i==j-0x1f202020);
   }
   cout<<dec<<nancount<<" NANs"<<endl;
-  tassert(nancount==175);
+  tassert(nancount==1);
   cout<<"done."<<endl;
 }
 

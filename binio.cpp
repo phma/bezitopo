@@ -178,7 +178,7 @@ double readledouble(std::istream &file)
   return *(double *)buf;
 }
 
-void writegeint(std::ostream &file,int i)
+void writegeint0(std::ostream &file,int i)
 /* Numbers in Bezitopo's geoid files are in 65536ths of a meter and are less than 110 m
  * (7208960) in absolute value. They are encoded as follows:
  * gg xx xx where gg is 00-7f		00 gg xx xx
@@ -219,7 +219,7 @@ void writegeint(std::ostream &file,int i)
   }
 }
 
-void writegeint0(std::ostream &file,int i)
+void writegeint(std::ostream &file,int i)
 /* Numbers in Bezitopo's geoid files are in 65536ths of a meter and are less than 110 m
  * (7208960) in absolute value. They are encoded as follows:
  * 20					80 00 00 00, which means NaN
@@ -319,7 +319,7 @@ void writegeint0(std::ostream &file,int i)
   }
 }
 
-int readgeint(std::istream &file)
+int readgeint0(std::istream &file)
 {
   char buf[8];
   int ret;
@@ -349,6 +349,61 @@ int readgeint(std::istream &file)
     endianflip(buf,4);
 #endif
     ret=*(int *)buf;
+  }
+  return ret;
+}
+
+int readgeint(std::istream &file)
+{
+  char buf[8];
+  int ret,nbytes,i;
+  file.read(buf,1);
+  nbytes=((buf[0]>>6)&3)+1;
+  file.read(buf+1,nbytes-1);
+  if ((buf[0]&0xff)==0xdf || (buf[0]&0xff)==0xe0)
+  {
+    file.read(buf+4,1);
+    nbytes++;
+  }
+  if (nbytes<4)
+    memmove(buf+4-nbytes,buf,nbytes);
+  if (nbytes>4)
+    memmove(buf,buf+1,4);
+  if (nbytes<5)
+  {
+    ret=(buf[4-nbytes]&32)/-32;
+    buf[4-nbytes]=(buf[4-nbytes]&63)|(ret&0xc0);
+    for (i=0;i<4-nbytes;i++)
+      buf[i]=ret;
+  }
+#ifndef BIGENDIAN
+  endianflip(buf,4);
+#endif
+  ret=*(int *)buf;
+  switch (nbytes)
+  {
+    case 1: // ffffffe0-0000001f: ffffffe0 means 80000000, rest stay same
+      if (ret==-32)
+        ret=0x80000000;
+      break;
+    case 2: // ffffe000-ffffffdf, 00000020-00001fff
+      if (ret<0)
+        ret-=0x1f;
+      else
+        ret+=0x20;
+      break;
+    case 3: // ffe00000-ffffdfff, 00002000-001fffff
+      if (ret<0)
+        ret-=0x201f;
+      else
+        ret+=0x2020;
+      break;
+    case 4: // e1000000-ffdfffff, 00200000-1effffff
+      if (ret<0)
+        ret-=0x20201f;
+      else
+        ret+=0x202020;
+      break;
   }
   return ret;
 }
