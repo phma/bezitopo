@@ -65,11 +65,17 @@ using namespace std;
  * 
  * Quadtrees look like this:
  * An empty face of the earth:
- * 00 8000
+ * 00 20
  * A face with just one geoquad:
- * 00 1e0943 fff382 002583 01ba38 000302 fffeed
+ * 00 9de923 739b 800563 819a18 42e2 7f06
  * Three quarters undivided, the upper right subdivided in quarters, all NaN:
- * 01 8000 00 8000 00 8000 01 8000 00 8000 00 8000 00 8000
+ * 01 20 00 20 00 20 01 20 00 20 00 20 00 20
+ *
+ * If the data are vectors tangent to the surface, they are encoded according
+ * to the angle they make with the center of the face. So a vector pointing
+ * straight north at Chamchamal, at the northeast corner of the Benin face,
+ * where the bearing to the center of the face is S60°W, is encoded as N15°W,
+ * since the bearing from the center to Chamchamal is N45°E.
  */
 
 cubemap cube;
