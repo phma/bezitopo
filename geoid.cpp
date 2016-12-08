@@ -307,7 +307,7 @@ cylinterval combine(cylinterval a,cylinterval b)
   {
     if (a.ebd+a.wbd-b.ebd-b.wbd>0)
       swap(a,b);
-    if ((double)(b.ebd-a.ebd)+(double)(b.wbd-a.wbd)<0)
+    if ((a.ebd+(a.wbd-a.ebd)/2)-(b.ebd+(b.wbd-b.ebd)/2)>0)
     {
       b.ebd+=DEG360;
       b.wbd+=DEG360;
@@ -370,7 +370,7 @@ cylinterval intersect(cylinterval a,cylinterval b)
   {
     if (a.ebd+a.wbd-b.ebd-b.wbd>0)
       swap(a,b);
-    if ((double)(b.ebd-a.ebd)+(double)(b.wbd-a.wbd)<0)
+    if ((a.ebd+(a.wbd-a.ebd)/2)-(b.ebd+(b.wbd-b.ebd)/2)>0)
     {
       b.ebd+=DEG360;
       b.wbd+=DEG360;

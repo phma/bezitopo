@@ -4494,9 +4494,9 @@ void testcylinterval()
   westnc.wbd=degtobin(-84.216666667); // and Charlotte 150 km circles,
   westnc.nbd=degtobin(36.933333333); // rounded to the nearest minute.
   westnc.sbd=degtobin(33.883333333);
-  cout<<"Area of globe "<<globe.area()<<endl;
+  cout<<"Area of globe "<<hnum(globe.area())<<endl;
   tassert(fabs(globe.area()-510e12)<0.1e12);
-  cout<<"Area of Howland "<<howland.area()<<" Lougou "<<lougou.area()<<endl;
+  cout<<"Area of Howland "<<hnum(howland.area())<<" Lougou "<<hnum(lougou.area())<<endl;
   res0=combine(howland,lougou);
   res1=combine(lougou,howland);
   res2=combine(res1,res0);
@@ -4507,15 +4507,15 @@ void testcylinterval()
   tassert(res2.ebd==res2.wbd+DEG360);
   tassert(res0.area()==res1.area());
   tassert(fabs(res0.area()-26.3e12)<0.1e12);
-  cout<<"Area of combine(howland,lougou) "<<res0.area()<<endl;
-  cout<<"Area of combine(lougou,howland) "<<res1.area()<<endl;
+  cout<<"Area of combine(howland,lougou) "<<hnum(res0.area())<<endl;
+  cout<<"Area of combine(lougou,howland) "<<hnum(res1.area())<<endl;
   res0=combine(udallvi,udallgu);
   res1=combine(udallgu,udallvi);
   tassert(res0.nbd==res1.nbd);
   tassert(res0.sbd==res1.sbd);
   tassert(res0.ebd==res1.ebd);
   tassert(res0.wbd==res1.wbd);
-  cout<<"Area of combine(udallvi,udallgu) "<<res0.area()<<endl;
+  cout<<"Area of combine(udallvi,udallgu) "<<hnum(res0.area())<<endl;
   cout<<"Longitude interval of combine(udallvi,udallgu) "<<bintodeg(res0.ebd-res0.wbd)<<endl;
   tassert(fabs(res0.area()-7.7e12)<0.1e12);
   tassert(res0.ebd-res0.wbd==899655632);
@@ -4544,7 +4544,7 @@ void testcylinterval()
   tassert(res0.sbd==globe.sbd);
   tassert(res0.ebd==globe.ebd);
   tassert(res0.wbd==globe.wbd);
-  cout<<"Area of Alaska "<<alaska.area()<<" Lower 48 "<<lower48.area()<<endl;
+  cout<<"Area of Alaska "<<hnum(alaska.area())<<" Lower 48 "<<hnum(lower48.area())<<endl;
   /* These are the areas of NGS geoid files. The areas of Alaska and
    * Lower 48 are only 1.7 Mm² and 8.1 Mm², respectively.
    */
