@@ -831,6 +831,19 @@ int readboldatni(geoid &geo,string filename)
   return ret;
 }
 
+void writeboldatni(geoid &geo,string filename)
+{
+  fstream file;
+  file.open(filename,fstream::out|fstream::binary);
+  if (geo.ghdr && geo.cmap)
+  {
+    geo.ghdr->hash=geo.cmap->hash();
+    geo.ghdr->writeBinary(file);
+    geo.cmap->writeBinary(file);
+  }
+  else
+    throw unsetgeoid;
+}
 double avgelev(xyz dir)
 {
   int i,n;

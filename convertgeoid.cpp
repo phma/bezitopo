@@ -415,10 +415,10 @@ int main(int argc, char *argv[])
   array<int,5> undhisto;
   cylinterval latticebound;
   int fineness=10800;
-  initformat("bol","bol","Bezitopo Boldatni",readboldatni,nullptr);
-  initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin,nullptr);
+  initformat("bol","bol","Bezitopo Boldatni",readboldatni,writeboldatni);
+  initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin,writeusngsbin);
   initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf,writecarlsongsf);
-  initformat("ngatxt","grd","US National Geospatial-Intelligence Agency text",readusngatxt,nullptr);
+  initformat("ngatxt","grd","US National Geospatial-Intelligence Agency text",readusngatxt,writeusngatxt);
   initformat("ngabin","","US National Geospatial-Intelligence Agency binary",readusngabin,nullptr);
   outputgeoid.cmap=new cubemap;
   outputgeoid.ghdr=new geoheader;
@@ -563,6 +563,10 @@ int main(int argc, char *argv[])
       else
         cout<<"Please specify a filename with -o"<<endl;
     }
+    if (formatlist[0].writefunc)
+      formatlist[0].writefunc(outputgeoid,outfilename);
+    else
+      cerr<<"Can't write in format "<<formatlist[0].cmd<<"; it is a whole-earth-only format."<<endl;
     ofile.open(outfilename);
     outputgeoid.ghdr->hash=outputgeoid.cmap->hash();
     outputgeoid.ghdr->writeBinary(ofile);
