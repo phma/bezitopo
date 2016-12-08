@@ -844,6 +844,7 @@ void writeboldatni(geoid &geo,string filename)
   else
     throw unsetgeoid;
 }
+
 double avgelev(xyz dir)
 {
   int i,n;

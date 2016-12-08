@@ -567,10 +567,6 @@ int main(int argc, char *argv[])
       formatlist[0].writefunc(outputgeoid,outfilename);
     else
       cerr<<"Can't write in format "<<formatlist[0].cmd<<"; it is a whole-earth-only format."<<endl;
-    ofile.open(outfilename);
-    outputgeoid.ghdr->hash=outputgeoid.cmap->hash();
-    outputgeoid.ghdr->writeBinary(ofile);
-    outputgeoid.cmap->writeBinary(ofile);
     drawglobecube(1024,62,-7,outputgeoid.cmap,0,"geoid.ppm");
     cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
     correctionHist.dump();
