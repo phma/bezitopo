@@ -4441,7 +4441,7 @@ void testsmallcircle()
 void testcylinterval()
 {
   cylinterval globe,lougou,howland,udallgu,udallvi,rec0,rec60,empty;
-  cylinterval alaska,lower48;
+  cylinterval alaska,lower48,allus,westnc;
   cylinterval res0,res1,res2;
   vector<cylinterval> manycyl;
   int i;
@@ -4485,6 +4485,14 @@ void testcylinterval()
   lower48.wbd=1372003442;
   lower48.nbd=345983477;
   lower48.sbd=143165577;
+  allus.ebd=degtobin(300); // East of Virgin Islands
+  allus.wbd=degtobin(143); // West of Guam
+  allus.nbd=degtobin(72); // North of Alaska
+  allus.sbd=degtobin(-17); // South of Samoa
+  westnc.ebd=degtobin(-79.183333333); // Combination of Asheville, Shelby,
+  westnc.wbd=degtobin(-84.216666667); // and Charlotte 150 km circles,
+  westnc.nbd=degtobin(36.933333333); // rounded to the nearest minute.
+  westnc.sbd=degtobin(33.883333333);
   cout<<"Area of globe "<<globe.area()<<endl;
   tassert(fabs(globe.area()-510e12)<0.1e12);
   cout<<"Area of Howland "<<howland.area()<<" Lougou "<<lougou.area()<<endl;
@@ -4545,6 +4553,20 @@ void testcylinterval()
   tassert(res0.sbd=alaska.sbd);
   tassert(res0.ebd=alaska.ebd);
   tassert(res0.wbd=lower48.wbd);
+  cout<<"Area of westnc "<<westnc.area()<<endl;
+  cout<<"Area of allus "<<allus.area()<<endl;
+  res0=intersect(westnc,allus);
+  res1=combine(westnc,allus);
+  cout<<"Area of intersect(westnc,allus) "<<res0.area()<<endl;
+  cout<<"Area of combine(westnc,allus) "<<res1.area()<<endl;
+  tassert(res0.area()==westnc.area());
+  tassert(res1.area()==allus.area());
+  res0=intersect(westnc,lower48);
+  res1=combine(westnc,lower48);
+  cout<<"Area of intersect(westnc,lower48) "<<res0.area()<<endl;
+  cout<<"Area of combine(westnc,lower48) "<<res1.area()<<endl;
+  tassert(res0.area()==westnc.area());
+  tassert(res1.area()==lower48.area());
   for (i=0;i<10;i++)
   {
     res0.nbd=degtobin(i)+1;
