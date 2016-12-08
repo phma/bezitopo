@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* ldecimal.h - lossless decimal representation       */
+/* hnum.h - human-graspable number format             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015 Pierre Abbat.
+/* Copyright 2016 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -19,10 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
-
+#ifndef HNUM_H
+#define HNUM_H
 #include <string>
 
-std::string ldecimal(double x);
-/* Returns the shortest decimal representation necessary for
- * the double read back in to be equal to the double written.
+std::string hnum(double x);
+/* Formats the number with three significant digits and an exponent which is
+ * a multiple of 3, using a unit symbol prefix if possible.
  */
+
+#endif

@@ -57,6 +57,7 @@
 #include "closure.h"
 #include "manysum.h"
 #include "ldecimal.h"
+#include "hnum.h"
 #include "ellipsoid.h"
 #include "projection.h"
 #include "color.h"
@@ -4548,23 +4549,23 @@ void testcylinterval()
    * Lower 48 are only 1.7 Mm² and 8.1 Mm², respectively.
    */
   res0=intersect(alaska,lower48);
-  cout<<"Area of intersect(alaska,lower48) "<<res0.area()<<endl;
+  cout<<"Area of intersect(alaska,lower48) "<<hnum(res0.area())<<endl;
   tassert(res0.nbd=lower48.nbd);
   tassert(res0.sbd=alaska.sbd);
   tassert(res0.ebd=alaska.ebd);
   tassert(res0.wbd=lower48.wbd);
-  cout<<"Area of westnc "<<westnc.area()<<endl;
-  cout<<"Area of allus "<<allus.area()<<endl;
+  cout<<"Area of westnc "<<hnum(westnc.area())<<endl;
+  cout<<"Area of allus "<<hnum(allus.area())<<endl;
   res0=intersect(westnc,allus);
   res1=combine(westnc,allus);
-  cout<<"Area of intersect(westnc,allus) "<<res0.area()<<endl;
-  cout<<"Area of combine(westnc,allus) "<<res1.area()<<endl;
+  cout<<"Area of intersect(westnc,allus) "<<hnum(res0.area())<<endl;
+  cout<<"Area of combine(westnc,allus) "<<hnum(res1.area())<<endl;
   tassert(res0.area()==westnc.area());
   tassert(res1.area()==allus.area());
   res0=intersect(westnc,lower48);
   res1=combine(westnc,lower48);
-  cout<<"Area of intersect(westnc,lower48) "<<res0.area()<<endl;
-  cout<<"Area of combine(westnc,lower48) "<<res1.area()<<endl;
+  cout<<"Area of intersect(westnc,lower48) "<<hnum(res0.area())<<endl;
+  cout<<"Area of combine(westnc,lower48) "<<hnum(res1.area())<<endl;
   tassert(res0.area()==westnc.area());
   tassert(res1.area()==lower48.area());
   for (i=0;i<10;i++)
