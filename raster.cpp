@@ -25,9 +25,6 @@
 #include <cmath>
 #include <stdexcept>
 #include "raster.h"
-#ifdef CONVERTGEOID
-#include "sourcegeoid.h"
-#endif
 
 using namespace std;
 fstream rfile;
@@ -188,7 +185,8 @@ vball foldcube(int panel,double x,double y)
   return v;
 }
 
-void drawglobecube(int side,double zscale,double zmid,cubemap *source,int imagetype,string filename)
+#ifdef CONVERTGEOID
+void drawglobecube(int side,double zscale,double zmid,geoid *source,int imagetype,string filename)
 /* side is in pixels. Draws 4*side wide by 3*side high. imagetype is currently ignored.
  * source is nullptr for xyz color (zscale is ignored), else its geoquads
  * are plotted.
@@ -218,7 +216,7 @@ void drawglobecube(int side,double zscale,double zmid,cubemap *source,int imaget
 	sphloc=decodedir(v);
 	if (source)
 	{
-	  z=source->undulation(sphloc);
+	  z=source->elev(sphloc);
 	  /*if (source==1)
 	    z=avgelev(sphloc);
 	  if (source==2)
@@ -245,6 +243,7 @@ void drawglobecube(int side,double zscale,double zmid,cubemap *source,int imaget
   rclose();
   cout<<"drawglobecube: max "<<max<<" min "<<min<<endl;
 }
+#endif
 
 void drawglobemicro(int side,xy center,double size,int source,int imagetype,string filename)
 {

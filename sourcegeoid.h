@@ -23,6 +23,8 @@
  * describes some geoid file formats. These are latitude-longitude grids.
  * I don't know what formats are used for polar geoid files.
  */
+#ifndef SOURCEGEOID_H
+#define SOURCEGEOID_H
 #include <vector>
 #include <string>
 #include <array>
@@ -66,6 +68,7 @@ public:
   double elev(xyz dir);
   void setslopes();
   void resize();
+  void setundula();
   void setbound(cylinterval bound);
   void setheader(usngsheader &hdr);
   void cvtheader(usngsheader &hdr);
@@ -154,3 +157,4 @@ int quadhash(double qpoints[][16],int qsz);
 matrix autocorr(double qpoints[][16],int qsz);
 void dump256(double qpoints[][16],int qsz);
 bool overlap(smallcircle sc,const geoquad &gq);
+#endif

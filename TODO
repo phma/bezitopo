@@ -18,7 +18,7 @@ Before 0.1.1:
 •Read NGA EGM geoid files and Carlson GSF files. ✓
 •Write a geolattice to any geolattice file it can read, if the format allows representing part of the earth. ✓
 •Output a KML file depicting the outline of a geoid file.
-•Write an excerpt of a geoid file with specified center and distance.
+•Write an excerpt of a geoid file with specified center and distance. ✓
 •Draw statistical graphs of geoid conversion.
 
 Before 0.1.2:

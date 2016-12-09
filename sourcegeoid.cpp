@@ -142,6 +142,21 @@ double geolattice::elev(int lat,int lon)
   return ret;
 }
 
+void geolattice::setundula()
+{
+  int i,j;
+  latlong ll;
+  for (i=0;i<=height;i++)
+  {
+    ll.lat=bintorad(sbd)-(double)i/height*bintorad(sbd-nbd);
+    for (j=0;j<=width;j++)
+    {
+      ll.lon=bintorad(wbd)-(double)j/width*bintorad(wbd-ebd);
+      undula[(width+1)*i+j]=rint(avgelev(Sphere.geoc(ll,0))*65536);
+    }
+  }
+}
+
 double geolattice::elev(xyz dir)
 {
   return elev(dir.lati(),dir.loni());

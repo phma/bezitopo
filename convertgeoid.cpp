@@ -520,11 +520,18 @@ int main(int argc, char *argv[])
       cout<<"1 byte "<<undhisto[0]<<"; 2 bytes "<<undhisto[1]<<"; 3 bytes "<<undhisto[2]<<"; 4 bytes "<<undhisto[3]<<endl;
       if (dataArea.total()>510e12)
         test360seam();
+      delete outputgeoid.glat;
+      outputgeoid.glat=nullptr;
     }
     else
     {
       outputgeoid.glat->setbound(latticebound);
       outputgeoid.glat->setfineness(fineness);
+      outputgeoid.glat->setundula();
+      delete outputgeoid.ghdr;
+      delete outputgeoid.cmap;
+      outputgeoid.ghdr=nullptr;
+      outputgeoid.cmap=nullptr;
     }
   }
   outund("Green Hill",degtobin(35.4),degtobin(-82.05));
@@ -567,7 +574,7 @@ int main(int argc, char *argv[])
       formatlist[0].writefunc(outputgeoid,outfilename);
     else
       cerr<<"Can't write in format "<<formatlist[0].cmd<<"; it is a whole-earth-only format."<<endl;
-    drawglobecube(1024,62,-7,outputgeoid.cmap,0,"geoid.ppm");
+    drawglobecube(1024,62,-7,&outputgeoid,0,"geoid.ppm");
     cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
     correctionHist.dump();
   }
