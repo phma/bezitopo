@@ -399,8 +399,8 @@ void geolattice::setfineness(int fineness)
  * data in it will shear the data.
  */
 {
-  width=-rint((double)(wbd-ebd)/fineness);
-  height=-rint((double)(sbd-nbd)/fineness);
+  width=-rint((double)(wbd-ebd)*(double)fineness/DEG180);
+  height=-rint((double)(sbd-nbd)*(double)fineness/DEG180);
   resize();
 }
 
@@ -609,13 +609,13 @@ void readcarlsongsfheader(carlsongsfheader &hdr,istream &file)
 {
   double dnlong,dnlat;
   try
-  {
-    hdr.south=readdouble(file);
-    hdr.west=readdouble(file);
-    hdr.north=readdouble(file);
-    hdr.east=readdouble(file);
-    dnlong=readdouble(file);
-    dnlat=readdouble(file);
+  { // Note the counterintuitive order of dnlong and dnlat.
+    hdr.south=readdouble(file); // lat
+    hdr.west=readdouble(file);  // lon
+    hdr.north=readdouble(file); // lat
+    hdr.east=readdouble(file);  // lon
+    dnlong=readdouble(file);    // lon
+    dnlat=readdouble(file);     // lat
     /* The numbers of rows and columns must be integers,
      * but are written as 118.0 in gsf files.
      */
@@ -639,7 +639,7 @@ void writecarlsongsfheader(carlsongsfheader &hdr,ostream &file)
 
 int readcarlsongsf(geolattice &geo,string filename)
 /* This is a text file used by Carlson software.
- * https://update.carlsonsw.com/kbase_attach/716/Geoid Separation File Format.pdf
+ * http://web.carlsonsw.com/files/knowledgebase/kbase_attach/716/Geoid Separation File Format.pdf
  */
 {
   int i,j,ret=0;
