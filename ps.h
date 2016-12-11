@@ -20,8 +20,30 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <string>
+#include <iostream>
 #include "bezier3d.h"
 class document;
+
+class PostScript
+{
+protected:
+  std::ostream *psfile;
+  int pages;
+  bool indocument,inpage;
+  double scale; // paper size is in millimeters, but model space is in meters
+  int orientation;
+  double oldr,oldg,oldb;
+  xy paper,modelcenter;
+public:
+  PostScript();
+  ~PostScript();
+  void open(std::string psfname);
+  void prolog();
+  void startpage();
+  void endpage();
+  void trailer();
+  void close();
+};
 
 extern FILE *psfile;
 extern int orientation;

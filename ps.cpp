@@ -23,13 +23,14 @@
  * output, is in the public domain.
  */
 #include <cstdio>
-#include <iostream>
+#include <fstream>
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <string>
 #include <unistd.h>
 #include "config.h"
+#include "ps.h"
 #include "point.h"
 #include "tin.h"
 #include "pointlist.h"
@@ -44,6 +45,85 @@ int orientation=0;
 double oldr=-1,oldg=-2,oldb=-3;
 xy paper(210,297),modelcenter;
 char rscales[]={10,12,15,20,25,30,40,50,60,80};
+const double PSPoint=25.4/72;
+
+PostScript::PostScript()
+{
+  oldr=oldg=oldb=NAN;
+  paper=xy(210,297);
+  scale=1;
+  orientation=pages=0;
+  indocument=inpage=false;
+  psfile=nullptr;
+}
+
+PostScript::~PostScript()
+{
+  if (psfile)
+    close();
+}
+
+void PostScript::open(string psfname)
+{
+  if (psfile)
+    close();
+  psfile=new ofstream(psfname);
+}
+
+void PostScript::prolog()
+{
+  if (psfile && !indocument)
+  {
+    *psfile<<"%!PS-Adobe-3.0\n%%BeginProlog\n%%%%Pages: (atend)"<<endl;
+    *psfile<<"%%BoundingBox: 0 0 "<<rint(paper.getx()/PSPoint)<<' '<<rint(paper.gety()/PSPoint)<<endl;
+    *psfile<<"\n/. % ( x y )\n{ newpath 0.1 0 360 arc fill } bind def\n\n";
+    *psfile<<"/- % ( x1 y1 x2 y2 )\n\n{ newpath moveto lineto stroke } bind def\n\n";
+    *psfile<<"/mmscale { 720 254 div dup scale } bind def\n";
+    *psfile<<"%%EndProlog"<<endl;
+    indocument=true;
+    pages=0;
+  }
+}
+
+void PostScript::startpage()
+{
+  if (psfile && indocument && !inpage)
+  {
+    ++pages;
+    *psfile<<"%%Page: "<<pages<<' '<<pages<<"\ngsave mmscale 0.1 setlinewidth\n";
+    *psfile<<"/Helvetica findfont 3 scalefont setfont"<<endl;
+    oldr=oldg=oldb=NAN;
+    inpage=true;
+  }
+}
+
+void PostScript::endpage()
+{
+  if (psfile && indocument && inpage)
+  {
+    *psfile<<"grestore showpage"<<endl;
+    inpage=false;
+  }
+}
+
+void PostScript::trailer()
+{
+  if (inpage)
+    endpage();
+  if (psfile && indocument)
+  {
+    *psfile<<"%%BeginTrailer\n%%Pages: "<<pages<<"\n%%EndTrailer"<<endl;
+    indocument=false;
+  }
+}
+
+void PostScript::close()
+{
+  if (indocument)
+    trailer();
+  delete(psfile);
+  psfile=nullptr;
+}
 
 void setscale(double minx,double miny,double maxx,double maxy,int ori)
 /* To compute minx etc. using dirbound on e.g. a pointlist pl:
