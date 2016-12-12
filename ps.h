@@ -34,6 +34,7 @@ protected:
   int orientation;
   double oldr,oldg,oldb;
   xy paper,modelcenter;
+  document *doc;
 public:
   PostScript();
   ~PostScript();
@@ -43,6 +44,14 @@ public:
   void endpage();
   void trailer();
   void close();
+  void setDoc(document &docu);
+  double xscale(double x);
+  double yscale(double y);
+  void setcolor(double r,double g,double b);
+  void setscale(double minx,double miny,double maxx,double maxy,int ori=0);
+  void dot(xy pnt,std::string comment="");
+  void circle(xy pnt,double radius);
+  void line(edge lin,int num,bool colorfibaster,bool directed=false);
 };
 
 extern FILE *psfile;

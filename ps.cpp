@@ -28,6 +28,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <string>
+#include <cassert>
+#include <iomanip>
 #include <unistd.h>
 #include "config.h"
 #include "ps.h"
@@ -46,6 +48,17 @@ double oldr=-1,oldg=-2,oldb=-3;
 xy paper(210,297),modelcenter;
 char rscales[]={10,12,15,20,25,30,40,50,60,80};
 const double PSPoint=25.4/72;
+
+int fibmod3(int n)
+{
+  int i,a,b;
+  for (i=a=0,b=1;a<n;i++)
+  {
+    b+=a;
+    a=b-a;
+  }
+  return (a==n)?(i%3):-1;
+}
 
 PostScript::PostScript()
 {
@@ -123,6 +136,119 @@ void PostScript::close()
     trailer();
   delete(psfile);
   psfile=nullptr;
+}
+
+void PostScript::setDoc(document &docu)
+{
+  doc=&docu;
+}
+
+double PostScript::xscale(double x)
+{
+  return scale*(x-modelcenter.east())+paper.getx()/2;
+}
+
+double PostScript::yscale(double y)
+{
+  return scale*(y-modelcenter.north())+paper.gety()/2;
+}
+
+void PostScript::setcolor(double r,double g,double b)
+{
+  if (r!=oldr || g!=oldg || b!=oldb)
+  {
+    *psfile<<r<<' '<<g<<' '<<b<<" setrgbcolor"<<endl;
+    oldr=r;
+    oldg=g;
+    oldb=b;
+  }
+}
+
+void PostScript::setscale(double minx,double miny,double maxx,double maxy,int ori)
+/* To compute minx etc. using dirbound on e.g. a pointlist pl:
+ * minx=pl.dirbound(-ori);
+ * miny=pl.dirbound(DEG90-ori);
+ * maxx=-pl.dirbound(DEG180-ori);
+ * maxy=-pl.dirbound(DEG270-ori);
+ */
+{
+  double xsize,ysize;
+  int i;
+  orientation=ori;
+  modelcenter=xy(minx+maxx,miny+maxy)/2;
+  xsize=fabs(minx-maxx);
+  ysize=fabs(miny-maxy);
+  for (scale=1;scale*xsize/10<paper.east() && scale*ysize/10<paper.north();scale*=10);
+  for (;scale*xsize/80>paper.east()*0.9 || scale*ysize/80>paper.north()*0.9;scale/=10);
+  for (i=0;i<9 && (scale*xsize/rscales[i]>paper.east()*0.9 || scale*ysize/rscales[i]>paper.north()*0.9);i++);
+  scale/=rscales[i];
+  *psfile<<"% minx="<<minx<<" miny="<<miny<<" maxx="<<maxx<<" maxy="<<maxy<<" scale="<<scale<<endl;
+}
+
+void PostScript::dot(xy pnt,string comment)
+{
+  assert(psfile);
+  pnt=turn(pnt,orientation);
+  if (isfinite(pnt.east()) && isfinite(pnt.north()))
+  {
+    *psfile<<fixed<<setprecision(2)<<xscale(pnt.east())<<' '<<yscale(pnt.north())<<" .";
+    if (comment.length())
+      *psfile<<" %"<<comment;
+    *psfile<<endl;
+  }
+}
+
+void PostScript::circle(xy pnt,double radius)
+{
+  pnt=turn(pnt,orientation);
+  *psfile<<fixed<<setprecision(2)<<xscale(pnt.east())<<yscale(pnt.north())
+  <<" newpath "<<scale*radius<<" 0 360 arc fill %"<<radius*radius<<endl;
+}
+
+void PostScript::line(edge lin,int num,bool colorfibaster,bool directed)
+/* Used in bezitest to show the 2D TIN before the 3D triangles are constructed on it.
+ * In bezitopo, use spline(lin.getsegment().approx3d(x)) to show it in 3D.
+ */
+{
+  xy mid,disp,base,ab1,ab2,a,b;
+  char *rgb;
+  a=*lin.a;
+  b=*lin.b;
+  a=turn(a,orientation);
+  b=turn(b,orientation);
+  if (lin.delaunay())
+    if (colorfibaster)
+      switch (fibmod3(abs(doc->pl[1].revpoints[lin.a]-doc->pl[1].revpoints[lin.b])))
+      {
+	case -1:
+	  setcolor(0.3,0.3,0.3);
+	  break;
+	case 0:
+	  setcolor(1,0.3,0.3);
+	  break;
+	case 1:
+	  setcolor(0,1,0);
+	  break;
+	case 2:
+	  setcolor(0.3,0.3,1);
+	  break;
+      }
+    else
+      setcolor(0,0,1);
+  else
+    setcolor(0,0,0);
+  if (directed)
+  {
+    disp=b-a;
+    base=xy(disp.north()/40,disp.east()/-40);
+    ab1=a+base;
+    ab2=a-base;
+    *psfile<<"newpath "<<xscale(b.east())<<' '<<yscale(b.north())<<" moveto "<<xscale(ab1.east())<<' '<<yscale(ab1.north())<<" lineto "<<xscale(ab2.east())<<' '<<yscale(ab2.north())<<" lineto closepath fill"<<endl;
+  }
+  else
+    *psfile<<xscale(a.east())<<' '<<yscale(a.north())<<' '<<xscale(b.east())<<' '<<yscale(b.north())<<" -"<<endl;
+  mid=(a+b)/2;
+  //fprintf(psfile,"%7.3f %7.3f moveto (%d) show\n",xscale(mid.east()),yscale(mid.north()),num);
 }
 
 void setscale(double minx,double miny,double maxx,double maxy,int ori)
@@ -246,17 +372,6 @@ void circle(xy pnt,double radius)
   pnt=turn(pnt,orientation);
   fprintf(psfile,"%7.3f %7.3f newpath %.3f 0 360 arc fill %%%f\n",
          xscale(pnt.east()),yscale(pnt.north()),scale*radius,radius*radius);
-}
-
-int fibmod3(int n)
-{
-  int i,a,b;
-  for (i=a=0,b=1;a<n;i++)
-  {
-    b+=a;
-    a=b-a;
-  }
-  return (a==n)?(i%3):-1;
 }
 
 void line(document &doc,edge lin,int num,bool colorfibaster,bool directed)
