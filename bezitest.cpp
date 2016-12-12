@@ -876,6 +876,7 @@ void testbreak0()
   int rotation=DEG90,i;
   criteria crit;
   criterion crit1;
+  PostScript ps;
   doc.pl[0].clear();
   doc.copytopopoints(crit);
   tassert(doc.pl[1].points.size()==0);
@@ -1004,28 +1005,29 @@ void testbreak0()
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
-  psopen("break0.ps");
-  psprolog();
-  startpage();
-  setscale(leftedge,bottomedge,rightedge,topedge,rotation);
+  ps.open("break0.ps");
+  ps.setDoc(doc);
+  ps.prolog();
+  ps.startpage();
+  ps.setscale(leftedge,bottomedge,rightedge,topedge,rotation);
   conterval=0.2;
   roughcontours(doc.pl[1],conterval);
   smoothcontours(doc.pl[1],conterval,false);
-  setcolor(0,0,0);
+  ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
-    spline(doc.pl[1].contours[i].approx3d(1));
+    ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
-  endpage();
-  startpage();
-  setscale(leftedge,bottomedge,rightedge,topedge,rotation);
+  ps.endpage();
+  ps.startpage();
+  ps.setscale(leftedge,bottomedge,rightedge,topedge,rotation);
   for (i=0;i<doc.pl[1].edges.size();i++)
   {
-    line(doc,doc.pl[1].edges[i],i,false);
+    ps.line(doc.pl[1].edges[i],i,false);
   }
-  endpage();
-  pstrailer();
-  psclose();
+  ps.endpage();
+  ps.trailer();
+  ps.close();
 }
 
 void testrelprime()

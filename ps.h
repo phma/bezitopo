@@ -52,6 +52,8 @@ public:
   void dot(xy pnt,std::string comment="");
   void circle(xy pnt,double radius);
   void line(edge lin,int num,bool colorfibaster,bool directed=false);
+  void line2p(xy pnt1,xy pnt2);
+  void spline(bezier3d spl);
 };
 
 extern FILE *psfile;

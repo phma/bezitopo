@@ -157,7 +157,7 @@ void PostScript::setcolor(double r,double g,double b)
 {
   if (r!=oldr || g!=oldg || b!=oldb)
   {
-    *psfile<<r<<' '<<g<<' '<<b<<" setrgbcolor"<<endl;
+    *psfile<<fixed<<setprecision(3)<<r<<' '<<g<<' '<<b<<" setrgbcolor"<<endl;
     oldr=r;
     oldg=g;
     oldb=b;
@@ -249,6 +249,38 @@ void PostScript::line(edge lin,int num,bool colorfibaster,bool directed)
     *psfile<<xscale(a.east())<<' '<<yscale(a.north())<<' '<<xscale(b.east())<<' '<<yscale(b.north())<<" -"<<endl;
   mid=(a+b)/2;
   //fprintf(psfile,"%7.3f %7.3f moveto (%d) show\n",xscale(mid.east()),yscale(mid.north()),num);
+}
+
+void PostScript::line2p(xy pnt1,xy pnt2)
+{
+  pnt1=turn(pnt1,orientation);
+  pnt2=turn(pnt2,orientation);
+  if (isfinite(pnt1.east()) && isfinite(pnt1.north()) && isfinite(pnt2.east()) && isfinite(pnt2.north()))
+    *psfile<<fixed<<setprecision(2)<<xscale(pnt1.east())<<' '<<yscale(pnt1.north())
+    <<' '<<xscale(pnt2.east())<<' '<<yscale(pnt2.north())<<" -"<<endl;
+}
+
+void PostScript::spline(bezier3d spl)
+{
+  int i,j,n;
+  vector<xyz> seg;
+  xy pnt;
+  n=spl.size();
+  pnt=turn(xy(spl[0][0]),orientation);
+  *psfile<<fixed<<setprecision(2)<<xscale(pnt.east())<<' '<<yscale(pnt.north())<<" moveto\n";
+  for (i=0;i<n;i++)
+  {
+    seg=spl[i];
+    for (j=1;j<4;j++)
+    {
+      pnt=turn(xy(seg[j]),orientation);
+      if (pnt.isnan())
+	cerr<<"NaN point"<<endl;
+      *psfile<<xscale(pnt.east())<<' '<<yscale(pnt.north())<<' ';
+    }
+    *psfile<<"curveto\n";
+  }
+  *psfile<<"stroke"<<endl;
 }
 
 void setscale(double minx,double miny,double maxx,double maxy,int ori)
@@ -450,7 +482,7 @@ void spline(bezier3d spl)
   }
   fprintf(psfile,"stroke\n");
 }
-  
+
 void pswrite(xy pnt,string text)
 {
   pnt=turn(pnt,orientation);
