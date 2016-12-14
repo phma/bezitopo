@@ -2171,6 +2171,7 @@ void testmakegrad()
   for (corr=0;corr<=1;corr+=0.1)
   {
     ps.startpage();
+    ps.setscale(-25,-25,25,25);
     doc.pl[1].makegrad(corr);
     checkgrad(avgerror,maxerror);
     printf("testmakegrad: corr=%f avgerror=%f maxerror=%f\n",corr,avgerror,maxerror);
