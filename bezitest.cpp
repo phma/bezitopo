@@ -2120,16 +2120,16 @@ void testqindex()
   ps.close();
 }
 
-void drawgrad(double scale)
+void drawgrad(PostScript &ps,double scale)
 {
   ptlist::iterator i;
   for (i=doc.pl[1].points.begin();i!=doc.pl[1].points.end();i++)
   {
-    setcolor(0,1,0);
-    line2p(i->second,xy(i->second)+testsurfacegrad(i->second)*scale);
-    setcolor(0,0,0);
-    dot(i->second);
-    line2p(i->second,xy(i->second)+i->second.gradient*scale);
+    ps.setcolor(0,1,0);
+    ps.line2p(i->second,xy(i->second)+testsurfacegrad(i->second)*scale);
+    ps.setcolor(0,0,0);
+    ps.dot(i->second);
+    ps.line2p(i->second,xy(i->second)+i->second.gradient*scale);
   }
 }
 
@@ -2153,6 +2153,7 @@ void testmakegrad()
 {
   double avgerror,maxerror,corr;
   xy grad63,grad63half;
+  PostScript ps;
   doc.pl[1].clear();
   setsurface(HYPAR);
   aster(doc,100);
@@ -2165,19 +2166,19 @@ void testmakegrad()
   printf("grad63 %f %f grad63half %f %f\n",grad63.east(),grad63.north(),grad63half.east(),grad63half.north());
   tassert(grad63==grad63half*2);
   enlarge(doc,0.5);
-  psopen("gradient.ps");
-  psprolog();
+  ps.open("gradient.ps");
+  ps.prolog();
   for (corr=0;corr<=1;corr+=0.1)
   {
-    startpage();
+    ps.startpage();
     doc.pl[1].makegrad(corr);
     checkgrad(avgerror,maxerror);
     printf("testmakegrad: corr=%f avgerror=%f maxerror=%f\n",corr,avgerror,maxerror);
-    drawgrad(3);
-    endpage();
+    drawgrad(ps,3);
+    ps.endpage();
   }
-  pstrailer();
-  psclose();
+  ps.trailer();
+  ps.close();
 }
 
 void testrasterdraw()
