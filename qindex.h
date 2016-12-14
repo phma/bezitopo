@@ -24,6 +24,7 @@
 #define QINDEX_H
 #include <vector>
 #include "bezier.h"
+#include "ps.h"
 #include "point.h"
 class qindex
 {
@@ -40,7 +41,7 @@ public:
   void sizefit(std::vector<xy> pnts);
   void split(std::vector<xy> pnts);
   void clear();
-  void draw(bool root=true);
+  void draw(PostScript &ps,bool root=true);
   std::vector<qindex*> traverse(int dir=0);
   void settri(triangle *starttri);
   qindex();

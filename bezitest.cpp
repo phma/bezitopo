@@ -1441,8 +1441,9 @@ void testspiralarc()
   xy ctr;
   spiralarc a(beg,end),b(beg,0.001,0.001,end),c,arch[10];
   bezier3d a3d;
-  psopen("spiralarc.ps");
-  psprolog();
+  PostScript ps;
+  ps.open("spiralarc.ps");
+  ps.prolog();
   tassert(fabs(a.length()-500)<0.001);
   tassert(a.chordlength()==500);
   cout<<b.length()<<' '<<b.curvature(200)<<endl;
@@ -1499,8 +1500,8 @@ void testspiralarc()
   }
   cout<<"setcurvature: "<<nfail<<" failures"<<endl;
   tassert(nfail>656 && nfail<1066);
-  startpage();
-  setscale(-10,-10,10,10,degtobin(0));
+  ps.startpage();
+  ps.setscale(-10,-10,10,10,degtobin(0));
   // Make something that resembles an Archimedean spiral
   //arch[0]=spiralarc(xyz(-0.5,0,0),2.,2/3.,xyz(1.5,0,0));
   arch[0]=spiralarc(xyz(-0.5,0,0),-DEG90,2.,2/3.,M_PI,0);
@@ -1508,20 +1509,20 @@ void testspiralarc()
     arch[i]=spiralarc(arch[i-1].getend(),arch[i-1].endbearing(),1/(i+0.5),1/(i+1.5),M_PI*(i+1),0);
   for (i=0;i<10;i++)
     a3d+=arch[i].approx3d(0.01);
-  spline(a3d);
+  ps.spline(a3d);
   for (i=0;i<-10;i++)
   {
     if (i&1)
-      setcolor(1,0,0);
+      ps.setcolor(1,0,0);
     else
-      setcolor(0,0,1);
-    spline(arch[i].approx3d(0.01));
+      ps.setcolor(0,0,1);
+    ps.spline(arch[i].approx3d(0.01));
   }
   cout<<"Archimedes-like spiral ended on "<<arch[9].getend().getx()<<','<<arch[9].getend().gety()<<endl;
   tassert(dist(arch[9].getend(),xy(-0.752,-10.588))<0.001);
-  endpage();
-  pstrailer();
-  psclose();
+  ps.endpage();
+  ps.trailer();
+  ps.close();
 }
 
 void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong,string fname,int scale=1)
@@ -1531,6 +1532,7 @@ void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong,string
   double apow2,bpow2,ainc,binc;
   double minx=INFINITY,miny=INFINITY,maxx=-INFINITY,maxy=-INFINITY;
   vector<xy> apoints,bpoints;
+  PostScript ps;
   fname+=".ps";
   frexp(aalong,&i);
   apow2=ldexp(0.5,i);
@@ -1574,43 +1576,43 @@ void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong,string
     if (point.gety()>maxy)
       maxy=point.gety();
   }
-  psopen(fname.c_str());
-  psprolog();
-  startpage();
-  setscale(minx,miny,maxx,maxy,0);
-  setcolor(1,0,0);
+  ps.open(fname);
+  ps.prolog();
+  ps.startpage();
+  ps.setscale(minx,miny,maxx,maxy,0);
+  ps.setcolor(1,0,0);
   for (i=0;i<apoints.size();i++)
-    dot(apoints[i]);
-  setcolor(0,0,1);
+    ps.dot(apoints[i]);
+  ps.setcolor(0,0,1);
   for (i=0;i<bpoints.size();i++)
-    dot(bpoints[i]);
-  endpage();
-  startpage();
-  setscale(minx,miny,maxx,maxy,0);
-  setcolor(0,0,1);
+    ps.dot(bpoints[i]);
+  ps.endpage();
+  ps.startpage();
+  ps.setscale(minx,miny,maxx,maxy,0);
+  ps.setcolor(0,0,1);
   for (i=0;i<apoints.size();i++)
   {
     if (i==apoints.size()/2)
-      setcolor(0,0.6,0);
-    dot(apoints[i]);
+      ps.setcolor(0,0.6,0);
+    ps.dot(apoints[i]);
     if (i==apoints.size()/2)
-      setcolor(0,0,1);
+      ps.setcolor(0,0,1);
   }
-  endpage();
-  startpage();
-  setscale(minx,miny,maxx,maxy,0);
-  setcolor(0,0,1);
+  ps.endpage();
+  ps.startpage();
+  ps.setscale(minx,miny,maxx,maxy,0);
+  ps.setcolor(0,0,1);
   for (i=0;i<bpoints.size();i++)
   {
     if (i==bpoints.size()/2)
-      setcolor(0,0.6,0);
-    dot(bpoints[i]);
+      ps.setcolor(0,0.6,0);
+    ps.dot(bpoints[i]);
     if (i==bpoints.size()/2)
-      setcolor(0,0,1);
+      ps.setcolor(0,0,1);
   }
-  endpage();
-  pstrailer();
-  psclose();
+  ps.endpage();
+  ps.trailer();
+  ps.close();
 }
 
 void testcogospiral1(spiralarc a,double a0,double a1,spiralarc b,double b0,double b1,bool extend,xy inter,string fname)
@@ -1700,19 +1702,20 @@ void testclosest()
   int i,j,ang;
   bool showinaccurate=false;
   double close,close15,minquick,d,d15;
+  PostScript ps;
   doc.pl[1].clear();
   aster(doc,1000);
-  psopen("closest.ps");
-  psprolog();
+  ps.open("closest.ps");
+  ps.prolog();
   for (i=0;i<5;i++)
   {
     a.setdelta(d1[i],d2[i]);
-    startpage();
+    ps.startpage();
     minquick=INFINITY;
     /* minquick is the minimum distance that it calculates quickly and inaccurately.
      * It should be greater than closesofar, which is 15.
      */
-    setscale(-32,-32,32,32,0);
+    ps.setscale(-32,-32,32,32,0);
     cout<<"Curvature*length at start "<<ldecimal(a.curvature(0)*a.length())<<", at end "<<ldecimal(a.curvature(a.length())*a.length())<<endl;
     for (j=1;j<=1000;j++)
     {
@@ -1733,20 +1736,20 @@ void testclosest()
 	ang=(ang&(DEG180-1))-DEG90;
 	if (abs(ang)>10)
 	  if (close==0 || close==a.length())
-	    setcolor(0,0,1);
+	    ps.setcolor(0,0,1);
 	  else
-	    setcolor(1,0,0);
+	    ps.setcolor(1,0,0);
 	else
-	  setcolor(0,0,0);
-	line2p(doc.pl[1].points[j],a.station(close));
+	  ps.setcolor(0,0,0);
+	ps.line2p(doc.pl[1].points[j],a.station(close));
       }
     }
-    endpage();
+    ps.endpage();
     cout<<"Minimum distance that is calculated inaccurately is "<<minquick<<endl;
     tassert(minquick>15);
   }
-  pstrailer();
-  psclose();
+  ps.trailer();
+  ps.close();
 }
 
 void testspiral()
@@ -1992,6 +1995,7 @@ void testqindex()
   double pathlength;
   vector<qindex*> hilbertpath;
   xy offset(16,8),bone1(3,4),bone2(-3,-4),bone3(49,-64);
+  PostScript ps;
   doc.pl[1].clear();
   plist.clear();
   doc.pl[1].addpoint(1,point(0.3,0.3,0,""));
@@ -2009,16 +2013,17 @@ void testqindex()
   qinx.clear();
   doc.pl[1].clear();
   plist.clear();
-  psopen("qindex.ps");
-  psprolog();
-  startpage();
-  setscale(1,-7,31,23);
+  ps.open("qindex.ps");
+  ps.prolog();
+  ps.setDoc(doc);
+  ps.startpage();
+  ps.setscale(1,-7,31,23);
   aster(doc,100);
   doc.pl[1].maketin();
   enlarge(doc,pow(2,(rng.usrandom()-32767.5)/65536));
   for (i=0;i<100;i++)
   {
-    dot(doc.pl[1].points[i+1]+offset);
+    ps.dot(doc.pl[1].points[i+1]+offset);
     plist.push_back(doc.pl[1].points[i+1]+offset);
   }
   qinx.sizefit(plist);
@@ -2029,50 +2034,50 @@ void testqindex()
   qs++;
   printf("%d leaves\n",qs);
   tassert(qs>=79 && qs<=133);
-  qinx.draw();
-  endpage();
-  startpage();
+  qinx.draw(ps);
+  ps.endpage();
+  ps.startpage();
   hilbertpath=qinx.traverse();
   tassert(hilbertpath.size()==qs);
-  setscale(1,-7,31,23);
-  qinx.draw();
-  setcolor(0,0,1);
+  ps.setscale(1,-7,31,23);
+  qinx.draw(ps);
+  ps.setcolor(0,0,1);
   for (i=1,pathlength=0;i<hilbertpath.size();i++)
   {
-    line2p(hilbertpath[i-1]->middle(),hilbertpath[i]->middle());
+    ps.line2p(hilbertpath[i-1]->middle(),hilbertpath[i]->middle());
     pathlength+=dist(hilbertpath[i-1]->middle(),hilbertpath[i]->middle());
   }
   printf("pathlength %f\n",pathlength);
   tassert(pathlength>100 && pathlength<400);
-  endpage();
-  startpage();
-  setscale(-15,-15,15,15);
+  ps.endpage();
+  ps.startpage();
+  ps.setscale(-15,-15,15,15);
   doc.pl[1].maketin();
   doc.pl[1].maketriangles();
   for (i=ntri=0;i<doc.pl[1].edges.size();i++)
   {
     ntri+=doc.pl[1].edges[i].tria!=NULL;
     ntri+=doc.pl[1].edges[i].trib!=NULL;
-    line(doc,doc.pl[1].edges[i],i,false,true);
-    setcolor(0.6,0.4,0);
+    ps.line(doc.pl[1].edges[i],i,false,true);
+    ps.setcolor(0.6,0.4,0);
     if (doc.pl[1].edges[i].tria)
-      line2p(doc.pl[1].edges[i].midpoint(),doc.pl[1].edges[i].tria->centroid());
-    setcolor(0,0.4,0.6);
+      ps.line2p(doc.pl[1].edges[i].midpoint(),doc.pl[1].edges[i].tria->centroid());
+    ps.setcolor(0,0.4,0.6);
     if (doc.pl[1].edges[i].trib)
-      line2p(doc.pl[1].edges[i].midpoint(),doc.pl[1].edges[i].trib->centroid());
+      ps.line2p(doc.pl[1].edges[i].midpoint(),doc.pl[1].edges[i].trib->centroid());
   }
   printf("%d edges ntri=%d\n",i,ntri);
   tassert(ntri>i/2);
-  setcolor(1,0,0);
+  ps.setcolor(1,0,0);
   for (i=0;i<doc.pl[1].triangles.size();i++)
   {
     tassert(doc.pl[1].triangles[i].area()>0);
     //printf("tri %d area %f\n",i,doc.pl[1].triangles[i].area());
-    dot(doc.pl[1].triangles[i].centroid());
+    ps.dot(doc.pl[1].triangles[i].centroid());
   }
   printf("%d triangles\n",i);
   tassert(ntri==i*3); // ntri is the number of sides of edges which are linked to a triangle
-  endpage();
+  ps.endpage();
   ptri=&doc.pl[1].triangles[0];
   ptri=ptri->findt(bone1);
   tassert(ptri->in(bone1));
@@ -2082,27 +2087,27 @@ void testqindex()
   tassert(!ptri->in(bone1));
   tassert(ptri->findt(bone3,true));
   tassert(!ptri->findt(bone3,false));
-  startpage();
-  setscale(-15,-15,15,15);
+  ps.startpage();
+  ps.setscale(-15,-15,15,15);
   plist.clear();
   for (i=0;i<100;i++)
     plist.push_back(doc.pl[1].points[i+1]);
   qinx.sizefit(plist);
   qinx.split(plist);
-  qinx.draw();
+  qinx.draw(ps);
   qinx.settri(&doc.pl[1].triangles[0]);
   for (i=ntri=0;i<doc.pl[1].edges.size();i++)
-    line(doc,doc.pl[1].edges[i],i,false);
-  setcolor(1,0,0);
+    ps.line(doc.pl[1].edges[i],i,false);
+  ps.setcolor(1,0,0);
   hilbertpath=qinx.traverse();
   for (i=pathlength=0;i<hilbertpath.size();i++)
   {
-    line2p(hilbertpath[i]->tri->centroid(),hilbertpath[i]->middle());
+    ps.line2p(hilbertpath[i]->tri->centroid(),hilbertpath[i]->middle());
     pathlength+=dist(hilbertpath[i]->tri->centroid(),hilbertpath[i]->middle());
   }
   printf("settri: pathlength=%f\n",pathlength);
   tassert(pathlength>50 && pathlength<250);
-  endpage();
+  ps.endpage();
   ptri=qinx.findt(bone1);
   tassert(ptri->in(bone1));
   tassert(!ptri->in(bone2));
@@ -2111,8 +2116,8 @@ void testqindex()
   tassert(!ptri->in(bone1));
   tassert(qinx.findt(bone3,true));
   tassert(!qinx.findt(bone3,false));
-  pstrailer();
-  psclose();
+  ps.trailer();
+  ps.close();
 }
 
 void drawgrad(double scale)

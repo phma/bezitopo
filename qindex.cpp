@@ -170,22 +170,22 @@ void qindex::clear()
     }
 }
 
-void qindex::draw(bool root)
+void qindex::draw(PostScript &ps,bool root)
 {
   int i;
   if (root) // if this is the root of the tree, draw its border
   {
-    line2p(xy(x,y),xy(x+side,y));
-    line2p(xy(x+side,y),xy(x+side,y+side));
-    line2p(xy(x+side,y+side),xy(x,y+side));
-    line2p(xy(x,y+side),xy(x,y));
+    ps.line2p(xy(x,y),xy(x+side,y));
+    ps.line2p(xy(x+side,y),xy(x+side,y+side));
+    ps.line2p(xy(x+side,y+side),xy(x,y+side));
+    ps.line2p(xy(x,y+side),xy(x,y));
   }
   if (sub[3])
   {
     for (i=0;i<4;i++)
-      sub[i]->draw(false);
-    line2p(xy(x,y+side/2),xy(x+side,y+side/2));
-    line2p(xy(x+side/2,y),xy(x+side/2,y+side));
+      sub[i]->draw(ps,false);
+    ps.line2p(xy(x,y+side/2),xy(x+side,y+side/2));
+    ps.line2p(xy(x+side/2,y),xy(x+side/2,y+side));
   }
 }
 

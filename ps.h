@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef PS_H
+#define PS_H
 #include <string>
 #include <iostream>
 #include "bezier3d.h"
@@ -74,3 +76,4 @@ void setcolor(double r,double g,double b);
 void setscale(double minx,double miny,double maxx,double maxy,int ori=0);
 void pswrite(xy pnt,std::string text);
 void pscomment(string text);
+#endif
