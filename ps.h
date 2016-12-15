@@ -56,6 +56,7 @@ public:
   void line(edge lin,int num,bool colorfibaster,bool directed=false);
   void line2p(xy pnt1,xy pnt2);
   void spline(bezier3d spl);
+  void write(xy pnt,std::string text);
 };
 
 extern FILE *psfile;

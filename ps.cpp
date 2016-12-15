@@ -283,6 +283,13 @@ void PostScript::spline(bezier3d spl)
   *psfile<<"stroke"<<endl;
 }
 
+void PostScript::write(xy pnt,string text)
+{
+  pnt=turn(pnt,orientation);
+  *psfile<<fixed<<setprecision(2)<<xscale(pnt.east())<<' '<<yscale(pnt.north())
+  <<" moveto ("<<text<<") show"<<endl;
+}
+
 void setscale(double minx,double miny,double maxx,double maxy,int ori)
 /* To compute minx etc. using dirbound on e.g. a pointlist pl:
  * minx=pl.dirbound(-ori);

@@ -1763,12 +1763,13 @@ void testspiral()
   vector<int> sbearings;
   bezier3d a3d;
   spiralarc sarc;
+  PostScript ps;
   a=cornu(0);
   tassert(a==xy(0,0));
-  psopen("spiral.ps");
-  psprolog();
-  startpage();
-  setscale(-1,-1,1,1,degtobin(0));
+  ps.open("spiral.ps");
+  ps.prolog();
+  ps.startpage();
+  ps.setscale(-1,-1,1,1,degtobin(0));
   //widen(10);
   for (i=-120;i<121;i++)
   {
@@ -1776,11 +1777,11 @@ void testspiral()
     if (i*i==14400)
     {
       limitpoint=b;
-      dot(b);
+      ps.dot(b);
     }
     else
       if (i>-119)
-	line2p(c,b);
+	ps.line2p(c,b);
     //printf("spiral %f %f,%f %f\n",t,b.east(),b.north(),1/sqr(dist(b,limitpoint)));
     if (i>=0)
       spoints.push_back(b);
@@ -1819,23 +1820,23 @@ void testspiral()
     lastbearing=bearing;
     bearing=dir(a,b);
   }
-  setcolor(0,0,1);
-  line2p(a,b);
-  endpage();
+  ps.setcolor(0,0,1);
+  ps.line2p(a,b);
+  ps.endpage();
   //b=cornu(1,1,1);
-  startpage();
+  ps.startpage();
   for (j=-3;j<=3;j++)
   {
     switch ((j+99)%3)
     {
       case 0:
-	setcolor(1,0,0);
+	ps.setcolor(1,0,0);
 	break;
       case 1:
-	setcolor(0,0.4,0);
+	ps.setcolor(0,0.4,0);
 	break;
       case 2:
-	setcolor(0,0,1);
+	ps.setcolor(0,0,1);
 	break;
     }
     for (i=-20;i<21;i++)
@@ -1843,7 +1844,7 @@ void testspiral()
       b=cornu(t=i/20.,2*j,2);
       if (i>-20)
       {
-	line2p(c,b);
+	ps.line2p(c,b);
 	tassert(dist(c,b)>0.049 && dist(c,b)<=0.05);
 	//cout<<dist(c,b)<<' ';
       }
@@ -1851,8 +1852,8 @@ void testspiral()
     }
     //cout<<endl;
   }
-  endpage();
-  //startpage();
+  ps.endpage();
+  //ps.startpage();
   /* Compare cornu(t,curvature,clothance) with cornu(t).
    * The code would draw a set of zero-length lines along a spiral.
    * As these would result in a blank page, it's commented out.
@@ -1868,15 +1869,15 @@ void testspiral()
     c=cornu(i/20.+sqrt(M_PI*2))-a;
     //cout<<i<<' '<<dist(b,c)<<endl;
     tassert(dist(b,c)<1e-12); // it's less than 1.1e-15 on 64-bit
-    //line2p(b,c);
+    //ps.line2p(b,c);
     b=cornu(i/20.,1,0);
     c=xy(0,1);
     //cout<<i<<' '<<dist(b,c)-1<<endl;
     tassert(fabs(dist(b,c)-1)<1e-12); // it's 0 or -1.11e-16 on 64-bit
   }
-  //endpage();
-  startpage();
-  setscale(-1,-1,1,1,0);
+  //ps.endpage();
+  ps.startpage();
+  ps.setscale(-1,-1,1,1,0);
   spoints.clear();
   for (i=0;i<sizeof(segalo)/sizeof(segalo[0]);i++)
   {
@@ -1889,7 +1890,7 @@ void testspiral()
     sarc.setdelta(sbearings[i+1]-sbearings[i],sbearings[i+1]+sbearings[i]-2*dir(spoints[i],spoints[i+1]));
     a3d+=sarc.approx3d(0.01);
   }
-  spline(a3d);
+  ps.spline(a3d);
   for (bearing=i=0,lastbearing=1;i<100 && bearing!=lastbearing;i++)
   {
     t=bintorad(bearing);
@@ -1898,13 +1899,13 @@ void testspiral()
     lastbearing=bearing;
     bearing=dir(a,b);
   }
-  dot(limitpoint);
-  dot(-limitpoint);
-  setcolor(0,0,1);
-  line2p(a,b);
-  endpage();
-  pstrailer();
-  psclose();
+  ps.dot(limitpoint);
+  ps.dot(-limitpoint);
+  ps.setcolor(0,0,1);
+  ps.line2p(a,b);
+  ps.endpage();
+  ps.trailer();
+  ps.close();
   tassert(bearing==162105696);
   printf("Maximum useful t of spiral is %f\n",sqrt(t+M_PI/2));
 }
@@ -2203,6 +2204,7 @@ void test1tri(string triname,int excrits)
   vector<double> xs,lh;
   vector<xyz> slice;
   vector<xy> crits;
+  PostScript ps;
   int i,j,side,cubedir,cubedir0,ptype,size0,size1,size2;
   double vertex,offset,arearatio;
   string fname,tfname,psfname;
@@ -2216,12 +2218,13 @@ void test1tri(string triname,int excrits)
   doc.pl[1].makeqindex();
   rasterdraw(doc.pl[1],xy(5,0),30,40,30,0,1,fname);
   ofile.open(tfname.c_str(),ios_base::out);
-  psopen(psfname.c_str());
-  psprolog();
-  startpage();
-  setscale(-17,-17,17,17);
+  ps.open(psfname);
+  ps.prolog();
+  ps.startpage();
+  ps.setDoc(doc);
+  ps.setscale(-17,-17,17,17);
   for (j=0;j<doc.pl[1].edges.size();j++)
-    line(doc,doc.pl[1].edges[j],j,false);
+    ps.line(doc.pl[1].edges[j],j,false);
   //cubedir0=doc.pl[1].triangles[0].findnocubedir0();
   cubedir=doc.pl[1].triangles[0].findnocubedir();
   //if (cubedir!=cubedir0)
@@ -2238,8 +2241,8 @@ void test1tri(string triname,int excrits)
       ofile<<string(rint((vertex+1.5)*20),' ')<<'*';
     ofile<<endl;
   }
-  line2p(doc.pl[1].triangles[0].spcoord(1.5,-1.5),doc.pl[1].triangles[0].spcoord(-1.5,-1.5));
-  line2p(doc.pl[1].triangles[0].spcoord(-1.5,-1.5),doc.pl[1].triangles[0].spcoord(-1.5,1.5));
+  ps.line2p(doc.pl[1].triangles[0].spcoord(1.5,-1.5),doc.pl[1].triangles[0].spcoord(-1.5,-1.5));
+  ps.line2p(doc.pl[1].triangles[0].spcoord(-1.5,-1.5),doc.pl[1].triangles[0].spcoord(-1.5,1.5));
   for (side=0;side<2;side++)
   {
     ofile<<"Side "<<side<<endl;
@@ -2251,10 +2254,10 @@ void test1tri(string triname,int excrits)
       if (j>0)
       {
 	if (slice[j-1].elev()>slice[j].elev())
-	  setcolor(0,.7,0);
+	  ps.setcolor(0,.7,0);
 	else
-	  setcolor(1,0,1);
-	line2p(doc.pl[1].triangles[0].spcoord(slice[j-1].east(),slice[j-1].north()),
+	  ps.setcolor(1,0,1);
+	ps.line2p(doc.pl[1].triangles[0].spcoord(slice[j-1].east(),slice[j-1].north()),
 		doc.pl[1].triangles[0].spcoord(slice[j].east(),slice[j].north()));
       }
     }
@@ -2262,7 +2265,7 @@ void test1tri(string triname,int excrits)
     for (j=0;j<crits.size();j++)
     {
       ofile<<fixed<<setprecision(3)<<setw(7)<<crits[j].east()<<setw(7)<<crits[j].north()<<endl;
-      dot(crits[j]);
+      ps.dot(crits[j]);
     }
   }
   crits=doc.pl[1].triangles[0].criticalpts_axis();
@@ -2270,7 +2273,7 @@ void test1tri(string triname,int excrits)
   for (j=0;j<crits.size();j++)
   {
     ofile<<fixed<<setprecision(3)<<setw(7)<<crits[j].east()<<setw(7)<<crits[j].north()<<endl;
-    dot(crits[j]);
+    ps.dot(crits[j]);
   }
   doc.pl[1].triangles[0].findcriticalpts();
   crits=doc.pl[1].triangles[0].critpoints;
@@ -2287,7 +2290,7 @@ void test1tri(string triname,int excrits)
     doc.pl[1].edges[j].findextrema();
     for (i=0;i<2;i++)
       if (isfinite(doc.pl[1].edges[j].extrema[i]))
-	dot(doc.pl[1].edges[j].critpoint(i));
+	ps.dot(doc.pl[1].edges[j].critpoint(i));
   }
   doc.pl[1].triangles[0].subdivide();
   size0=doc.pl[1].triangles[0].subdiv.size();
@@ -2305,12 +2308,12 @@ void test1tri(string triname,int excrits)
   lh=doc.pl[1].triangles[0].lohi();
   cout<<"lohi: "<<setprecision(7)<<lh[0]<<' '<<lh[1]<<' '<<lh[2]<<' '<<lh[3]<<endl;
   for (j=0;j<doc.pl[1].triangles[0].subdiv.size();j++)
-    spline(doc.pl[1].triangles[0].subdiv[j].approx3d(1));
+    ps.spline(doc.pl[1].triangles[0].subdiv[j].approx3d(1));
   clipped=doc.pl[1].triangles[0].dirclip(xy(1,2),AT34);
-  setcolor(1,0,1);
-  spline(clipped.approx3d(1));
-  endpage();
-  psclose();
+  ps.setcolor(1,0,1);
+  ps.spline(clipped.approx3d(1));
+  ps.endpage();
+  ps.close();
   cout<<fname<<endl;
   if (crits.size()!=excrits && excrits>=0)
     cout<<crits.size()<<" critical points found, "<<excrits<<" expected"<<endl;
@@ -2776,6 +2779,7 @@ void testbezier3d()
   bezier3d a(xyz(0,0,0),xyz(1,0,0),xyz(2,3,0),xyz(3,9,27)),
   b(xyz(3,9,27),xyz(4,15,54),xyz(7,11,13),xyz(2,3,5)),c;
   xyz pt,pt1;
+  PostScript ps;
   arc0.setslope(START,-0.1);
   arc0.setslope(END,0.2);
   spiralarc0.setslope(START,-0.1);
@@ -2792,13 +2796,13 @@ void testbezier3d()
   pt1=b.station(.5);
   cout<<pt.east()<<' '<<pt.north()<<' '<<pt.elev()<<endl;
   tassert(pt==pt1);
-  psopen("bezier3d.ps");
-  psprolog();
+  ps.open("bezier3d.ps");
+  ps.prolog();
   for (curvature=-1;curvature<1.1;curvature+=0.125)
     for (clothance=-6;clothance<6.1;clothance+=(clothance>-0.76 && clothance<0.74)?0.25:0.75)
     {
-      startpage();
-      setscale(-0.2,-0.5,0.2,0.5,degtobin(90));
+      ps.startpage();
+      ps.setscale(-0.2,-0.5,0.2,0.5,degtobin(90));
       startpoint=xyz(cornu(-0.5,curvature,clothance),0);
       endpoint=xyz(cornu(0.5,curvature,clothance),0);
       startbearing=ispiralbearing(-0.5,curvature,clothance);
@@ -2809,16 +2813,16 @@ void testbezier3d()
 	spipts[i+10]=cornu(i/20.,curvature,clothance);
 	bezpts[i+10]=a.station((i+10)/20.);
       }
-      setcolor(0,0,0);
+      ps.setcolor(0,0,0);
       sprintf(buf,"cur=%5.3f clo=%5.3f",curvature,clothance);
-      pswrite(xy(0,0.2),buf);
-      setcolor(1,.5,0); // red is the spiral
+      ps.write(xy(0,0.2),buf);
+      ps.setcolor(1,.5,0); // red is the spiral
       for (i=-10;i<10;i++)
-        line2p(spipts[i+10],spipts[i+11]);
-      setcolor(0,.5,1); // blue is the Bézier I'm approximating it with
+        ps.line2p(spipts[i+10],spipts[i+11]);
+      ps.setcolor(0,.5,1); // blue is the Bézier I'm approximating it with
       for (i=-10;i<10;i++)
-        line2p(bezpts[i+10],bezpts[i+11]);
-      setcolor(0,0,0);
+        ps.line2p(bezpts[i+10],bezpts[i+11]);
+      ps.setcolor(0,0,0);
       for (totaldist=numdist=i=j=0,thispt=startpoint;i<20 && j<20;)
       {
 	lastpt=thispt;
@@ -2841,35 +2845,35 @@ void testbezier3d()
 	  else
 	    thispt=bezpts[j++];
 	}
-	line2p(lastpt,thispt);
+	ps.line2p(lastpt,thispt);
       }
       avgdist=sqrt(totaldist/numdist);
       dists[clothance*M_PI+curvature]=avgdist;
       ests[clothance*M_PI+curvature]=bez3destimate(startpoint,startbearing,1,endbearing,endpoint);
-      setcolor(0,0,0);
+      ps.setcolor(0,0,0);
       sprintf(buf,"dist=%5.7f",avgdist);
-      pswrite(xy(0,-0.2),buf);
-      endpage();
+      ps.write(xy(0,-0.2),buf);
+      ps.endpage();
       //cout<<avgdist<<endl;
     }
-  startpage();
-  setscale(-1,-1,1,1,0);
-  setcolor(0.5,0.5,1);
+  ps.startpage();
+  ps.setscale(-1,-1,1,1,0);
+  ps.setcolor(0.5,0.5,1);
   for (curvature=-1;curvature<1.1;curvature+=0.125)
     for (clothance=-6;clothance<6.1;clothance+=(clothance>-0.76 && clothance<0.74)?0.25:0.75)
-      circle(xy(curvature,clothance/6),sqrt(ests[clothance*M_PI+curvature]));
-  setcolor(0,0,0);
+      ps.circle(xy(curvature,clothance/6),sqrt(ests[clothance*M_PI+curvature]));
+  ps.setcolor(0,0,0);
   for (curvature=-1;curvature<1.1;curvature+=0.125)
     for (clothance=-6;clothance<6.1;clothance+=(clothance>-0.76 && clothance<0.74)?0.25:0.75)
     {
-      circle(xy(curvature,clothance/6),sqrt(dists[clothance*M_PI+curvature]));
+      ps.circle(xy(curvature,clothance/6),sqrt(dists[clothance*M_PI+curvature]));
       if (dists[clothance*M_PI+curvature]>ests[clothance*M_PI+curvature])
 	cout<<"estimate too small crv="<<curvature<<" clo="<<clothance<<endl;
       tassert(dists[clothance*M_PI+curvature]<=ests[clothance*M_PI+curvature]);
     }
-  endpage();
-  startpage();
-  setscale(-100,-180,100,180,degtobin(0));
+  ps.endpage();
+  ps.startpage();
+  ps.setscale(-100,-180,100,180,degtobin(0));
   for (i=-300,nclose=0;i<330;i+=60)
   {
     arc0.setdelta(degtobin(i));
@@ -2881,13 +2885,13 @@ void testbezier3d()
     pt1=c.station(c.size()/3.);
     //cout<<"distance "<<dist(pt,pt1)<<endl;
     nclose+=(dist(pt,pt1)<1);
-    spline(c);
+    ps.spline(c);
   }
-  endpage();
+  ps.endpage();
   for (i=-300,ngood=0;i<330;i+=60)
   {
-    startpage();
-    setscale(-100,-180,100,180,degtobin(0));
+    ps.startpage();
+    ps.setscale(-100,-180,100,180,degtobin(0));
     for (j=-300;j<330;j+=60)
     {
       //cout<<j<<"° delta "<<i<<"° skew"<<endl;
@@ -2900,32 +2904,32 @@ void testbezier3d()
 	// Most of these aren't close, because the splitting is not uniform, but enough are.
 	//cout<<"distance "<<dist(pt,pt1)<<endl;
 	nclose+=(dist(pt,pt1)<1);
-	spline(c);
+	ps.spline(c);
 	ngood++;
       }
     }
-    endpage();
+    ps.endpage();
   }
   cout<<ngood<<" good spirals"<<endl;
   cout<<nclose<<" with 1/3 point close"<<endl;
   tassert(ngood>=107);
   tassert(nclose>=30);
-  startpage();
-  setscale(-30,-70,30,70,DEG90);
+  ps.startpage();
+  ps.setscale(-30,-70,30,70,DEG90);
   for (i=-18,nclose=0;i<19;i+=2)
   {
     switch (i%3)
     {
       case 0:
-	setcolor(1,0,0);
+	ps.setcolor(1,0,0);
 	break;
       case 1:
       case -2:
-	setcolor(0,0.5,0);
+	ps.setcolor(0,0.5,0);
 	break;
       case -1:
       case 2:
-	setcolor(0,0,1);
+	ps.setcolor(0,0,1);
 	break;
     }
     spiralarc0.setcurvature(i/1e3,i/1e3);
@@ -2937,25 +2941,25 @@ void testbezier3d()
     pt1=c.station(c.size()/3.);
     //cout<<"distance "<<dist(pt,pt1)<<endl;
     nclose+=(dist(pt,pt1)<1);
-    spline(c);
+    ps.spline(c);
   }
-  endpage();
-  startpage();
-  setscale(-30,-70,30,70,DEG90);
+  ps.endpage();
+  ps.startpage();
+  ps.setscale(-30,-70,30,70,DEG90);
   for (i=-100,nclose=0;i<101;i+=5)
   {
     switch (i%3)
     {
       case 0:
-	setcolor(1,0,0);
+	ps.setcolor(1,0,0);
 	break;
       case 1:
       case -2:
-	setcolor(0,0.5,0);
+	ps.setcolor(0,0.5,0);
 	break;
       case -1:
       case 2:
-	setcolor(0,0,1);
+	ps.setcolor(0,0,1);
 	break;
     }
     spiralarc0.setcurvature(i/1e3,-i/1e3);
@@ -2968,12 +2972,12 @@ void testbezier3d()
     //cout<<"distance "<<dist(pt,pt1)<<endl;
     nclose+=(dist(pt,pt1)<1);
     if (spiralarc0.valid())
-      spline(c);
+      ps.spline(c);
   }
-  setcolor(0,0,0);
-  endpage();
-  pstrailer();
-  psclose();
+  ps.setcolor(0,0,0);
+  ps.endpage();
+  ps.trailer();
+  ps.close();
 }
 
 void testangleconvcorner(string anglestr,xyz &totxyz)
@@ -3165,6 +3169,7 @@ void drawproj(string projName,Projection &proj)
   int i,ori=0;
   double minx,maxx,miny,maxy;
   latlong ll;
+  PostScript ps;
   polyline outline;
   for (i=0;i<sizeof(BeninBoundary)/sizeof(BeninBoundary[0]);i++)
   {
@@ -3175,14 +3180,14 @@ void drawproj(string projName,Projection &proj)
   miny=outline.dirbound(-ori+DEG90);
   maxx=-outline.dirbound(-ori+DEG180);
   maxy=-outline.dirbound(-ori-DEG90);
-  psopen((projName+".ps").c_str());
-  psprolog();
-  startpage();
-  setscale(minx,miny,maxx,maxy,ori);
-  spline(outline.approx3d(1));
-  endpage();
-  pstrailer();
-  psclose();
+  ps.open(projName+".ps");
+  ps.prolog();
+  ps.startpage();
+  ps.setscale(minx,miny,maxx,maxy,ori);
+  ps.spline(outline.approx3d(1));
+  ps.endpage();
+  ps.trailer();
+  ps.close();
 }
 
 void test1projection(string projName,Projection &proj,latlong ll,xy grid)
@@ -3400,10 +3405,11 @@ void testcontour()
   int i,j;
   double conterval;
   ofstream ofile("contour.bez");
-  psopen("contour.ps");
-  psprolog();
-  startpage();
-  setscale(-10,-10,10,10,0);
+  PostScript ps;
+  ps.open("contour.ps");
+  ps.prolog();
+  ps.startpage();
+  ps.setscale(-10,-10,10,10,0);
   doc.pl[1].clear();
   setsurface(CIRPAR);
   aster(doc,100);
@@ -3416,39 +3422,39 @@ void testcontour()
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
-  setcolor(0,1,1);
+  ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
-      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+      ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   conterval=0.03;
   roughcontours(doc.pl[1],conterval);
-  setcolor(0,0,0);
+  ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
-    spline(doc.pl[1].contours[i].approx3d(1));
+    ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
-  endpage();
-  startpage();
-  setscale(-10,-10,10,10,0);
-  setcolor(0,1,1);
+  ps.endpage();
+  ps.startpage();
+  ps.setscale(-10,-10,10,10,0);
+  ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
-      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+      ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   //psclose();
   smoothcontours(doc.pl[1],conterval,false);
-  setcolor(0,0,0);
+  ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
     //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
-    spline(doc.pl[1].contours[i].approx3d(1));
+    ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
-  endpage();
-  pstrailer();
-  psclose();
+  ps.endpage();
+  ps.trailer();
+  ps.close();
   doc.writeXml(ofile);
 }
 
@@ -3462,10 +3468,11 @@ void testfoldcontour()
   int i,j;
   double conterval;
   ofstream ofile("foldcontour.bez");
-  psopen("foldcontour.ps");
-  psprolog();
-  startpage();
-  setscale(194,-143,221,182,-DEG60);
+  PostScript ps;
+  ps.open("foldcontour.ps");
+  ps.prolog();
+  ps.startpage();
+  ps.setscale(194,-143,221,182,-DEG60);
   doc.pl[1].clear();
   doc.pl[1].addpoint(1,point(-56.185204978391994,267.41484378968016,206.0516647193294,"BC")); // 956
   doc.pl[1].addpoint(2,point(13.2558628396946,217.37694386590738,208.42972517145031,"TP L")); // 1112
@@ -3487,38 +3494,38 @@ void testfoldcontour()
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
-  setcolor(0,1,1);
+  ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
-      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+      ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   //rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"foldcontour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   conterval=0.1;
   roughcontours(doc.pl[1],conterval);
-  setcolor(0,0,0);
+  ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
-    spline(doc.pl[1].contours[i].approx3d(1));
+    ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
-  endpage();
-  startpage();
-  setscale(194,-143,221,182,-DEG60);
-  setcolor(0,1,1);
+  ps.endpage();
+  ps.startpage();
+  ps.setscale(194,-143,221,182,-DEG60);
+  ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
-      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+      ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   //rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"foldcontour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   smoothcontours(doc.pl[1],conterval);
-  setcolor(0,0,0);
+  ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
     //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
-    spline(doc.pl[1].contours[i].approx3d(1));
+    ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
-  endpage();
-  pstrailer();
-  psclose();
+  ps.endpage();
+  ps.trailer();
+  ps.close();
   doc.writeXml(ofile);
 }
 
@@ -3531,10 +3538,11 @@ void testtracingstop()
   int i,j;
   double conterval;
   ofstream ofile("tracingstop.bez");
-  psopen("tracingstop.ps");
-  psprolog();
-  startpage();
-  setscale(144,51,147,54,0);
+  PostScript ps;
+  ps.open("tracingstop.ps");
+  ps.prolog();
+  ps.startpage();
+  ps.setscale(144,51,147,54,0);
   doc.pl[1].clear();
   doc.pl[1].addpoint(1,point(146.51216865633614,53.34791973582469,205.6513304546609,"CENTER SW")); // 697
   doc.pl[1].addpoint(2,point(144.90511658618925,51.606410972832236,205.68529743459484,"SW")); // 681
@@ -3549,38 +3557,38 @@ void testtracingstop()
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
-  setcolor(0,1,1);
+  ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
-      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+      ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   //rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"foldcontour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   conterval=0.1;
   roughcontours(doc.pl[1],conterval);
-  setcolor(0,0,0);
+  ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
-    spline(doc.pl[1].contours[i].approx3d(1));
+    ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
-  endpage();
-  startpage();
-  setscale(144,51,147,54,0);
-  setcolor(0,1,1);
+  ps.endpage();
+  ps.startpage();
+  ps.setscale(144,51,147,54,0);
+  ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
-      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+      ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   //rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"foldcontour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   smoothcontours(doc.pl[1],conterval);
-  setcolor(0,0,0);
+  ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
     //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
-    spline(doc.pl[1].contours[i].approx3d(1));
+    ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
-  endpage();
-  pstrailer();
-  psclose();
+  ps.endpage();
+  ps.trailer();
+  ps.close();
   doc.writeXml(ofile);
 }
 
@@ -3593,10 +3601,11 @@ void testzigzagcontour()
   int i,j;
   double conterval;
   ofstream ofile("zigzagcontour.bez");
-  psopen("zigzagcontour.ps");
-  psprolog();
-  startpage();
-  setscale(15111,14793,15346,15108,0);
+  PostScript ps;
+  ps.open("zigzagcontour.ps");
+  ps.prolog();
+  ps.startpage();
+  ps.setscale(15111,14793,15346,15108,0);
   doc.pl[1].clear();
   doc.pl[1].addpoint(1,point(15345.127559055116,15064.447223774447,281.5871780543561,"VRS DEL")); // 1009
   doc.pl[1].addpoint(2,point(15202.258582677165,15107.048442976886,280.3079298958598,"OL PK397")); // 398
@@ -3611,38 +3620,38 @@ void testzigzagcontour()
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
-  setcolor(0,1,1);
+  ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
-      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+      ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   //rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"zigzagcontour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   conterval=0.1;
   roughcontours(doc.pl[1],conterval);
-  setcolor(0,0,0);
+  ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
-    spline(doc.pl[1].contours[i].approx3d(1));
+    ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
-  endpage();
-  startpage();
-  setscale(15111,14793,15346,15108,0);
-  setcolor(0,1,1);
+  ps.endpage();
+  ps.startpage();
+  ps.setscale(15111,14793,15346,15108,0);
+  ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
-      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+      ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   //rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"zigzagcontour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   smoothcontours(doc.pl[1],conterval);
-  setcolor(0,0,0);
+  ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
     //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
-    spline(doc.pl[1].contours[i].approx3d(1));
+    ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
-  endpage();
-  pstrailer();
-  psclose();
+  ps.endpage();
+  ps.trailer();
+  ps.close();
   doc.writeXml(ofile);
 }
 
@@ -3701,11 +3710,12 @@ void splitcubic()
   polyspiral ps,psneg,pspos;
   xyz st(0,0,0),nd(1,0,0);
   segment cubic(st,nd);
+  PostScript pscr;
   cubic.setslope(START,1);
-  psopen("splitcubic.ps");
-  psprolog();
-  startpage();
-  setscale(-1,0,1,0.5,0);
+  pscr.open("splitcubic.ps");
+  pscr.prolog();
+  pscr.startpage();
+  pscr.setscale(-1,0,1,0.5,0);
   for (i=0;i<65;i++)
     bsum[i]=bcount[i]=0;
   for (i=-310;i<1334;i++)
@@ -3739,13 +3749,13 @@ void splitcubic()
   plpos.open();
   pspos=polyspiral(plpos);
   pspos.smooth();
-  spline(ps.approx3d(0.1));
-  setcolor(0,0,1);
-  spline(pspos.approx3d(0.1));
-  spline(psneg.approx3d(0.1));
-  endpage();
-  pstrailer();
-  psclose();
+  pscr.spline(ps.approx3d(0.1));
+  pscr.setcolor(0,0,1);
+  pscr.spline(pspos.approx3d(0.1));
+  pscr.spline(psneg.approx3d(0.1));
+  pscr.endpage();
+  pscr.trailer();
+  pscr.close();
 }
 
 void testminquad()
@@ -4266,7 +4276,7 @@ xy unfold(vball pnt)
   return ret;
 }
 
-array<int,2> plotcenter(geoquad &quad,smallcircle sc)
+array<int,2> plotcenter(PostScript &ps,geoquad &quad,smallcircle sc)
 {
   int i;
   array<int,2> ret,subcount;
@@ -4284,27 +4294,27 @@ array<int,2> plotcenter(geoquad &quad,smallcircle sc)
   if (ovlp && quad.subdivided())
     for (i=0;i<4;i++)
     {
-      subcount=plotcenter(*quad.sub[i],sc);
+      subcount=plotcenter(ps,*quad.sub[i],sc);
       ret[0]+=subcount[0];
       ret[1]+=subcount[1];
     }
   if (centerin)
-    setcolor(0,0,0);
+    ps.setcolor(0,0,0);
   else
-    setcolor(0.5,0.5,1);
-  dot(unfold(quad.vcenter()));
+    ps.setcolor(0.5,0.5,1);
+  ps.dot(unfold(quad.vcenter()));
   return ret;
 }
 
-array<int,2> plotcenters(string name,smallcircle sc)
+array<int,2> plotcenters(PostScript &ps,string name,smallcircle sc)
 {
   array<int,2> ret,subcount;
   ret[0]=ret[1]=0;
-  setscale(-3,-3,3,5,DEG90);
+  ps.setscale(-3,-3,3,5,DEG90);
   int i;
   for (i=0;i<6;i++)
   {
-    subcount=plotcenter(cube.faces[i],sc);
+    subcount=plotcenter(ps,cube.faces[i],sc);
     ret[0]+=subcount[0];
     ret[1]+=subcount[1];
   }
@@ -4316,6 +4326,7 @@ void testsmallcircle()
 {
   int r,i;
   array<int,2> count;
+  PostScript ps;
   smallcircle avl150,eho150,clt150; // Asheville, Shelby, Charlotte
   smallcircle athwi45d; // Athens, Wisconsin, 45°N, to test a circle passing through the pole
   smallcircle ush4000; // circle encloses the pole
@@ -4408,44 +4419,43 @@ void testsmallcircle()
   /* 64×64; as each face is a little less than 70 mm square, that's
    * about 1 dot per millimeter when printed
    */
-  psopen("smallcircle.ps");
-  psprolog();
-  startpage();
-  count=plotcenters("Asheville",avl150);
+  ps.open("smallcircle.ps");
+  ps.prolog();
+  ps.startpage();
+  count=plotcenters(ps,"Asheville",avl150);
   tassert(count[0]==25 && count[1]==5);
-  endpage();
-  startpage();
-  count=plotcenters("Shelby",eho150);
+  ps.endpage();
+  ps.startpage();
+  count=plotcenters(ps,"Shelby",eho150);
   tassert(count[0]==22 && count[1]==5);
-  endpage();
-  startpage();
-  count=plotcenters("Charlotte",clt150);
+  ps.endpage();
+  ps.startpage();
+  count=plotcenters(ps,"Charlotte",clt150);
   tassert(count[0]==21 && count[1]==5);
-  endpage();
-  startpage();
-  count=plotcenters("Athens, WI",athwi45d);
+  ps.endpage();
+  ps.startpage();
+  count=plotcenters(ps,"Athens, WI",athwi45d);
   tassert(count[0]>=5164 && count[0]<=5188 && count[1]==4968);
   /* Depending on implementation, count[0] could be 5164 or 5188. The geoquads
    * in the difference are tangent at one corner to the North Pole or
    * Galápagos; the intersections computed in the overlap function include
    * two points 222 pm apart, which have the same bearing from Athens.
    */
-  endpage();
-  startpage();
-  count=plotcenters("Ushuaia",ush4000);
+  ps.endpage();
+  ps.startpage();
+  count=plotcenters(ps,"Ushuaia",ush4000);
   tassert(count[0]==3501 && count[1]==3275);
-  endpage();
-  startpage();
-  count=plotcenters("Galápagos",gps5311);
+  ps.endpage();
+  ps.startpage();
+  count=plotcenters(ps,"Galápagos",gps5311);
   tassert(count[0]==5437 && count[1]==5157);
-  endpage();
-  startpage();
-  count=plotcenters("Chamchamal",cham8000);
+  ps.endpage();
+  ps.startpage();
+  count=plotcenters(ps,"Chamchamal",cham8000);
   tassert(count[0]==11085 && count[1]==10689);
-  endpage();
-  pstrailer();
-  psclose();
-  
+  ps.endpage();
+  ps.trailer();
+  ps.close();
 }
 
 void testcylinterval()
