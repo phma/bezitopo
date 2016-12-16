@@ -290,6 +290,11 @@ void PostScript::write(xy pnt,string text)
   <<" moveto ("<<text<<") show"<<endl;
 }
 
+void PostScript::comment(string text)
+{
+  *psfile<<'%'<<text<<endl;
+}
+
 void setscale(double minx,double miny,double maxx,double maxy,int ori)
 /* To compute minx etc. using dirbound on e.g. a pointlist pl:
  * minx=pl.dirbound(-ori);

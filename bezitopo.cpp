@@ -81,6 +81,7 @@ void indpark(string args)
   ofstream ofile("IndependencePark.bez");
   criteria crit;
   criterion crit1;
+  PostScript ps;
   doc.offset=xyz(0,0,0);
   setfoot(USSURVEY);
   set_length_unit(FOOT+DEC2);
@@ -125,43 +126,43 @@ void indpark(string args)
   roughcontours(doc.pl[1],0.1);
   doc.pl[1].removeperimeter();
   smoothcontours(doc.pl[1],0.1);
-  psopen("IndependencePark.ps");
-  psprolog();
-  startpage();
-  setscale(-n,w,-s,e,DEG90);
-  setcolor(0,0.6,0.6);
+  ps.open("IndependencePark.ps");
+  ps.prolog();
+  ps.startpage();
+  ps.setscale(-n,w,-s,e,DEG90);
+  ps.setcolor(0,0.6,0.6);
   for (i=0;i<doc.pl[1].edges.size();i++)
-    spline(doc.pl[1].edges[i].getsegment().approx3d(1));
-  setcolor(0,1,1);
+    ps.spline(doc.pl[1].edges[i].getsegment().approx3d(1));
+  ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
-      spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+      ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
     if (i<0 && doc.pl[1].contours[i].getElevation()>doc.pl[1].contours[i-1].getElevation())
     // debugging: "i>0" puts each contour elevation on a separate page; "i<0" disables
     {
-      endpage();
-      startpage();
-      setscale(-n,w,-s,e,DEG90);
+      ps.endpage();
+      ps.startpage();
+      ps.setscale(-n,w,-s,e,DEG90);
     }
     switch (lrint(doc.pl[1].contours[i].getElevation()/0.1)%10)
     {
       case 0:
-	setcolor(1,0,0);
+	ps.setcolor(1,0,0);
 	break;
       case 5:
-	setcolor(0,0,1);
+	ps.setcolor(0,0,1);
 	break;
       default:
-	setcolor(0,0,0);
+	ps.setcolor(0,0,0);
     }
-    pscomment("Elevation "+ldecimal(doc.pl[1].contours[i].getElevation())+" Contour #"+to_string(i));
-    spline(doc.pl[1].contours[i].approx3d(0.1));
+    ps.comment("Elevation "+ldecimal(doc.pl[1].contours[i].getElevation())+" Contour #"+to_string(i));
+    ps.spline(doc.pl[1].contours[i].approx3d(0.1));
   }
-  endpage();
-  pstrailer();
-  psclose();
+  ps.endpage();
+  ps.trailer();
+  ps.close();
   doc.writeXml(ofile);
   doc.pl[1].setgradient(true);
   cout<<"Writing topo with flat triangles"<<endl;

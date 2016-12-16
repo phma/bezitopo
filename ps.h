@@ -57,6 +57,7 @@ public:
   void line2p(xy pnt1,xy pnt2);
   void spline(bezier3d spl);
   void write(xy pnt,std::string text);
+  void comment(string text);
 };
 
 extern FILE *psfile;
