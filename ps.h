@@ -56,11 +56,12 @@ public:
   void line(edge lin,int num,bool colorfibaster,bool directed=false);
   void line2p(xy pnt1,xy pnt2);
   void spline(bezier3d spl);
+  void widen(double factor);
   void write(xy pnt,std::string text);
   void comment(string text);
 };
 
-extern FILE *psfile;
+/*extern FILE *psfile;
 extern int orientation;
 void psprolog();
 void startpage();
@@ -69,13 +70,11 @@ void dot(xy pnt,std::string comment="");
 void circle(xy pnt,double radius);
 void line(document &doc,edge lin,int num,bool colorfibaster,bool directed=false);
 void pstrailer();
-//void psopen(const char * psfname);
-void psclose();
 void line2p(xy pnt1,xy pnt2);
 void spline(bezier3d spl);
 void widen(double factor);
 void setcolor(double r,double g,double b);
 void setscale(double minx,double miny,double maxx,double maxy,int ori=0);
 void pswrite(xy pnt,std::string text);
-void pscomment(string text);
+void pscomment(string text);*/
 #endif

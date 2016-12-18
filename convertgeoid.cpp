@@ -122,47 +122,47 @@ xy unfold(vball pnt)
   return ret;
 }
 
-void plotcenter(geoquad &quad)
+void plotcenter(PostScript &ps,geoquad &quad)
 {
   int i;
   if (quad.subdivided())
     for (i=0;i<4;i++)
-      plotcenter(*quad.sub[i]);
+      plotcenter(ps,*quad.sub[i]);
   else
-    dot(unfold(quad.vcenter()));
+    ps.dot(unfold(quad.vcenter()));
 }
 
-void plotcenters()
+void plotcenters(PostScript &ps)
 {
-  setscale(-3,-3,3,5,DEG90);
+  ps.setscale(-3,-3,3,5,DEG90);
   int i;
   for (i=0;i<6;i++)
-    plotcenter(cube.faces[i]);
+    plotcenter(ps,cube.faces[i]);
 }
 
-void plotinter(geoquad &quad)
+void plotinter(PostScript &ps,geoquad &quad)
 {
   int i;
   if (quad.subdivided())
     for (i=0;i<4;i++)
-      plotinter(*quad.sub[i]);
+      plotinter(ps,*quad.sub[i]);
   else
   {
-    setcolor(0,0,1);
+    ps.setcolor(0,0,1);
     for (i=0;i<quad.nums.size();i++)
-      dot(unfold(vball(quad.face,quad.nums[i])));
-    setcolor(1,0,0);
+      ps.dot(unfold(vball(quad.face,quad.nums[i])));
+    ps.setcolor(1,0,0);
     for (i=0;i<quad.nans.size();i++)
-      dot(unfold(vball(quad.face,quad.nans[i])));
+      ps.dot(unfold(vball(quad.face,quad.nans[i])));
   }
 }
 
-void plotinters()
+void plotinters(PostScript &ps)
 {
-  setscale(-3,-3,3,5,DEG90);
+  ps.setscale(-3,-3,3,5,DEG90);
   int i;
   for (i=0;i<6;i++)
-    plotinter(cube.faces[i]);
+    plotinter(ps,cube.faces[i]);
 }
 
 void outund(string loc,int lat,int lon)
@@ -410,6 +410,7 @@ int main(int argc, char *argv[])
   ofstream ofile;
   int i;
   vball v;
+  PostScript ps;
   vector<cylinterval> excerptintervals,inputbounds;
   array<int,6> undrange;
   array<int,5> undhisto;
@@ -547,16 +548,16 @@ int main(int argc, char *argv[])
   drawglobemicro(1024,xy(3.579192,1.654771),1e-3,2,0,"geosamoascvt.ppm");
   drawglobemicro(1024,xy(3.552552,1.6253505),1e-3,2,0,"geosamoawcvt.ppm");*/
   //drawglobemicro(1024,xy(1.5,1.5),2e-2,2,0,"geotestcvt.ppm");
-  /*psopen("geoid.ps");
-  psprolog();
-  startpage();
-  plotcenters();
-  endpage();
-  //startpage();
-  //plotinters();
-  //endpage();
-  pstrailer();
-  psclose();*/
+  /*ps.open("geoid.ps");
+  ps.prolog();
+  ps.startpage();
+  plotcenters(ps);
+  ps.endpage();
+  //ps.startpage();
+  //plotinters(ps);
+  //ps.endpage();
+  ps.trailer();
+  ps.close();*/
   //hdr.hash=cube.hash();
   if (!helporversion)
   {

@@ -28,6 +28,7 @@
 #include "ps.h"
 #include "point.h"
 #include "pointlist.h"
+#include "ldecimal.h"
 
 #define THR 16777216
 //threshold for goodcenter to determine if a point is sufficiently
@@ -177,37 +178,39 @@ void pointlist::dumpedges_ps(PostScript &ps,bool colorfibaster)
      ps.line(i->second,n,colorfibaster);
 }
 
-void pointlist::dumpnext_ps()
+void pointlist::dumpnext_ps(PostScript &ps)
 {
   map<int,edge>::iterator i;
-  setcolor(0,0.7,0);
+  ps.setcolor(0,0.7,0);
   for (i=edges.begin();i!=edges.end();i++)
   {
     if (i->second.nexta)
-      line2p(i->second.midpoint(),i->second.nexta->midpoint());
+      ps.line2p(i->second.midpoint(),i->second.nexta->midpoint());
     if (i->second.nextb)
-      line2p(i->second.midpoint(),i->second.nextb->midpoint());
+      ps.line2p(i->second.midpoint(),i->second.nextb->midpoint());
   }
 }
 
-void dumphull_ps()
-{multimap<double,point*>::iterator i;
- xy pnt,pnt1;
- int j;
- widen(5);
- for (i=convexhull.begin(),j=0;i!=convexhull.end();i++,j++)
-     {setcolor(0,0,0);
-      fprintf(psfile,"%d %d moveto (%.3f) show\n",10,3*j+10,i->first);
-      setcolor(1,1,0);
-      if (j)
-         line2p(pnt,*i->second);
-      else
-         pnt1=*i->second;
-      pnt=*i->second;
-      }
- line2p(pnt,pnt1);
- widen(0.2);
- }
+void dumphull_ps(PostScript &ps)
+{
+  multimap<double,point*>::iterator i;
+  xy pnt,pnt1;
+  int j;
+  ps.widen(5);
+  for (i=convexhull.begin(),j=0;i!=convexhull.end();i++,j++)
+  {
+    ps.setcolor(0,0,0);
+    ps.write(xy(10,3*j+10),ldecimal(i->first));
+    ps.setcolor(1,1,0);
+    if (j)
+      ps.line2p(pnt,*i->second);
+    else
+      pnt1=*i->second;
+    pnt=*i->second;
+  }
+  ps.line2p(pnt,pnt1);
+  ps.widen(0.2);
+}
 
 double edge::length()
 {
@@ -568,9 +571,9 @@ void pointlist::maketin(string filename,bool colorfibaster)
              flipcount++;
              //debugdel=0;
              if (n>680 && n<680)
-                {startpage();
+                {ps.startpage();
                  dumpedges_ps(ps,colorfibaster);
-                 endpage();
+                 ps.endpage();
                  }
              //debugdel=1;
              }

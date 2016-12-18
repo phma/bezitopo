@@ -53,7 +53,7 @@ public:
   // the following methods are in tin.cpp
 private:
   void dumpedges();
-  void dumpnext_ps();
+  void dumpnext_ps(PostScript &ps);
 public:
   void dumpedges_ps(PostScript &ps,bool colorfibaster);
   void maketin(string filename="",bool colorfibaster=false);

@@ -31,6 +31,7 @@
 #include <cassert>
 #include <iomanip>
 #include <unistd.h>
+#include "ldecimal.h"
 #include "config.h"
 #include "ps.h"
 #include "point.h"
@@ -283,6 +284,11 @@ void PostScript::spline(bezier3d spl)
   *psfile<<"stroke"<<endl;
 }
 
+void PostScript::widen(double factor)
+{
+  *psfile<<"currentlinewidth "<<ldecimal(factor)<<" mul setlinewidth"<<endl;
+}
+
 void PostScript::write(xy pnt,string text)
 {
   pnt=turn(pnt,orientation);
@@ -331,17 +337,6 @@ void setcolor(double r,double g,double b)
     oldg=g;
     oldb=b;
   }
-}
-
-/*void psopen(const char * psfname)
-{psfile=fopen(psfname,"w");
- }*/
-
-void psclose()
-{
-  fclose(psfile);
-  //printf("scale=%f\n",scale);
-  //sleep(3);
 }
 
 void psprolog()
