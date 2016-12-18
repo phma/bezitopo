@@ -55,7 +55,7 @@ private:
   void dumpedges();
   void dumpnext_ps();
 public:
-  void dumpedges_ps(bool colorfibaster);
+  void dumpedges_ps(PostScript &ps,bool colorfibaster);
   void maketin(string filename="",bool colorfibaster=false);
   void makegrad(double corr);
   void maketriangles();

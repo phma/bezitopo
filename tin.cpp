@@ -169,12 +169,12 @@ void pointlist::dumpedges()
   printf("end dump\n");
 }
 
-void pointlist::dumpedges_ps(bool colorfibaster)
+void pointlist::dumpedges_ps(PostScript &ps,bool colorfibaster)
 {
   map<int,edge>::iterator i;
   int n;
   for (i=edges.begin(),n=0;i!=edges.end();i++,n++)
-     line(doc,i->second,n,colorfibaster);
+     ps.line(i->second,n,colorfibaster);
 }
 
 void pointlist::dumpnext_ps()
@@ -332,6 +332,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
  bool fail;
  double maxdist,mindist,idist,minx,miny,maxx,maxy;
  xy A,B,C,farthest;
+ PostScript ps;
  if (points.size()<3)
     throw notri;
  startpnt=xy(0,0);
@@ -347,8 +348,9 @@ void pointlist::maketin(string filename,bool colorfibaster)
  startpnt=points.begin()->second;
  if (filename.length())
  {
-   psopen(filename.c_str());
-   psprolog();
+   ps.open(filename);
+   ps.prolog();
+   ps.setDoc(doc); //TODO set a pointlist instead of a document
  }
  for (m2=0,fail=true;m2<100 && fail;m2++)
      {edges.clear();
@@ -394,14 +396,14 @@ void pointlist::maketin(string filename,bool colorfibaster)
            }
       if (filename.length())
       {
-        setscale(minx,miny,maxx,maxy);
-        startpage();
-        setcolor(0,0,1);
-        dot(startpnt);
-        setcolor(1,.5,0);
+        ps.setscale(minx,miny,maxx,maxy);
+        ps.startpage();
+        ps.setcolor(0,0,1);
+        ps.dot(startpnt);
+        ps.setcolor(1,.5,0);
         for (i=points.begin();i!=points.end();i++)
-            dot(i->second,to_string(revpoints[&i->second]));
-        endpage();
+            ps.dot(i->second,to_string(revpoints[&i->second]));
+        ps.endpage();
       }
       j=outward.begin();
       //printf("edges %d\n",edges.size());
@@ -528,12 +530,12 @@ void pointlist::maketin(string filename,bool colorfibaster)
            //dumpedges();
            j->second->line=&edges[edgeoff];
            visible[val-1]->line=&edges[edgeoff+val-1];
-           /*startpage();
+           /*ps.startpage();
            //dumphull();
-           dot(startpnt);
+           ps.dot(startpnt);
            dumphull_ps();
            dumpedges_ps(colorfibaster);
-           endpage();*/
+           ps.endpage();*/
            //dumpedges();
            }
       }
@@ -541,11 +543,11 @@ void pointlist::maketin(string filename,bool colorfibaster)
    throw flattri; // Failing to make a proper TIN, after trying a hundred start points, normally means that all triangles are flat.
  if (filename.length())
  {
-   startpage();
-   dumpedges_ps(colorfibaster);
+   ps.startpage();
+   dumpedges_ps(ps,colorfibaster);
    //dumpnext_ps();
-   dot(startpnt);
-   endpage();
+   ps.dot(startpnt);
+   ps.endpage();
  }
  flipcount=passcount=0;
  //debugdel=1;
@@ -567,7 +569,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
              //debugdel=0;
              if (n>680 && n<680)
                 {startpage();
-                 dumpedges_ps(colorfibaster);
+                 dumpedges_ps(ps,colorfibaster);
                  endpage();
                  }
              //debugdel=1;
@@ -575,10 +577,10 @@ void pointlist::maketin(string filename,bool colorfibaster)
      debugdel=0;
      if (filename.length())
      {
-       startpage();
-       dumpedges_ps(colorfibaster);
+       ps.startpage();
+       dumpedges_ps(ps,colorfibaster);
        //dumpnext_ps();
-       endpage();
+       ps.endpage();
      }
      //debugdel=1;
      passcount++;
@@ -586,12 +588,12 @@ void pointlist::maketin(string filename,bool colorfibaster)
  //printf("Total %d edges flipped in %d passes\n",flipcount,passcount);
  if (filename.length())
  {
-   startpage();
-   dumpedges_ps(colorfibaster);
-   dot(startpnt);
-   endpage();
-   pstrailer();
-   psclose();
+   ps.startpage();
+   dumpedges_ps(ps,colorfibaster);
+   ps.dot(startpnt);
+   ps.endpage();
+   ps.trailer();
+   ps.close();
  }
  }
 

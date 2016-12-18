@@ -320,6 +320,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
   double we,ea,so,no;
   xyz lpt,rpt,newpt;
   xy spt;
+  PostScript ps;
   segment splitseg,part0,part1;
   vector<double> vex;
   spiralarc sarc;
@@ -331,8 +332,8 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
   no=-pl.dirbound(DEG270);
   if (log)
   {
-    psopen("smoothcontours.ps");
-    psprolog();
+    ps.open("smoothcontours.ps");
+    ps.prolog();
   }
   for (i=0;i<pl.contours.size();i++)
   {
@@ -408,13 +409,13 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	    }
 	    if (log)
 	    {
-	      startpage();
-	      setscale(we,so,ea,no,0);
-	      setcolor(0,0,0);
-	      spline(pl.contours[i].approx3d(0.1));
-	      setcolor(0,0,1);
-	      spline(splitseg.approx3d(0.1));
-	      endpage();
+	      ps.startpage();
+	      ps.setscale(we,so,ea,no,0);
+	      ps.setcolor(0,0,0);
+	      ps.spline(pl.contours[i].approx3d(0.1));
+	      ps.setcolor(0,0,1);
+	      ps.spline(splitseg.approx3d(0.1));
+	      ps.endpage();
 	    }
 	  }
 	}
@@ -423,7 +424,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
   }
   if (log)
   {
-    pstrailer();
-    psclose();
+    ps.trailer();
+    ps.close();
   }
 }

@@ -237,20 +237,22 @@ void maketin_i(string args)
 void drawtin_i(string args)
 {
   double w,e,s,n;
+  PostScript ps;
   if (doc.pl[1].edges.size())
   {
     w=doc.pl[1].dirbound(degtobin(0));
     s=doc.pl[1].dirbound(degtobin(90));
     e=-doc.pl[1].dirbound(degtobin(180));
     n=-doc.pl[1].dirbound(degtobin(270));
-    psopen(trim(args).c_str());
-    psprolog();
-    setscale(w,s,n,e);
-    startpage();
-    doc.pl[1].dumpedges_ps(false);
-    endpage();
-    pstrailer();
-    psclose();
+    ps.open(trim(args));
+    ps.setDoc(doc);
+    ps.prolog();
+    ps.setscale(w,s,n,e);
+    ps.startpage();
+    doc.pl[1].dumpedges_ps(ps,false);
+    ps.endpage();
+    ps.trailer();
+    ps.close();
   }
   else
     cout<<"No TIN present. Please make a TIN first."<<endl;
@@ -289,6 +291,7 @@ void contourdraw_i(string args)
   double conterval;
   double w,e,s,n;
   int i,j;
+  PostScript ps;
   contervalstr=firstarg(args);
   conterval=parse_length(contervalstr);
   if (conterval>5e-6 && conterval<1e5)
@@ -303,36 +306,36 @@ void contourdraw_i(string args)
       s=doc.pl[1].dirbound(degtobin(90));
       e=-doc.pl[1].dirbound(degtobin(180));
       n=-doc.pl[1].dirbound(degtobin(270));
-      psopen(args.c_str());
-      psprolog();
-      startpage();
-      setscale(w,s,e,n,0);
-      setcolor(0,0.6,0.6);
+      ps.open(args.c_str());
+      ps.prolog();
+      ps.startpage();
+      ps.setscale(w,s,e,n,0);
+      ps.setcolor(0,0.6,0.6);
       for (i=0;i<doc.pl[1].edges.size();i++)
-	spline(doc.pl[1].edges[i].getsegment().approx3d(1));
-      setcolor(0,1,1);
+	ps.spline(doc.pl[1].edges[i].getsegment().approx3d(1));
+      ps.setcolor(0,1,1);
       for (i=0;i<doc.pl[1].triangles.size();i++)
 	for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
-	  spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
+	  ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
       for (i=0;i<doc.pl[1].contours.size();i++)
       {
 	switch (lrint(doc.pl[1].contours[i].getElevation()/conterval)%10)
 	{
 	  case 0:
-	    setcolor(1,0,0);
+	    ps.setcolor(1,0,0);
 	    break;
 	  case 5:
-	    setcolor(0,0,1);
+	    ps.setcolor(0,0,1);
 	    break;
 	  default:
-	    setcolor(0,0,0);
+	    ps.setcolor(0,0,0);
 	}
-	pscomment("Elevation "+ldecimal(doc.pl[1].contours[i].getElevation())+" Contour #"+to_string(i));
-	spline(doc.pl[1].contours[i].approx3d(0.1));
+	ps.comment("Elevation "+ldecimal(doc.pl[1].contours[i].getElevation())+" Contour #"+to_string(i));
+	ps.spline(doc.pl[1].contours[i].approx3d(0.1));
       }
-      endpage();
-      pstrailer();
-      psclose();
+      ps.endpage();
+      ps.trailer();
+      ps.close();
     }
     else
       cout<<"No TIN present. Please make a TIN first."<<endl;

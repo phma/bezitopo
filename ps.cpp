@@ -333,9 +333,9 @@ void setcolor(double r,double g,double b)
   }
 }
 
-void psopen(const char * psfname)
+/*void psopen(const char * psfname)
 {psfile=fopen(psfname,"w");
- }
+ }*/
 
 void psclose()
 {

@@ -69,7 +69,7 @@ void dot(xy pnt,std::string comment="");
 void circle(xy pnt,double radius);
 void line(document &doc,edge lin,int num,bool colorfibaster,bool directed=false);
 void pstrailer();
-void psopen(const char * psfname);
+//void psopen(const char * psfname);
 void psclose();
 void line2p(xy pnt1,xy pnt2);
 void spline(bezier3d spl);
