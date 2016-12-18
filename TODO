@@ -48,5 +48,5 @@ For later:
 •Implement at least one map projection (Lambert conic).
 •Given two pointlists and a list of points in one pointlist and corresponding points in the other pointlist, rotate and translate one pointlist to match the other.
 •Add an interior point to a TIN. This will be used to approximate a road surface with a TIN.
-•Make the PostScript output routine a class.
+•Make the PostScript output routine a class. ✓
 •Make a road intersection object. Its boundary consists of alternating straight lines (which have cross-sections that match those of the roads) and circular arcs (fillets between the roads).
