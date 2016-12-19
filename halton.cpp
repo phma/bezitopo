@@ -37,6 +37,7 @@
 #include <cstring>
 #include <iostream>
 #include "halton.h"
+#include "random.h"
 
 using namespace std;
 
@@ -124,6 +125,23 @@ void initbtreverse()
   //cout<<assembleshort(243,256)<<endl;
 }
 
+bool isbtinit()
+{
+  int i,r;
+  bool ret=true;
+  for (i=0;i<10;i++)
+  {
+    r=rng.usrandom();
+    if (breversetable[i]+breversetable[65535-i]!=65535)
+      ret=false;
+    if (i<62208 && btreversetable[i]+btreversetable[62207-i]!=62207)
+      ret=false;
+    if (i<59049 && treversetable[i]+treversetable[59048-i]!=59048)
+      ret=false;
+  }
+  return ret;
+}
+
 vector<unsigned short> splithalton(unsigned long long n)
 {
   int i,j;
@@ -158,6 +176,8 @@ unsigned treverse(unsigned n)
 
 halton::halton()
 {
+  if (!isbtinit())
+    initbtreverse();
   n=0;
 }
 

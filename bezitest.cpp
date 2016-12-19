@@ -2651,7 +2651,6 @@ void testhalton()
   xyz pt;
   double toler,expected;
   manysum xsqsum,ysqsum,zsqsum;
-  initbtreverse();
   for (i=0;i<30;i++)
     printf("%7d ",btreversetable[i]);
   tassert(btreversetable[13]==37296);

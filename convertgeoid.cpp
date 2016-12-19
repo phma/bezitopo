@@ -438,7 +438,6 @@ int main(int argc, char *argv[])
   array<int,5> undhisto;
   cylinterval latticebound;
   int fineness=10800;
-  initbtreverse();
   initformat("bol","bol","Bezitopo Boldatni",readboldatni,writeboldatni);
   initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin,writeusngsbin);
   initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf,writecarlsongsf);
