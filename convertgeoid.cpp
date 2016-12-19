@@ -32,6 +32,7 @@
 #include "ps.h"
 #include "manysum.h"
 #include "latlong.h"
+#include "halton.h"
 using namespace std;
 
 document doc;
@@ -270,6 +271,26 @@ void frontformat(string fmt)
     cout<<"Unrecognized format: "<<fmt<<endl;
 }
 
+histogram errorspread()
+{
+  histogram ret(-1/65536.,1/65536.);
+  halton hal;
+  latlong ll;
+  xyz loc;
+  int i;
+  double origelev,cvtelev;
+  for (i=0;i*ret.nbars()<16777216;i++)
+  {
+    ll=hal.onearth();
+    loc=Sphere.geoc(ll,0);
+    cvtelev=outputgeoid.elev(loc);
+    origelev=avgelev(loc);
+    if (isfinite(cvtelev) && isfinite(origelev))
+      ret<<(cvtelev-origelev);
+  }
+  return ret;
+}
+
 void argpass1(int argc, char *argv[])
 {
   int i,j;
@@ -411,11 +432,13 @@ int main(int argc, char *argv[])
   int i;
   vball v;
   PostScript ps;
+  histogram errorHist;
   vector<cylinterval> excerptintervals,inputbounds;
   array<int,6> undrange;
   array<int,5> undhisto;
   cylinterval latticebound;
   int fineness=10800;
+  initbtreverse();
   initformat("bol","bol","Bezitopo Boldatni",readboldatni,writeboldatni);
   initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin,writeusngsbin);
   initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf,writecarlsongsf);
@@ -577,7 +600,10 @@ int main(int argc, char *argv[])
       cerr<<"Can't write in format "<<formatlist[0].cmd<<"; it is a whole-earth-only format."<<endl;
     drawglobecube(1024,62,-7,&outputgeoid,0,"geoid.ppm");
     cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
-    correctionHist.dump();
+    //correctionHist.dump();
+    cout<<"Computing error histogram"<<endl;
+    errorHist=errorspread();
+    errorHist.dump();
   }
   return 0;
 }
