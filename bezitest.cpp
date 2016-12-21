@@ -2015,6 +2015,7 @@ void testqindex()
   doc.pl[1].clear();
   plist.clear();
   ps.open("qindex.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
   ps.setDoc(doc);
   ps.startpage();

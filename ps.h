@@ -23,8 +23,15 @@
 #define PS_H
 #include <string>
 #include <iostream>
+#include <map>
 #include "bezier3d.h"
 class document;
+
+struct papersize
+{
+  int width,height; // in micrometers
+};
+extern std::map<string,papersize> papersizes;
 
 class PostScript
 {
@@ -33,13 +40,14 @@ protected:
   int pages;
   bool indocument,inpage;
   double scale; // paper size is in millimeters, but model space is in meters
-  int orientation;
+  int orientation,pageorientation;
   double oldr,oldg,oldb;
   xy paper,modelcenter;
   document *doc;
 public:
   PostScript();
   ~PostScript();
+  void setpaper(papersize pap,int ori);
   void open(std::string psfname);
   void prolog();
   void startpage();

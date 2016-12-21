@@ -43,6 +43,19 @@ using namespace std;
 
 char rscales[]={10,12,15,20,25,30,40,50,60,80};
 const double PSPoint=25.4/72;
+map<string,papersize> papersizes=
+/* These mean the physical orientation of the paper in the printer. If you
+ * want to print in landscape, but the paper is portrait in the printer,
+ * set pageorientation to 1.
+ */
+{
+  {"A4 portrait",{210000,297000}},
+  {"A4 landscape",{297000,210000}},
+  {"US Letter portrait",{215900,279400}},
+  {"US Letter landscape",{279400,215900}},
+  {"US Legal portrait",{215900,355600}},
+  {"US Legal landscape",{355600,215900}}
+};
 
 int fibmod3(int n)
 {
@@ -69,6 +82,16 @@ PostScript::~PostScript()
 {
   if (psfile)
     close();
+}
+
+void PostScript::setpaper(papersize pap,int ori)
+/* ori is 0 for no rotation, 1 for 90° rotation, making portrait
+ * into landscape and vice versa. Do this before each page,
+ * or before calling prolog if all pages are the same size.
+ */
+{
+  paper=xy(pap.width/1e3,pap.height/1e3);
+  pageorientation=ori;
 }
 
 void PostScript::open(string psfname)
@@ -99,6 +122,9 @@ void PostScript::startpage()
   {
     ++pages;
     *psfile<<"%%Page: "<<pages<<' '<<pages<<"\ngsave mmscale 0.1 setlinewidth\n";
+    *psfile<<paper.getx()/2<<' '<<paper.gety()/2<<' '<<"translate ";
+    *psfile<<(pageorientation&3)*90<<" rotate ";
+    *psfile<<paper.getx()/-2<<' '<<paper.gety()/-2<<' '<<"translate"<<endl;
     *psfile<<"/Helvetica findfont 3 scalefont setfont"<<endl;
     oldr=oldg=oldb=NAN;
     inpage=true;
