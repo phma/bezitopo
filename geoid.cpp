@@ -45,21 +45,23 @@ using namespace std;
  * Start Len
  * 0000 0008 literal string "boldatni"
  * 0008 0008 hash identifier of this geoid file
- * 0008 0002 0000 file refers to the earth (other planets/moons have different
+ * 0010 0008 hash identifier of the geoid file this is an excerpt of, if any
+ * 0018 0002 0000 file refers to the earth (other planets/moons have different
  *           sizes, so the limit of subdivision and smallest island are
  *           relatively different)
- * 0012 0001 00 type of data is geoidal undulation (others are not defined but
+ * 001a 0001 00 type of data is geoidal undulation (others are not defined but
  *           include deflection of vertical or variation of gravity)
- * 0013 0001 01 encoding (00 is 4-byte big endian, 01 is variable length)
- * 0014 0001 01 data are scalar (order of data if there are more components
+ * 001b 0001 01 encoding (00 is 4-byte big endian, 01 is variable length)
+ * 001c 0001 01 data are scalar (order of data if there are more components
  *           is not yet defined)
- * 0015 0002 fff0 scale factor as binary exponent is -16, one ulp is 1/65536 m
- * 0017 0008 tolerance of conversion
- * 001f 0008 limit of subdivision. If a geoquad is partly NaN and partly number,
+ * 001d 0004 00000000 there are no x-y pairs of components
+ * 0021 0002 fff0 scale factor as binary exponent is -16, one ulp is 1/65536 m
+ * 0023 0008 tolerance of conversion
+ * 002b 0008 limit of subdivision. If a geoquad is partly NaN and partly number,
  *           it will not be subdivided if it's smaller than this.
- * 0027 0008 smallest island or lacuna of data that won't be missed
- * 002f 0002 number of source files × 2
- * 0031 vary names of source files alternating with names of formats, each
+ * 0033 0008 smallest island or lacuna of data that won't be missed
+ * 003b 0002 number of source files × 2
+ * 003d vary names of source files alternating with names of formats, each
  *           null-terminated
  * vary vary six quadtrees of geoquads
  * 
@@ -1143,10 +1145,13 @@ void geoheader::writeBinary(std::ostream &ofile)
   ofile<<"boldatni";
   writebeint(ofile,hash[0]);
   writebeint(ofile,hash[1]);
+  writebeint(ofile,origHash[0]);
+  writebeint(ofile,origHash[1]);
   writebeshort(ofile,planet);
   ofile.put(dataType);
   ofile.put(encoding);
   ofile.put(ncomponents);
+  writebeint(ofile,xComponentBits);
   writebeshort(ofile,logScale);
   writebedouble(ofile,tolerance);
   writebedouble(ofile,sublimit);
@@ -1165,10 +1170,13 @@ void geoheader::readBinary(std::istream &ifile)
     throw badheader;
   hash[0]=readbeint(ifile);
   hash[1]=readbeint(ifile);
+  origHash[0]=readbeint(ifile);
+  origHash[1]=readbeint(ifile);
   planet=readbeshort(ifile);
   dataType=ifile.get();
   encoding=ifile.get();
   ncomponents=ifile.get();
+  xComponentBits=readbeint(ifile);
   logScale=readbeshort(ifile);
   tolerance=readbedouble(ifile);
   sublimit=readbedouble(ifile);

@@ -133,11 +133,24 @@ public:
 
 struct geoheader
 {
-  std::array<unsigned,2> hash;
+  std::array<unsigned,2> hash,origHash;
+  /* If this is an original boldatni file or one converted from another format,
+   * hash and origHash are equal. If this is an excerpt of a boldatni file,
+   * hash is set to the hash of the excerpt, while origHash is set to the
+   * hash of the original file it was excerpted from. This is so that field
+   * software using excerpts can tag the file as using geoid separations from
+   * the large file.
+   */
+  bool excerpted;
   int planet;
   int dataType;
   int encoding;
   int ncomponents;
+  int xComponentBits;
+  /* Bitmask indicating which components are x-coordinates of xy-pairs. In a
+   * file of gravity tilt, you would set ncomponents to 2 and xComponentBits
+   * to 1 (bit 0 set), meaning that component 0 is x and component 1 is y.
+   */
   int logScale;
   double tolerance;
   double sublimit;
