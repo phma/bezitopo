@@ -94,6 +94,15 @@ void PostScript::setpaper(papersize pap,int ori)
   pageorientation=ori;
 }
 
+double PostScript::aspectRatio()
+// Returns >1 for landscape, <1 for portrait.
+{
+  if (pageorientation&1)
+    return paper.gety()/paper.getx();
+  else
+    return paper.getx()/paper.gety();
+}
+
 void PostScript::open(string psfname)
 {
   if (psfile)

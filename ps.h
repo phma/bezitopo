@@ -48,6 +48,7 @@ public:
   PostScript();
   ~PostScript();
   void setpaper(papersize pap,int ori);
+  double aspectRatio();
   void open(std::string psfname);
   void prolog();
   void startpage();
