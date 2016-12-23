@@ -605,12 +605,17 @@ int main(int argc, char *argv[])
     errorHist=errorspread();
     if (outfilename.length())
     {
-      ps.open(outfilename+".ps");
-      ps.setpaper(papersizes["A4 portrait"],1);
-      ps.prolog();
-      ps.startpage();
-      errorHist.plot(ps,HISTO_LINEAR);
-      ps.close();
+      if (errorHist.gettotal())
+      {
+        ps.open(outfilename+".ps");
+        ps.setpaper(papersizes["A4 portrait"],1);
+        ps.prolog();
+        ps.startpage();
+        errorHist.plot(ps,HISTO_LINEAR);
+        ps.close();
+      }
+      else
+        cout<<"Error histogram empty, not plotting"<<endl;
     }
   }
   return 0;
