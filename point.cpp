@@ -322,6 +322,11 @@ bool operator==(const xyz &l,const xyz &r)
   return l.x==r.x && l.y==r.y && l.z==r.z;
 }
 
+bool operator!=(const xyz &l,const xyz &r)
+{
+  return l.x!=r.x || l.y!=r.y || l.z!=r.z;
+}
+
 xyz operator/(const xyz &l,const double r)
 {
   return xyz(l.x/r,l.y/r,l.z/r);
