@@ -22,6 +22,9 @@
 #ifndef HISTOGRAM_H
 #define HISTOGRAM_H
 #include <vector>
+#include "ps.h"
+#define HISTO_LINEAR 0
+#define HISTO_LOG 1
 
 struct histobar
 {
@@ -49,6 +52,7 @@ public:
   unsigned nbars();
   histobar getbar(unsigned n);
   unsigned gettotal();
+  void plot(PostScript &ps,int xtype);
   void dump();
 };
 #endif

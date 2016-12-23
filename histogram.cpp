@@ -24,6 +24,7 @@
 #include <iomanip>
 #include "angle.h"
 #include "histogram.h"
+#include "polyline.h"
 using namespace std;
 
 histogram::histogram()
@@ -167,4 +168,36 @@ void histogram::dump()
     cout<<setw(10)<<bar.start<<setw(10)<<bar.end<<setw(10)<<bar.count
     <<setw(10)<<bar.count/(bar.end-bar.start)<<endl;
   }
+}
+
+/* To plot a histogram in PostScript:
+ * Graphs are fitted in a rectangle 3×2 (landscape) or 2×3 (portrait) with a
+ * margin of 0.2 on all sides. This gives an aspect ratio of 17:12, which
+ * is close to that of ISO paper.
+ * 
+ * If xtype is HISTO_LOG, the starts and ends of bars are assumed to be
+ * logarithms of the actual data. They are plotted linearly on the paper,
+ * but the tickmarks are placed according to a log scale.
+ */
+void histogram::plot(PostScript &ps,int xtype)
+{
+  double height,width;
+  double rangeLow,rangeHigh,tallestBar;
+  polyline frame,barGraph;
+  if (ps.aspectRatio()>1)
+  {
+    height=2;
+    width=3;
+  }
+  else
+  {
+    height=3;
+    width=2;
+  }
+  ps.setscale(-0.2,-0.2,width+0.2,height+0.2);
+  frame.insert(xy(0,0));
+  frame.insert(xy(width,0));
+  frame.insert(xy(width,height));
+  frame.insert(xy(0,height));
+  ps.spline(frame.approx3d(0.01));
 }

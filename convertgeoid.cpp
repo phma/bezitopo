@@ -273,7 +273,7 @@ void frontformat(string fmt)
 
 histogram errorspread()
 {
-  histogram ret(-1/65536.,1/65536.);
+  histogram ret(-0.001,0.001);
   halton hal;
   latlong ll;
   xyz loc;
@@ -593,16 +593,25 @@ int main(int argc, char *argv[])
       else
         cout<<"Please specify a filename with -o"<<endl;
     }
-    if (formatlist[0].writefunc)
-      formatlist[0].writefunc(outputgeoid,outfilename);
-    else
-      cerr<<"Can't write in format "<<formatlist[0].cmd<<"; it is a whole-earth-only format."<<endl;
+    if (outfilename.length())
+      if (formatlist[0].writefunc)
+        formatlist[0].writefunc(outputgeoid,outfilename);
+      else
+        cerr<<"Can't write in format "<<formatlist[0].cmd<<"; it is a whole-earth-only format."<<endl;
     drawglobecube(1024,62,-7,&outputgeoid,0,"geoid.ppm");
     cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
     //correctionHist.dump();
     cout<<"Computing error histogram"<<endl;
     errorHist=errorspread();
-    errorHist.dump();
+    if (outfilename.length())
+    {
+      ps.open(outfilename+".ps");
+      ps.setpaper(papersizes["A4 portrait"],1);
+      ps.prolog();
+      ps.startpage();
+      errorHist.plot(ps,HISTO_LINEAR);
+      ps.close();
+    }
   }
   return 0;
 }

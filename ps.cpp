@@ -202,15 +202,19 @@ void PostScript::setscale(double minx,double miny,double maxx,double maxy,int or
  * maxy=-pl.dirbound(DEG270-ori);
  */
 {
-  double xsize,ysize;
+  double xsize,ysize,papx,papy;
   int i;
   orientation=ori;
   modelcenter=xy(minx+maxx,miny+maxy)/2;
   xsize=fabs(minx-maxx);
   ysize=fabs(miny-maxy);
-  for (scale=1;scale*xsize/10<paper.east() && scale*ysize/10<paper.north();scale*=10);
-  for (;scale*xsize/80>paper.east()*0.9 || scale*ysize/80>paper.north()*0.9;scale/=10);
-  for (i=0;i<9 && (scale*xsize/rscales[i]>paper.east()*0.9 || scale*ysize/rscales[i]>paper.north()*0.9);i++);
+  papx=paper.getx();
+  papy=paper.gety();
+  if (pageorientation&1)
+    swap(papx,papy);
+  for (scale=1;scale*xsize/10<papx && scale*ysize/10<papy;scale*=10);
+  for (;scale*xsize/80>papx*0.9 || scale*ysize/80>papy*0.9;scale/=10);
+  for (i=0;i<9 && (scale*xsize/rscales[i]>papx*0.9 || scale*ysize/rscales[i]>papy*0.9);i++);
   scale/=rscales[i];
   *psfile<<"% minx="<<minx<<" miny="<<miny<<" maxx="<<maxx<<" maxy="<<maxy<<" scale="<<scale<<endl;
 }
