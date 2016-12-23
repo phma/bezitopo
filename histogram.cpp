@@ -182,7 +182,9 @@ void histogram::dump()
 void histogram::plot(PostScript &ps,int xtype)
 {
   double height,width;
-  double rangeLow,rangeHigh,tallestBar;
+  double rangeLow,rangeHigh,tallestBar,barHeight;
+  int i;
+  histobar bar;
   polyline frame,barGraph;
   if (ps.aspectRatio()>1)
   {
@@ -200,4 +202,23 @@ void histogram::plot(PostScript &ps,int xtype)
   frame.insert(xy(width,height));
   frame.insert(xy(0,height));
   ps.spline(frame.approx3d(0.01));
+  rangeLow=bin[0];
+  rangeHigh=bin.back();
+  for (tallestBar=i=0;i<nbars();i++)
+  {
+    bar=getbar(i);
+    barHeight=bar.count/(bar.end-bar.start);
+    if (barHeight>tallestBar)
+      tallestBar=barHeight;
+  }
+  barGraph.insert(xy(0,0));
+  for (i=0;i<nbars();i++)
+  {
+    bar=getbar(i);
+    barHeight=bar.count/(bar.end-bar.start)*height/tallestBar;
+    barGraph.insert(xy((bar.start-rangeLow)*width/(rangeHigh-rangeLow),barHeight));
+    barGraph.insert(xy((bar.end-rangeLow)*width/(rangeHigh-rangeLow),barHeight));
+  }
+  barGraph.insert(xy(width,0));
+  ps.spline(barGraph.approx3d(0.01));
 }
