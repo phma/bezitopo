@@ -220,5 +220,6 @@ void histogram::plot(PostScript &ps,int xtype)
     barGraph.insert(xy((bar.end-rangeLow)*width/(rangeHigh-rangeLow),barHeight));
   }
   barGraph.insert(xy(width,0));
-  ps.spline(barGraph.approx3d(0.01));
+  ps.setcolor(0,0,1);
+  ps.spline(barGraph.approx3d(0.01),true);
 }

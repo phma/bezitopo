@@ -311,7 +311,7 @@ void PostScript::line2p(xy pnt1,xy pnt2)
     <<' '<<xscale(pnt2.east())<<' '<<yscale(pnt2.north())<<" -"<<endl;
 }
 
-void PostScript::spline(bezier3d spl)
+void PostScript::spline(bezier3d spl,bool fill)
 {
   int i,j,n;
   vector<xyz> seg;
@@ -339,7 +339,7 @@ void PostScript::spline(bezier3d spl)
       *psfile<<"curveto\n";
     }
   }
-  *psfile<<"stroke"<<endl;
+  *psfile<<(fill?"fill":"stroke")<<endl;
 }
 
 void PostScript::widen(double factor)
