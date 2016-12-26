@@ -182,7 +182,8 @@ void histogram::dump()
 void histogram::plot(PostScript &ps,int xtype)
 {
   double height,width;
-  double rangeLow,rangeHigh,tallestBar,barHeight;
+  double rangeLow,rangeHigh,range,tallestBar,barHeight;
+  double tickSpacing,x,tickx;
   int i;
   histobar bar;
   polyline frame,barGraph;
@@ -204,6 +205,7 @@ void histogram::plot(PostScript &ps,int xtype)
   ps.spline(frame.approx3d(0.01));
   rangeLow=bin[0];
   rangeHigh=bin.back();
+  range=rangeHigh-rangeLow;
   for (tallestBar=i=0;i<nbars();i++)
   {
     bar=getbar(i);
@@ -216,10 +218,33 @@ void histogram::plot(PostScript &ps,int xtype)
   {
     bar=getbar(i);
     barHeight=bar.count/(bar.end-bar.start)*height/tallestBar;
-    barGraph.insert(xy((bar.start-rangeLow)*width/(rangeHigh-rangeLow),barHeight));
-    barGraph.insert(xy((bar.end-rangeLow)*width/(rangeHigh-rangeLow),barHeight));
+    barGraph.insert(xy((bar.start-rangeLow)*width/range,barHeight));
+    barGraph.insert(xy((bar.end-rangeLow)*width/range,barHeight));
   }
   barGraph.insert(xy(width,0));
+  switch (xtype)
+  {
+    case HISTO_LINEAR:
+      for (tickSpacing=1;tickSpacing>range/20;tickSpacing/=10);
+      for (;tickSpacing<range/20;tickSpacing*=10);
+      if (tickSpacing>range/20)
+        tickSpacing/=2;
+      if (tickSpacing>range/20)
+        tickSpacing/=2.5;
+      if (tickSpacing>range/20)
+        tickSpacing/=2;
+      for (x=floor(rangeLow/tickSpacing)*tickSpacing;x<=ceil(rangeHigh/tickSpacing)*tickSpacing;x+=tickSpacing)
+        if (x>=rangeLow && x<=rangeHigh)
+        {
+          tickx=(x-rangeLow)*width/range;
+          ps.line2p(xy(tickx,0),xy(tickx,-0.1));
+        }
+      cout<<"Tick spacing "<<tickSpacing<<endl;
+      break;
+    case HISTO_LOG:
+      // TODO
+      break;
+  }
   ps.setcolor(0,0,1);
   ps.spline(barGraph.approx3d(0.01),true);
 }
