@@ -113,3 +113,37 @@ bool sameEdge(const vball &a,const vball &b)
   }
   return ret;
 }
+
+char log29[]={
+  63,
+  0,1,5,2,22,6,12,
+  3,10,23,25,7,18,13,
+  27,4,21,11,9,24,17,
+  26,20,8,16,19,15,14
+};
+
+int splitLevel(double coord)
+/* Returns the number of times a geoquad has to be split to produce
+ * (coord,coord) as a boundary point. This is used when merging boundaries,
+ * as only those segments with the lowest level need be considered.
+ */
+{
+  int i,n,ret;
+  if (coord==rint(coord))
+    ret=coord==0;
+  else
+  {
+    coord=fabs(coord);
+    for (n=-1,i=0;coord!=n;i++)
+    {
+      coord=(coord-trunc(coord))*16777216;
+      n=rint(coord);
+    }
+    n=n&-n;
+    ret=i*24-log29[n%29]+1;
+  }
+  return ret;
+}
+
+//int splitLevel(vball v)
+//int splitLevel(vsegment v)

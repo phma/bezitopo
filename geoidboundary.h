@@ -19,5 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <vector>
+
 bool operator==(const vball &a,const vball &b);
 bool sameEdge(const vball &a,const vball &b);
+
+struct vsegment
+{
+  vball start,end;
+};
+
+int splitLevel(double coord);
+//int splitLevel(vball v);
+//int splitLevel(vsegment v);
+
+class g1boundary
+{
+  vector<vball> bdy;
+};
