@@ -62,4 +62,5 @@ protected:
   double w,x,y,z;
 };
 
+Quaternion randomVersor();
 #endif

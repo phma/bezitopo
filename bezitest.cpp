@@ -4089,6 +4089,8 @@ void testgeoidboundary()
     tassert(splitLevel(x)==i);
     x=x/2+((r&(1<<(i-1)))?0.5:-0.5);
   }
+  for (i=0;i<100;i++)
+    randomVersor();
 }
 
 void testgeoid()

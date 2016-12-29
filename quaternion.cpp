@@ -21,8 +21,11 @@
  */
 
 #include <cmath>
+#include <iostream>
 #include "angle.h"
 #include "quaternion.h"
+#include "random.h"
+using namespace std;
 
 /* Quaternions are used in least-squares adjustment to represent the
  * orientation of a total station. Normally it is oriented in any direction
@@ -247,4 +250,27 @@ Quaternion versor(xyz vec,int angle)
     imag=Quaternion(0);
   }
   return real*coshalf(angle)+imag*sinhalf(angle);
+}
+
+Quaternion randomacc=1;
+
+Quaternion randomVersor()
+{
+  unsigned int r;
+  int i,j;
+  Quaternion m;
+  for (i=j=0;i<5 || j<2;i++)
+  {
+    r=rng.uirandom();
+    m=Quaternion(((r>>0)&255)-127.5,((r>>8)&255)-127.5,((r>>16)&255)-127.5,((r>>24)&255)-127.5);
+    randomacc=randomacc*m/128;
+    if (m.norm()<=128)
+      j++;
+    if (randomacc.norm()<0.5)
+      randomacc*=2;
+    if (randomacc.norm()>2)
+      randomacc/=2;
+  }
+  //cout<<"i="<<i<<" j="<<j<<endl;
+  return randomacc/randomacc.norm();
 }
