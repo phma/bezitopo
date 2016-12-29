@@ -46,7 +46,6 @@ struct vball // so called because a sphere so marked looks like a volleyball
   vball();
   vball(int f,xy p);
   xy getxy();
-  friend bool operator==(const vball &a,const vball &b);
 };
 
 vball encodedir(xyz dir);

@@ -68,6 +68,7 @@
 #include "hlattice.h"
 #include "histogram.h"
 #include "geoid.h"
+#include "geoidboundary.h"
 #include "refinegeoid.h"
 #include "binio.h"
 #include "sourcegeoid.h"

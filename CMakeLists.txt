@@ -26,7 +26,8 @@ add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                spiral.cpp stl.cpp test.cpp segment.cpp tin.cpp vcurve.cpp)
 add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitest.cpp bicubic.cpp binio.cpp brent.cpp cogo.cpp cogospiral.cpp
-               contour.cpp document.cpp drawobj.cpp ellipsoid.cpp geoid.cpp color.cpp
+               color.cpp contour.cpp document.cpp drawobj.cpp
+               ellipsoid.cpp geoid.cpp geoidboundary.cpp 
                halton.cpp histogram.cpp hlattice.cpp hnum.cpp
                latlong.cpp layer.cpp ldecimal.cpp manysum.cpp
                matrix.cpp measure.cpp objlist.cpp plot.cpp pnezd.cpp point.cpp
