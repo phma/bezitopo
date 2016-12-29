@@ -4077,6 +4077,20 @@ void testvball()
   cout<<"done."<<endl;
 }
 
+void testgeoidboundary()
+{
+  int i,r;
+  double x;
+  tassert(splitLevel(-1)==0);
+  tassert(splitLevel(1)==0);
+  r=rng.uirandom();
+  for (x=0,i=1;i<33;i++)
+  {
+    tassert(splitLevel(x)==i);
+    x=x/2+((r&(1<<(i-1)))?0.5:-0.5);
+  }
+}
+
 void testgeoid()
 {
   array<vball,4> bounds;
@@ -4870,6 +4884,8 @@ int main(int argc, char *argv[])
     testvball();
   if (shoulddo("geoid"))
     testgeoid();
+  if (shoulddo("geoidboundary"))
+    testgeoidboundary();
   if (shoulddo("geint"))
     testgeint();
   //clampcubic();

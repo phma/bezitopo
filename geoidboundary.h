@@ -35,5 +35,5 @@ int splitLevel(double coord);
 
 class g1boundary
 {
-  vector<vball> bdy;
+  std::vector<vball> bdy;
 };

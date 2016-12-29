@@ -27,7 +27,7 @@ add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
 add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitest.cpp bicubic.cpp binio.cpp brent.cpp cogo.cpp cogospiral.cpp
                color.cpp contour.cpp document.cpp drawobj.cpp
-               ellipsoid.cpp geoid.cpp geoidboundary.cpp 
+               ellipsoid.cpp geoid.cpp geoidboundary.cpp
                halton.cpp histogram.cpp hlattice.cpp hnum.cpp
                latlong.cpp layer.cpp ldecimal.cpp manysum.cpp
                matrix.cpp measure.cpp objlist.cpp plot.cpp pnezd.cpp point.cpp
@@ -93,7 +93,7 @@ add_test(polyline bezitest polyline)
 add_test(bezier3d bezitest bezier3d)
 add_test(fileio bezitest csvline ldecimal)
 add_test(geodesy bezitest ellipsoid projection vball geoid geint)
-add_test(convertgeoid bezitest hlattice bicubic smooth5 smallcircle cylinterval quadhash)
+add_test(convertgeoid bezitest hlattice bicubic smooth5 smallcircle cylinterval quadhash geoidboundary)
 add_test(color bezitest color)
 add_test(contour bezitest contour foldcontour zigzagcontour tracingstop)
 add_test(roscat bezitest roscat absorient)

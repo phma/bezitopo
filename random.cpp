@@ -3,7 +3,7 @@
 /* random.cpp - random numbers                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014 Pierre Abbat.
+/* Copyright 2012,2014,2016 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -31,6 +31,13 @@ randm::randm()
 randm::~randm()
 {
   fclose(randfil);
+}
+
+unsigned int randm::uirandom()
+{
+  unsigned int n;
+  fread(&n,1,4,randfil);
+  return n;
 }
 
 unsigned short randm::usrandom()
