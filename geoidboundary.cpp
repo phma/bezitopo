@@ -145,5 +145,26 @@ int splitLevel(double coord)
   return ret;
 }
 
-//int splitLevel(vball v)
-//int splitLevel(vsegment v)
+int splitLevel(vball v)
+{
+  int xLevel=splitLevel(v.x),yLevel=splitLevel(v.y);
+  if (xLevel<yLevel)
+    return xLevel;
+  else
+    return yLevel;
+}
+
+int splitLevel(vsegment v)
+{
+  if (v.start.face==v.end.face)
+    if (v.start.x==v.end.x)
+      return splitLevel(v.start.x);
+    else if (v.start.y==v.end.y)
+      return splitLevel(v.start.y);
+    else
+      return -1;
+  else if (sameEdge(v.start,v.end))
+    return 0;
+  else
+    return -1;
+}

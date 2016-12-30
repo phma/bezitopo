@@ -30,8 +30,8 @@ struct vsegment
 };
 
 int splitLevel(double coord);
-//int splitLevel(vball v);
-//int splitLevel(vsegment v);
+int splitLevel(vball v);
+int splitLevel(vsegment v);
 
 class g1boundary
 {
