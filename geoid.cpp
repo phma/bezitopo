@@ -100,6 +100,14 @@ xy vball::getxy()
   return xy(x,y);
 }
 
+double vball::diag()
+/* Used in geoidboundary as a fake distance, because all distances involved
+ * are orthogonal.
+ */
+{
+  return x+y;
+}
+
 vball encodedir(xyz dir)
 {
   vball ret;

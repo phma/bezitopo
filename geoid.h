@@ -46,6 +46,7 @@ struct vball // so called because a sphere so marked looks like a volleyball
   vball();
   vball(int f,xy p);
   xy getxy();
+  double diag();
 };
 
 vball encodedir(xyz dir);

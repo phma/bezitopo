@@ -42,3 +42,5 @@ public:
   vsegment seg(int n);
   std::vector<int> segmentsAtLevel(int l);
 };
+
+bool overlap(vsegment a,vsegment b);

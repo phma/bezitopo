@@ -204,3 +204,70 @@ vector<int> g1boundary::segmentsAtLevel(int l)
       ret.push_back(i);
   return ret;
 }
+
+void moveToFace(vball &v,int f)
+/* Moves v to face f, assuming that it's on face f (in which case it does
+ * nothing) or on the edge of an adjacent face.
+ */
+{
+  int edgetype=vballcompare[v.face][f];
+  assert(edgetype<77 && edgetype>00);
+  switch (edgetype)
+  {
+    case 12:
+      v.x=v.y;
+      v.y=1;
+      break;
+    case 21:
+      v.y=v.x;
+      v.x=1;
+      break;
+    case 14:
+      v.y=-v.x;
+      v.x=1;
+      break;
+    case 41:
+      v.x=-v.y;
+      v.y=-1;
+      break;
+    case 36:
+      v.x=v.y;
+      v.y=-1;
+      break;
+    case 63:
+      v.y=v.x;
+      v.x=-1;
+      break;
+    case 45:
+      v.y=-v.x;
+      v.x=-1;
+      break;
+    case 54:
+      v.x=-v.y;
+      v.y=1;
+      break;
+  }
+  v.face=f;
+}
+
+bool overlap(vsegment a,vsegment b)
+/* Returns true if the two segments are part of the same line and overlap.
+ * The segments are assumed to go in opposite directions. If a segment
+ * has one end but not the other on an edge, but that end is represented
+ * as being on the adjacent face, it will fail.
+ */
+{
+  if (sameEdge(a.start,b.start) &&
+      sameEdge(a.start,b.end) &&
+      sameEdge(a.end,b.start) &&
+      sameEdge(a.end,b.end))
+  {
+    moveToFace(b.start,a.start.face);
+    moveToFace(b.end,a.start.face);
+    moveToFace(a.end,a.start.face);
+    return fabs(a.start.diag()-a.end.diag())+fabs(b.start.diag()-b.end.diag())>
+           fabs(a.start.diag()-b.end.diag())+fabs(b.start.diag()-a.end.diag());
+  }
+  else
+    return false;
+}
