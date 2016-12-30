@@ -35,5 +35,10 @@ int splitLevel(vsegment v);
 
 class g1boundary
 {
+private:
   std::vector<vball> bdy;
+public:
+  void push_back(vball v);
+  vsegment seg(int n);
+  std::vector<int> segmentsAtLevel(int l);
 };

@@ -19,8 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cassert>
 #include "geoid.h"
 #include "geoidboundary.h"
+using namespace std;
 
 char vballcompare[8][8]=
 {
@@ -167,4 +169,38 @@ int splitLevel(vsegment v)
     return 0;
   else
     return -1;
+}
+
+void g1boundary::push_back(vball v)
+/* A g1boundary is initialized with four points, the corners of a geoquad
+ * in counterclockwise order. A clockwise g1boundary is the boundary
+ * of a hole in a region.
+ */
+{
+  bdy.push_back(v);
+}
+
+vsegment g1boundary::seg(int n)
+{
+  vsegment ret;
+  assert(bdy.size());
+  n%=bdy.size();
+  if (n<0)
+    n+=bdy.size();
+  ret.start=bdy[n];
+  ret.end=bdy[(n+1)%bdy.size()];
+  return ret;
+}
+
+vector<int> g1boundary::segmentsAtLevel(int l)
+/* This returns indices, not segments, because the indices will be necessary
+ * for surgery.
+ */
+{
+  int i;
+  vector<int> ret;
+  for (i=0;i<bdy.size();i++)
+    if (splitLevel(seg(i))==l)
+      ret.push_back(i);
+  return ret;
 }
