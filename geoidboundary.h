@@ -3,7 +3,7 @@
 /* geoidboundary.h - geoid boundaries                 */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016 Pierre Abbat.
+/* Copyright 2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -38,9 +38,16 @@ class g1boundary
 private:
   std::vector<vball> bdy;
 public:
+  bool isempty();
   void push_back(vball v);
   vsegment seg(int n);
   std::vector<int> segmentsAtLevel(int l);
+  std::vector<int> nullSegments();
+  void positionSegment(int n);
+  void splice(g1boundary &b);
+  void split(int n,g1boundary &b);
+  void splice(int m,g1boundary &b,int n);
+  void split(int m,int n,g1boundary &b);
 };
 
 bool overlap(vsegment a,vsegment b);

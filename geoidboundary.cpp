@@ -3,7 +3,7 @@
 /* geoidboundary.cpp - geoid boundaries               */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016 Pierre Abbat.
+/* Copyright 2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -171,6 +171,11 @@ int splitLevel(vsegment v)
     return -1;
 }
 
+bool g1boundary::isempty()
+{
+  return !bdy.size();
+}
+
 void g1boundary::push_back(vball v)
 /* A g1boundary is initialized with four points, the corners of a geoquad
  * in counterclockwise order. A clockwise g1boundary is the boundary
@@ -203,6 +208,82 @@ vector<int> g1boundary::segmentsAtLevel(int l)
     if (splitLevel(seg(i))==l)
       ret.push_back(i);
   return ret;
+}
+
+vector<int> g1boundary::nullSegments()
+{
+  int i;
+  vector<int> ret;
+  vsegment vseg;
+  for (i=0;i<bdy.size();i++)
+  {
+    vseg=seg(i);
+    if (vseg.start==vseg.end)
+      ret.push_back(i);
+  }
+  return ret;
+}
+
+void g1boundary::positionSegment(int n)
+/* Rolls the vector of vballs so that the one at n becomes last and the one
+ * at n+1 becomes 0th, so that boundaries can be easily spliced.
+ */
+{
+  int m=n+1;
+  vector<vball> bdy1(bdy);
+  if (bdy.size())
+  {
+    n%=bdy.size();
+    if (n<0)
+      n+=bdy.size();
+    m%=bdy.size();
+    if (m<0)
+      m+=bdy.size();
+    if (m>n)
+    {
+      memmove(&bdy1[0],&bdy[m],(bdy.size()-m)*sizeof(vball));
+      memmove(&bdy1[bdy.size()-m],&bdy[0],m*sizeof(vball));
+      swap(bdy,bdy1);
+    }
+  }
+}
+
+void g1boundary::splice(g1boundary &b)
+{
+  int oldsize=bdy.size();
+  bdy.resize(oldsize+b.bdy.size());
+  memmove(&bdy[oldsize],&b.bdy[0],b.bdy.size()*sizeof(vball));
+  b.bdy.clear();
+}
+
+void g1boundary::split(int n,g1boundary &b)
+{
+  n%=bdy.size();
+  if (n<0)
+    n+=bdy.size();
+  b.bdy.resize(bdy.size()-n);
+  memmove(&b.bdy[0],&bdy[n],(bdy.size()-n)*sizeof(vball));
+  bdy.resize(n);
+}
+
+void g1boundary::splice(int m,g1boundary &b,int n)
+/* Splice together this, at its mth segment, and b, at its nth segment.
+ * this is left with one of the resulting segments between the back and front.
+ * b is left empty.
+ */
+{
+  positionSegment(m);
+  b.positionSegment(n);
+  splice(b);
+}
+
+void g1boundary::split(int m,int n,g1boundary &b)
+/* Splits this into two loops, cutting segments m and n and making new ones.
+ * Any previous content of b is overwritten.
+ */
+{
+  positionSegment(m);
+  split(n-m+1,b);
 }
 
 void moveToFace(vball &v,int f)
