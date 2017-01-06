@@ -353,6 +353,89 @@ bool overlap(vsegment a,vsegment b)
     return false;
 }
 
+void gboundary::consolidate(int l)
+{
+  int i=0,j=1,m,n,m0,n0,sz=bdy.size(),cnt=1;
+  vector<int> iseg,jseg;
+  bool found;
+  while (cnt<sqr(sz))
+  {
+    iseg=bdy[i].segmentsAtLevel(l);
+    jseg=bdy[j].segmentsAtLevel(l);
+    found=false;
+    for (m=0;m<iseg.size();m++)
+      for (n=0;n<jseg.size();n++)
+        if (overlap(bdy[i].seg(iseg[m]),bdy[j].seg(jseg[n])))
+        {
+          found=true;
+          m0=m;
+          n0=n;
+        }
+    if (found)
+    {
+      cnt=0;
+      bdy[m0].splice(m0,bdy[n0],n0);
+    }
+    else
+      cnt++;
+    j=(j+1)%sz;
+    if (i==j)
+      i=(i+sz-1)%sz;
+  }
+}
+
+void gboundary::splitoff(int l)
+{
+  int i,j,k;
+  bool found;
+  vector<int> iseg;
+  for (i=0;i<bdy.size();i++)
+  {
+    iseg=bdy[i].segmentsAtLevel(l);
+    do
+    {
+      found=false;
+      for (j=0;j<iseg.size();j++)
+      {
+        for (k=0;k<j;k++)
+          if (overlap(bdy[i].seg(iseg[j]),bdy[i].seg(iseg[k])))
+          {
+            found=true;
+            break;
+          }
+        if (found)
+          break;
+      }
+      if (found)
+      {
+        bdy.resize(bdy.size()+1);
+        bdy[i].split(i,j,bdy.back());
+      }
+    } while (found);
+  }
+}
+
+void gboundary::deleteNullSegments()
+/* Do this after consolidate and splitoff. At level 0, it can leave the
+ * boundary in a state where sameEdge incorrectly returns false, so overlapping
+ * segments aren't recognized.
+ */
+{
+  int i;
+  vector<int> iseg;
+  g1boundary tmp;
+  for (i=0;i<bdy.size();i++)
+  {
+    while (true)
+    {
+      iseg=bdy[i].nullSegments();
+      if (!iseg.size())
+        break;
+      bdy[i].split(iseg[0],iseg[0]+1,tmp);
+    }
+  }
+}
+
 /* To compute the area of a boundary (which is needed only for testing; area
  * can be computed easier by asking the geoquads), add up the spherical
  * deflection angles and subtract 2π. To compute the deflection angle ABC:

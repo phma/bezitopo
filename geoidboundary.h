@@ -51,3 +51,16 @@ public:
 };
 
 bool overlap(vsegment a,vsegment b);
+
+class gboundary
+{
+private:
+  std::vector<g1boundary> bdy;
+public:
+  void consolidate(int l);
+  void splitoff(int l);
+  void deleteNullSegments();
+  void deleteEmpty();
+  friend gboundary operator||(const gboundary &l,const gboundary &r);
+  friend gboundary operator+(const gboundary &l,const gboundary &r);
+};
