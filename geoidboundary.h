@@ -57,6 +57,7 @@ class gboundary
 private:
   std::vector<g1boundary> bdy;
 public:
+  void push_back(g1boundary g1);
   void consolidate(int l);
   void splitoff(int l);
   void deleteNullSegments();

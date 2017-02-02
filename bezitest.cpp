@@ -4081,6 +4081,9 @@ void testgeoidboundary()
 {
   int i,r;
   double x;
+  g1boundary g1,g2;
+  gboundary gb;
+  vball v;
   tassert(splitLevel(-1)==0);
   tassert(splitLevel(1)==0);
   r=rng.uirandom();
@@ -4091,6 +4094,29 @@ void testgeoidboundary()
   }
   for (i=0;i<100;i++)
     randomVersor();
+  v.face=1;
+  v.x=v.y=0;
+  g1.push_back(v);
+  v.x=0.5;
+  g1.push_back(v);
+  v.y=0.5;
+  g1.push_back(v);
+  v.x=0;
+  g1.push_back(v);
+  v.y=0;
+  v.x=-0.25;
+  g2.push_back(v);
+  v.y=-0.5;
+  g2.push_back(v);
+  v.x=0.25;
+  g2.push_back(v);
+  v.y=0;
+  g2.push_back(v);
+  gb.push_back(g1);
+  gb.push_back(g2);
+  gb.consolidate(0);
+  gb.consolidate(2);
+  gb.consolidate(1);
 }
 
 void testgeoid()

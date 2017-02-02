@@ -353,6 +353,11 @@ bool overlap(vsegment a,vsegment b)
     return false;
 }
 
+void gboundary::push_back(g1boundary g1)
+{
+  bdy.push_back(g1);
+}
+
 void gboundary::consolidate(int l)
 {
   int i=0,j=1,m,n,m0,n0,sz=bdy.size(),cnt=1;
@@ -374,7 +379,7 @@ void gboundary::consolidate(int l)
     if (found)
     {
       cnt=0;
-      bdy[m0].splice(m0,bdy[n0],n0);
+      bdy[i].splice(iseg[m0],bdy[j],jseg[n0]);
     }
     else
       cnt++;
