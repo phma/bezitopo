@@ -4115,8 +4115,24 @@ void testgeoidboundary()
   gb.push_back(g1);
   gb.push_back(g2);
   gb.consolidate(0);
+  tassert(gb.size()==2);
+  tassert(gb[0].size()==4);
+  tassert(gb[1].size()==4);
   gb.consolidate(2);
+  tassert(gb.size()==2);
+  tassert(gb[0].size()==4); // Nothing's happened, because the two squares
+  tassert(gb[1].size()==4); // meet on a line at level 1.
   gb.consolidate(1);
+  tassert(gb.size()==2);
+  tassert(gb[0].size()==8);
+  tassert(gb[1].size()==0);
+  gb.splitoff(1);
+  tassert(gb.size()==2);
+  gb.deleteNullSegments();
+  tassert(gb[0].size()==8);
+  gb.deleteEmpty();
+  tassert(gb.size()==1);
+  tassert(gb[0].size()==8);
 }
 
 void testgeoid()

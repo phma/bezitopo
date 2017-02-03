@@ -20,6 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <cassert>
+#include <iostream>
 #include "geoid.h"
 #include "geoidboundary.h"
 using namespace std;
@@ -174,6 +175,11 @@ int splitLevel(vsegment v)
 bool g1boundary::isempty()
 {
   return !bdy.size();
+}
+
+int g1boundary::size()
+{
+  return bdy.size();
 }
 
 void g1boundary::push_back(vball v)
@@ -358,6 +364,16 @@ void gboundary::push_back(g1boundary g1)
   bdy.push_back(g1);
 }
 
+g1boundary gboundary::operator[](int n)
+{
+  return bdy[n];
+}
+
+int gboundary::size()
+{
+  return bdy.size();
+}
+
 void gboundary::consolidate(int l)
 {
   int i=0,j=1,m,n,m0,n0,sz=bdy.size(),cnt=1;
@@ -439,6 +455,24 @@ void gboundary::deleteNullSegments()
       bdy[i].split(iseg[0],iseg[0]+1,tmp);
     }
   }
+}
+
+void gboundary::deleteEmpty()
+/* Do this after deleteNullSegments.
+ */
+{
+  int i,j;
+  for (i=0,j=size()-1;i<j;)
+  {
+    while (i<size() && bdy[i].size()>0)
+      i++;
+    while (j>=0 && bdy[j].size()==0)
+      j--;
+    if (i<j)
+      swap(bdy[i],bdy[j]);
+    //cout<<"i="<<i<<" j="<<j<<endl;
+  }
+  bdy.resize(i);
 }
 
 /* To compute the area of a boundary (which is needed only for testing; area
