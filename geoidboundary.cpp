@@ -474,11 +474,3 @@ void gboundary::deleteEmpty()
   }
   bdy.resize(i);
 }
-
-/* To compute the area of a boundary (which is needed only for testing; area
- * can be computed easier by asking the geoquads), add up the spherical
- * deflection angles and subtract 2π. To compute the deflection angle ABC:
- * • AXB=A×B; BXC=B×C;
- * • Normalize AXB, BXC, and B;
- * • (AXB×BXC)·B is the sine of the angle; AXB·BXC is the cosine.
- */

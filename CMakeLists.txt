@@ -32,7 +32,7 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                latlong.cpp layer.cpp ldecimal.cpp manysum.cpp
                matrix.cpp measure.cpp objlist.cpp plot.cpp pnezd.cpp point.cpp
                pointlist.cpp polyline.cpp projection.cpp ps.cpp qindex.cpp quaternion.cpp
-               random.cpp raster.cpp refinegeoid.cpp relprime.cpp sourcegeoid.cpp spiral.cpp
+               random.cpp raster.cpp refinegeoid.cpp relprime.cpp sourcegeoid.cpp spiral.cpp spolygon.cpp
                stl.cpp test.cpp segment.cpp tin.cpp vcurve.cpp)
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
                binio.cpp brent.cpp cogo.cpp convertgeoid.cpp document.cpp drawobj.cpp
