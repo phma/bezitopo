@@ -3,7 +3,7 @@
 /* bezitest.cpp - test program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -1165,7 +1165,7 @@ void testmanysum()
   cout<<"manysum"<<endl;
   ms.clear();
   summands.clear();
-  tassert(pairwisesum(&summands[0],summands.size())==0);
+  tassert(pairwisesum(summands)==0);
   for (naiveforwardsum=i=0;i>-7;i--)
   {
     x=pow(1000,i);
@@ -1178,7 +1178,7 @@ void testmanysum()
   }
   ms.prune();
   forwardsum=ms.total();
-  pairforwardsum=pairwisesum(&summands[0],summands.size());
+  pairforwardsum=pairwisesum(summands);
   ms.clear();
   summands.clear();
   for (naivebackwardsum=0,i=-6;i<1;i++)
@@ -1193,7 +1193,7 @@ void testmanysum()
   }
   ms.prune();
   backwardsum=ms.total();
-  pairbackwardsum=pairwisesum(&summands[0],summands.size());
+  pairbackwardsum=pairwisesum(summands);
   cout<<"Forward: "<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(pairforwardsum)<<endl;
   cout<<"Backward: "<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<' '<<ldecimal(pairbackwardsum)<<endl;
   tassert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
@@ -1215,7 +1215,7 @@ void testmanysum()
   }
   ms.prune();
   forwardsum=ms.total();
-  pairforwardsum=pairwisesum(&summands[0],summands.size());
+  pairforwardsum=pairwisesum(summands);
   ms.clear();
   summands.clear();
   for (naivebackwardsum=0,i=-0x35ffff&-h;i<1;i+=h)
@@ -1227,7 +1227,7 @@ void testmanysum()
   }
   ms.prune();
   backwardsum=ms.total();
-  pairbackwardsum=pairwisesum(&summands[0],summands.size());
+  pairbackwardsum=pairwisesum(summands);
   cout<<"Forward: "<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(pairforwardsum)<<endl;
   cout<<"Backward: "<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<' '<<ldecimal(pairbackwardsum)<<endl;
   tassert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);

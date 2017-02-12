@@ -146,3 +146,8 @@ double pairwisesum(vector<double> &a)
 {
   return pairwisesum(&a[0],a.size());
 }
+
+long double pairwisesum(vector<long double> &a)
+{
+  return pairwisesum(&a[0],a.size());
+}

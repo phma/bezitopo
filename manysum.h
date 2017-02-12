@@ -56,4 +56,5 @@ public:
 double pairwisesum(double *a,unsigned n);
 double pairwisesum(std::vector<double> &a);
 long double pairwisesum(long double *a,unsigned n);
+long double pairwisesum(std::vector<long double> &a);
 #endif

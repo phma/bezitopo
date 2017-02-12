@@ -93,8 +93,8 @@ xy cornu(double t)
     if (fabsl(imagparts[i])>bigpart)
       bigpart=fabsl(imagparts[i]);
   }
-  rsum=pairwisesum(&realparts[0],realparts.size());
-  isum=pairwisesum(&imagparts[0],imagparts.size());
+  rsum=pairwisesum(realparts);
+  isum=pairwisesum(imagparts);
   precision=nextafterl(bigpart,2*bigpart)-bigpart;
   //printf("precision %e\n",precision);
   if (precision>1e-6)
