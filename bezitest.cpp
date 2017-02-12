@@ -4125,12 +4125,14 @@ void testgeoidboundary()
   tassert(gb[1].size()==4); // meet on a line at level 1.
   tassert(fabs(gb.perimeter()-23e6)<0.2e6);
   cout<<"perimeter of two squares is "<<gb.perimeter()<<" before consolidating"<<endl;
+  cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
   gb.consolidate(1);
   tassert(gb.size()==2);
   tassert(gb[0].size()==8);
   tassert(gb[1].size()==0);
   tassert(fabs(gb.perimeter()-20e6)<0.2e6);
   cout<<"perimeter of two squares is "<<gb.perimeter()<<" after consolidating"<<endl;
+  cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
   gb.splitoff(1);
   tassert(gb.size()==2);
   gb.deleteNullSegments();

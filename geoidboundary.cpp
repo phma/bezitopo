@@ -309,6 +309,11 @@ double g1boundary::perimeter()
   return surfacePerimeter(surfaceCorners());
 }
 
+int g1boundary::area()
+{
+  return iSurfaceArea(surfaceCorners());
+}
+
 void moveToFace(vball &v,int f)
 /* Moves v to face f, assuming that it's on face f (in which case it does
  * nothing) or on the edge of an adjacent face.
@@ -500,4 +505,12 @@ double gboundary::perimeter()
   for (i=0;i<bdy.size();i++)
     perim[i]=bdy[i].perimeter();
   return pairwisesum(perim);
+}
+
+int gboundary::area()
+{
+  int i,total;
+  for (total=i=0;i<bdy.size();i++)
+    total+=bdy[i].area();
+  return total;
 }

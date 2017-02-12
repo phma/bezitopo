@@ -51,6 +51,7 @@ public:
   void split(int m,int n,g1boundary &b);
   std::vector<xyz> surfaceCorners();
   double perimeter();
+  int area();
 };
 
 bool overlap(vsegment a,vsegment b);
@@ -68,6 +69,7 @@ public:
   void deleteNullSegments();
   void deleteEmpty();
   double perimeter();
+  int area();
   friend gboundary operator||(const gboundary &l,const gboundary &r);
   friend gboundary operator+(const gboundary &l,const gboundary &r);
 };

@@ -59,3 +59,24 @@ double surfacePerimeter(vector<xyz> polygon)
  * almost all the earth. Areas are thus expressed as 32-bit integers like
  * angles. One ulp is about 119 dunams.
  */
+
+double deflectionAngle(xyz a,xyz b,xyz c)
+{
+  xyz axb,bxc;
+  axb=cross(a,b);
+  bxc=cross(b,c);
+  axb.normalize();
+  b.normalize();
+  bxc.normalize();
+  return atan2(dot(cross(axb,bxc),b),dot(axb,bxc));
+}
+
+int iSurfaceArea(std::vector<xyz> polygon)
+{
+  vector<double> dangle;
+  int i;
+  dangle.resize(polygon.size());
+  for (i=0;i<polygon.size();i++)
+    dangle[i]=deflectionAngle(polygon[(i+polygon.size()-1)%polygon.size()],polygon[i],polygon[(i+1)%polygon.size()]);
+  return radtobin(pairwisesum(dangle))+DEG360;
+}

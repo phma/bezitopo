@@ -23,3 +23,4 @@
 #include "xyz.h"
 
 double surfacePerimeter(std::vector<xyz> polygon);
+int iSurfaceArea(std::vector<xyz> polygon);
