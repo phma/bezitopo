@@ -19,7 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cassert>
+#include "angle.h"
 #include "spolygon.h"
+#include "geoid.h"
+#include "manysum.h"
+using namespace std;
+
+double surfaceLength(double throughLength)
+{
+  assert(throughLength<2.001*EARTHRAD);
+  if (throughLength>=2*EARTHRAD)
+    return M_PI*EARTHRAD;
+  else
+    return 2*EARTHRAD*asin(throughLength/2/EARTHRAD);
+}
+
+double surfacePerimeter(vector<xyz> polygon)
+/* All vertices of polygon are assumed to be at the surface of the earth,
+ * as provided by decodedir.
+ */
+{
+  vector<double> sideLength(polygon.size(),0);
+  int i;
+  for (i=0;i<polygon.size();i++)
+    sideLength[i]=surfaceLength(dist(polygon[i],polygon[(i+1)%polygon.size()]));
+  return pairwisesum(sideLength);
+}
 
 /* To compute the area of a boundary (which is needed only for testing; area
  * can be computed easier by asking the geoquads), add up the spherical

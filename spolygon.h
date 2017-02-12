@@ -21,3 +21,5 @@
  */
 #include <vector>
 #include "xyz.h"
+
+double surfacePerimeter(std::vector<xyz> polygon);

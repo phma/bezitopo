@@ -141,3 +141,8 @@ long double pairwisesum(long double *a,unsigned n)
   else
     return 0;
 }
+
+double pairwisesum(vector<double> &a)
+{
+  return pairwisesum(&a[0],a.size());
+}

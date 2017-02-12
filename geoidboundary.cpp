@@ -23,6 +23,8 @@
 #include <iostream>
 #include "geoid.h"
 #include "geoidboundary.h"
+#include "spolygon.h"
+#include "manysum.h"
 using namespace std;
 
 char vballcompare[8][8]=
@@ -292,6 +294,21 @@ void g1boundary::split(int m,int n,g1boundary &b)
   split(n-m+1,b);
 }
 
+vector<xyz> g1boundary::surfaceCorners()
+{
+  vector<xyz> ret;
+  int i;
+  ret.resize(bdy.size());
+  for (i=0;i<bdy.size();i++)
+    ret[i]=decodedir(bdy[i]);
+  return ret;
+}
+
+double g1boundary::perimeter()
+{
+  return surfacePerimeter(surfaceCorners());
+}
+
 void moveToFace(vball &v,int f)
 /* Moves v to face f, assuming that it's on face f (in which case it does
  * nothing) or on the edge of an adjacent face.
@@ -473,4 +490,14 @@ void gboundary::deleteEmpty()
     //cout<<"i="<<i<<" j="<<j<<endl;
   }
   bdy.resize(i);
+}
+
+double gboundary::perimeter()
+{
+  vector<double> perim;
+  int i;
+  perim.resize(bdy.size());
+  for (i=0;i<bdy.size();i++)
+    perim[i]=bdy[i].perimeter();
+  return pairwisesum(perim);
 }

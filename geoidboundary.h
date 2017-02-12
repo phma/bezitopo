@@ -49,6 +49,8 @@ public:
   void split(int n,g1boundary &b);
   void splice(int m,g1boundary &b,int n);
   void split(int m,int n,g1boundary &b);
+  std::vector<xyz> surfaceCorners();
+  double perimeter();
 };
 
 bool overlap(vsegment a,vsegment b);
@@ -65,6 +67,7 @@ public:
   void splitoff(int l);
   void deleteNullSegments();
   void deleteEmpty();
+  double perimeter();
   friend gboundary operator||(const gboundary &l,const gboundary &r);
   friend gboundary operator+(const gboundary &l,const gboundary &r);
 };
