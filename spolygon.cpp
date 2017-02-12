@@ -49,7 +49,7 @@ double surfacePerimeter(vector<xyz> polygon)
 
 /* To compute the area of a boundary (which is needed only for testing; area
  * can be computed easier by asking the geoquads), add up the spherical
- * deflection angles and subtract 2π. To compute the deflection angle ABC:
+ * deflection angles and subtract from 2π. To compute the deflection angle ABC:
  * • AXB=A×B; BXC=B×C;
  * • Normalize AXB, BXC, and B;
  * • (AXB×BXC)·B is the sine of the angle; AXB·BXC is the cosine.
@@ -78,5 +78,6 @@ int iSurfaceArea(std::vector<xyz> polygon)
   dangle.resize(polygon.size());
   for (i=0;i<polygon.size();i++)
     dangle[i]=deflectionAngle(polygon[(i+polygon.size()-1)%polygon.size()],polygon[i],polygon[(i+1)%polygon.size()]);
-  return radtobin(pairwisesum(dangle))+DEG360;
+  return (polygon.size()?DEG360:0)-radtobin(pairwisesum(dangle));
+  // The area of an empty polygon is 0. Without the ?;, it would be 2π.
 }

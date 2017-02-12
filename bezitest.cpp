@@ -4119,11 +4119,13 @@ void testgeoidboundary()
   tassert(gb[0].size()==4);
   tassert(gb[1].size()==4);
   tassert(fabs(gb.perimeter()-23e6)<0.2e6);
+  tassert(fabs(bintodeg(gb.area())-24)<0.01);
   gb.consolidate(2);
   tassert(gb.size()==2);
   tassert(gb[0].size()==4); // Nothing's happened, because the two squares
   tassert(gb[1].size()==4); // meet on a line at level 1.
   tassert(fabs(gb.perimeter()-23e6)<0.2e6);
+  tassert(fabs(bintodeg(gb.area())-24)<0.01);
   cout<<"perimeter of two squares is "<<gb.perimeter()<<" before consolidating"<<endl;
   cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
   gb.consolidate(1);
@@ -4131,6 +4133,7 @@ void testgeoidboundary()
   tassert(gb[0].size()==8);
   tassert(gb[1].size()==0);
   tassert(fabs(gb.perimeter()-20e6)<0.2e6);
+  tassert(fabs(bintodeg(gb.area())-24)<0.01);
   cout<<"perimeter of two squares is "<<gb.perimeter()<<" after consolidating"<<endl;
   cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
   gb.splitoff(1);
@@ -4138,10 +4141,12 @@ void testgeoidboundary()
   gb.deleteNullSegments();
   tassert(gb[0].size()==8);
   tassert(fabs(gb.perimeter()-20e6)<0.2e6);
+  tassert(fabs(bintodeg(gb.area())-24)<0.01);
   gb.deleteEmpty();
   tassert(gb.size()==1);
   tassert(gb[0].size()==8);
   tassert(fabs(gb.perimeter()-20e6)<0.2e6);
+  tassert(fabs(bintodeg(gb.area())-24)<0.01);
 }
 
 void testgeoid()
