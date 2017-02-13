@@ -4147,6 +4147,19 @@ void testgeoidboundary()
   tassert(gb[0].size()==8);
   tassert(fabs(gb.perimeter()-20e6)<0.2e6);
   tassert(fabs(bintodeg(gb.area())-24)<0.01);
+  /* The main test is as follows:
+   * 1. Create an excerpt of a global geoid file, using five circles centered
+   *    at corners of a regular icosahedron and passing through corners of
+   *    a regular dodecahedron. The icosahedron is in random orientation.
+   * 2. Compute the boundary of the cubemap.
+   * 3. Check that the boundary has two components and that the length
+   *    (measured by midpoints) and area are close to correct.
+   * Corner of an icosahedron: (0,1,φ) normalized -> (0,0.52573,0.85065)
+   * Corner of a dodecahedron: (sqrt(1/3),sqrt(1/3),sqrt(1/3))
+   * Radius of a circle: 4156.174 km, 37.40556°, 223132877
+   * Area of figure: 242.1199 Mm², 341.77317°, 2038756371
+   * Perimeter of figure: 72902.392 km, 656.12152°, 3913917342.
+   */
 }
 
 void testgeoid()
