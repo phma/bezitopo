@@ -4084,6 +4084,7 @@ void testgeoidboundary()
   g1boundary g1,g2;
   gboundary gb;
   vball v;
+  smallcircle c;
   tassert(splitLevel(-1)==0);
   tassert(splitLevel(1)==0);
   r=rng.uirandom();
@@ -4160,6 +4161,22 @@ void testgeoidboundary()
    * Area of figure: 242.1199 Mm², 341.77317°, 2038756371
    * Perimeter of figure: 72902.392 km, 656.12152°, 3913917342.
    */
+  excerptcircles.clear();
+  c.center=xyz(3524578,5702887,0);
+  c.setradius(223132877);
+  excerptcircles.push_back(c);
+  c.center=xyz(5702887,0,3524578);
+  c.setradius(223132877);
+  excerptcircles.push_back(c);
+  c.center=xyz(0,-3524578,5702887);
+  c.setradius(223132877);
+  excerptcircles.push_back(c);
+  c.center=xyz(-5702887,0,3524578);
+  c.setradius(223132877);
+  excerptcircles.push_back(c);
+  c.center=xyz(-3524578,5702887,0);
+  c.setradius(223132877);
+  excerptcircles.push_back(c);
 }
 
 void testgeoid()
