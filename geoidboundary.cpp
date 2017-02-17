@@ -184,6 +184,11 @@ int g1boundary::size()
   return bdy.size();
 }
 
+void g1boundary::clear()
+{
+  bdy.clear();
+}
+
 void g1boundary::push_back(vball v)
 /* A g1boundary is initialized with four points, the corners of a geoquad
  * in counterclockwise order. A clockwise g1boundary is the boundary
@@ -394,6 +399,11 @@ g1boundary gboundary::operator[](int n)
 int gboundary::size()
 {
   return bdy.size();
+}
+
+void gboundary::clear()
+{
+  bdy.clear();
 }
 
 void gboundary::consolidate(int l)

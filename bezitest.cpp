@@ -4148,6 +4148,37 @@ void testgeoidboundary()
   tassert(gb[0].size()==8);
   tassert(fabs(gb.perimeter()-20e6)<0.2e6);
   tassert(fabs(bintodeg(gb.area())-24)<0.01);
+  // start another test: 回
+  gb.clear();
+  g1.clear();
+  v.face=2;
+  v.x=v.y=-1;
+  g1.push_back(v);
+  v.x=.5;
+  g1.push_back(v);
+  v.y=.5;
+  g1.push_back(v);
+  v.x-1;
+  g1.push_back(v);
+  v.y=-.5;
+  g1.push_back(v);
+  v.x=-.5;
+  g1.push_back(v);
+  v.y=0;
+  g1.push_back(v);
+  v.x=0;
+  g1.push_back(v);
+  v.y=-.5;
+  g1.push_back(v);
+  v.x=-1;
+  g1.push_back(v);
+  gb.push_back(g1);
+  gb.splitoff(3);
+  cout<<"gb.size at 3 "<<gb.size()<<endl;
+  gb.splitoff(2);
+  cout<<"gb.size at 2 "<<gb.size()<<endl;
+  gb.splitoff(1);
+  cout<<"gb.size at 1"<<gb.size()<<endl;
   /* The main test is as follows:
    * 1. Create an excerpt of a global geoid file, using five circles centered
    *    at corners of a regular icosahedron and passing through corners of

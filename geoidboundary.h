@@ -40,6 +40,7 @@ private:
 public:
   bool isempty();
   int size();
+  void clear();
   void push_back(vball v);
   vsegment seg(int n);
   std::vector<int> segmentsAtLevel(int l);
@@ -64,6 +65,7 @@ public:
   void push_back(g1boundary g1);
   g1boundary operator[](int n);
   int size();
+  void clear();
   void consolidate(int l);
   void splitoff(int l);
   void deleteNullSegments();
