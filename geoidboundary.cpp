@@ -444,9 +444,9 @@ void gboundary::splitoff(int l)
   vector<int> iseg;
   for (i=0;i<bdy.size();i++)
   {
-    iseg=bdy[i].segmentsAtLevel(l);
     do
     {
+      iseg=bdy[i].segmentsAtLevel(l);
       found=false;
       for (j=0;j<iseg.size();j++)
       {
@@ -462,7 +462,7 @@ void gboundary::splitoff(int l)
       if (found)
       {
         bdy.resize(bdy.size()+1);
-        bdy[i].split(i,j,bdy.back());
+        bdy[i].split(iseg[j],iseg[k],bdy.back());
       }
     } while (found);
   }

@@ -4158,7 +4158,7 @@ void testgeoidboundary()
   g1.push_back(v);
   v.y=.5;
   g1.push_back(v);
-  v.x-1;
+  v.x=-1;
   g1.push_back(v);
   v.y=-.5;
   g1.push_back(v);
