@@ -271,7 +271,10 @@ void g1boundary::splice(g1boundary &b)
 
 void g1boundary::split(int n,g1boundary &b)
 {
-  n%=bdy.size();
+  n%=(signed int)bdy.size();
+  /* "n%=bdy.size()" is wrong. If size()=10, and n=-4, this results in 2,
+   * because (4294967296-4)%10=2.
+   */
   if (n<0)
     n+=bdy.size();
   b.bdy.resize(bdy.size()-n);
@@ -296,7 +299,7 @@ void g1boundary::split(int m,int n,g1boundary &b)
  */
 {
   positionSegment(m);
-  split(n-m+1,b);
+  split(n-m,b);
 }
 
 vector<xyz> g1boundary::surfaceCorners()

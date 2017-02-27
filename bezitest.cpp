@@ -4178,7 +4178,9 @@ void testgeoidboundary()
   gb.splitoff(2);
   cout<<"gb.size at 2 "<<gb.size()<<endl;
   gb.splitoff(1);
-  cout<<"gb.size at 1"<<gb.size()<<endl;
+  cout<<"gb.size at 1 "<<gb.size()<<endl;
+  for (i=0;i<gb.size();i++)
+    cout<<"gb["<<i<<"].size "<<gb[i].size()<<endl;
   /* The main test is as follows:
    * 1. Create an excerpt of a global geoid file, using five circles centered
    *    at corners of a regular icosahedron and passing through corners of
