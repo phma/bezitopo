@@ -490,17 +490,17 @@ void gboundary::splitoff(int l)
 }
 
 void gboundary::deleteCollinear()
+/* Do this after consolidate and splitoff. At level 0, it can leave the
+ * boundary in a state where sameEdge incorrectly returns false, so overlapping
+ * segments aren't recognized.
+ */
 {
   int i;
   for (i=0;i<bdy.size();i++)
     bdy[i].deleteCollinear();
 }
 
-void gboundary::deleteNullSegments()
-/* Do this after consolidate and splitoff. At level 0, it can leave the
- * boundary in a state where sameEdge incorrectly returns false, so overlapping
- * segments aren't recognized.
- */
+/*void gboundary::deleteNullSegments()
 {
   int i;
   vector<int> iseg;
@@ -515,10 +515,10 @@ void gboundary::deleteNullSegments()
       bdy[i].split(iseg[0],iseg[0]+1,tmp);
     }
   }
-}
+}*/
 
 void gboundary::deleteEmpty()
-/* Do this after deleteNullSegments.
+/* Do this after deleteCollinear.
  */
 {
   int i,j;

@@ -4139,7 +4139,7 @@ void testgeoidboundary()
   cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
   gb.splitoff(1);
   tassert(gb.size()==2);
-  gb.deleteNullSegments();
+  gb.deleteCollinear();
   tassert(gb[0].size()==8);
   tassert(fabs(gb.perimeter()-20e6)<0.2e6);
   tassert(fabs(bintodeg(gb.area())-24)<0.01);
