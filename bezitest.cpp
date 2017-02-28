@@ -4173,14 +4173,28 @@ void testgeoidboundary()
   v.x=-1;
   g1.push_back(v);
   gb.push_back(g1);
+  cout<<"perimeter of square in square is "<<gb.perimeter()<<" before splitting off"<<endl;
+  cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
+  tassert(fabs(gb.perimeter()-42e6)<0.2e6);
+  tassert(fabs(bintodeg(gb.area())-66.87)<0.01);
   gb.splitoff(3);
+  gb.deleteCollinear();
   cout<<"gb.size at 3 "<<gb.size()<<endl;
   gb.splitoff(2);
+  gb.deleteCollinear();
   cout<<"gb.size at 2 "<<gb.size()<<endl;
   gb.splitoff(1);
+  gb.deleteCollinear();
   cout<<"gb.size at 1 "<<gb.size()<<endl;
   for (i=0;i<gb.size();i++)
     cout<<"gb["<<i<<"].size "<<gb[i].size()<<endl;
+  cout<<"perimeter of square in square is "<<gb.perimeter()<<" after splitting off"<<endl;
+  cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
+  tassert(gb.size()==2);
+  tassert(gb[0].size()==4);
+  tassert(gb[1].size()==4);
+  tassert(fabs(gb.perimeter()-38e6)<0.2e6);
+  tassert(fabs(bintodeg(gb.area())-66.87)<0.01);
   /* The main test is as follows:
    * 1. Create an excerpt of a global geoid file, using five circles centered
    *    at corners of a regular icosahedron and passing through corners of

@@ -50,6 +50,7 @@ public:
   void split(int n,g1boundary &b);
   void splice(int m,g1boundary &b,int n);
   void split(int m,int n,g1boundary &b);
+  void deleteCollinear();
   std::vector<xyz> surfaceCorners();
   double perimeter();
   int area();
@@ -68,6 +69,7 @@ public:
   void clear();
   void consolidate(int l);
   void splitoff(int l);
+  void deleteCollinear();
   void deleteNullSegments();
   void deleteEmpty();
   double perimeter();

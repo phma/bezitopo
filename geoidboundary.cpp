@@ -302,6 +302,24 @@ void g1boundary::split(int m,int n,g1boundary &b)
   split(n-m,b);
 }
 
+void g1boundary::deleteCollinear()
+{
+  int i,sz;
+  bool found;
+  do
+  {
+    found=false;
+    sz=bdy.size();
+    for (i=0;i<sz && !found;i++)
+      if (sameEdge(bdy[i],bdy[(i+1)%sz]) && sameEdge(bdy[(i+1)%sz],bdy[(i+2)%sz]) && sameEdge(bdy[(i+2)%sz],bdy[i]))
+      {
+        found=true;
+        positionSegment(i+1);
+        bdy.resize(sz-1);
+      }
+  } while (found);
+}
+
 vector<xyz> g1boundary::surfaceCorners()
 {
   vector<xyz> ret;
@@ -469,6 +487,13 @@ void gboundary::splitoff(int l)
       }
     } while (found);
   }
+}
+
+void gboundary::deleteCollinear()
+{
+  int i;
+  for (i=0;i<bdy.size();i++)
+    bdy[i].deleteCollinear();
 }
 
 void gboundary::deleteNullSegments()
