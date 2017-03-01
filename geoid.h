@@ -3,7 +3,7 @@
 /* geoid.h - geoidal undulation                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -30,27 +30,16 @@
 #include <cstring>
 #include "xyz.h"
 #include "ellipsoid.h"
+#include "vball.h"
+#include "geoidboundary.h"
 
 #define BOL_EARTH 0
 #define BOL_UNDULATION 0
 #define BOL_VARLENGTH 1
 #define badheader 5
 #define baddata 6
-#define EARTHRAD 6371e3
-#define EARTHRADSQ 4.0589641e13
 
-struct vball // so called because a sphere so marked looks like a volleyball
-{
-  int face;
-  double x,y;
-  vball();
-  vball(int f,xy p);
-  xy getxy();
-  double diag();
-};
-
-vball encodedir(xyz dir);
-xyz decodedir(vball code);
+class gboundary;
 
 struct cylinterval
 /* A rectangle on a cylindrical map. Used when excerpting
@@ -85,6 +74,7 @@ public:
   geoquad(const geoquad& b);
   geoquad& operator=(geoquad b);
   vball vcenter() const;
+  int splitLevel() const;
   void clear();
   void subdivide();
   void filldepth(int depth);
@@ -103,6 +93,7 @@ public:
   std::array<unsigned,2> hash();
   std::vector<cylinterval> boundrects();
   std::array<vball,4> bounds() const;
+  gboundary gbounds();
   void writeBinary(std::ostream &ofile,int nesting=0);
   void readBinary(std::istream &ifile,int nesting=-1);
   void dump(std::ostream &ofile,int nesting=0);

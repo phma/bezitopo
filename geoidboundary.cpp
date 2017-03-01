@@ -21,7 +21,6 @@
  */
 #include <cassert>
 #include <iostream>
-#include "geoid.h"
 #include "geoidboundary.h"
 #include "spolygon.h"
 #include "manysum.h"
@@ -417,7 +416,7 @@ g1boundary gboundary::operator[](int n)
   return bdy[n];
 }
 
-int gboundary::size()
+int gboundary::size() const
 {
   return bdy.size();
 }
@@ -551,4 +550,15 @@ int gboundary::area()
   for (total=i=0;i<bdy.size();i++)
     total+=bdy[i].area();
   return total;
+}
+
+gboundary operator+(const gboundary &l,const gboundary &r)
+{
+  gboundary ret;
+  int i;
+  for (i=0;i<l.size();i++)
+    ret.push_back(l.bdy[i]);
+  for (i=0;i<r.size();i++)
+    ret.push_back(r.bdy[i]);
+  return ret;
 }

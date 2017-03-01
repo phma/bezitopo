@@ -19,7 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef GEOIDBOUNDARY_H
+#define GEOIDBOUNDARY_H
 #include <vector>
+#include "geoid.h"
 
 bool operator==(const vball &a,const vball &b);
 bool sameEdge(const vball &a,const vball &b);
@@ -65,7 +68,7 @@ private:
 public:
   void push_back(g1boundary g1);
   g1boundary operator[](int n);
-  int size();
+  int size() const;
   void clear();
   void consolidate(int l);
   void splitoff(int l);
@@ -74,6 +77,6 @@ public:
   void deleteEmpty();
   double perimeter();
   int area();
-  friend gboundary operator||(const gboundary &l,const gboundary &r);
   friend gboundary operator+(const gboundary &l,const gboundary &r);
 };
+#endif
