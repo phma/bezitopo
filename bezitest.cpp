@@ -4085,6 +4085,8 @@ void testgeoidboundary()
   gboundary gb;
   vball v;
   smallcircle c;
+  Quaternion ro;
+  geoid gd,outgd;
   tassert(splitLevel(-1)==0);
   tassert(splitLevel(1)==0);
   r=rng.uirandom();
@@ -4093,8 +4095,7 @@ void testgeoidboundary()
     tassert(splitLevel(x)==i);
     x=x/2+((r&(1<<(i-1)))?0.5:-0.5);
   }
-  for (i=0;i<100;i++)
-    randomVersor();
+  ro=randomVersor();
   v.face=1;
   v.x=v.y=0;
   g1.push_back(v);
@@ -4209,21 +4210,49 @@ void testgeoidboundary()
    * Perimeter of figure: 72902.392 km, 656.12152°, 3913917342.
    */
   excerptcircles.clear();
-  c.center=xyz(3524578,5702887,0);
+  c.center=ro.rotate(xyz(3524578,5702887,0));
   c.setradius(223132877);
   excerptcircles.push_back(c);
-  c.center=xyz(5702887,0,3524578);
+  c.center=ro.rotate(xyz(5702887,0,3524578));
   c.setradius(223132877);
   excerptcircles.push_back(c);
-  c.center=xyz(0,-3524578,5702887);
+  c.center=ro.rotate(xyz(0,-3524578,5702887));
   c.setradius(223132877);
   excerptcircles.push_back(c);
-  c.center=xyz(-5702887,0,3524578);
+  c.center=ro.rotate(xyz(-5702887,0,3524578));
   c.setradius(223132877);
   excerptcircles.push_back(c);
-  c.center=xyz(-3524578,5702887,0);
+  c.center=ro.rotate(xyz(-3524578,5702887,0));
   c.setradius(223132877);
   excerptcircles.push_back(c);
+  geo.clear();
+  r=readusngatxt(gd,"ww15mgh.grd");
+  if (r<2) // TODO generate a fake geoid internally
+    r=readusngatxt(gd,"../ww15mgh.grd");
+  if (r<2)
+    cerr<<"Please download ww15mgh.grd; it is needed for the geoidboundary test."<<endl;
+  else
+    geo.push_back(gd);
+  tassert(r==2);
+  outgd.ghdr=new geoheader;
+  outgd.cmap=new cubemap;
+  outgd.cmap->scale=1/65536.;
+  outgd.ghdr->logScale=-16;
+  outgd.ghdr->planet=BOL_EARTH;
+  outgd.ghdr->dataType=BOL_UNDULATION;
+  outgd.ghdr->encoding=BOL_VARLENGTH;
+  outgd.ghdr->ncomponents=1;
+  outgd.ghdr->tolerance=0.003;
+  outgd.ghdr->sublimit=1000;
+  outgd.ghdr->spacing=1e5;
+  for (i=0;i<6;i++)
+  {
+    interroquad(outgd.cmap->faces[i],3e5);
+    refine(outgd.cmap->faces[i],outgd.cmap->scale,outgd.ghdr->tolerance,outgd.ghdr->sublimit,outgd.ghdr->spacing,4);
+  }
+  outProgress();
+  cout<<endl;
+  drawglobecube(1024,62,-7,&outgd,0,"geoidboundary.ppm");
 }
 
 void testgeoid()

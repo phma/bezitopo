@@ -185,7 +185,7 @@ vball foldcube(int panel,double x,double y)
   return v;
 }
 
-#ifdef CONVERTGEOID
+#ifdef NUMSGEOID
 void drawglobecube(int side,double zscale,double zmid,geoid *source,int imagetype,string filename)
 /* side is in pixels. Draws 4*side wide by 3*side high. imagetype is currently ignored.
  * source is nullptr for xyz color (zscale is ignored), else its geoquads

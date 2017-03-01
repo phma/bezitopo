@@ -21,13 +21,13 @@
  */
 #include "pointlist.h"
 #include "geoid.h"
-#ifdef CONVERTGEOID
+#ifdef NUMSGEOID
 #include "sourcegeoid.h"
 #endif
 
 void rasterdraw(pointlist &pts,xy center,double width,double height,
 	    double scale,int imagetype,double zscale,string filename);
-#ifdef CONVERTGEOID
+#ifdef NUMSGEOID
 void drawglobecube(int side,double zscale,double zmid,geoid *source,int imagetype,string filename);
 #endif
 void drawglobemicro(int side,xy center,double size,int source,int imagetype,string filename);
