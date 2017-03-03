@@ -953,6 +953,18 @@ cylinterval cubemap::boundrect()
   return combine(boundrects());
 }
 
+gboundary cubemap::gbounds()
+{
+  gboundary ret;
+  ret=faces[0].gbounds()+faces[1].gbounds()+faces[2].gbounds()+
+      faces[3].gbounds()+faces[4].gbounds()+faces[5].gbounds();
+  ret.consolidate(0);
+  ret.splitoff(0);
+  ret.deleteCollinear();
+  ret.deleteEmpty();
+  return ret;
+}
+
 void cubemap::writeBinary(ostream &ofile)
 {
   int i;

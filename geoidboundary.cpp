@@ -329,9 +329,22 @@ vector<xyz> g1boundary::surfaceCorners()
   return ret;
 }
 
-double g1boundary::perimeter()
+vector<xyz> g1boundary::surfaceMidpoints()
 {
-  return surfacePerimeter(surfaceCorners());
+  vector<xyz> ret;
+  int i;
+  ret.resize(bdy.size());
+  for (i=0;i<bdy.size();i++)
+  {
+    ret[i]=(decodedir(bdy[i])+decodedir(bdy[(i+1)&bdy.size()]));
+    ret[i]*=EARTHRAD/ret[i].length();
+  }
+  return ret;
+}
+
+double g1boundary::perimeter(bool midpt)
+{
+  return surfacePerimeter(midpt?surfaceMidpoints():surfaceCorners());
 }
 
 int g1boundary::area()
@@ -534,13 +547,13 @@ void gboundary::deleteEmpty()
   bdy.resize(i);
 }
 
-double gboundary::perimeter()
+double gboundary::perimeter(bool midpt)
 {
   vector<double> perim;
   int i;
   perim.resize(bdy.size());
   for (i=0;i<bdy.size();i++)
-    perim[i]=bdy[i].perimeter();
+    perim[i]=bdy[i].perimeter(midpt);
   return pairwisesum(perim);
 }
 

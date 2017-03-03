@@ -4253,6 +4253,12 @@ void testgeoidboundary()
   outProgress();
   cout<<endl;
   drawglobecube(1024,62,-7,&outgd,0,"geoidboundary.ppm");
+  gb=outgd.cmap->gbounds();
+  cout<<"gb.size "<<gb.size()<<endl;
+  for (i=0;i<gb.size();i++)
+    cout<<"gb["<<i<<"].size "<<gb[i].size()<<endl;
+  cout<<"perimeter of five circles is "<<gb.perimeter(true)<<endl;
+  cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
 }
 
 void testgeoid()

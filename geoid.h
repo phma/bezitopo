@@ -115,6 +115,7 @@ public:
   double undulation(xyz dir);
   std::vector<cylinterval> boundrects();
   cylinterval boundrect();
+  gboundary gbounds();
   void writeBinary(std::ostream &ofile);
   void readBinary(std::istream &ifile);
   void dump(std::ostream &ofile);

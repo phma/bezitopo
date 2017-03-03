@@ -55,7 +55,8 @@ public:
   void split(int m,int n,g1boundary &b);
   void deleteCollinear();
   std::vector<xyz> surfaceCorners();
-  double perimeter();
+  std::vector<xyz> surfaceMidpoints();
+  double perimeter(bool midpt=false);
   int area();
 };
 
@@ -75,7 +76,7 @@ public:
   void deleteCollinear();
   //void deleteNullSegments();
   void deleteEmpty();
-  double perimeter();
+  double perimeter(bool midpt=false);
   int area();
   friend gboundary operator+(const gboundary &l,const gboundary &r);
 };
