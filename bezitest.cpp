@@ -4140,7 +4140,8 @@ void testgeoidboundary()
     tassert(splitLevel(x)==i);
     x=x/2+((r&(1<<(i-1)))?0.5:-0.5);
   }
-  ro=randomVersor();
+  //ro=randomVersor();
+  ro=versor(xyz(0,0,0));
   v.face=1;
   v.x=v.y=0;
   g1.push_back(v);
