@@ -59,6 +59,7 @@ public:
   std::vector<xyz> surfaceMidpoints();
   double perimeter(bool midpt=false);
   int area();
+  double cubeArea();
 };
 
 bool overlap(vsegment a,vsegment b);
@@ -79,6 +80,7 @@ public:
   void deleteEmpty();
   double perimeter(bool midpt=false);
   int area();
+  double cubeArea();
   friend gboundary operator+(const gboundary &l,const gboundary &r);
 };
 #endif

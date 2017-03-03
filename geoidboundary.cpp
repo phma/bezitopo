@@ -361,6 +361,19 @@ int g1boundary::area()
   return iSurfaceArea(surfaceCorners());
 }
 
+double g1boundary::cubeArea()
+/* Area on the cube projection. This will give garbage if the
+ * path crosses an edge.
+ */
+{
+  int i,sz=bdy.size();
+  vector<double> xmul;
+  for (i=0;i<sz;i++)
+    xmul.push_back(bdy[(i+1)%sz].y*bdy[i].x-
+                   bdy[(i+1)%sz].x*bdy[i].y);
+  return pairwisesum(xmul)/2;
+}
+
 void moveToFace(vball &v,int f)
 /* Moves v to face f, assuming that it's on face f (in which case it does
  * nothing) or on the edge of an adjacent face.
@@ -572,6 +585,15 @@ int gboundary::area()
   for (total=i=0;i<bdy.size();i++)
     total+=bdy[i].area();
   return total;
+}
+
+double gboundary::cubeArea()
+{
+  int i;
+  vector<double> total;
+  for (i=0;i<bdy.size();i++)
+    total.push_back(bdy[i].cubeArea());
+  return pairwisesum(total);
 }
 
 gboundary operator+(const gboundary &l,const gboundary &r)
