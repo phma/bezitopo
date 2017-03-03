@@ -45,6 +45,7 @@ public:
   int size();
   void clear();
   void push_back(vball v);
+  vball operator[](int n);
   vsegment seg(int n);
   std::vector<int> segmentsAtLevel(int l);
   std::vector<int> nullSegments();

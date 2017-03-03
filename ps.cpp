@@ -311,6 +311,30 @@ void PostScript::line2p(xy pnt1,xy pnt2)
     <<' '<<xscale(pnt2.east())<<' '<<yscale(pnt2.north())<<" -"<<endl;
 }
 
+void PostScript::startline()
+{
+  assert(psfile);
+  *psfile<<"newpath"<<endl;
+}
+
+void PostScript::lineto(xy pnt)
+{
+  assert(psfile);
+  pnt=turn(pnt,orientation);
+  *psfile<<fixed<<setprecision(2)<<xscale(pnt.east())<<' '<<yscale(pnt.north())<<(inlin?" lineto":" moveto");
+  *psfile<<endl;
+  inlin=true;
+}
+
+void PostScript::endline(bool closed)
+{
+  assert(psfile);
+  if (closed)
+    *psfile<<"closepath ";
+  *psfile<<"stroke"<<endl;
+  inlin=false;
+}
+
 void PostScript::spline(bezier3d spl,bool fill)
 {
   int i,j,n;

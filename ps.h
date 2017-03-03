@@ -3,7 +3,7 @@
 /* ps.h - PostScript output                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -38,7 +38,7 @@ class PostScript
 protected:
   std::ostream *psfile;
   int pages;
-  bool indocument,inpage;
+  bool indocument,inpage,inlin;
   double scale; // paper size is in millimeters, but model space is in meters
   int orientation,pageorientation;
   double oldr,oldg,oldb;
@@ -64,6 +64,9 @@ public:
   void circle(xy pnt,double radius);
   void line(edge lin,int num,bool colorfibaster,bool directed=false);
   void line2p(xy pnt1,xy pnt2);
+  void startline();
+  void lineto(xy pnt);
+  void endline(bool closed=false);
   void spline(bezier3d spl,bool fill=false);
   void widen(double factor);
   void write(xy pnt,std::string text);

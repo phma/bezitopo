@@ -197,6 +197,15 @@ void g1boundary::push_back(vball v)
   bdy.push_back(v);
 }
 
+vball g1boundary::operator[](int n)
+{
+  assert(bdy.size());
+  n%=bdy.size();
+  if (n<0)
+    n+=bdy.size();
+  return bdy[n];
+}
+
 vsegment g1boundary::seg(int n)
 {
   vsegment ret;

@@ -4077,6 +4077,50 @@ void testvball()
   cout<<"done."<<endl;
 }
 
+xy unfold(vball pnt)
+{
+  xy ret(-2,-2);
+  switch (pnt.face)
+  {
+    case 1:
+      ret=xy(pnt.x,pnt.y);
+      break;
+    case 2:
+      ret=xy(2-pnt.y,pnt.x);
+      break;
+    case 3:
+      ret=xy(pnt.y,2-pnt.x);
+      break;
+    case 4:
+      ret=xy(-pnt.y,pnt.x-2);
+      break;
+    case 5:
+      ret=xy(-2-pnt.y,pnt.x);
+      break;
+    case 6:
+      ret=xy(4-pnt.x,-pnt.y);
+      break;
+  }
+  return ret;
+}
+
+void plot1bdy(PostScript &ps,g1boundary g1)
+{
+  int i;
+  ps.startline();
+  for (i=0;i<g1.size();i++)
+    ps.lineto(unfold(g1[i]));
+  ps.endline(true);
+}
+
+void plotbdy(PostScript &ps,gboundary &gb)
+{
+  int i;
+  ps.setscale(-3,-3,3,5,DEG90);
+  for (i=0;i<gb.size();i++)
+    plot1bdy(ps,gb[i]);
+}
+
 void testgeoidboundary()
 {
   int i,r;
@@ -4087,6 +4131,7 @@ void testgeoidboundary()
   smallcircle c;
   Quaternion ro;
   geoid gd,outgd;
+  PostScript ps;
   tassert(splitLevel(-1)==0);
   tassert(splitLevel(1)==0);
   r=rng.uirandom();
@@ -4254,6 +4299,13 @@ void testgeoidboundary()
   cout<<endl;
   drawglobecube(1024,62,-7,&outgd,0,"geoidboundary.ppm");
   gb=outgd.cmap->gbounds();
+  ps.open("geoidboundary.ps");
+  ps.prolog();
+  ps.startpage();
+  plotbdy(ps,gb);
+  ps.endpage();
+  ps.trailer();
+  ps.close();
   cout<<"gb.size "<<gb.size()<<endl;
   for (i=0;i<gb.size();i++)
     cout<<"gb["<<i<<"].size "<<gb[i].size()<<endl;
@@ -4432,33 +4484,6 @@ void outcyl(cylinterval c)
 {
   cout<<"latitude "<<bintodeg(c.sbd)<<'-'<<bintodeg(c.nbd);
   cout<<" longitude "<<bintodeg(c.wbd)<<'-'<<bintodeg(c.ebd);
-}
-
-xy unfold(vball pnt)
-{
-  xy ret(-2,-2);
-  switch (pnt.face)
-  {
-    case 1:
-      ret=xy(pnt.x,pnt.y);
-      break;
-    case 2:
-      ret=xy(2-pnt.y,pnt.x);
-      break;
-    case 3:
-      ret=xy(pnt.y,2-pnt.x);
-      break;
-    case 4:
-      ret=xy(-pnt.y,pnt.x-2);
-      break;
-    case 5:
-      ret=xy(-2-pnt.y,pnt.x);
-      break;
-    case 6:
-      ret=xy(4-pnt.x,-pnt.y);
-      break;
-  }
-  return ret;
 }
 
 array<int,2> plotcenter(PostScript &ps,geoquad &quad,smallcircle sc)
