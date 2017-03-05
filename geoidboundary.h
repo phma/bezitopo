@@ -76,7 +76,7 @@ public:
   void consolidate(int l);
   void splitoff(int l);
   void deleteCollinear();
-  //void deleteNullSegments();
+  void deleteNullSegments();
   void deleteEmpty();
   double perimeter(bool midpt=false);
   int area();

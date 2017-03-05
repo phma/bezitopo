@@ -4123,7 +4123,7 @@ void plotbdy(PostScript &ps,gboundary &gb)
 
 void testgeoidboundary()
 {
-  int i,r;
+  int i,r,gbarea;
   double x;
   g1boundary g1,g2;
   gboundary gb;
@@ -4140,8 +4140,8 @@ void testgeoidboundary()
     tassert(splitLevel(x)==i);
     x=x/2+((r&(1<<(i-1)))?0.5:-0.5);
   }
-  //ro=randomVersor();
-  ro=versor(xyz(0,0,0));
+  ro=randomVersor();
+  //ro=versor(xyz(0,0,0));
   v.face=1;
   v.x=v.y=0;
   g1.push_back(v);
@@ -4175,7 +4175,8 @@ void testgeoidboundary()
   tassert(fabs(gb.perimeter()-23e6)<0.2e6);
   tassert(fabs(bintodeg(gb.area())-24)<0.01);
   cout<<"perimeter of two squares is "<<gb.perimeter()<<" before consolidating"<<endl;
-  cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
+  gbarea=gb.area();
+  cout<<"area "<<gbarea<<' '<<bintodeg(gbarea)<<endl;
   gb.consolidate(1);
   tassert(gb.size()==2);
   tassert(gb[0].size()==8);
@@ -4183,7 +4184,8 @@ void testgeoidboundary()
   tassert(fabs(gb.perimeter()-20e6)<0.2e6);
   tassert(fabs(bintodeg(gb.area())-24)<0.01);
   cout<<"perimeter of two squares is "<<gb.perimeter()<<" after consolidating"<<endl;
-  cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
+  gbarea=gb.area();
+  cout<<"area "<<gbarea<<' '<<bintodeg(gbarea)<<endl;
   gb.splitoff(1);
   tassert(gb.size()==2);
   gb.deleteCollinear();
@@ -4221,9 +4223,10 @@ void testgeoidboundary()
   g1.push_back(v);
   gb.push_back(g1);
   cout<<"perimeter of square in square is "<<gb.perimeter()<<" before splitting off"<<endl;
-  cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
+  gbarea=gb.area();
+  cout<<"area "<<gbarea<<' '<<bintodeg(gbarea)<<endl;
   tassert(fabs(gb.perimeter()-42e6)<0.2e6);
-  tassert(fabs(bintodeg(gb.area())-66.87)<0.01);
+  tassert(fabs(bintodeg(gbarea)-66.87)<0.01);
   gb.splitoff(3);
   gb.deleteCollinear();
   cout<<"gb.size at 3 "<<gb.size()<<endl;
@@ -4236,12 +4239,13 @@ void testgeoidboundary()
   for (i=0;i<gb.size();i++)
     cout<<"gb["<<i<<"].size "<<gb[i].size()<<endl;
   cout<<"perimeter of square in square is "<<gb.perimeter()<<" after splitting off"<<endl;
-  cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
+  gbarea=gb.area();
+  cout<<"area "<<gbarea<<' '<<bintodeg(gbarea)<<endl;
   tassert(gb.size()==2);
   tassert(gb[0].size()==4);
   tassert(gb[1].size()==4);
   tassert(fabs(gb.perimeter()-38e6)<0.2e6);
-  tassert(fabs(bintodeg(gb.area())-66.87)<0.01);
+  tassert(fabs(bintodeg(gbarea)-66.87)<0.01);
   /* The main test is as follows:
    * 1. Create an excerpt of a global geoid file, using five circles centered
    *    at corners of a regular icosahedron and passing through corners of
@@ -4311,7 +4315,10 @@ void testgeoidboundary()
   for (i=0;i<gb.size();i++)
     cout<<"gb["<<i<<"].size "<<gb[i].size()<<endl;
   cout<<"perimeter of five circles is "<<gb.perimeter(true)<<endl;
-  cout<<"area "<<gb.area()<<' '<<bintodeg(gb.area())<<endl;
+  gbarea=gb.area();
+  cout<<"area "<<gbarea<<' '<<bintodeg(gbarea)<<endl;
+  tassert(gbarea>2038756371 && gbarea<2060000000);
+  // The area is a little bigger so that it covers all the circles completely.
 }
 
 void testgeoid()

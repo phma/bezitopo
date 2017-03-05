@@ -334,7 +334,11 @@ vector<xyz> g1boundary::surfaceCorners()
   int i;
   ret.resize(bdy.size());
   for (i=0;i<bdy.size();i++)
+  {
     ret[i]=decodedir(bdy[i]);
+    if (i && dist(ret[i-1],ret[i])<1)
+      cout<<"Adjacent points very close"<<endl;
+  }
   return ret;
 }
 
@@ -534,7 +538,7 @@ void gboundary::deleteCollinear()
     bdy[i].deleteCollinear();
 }
 
-/*void gboundary::deleteNullSegments()
+void gboundary::deleteNullSegments()
 {
   int i;
   vector<int> iseg;
@@ -546,10 +550,10 @@ void gboundary::deleteCollinear()
       iseg=bdy[i].nullSegments();
       if (!iseg.size())
         break;
-      bdy[i].split(iseg[0],iseg[0]+1,tmp);
+      bdy[i].split(iseg[0]+1,iseg[0],tmp);
     }
   }
-}*/
+}
 
 void gboundary::deleteEmpty()
 /* Do this after deleteCollinear.

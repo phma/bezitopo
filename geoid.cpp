@@ -967,6 +967,7 @@ gboundary cubemap::gbounds()
   ret.consolidate(0);
   ret.splitoff(0);
   ret.deleteCollinear();
+  ret.deleteNullSegments(); // Delete one of two equal points on different edges.
   ret.deleteEmpty();
   return ret;
 }
