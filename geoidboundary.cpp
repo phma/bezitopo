@@ -556,7 +556,7 @@ void gboundary::deleteEmpty()
  */
 {
   int i,j;
-  for (i=0,j=size()-1;i<j;)
+  for (i=0,j=size()-1;i<=j;)
   {
     while (i<size() && bdy[i].size()>0)
       i++;
@@ -566,8 +566,6 @@ void gboundary::deleteEmpty()
       swap(bdy[i],bdy[j]);
     //cout<<"i="<<i<<" j="<<j<<endl;
   }
-  while (i<size() && bdy[i].size()>0)
-    i++;
   bdy.resize(i);
 }
 
