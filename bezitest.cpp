@@ -4124,7 +4124,7 @@ void plotbdy(PostScript &ps,gboundary &gb)
 void testgeoidboundary()
 {
   int i,r,gbarea;
-  double x;
+  double x,peri;
   g1boundary g1,g2;
   gboundary gb;
   vball v;
@@ -4314,7 +4314,10 @@ void testgeoidboundary()
   cout<<"gb.size "<<gb.size()<<endl;
   for (i=0;i<gb.size();i++)
     cout<<"gb["<<i<<"].size "<<gb[i].size()<<endl;
-  cout<<"perimeter of five circles is "<<gb.perimeter(true)<<endl;
+  tassert(gb.size()==2);
+  peri=gb.perimeter(true);
+  cout<<"perimeter of five circles is "<<peri<<endl;
+  tassert(peri>72.9e6 && peri<75e6);
   gbarea=gb.area();
   cout<<"area "<<gbarea<<' '<<bintodeg(gbarea)<<endl;
   tassert(gbarea>2038756371 && gbarea<2060000000);

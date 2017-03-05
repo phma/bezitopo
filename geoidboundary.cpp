@@ -349,7 +349,7 @@ vector<xyz> g1boundary::surfaceMidpoints()
   ret.resize(bdy.size());
   for (i=0;i<bdy.size();i++)
   {
-    ret[i]=(decodedir(bdy[i])+decodedir(bdy[(i+1)&bdy.size()]));
+    ret[i]=(decodedir(bdy[i])+decodedir(bdy[(i+1)%bdy.size()]));
     ret[i]*=EARTHRAD/ret[i].length();
   }
   return ret;
