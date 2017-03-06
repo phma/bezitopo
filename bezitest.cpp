@@ -4311,6 +4311,7 @@ void testgeoidboundary()
   ps.endpage();
   ps.trailer();
   ps.close();
+  writeboldatni(outgd,"geoidboundary.bol");
   cout<<"gb.size "<<gb.size()<<endl;
   for (i=0;i<gb.size();i++)
     cout<<"gb["<<i<<"].size "<<gb[i].size()<<endl;
