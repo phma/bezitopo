@@ -685,20 +685,14 @@ gboundary geoquad::gbounds()
 {
   gboundary ret;
   g1boundary g1;
-  double a;
   int l=splitLevel();
-  if (face==4 && center.getx()<-0.99 && center.gety()<-0.99)
-    cout<<"aoeu"<<endl;
   if (subdivided())
   {
     ret=sub[0]->gbounds()+sub[1]->gbounds()+sub[2]->gbounds()+sub[3]->gbounds();
     ret.consolidate(l);
     ret.splitoff(l);
     ret.deleteCollinear();
-    a=ret.cubeArea();
     ret.deleteEmpty();
-    if (a!=ret.cubeArea())
-      cout<<"Area lost: "<<face<<':'<<ldecimal(center.getx())<<','<<ldecimal(center.gety())<<' '<<ldecimal(scale)<<endl;
   }
   else if (!isnan())
   {
