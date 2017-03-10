@@ -41,6 +41,12 @@ double middleOrdinate(latlong ll0,latlong ll1)
   return dist(xyzmid,Sphere.geoc(llmid,0));
 }
 
+latlong splitPoint(latlong ll0,latlong ll1,int i,int n)
+{
+  int j=n-i;
+  return latlong((ll0.lat*j+ll1.lat*i)/n,(ll0.lon*j+ll1.lon*i)/n);
+}
+
 void openkml(ofstream &file,char *filename)
 {
   file.open(filename);
