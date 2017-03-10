@@ -24,5 +24,6 @@
 #include <fstream>
 #include "sourcegeoid.h"
 
+double middleOrdinate(latlong ll0,latlong ll1);
 void openkml(std::ofstream &file,char *filename);
 void closekml(std::ofstream &file);

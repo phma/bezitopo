@@ -26,6 +26,21 @@
 #include "kml.h"
 using namespace std;
 
+double middleOrdinate(latlong ll0,latlong ll1)
+/* Computes the middle by simply averaging coordinates. This is fine, as
+ * the only lines that are boundaries of cylintervals are meridians
+ * and parallels.
+ */
+{
+  latlong llmid;
+  xyz xyz0,xyz1,xyzmid;
+  llmid=latlong((ll0.lat+ll1.lat)/2,(ll0.lon+ll1.lon)/2);
+  xyz0=Sphere.geoc(ll0,0);
+  xyz1=Sphere.geoc(ll1,0);
+  xyzmid=(xyz0+xyz1)/2;
+  return dist(xyzmid,Sphere.geoc(llmid,0));
+}
+
 void openkml(ofstream &file,char *filename)
 {
   file.open(filename);
