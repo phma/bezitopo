@@ -4325,6 +4325,10 @@ void testgeoidboundary()
   // The area is a little bigger so that it covers all the circles completely.
 }
 
+void testkml()
+{
+}
+
 void testgeoid()
 {
   array<vball,4> bounds;
@@ -5093,6 +5097,8 @@ int main(int argc, char *argv[])
     testgeoid();
   if (shoulddo("geoidboundary"))
     testgeoidboundary();
+  if (shoulddo("kml"))
+    testkml();
   if (shoulddo("geint"))
     testgeint();
   //clampcubic();
