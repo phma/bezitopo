@@ -40,8 +40,11 @@ class g1boundary
 {
 private:
   std::vector<vball> bdy;
+  bool inner; // used in kml
 public:
   bool isempty();
+  bool isInner();
+  void setInner(bool i);
   int size();
   void clear();
   void push_back(vball v);

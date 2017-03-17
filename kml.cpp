@@ -47,6 +47,23 @@ latlong splitPoint(latlong ll0,latlong ll1,int i,int n)
   return latlong((ll0.lat*j+ll1.lat*i)/n,(ll0.lon*j+ll1.lon*i)/n);
 }
 
+/* KML requires that inner boundaries be distinguished from the outer boundary.
+ * The g1boundary as computed by cubemap has no notion of inner or outer
+ * boundary, so the KML export routine must figure out which is the outer
+ * boundary. To do this:
+ * 1. Find the largest blank area. This is the outside.
+ * 2. Mark all g1boundaries adjacent to the outside as outer boundaries.
+ * 3. Output each one as KML, including any immediately inside g1boundary as
+ *    inner boundary.
+ * 4. Remove the written boundaries from the gboundary.
+ * 5. If there is any g1boundary left, return to step 1.
+ * This requires calculating when a point is inside a g1boundary. To do this,
+ * pick a point inside the g1boundary, whose antipode is outside, and
+ * stereographically project the sphere around this point, getting a polyarc.
+ * Then use the polyarc::in method to determine whether the projection of
+ * the point is inside the polyarc.
+ */
+
 void openkml(ofstream &file,char *filename)
 {
   file.open(filename);

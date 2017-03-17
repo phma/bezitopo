@@ -178,6 +178,16 @@ bool g1boundary::isempty()
   return !bdy.size();
 }
 
+bool g1boundary::isInner()
+{
+  return inner;
+}
+
+void g1boundary::setInner(bool i)
+{
+  inner=i;
+}
+
 int g1boundary::size()
 {
   return bdy.size();
