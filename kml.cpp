@@ -58,7 +58,7 @@ latlong splitPoint(latlong ll0,latlong ll1,int i,int n)
  * 4. Remove the written boundaries from the gboundary.
  * 5. If there is any g1boundary left, return to step 1.
  * This requires calculating when a point is inside a g1boundary. To do this,
- * pick a point inside the g1boundary, whose antipode is outside, and
+ * pick a point remote from land and not exactly on any geoquad boundary, and
  * stereographically project the sphere around this point, getting a polyarc.
  * Then use the polyarc::in method to determine whether the projection of
  * the point is inside the polyarc.

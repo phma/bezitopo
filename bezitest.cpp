@@ -514,8 +514,11 @@ void testquaternion()
   Quaternion q0(0,0,0,0),q1(1,0,0,0),qr2(0,1,0,0),qr3(0.5,0.5,0.5,0.5);
   Quaternion qr5(M_1PHI/2+0.5,0.5,M_1PHI/2,0),qsum(1.5,0.5,0.5,0.5);
   Quaternion qprod(-0.5,0,-M_1PHI/2,M_1PHI/2+0.5);
+  Quaternion qrste(-1/14.,5/14.,7/14.,11/14.);
   xyz vec0(0,0.6,0.8),vec2,vec3,vec5;
   xyz vec2r(0,-0.6,-0.8),vec3r(0.8,0,0.6),vec5r(0.3*M_1PHI+0.4,0.3-0.4/M_1PHI,0.3/M_1PHI+0.4*M_1PHI);
+  xyz vecste(0,0,-192);
+  vball v;
   /* qr2, qr3, and qr5 generate the group of order 120 which is the group
    * of rotations of an icosahedron (or dodecahedron) times 2.
    * The matrix of qr5 is
@@ -550,6 +553,11 @@ void testquaternion()
   tassert((vec2-vec2r).length()<1e-15);
   tassert((vec3-vec3r).length()<1e-15);
   tassert((vec5-vec5r).length()<1e-15);
+  vec2=qrste.rotate(vecste);
+  cout<<vec2.getx()<<' '<<vec2.gety()<<' '<<vec2.getz()<<endl;
+  v=encodedir(vec2);
+  cout<<v.face<<' '<<v.x<<' '<<v.y<<endl;
+  cout<<ldecimal(radtodeg(vec2.lat()))<<' '<<ldecimal(radtodeg(vec2.lon()))<<endl;
 }
 
 void testcopytopopoints()

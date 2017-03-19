@@ -200,3 +200,80 @@ double LambertConicSphere::scaleFactor(latlong ll)
  * ellipsoid GRS80
  * everything else the same
  */
+
+const Quaternion rotateStereographic(1/14.,5/14.,7/14.,11/14.);
+const Quaternion unrotateStereographic(-1/14.,5/14.,7/14.,11/14.);
+/* This rotates (-96/196,-164/196,-48/196) to the South Pole, which is then
+ * projected to infinity. This point is:
+ * (-3120489.796,-5330836.735,-1560244.898) in ECEF coordinates,
+ * (5,-0.292682926829,0.585365853659) in volleyball coordinates,
+ * 14.1758035159S 120.343248884W in lat-long degrees,
+ * 14°10'32.9"S 120.20°35.7'W in lat-long DMS,
+ * 84561961.799S 717875442.017W in lat-long integer coordinates.
+ * This point is in the Pacific Ocean over a megameter from land. It is highly
+ * unlikely to be near any geoid file boundary, and neither a boldatni boundary
+ * nor a cylinterval boundary can exactly hit it.
+ */
+
+StereographicSphere::StereographicSphere():Projection()
+{
+  rotation=1;
+}
+
+StereographicSphere::StereographicSphere(Quaternion Rotation):Projection()
+{
+  rotation=Rotation;
+}
+
+latlong StereographicSphere::gridToLatlong(xy grid)
+{
+  double angle,radius;
+  latlong ret;
+  grid=(grid-offset)/scale;
+  ret.lat=M_PIl/2-2*atan(radius);
+  ret.lon=angle;
+  return ret;
+}
+
+xyz StereographicSphere::gridToGeocentric(xy grid)
+{
+  return ellip->geoc(gridToLatlong(grid),0);
+}
+
+/*xy StereographicSphere::geocentricToGrid(xyz geoc)
+{
+  return xy(0,0);
+}*/
+
+xy StereographicSphere::latlongToGrid(latlong ll)
+{
+  double radius,angle,northing,easting;
+  radius=tan((M_PIl/2-ll.lat)/2);
+  angle=ll.lon;
+  while(angle>M_PIl*2)
+    angle-=M_PIl*2;
+  while(angle<-M_PIl*2)
+    angle+=M_PIl*2;
+  /* TODO: if exponent is small, say less than 1/64, then use a complex
+   * function similar to expm1 on the Mercator coordinates.
+   */
+  radius=radius*ellip->getpor();
+  easting=radius*sin(angle);
+  northing=-radius*cos(angle);
+  return xy(easting,northing)*scale+offset;
+}
+
+double StereographicSphere::scaleFactor(xy grid)
+{
+  return scaleFactor(gridToLatlong(grid));
+}
+
+double StereographicSphere::scaleFactor(latlong ll)
+{
+  double coneradius,cenconeradius,parradius,cenparradius;
+  coneradius=tan((M_PIl/2-ll.lat)/2);
+  cenconeradius=0;
+  parradius=(ellip->geoc(ll.lat,0.,0.)).getx()/ellip->geteqr();
+  cenparradius=(ellip->geoc(0.,0.,0.)).getx()/ellip->geteqr();
+  return coneradius/cenconeradius*cenparradius/parradius*scale;
+}

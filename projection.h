@@ -91,3 +91,22 @@ protected:
   void setParallel(double Parallel);
   double scaleRatioLog(double Parallel0,double Parallel1);
 };
+
+class StereographicSphere: public Projection
+/* This is used to tell whether a point is inside a g1boundary,
+ * by projecting the sphere so that a point that's highly unlikely
+ * to be on a g1boundary is mapped to infinity.
+ */
+{
+public:
+  StereographicSphere();
+  StereographicSphere(Quaternion Rotation);
+  virtual latlong gridToLatlong(xy grid);
+  virtual xyz gridToGeocentric(xy grid);
+  //virtual xy geocentricToGrid(xyz geoc);
+  virtual xy latlongToGrid(latlong ll);
+  virtual double scaleFactor(xy grid);
+  virtual double scaleFactor(latlong ll);
+protected:
+  Quaternion rotation;
+};
