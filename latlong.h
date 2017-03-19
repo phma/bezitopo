@@ -36,4 +36,11 @@ struct latlong
 latlong parselatlong(std::string angstr,int unitp);
 std::string formatlatlong(latlong ll,int unitp);
 
+struct latlongelev
+{
+  double lat;
+  double lon;
+  double elev;
+};
+
 #endif

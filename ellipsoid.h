@@ -35,6 +35,7 @@ public:
   ~ellipsoid();
   xyz geoc(double lat,double lon,double elev);
   xyz geoc(latlong ll,double elev);
+  xyz geoc(latlongelev lle);
   xyz geoc(int lat,int lon,int elev); // elev is in 1/65536 meter; for lat and long see angle.h
   double avgradius();
   double geteqr()
