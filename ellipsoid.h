@@ -37,6 +37,7 @@ public:
   xyz geoc(latlong ll,double elev);
   xyz geoc(latlongelev lle);
   xyz geoc(int lat,int lon,int elev); // elev is in 1/65536 meter; for lat and long see angle.h
+  latlongelev geod(xyz geocen);
   double avgradius();
   double geteqr()
   {

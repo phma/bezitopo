@@ -87,6 +87,33 @@ xyz ellipsoid::geoc(latlongelev lle)
   return geoc(lle.lat,lle.lon,lle.elev);
 }
 
+latlongelev ellipsoid::geod(xyz geocen)
+// Geodetic coordinates. Inverse of geoc.
+{
+  latlongelev ret;
+  xyz chk,normal,at0;
+  double z,cylr,toler=avgradius()/1e15;
+  z=geocen.getz();
+  cylr=hypot(geocen.gety(),geocen.getx());
+  ret.lon=atan2(geocen.gety(),geocen.getx());
+  ret.lat=atan2(z*eqr/por,cylr*por/eqr);
+  ret.elev=0;
+  while (true)
+  {
+    chk=geoc(ret);
+    if (dist(chk,geocen)<toler)
+      break;
+    normal=sphere->geoc(ret);
+    normal.normalize();
+    ret.elev+=dot(geocen-chk,normal);
+    at0=geocen-ret.elev*normal;
+    z=at0.getz();
+    cylr=hypot(at0.gety(),at0.getx());
+    ret.lat=atan2(z*eqr/por,cylr*por/eqr);
+  }
+  return ret;
+}
+
 double ellipsoid::avgradius()
 {
   return cbrt(eqr*eqr*por);
