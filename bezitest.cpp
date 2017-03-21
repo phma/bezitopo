@@ -3111,6 +3111,8 @@ void testellipsoid()
 {
   double rad;
   xyz sealevel,kmhigh,noffset,soffset,diff,benin,bengal,howland,galapagos,npole,spole;
+  latlongelev greenhill,greenhill2;
+  xyz gh;
   ellipsoid test1(8026957,0,0.5),test2(8026957,4013478.5,0);
   tassert(test1.geteqr()==test2.geteqr());
   tassert(test1.getpor()==test2.getpor());
@@ -3146,6 +3148,16 @@ void testellipsoid()
   tassert(galapagos.gety()<-6370999);
   tassert(npole.getz()>6370999);
   tassert(spole.getz()<-6370999);
+  greenhill.lat=degtorad(35.4);
+  greenhill.lon=degtorad(-82.05);
+  greenhill.elev=310; // over ellipsoid; geoid is about 30 m below ellipsoid
+  gh=GRS80.geoc(greenhill);
+  greenhill2=GRS80.geod(gh);
+  cout<<"Green Hill "<<radtodeg(greenhill2.lat)<<' '<<radtodeg(greenhill2.lon)<<' '<<greenhill2.elev<<endl;
+  tassert(fabs(greenhill2.lat-greenhill.lat)<1e-3/EARTHRAD);
+  tassert(fabs(greenhill2.lon-greenhill.lon)<1e-3/EARTHRAD);
+  tassert(fabs(greenhill2.elev-greenhill.elev)<1e-3);
+  greenhill2=GRS80.geod(gh/1000);
   rad=GRS80.radiusAtLatitude(latlong(0,0),0);
   cout<<"Radius in prime at equator: "<<ldecimal(rad)<<endl;
   tassert(fabs(rad-6378137)<0.5);

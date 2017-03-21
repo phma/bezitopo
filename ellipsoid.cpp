@@ -91,6 +91,7 @@ latlongelev ellipsoid::geod(xyz geocen)
 // Geodetic coordinates. Inverse of geoc.
 {
   latlongelev ret;
+  int i;
   xyz chk,normal,at0;
   double z,cylr,toler=avgradius()/1e15;
   z=geocen.getz();
@@ -98,7 +99,7 @@ latlongelev ellipsoid::geod(xyz geocen)
   ret.lon=atan2(geocen.gety(),geocen.getx());
   ret.lat=atan2(z*eqr/por,cylr*por/eqr);
   ret.elev=0;
-  while (true)
+  for (i=0;i<100;i++)
   {
     chk=geoc(ret);
     if (dist(chk,geocen)<toler)
@@ -111,6 +112,8 @@ latlongelev ellipsoid::geod(xyz geocen)
     cylr=hypot(at0.gety(),at0.getx());
     ret.lat=atan2(z*eqr/por,cylr*por/eqr);
   }
+  if (i==100) // this can happen if the point is in the earth's core
+    ret.lon=ret.lat=ret.elev=NAN;
   return ret;
 }
 
