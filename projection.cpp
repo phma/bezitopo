@@ -144,10 +144,12 @@ xyz LambertConicSphere::gridToGeocentric(xy grid)
   return ellip->geoc(gridToLatlong(grid),0);
 }
 
-/*xy LambertConicSphere::geocentricToGrid(xyz geoc)
+xy LambertConicSphere::geocentricToGrid(xyz geoc)
 {
-  return xy(0,0);
-}*/
+  latlongelev lle=ellip->geod(geoc);
+  latlong ll(lle);
+  return latlongToGrid(ll);
+}
 
 xy LambertConicSphere::latlongToGrid(latlong ll)
 {
@@ -240,10 +242,10 @@ xyz StereographicSphere::gridToGeocentric(xy grid)
   return ellip->geoc(gridToLatlong(grid),0);
 }
 
-/*xy StereographicSphere::geocentricToGrid(xyz geoc)
+xy StereographicSphere::geocentricToGrid(xyz geoc)
 {
   return xy(0,0);
-}*/
+}
 
 xy StereographicSphere::latlongToGrid(latlong ll)
 {

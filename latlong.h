@@ -23,6 +23,8 @@
 #ifndef LATLONG_H
 #define LATLONG_H
 
+struct latlongelev;
+
 struct latlong
 {
   double lat;
@@ -30,6 +32,7 @@ struct latlong
   latlong();
   latlong(int ilat,int ilon);
   latlong(double dlat,double dlon); // Arguments are in radians.
+  latlong(latlongelev lle);
   int valid(); // 0, 1, or 2
 };
 

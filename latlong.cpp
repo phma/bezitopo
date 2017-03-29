@@ -42,6 +42,12 @@ latlong::latlong(double dlat,double dlon)
   lon=dlon;
 }
 
+latlong::latlong(latlongelev lle)
+{
+  lat=lle.lat;
+  lon=lle.lon;
+}
+
 int latlong::valid()
 {
   int ret=0;
