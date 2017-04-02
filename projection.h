@@ -110,3 +110,5 @@ public:
 protected:
   Quaternion rotation;
 };
+
+extern StereographicSphere sphereStereoArabianSea;

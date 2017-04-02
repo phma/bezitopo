@@ -259,3 +259,5 @@ double StereographicSphere::scaleFactor(latlong ll)
 {
   return scaleFactor(latlongToGrid(ll));
 }
+
+StereographicSphere sphereStereoArabianSea(rotateStereographic);

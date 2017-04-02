@@ -3336,6 +3336,8 @@ void testprojection()
   drawproj("sphereConicBenin",sphereConicBenin);
   testprojscale("sphereStereoNorthPole",sphereStereoNorthPole);
   drawproj("sphereStereoNorthPole",sphereStereoNorthPole);
+  testprojscale("sphereStereoArabianSea",sphereStereoArabianSea);
+  drawproj("sphereStereoArabianSea",sphereStereoArabianSea);
 }
 
 void spotcheckcolor(int col0,int col1)
