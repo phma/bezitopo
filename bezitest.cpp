@@ -3304,6 +3304,7 @@ void testprojection()
   LambertConicSphere sphereConic4590m(0,degtorad(45),bintorad(DEG90-1));
   // One parallel 90° and the other not is an invalid condition.
   // This is a test to see what the object does with it.
+  StereographicSphere sphereStereoNorthPole;
   latlong ll;
   xy grid;
   cout<<"projection"<<endl;
@@ -3333,6 +3334,8 @@ void testprojection()
   drawproj("sphereConic-80",sphereConicm80);
   testprojscale("sphereConicBenin",sphereConicBenin);
   drawproj("sphereConicBenin",sphereConicBenin);
+  testprojscale("sphereStereoNorthPole",sphereStereoNorthPole);
+  drawproj("sphereStereoNorthPole",sphereStereoNorthPole);
 }
 
 void spotcheckcolor(int col0,int col1)

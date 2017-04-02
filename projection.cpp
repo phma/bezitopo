@@ -229,53 +229,33 @@ StereographicSphere::StereographicSphere(Quaternion Rotation):Projection()
 
 latlong StereographicSphere::gridToLatlong(xy grid)
 {
-  double angle,radius;
-  latlong ret;
-  grid=(grid-offset)/scale;
-  ret.lat=M_PIl/2-2*atan(radius);
-  ret.lon=angle;
-  return ret;
+  return gridToGeocentric(grid).latlon();
 }
 
 xyz StereographicSphere::gridToGeocentric(xy grid)
 {
-  return ellip->geoc(gridToLatlong(grid),0);
+  double sf=scaleFactor(grid);
+  return rotation.conj().rotate(xyz(grid/sf,ellip->getpor()*(2/sf-1)));
 }
 
 xy StereographicSphere::geocentricToGrid(xyz geoc)
 {
-  return xy(0,0);
+  geoc=rotation.rotate(geoc);
+  geoc.normalize();
+  return xy(geoc)*ellip->getpor()*2/(geoc.getz()+1);
 }
 
 xy StereographicSphere::latlongToGrid(latlong ll)
 {
-  double radius,angle,northing,easting;
-  radius=tan((M_PIl/2-ll.lat)/2);
-  angle=ll.lon;
-  while(angle>M_PIl*2)
-    angle-=M_PIl*2;
-  while(angle<-M_PIl*2)
-    angle+=M_PIl*2;
-  /* TODO: if exponent is small, say less than 1/64, then use a complex
-   * function similar to expm1 on the Mercator coordinates.
-   */
-  radius=radius*ellip->getpor();
-  easting=radius*sin(angle);
-  northing=-radius*cos(angle);
-  return xy(easting,northing)*scale+offset;
+  return geocentricToGrid(ellip->geoc(ll,0));
 }
 
 double StereographicSphere::scaleFactor(xy grid)
 {
-  return scaleFactor(gridToLatlong(grid));
+  return 1+sqr(grid.length()/ellip->getpor());
 }
 
 double StereographicSphere::scaleFactor(latlong ll)
 {
-  double coneradius,cenconeradius,parradius,cenparradius;
-  coneradius=tan((M_PIl/2-ll.lat)/2);
-  cenconeradius=0;
-  parradius=(ellip->geoc(ll.lat,0.,0.)).getx()/ellip->geteqr();
-  cenparradius=(ellip->geoc(0.,0.,0.)).getx()/ellip->geteqr();
-  return coneradius/cenconeradius*cenparradius/parradius*scale;
+  return scaleFactor(latlongToGrid(ll));
 }
