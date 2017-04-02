@@ -252,7 +252,7 @@ xy StereographicSphere::latlongToGrid(latlong ll)
 
 double StereographicSphere::scaleFactor(xy grid)
 {
-  return 1+sqr(grid.length()/ellip->getpor());
+  return 1+sqr(grid.length()/2/ellip->getpor());
 }
 
 double StereographicSphere::scaleFactor(latlong ll)
