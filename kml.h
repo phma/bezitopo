@@ -23,7 +23,9 @@
 #include <iostream>
 #include <fstream>
 #include "sourcegeoid.h"
+#include "polyline.h"
 
 double middleOrdinate(latlong ll0,latlong ll1);
 void openkml(std::ofstream &file,char *filename);
 void closekml(std::ofstream &file);
+polyarc flatten(g1boundary g1);

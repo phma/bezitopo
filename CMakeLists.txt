@@ -40,9 +40,9 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                ellipsoid.cpp geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp
                hlattice.cpp kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
                matrix.cpp measure.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp
-               ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp refinegeoid.cpp
-               relprime.cpp segment.cpp sourcegeoid.cpp spiral.cpp spolygon.cpp tin.cpp
-               vball.cpp vcurve.cpp)
+               projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp
+               refinegeoid.cpp relprime.cpp segment.cpp sourcegeoid.cpp spiral.cpp
+               spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
 target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID NUMSGEOID)
 target_compile_definitions(bezitest PUBLIC NUMSGEOID)
 

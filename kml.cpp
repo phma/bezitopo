@@ -24,6 +24,7 @@
  */
 
 #include "kml.h"
+#include "projection.h"
 using namespace std;
 
 double middleOrdinate(latlong ll0,latlong ll1)
@@ -78,3 +79,20 @@ void closekml(ofstream &file)
   file.close();
 }
 
+polyarc flatten(g1boundary g1)
+{
+  int i;
+  polyarc ret;
+  arc tmp;
+  xy midpt;
+  for (i=0;i<g1.size();i++)
+    ret.insert(sphereStereoArabianSea.geocentricToGrid(decodedir(g1[i])));
+  for (i=0;i<g1.size();i++)
+  {
+    tmp=ret.getarc(i);
+    midpt=sphereStereoArabianSea.geocentricToGrid(decodedir(g1.seg(i).midpoint()));
+    tmp=arc(tmp.getstart(),xyz(midpt,0),tmp.getend());
+    ret.setdelta(i,tmp.getdelta());
+  }
+  return ret;
+}

@@ -30,6 +30,7 @@ bool sameEdge(const vball &a,const vball &b);
 struct vsegment
 {
   vball start,end;
+  vball midpoint();
 };
 
 int splitLevel(double coord);

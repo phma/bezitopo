@@ -126,6 +126,17 @@ char log29[]={
   26,20,8,16,19,15,14
 };
 
+vball vsegment::midpoint()
+{
+  vball ret;
+  if (start.face!=end.face)
+    /*figure this out later*/;
+  ret.face=start.face;
+  ret.x=(start.x+end.x)/2;
+  ret.y=(start.y+end.y)/2;
+  return ret;
+}
+
 int splitLevel(double coord)
 /* Returns the number of times a geoquad has to be split to produce
  * (coord,coord) as a boundary point. This is used when merging boundaries,
