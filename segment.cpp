@@ -355,7 +355,7 @@ double segment::dirbound(int angle,double boundsofar)
   closedist=curvature(len);
   if (closedist>closest)
     closest=closedist;
-  nstartpoints=nearbyint(closest*len)+2;
+  nstartpoints=nearbyint(fabs(closest*len))+2;
   closedist=INFINITY;
   fardist=-INFINITY;
   for (i=0;i<=nstartpoints;i++)

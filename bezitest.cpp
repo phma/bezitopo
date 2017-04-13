@@ -75,6 +75,7 @@
 #include "bicubic.h"
 #include "matrix.h"
 #include "quaternion.h"
+#include "kml.h"
 
 #define psoutput false
 // affects only maketin
@@ -4350,8 +4351,43 @@ void testgeoidboundary()
   // The area is a little bigger so that it covers all the circles completely.
 }
 
+void drawproj1bdy(PostScript &ps,polyarc proj1bdy)
+{
+  int i,ori=0;
+  double minx,maxx,miny,maxy;
+  latlong ll;
+  minx=proj1bdy.dirbound(-ori);
+  miny=proj1bdy.dirbound(-ori+DEG90);
+  maxx=-proj1bdy.dirbound(-ori+DEG180);
+  maxy=-proj1bdy.dirbound(-ori-DEG90);
+  ps.startpage();
+  ps.setscale(minx,miny,maxx,maxy,ori);
+  ps.spline(proj1bdy.approx3d(1));
+  ps.endpage();
+}
+
 void testkml()
 {
+  PostScript ps;
+  g1boundary gPode,gAntipode;
+  polyarc pPode,pAntipode;
+  vball v;
+  v.face=5;
+  v.x=-0.29296875;
+  v.y=0.585205078125;
+  gAntipode.push_back(v);
+  v.x=-0.29248046875;
+  gAntipode.push_back(v);
+  v.y=0.585693359375;
+  gAntipode.push_back(v);
+  v.x=-0.29296875;
+  gAntipode.push_back(v);
+  pAntipode=flatten(gAntipode);
+  ps.open("kml.ps");
+  ps.prolog();
+  drawproj1bdy(ps,pAntipode);
+  ps.trailer();
+  ps.close();
 }
 
 void testgeoid()
