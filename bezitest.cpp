@@ -4372,6 +4372,16 @@ void testkml()
   g1boundary gPode,gAntipode;
   polyarc pPode,pAntipode;
   vball v;
+  v.face=2;
+  v.x=0.29296875;
+  v.y=0.585693359375;
+  gPode.push_back(v);
+  v.x=0.29248046875;
+  gPode.push_back(v);
+  v.y=0.585205078125;
+  gPode.push_back(v);
+  v.x=0.29296875;
+  gPode.push_back(v);
   v.face=5;
   v.x=-0.29296875;
   v.y=0.585205078125;
@@ -4382,9 +4392,11 @@ void testkml()
   gAntipode.push_back(v);
   v.x=-0.29296875;
   gAntipode.push_back(v);
+  pPode=flatten(gPode);
   pAntipode=flatten(gAntipode);
   ps.open("kml.ps");
   ps.prolog();
+  drawproj1bdy(ps,pPode);
   drawproj1bdy(ps,pAntipode);
   ps.trailer();
   ps.close();
