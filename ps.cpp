@@ -236,6 +236,11 @@ void PostScript::setscale(double minx,double miny,double maxx,double maxy,int or
   *psfile<<"% minx="<<minx<<" miny="<<miny<<" maxx="<<maxx<<" maxy="<<maxy<<" scale="<<scale<<endl;
 }
 
+double PostScript::getscale()
+{
+  return scale;
+}
+
 void PostScript::dot(xy pnt,string comment)
 {
   assert(psfile);

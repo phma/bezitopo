@@ -4362,7 +4362,7 @@ void drawproj1bdy(PostScript &ps,polyarc proj1bdy)
   maxy=-proj1bdy.dirbound(-ori-DEG90);
   ps.startpage();
   ps.setscale(minx,miny,maxx,maxy,ori);
-  ps.spline(proj1bdy.approx3d(1));
+  ps.spline(proj1bdy.approx3d(0.1/ps.getscale()));
   ps.endpage();
 }
 

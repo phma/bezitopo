@@ -60,6 +60,7 @@ public:
   double yscale(double y);
   void setcolor(double r,double g,double b);
   void setscale(double minx,double miny,double maxx,double maxy,int ori=0);
+  double getscale();
   void dot(xy pnt,std::string comment="");
   void circle(xy pnt,double radius);
   void line(edge lin,int num,bool colorfibaster,bool directed=false);
