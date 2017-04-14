@@ -270,6 +270,8 @@ void polyarc::insert(xy newpoint,int pos)
  */
 {
   bool wasopen;
+  double totdist=0,totdelta=0;
+  int i,savepos,newdelta[2];
   vector<xy>::iterator ptit;
   vector<int>::iterator arcit;
   vector<double>::iterator lenit;
@@ -282,6 +284,53 @@ void polyarc::insert(xy newpoint,int pos)
   endpoints.insert(ptit,newpoint);
   deltas.insert(arcit,0);
   lengths.insert(lenit,0);
+  pos--;
+  if (pos<0)
+    if (wasopen)
+      pos=0;
+    else
+      pos+=endpoints.size();
+  savepos=pos;
+  for (i=0;i<2;i++)
+  {
+    if (pos+1<endpoints.size())
+    {
+      lengths[pos]=dist(endpoints[pos],endpoints[pos+1]);
+      totdist+=lengths[pos];
+      totdelta+=deltas[pos];
+    }
+    if (pos+1==endpoints.size() && !wasopen)
+    {
+      lengths[pos]=dist(endpoints[pos],endpoints[0]);
+      totdist+=lengths[pos];
+      totdelta+=deltas[pos];
+    }
+    pos++;
+    if (pos>=lengths.size())
+      pos=0;
+  }
+  pos=savepos;
+  if (totdist)
+  {
+    newdelta[0]=rint(lengths[pos]*totdelta/totdist);
+    newdelta[1]=totdelta-newdelta[0];
+  }
+  else
+  {
+    newdelta[0]=totdelta;
+    newdelta[1]=0;
+  }
+  for (i=0;i<2;i++)
+  {
+    if (pos+1<endpoints.size() || !wasopen)
+    {
+      deltas[pos]=newdelta[i];
+      lengths[pos]=getarc(i).length();
+    }
+    pos++;
+    if (pos>=lengths.size())
+      pos=0;
+  }
 }
 
 void polyline::setlengths()
@@ -301,7 +350,11 @@ void polyarc::setlengths()
 
 void polyarc::setdelta(int i,int delta)
 {
-  deltas[i%deltas.size()]=delta;
+  i%=deltas.size();
+  if (i<0)
+    i+=deltas.size();
+  deltas[i]=delta;
+  lengths[i]=getarc(i).length();
 }
 
 double polyline::length()
