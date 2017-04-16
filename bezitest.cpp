@@ -4394,11 +4394,12 @@ void testkml()
   gAntipode.push_back(v);
   pPode=flatten(gPode);
   pAntipode=flatten(gAntipode);
-  //pPode.setlengths();
-  //pAntipode.setlengths();
   cout<<"Pode length "<<pPode.length()<<" Antipode length "<<pAntipode.length()<<endl;
+  cout<<"Pode area "<<pPode.area()<<" Antipode area "<<pAntipode.area()<<endl;
   tassert(fabs(pPode.length()-9585.5)<0.1);
   tassert(fabs(pAntipode.length()-9.845e11)<1e8);
+  tassert(pPode.area()>0);
+  tassert(pAntipode.area()<0);
   ps.open("kml.ps");
   ps.prolog();
   drawproj1bdy(ps,pPode);

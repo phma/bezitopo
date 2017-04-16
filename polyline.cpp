@@ -3,7 +3,7 @@
 /* polyline.cpp - polylines                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -355,6 +355,33 @@ void polyarc::setdelta(int i,int delta)
     i+=deltas.size();
   deltas[i]=delta;
   lengths[i]=getarc(i).length();
+}
+
+double polyline::in(xy point)
+/* Returns 1 if the polyline winds once counterclockwise around point.
+ * Returns 1/2 or -1/2 if point is on polyline's boundary, unless it
+ * is a corner, in which case it returns another fraction.
+ */
+{
+  double ret=0,subtarea;
+  int i,subtended,sz=endpoints.size();
+  for (i=0;i<lengths.size();i++)
+  {
+    if (point!=endpoints[i] && point!=endpoints[(i+1)%sz])
+    {
+      subtended=foldangle(dir(point,endpoints[(i+1)%sz])-dir(point,endpoints[i]));
+      if (subtended==-DEG180)
+      {
+        subtarea=area3(endpoints[(i+1)%sz],point,endpoints[i]);
+        if (subtarea>0)
+          subtended=DEG180;
+        if (subtarea==0)
+          subtended=0;
+      }
+      ret+=(double)subtended/DEG180;
+    }
+  }
+  return ret;
 }
 
 double polyline::length()

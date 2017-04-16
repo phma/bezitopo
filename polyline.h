@@ -3,7 +3,7 @@
 /* polyline.h - polylines                             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -65,6 +65,7 @@ public:
   virtual void setlengths();
   virtual void open();
   virtual void close();
+  virtual double in(xy point);
   virtual double length();
   virtual double area();
   virtual double dirbound(int angle);

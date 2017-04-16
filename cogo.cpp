@@ -155,7 +155,7 @@ int in3(xy p,xy a,xy b,xy c)
 {
   double maxarea,maxcoord;
   int windnum=intstype(p,a,b,c,maxarea,maxcoord)+40;
-  // abc's sign is wrong, pab's sign is wring, pbc's sign is right, and pca's sign is wrong.
+  // abc's sign is wrong, pab's sign is wrong, pbc's sign is right, and pca's sign is wrong.
   windnum=intable[windnum/27][windnum%27/9][windnum%9/3][windnum%3];
   if (windnum==-128 && maxarea<maxcoord*maxcoord*1e-15)
     windnum=0;
