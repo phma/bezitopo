@@ -2705,6 +2705,7 @@ void testpolyline()
   polyline p;
   polyarc q;
   polyspiral r;
+  xy a(2,1.333),b(1.5,2),c(1.5000000001,2),d(1.499999999,2);
   cout<<"testpolyline"<<endl;
   r.smooth(); // sets the curvy flag
   bendlimit=DEG180+7;
@@ -2747,6 +2748,12 @@ void testpolyline()
   tassert(fabs(q.area()-M_PI*6.25)<0.0005);
   cout<<q.getarc(0).center().north()<<endl;
   cout<<q.length()<<endl;
+  cout<<"p: a "<<p.in(a)<<" b "<<p.in(b)<<" c "<<p.in(c)<<" d "<<p.in(d)<<endl;
+  // If these are the opposite of what they should be, check the sign of DEG360.
+  tassert(p.in(a)==1);
+  tassert(p.in(b)==0.5);
+  tassert(p.in(c)==1);
+  tassert(p.in(d)==0);
   bendlimit=DEG120;
 }
 

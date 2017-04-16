@@ -378,7 +378,7 @@ double polyline::in(xy point)
         if (subtarea==0)
           subtended=0;
       }
-      ret+=(double)subtended/DEG180;
+      ret+=(double)subtended/DEG360; // DEG360 is here construed as positive.
     }
   }
   return ret;
