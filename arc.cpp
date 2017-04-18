@@ -3,7 +3,7 @@
 /* arc.cpp - horizontal circular arcs                 */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -146,14 +146,14 @@ void arc::split(double along,arc &a,arc &b)
   //printf("split: %f,%f\n",a.end.east(),a.end.north());
 }
 
-int arc::in(xy pnt)
+double arc::in(xy pnt)
 {
   int beardiff;
   beardiff=foldangle(2*(dir(pnt,end)-dir(start,pnt)));
   if (delta && (abs(beardiff-delta)<2 || beardiff==0))
-    return (delta>0)?1:-1; // call spiralarc::in once that's defined
+    return (delta>0)?0.5:-0.5; // call spiralarc::in once that's defined
   else if (delta && (pnt==start || pnt==end))
-    return IN_AT_CORNER;
+    return bintorot(delta)/2;
   else
     return 2*((beardiff>0)-(beardiff>delta));
 }

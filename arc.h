@@ -3,7 +3,7 @@
 /* arc.h - horizontal circular arcs                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -63,7 +63,7 @@ public:
   {
     return 0;
   }
-  virtual int in(xy pnt);
+  virtual double in(xy pnt);
   double length() const;
   virtual xyz station(double along) const;
   virtual int bearing(double along);
