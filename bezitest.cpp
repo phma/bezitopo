@@ -2764,7 +2764,7 @@ void testpolyline()
   tassert(q.in(b)==1);
   //tassert(q.in(c)==1); // Actually returns 1.5 because of roundoff.
   //tassert(q.in(d)==1); // 0.5 ditto
-  //tassert(q.in(e)==0.5); // Returns 0.897584 ??
+  tassert(q.in(e)==0.5);
   tassert(q.in(f)==0.5);
   tassert(q.in(g)==0.5);
   bendlimit=DEG120;
