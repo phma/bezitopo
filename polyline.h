@@ -89,6 +89,7 @@ public:
   virtual void setlengths();
   virtual void open();
   virtual void close();
+  virtual double in(xy point);
   //virtual double length();
   virtual double area();
   virtual double dirbound(int angle);

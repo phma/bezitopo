@@ -378,9 +378,18 @@ double polyline::in(xy point)
         if (subtarea==0)
           subtended=0;
       }
-      ret+=(double)subtended/DEG360; // DEG360 is here construed as positive.
+      ret+=bintorot(subtended);
     }
   }
+  return ret;
+}
+
+double polyarc::in(xy point)
+{
+  double ret=polyline::in(point);
+  int i;
+  for (i=0;i<lengths.size();i++)
+    ret+=getarc(i).in(point);
   return ret;
 }
 

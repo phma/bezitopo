@@ -149,7 +149,7 @@ void arc::split(double along,arc &a,arc &b)
 double arc::in(xy pnt)
 {
   int beardiff;
-  beardiff=foldangle(2*(dir(pnt,end)-dir(start,pnt)));
+  beardiff=2*(foldangle(dir(pnt,end)-dir(start,pnt)));
   if (delta && (abs(beardiff-delta)<2 || beardiff==0))
     return (delta>0)?0.5:-0.5; // call spiralarc::in once that's defined
   else if (delta && (pnt==start || pnt==end))

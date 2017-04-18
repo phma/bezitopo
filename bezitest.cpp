@@ -2706,6 +2706,7 @@ void testpolyline()
   polyarc q;
   polyspiral r;
   xy a(2,1.333),b(1.5,2),c(1.5000000001,2),d(1.499999999,2);
+  xy e(3,0),f(3.5,0.5),g(0,4);
   cout<<"testpolyline"<<endl;
   r.smooth(); // sets the curvy flag
   bendlimit=DEG180+7;
@@ -2748,12 +2749,24 @@ void testpolyline()
   tassert(fabs(q.area()-M_PI*6.25)<0.0005);
   cout<<q.getarc(0).center().north()<<endl;
   cout<<q.length()<<endl;
-  cout<<"p: a "<<p.in(a)<<" b "<<p.in(b)<<" c "<<p.in(c)<<" d "<<p.in(d)<<endl;
-  // If these are the opposite of what they should be, check the sign of DEG360.
+  cout<<"p: a "<<p.in(a)<<" b "<<p.in(b)<<" c "<<p.in(c)<<" d "<<p.in(d)
+    <<" e "<<p.in(e)<<" f "<<p.in(f)<<" g "<<p.in(g)<<endl;
   tassert(p.in(a)==1);
   tassert(p.in(b)==0.5);
   tassert(p.in(c)==1);
   tassert(p.in(d)==0);
+  tassert(p.in(e)==0.25);
+  tassert(p.in(f)==0);
+  tassert(p.in(g)==0);
+  cout<<"q: a "<<q.in(a)<<" b "<<q.in(b)<<" c "<<q.in(c)<<" d "<<q.in(d)
+    <<" e "<<q.in(e)<<" f "<<q.in(f)<<" g "<<q.in(g)<<endl;
+  tassert(q.in(a)==1);
+  tassert(q.in(b)==1);
+  //tassert(q.in(c)==1); // Actually returns 1.5 because of roundoff.
+  //tassert(q.in(d)==1); // 0.5 ditto
+  //tassert(q.in(e)==0.5); // Returns 0.897584 ??
+  tassert(q.in(f)==0.5);
+  tassert(q.in(g)==0.5);
   bendlimit=DEG120;
 }
 
