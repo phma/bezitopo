@@ -3,7 +3,7 @@
 /* cogo.cpp - coordinate geometry                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015,2016 Pierre Abbat.
+/* Copyright 2012,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -151,19 +151,27 @@ inttype intersection_type(xy a,xy c,xy b,xy d)
   return (inttype)itype;
 }
 
-int in3(xy p,xy a,xy b,xy c)
+double in3(xy p,xy a,xy b,xy c)
 {
-  double maxarea,maxcoord;
-  int windnum=intstype(p,a,b,c,maxarea,maxcoord)+40;
+  double maxarea,maxcoord,ret;
+  int n=intstype(p,a,b,c,maxarea,maxcoord)+40;
   // abc's sign is wrong, pab's sign is wrong, pbc's sign is right, and pca's sign is wrong.
-  windnum=intable[windnum/27][windnum%27/9][windnum%9/3][windnum%3];
-  if (windnum==-128 && maxarea<maxcoord*maxcoord*1e-15)
-    windnum=0;
-  if (windnum==-128)
-    windnum=INT_MIN;
-  if (windnum==0x69)
-    windnum=IN_AT_CORNER;
-  return windnum;
+  ret=intable[n/27][n%27/9][n%9/3][n%3]/2.;
+  if (ret==-64 && maxarea<maxcoord*maxcoord*1e-15)
+    ret=0;
+  if (ret==-64)
+    ret=NAN;
+  if (ret==52.5)
+  {
+    if (p==a)
+      n=dir(a,c)-dir(a,b);
+    if (p==b)
+      n=dir(b,a)-dir(b,c);
+    if (p==c)
+      n=dir(c,b)-dir(c,a);
+    ret=bintorot(foldangle(n));
+  }
+  return ret;
 }
 
 double pldist(xy a,xy b,xy c)

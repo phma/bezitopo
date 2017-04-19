@@ -189,27 +189,27 @@ void testintersection()
   test1intersection(a,b,f,a,b,COLIN);
 }
 
-void test1in(xy p,xy a,xy b,xy c,int windnum)
+void test1in(xy p,xy a,xy b,xy c,double windnum)
 {
-  int wind;
+  double wind;
   wind=in3(p,a,b,c);
-  if (wind!=windnum)
+  if (wind!=windnum && (windnum!=IN_AT_CORNER || wind<=-1 || wind==0 || wind>=1))
     cout<<"Triangle ("<<a.east()<<','<<a.north()<<"),("<<
       b.east()<<','<<b.north()<<"),("<<
       c.east()<<','<<c.north()<<"): ("<<
       p.east()<<','<<p.north()<<")'s winding number is "<<wind<<
       ", should be "<<windnum<<endl;
-  tassert(wind==windnum);
+  tassert(wind==windnum || windnum==IN_AT_CORNER);
   wind=in3(p,c,b,a);
   if (windnum<10 && windnum>-10)
     windnum=-windnum;
-  if (wind!=windnum)
+  if (wind!=windnum && (windnum!=IN_AT_CORNER || wind<=-1 || wind==0 || wind>=1))
     cout<<"Triangle ("<<c.east()<<','<<c.north()<<"),("<<
       b.east()<<','<<b.north()<<"),("<<
       a.east()<<','<<a.north()<<"): ("<<
       p.east()<<','<<p.north()<<")'s winding number is "<<wind<<
       ", should be "<<windnum<<endl;
-  tassert(wind==windnum);
+  tassert(wind==windnum || windnum==IN_AT_CORNER);
 }
 
 latlong randomPoint()
@@ -284,7 +284,7 @@ void testin()
 {
   xy a(0,0),b(4,0),c(0,3),d(4/3.,1),e(4,3),f(5,0),g(7,-1),h(8,-3),
      i(3,-5),j(0,-6),k(-2,-2),l(-4,0),m(-4,-3),n(-4,6),o(-3,7),p(0,8),q(2,1.5);
-  test1in(d,a,b,c,2);
+  test1in(d,a,b,c,1);
   test1in(e,a,b,c,0);
   test1in(f,a,b,c,0);
   test1in(g,a,b,c,0);
@@ -297,8 +297,8 @@ void testin()
   test1in(n,a,b,c,0);
   test1in(o,a,b,c,0);
   test1in(p,a,b,c,0);
-  test1in(q,a,b,c,1);
-  test1in(a,a,b,c,IN_AT_CORNER);
+  test1in(q,a,b,c,0.5);
+  test1in(a,a,b,c,0.25);
   test1in(b,a,b,c,IN_AT_CORNER);
   test1in(c,a,b,c,IN_AT_CORNER);
   test1in(b,c,h,n,0);

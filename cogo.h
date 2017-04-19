@@ -3,7 +3,7 @@
 /* cogo.h - coordinate geometry                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015 Pierre Abbat.
+/* Copyright 2012,2015,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -48,14 +48,14 @@ inttype intersection_type(xy a,xy c,xy b,xy d);
    COLIN  all four points are collinear
    IMPOS  impossible, probably caused by roundoff error
    */
-int in3(xy p,xy a,xy b,xy c);
-/* Returns twice the winding number of abc arount p.
- * If abc is counterclockwise and p is inside it, returns 2.
- * If p is on the boundary of abc, returns 1 or -1, depending on the orientation
+double in3(xy p,xy a,xy b,xy c);
+/* Returns the winding number of abc arount p.
+ * If abc is counterclockwise and p is inside it, returns 1.
+ * If p is on the boundary of abc, returns 0.5 or -0.5, depending on the orientation
  * of abc.
  * If abc is flat, returns 0.
- * If p is one of a, b, and c, and abc is not flat, returns IN_AT_CORNER,
- * which must be handled specially.
+ * If p is one of a, b, and c, and abc is not flat, returns the angle
+ * as a fraction of a rotation.
  */
 double pldist(xy a,xy b,xy c);
 // Signed distance from a to the line bc.
