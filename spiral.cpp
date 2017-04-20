@@ -286,7 +286,7 @@ double spiralarc::in(xy pnt)
   {
     spiralarc first,second;
     split(len/2,first,second);
-    return in3(pnt,start,end,first.end)+first.in(pnt)+second.in(pnt);
+    return in3(pnt,start,mid,end)+first.in(pnt)+second.in(pnt);
   }
 }
 

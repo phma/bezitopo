@@ -2770,12 +2770,12 @@ void testpolyline()
   cout<<"r: a "<<r.in(a)<<" b "<<r.in(b)<<" c "<<r.in(c)<<" d "<<r.in(d)
     <<" e "<<r.in(e)<<" f "<<r.in(f)<<" g "<<r.in(g)<<endl;
   tassert(r.in(a)==1);
-  //tassert(r.in(b)==1);
-  //tassert(r.in(c)==1); // Actually returns 1.5 because of roundoff.
+  tassert(r.in(b)==1);
+  tassert(r.in(c)==1);
   //tassert(r.in(d)==1); // 0.5 ditto
   tassert(r.in(e)==0.5);
   //tassert(r.in(f)==0.5);
-  //tassert(r.in(g)==0.5);
+  tassert(fabs(r.in(g)-0.5)<1e-6);
   bendlimit=DEG120;
 }
 
