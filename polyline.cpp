@@ -393,6 +393,15 @@ double polyarc::in(xy point)
   return ret;
 }
 
+double polyspiral::in(xy point)
+{
+  double ret=polyline::in(point);
+  int i;
+  for (i=0;i<lengths.size();i++)
+    ret+=getspiralarc(i).in(point);
+  return ret;
+}
+
 double polyline::length()
 {
   int i;

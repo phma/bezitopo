@@ -269,6 +269,27 @@ spiralarc::spiralarc(xyz kra,xyz mij,xyz fam,int mbear,double curvature,double c
   control2=(start.elev()+2*end.elev())/3;
 }
 
+double spiralarc::in(xy pnt)
+{
+  double begcur=curvature(0),endcur=curvature(len),maxcur;
+  maxcur=fabs(begcur);
+  if (fabs(endcur)>maxcur)
+    maxcur=fabs(endcur);
+  if ((dist(pnt,start)>len && dist(pnt,end)>len) || 
+      maxcur*len<(xy(start).length()+xy(end).length())*1e-12)
+    return 0;
+  else if (maxcur*len<2 && pnt==xy(start))
+    return bintorot(foldangle(chordbearing()-startbearing()));
+  else if (maxcur*len<2 && pnt==xy(end))
+    return bintorot(foldangle(endbearing()-chordbearing()));
+  else
+  {
+    spiralarc first,second;
+    split(len/2,first,second);
+    return in3(pnt,start,end,first.end)+first.in(pnt)+second.in(pnt);
+  }
+}
+
 xyz spiralarc::station(double along) const
 {
   double midlong;
