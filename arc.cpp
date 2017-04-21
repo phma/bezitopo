@@ -24,6 +24,7 @@
 #include "point.h"
 #include "arc.h"
 #include "vcurve.h"
+#include "spiral.h"
 
 arc::arc()
 {
@@ -153,7 +154,10 @@ double arc::in(xy pnt)
   if (pnt==start || pnt==end)
     return bintorot(delta)/2;
   else if (delta && (abs(beardiff-delta)<2 || beardiff==0))
-    return (delta>0)?0.5:-0.5; // call spiralarc::in once that's defined
+  {
+    spiralarc spi(*this);
+    return spi.in(pnt);
+  }
   else
     return 2*((beardiff>0)-(beardiff>delta));
 }

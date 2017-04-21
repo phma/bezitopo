@@ -2797,8 +2797,8 @@ void testpolyline()
     <<" e "<<q.in(e)<<" f "<<q.in(f)<<" g "<<q.in(g)<<endl;
   tassert(q.in(a)==1);
   tassert(q.in(b)==1);
-  //tassert(q.in(c)==1); // Actually returns 1.5 because of roundoff.
-  //tassert(q.in(d)==1); // 0.5 ditto
+  tassert(q.in(c)==1);
+  tassert(q.in(d)==1);
   tassert(q.in(e)==0.5);
   mid=intersection(q,b,2*f-b);
   cout<<"q x b-f ("<<ldecimal(mid.getx())<<','<<ldecimal(mid.gety())<<')'<<endl;
@@ -2811,7 +2811,7 @@ void testpolyline()
   tassert(r.in(a)==1);
   tassert(r.in(b)==1);
   tassert(r.in(c)==1);
-  //tassert(r.in(d)==1); // 0.5 ditto
+  tassert(r.in(d)==1);
   tassert(r.in(e)==0.5);
   mid=intersection(r,b,2*f-b);
   cout<<"r x b-f ("<<ldecimal(mid.getx())<<','<<ldecimal(mid.gety())<<')'<<endl;
