@@ -2700,13 +2700,48 @@ void testhalton()
   tassert(fabs(zsqsum.total()-expected)<toler);
 }
 
+xy intersection(polyline &p,xy start,xy end)
+/* Given start and end, of which one is in p and the other is out,
+ * returns a point on p. It can't use Brent's method because p.in
+ * gives no clue about distance. It uses bisection.
+ */
+{
+  xy mid;
+  double sin,min,ein;
+  sin=p.in(start);
+  ein=p.in(end);
+  min=9;
+  while (fabs(min)>=0.75 || fabs(min)<=0.25)
+  {
+    mid=(start+end)/2;
+    min=p.in(mid);
+    if (dist(start,mid)==0 || dist(mid,end)==0)
+      break;
+    if (fabs(sin-min)>fabs(min-ein))
+    {
+      end=mid;
+      ein=min;
+    }
+    else if (fabs(sin-min)<fabs(min-ein))
+    {
+      start=mid;
+      sin=min;
+    }
+  }
+  return mid;
+}
+
 void testpolyline()
 {
   polyline p;
   polyarc q;
   polyspiral r;
   xy a(2,1.333),b(1.5,2),c(1.5000000001,2),d(1.499999999,2);
-  xy e(3,0),f(3.5,0.5),g(0,4);
+  xy e(3,0),f(3.5,0.5),g(0,4),mid;
+  /* a: near centroid; b: center of circle, midpoint of hypot;
+   * c and d: on opposite sites of b; e: corner;
+   * f and g: other points on circle
+   */
   cout<<"testpolyline"<<endl;
   r.smooth(); // sets the curvy flag
   bendlimit=DEG180+7;
@@ -2765,8 +2800,12 @@ void testpolyline()
   //tassert(q.in(c)==1); // Actually returns 1.5 because of roundoff.
   //tassert(q.in(d)==1); // 0.5 ditto
   tassert(q.in(e)==0.5);
-  tassert(q.in(f)==0.5);
-  tassert(q.in(g)==0.5);
+  mid=intersection(q,b,2*f-b);
+  cout<<"q x b-f ("<<ldecimal(mid.getx())<<','<<ldecimal(mid.gety())<<')'<<endl;
+  tassert(dist(f,mid)<1e-8);
+  mid=intersection(q,b,2*g-b);
+  cout<<"q x b-g ("<<ldecimal(mid.getx())<<','<<ldecimal(mid.gety())<<')'<<endl;
+  tassert(dist(g,mid)<1e-8);
   cout<<"r: a "<<r.in(a)<<" b "<<r.in(b)<<" c "<<r.in(c)<<" d "<<r.in(d)
     <<" e "<<r.in(e)<<" f "<<r.in(f)<<" g "<<r.in(g)<<endl;
   tassert(r.in(a)==1);
@@ -2774,8 +2813,12 @@ void testpolyline()
   tassert(r.in(c)==1);
   //tassert(r.in(d)==1); // 0.5 ditto
   tassert(r.in(e)==0.5);
-  //tassert(r.in(f)==0.5);
-  tassert(fabs(r.in(g)-0.5)<1e-6);
+  mid=intersection(r,b,2*f-b);
+  cout<<"r x b-f ("<<ldecimal(mid.getx())<<','<<ldecimal(mid.gety())<<')'<<endl;
+  tassert(dist(f,mid)<1e-8);
+  mid=intersection(r,b,2*g-b);
+  cout<<"r x b-g ("<<ldecimal(mid.getx())<<','<<ldecimal(mid.gety())<<')'<<endl;
+  tassert(dist(g,mid)<1e-8);
   bendlimit=DEG120;
 }
 
