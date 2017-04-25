@@ -24,6 +24,7 @@
 #include "geoidboundary.h"
 #include "spolygon.h"
 #include "manysum.h"
+#include "kml.h"
 using namespace std;
 
 char vballcompare[8][8]=
@@ -630,4 +631,22 @@ gboundary operator+(const gboundary &l,const gboundary &r)
   for (i=0;i<r.size();i++)
     ret.push_back(r.bdy[i]);
   return ret;
+}
+
+void gboundary::flattenBdy()
+/* Project the g1boundaries onto a plane, so that we can tell whether
+ * points are inside or outside them. Used in kml.
+ */
+{
+  int i;
+  if (flatBdy.size()!=bdy.size())
+  {
+    flatBdy.clear();
+    areaSign.clear();
+    for (i=0;i<bdy.size();i++)
+    {
+      flatBdy.push_back(flatten(bdy[i]));
+      areaSign.push_back(signbit(flatBdy.back().area()));
+    }
+  }
 }

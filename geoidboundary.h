@@ -23,6 +23,7 @@
 #define GEOIDBOUNDARY_H
 #include <vector>
 #include "geoid.h"
+#include "polyline.h"
 
 bool operator==(const vball &a,const vball &b);
 bool sameEdge(const vball &a,const vball &b);
@@ -72,6 +73,8 @@ class gboundary
 {
 private:
   std::vector<g1boundary> bdy;
+  std::vector<polyarc> flatBdy; // for kml
+  std::vector<int> areaSign; // for kml
 public:
   void push_back(g1boundary g1);
   g1boundary operator[](int n);
@@ -86,5 +89,6 @@ public:
   int area();
   double cubeArea();
   friend gboundary operator+(const gboundary &l,const gboundary &r);
+  void flattenBdy(); // for kml
 };
 #endif

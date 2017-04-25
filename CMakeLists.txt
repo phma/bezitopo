@@ -19,7 +19,7 @@ add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitopo.cpp binio.cpp brent.cpp closure.cpp cogo.cpp cogospiral.cpp
                color.cpp contour.cpp cvtmeas.cpp document.cpp drawobj.cpp
                ellipsoid.cpp geoid.cpp geoidboundary.cpp halton.cpp icommon.cpp
-               latlong.cpp layer.cpp ldecimal.cpp
+               kml.cpp latlong.cpp layer.cpp ldecimal.cpp
                manysum.cpp measure.cpp mkpoint.cpp objlist.cpp plot.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp projection.cpp ps.cpp qindex.cpp
                quaternion.cpp random.cpp raster.cpp relprime.cpp scalefactor.cpp
