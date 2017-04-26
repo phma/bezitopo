@@ -25,6 +25,7 @@
 
 #include "kml.h"
 #include "projection.h"
+#include "halton.h"
 using namespace std;
 
 double middleOrdinate(latlong ll0,latlong ll1)
@@ -93,6 +94,32 @@ polyarc flatten(g1boundary g1)
     midpt=sphereStereoArabianSea.geocentricToGrid(decodedir(g1.seg(i).midpoint()));
     tmp=arc(tmp.getstart(),xyz(midpt,0),tmp.getend());
     ret.setdelta(i,tmp.getdelta());
+  }
+  return ret;
+}
+
+map<unsigned int,latlong> kmlRegions(gboundary &gb)
+/* Given a gboundary (which has its flatBdy computed, if it didn't already),
+ * computes the regions that it divides the earth into. There are normally
+ * one more regions than g1boundaries. If gb.size() is more than 32, they
+ * cannot all be distinguished; in this case, or if a region is empty,
+ * it continues for over 2e9 iterations, trying at least four points per
+ * square kilometer, before giving up.
+ */
+{
+  int i,r;
+  halton hal;
+  latlong ll;
+  xyz pnt;
+  map<unsigned int,latlong> ret;
+  for (i=0;i<2147483600 && ret.size()<=gb.size();i++)
+  {
+    ll=hal.onearth();
+    r=gb.in(ll);
+    ret[r]=ll;
+    pnt=gb.nearPoint();
+    r=gb.in(pnt);
+    ret[r]=pnt.latlon();
   }
   return ret;
 }

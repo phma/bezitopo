@@ -25,6 +25,9 @@
 #include "spolygon.h"
 #include "manysum.h"
 #include "kml.h"
+#include "projection.h"
+#include "random.h"
+#include "relprime.h"
 using namespace std;
 
 char vballcompare[8][8]=
@@ -482,6 +485,53 @@ int gboundary::size() const
   return bdy.size();
 }
 
+int gboundary::totalSegments()
+{
+  int i,total;
+  for (i=total=0;i<bdy.size();i++)
+    total+=bdy[i].size();
+  return total;
+}
+
+vsegment gboundary::seg(int n)
+{
+  vsegment ret;
+  int i;
+  for (i=0;i<bdy.size() && n>=0;i++)
+  {
+    if (n>=0 && n<bdy[i].size())
+      ret=bdy[i].seg(n);
+    n-=bdy[i].size();
+  }
+  return ret;
+}
+
+vsegment gboundary::someSeg()
+// Returns a different segment each time; eventually returns all segments.
+{
+  int t=totalSegments();
+  if (t)
+  {
+    segNum=(segNum+relprime(t))%t;
+    if (segNum<0)
+      segNum+=t;
+  }
+  return seg(segNum);
+}
+
+xyz gboundary::nearPoint()
+/* Picks an arbitrary segment, then rotates one end around the middle
+ * by a random angle.
+ */
+{
+  vsegment aseg=someSeg();
+  xyz start,mid,end;
+  start=decodedir(aseg.start);
+  end=decodedir(aseg.end);
+  mid=start+end;
+  return versor(mid,rng.usrandom()*32768+20252).rotate(end);
+}
+
 void gboundary::clear()
 {
   bdy.clear();
@@ -649,4 +699,34 @@ void gboundary::flattenBdy()
       areaSign.push_back(signbit(flatBdy.back().area()));
     }
   }
+}
+
+unsigned int gboundary::in(xyz pnt)
+/* Returns a bit vector telling whether pnt is inside each of the g1boundaries.
+ * pnt must be on the spherical earth's surface. The number of g1boundaries
+ * must be at most 32, else it will lose information.
+ */
+{
+  int i;
+  unsigned int ret=0;
+  double bdyin;
+  xy pntproj=sphereStereoArabianSea.geocentricToGrid(pnt);
+  flattenBdy();
+  for (i=0;i<flatBdy.size();i++)
+  {
+    bdyin=flatBdy[i].in(pntproj)+areaSign[i];
+    if (bdyin>0.5)
+      ret|=1<<i;
+  }
+  return ret;
+}
+
+unsigned int gboundary::in(latlong pnt)
+{
+  return in(Sphere.geoc(pnt,0));
+}
+
+unsigned int gboundary::in(vball pnt)
+{
+  return in(decodedir(pnt));
 }

@@ -75,10 +75,15 @@ private:
   std::vector<g1boundary> bdy;
   std::vector<polyarc> flatBdy; // for kml
   std::vector<int> areaSign; // for kml
+  int segNum;
 public:
   void push_back(g1boundary g1);
   g1boundary operator[](int n);
   int size() const;
+  int totalSegments();
+  vsegment seg(int n);
+  vsegment someSeg();
+  xyz nearPoint();
   void clear();
   void consolidate(int l);
   void splitoff(int l);
@@ -90,5 +95,8 @@ public:
   double cubeArea();
   friend gboundary operator+(const gboundary &l,const gboundary &r);
   void flattenBdy(); // for kml
+  unsigned int in(xyz pnt);
+  unsigned int in(latlong pnt);
+  unsigned int in(vball pnt);
 };
 #endif

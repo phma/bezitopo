@@ -4442,6 +4442,8 @@ void testkml()
 {
   PostScript ps;
   g1boundary gPode,gAntipode;
+  gboundary gPodes;
+  map<unsigned int,latlong> kmlReg;
   polyarc pPode,pAntipode;
   vball v;
   v.face=2;
@@ -4464,6 +4466,8 @@ void testkml()
   gAntipode.push_back(v);
   v.x=-0.29296875;
   gAntipode.push_back(v);
+  gPodes.push_back(gPode);
+  gPodes.push_back(gAntipode);
   pPode=flatten(gPode);
   pAntipode=flatten(gAntipode);
   cout<<"Pode length "<<pPode.length()<<" Antipode length "<<pAntipode.length()<<endl;
@@ -4472,6 +4476,9 @@ void testkml()
   tassert(fabs(pAntipode.length()-9.845e11)<1e8);
   tassert(pPode.area()>0);
   tassert(pAntipode.area()<0);
+  kmlReg=kmlRegions(gPodes);
+  cout<<kmlReg.size()<<" regions"<<endl;
+  tassert(kmlReg.size()==3);
   ps.open("kml.ps");
   ps.prolog();
   drawproj1bdy(ps,pPode);
