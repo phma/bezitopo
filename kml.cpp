@@ -22,7 +22,7 @@
 /* Writes the boundary of an excerpt of a geoid file to a KML file
  * so that it can be seen on a map.
  */
-
+#include <climits>
 #include "kml.h"
 #include "projection.h"
 #include "halton.h"
@@ -98,28 +98,52 @@ polyarc flatten(g1boundary g1)
   return ret;
 }
 
-map<unsigned int,latlong> kmlRegions(gboundary &gb)
+KmlRegionList kmlRegions(gboundary &gb)
 /* Given a gboundary (which has its flatBdy computed, if it didn't already),
  * computes the regions that it divides the earth into. There are normally
  * one more regions than g1boundaries. If gb.size() is more than 32, they
  * cannot all be distinguished; in this case, or if a region is empty,
- * it continues for over 2e9 iterations, trying at least four points per
- * square kilometer, before giving up.
+ * it continues for 30 iterations per segment of boundary before giving up.
  */
 {
   int i,r;
-  halton hal;
+  map<unsigned int,xyz>::iterator j;
   latlong ll;
   xyz pnt;
-  map<unsigned int,latlong> ret;
-  for (i=0;i<2147483600 && ret.size()<=gb.size();i++)
+  KmlRegionList ret;
+  for (i=0;i<gb.totalSegments()*30 && ret.regionMap.size()<=gb.size();i++)
   {
-    ll=hal.onearth();
-    r=gb.in(ll);
-    ret[r]=ll;
     pnt=gb.nearPoint();
     r=gb.in(pnt);
-    ret[r]=pnt.latlon();
+    ret.regionMap[r]=pnt;
   }
+  ret.blankBitCount=INT_MAX;
+  for (j=ret.regionMap.begin();j!=ret.regionMap.end();j++)
+    if (j->first<ret.blankBitCount)
+      ret.blankBitCount=j->first;
   return ret;
 }
+
+int bitcount(int n)
+{
+  n=((n&0xaaaaaaaa)>>1)+(n&0x55555555);
+  n=((n&0xcccccccc)>>2)+(n&0x33333333);
+  n=((n&0xf0f0f0f0)>>4)+(n&0x0f0f0f0f);
+  n=((n&0xff00ff00)>>8)+(n&0x00ff00ff);
+  n=((n&0xffff0000)>>16)+(n&0x0000ffff);
+  return n;
+}
+
+gboundary regionBoundary(KmlRegionList regionList,gboundary allBdy,unsigned reg)
+{
+  map<unsigned int,xyz>::iterator i;
+  int n;
+  gboundary ret;
+  for (i=regionList.regionMap.begin();i!=regionList.regionMap.end();i++)
+    if (bitcount(reg^i->first)==1)
+      for (n=0;n<allBdy.size();n++)
+        if ((reg^i->first)&(1<<n))
+          ret.push_back(allBdy[n]);
+  return ret;
+}
+

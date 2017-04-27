@@ -4443,7 +4443,7 @@ void testkml()
   PostScript ps;
   g1boundary gPode,gAntipode;
   gboundary gPodes;
-  map<unsigned int,latlong> kmlReg;
+  KmlRegionList kmlReg;
   polyarc pPode,pAntipode;
   vball v;
   v.face=2;
@@ -4477,8 +4477,9 @@ void testkml()
   tassert(pPode.area()>0);
   tassert(pAntipode.area()<0);
   kmlReg=kmlRegions(gPodes);
-  cout<<kmlReg.size()<<" regions"<<endl;
-  tassert(kmlReg.size()==3);
+  cout<<kmlReg.regionMap.size()<<" regions; blank regions are inside "<<kmlReg.blankBitCount<<" boundaries"<<endl;
+  tassert(kmlReg.regionMap.size()==3);
+  tassert(kmlReg.blankBitCount==0);
   ps.open("kml.ps");
   ps.prolog();
   drawproj1bdy(ps,pPode);

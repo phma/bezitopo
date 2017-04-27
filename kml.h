@@ -30,4 +30,16 @@ double middleOrdinate(latlong ll0,latlong ll1);
 void openkml(std::ofstream &file,char *filename);
 void closekml(std::ofstream &file);
 polyarc flatten(g1boundary g1);
-std::map<unsigned int,latlong> kmlRegions(gboundary &gb);
+
+struct KmlRegionList
+{
+  /* The bits in the key of regionMap tell which g1boundaries the region
+   * is inside. The value is a point in the region.
+   * blankBitCount is the number of bits set in the key of a blank region.
+   * Full regions have one more bit set.
+   */
+  std::map<unsigned int,xyz> regionMap;
+  int blankBitCount;
+};
+
+KmlRegionList kmlRegions(gboundary &gb);
