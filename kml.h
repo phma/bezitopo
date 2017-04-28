@@ -31,15 +31,17 @@ void openkml(std::ofstream &file,char *filename);
 void closekml(std::ofstream &file);
 polyarc flatten(g1boundary g1);
 
-struct KmlRegionList
+class KmlRegionList
 {
   /* The bits in the key of regionMap tell which g1boundaries the region
    * is inside. The value is a point in the region.
    * blankBitCount is the number of bits set in the key of a blank region.
    * Full regions have one more bit set.
    */
+public:
   std::map<unsigned int,xyz> regionMap;
   int blankBitCount;
+  unsigned int biggestBlankRegion(gboundary& allBdy);
 };
 
 KmlRegionList kmlRegions(gboundary &gb);

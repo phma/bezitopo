@@ -4444,6 +4444,7 @@ void testkml()
   g1boundary gPode,gAntipode;
   gboundary gPodes;
   KmlRegionList kmlReg;
+  unsigned bigReg;
   polyarc pPode,pAntipode;
   vball v;
   v.face=2;
@@ -4480,6 +4481,8 @@ void testkml()
   cout<<kmlReg.regionMap.size()<<" regions; blank regions are inside "<<kmlReg.blankBitCount<<" boundaries"<<endl;
   tassert(kmlReg.regionMap.size()==3);
   tassert(kmlReg.blankBitCount==0);
+  bigReg=kmlReg.biggestBlankRegion(gPodes);
+  cout<<"biggest blank region is "<<bigReg<<endl;
   ps.open("kml.ps");
   ps.prolog();
   drawproj1bdy(ps,pPode);

@@ -134,7 +134,7 @@ int bitcount(int n)
   return n;
 }
 
-gboundary regionBoundary(KmlRegionList regionList,gboundary allBdy,unsigned reg)
+gboundary regionBoundary(KmlRegionList& regionList,gboundary& allBdy,unsigned reg)
 {
   map<unsigned int,xyz>::iterator i;
   int n;
@@ -147,3 +147,27 @@ gboundary regionBoundary(KmlRegionList regionList,gboundary allBdy,unsigned reg)
   return ret;
 }
 
+unsigned int KmlRegionList::biggestBlankRegion(gboundary& allBdy)
+/* Finds the biggest blank region and returns the bitmap indicating which
+ * g1boundaries it's in. The areas of regions are returned signed, but must
+ * be compared unsigned, and the areas of blank regions are the negatives
+ * of the actual areas.
+ */
+{
+  map<unsigned int,xyz>::iterator i;
+  int n;
+  unsigned thisarea,biggestarea=0,ret;
+  gboundary regionBdy;
+  for (i=regionMap.begin();i!=regionMap.end();i++)
+    if (bitcount(i->first)==blankBitCount)
+    {
+      regionBdy=regionBoundary(*this,allBdy,i->first);
+      thisarea=-regionBdy.area();
+      if (thisarea>biggestarea)
+      {
+        biggestarea=thisarea;
+        ret=i->first;
+      }
+    }
+  return ret;
+}
