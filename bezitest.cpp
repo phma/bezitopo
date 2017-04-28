@@ -4442,7 +4442,8 @@ void testkml()
 {
   PostScript ps;
   g1boundary gPode,gAntipode;
-  gboundary gPodes;
+  gboundary gPodes,gRingFive;
+  geoid ringFive;
   KmlRegionList kmlReg;
   unsigned bigReg;
   polyarc pPode,pAntipode;
@@ -4483,12 +4484,26 @@ void testkml()
   tassert(kmlReg.blankBitCount==0);
   bigReg=kmlReg.biggestBlankRegion(gPodes);
   cout<<"biggest blank region is "<<bigReg<<endl;
+  tassert(bigReg==0);
   ps.open("kml.ps");
   ps.prolog();
   drawproj1bdy(ps,pPode);
   drawproj1bdy(ps,pAntipode);
   ps.trailer();
   ps.close();
+  // Start test with file previously written by testgeoidboundary
+  if (readboldatni(ringFive,"geoidboundary.bol")<2)
+    cerr<<"Please run \"bezitest geoidboundary\" first."<<endl;
+  else
+    cout<<"Read geoidboundary.bol written by geoidboundary test"<<endl;
+  gRingFive=ringFive.cmap->gbounds();
+  kmlReg=kmlRegions(gRingFive);
+  cout<<kmlReg.regionMap.size()<<" regions; blank regions are inside "<<kmlReg.blankBitCount<<" boundaries"<<endl;
+  tassert(kmlReg.regionMap.size()==3);
+  tassert(kmlReg.blankBitCount==1);
+  bigReg=kmlReg.biggestBlankRegion(gRingFive);
+  cout<<"biggest blank region is "<<bigReg<<endl; // can be 1 or 2, depending on where on earth the ring is
+  
 }
 
 void testgeoid()
