@@ -44,4 +44,5 @@ public:
   unsigned int biggestBlankRegion(gboundary& allBdy);
 };
 
+gboundary regionBoundary(KmlRegionList& regionList,gboundary& allBdy,unsigned reg);
 KmlRegionList kmlRegions(gboundary &gb);

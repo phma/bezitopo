@@ -4442,10 +4442,10 @@ void testkml()
 {
   PostScript ps;
   g1boundary gPode,gAntipode;
-  gboundary gPodes,gRingFive;
+  gboundary gPodes,gRingFive,bigBdy,smallBdy;
   geoid ringFive;
   KmlRegionList kmlReg;
-  unsigned bigReg;
+  unsigned bigReg,smallReg;
   polyarc pPode,pAntipode;
   vball v;
   v.face=2;
@@ -4489,6 +4489,9 @@ void testkml()
   ps.prolog();
   drawproj1bdy(ps,pPode);
   drawproj1bdy(ps,pAntipode);
+  ps.startpage();
+  plotbdy(ps,gPodes);
+  ps.endpage();
   ps.trailer();
   ps.close();
   // Start test with file previously written by testgeoidboundary
@@ -4502,8 +4505,16 @@ void testkml()
   tassert(kmlReg.regionMap.size()==3);
   tassert(kmlReg.blankBitCount==1);
   bigReg=kmlReg.biggestBlankRegion(gRingFive);
-  cout<<"biggest blank region is "<<bigReg<<endl; // can be 1 or 2, depending on where on earth the ring is
-  
+  cout<<"biggest blank region is "<<bigReg<<endl;
+  /* The biggest blank region can be 1 or 2, depending on where on earth the
+   * ring is. The other blank region is 2 or 1. The nonblank region is 3.
+   * The biggest region's boundary is twice as long as the smallest region's.
+   */
+  smallReg=3-bigReg;
+  tassert(bigReg*smallReg==2);
+  bigBdy=regionBoundary(kmlReg,gRingFive,bigReg);
+  smallBdy=regionBoundary(kmlReg,gRingFive,smallReg);
+  cout<<"bigBdy is "<<bigBdy.perimeter(true)/smallBdy.perimeter(true)<<" times as long as smallBdy"<<endl;
 }
 
 void testgeoid()
