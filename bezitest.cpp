@@ -4440,6 +4440,7 @@ void drawproj1bdy(PostScript &ps,polyarc proj1bdy)
 
 void testkml()
 {
+  int i;
   PostScript ps;
   g1boundary gPode,gAntipode;
   gboundary gPodes,gRingFive,bigBdy,smallBdy;
@@ -4492,8 +4493,6 @@ void testkml()
   ps.startpage();
   plotbdy(ps,gPodes);
   ps.endpage();
-  ps.trailer();
-  ps.close();
   // Start test with file previously written by testgeoidboundary
   if (readboldatni(ringFive,"geoidboundary.bol")<2)
     cerr<<"Please run \"bezitest geoidboundary\" first."<<endl;
@@ -4502,6 +4501,8 @@ void testkml()
   gRingFive=ringFive.cmap->gbounds();
   kmlReg=kmlRegions(gRingFive);
   cout<<kmlReg.regionMap.size()<<" regions; blank regions are inside "<<kmlReg.blankBitCount<<" boundaries"<<endl;
+  for (i=0;i<gRingFive.size();i++)
+    drawproj1bdy(ps,gRingFive.getFlatBdy(i));
   tassert(kmlReg.regionMap.size()==3);
   tassert(kmlReg.blankBitCount==1);
   bigReg=kmlReg.biggestBlankRegion(gRingFive);
@@ -4515,6 +4516,8 @@ void testkml()
   bigBdy=regionBoundary(kmlReg,gRingFive,bigReg);
   smallBdy=regionBoundary(kmlReg,gRingFive,smallReg);
   cout<<"bigBdy is "<<bigBdy.perimeter(true)/smallBdy.perimeter(true)<<" times as long as smallBdy"<<endl;
+  ps.trailer();
+  ps.close();
 }
 
 void testgeoid()

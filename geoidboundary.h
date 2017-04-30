@@ -79,6 +79,7 @@ private:
 public:
   void push_back(g1boundary g1);
   g1boundary operator[](int n);
+  polyarc getFlatBdy(int n);
   int size() const;
   int totalSegments();
   vsegment seg(int n);

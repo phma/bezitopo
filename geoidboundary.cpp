@@ -480,6 +480,11 @@ g1boundary gboundary::operator[](int n)
   return bdy[n];
 }
 
+polyarc gboundary::getFlatBdy(int n)
+{
+  return flatBdy[n];
+}
+
 int gboundary::size() const
 {
   return bdy.size();
@@ -697,6 +702,8 @@ void gboundary::flattenBdy()
     {
       flatBdy.push_back(flatten(bdy[i]));
       areaSign.push_back(signbit(flatBdy.back().area()));
+      cout<<"bdy#"<<i<<" signbit "<<areaSign.back()<<" bdy size "<<bdy[i].size()<<
+        " around origin "<<flatBdy.back().in(xy(0,0))<<endl;
     }
   }
 }
