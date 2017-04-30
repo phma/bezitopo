@@ -93,6 +93,11 @@ polyarc flatten(g1boundary g1)
     tmp=ret.getarc(i);
     midpt=sphereStereoArabianSea.geocentricToGrid(decodedir(g1.seg(i).midpoint()));
     tmp=arc(tmp.getstart(),xyz(midpt,0),tmp.getend());
+    if (tmp.chordlength()<EARTHRAD && -abs(tmp.getdelta())<-DEG180)
+    {
+      cerr<<"Took greater arc when it shouldn't"<<endl;
+      tmp=arc(tmp.getstart(),xyz(midpt,0),tmp.getend());
+    }
     ret.setdelta(i,tmp.getdelta());
   }
   return ret;
