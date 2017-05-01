@@ -22,6 +22,24 @@
 #include <cmath>
 #include "vball.h"
 
+signed char adjFaceY[6][2][3]=
+{ // new face, new x value, sign change of x becoming y
+  {{3,1,1},{4,1,-1}},
+  {{1,1,1},{6,1,-1}},
+  {{2,1,1},{5,1,-1}},
+  {{5,-1,-1},{2,-1,1}},
+  {{6,-1,-1},{1,-1,1}},
+  {{4,-1,-1},{3,-1,1}}
+}, adjFaceX[6][2][3]=
+{ // new face, new y value, sign change of y becoming x
+  {{2,1,1},{5,-1,1}},
+  {{3,1,1},{4,-1,1}},
+  {{1,1,1},{6,-1,1}},
+  {{1,-1,-1},{6,1,-1}},
+  {{3,-1,-1},{4,1,-1}},
+  {{2,-1,-1},{5,1,-1}}
+};
+
 vball::vball()
 {
   face=0;
@@ -46,6 +64,29 @@ double vball::diag()
  */
 {
   return x+y;
+}
+
+void vball::switchFace()
+/* If the vball is on an edge, switches to the other face on that edge.
+ * If it is at a corner, switches to one of the other two faces,
+ * cycling through the three faces on the corner.
+ */
+{
+  double save;
+  if (face>0 && face<7 && fabs(y)==1)
+  {
+    save=y;
+    y=x*adjFaceY[face-1][save<0][2];
+    x=adjFaceY[face-1][save<0][1];
+    face=adjFaceY[face-1][save<0][0];
+  }
+  else if (face>0 && face<7 && fabs(x)==1)
+  {
+    save=x;
+    x=y*adjFaceX[face-1][save<0][2];
+    y=adjFaceX[face-1][save<0][1];
+    face=adjFaceX[face-1][save<0][0];
+  }
 }
 
 vball encodedir(xyz dir)

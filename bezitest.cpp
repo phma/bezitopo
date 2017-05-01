@@ -4094,9 +4094,9 @@ void testquadhash()
 void testvball()
 {
   int lat,lon,olat,olon,i,j;
-  vball v,places[24];
+  vball v,places[33];
   bool vequal,xyzequal;
-  string placenames[24];
+  string placenames[33];
   xyz dir;
   cout<<"Testing conversion to and from volleyball coordinates...";
   cout.flush();
@@ -4155,6 +4155,22 @@ void testvball()
   places[22]=vball(5,xy(-1,-0.33266));
   places[23]=vball(4,xy(0.33266,1));
   placenames[22]=placenames[23]="Corcovado, Chubut";
+  places[24]=vball(1,xy(1,1));
+  places[25]=vball(2,xy(1,1));
+  places[26]=vball(3,xy(1,1));
+  placenames[24]=placenames[25]=placenames[26]="Chamchamal, Sulaymaniya";
+  places[27]=vball(6,xy(1,-1));
+  places[28]=vball(2,xy(1,-1));
+  places[29]=vball(3,xy(-1,1));
+  placenames[27]=placenames[28]=placenames[29]="Tamba, Hyogo";
+  /* This is a close call. The point is about as far north of Tamba as it is
+   * west of Fukuchiyama, Kyoto. It's about 1 km WSW of a bend in the border,
+   * on the Hyogo side.
+   */
+  places[30]=vball(6,xy(1,1));
+  places[31]=vball(2,xy(-1,-1));
+  places[32]=vball(4,xy(-1,-1));
+  placenames[30]=placenames[31]=placenames[32]="Port Lincoln, South Australia";
   for (i=0;i<sizeof(places)/sizeof(places[0]);i++)
   {
     dir=decodedir(places[i]);
@@ -4163,6 +4179,10 @@ void testvball()
   }
   for (i=0;i<sizeof(places)/sizeof(places[0]);i++)
   {
+    v=places[i];
+    v.switchFace();
+    cout<<((v==places[i])?':':'x');
+    //tassert(v==places[i] && v.face!=places[i].face);
     for (j=0;j<sizeof(places)/sizeof(places[0]);j++)
     {
       vequal=places[i]==places[j];

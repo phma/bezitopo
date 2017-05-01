@@ -25,14 +25,16 @@
 #define EARTHRAD 6371e3
 #define EARTHRADSQ 4.0589641e13
 
-struct vball // so called because a sphere so marked looks like a volleyball
+class vball // so called because a sphere so marked looks like a volleyball
 {
+public:
   int face;
   double x,y;
   vball();
   vball(int f,xy p);
   xy getxy();
   double diag();
+  void switchFace();
 };
 
 vball encodedir(xyz dir);

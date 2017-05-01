@@ -133,8 +133,12 @@ char log29[]={
 vball vsegment::midpoint()
 {
   vball ret;
-  if (start.face!=end.face)
-    /*figure this out later*/;
+  int i;
+  for (i=0;i<9 && start.face!=end.face;i++)
+    if (i%3)
+      start.switchFace();
+    else
+      end.switchFace();
   ret.face=start.face;
   ret.x=(start.x+end.x)/2;
   ret.y=(start.y+end.y)/2;
