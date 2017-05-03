@@ -4464,6 +4464,7 @@ void testkml()
   PostScript ps;
   g1boundary gPode,gAntipode;
   gboundary gPodes,gRingFive,bigBdy,smallBdy;
+  double bigperim,smallperim;
   geoid ringFive;
   KmlRegionList kmlReg;
   unsigned bigReg,smallReg;
@@ -4535,7 +4536,10 @@ void testkml()
   tassert(bigReg*smallReg==2);
   bigBdy=regionBoundary(kmlReg,gRingFive,bigReg);
   smallBdy=regionBoundary(kmlReg,gRingFive,smallReg);
-  cout<<"bigBdy is "<<bigBdy.perimeter(true)/smallBdy.perimeter(true)<<" times as long as smallBdy"<<endl;
+  bigperim=bigBdy.perimeter(true);
+  smallperim=smallBdy.perimeter(true);
+  cout<<"bigBdy is "<<bigperim/smallperim<<" times as long as smallBdy"<<endl;
+  tassert(bigperim/smallperim<2.05 && bigperim/smallperim>1.98);
   ps.trailer();
   ps.close();
 }
