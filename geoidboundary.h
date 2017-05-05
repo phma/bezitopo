@@ -91,6 +91,7 @@ public:
   void deleteCollinear();
   void deleteNullSegments();
   void deleteEmpty();
+  void erase(int n);
   double perimeter(bool midpt=false);
   int area();
   double cubeArea();

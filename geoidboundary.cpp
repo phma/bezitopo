@@ -654,6 +654,15 @@ void gboundary::deleteEmpty()
   bdy.resize(i);
 }
 
+void gboundary::erase(int n)
+// When erasing many g1boundaries, erase them in reverse order.
+{
+  if (n<bdy.size()-1 && n>=0)
+    swap(bdy[n],bdy[bdy.size()-1]);
+  if (n<bdy.size() && n>=0)
+    bdy.resize(bdy.size()-1);
+}
+
 double gboundary::perimeter(bool midpt)
 {
   vector<double> perim;
