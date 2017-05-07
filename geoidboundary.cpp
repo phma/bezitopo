@@ -452,6 +452,20 @@ void moveToFace(vball &v,int f)
   v.face=f;
 }
 
+bool operator==(const g1boundary l,const g1boundary r)
+/* If one is rotated from the other, returns false. They have to start at
+ * the same place for it to return true. This is used in kml to compare
+ * a gboundary with a copy of itself. Ignores the inner bit.
+ */
+{
+  int i,minsize;
+  minsize=l.bdy.size();
+  if (r.bdy.size()<minsize)
+    minsize=r.bdy.size();
+  for (i=0;i<minsize && l.bdy[i]==r.bdy[i];i++);
+  return i==l.bdy.size() && i==r.bdy.size();
+}
+
 bool overlap(vsegment a,vsegment b)
 /* Returns true if the two segments are part of the same line and overlap.
  * The segments are assumed to go in opposite directions. If a segment
@@ -544,6 +558,11 @@ xyz gboundary::nearPoint()
 void gboundary::clear()
 {
   bdy.clear();
+}
+
+void gboundary::setInner(int n,bool i)
+{
+  bdy[n].setInner(i);
 }
 
 void gboundary::consolidate(int l)

@@ -176,3 +176,31 @@ unsigned int KmlRegionList::biggestBlankRegion(gboundary& allBdy)
     }
   return ret;
 }
+
+gboundary extractRegion(gboundary &gb)
+// Extracts a full region bounding the largest blank region and removes it from gb.
+{
+  gboundary ret;
+  g1boundary gb1;
+  unsigned blankRegion,fullRegion;
+  KmlRegionList regionList;
+  map<unsigned int,xyz>::iterator i;
+  int j,k;
+  vector<int> delenda;
+  regionList=kmlRegions(gb);
+  blankRegion=regionList.biggestBlankRegion(gb);
+  for (i=regionList.regionMap.begin();i!=regionList.regionMap.end();i++)
+    if (bitcount(i->first^blankRegion)==1)
+      fullRegion=i->first;
+  ret=regionBoundary(regionList,gb,fullRegion);
+  for (j=0;j<gb.size();j++)
+    for (k=0;k<ret.size();k++)
+      if (gb[j]==ret[k])
+      {
+        delenda.push_back(j);
+        ret.setInner(k,((~fullRegion^blankRegion)>>j)&1);
+      }
+  for (j=delenda.size()-1;j>=0;j--)
+    gb.erase(delenda[j]);
+  return ret;
+}

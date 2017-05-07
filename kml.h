@@ -46,3 +46,4 @@ public:
 
 gboundary regionBoundary(KmlRegionList& regionList,gboundary& allBdy,unsigned reg);
 KmlRegionList kmlRegions(gboundary &gb);
+gboundary extractRegion(gboundary &gb);

@@ -65,6 +65,7 @@ public:
   double perimeter(bool midpt=false);
   int area();
   double cubeArea();
+  friend bool operator==(const g1boundary l,const g1boundary r);
 };
 
 bool overlap(vsegment a,vsegment b);
@@ -86,6 +87,7 @@ public:
   vsegment someSeg();
   xyz nearPoint();
   void clear();
+  void setInner(int n,bool i);
   void consolidate(int l);
   void splitoff(int l);
   void deleteCollinear();
