@@ -4539,9 +4539,10 @@ void testkml()
   bigperim=bigBdy.perimeter(true);
   smallperim=smallBdy.perimeter(true);
   cout<<"bigBdy is "<<bigperim/smallperim<<" times as long as smallBdy"<<endl;
-  tassert(bigperim/smallperim<2.05 && bigperim/smallperim>1.98);
+  tassert(bigperim/smallperim<2.07 && bigperim/smallperim>1.98);
   ps.trailer();
   ps.close();
+  outKml(gRingFive,"geoidboundary.kml");
 }
 
 void testgeoid()

@@ -27,7 +27,7 @@
 #include "polyline.h"
 
 double middleOrdinate(latlong ll0,latlong ll1);
-void openkml(std::ofstream &file,char *filename);
+void openkml(std::ofstream &file,std::string filename);
 void closekml(std::ofstream &file);
 polyarc flatten(g1boundary g1);
 
@@ -47,3 +47,4 @@ public:
 gboundary regionBoundary(KmlRegionList& regionList,gboundary& allBdy,unsigned reg);
 KmlRegionList kmlRegions(gboundary &gb);
 gboundary extractRegion(gboundary &gb);
+void outKml(gboundary gb,std::string filename);

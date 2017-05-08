@@ -26,6 +26,7 @@
 #include "kml.h"
 #include "projection.h"
 #include "halton.h"
+#include "ldecimal.h"
 using namespace std;
 
 double middleOrdinate(latlong ll0,latlong ll1)
@@ -66,12 +67,35 @@ latlong splitPoint(latlong ll0,latlong ll1,int i,int n)
  * the point is inside the polyarc.
  */
 
-void openkml(ofstream &file,char *filename)
+void openkml(ofstream &file,string filename)
 {
   file.open(filename);
   file<<"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
       <<"<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n"
       <<"<Document>\n";
+}
+
+void kmlBoundary(ofstream &file,g1boundary g)
+{
+  bool inner=g.isInner();
+  int i;
+  latlong ll;
+  file<<(inner?"<innerBoundaryIs>":"<outerBoundaryIs>")<<"<LinearRing><coordinates>\n";
+  for (i=0;i<g.size();i++)
+  {
+    ll=decodedir(g[inner?(g.size()-1-i):i]).latlon();
+    file<<ldecimal(radtodeg(ll.lon))<<','<<ldecimal(radtodeg(ll.lat))<<'\n';
+  }
+  file<<"</coordinates></LinearRing>"<<(inner?"</innerBoundaryIs>":"</outerBoundaryIs>")<<endl;
+}
+
+void kmlPolygon(ofstream &file,gboundary g)
+{
+  int i;
+  file<<"<Polygon>\n";
+  for (i=0;i<g.size();i++)
+    kmlBoundary(file,g[i]);
+  file<<"</Polygon>"<<endl;
 }
 
 void closekml(ofstream &file)
@@ -203,4 +227,17 @@ gboundary extractRegion(gboundary &gb)
   for (j=delenda.size()-1;j>=0;j--)
     gb.erase(delenda[j]);
   return ret;
+}
+
+void outKml(gboundary gb,string filename)
+{
+  ofstream file;
+  gboundary poly;
+  openkml(file,filename);
+  while (gb.size())
+  {
+    poly=extractRegion(gb);
+    kmlPolygon(file,poly);
+  }
+  closekml(file);
 }
