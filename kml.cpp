@@ -81,9 +81,9 @@ void kmlBoundary(ofstream &file,g1boundary g)
   int i;
   latlong ll;
   file<<(inner?"<innerBoundaryIs>":"<outerBoundaryIs>")<<"<LinearRing><coordinates>\n";
-  for (i=0;i<g.size();i++)
+  for (i=0;i<=g.size();i++)
   {
-    ll=decodedir(g[inner?(g.size()-1-i):i]).latlon();
+    ll=decodedir(g[inner?(g.size()-i):i]).latlon();
     file<<ldecimal(radtodeg(ll.lon))<<','<<ldecimal(radtodeg(ll.lat))<<'\n';
   }
   file<<"</coordinates></LinearRing>"<<(inner?"</innerBoundaryIs>":"</outerBoundaryIs>")<<endl;
