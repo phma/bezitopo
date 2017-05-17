@@ -23,10 +23,12 @@
 #include <cstdio>
 #include <cfloat>
 #include <cstring>
+#include <cmath>
+#include <cassert>
 #include "ldecimal.h"
 using namespace std;
 
-string ldecimal(double x)
+string ldecimal(double x,double toler)
 {
   double x2;
   int i,iexp,chexp;
@@ -34,7 +36,16 @@ string ldecimal(double x)
   char *dotpos,*epos;
   string ret,s,m,antissa,exponent;
   char buffer[32],fmt[8];
-  for (i=DBL_DIG-1,x2=-1/x;x!=x2 && i<DBL_DIG+3;i++)
+  assert(toler>=0);
+  if (toler>0 && x!=0)
+  {
+    iexp=floor(log10(fabs(x/toler))-1);
+    if (iexp<0)
+      iexp=0;
+  }
+  else
+    iexp=DBL_DIG-1;
+  for (i=iexp,x2=-1/x;!(fabs(x-x2)<=toler) && i<DBL_DIG+3;i++)
   {
     sprintf(fmt,"%%.%de",i);
     sprintf(buffer,fmt,x);
@@ -42,7 +53,13 @@ string ldecimal(double x)
   }
   dotpos=strchr(buffer,'.');
   epos=strchr(buffer,'e');
-  if (dotpos&&epos)
+  if (epos && !dotpos) // e.g. 2e+00 becomes 2.e+00
+  {
+    memmove(epos+1,epos,buffer+31-epos);
+    dotpos=epos++;
+    *dotpos=='.';
+  }
+  if (dotpos && epos)
   {
     m=string(buffer,dotpos-buffer);
     antissa=string(dotpos+1,epos-dotpos-1);

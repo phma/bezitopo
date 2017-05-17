@@ -3167,13 +3167,18 @@ void testldecimal()
       cout<<ldecimal(d)<<endl;
     for (d=123400000000000;d>3e-15;d/=10)
       cout<<ldecimal(d)<<endl;
+    for (d=DBL_EPSILON;d<=1;d*=2)
+      cout<<ldecimal(M_SQRT_3,d)<<endl;
   }
   cout<<ldecimal(0)<<' '<<ldecimal(INFINITY)<<' '<<ldecimal(NAN)<<' '<<ldecimal(-5.67)<<endl;
   cout<<ldecimal(3628800)<<' '<<ldecimal(1296000)<<' '<<ldecimal(0.000016387064)<<endl;
   tassert(ldecimal(0)=="0");
   tassert(ldecimal(1)=="1");
   tassert(ldecimal(-1)=="-1");
+  tassert(isalpha(ldecimal(INFINITY)[0]));
+  tassert(isalpha(ldecimal(NAN)[0]));
   tassert(ldecimal(1.7320508)=="1.7320508");
+  tassert(ldecimal(1.7320508,0.0005)=="1.732");
   tassert(ldecimal(-0.00064516)=="-.00064516");
   tassert(ldecimal(3628800)=="3628800");
   tassert(ldecimal(1296000)=="1296e3");
