@@ -41,6 +41,8 @@
 #include "document.h"
 using namespace std;
 
+#define PAPERRES 0.004
+
 char rscales[]={10,12,15,20,25,30,40,50,60,80};
 const double PSPoint=25.4/72;
 map<string,papersize> papersizes=
@@ -347,14 +349,14 @@ void PostScript::spline(bezier3d spl,bool fill)
   xy pnt;
   n=spl.size();
   pnt=turn(xy(spl[0][0]),orientation);
-  *psfile<<fixed<<setprecision(2)<<xscale(pnt.east())<<' '<<yscale(pnt.north())<<" moveto\n";
+  *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<" moveto\n";
   for (i=0;i<n;i++)
   {
     seg=spl[i];
     if (isstraight(seg))
     {
       pnt=turn(xy(seg[3]),orientation);
-      *psfile<<xscale(pnt.east())<<' '<<yscale(pnt.north())<<' '<<"lineto\n";
+      *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<' '<<"lineto\n";
     }
     else
     {
@@ -363,7 +365,7 @@ void PostScript::spline(bezier3d spl,bool fill)
         pnt=turn(xy(seg[j]),orientation);
         if (pnt.isnan())
           cerr<<"NaN point"<<endl;
-        *psfile<<xscale(pnt.east())<<' '<<yscale(pnt.north())<<' ';
+        *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<' ';
       }
       *psfile<<"curveto\n";
     }
