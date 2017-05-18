@@ -3,7 +3,7 @@
 /* ps.cpp - PostScript output                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -249,7 +249,7 @@ void PostScript::dot(xy pnt,string comment)
   pnt=turn(pnt,orientation);
   if (isfinite(pnt.east()) && isfinite(pnt.north()))
   {
-    *psfile<<fixed<<setprecision(2)<<xscale(pnt.east())<<' '<<yscale(pnt.north())<<" .";
+    *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<" .";
     if (comment.length())
       *psfile<<" %"<<comment;
     *psfile<<endl;
@@ -259,8 +259,8 @@ void PostScript::dot(xy pnt,string comment)
 void PostScript::circle(xy pnt,double radius)
 {
   pnt=turn(pnt,orientation);
-  *psfile<<fixed<<setprecision(2)<<xscale(pnt.east())<<yscale(pnt.north())
-  <<" newpath "<<scale*radius<<" 0 360 arc fill %"<<radius*radius<<endl;
+  *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<ldecimal(yscale(pnt.north()),PAPERRES)
+  <<" newpath "<<ldecimal(scale*radius,PAPERRES)<<" 0 360 arc fill %"<<radius*radius<<endl;
 }
 
 void PostScript::line(edge lin,int num,bool colorfibaster,bool directed)
@@ -314,8 +314,8 @@ void PostScript::line2p(xy pnt1,xy pnt2)
   pnt1=turn(pnt1,orientation);
   pnt2=turn(pnt2,orientation);
   if (isfinite(pnt1.east()) && isfinite(pnt1.north()) && isfinite(pnt2.east()) && isfinite(pnt2.north()))
-    *psfile<<fixed<<setprecision(2)<<xscale(pnt1.east())<<' '<<yscale(pnt1.north())
-    <<' '<<xscale(pnt2.east())<<' '<<yscale(pnt2.north())<<" -"<<endl;
+    *psfile<<ldecimal(xscale(pnt1.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt1.north()),PAPERRES)
+    <<' '<<ldecimal(xscale(pnt2.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt2.north()),PAPERRES)<<" -"<<endl;
 }
 
 void PostScript::startline()
@@ -328,7 +328,7 @@ void PostScript::lineto(xy pnt)
 {
   assert(psfile);
   pnt=turn(pnt,orientation);
-  *psfile<<fixed<<setprecision(2)<<xscale(pnt.east())<<' '<<yscale(pnt.north())<<(inlin?" lineto":" moveto");
+  *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<(inlin?" lineto":" moveto");
   *psfile<<endl;
   inlin=true;
 }

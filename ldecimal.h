@@ -3,7 +3,7 @@
 /* ldecimal.h - lossless decimal representation       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015 Pierre Abbat.
+/* Copyright 2015,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
