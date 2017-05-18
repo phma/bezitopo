@@ -26,6 +26,9 @@
 #include "sourcegeoid.h"
 #include "polyline.h"
 
+#define MAXMIDORD 1e3
+// Maximum middle ordinate affects both loxodromes and geodesics.
+
 double middleOrdinate(latlong ll0,latlong ll1);
 void openkml(std::ofstream &file,std::string filename);
 void closekml(std::ofstream &file);

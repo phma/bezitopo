@@ -59,6 +59,7 @@ public:
   void split(int n,g1boundary &b);
   void splice(int m,g1boundary &b,int n);
   void split(int m,int n,g1boundary &b);
+  void halve(int n);
   void deleteCollinear();
   std::vector<xyz> surfaceCorners();
   std::vector<xyz> surfaceMidpoints();

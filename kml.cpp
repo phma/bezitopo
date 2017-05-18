@@ -44,6 +44,20 @@ double middleOrdinate(latlong ll0,latlong ll1)
   return dist(xyzmid,Sphere.geoc(llmid,0));
 }
 
+double middleOrdinate(vsegment vseg)
+/* Computes the middle by simply averaging coordinates. This is fine, as
+ * the resulting middle ordinate is always at least the actual middle ordinate.
+ */
+{
+  vball vmid;
+  xyz xyz0,xyz1,xyzmid;
+  vmid=vseg.midpoint();
+  xyz0=decodedir(vseg.start);
+  xyz1=decodedir(vseg.end);
+  xyzmid=(xyz0+xyz1)/2;
+  return dist(xyzmid,decodedir(vmid));
+}
+
 latlong splitPoint(latlong ll0,latlong ll1,int i,int n)
 {
   int j=n-i;
@@ -89,12 +103,28 @@ void kmlBoundary(ofstream &file,g1boundary g)
   file<<"</coordinates></LinearRing>"<<(inner?"</innerBoundaryIs>":"</outerBoundaryIs>")<<endl;
 }
 
+void refine(g1boundary &g1)
+{
+  int i;
+  for (i=0;i<g1.size();i++)
+    if (middleOrdinate(g1.seg(i))>MAXMIDORD)
+    {
+      g1.halve(i);
+      i=-1;
+    }
+}
+
 void kmlPolygon(ofstream &file,gboundary g)
 {
   int i;
+  g1boundary g1;
   file<<"<Polygon>\n";
   for (i=0;i<g.size();i++)
-    kmlBoundary(file,g[i]);
+  {
+    g1=g[i];
+    refine(g1);
+    kmlBoundary(file,g1);
+  }
   file<<"</Polygon>"<<endl;
 }
 

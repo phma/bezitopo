@@ -239,7 +239,7 @@ vsegment g1boundary::seg(int n)
 {
   vsegment ret;
   assert(bdy.size());
-  n%=bdy.size();
+  n%=(signed)bdy.size();
   if (n<0)
     n+=bdy.size();
   ret.start=bdy[n];
@@ -337,6 +337,12 @@ void g1boundary::split(int m,int n,g1boundary &b)
 {
   positionSegment(m);
   split(n-m,b);
+}
+
+void g1boundary::halve(int n)
+{
+  positionSegment(n);
+  bdy.push_back(seg(-1).midpoint());
 }
 
 void g1boundary::deleteCollinear()
