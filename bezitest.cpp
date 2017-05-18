@@ -4468,9 +4468,9 @@ void testkml()
   int i;
   PostScript ps;
   g1boundary gPode,gAntipode;
-  gboundary gPodes,gRingFive,bigBdy,smallBdy;
+  gboundary gPodes,gRingFive,gOneFace,bigBdy,smallBdy;
   double bigperim,smallperim;
-  geoid ringFive;
+  geoid ringFive,oneFace;
   KmlRegionList kmlReg;
   unsigned bigReg,smallReg;
   polyarc pPode,pAntipode;
@@ -4548,6 +4548,15 @@ void testkml()
   ps.trailer();
   ps.close();
   outKml(gRingFive,"geoidboundary.kml");
+  /* Test a single face. This is to check whether the polygons in KML consist
+   * of geodesics or loxodromes.
+   */
+  oneFace.ghdr=new geoheader;
+  oneFace.cmap=new cubemap;
+  *oneFace.ghdr=*ringFive.ghdr;
+  oneFace.cmap->faces[0].und[0]=65535;
+  gOneFace=oneFace.cmap->gbounds();
+  outKml(gOneFace,"oneface.kml");
 }
 
 void testgeoid()
