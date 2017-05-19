@@ -64,6 +64,27 @@ latlong splitPoint(latlong ll0,latlong ll1,int i,int n)
   return latlong((ll0.lat*j+ll1.lat*i)/n,(ll0.lon*j+ll1.lon*i)/n);
 }
 
+vector<latlong> splitPoints(latlong ll0,latlong ll1)
+{
+  int n=1+floor(fabs(ll0.lat-ll1.lat)+fabs(ll0.lon-ll1.lon));
+  int newn,i;
+  vector<latlong> ret;
+  double midord;
+  while (true)
+  {
+    midord=middleOrdinate(splitPoint(ll0,ll1,n/2,n),splitPoint(ll0,ll1,n/2+1,n));
+    if (midord<=MAXMIDORD)
+      break;
+    newn=floor(n*sqrt(midord/MAXMIDORD));
+    if (newn<=n)
+      newn=n+1;
+    n=newn;
+  }
+  for (i=0;i<n;i++)
+    ret.push_back(splitPoint(ll0,ll1,i,n));
+  return ret;
+}
+
 /* KML requires that inner boundaries be distinguished from the outer boundary.
  * The g1boundary as computed by cubemap has no notion of inner or outer
  * boundary, so the KML export routine must figure out which is the outer
