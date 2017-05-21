@@ -29,6 +29,8 @@
 #include "ldecimal.h"
 using namespace std;
 
+char corners[4]={0,1,3,2};
+
 double middleOrdinate(latlong ll0,latlong ll1)
 /* Computes the middle by simply averaging coordinates. This is fine, as
  * the only lines that are boundaries of cylintervals are meridians
@@ -82,6 +84,24 @@ vector<latlong> splitPoints(latlong ll0,latlong ll1)
   }
   for (i=0;i<n;i++)
     ret.push_back(splitPoint(ll0,ll1,i,n));
+  return ret;
+}
+
+gboundary gbounds(cylinterval cyl)
+{
+  g1boundary ret1;
+  gboundary ret;
+  vector<latlong> side;
+  int i,j;
+  for (i=0;i<4;i++)
+  {
+    side=splitPoints(cyl.corner(corners[i]),cyl.corner(corners[(i+1)&3]));
+    for (j=0;j<side.size();j++)
+      ret1.push_back(encodedir(Sphere.geoc(side[j],0)));
+  }
+  ret1.setInner(false);
+  ret.push_back(ret1);
+  ret.deleteNullSegments();
   return ret;
 }
 

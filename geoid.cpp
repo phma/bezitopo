@@ -116,7 +116,7 @@ void cylinterval::round(int fineness)
 latlong cylinterval::corner(int n)
 // 0 is SW, 1 is SE, 2 is NW, 3 is NE
 {
-  return latlong(bintorad((n&2)?nbd:sbd),bintorad(ebd)+(n&1)?0:bintorad(wbd-ebd));
+  return latlong(bintorad((n&2)?nbd:sbd),bintorad(ebd)+((n&1)?0:bintorad(wbd-ebd)));
 }
 
 cylinterval combine(cylinterval a,cylinterval b)

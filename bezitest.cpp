@@ -4463,10 +4463,18 @@ void drawproj1bdy(PostScript &ps,polyarc proj1bdy)
   ps.endpage();
 }
 
+void test1kml(cylinterval cyl,string name)
+{
+  gboundary bdy;
+  bdy=gbounds(cyl);
+  outKml(bdy,name+".kml");
+}
+
 void testkml()
 {
-  int i;
+  int i,r;
   PostScript ps;
+  smallcircle avl150,tvu50;
   g1boundary gPode,gAntipode;
   gboundary gPodes,gRingFive,gOneFace,bigBdy,smallBdy;
   double bigperim,smallperim;
@@ -4557,6 +4565,10 @@ void testkml()
   oneFace.cmap->faces[0].und[0]=65535;
   gOneFace=oneFace.cmap->gbounds();
   outKml(gOneFace,"oneface.kml");
+  avl150.center=Sphere.geoc(degtobin(35.58),degtobin(-82.56),0);
+  r=radtobin(15e4/EARTHRAD);
+  avl150.setradius(r);
+  test1kml(avl150.boundrect(),"avl150");
 }
 
 void testgeoid()

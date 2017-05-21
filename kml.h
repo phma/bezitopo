@@ -47,6 +47,7 @@ public:
   unsigned int biggestBlankRegion(gboundary& allBdy);
 };
 
+gboundary gbounds(cylinterval cyl);
 gboundary regionBoundary(KmlRegionList& regionList,gboundary& allBdy,unsigned reg);
 KmlRegionList kmlRegions(gboundary &gb);
 gboundary extractRegion(gboundary &gb);
