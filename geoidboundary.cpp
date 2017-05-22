@@ -131,6 +131,10 @@ char log29[]={
 };
 
 vball vsegment::midpoint()
+/* This always returns a point on the great circle segment between the ends,
+ * but usually not the exact midpoint. If the segment crosses a face boundary,
+ * it computes the exact midpoint, which takes longer.
+ */
 {
   vball ret;
   int i;
@@ -139,9 +143,14 @@ vball vsegment::midpoint()
       start.switchFace();
     else
       end.switchFace();
-  ret.face=start.face;
-  ret.x=(start.x+end.x)/2;
-  ret.y=(start.y+end.y)/2;
+  if (start.face==end.face)
+  {
+    ret.face=start.face;
+    ret.x=(start.x+end.x)/2;
+    ret.y=(start.y+end.y)/2;
+  }
+  else
+    ret=encodedir(decodedir(start)+decodedir(end));
   return ret;
 }
 

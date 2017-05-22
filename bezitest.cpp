@@ -4468,13 +4468,14 @@ void test1kml(cylinterval cyl,string name)
   gboundary bdy;
   bdy=gbounds(cyl);
   outKml(bdy,name+".kml");
+  cout<<name+".kml"<<endl;
 }
 
 void testkml()
 {
   int i,r;
   PostScript ps;
-  smallcircle avl150,tvu50;
+  smallcircle avl150,tvu150,cham150,athwi150;
   g1boundary gPode,gAntipode;
   gboundary gPodes,gRingFive,gOneFace,bigBdy,smallBdy;
   double bigperim,smallperim;
@@ -4568,7 +4569,16 @@ void testkml()
   avl150.center=Sphere.geoc(degtobin(35.58),degtobin(-82.56),0);
   r=radtobin(15e4/EARTHRAD);
   avl150.setradius(r);
+  cham150.center=xyz(EARTHRAD,EARTHRAD,EARTHRAD)/M_SQRT_3;
+  cham150.setradius(r);
+  tvu150.center=Sphere.geoc(degtobin(-16.86),degtobin(-179.95),0);
+  tvu150.setradius(r);
+  athwi150.center=xyz(0,-4504977.3,4504977.3);
+  athwi150.setradius(r);
   test1kml(avl150.boundrect(),"avl150");
+  test1kml(cham150.boundrect(),"cham150");
+  test1kml(tvu150.boundrect(),"tvu150");
+  test1kml(athwi150.boundrect(),"athwi150");
 }
 
 void testgeoid()
