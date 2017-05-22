@@ -4476,6 +4476,7 @@ void testkml()
   int i,r;
   PostScript ps;
   smallcircle avl150,tvu150,cham150,athwi150;
+  cylinterval lune,nearpole,emptym,emptyp;
   g1boundary gPode,gAntipode;
   gboundary gPodes,gRingFive,gOneFace,bigBdy,smallBdy;
   double bigperim,smallperim;
@@ -4579,6 +4580,17 @@ void testkml()
   test1kml(cham150.boundrect(),"cham150");
   test1kml(tvu150.boundrect(),"tvu150");
   test1kml(athwi150.boundrect(),"athwi150");
+  i=rng.uirandom();
+  lune.wbd=i;
+  lune.ebd=i+DEG60;
+  lune.sbd=-DEG90;
+  lune.nbd=DEG90;
+  nearpole.wbd=i;
+  nearpole.ebd=i+DEG60;
+  nearpole.sbd=MIN1-DEG90;
+  nearpole.nbd=DEG90-MIN1;
+  test1kml(lune,"lune");
+  test1kml(nearpole,"nearpole");
 }
 
 void testgeoid()
