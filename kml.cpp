@@ -102,6 +102,7 @@ gboundary gbounds(cylinterval cyl)
   ret1.setInner(false);
   ret.push_back(ret1);
   ret.deleteNullSegments();
+  ret.deleteEmpty();
   return ret;
 }
 
