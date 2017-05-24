@@ -4592,9 +4592,17 @@ void testkml()
   nearpole.nbd=DEG90-MIN1;
   empty.wbd=empty.ebd=i;
   empty.nbd=empty.sbd=r;
+  emptym.wbd=emptym.ebd=i;
+  emptym.nbd=DEG40;
+  emptym.sbd=-DEG40;
+  emptyp.wbd=i;
+  emptyp.ebd=i+DEG60;
+  emptyp.nbd=emptyp.sbd=r;
   test1kml(lune,"lune");
   test1kml(nearpole,"nearpole");
   test1kml(empty,"empty");
+  test1kml(emptym,"emptym");
+  test1kml(emptyp,"emptyp");
 }
 
 void testgeoid()

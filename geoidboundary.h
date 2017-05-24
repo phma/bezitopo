@@ -61,6 +61,7 @@ public:
   void split(int m,int n,g1boundary &b);
   void halve(int n);
   void deleteCollinear();
+  void deleteRetrace();
   std::vector<xyz> surfaceCorners();
   std::vector<xyz> surfaceMidpoints();
   double perimeter(bool midpt=false);
@@ -92,6 +93,7 @@ public:
   void consolidate(int l);
   void splitoff(int l);
   void deleteCollinear();
+  void deleteRetrace();
   void deleteNullSegments();
   void deleteEmpty();
   void erase(int n);

@@ -372,6 +372,24 @@ void g1boundary::deleteCollinear()
   } while (found);
 }
 
+void g1boundary::deleteRetrace()
+{
+  int i,sz;
+  bool found;
+  do
+  {
+    found=false;
+    sz=bdy.size();
+    for (i=0;i<sz && !found;i++)
+      if (bdy[i]==bdy[(i+2)%sz] || bdy[i]==bdy[(i+1)%sz] || bdy[(i+1)%sz]==bdy[(i+2)%sz])
+      {
+        found=true;
+        positionSegment(i+1);
+        bdy.resize(sz-1);
+      }
+  } while (found);
+}
+
 vector<xyz> g1boundary::surfaceCorners()
 {
   vector<xyz> ret;
@@ -651,6 +669,15 @@ void gboundary::deleteCollinear()
   int i;
   for (i=0;i<bdy.size();i++)
     bdy[i].deleteCollinear();
+}
+
+void gboundary::deleteRetrace()
+/* For cylinterval boundaries with area 0 or 510 (full).
+ */
+{
+  int i;
+  for (i=0;i<bdy.size();i++)
+    bdy[i].deleteRetrace();
 }
 
 void gboundary::deleteNullSegments()
