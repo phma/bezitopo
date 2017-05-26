@@ -63,7 +63,12 @@ double middleOrdinate(vsegment vseg)
 latlong splitPoint(latlong ll0,latlong ll1,int i,int n)
 {
   int j=n-i;
-  return latlong((ll0.lat*j+ll1.lat*i)/n,(ll0.lon*j+ll1.lon*i)/n);
+  if (i&&j)
+    return latlong((ll0.lat*j+ll1.lat*i)/n,(ll0.lon*j+ll1.lon*i)/n);
+  else if (i)
+    return ll1; // (lat*n)/n occasionally !=lat
+  else
+    return ll0;
 }
 
 vector<latlong> splitPoints(latlong ll0,latlong ll1)
