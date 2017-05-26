@@ -4580,8 +4580,10 @@ void testkml()
   test1kml(cham150.boundrect(),"cham150");
   test1kml(tvu150.boundrect(),"tvu150");
   test1kml(athwi150.boundrect(),"athwi150");
-  i=rng.uirandom();
-  r=(rng.usrandom()<<14)-0x1fffaa04;
+  //i=rng.uirandom();
+  //r=(rng.usrandom()<<14)-0x1fffaa04;
+  i=-1126202058;
+  r=-271231492;
   lune.wbd=i;
   lune.ebd=i+DEG60;
   lune.sbd=-DEG90;
@@ -4598,11 +4600,22 @@ void testkml()
   emptyp.wbd=i;
   emptyp.ebd=i+DEG60;
   emptyp.nbd=emptyp.sbd=r;
+  band30.wbd=band40.wbd=band50.wbd=i;
+  band30.ebd=band40.ebd=band50.ebd=i+DEG360;
+  band30.nbd=DEG30;
+  band30.sbd=-DEG30;
+  band40.nbd=DEG40;
+  band40.sbd=-DEG40;
+  band50.nbd=DEG50;
+  band50.sbd=-DEG50;
   test1kml(lune,"lune");
   test1kml(nearpole,"nearpole");
   test1kml(empty,"empty");
   test1kml(emptym,"emptym");
   test1kml(emptyp,"emptyp");
+  test1kml(band30,"band30");
+  test1kml(band30,"band40");
+  test1kml(band30,"band50");
 }
 
 void testgeoid()
