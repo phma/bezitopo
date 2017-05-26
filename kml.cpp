@@ -47,17 +47,30 @@ double middleOrdinate(latlong ll0,latlong ll1)
 }
 
 double middleOrdinate(vsegment vseg)
-/* Computes the middle by simply averaging coordinates. This is fine, as
- * the resulting middle ordinate is always at least the actual middle ordinate.
+/* Computes the middle by simply averaging coordinates. This usually results
+ * in a too-big middle ordinate, so apply Element 3:35.
  */
 {
   vball vmid;
   xyz xyz0,xyz1,xyzmid;
+  double ret,chord;;
   vmid=vseg.midpoint();
   xyz0=decodedir(vseg.start);
   xyz1=decodedir(vseg.end);
   xyzmid=(xyz0+xyz1)/2;
-  return dist(xyzmid,decodedir(vmid));
+  ret=dist(xyzmid,decodedir(vmid));
+  chord=dist(xyz0,xyz1);
+  /* At this point, ret may be up to twice the actual middle ordinate.
+   * If the two endpoints are in the same face, the chord is less than
+   * EARTHRAD*sqrt(8/3). If they're in different faces, the midpoint
+   * was computed the slow way and the middle ordinate is accurate.
+   */
+  if (chord<1.633*EARTHRAD)
+  {
+    ret=sqr(chord)/4/(2*EARTHRAD-ret);
+    ret=sqr(chord)/4/(2*EARTHRAD-ret);
+  }
+  return ret;
 }
 
 latlong splitPoint(latlong ll0,latlong ll1,int i,int n)
@@ -154,9 +167,11 @@ void kmlBoundary(ofstream &file,g1boundary g)
 void refine(g1boundary &g1)
 {
   int i;
+  double mo;
   for (i=0;i<g1.size();i++)
-    if (middleOrdinate(g1.seg(i))>MAXMIDORD)
+    if ((mo=middleOrdinate(g1.seg(i)))>MAXMIDORD)
     {
+      //cout<<"midord "<<mo<<endl;
       g1.halve(i);
       i=-1;
     }
