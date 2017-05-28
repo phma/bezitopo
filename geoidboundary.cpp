@@ -264,7 +264,7 @@ vector<int> g1boundary::segmentsAtLevel(int l)
   int i;
   vector<int> ret;
   for (i=0;i<bdy.size();i++)
-    if (splitLevel(seg(i))==l)
+    if (l<0 || splitLevel(seg(i))==l)
       ret.push_back(i);
   return ret;
 }
@@ -518,7 +518,7 @@ bool overlap(vsegment a,vsegment b)
            fabs(a.start.diag()-b.end.diag())+fabs(b.start.diag()-a.end.diag());
   }
   else
-    return false;
+    return a.start==b.end && b.start==a.end;
 }
 
 void gboundary::push_back(g1boundary g1)

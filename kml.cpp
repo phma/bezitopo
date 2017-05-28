@@ -119,6 +119,7 @@ gboundary gbounds(cylinterval cyl)
   }
   ret1.setInner(false);
   ret.push_back(ret1);
+  ret.splitoff(-1);
   ret.deleteNullSegments();
   ret.deleteRetrace();
   ret.deleteEmpty();
@@ -317,6 +318,12 @@ gboundary extractRegion(gboundary &gb)
         delenda.push_back(j);
         ret.setInner(k,((~fullRegion^blankRegion)>>j)&1);
       }
+  if (delenda.size()==0 && ret.size()==0 && gb.size()>0)
+  {
+    cerr<<"No region found, deleting one g1boundary"<<endl;
+    delenda.push_back(0);
+    ret.push_back(gb[0]);
+  }
   for (j=delenda.size()-1;j>=0;j--)
     gb.erase(delenda[j]);
   return ret;
