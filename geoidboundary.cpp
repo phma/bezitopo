@@ -506,6 +506,7 @@ bool overlap(vsegment a,vsegment b)
  * as being on the adjacent face, it will fail.
  */
 {
+  bool ret=false;
   if (sameEdge(a.start,b.start) &&
       sameEdge(a.start,b.end) &&
       sameEdge(a.end,b.start) &&
@@ -514,11 +515,11 @@ bool overlap(vsegment a,vsegment b)
     moveToFace(b.start,a.start.face);
     moveToFace(b.end,a.start.face);
     moveToFace(a.end,a.start.face);
-    return fabs(a.start.diag()-a.end.diag())+fabs(b.start.diag()-b.end.diag())>
-           fabs(a.start.diag()-b.end.diag())+fabs(b.start.diag()-a.end.diag());
+    ret=fabs(a.start.diag()-a.end.diag())+fabs(b.start.diag()-b.end.diag())>
+        fabs(a.start.diag()-b.end.diag())+fabs(b.start.diag()-a.end.diag());
   }
-  else
-    return a.start==b.end && b.start==a.end;
+  ret=ret || (a.start==b.end && b.start==a.end);
+  return ret;
 }
 
 void gboundary::push_back(g1boundary g1)
@@ -634,6 +635,8 @@ void gboundary::splitoff(int l)
   int i,j,k;
   bool found;
   vector<int> iseg;
+  if (l<0)
+    cout<<"splitoff: l<0"<<endl;
   for (i=0;i<bdy.size();i++)
   {
     do
