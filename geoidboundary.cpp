@@ -21,6 +21,7 @@
  */
 #include <cassert>
 #include <iostream>
+#include <cfloat>
 #include "geoidboundary.h"
 #include "spolygon.h"
 #include "manysum.h"
@@ -29,6 +30,10 @@
 #include "random.h"
 #include "relprime.h"
 using namespace std;
+
+#define VBTOLER (20*DBL_EPSILON)
+// DBL_EPSILON in vball coordinates is 0.707 nm at the center of a face.
+#define cmpeq(a,b) (fabs(a-b)<VBTOLER)
 
 char vballcompare[8][8]=
 {
@@ -76,7 +81,7 @@ bool operator==(const vball &a,const vball &b)
       ret=a.x==-1 && a.y==-b.x && b.y==1;
       break;
     case 66:
-      ret=a.x==b.x && a.y==b.y;
+      ret=cmpeq(a.x,b.x) && cmpeq(a.y,b.y);
       break;
   }
   return ret;
