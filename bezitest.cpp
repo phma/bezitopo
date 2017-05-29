@@ -4369,6 +4369,34 @@ void testgeoidboundary()
   tassert(gb[1].size()==4);
   tassert(fabs(gb.perimeter()-38e6)<0.2e6);
   tassert(fabs(bintodeg(gbarea)-66.87)<0.01);
+  // start another test: back and forth along an oblique or edge-crossing line
+  gb.clear();
+  g1.clear();
+  v.face=1;
+  v.x=0.8;
+  v.y=0.9;
+  g1.push_back(v);
+  v.face=2;
+  g1.push_back(v);
+  v.face=3;
+  g1.push_back(v);
+  v.face=1;
+  g1.push_back(v);
+  v.face=5;
+  v.x=-0.9;
+  v.y=0.8;
+  g1.push_back(v);
+  v.face=6;
+  g1.push_back(v);
+  v.face=4;
+  g1.push_back(v);
+  v.face=5;
+  g1.push_back(v);
+  gb.push_back(g1);
+  cout<<"perimeter of two triangles is "<<gb.perimeter()<<" before splitting off"<<endl;
+  gb.splitoff(-1);
+  cout<<"perimeter of two triangles is "<<gb.perimeter()<<" after splitting off"<<endl;
+  tassert(gb.size()==2);
   /* The main test is as follows:
    * 1. Create an excerpt of a global geoid file, using five circles centered
    *    at corners of a regular icosahedron and passing through corners of

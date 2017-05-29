@@ -40,6 +40,10 @@ using namespace std;
  * face=5: in the Galápagos face; x=+z, y=-x
  * face=6: in the Howland face; x=+y, y=-z
  * face=7: a coordinate is NaN or at least two are infinite
+ * Chamchamal is at (1,1) on faces 1, 2, and 3, which are counterclockwise
+ * in that order around it. Its antipode, which is in the South Pacific over a
+ * megameter WSW of Easter Island, is at (-1,1) on faces 4, 5, and 6, which are
+ * counterclockwise in that order around it.
  */
 /* Format of Bezitopo's geoid files:
  * Start Len
