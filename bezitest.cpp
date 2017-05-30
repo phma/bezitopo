@@ -4491,10 +4491,13 @@ void drawproj1bdy(PostScript &ps,polyarc proj1bdy)
   ps.endpage();
 }
 
-void test1kml(cylinterval cyl,string name)
+void test1kml(cylinterval cyl,string name,int pieces)
 {
   gboundary bdy;
   bdy=gbounds(cyl);
+  tassert(pieces<0 || pieces==bdy.size());
+  if (pieces>=0 && pieces!=bdy.size())
+    cerr<<name<<": "<<pieces<<" pieces expected, "<<bdy.size()<<" found"<<endl;
   outKml(bdy,name+".kml");
   cout<<name+".kml"<<endl;
 }
@@ -4604,10 +4607,10 @@ void testkml()
   tvu150.setradius(r);
   athwi150.center=xyz(0,-4504977.3,4504977.3);
   athwi150.setradius(r);
-  test1kml(avl150.boundrect(),"avl150");
-  test1kml(cham150.boundrect(),"cham150");
-  test1kml(tvu150.boundrect(),"tvu150");
-  test1kml(athwi150.boundrect(),"athwi150");
+  test1kml(avl150.boundrect(),"avl150",1);
+  test1kml(cham150.boundrect(),"cham150",1);
+  test1kml(tvu150.boundrect(),"tvu150",1);
+  test1kml(athwi150.boundrect(),"athwi150",1);
   i=rng.uirandom();
   r=(rng.usrandom()<<14)-0x1fffaa04;
   lune.wbd=i;
@@ -4634,14 +4637,14 @@ void testkml()
   band40.sbd=-DEG40;
   band50.nbd=DEG50;
   band50.sbd=-DEG50;
-  test1kml(lune,"lune");
-  test1kml(nearpole,"nearpole");
-  test1kml(empty,"empty");
-  test1kml(emptym,"emptym");
-  test1kml(emptyp,"emptyp");
-  test1kml(band30,"band30");
-  test1kml(band40,"band40");
-  test1kml(band50,"band50");
+  test1kml(lune,"lune",1);
+  test1kml(nearpole,"nearpole",1);
+  test1kml(empty,"empty",0);
+  test1kml(emptym,"emptym",0);
+  test1kml(emptyp,"emptyp",0);
+  test1kml(band30,"band30",2);
+  test1kml(band40,"band40",2);
+  test1kml(band50,"band50",2);
 }
 
 void testgeoid()
