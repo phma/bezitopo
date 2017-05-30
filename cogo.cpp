@@ -192,11 +192,12 @@ xy rand2p(xy a,xy b)
  }
 
 bool delaunay(xy a,xy c,xy b,xy d)
-//Returns true if ac satisfies the criterion in the quadrilateral abcd.
-//If false, the edge should be flipped to bd.
-//The computation is based on the theorem that the two diagonals of
-//a quadrilateral inscribed in a circle cut each other into parts
-//whose products are equal.
+/* Returns true if ac satisfies the criterion in the quadrilateral abcd.
+ * If false, the edge should be flipped to bd.
+ * The computation is based on the theorem that the two diagonals of
+ * a quadrilateral inscribed in a circle cut each other into parts
+ * whose products are equal. Element 3:35.
+ */
 {xy ints;
  double dista,distc,distb,distd,distac,distbd;
  ints=intersection(a,c,b,d);
