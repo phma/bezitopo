@@ -4507,7 +4507,7 @@ void testkml()
   int i,r;
   PostScript ps;
   smallcircle avl150,tvu150,cham150,athwi150;
-  cylinterval lune,nearpole,empty,emptym,emptyp,band30,band40,band50,full;
+  cylinterval lune,nearpole,empty,emptym,emptyp,band30,band40,band50,antarctic,full;
   g1boundary gPode,gAntipode;
   gboundary gPodes,gRingFive,gOneFace,bigBdy,smallBdy;
   double bigperim,smallperim;
@@ -4629,14 +4629,18 @@ void testkml()
   emptyp.wbd=i;
   emptyp.ebd=i+DEG60;
   emptyp.nbd=emptyp.sbd=r;
-  band30.wbd=band40.wbd=band50.wbd=i;
-  band30.ebd=band40.ebd=band50.ebd=i+DEG360;
+  band30.wbd=band40.wbd=band50.wbd=antarctic.wbd=full.wbd=i;
+  band30.ebd=band40.ebd=band50.ebd=antarctic.ebd=full.ebd=i+DEG360;
   band30.nbd=DEG30;
   band30.sbd=-DEG30;
   band40.nbd=DEG40;
   band40.sbd=-DEG40;
   band50.nbd=DEG50;
   band50.sbd=-DEG50;
+  antarctic.nbd=-DEG60; // boundary of Southern Ocean
+  antarctic.sbd=-397063600; // Antarctic Circle
+  full.nbd=DEG90;
+  full.sbd=-DEG90;
   test1kml(lune,"lune",1);
   test1kml(nearpole,"nearpole",1);
   test1kml(empty,"empty",0);
@@ -4645,6 +4649,8 @@ void testkml()
   test1kml(band30,"band30",2);
   test1kml(band40,"band40",2);
   test1kml(band50,"band50",2);
+  test1kml(antarctic,"antarctic",2);
+  test1kml(full,"full",0);
 }
 
 void testgeoid()
