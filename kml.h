@@ -48,6 +48,9 @@ public:
 };
 
 gboundary gbounds(cylinterval cyl);
+#ifdef NUMSGEOID
+gboundary gbounds(geoid &geo);
+#endif
 gboundary regionBoundary(KmlRegionList& regionList,gboundary& allBdy,unsigned reg);
 KmlRegionList kmlRegions(gboundary &gb);
 gboundary extractRegion(gboundary &gb);

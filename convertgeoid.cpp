@@ -33,6 +33,7 @@
 #include "manysum.h"
 #include "latlong.h"
 #include "halton.h"
+#include "kml.h"
 using namespace std;
 
 document doc;
@@ -595,7 +596,10 @@ int main(int argc, char *argv[])
     }
     if (outfilename.length())
       if (formatlist[0].writefunc)
+      {
         formatlist[0].writefunc(outputgeoid,outfilename);
+        outKml(gbounds(outputgeoid),outfilename+".kml");
+      }
       else
         cerr<<"Can't write in format "<<formatlist[0].cmd<<"; it is a whole-earth-only format."<<endl;
     drawglobecube(1024,62,-7,&outputgeoid,0,"geoid.ppm");

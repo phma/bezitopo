@@ -247,6 +247,20 @@ KmlRegionList kmlRegions(gboundary &gb)
   return ret;
 }
 
+#ifdef NUMSGEOID
+gboundary gbounds(geoid &geo)
+{
+  cylinterval n;
+  n.setempty();
+  if (geo.cmap)
+    return geo.cmap->gbounds();
+  else if (geo.glat)
+    return gbounds(geo.glat->boundrect());
+  else
+    return gbounds(n);
+}
+#endif
+
 int bitcount(int n)
 {
   n=((n&0xaaaaaaaa)>>1)+(n&0x55555555);
