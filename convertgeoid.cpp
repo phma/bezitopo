@@ -3,7 +3,7 @@
 /* convertgeoid.cpp - convert geoidal undulation data */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -39,7 +39,7 @@ using namespace std;
 document doc;
 vector<geoformat> formatlist;
 int verbosity=1;
-bool helporversion=false;
+bool helporversion=false,commandError=false;
 int qsz=4;
 vector<string> infilebasenames;
 string outfilename;
@@ -75,6 +75,10 @@ geoid outputgeoid;
 void outhelp()
 {
   int i,j;
+  cout<<"Convertgeoid converts geoid files from one format to another and\n"
+    <<"makes excerpts of them. Example:\n"
+    <<"convertgeoid g2012bu0.bin -c 38N99W 150 -f gsf -o Macksville.gsf\n"
+    <<"makes an excerpt containing a 150 km circle around Macksville, Kansas.\n";
   for (i=0;i<options.size();i++)
   {
     cout<<(options[i].shopt?options[i].shopt:' ')<<' ';
@@ -336,7 +340,7 @@ void argpass2()
 	break;
       case 1:
 	helporversion=true;
-	cout<<"Convertgeoid, part of Bezitopo version "<<VERSION<<" © 2016 Pierre Abbat\n"
+	cout<<"Convertgeoid, part of Bezitopo version "<<VERSION<<" © 2017 Pierre Abbat\n"
 	<<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
 	break;
       case 2:
@@ -354,6 +358,7 @@ void argpass2()
 	  cout<<"-f / --format requires an argument, one of:"<<endl;
 	  for (j=0;j<formatlist.size();j++)
 	    cout<<formatlist[j].cmd<<'\t'<<formatlist[j].desc<<endl;
+          commandError=true;
 	}
 	break;
       case 4:
@@ -366,6 +371,7 @@ void argpass2()
 	else
 	{
 	  cout<<"-o / --output requires an argument, a filename"<<endl;
+          commandError=true;
 	}
 	break;
       case 5:
@@ -380,9 +386,9 @@ void argpass2()
 	i+=j;
 	if (ll.valid()==2 && i<cmdline.size() && cmdline[i].optnum<0)
 	  radius=stod(cmdline[i++].nonopt)*1000;
-	if (radius>0 && radius<=1e7)
+	if (radius>0 && radius<=1e7 && ll.lat>=-M_PI/2 && ll.lat<=M_PI/2)
 	{
-	  cout<<"Excerpt will be centered on "<<radtodeg(ll.lat)<<','<<radtodeg(ll.lon)<<" with radius "<<radius<<endl;
+	  cout<<"Excerpt will be centered on "<<radtodeg(ll.lat)<<','<<radtodeg(ll.lon)<<" with radius "<<radius<<" m"<<endl;
 	  cir.center=Sphere.geoc(ll,0);
 	  cir.setradius(radtobin(radius/Sphere.avgradius()));
 	  excerptcircles.push_back(cir);
@@ -391,6 +397,7 @@ void argpass2()
 	{
 	  cout<<"-c / --circle requires two arguments, a center (latitude/longitude) and a radius"<<endl;
 	  cout<<"radius is 10000 max, in kilometers"<<endl;
+          commandError=true;
 	}
 	i--;
 	break;
@@ -403,6 +410,7 @@ void argpass2()
 	else
 	{
 	  cout<<"-q / --quadsample requires an argument, an integer from 4 to 16"<<endl;
+          commandError=true;
 	}
 	break;
         
@@ -473,9 +481,9 @@ int main(int argc, char *argv[])
     excerptinterval.setfull();
   excerptinterval.round(fineness);
   latticebound=intersect(excerptinterval,combine(inputbounds));
-  cout<<"latticebound "<<formatlatlong(latlong(latticebound.sbd,latticebound.wbd),DEGREE+SEXAG2);
-  cout<<' '<<formatlatlong(latlong(latticebound.nbd,latticebound.ebd),DEGREE+SEXAG2)<<endl;
-  if (!helporversion)
+  //cout<<"latticebound "<<formatlatlong(latlong(latticebound.sbd,latticebound.wbd),DEGREE+SEXAG2);
+  //cout<<' '<<formatlatlong(latlong(latticebound.nbd,latticebound.ebd),DEGREE+SEXAG2)<<endl;
+  if (!helporversion && !commandError)
   {
     if (formatlist[0].cmd=="bol")
     {
@@ -514,7 +522,7 @@ int main(int argc, char *argv[])
       outputgeoid.cmap=nullptr;
     }
   }
-  if (!helporversion)
+  if (!helporversion && !commandError)
   {
     if (!outfilename.length())
     {
@@ -553,6 +561,11 @@ int main(int argc, char *argv[])
       else
         cout<<"Error histogram empty, not plotting"<<endl;
     }
+  }
+  if (commandError)
+  {
+    cout<<"Run \"convertgeoid --help\" for help."<<endl;
+    return 1;
   }
   return 0;
 }
