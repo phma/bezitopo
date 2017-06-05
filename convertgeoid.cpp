@@ -475,50 +475,6 @@ int main(int argc, char *argv[])
   latticebound=intersect(excerptinterval,combine(inputbounds));
   cout<<"latticebound "<<formatlatlong(latlong(latticebound.sbd,latticebound.wbd),DEGREE+SEXAG2);
   cout<<' '<<formatlatlong(latlong(latticebound.nbd,latticebound.ebd),DEGREE+SEXAG2)<<endl;
-  /*readgeoid("../g2012bu0.bin");
-  readgeoid("../g2012ba0.bin");
-  readgeoid("../g2012bh0.bin");
-  readgeoid("../g2012bg0.bin");
-  readgeoid("../g2012bs0.bin");
-  readgeoid("../g2012bp0.bin");
-  readgeoid("NCGreenHill150KM.gsf");
-  readgeoid("NCAsheville100M.gsf");
-  readgeoid("contour.ps");
-  readgeoid("ceiling.txt");*/
-  //geo[i].settest();
-  //drawglobemicro(1024,xy(1.3429,0.2848),3e-4,1,0,"geowrangell.ppm");
-  /* (-.4304,-.3142,1) 143.86986°W 61.9475°N 143°52'12"W 61°56'51"N
-   * This is a local maximum of the geoid in Alaska at Mount Wrangell.
-   * It clearly shows artifacts when interpolated bilinearly.
-   */
-  //drawglobemicro(1024,xy(0.384566,1.27153),3e-3,1,0,"geonieves.ppm");
-  /* (-.230868,-1,0.45694) 103°W 24°N
-   * This is on the boundary of the Lower 48 file.
-   */
-  //drawglobemicro(1024,xy(1.21676,0.294214),3e-3,1,0,"geogranisle.ppm");
-  /* (-.411572,-.56648,1) 126°W 55°N
-   * This is on the boundary of the overlap between the Alaska file
-   * and the Lower 48 file.
-   */
-  //drawglobemicro(1024,xy(3.579192,1.5984015),1e-3,1,0,"geosamoan.ppm");
-  //drawglobemicro(1024,xy(3.6062785,1.627449),1e-3,1,0,"geosamoae.ppm");
-  //drawglobemicro(1024,xy(3.579192,1.654771),1e-3,1,0,"geosamoas.ppm");
-  //drawglobemicro(1024,xy(3.552552,1.6253505),1e-3,1,0,"geosamoaw.ppm");
-  //drawglobemicro(1024,xy(1.5,1.5),2e-2,1,0,"geotest.ppm");
-  v=encodedir(Sphere.geoc(degtorad(62),degtorad(-144),0.));
-  cout<<"Wrangell "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
-  v=encodedir(Sphere.geoc(degtorad(24),degtorad(-103),0.));
-  cout<<"Nieves "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
-  v=encodedir(Sphere.geoc(degtorad(55),degtorad(-126),0.));
-  cout<<"Granisle "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
-  v=encodedir(Sphere.geoc(degtorad(-11),degtorad(-171),0.));
-  cout<<"Samoa N "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
-  v=encodedir(Sphere.geoc(degtorad(-14),degtorad(-168),0.));
-  cout<<"Samoa E "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
-  v=encodedir(Sphere.geoc(degtorad(-17),degtorad(-171),0.));
-  cout<<"Samoa S "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
-  v=encodedir(Sphere.geoc(degtorad(-14),degtorad(-174),0.));
-  cout<<"Samoa W "<<v.face<<' '<<v.x<<' '<<v.y<<endl;
   if (!helporversion)
   {
     if (formatlist[0].cmd=="bol")
@@ -558,30 +514,6 @@ int main(int argc, char *argv[])
       outputgeoid.cmap=nullptr;
     }
   }
-  outund("Green Hill",degtobin(35.4),degtobin(-82.05));
-  outund("Charlotte",degtobin(35.22),degtobin(-80.84));
-  outund("Kitimat",degtobin(54.0547),degtobin(-128.6578)); // in the overlap of two files
-  outund("Denali",degtobin(63.0695),degtobin(-151.0074));
-  outund("Haleakala",degtobin(20.7097),degtobin(-156.2533));
-  /*drawglobemicro(1024,xy(1.3429,0.2848),3e-4,2,0,"geowrangellcvt.ppm");
-  drawglobemicro(1024,xy(0.384566,1.27153),3e-3,2,0,"geonievescvt.ppm");
-  drawglobemicro(1024,xy(1.21676,0.294214),3e-3,2,0,"geogranislecvt.ppm");
-  drawglobemicro(1024,xy(3.579192,1.5984015),1e-3,2,0,"geosamoancvt.ppm");
-  drawglobemicro(1024,xy(3.6062785,1.627449),1e-3,2,0,"geosamoaecvt.ppm");
-  drawglobemicro(1024,xy(3.579192,1.654771),1e-3,2,0,"geosamoascvt.ppm");
-  drawglobemicro(1024,xy(3.552552,1.6253505),1e-3,2,0,"geosamoawcvt.ppm");*/
-  //drawglobemicro(1024,xy(1.5,1.5),2e-2,2,0,"geotestcvt.ppm");
-  /*ps.open("geoid.ps");
-  ps.prolog();
-  ps.startpage();
-  plotcenters(ps);
-  ps.endpage();
-  //ps.startpage();
-  //plotinters(ps);
-  //ps.endpage();
-  ps.trailer();
-  ps.close();*/
-  //hdr.hash=cube.hash();
   if (!helporversion)
   {
     if (!outfilename.length())
@@ -602,7 +534,7 @@ int main(int argc, char *argv[])
       }
       else
         cerr<<"Can't write in format "<<formatlist[0].cmd<<"; it is a whole-earth-only format."<<endl;
-    drawglobecube(1024,62,-7,&outputgeoid,0,"geoid.ppm");
+    //drawglobecube(1024,62,-7,&outputgeoid,0,"geoid.ppm");
     cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
     //correctionHist.dump();
     cout<<"Computing error histogram"<<endl;
