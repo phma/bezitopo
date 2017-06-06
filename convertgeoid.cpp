@@ -290,10 +290,16 @@ histogram errorspread()
   {
     ll=hal.onearth();
     loc=Sphere.geoc(ll,0);
+    if (i==178)
+      cout<<"aoeu"<<endl;
     cvtelev=outputgeoid.elev(loc);
     origelev=avgelev(loc);
     if (isfinite(cvtelev) && isfinite(origelev))
+    {
       ret<<(cvtelev-origelev);
+      if (fabs(cvtelev-origelev)>0.018)
+        cout<<"conversion error "<<cvtelev-origelev<<" i "<<i<<endl;
+    }
   }
   return ret;
 }
@@ -518,6 +524,7 @@ int main(int argc, char *argv[])
       outputgeoid.glat->setbound(latticebound);
       outputgeoid.glat->setfineness(fineness);
       outputgeoid.glat->setundula();
+      outputgeoid.glat->setslopes();
       delete outputgeoid.ghdr;
       delete outputgeoid.cmap;
       outputgeoid.ghdr=nullptr;
