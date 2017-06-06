@@ -25,6 +25,7 @@
 #include "angle.h"
 #include "histogram.h"
 #include "polyline.h"
+#include "ldecimal.h"
 using namespace std;
 
 histogram::histogram()
@@ -202,6 +203,7 @@ void histogram::plot(PostScript &ps,int xtype)
   frame.insert(xy(width,0));
   frame.insert(xy(width,height));
   frame.insert(xy(0,height));
+  ps.comment(ldecimal(total)+" total data points");
   ps.spline(frame.approx3d(0.01));
   rangeLow=bin[0];
   rangeHigh=bin.back();
