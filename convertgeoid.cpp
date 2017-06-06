@@ -41,6 +41,7 @@ vector<geoformat> formatlist;
 int verbosity=1;
 bool helporversion=false,commandError=false;
 int qsz=4;
+int nInputFiles=0;
 vector<string> infilebasenames;
 string outfilename;
 
@@ -237,6 +238,7 @@ int readgeoid(string filename)
   size_t extpos;
   string basename;
   geoid gd;
+  nInputFiles++;
   for (i=0,ret=1;i<formatlist.size() && ret==1;i++)
     ret=formatlist[i].readfunc(gd,filename);
   i--;
@@ -483,7 +485,7 @@ int main(int argc, char *argv[])
   latticebound=intersect(excerptinterval,combine(inputbounds));
   //cout<<"latticebound "<<formatlatlong(latlong(latticebound.sbd,latticebound.wbd),DEGREE+SEXAG2);
   //cout<<' '<<formatlatlong(latlong(latticebound.nbd,latticebound.ebd),DEGREE+SEXAG2)<<endl;
-  if (!helporversion && !commandError)
+  if (!helporversion && !commandError && (geo.size() || !nInputFiles))
   {
     if (formatlist[0].cmd=="bol")
     {
@@ -521,9 +523,6 @@ int main(int argc, char *argv[])
       outputgeoid.ghdr=nullptr;
       outputgeoid.cmap=nullptr;
     }
-  }
-  if (!helporversion && !commandError)
-  {
     if (!outfilename.length())
     {
       if (infilebasenames.size()==1)
@@ -562,10 +561,15 @@ int main(int argc, char *argv[])
         cout<<"Error histogram empty, not plotting"<<endl;
     }
   }
-  if (commandError)
+  if (nInputFiles && !geo.size()) // Specifying no input file is valid.
+  {
+    cout<<"Input files could not be read or are not geoid files."<<endl;
+    return 2;
+  }
+  else if (commandError)
   {
     cout<<"Run \"convertgeoid --help\" for help."<<endl;
     return 1;
   }
-  return 0;
+  else return 0;
 }
