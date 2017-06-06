@@ -280,7 +280,7 @@ void frontformat(string fmt)
 
 histogram errorspread()
 {
-  histogram ret(-0.001,0.001);
+  histogram ret(-1/65536.,1/65536.);
   halton hal;
   latlong ll;
   xyz loc;
