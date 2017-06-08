@@ -58,6 +58,7 @@ public:
   void setDoc(document &docu);
   double xscale(double x);
   double yscale(double y);
+  std::string escape(std::string text);
   void setcolor(double r,double g,double b);
   void setscale(double minx,double miny,double maxx,double maxy,int ori=0);
   double getscale();
@@ -71,6 +72,7 @@ public:
   void spline(bezier3d spl,bool fill=false);
   void widen(double factor);
   void write(xy pnt,std::string text);
+  void centerWrite(xy pnt,std::string text);
   void comment(string text);
 };
 

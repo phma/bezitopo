@@ -137,6 +137,8 @@ void PostScript::prolog()
     *psfile<<"%%BoundingBox: 0 0 "<<rint(paper.getx()/PSPoint)<<' '<<rint(paper.gety()/PSPoint)<<endl;
     *psfile<<"\n/. % ( x y )\n{ newpath 0.1 0 360 arc fill } bind def\n\n";
     *psfile<<"/- % ( x1 y1 x2 y2 )\n\n{ newpath moveto lineto stroke } bind def\n\n";
+    *psfile<<"/c. % ( str )\n{ dup stringwidth -2 div exch -2 div exch\n"<<
+            "3 2 roll 2 index 2 index rmoveto show rmoveto } bind def\n\n";
     *psfile<<"/mmscale { 720 254 div dup scale } bind def\n";
     *psfile<<"%%EndProlog"<<endl;
     indocument=true;
@@ -200,6 +202,21 @@ double PostScript::xscale(double x)
 double PostScript::yscale(double y)
 {
   return scale*(y-modelcenter.north())+paper.gety()/2;
+}
+
+string PostScript::escape(string text)
+{
+  string ret;
+  int ch;
+  while (text.length())
+  {
+    ch=text[0];
+    if (ch=='(' || ch==')')
+      ret+='\\';
+    ret+=ch;
+    text.erase(0,1);
+  }
+  return ret;
 }
 
 void PostScript::setcolor(double r,double g,double b)
@@ -381,8 +398,15 @@ void PostScript::widen(double factor)
 void PostScript::write(xy pnt,string text)
 {
   pnt=turn(pnt,orientation);
-  *psfile<<fixed<<setprecision(2)<<xscale(pnt.east())<<' '<<yscale(pnt.north())
-  <<" moveto ("<<text<<") show"<<endl;
+  *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)
+  <<" moveto ("<<escape(text)<<") show"<<endl;
+}
+
+void PostScript::centerWrite(xy pnt,string text)
+{
+  pnt=turn(pnt,orientation);
+  *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)
+  <<" moveto ("<<escape(text)<<") c."<<endl;
 }
 
 void PostScript::comment(string text)
