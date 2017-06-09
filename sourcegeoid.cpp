@@ -319,8 +319,8 @@ void geolattice::cvtheader(usngsheader &hdr)
 {
   hdr.south=bintodeg(sbd);
   hdr.west=bintodeg(wbd);
-  hdr.latspace=bintodeg(nbd-sbd)/width;
-  hdr.longspace=-bintodeg(wbd-ebd)/height;
+  hdr.latspace=bintodeg(nbd-sbd)/height;
+  hdr.longspace=-bintodeg(wbd-ebd)/width;
   hdr.nlong=width+1;
   hdr.nlat=height+1;
   hdr.dtype=1; // 1 means float. Don't know what anything else would mean.
