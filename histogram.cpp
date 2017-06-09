@@ -184,7 +184,7 @@ void histogram::plot(PostScript &ps,int xtype)
 {
   double height,width;
   double rangeLow,rangeHigh,range,tallestBar,barHeight;
-  double tickSpacing,x,tickx;
+  double tickSpacing,numberSpacing,x,tickx;
   int i;
   histobar bar;
   polyline frame,barGraph;
@@ -229,17 +229,29 @@ void histogram::plot(PostScript &ps,int xtype)
     case HISTO_LINEAR:
       for (tickSpacing=1;tickSpacing>range/20;tickSpacing/=10);
       for (;tickSpacing<range/20;tickSpacing*=10);
+      numberSpacing=tickSpacing*5;
       if (tickSpacing>range/20)
+      {
         tickSpacing/=2;
+        numberSpacing/=2.5;
+      }
       if (tickSpacing>range/20)
+      {
         tickSpacing/=2.5;
+        numberSpacing/=2;
+      }
       if (tickSpacing>range/20)
+      {
         tickSpacing/=2;
+        numberSpacing/=2;
+      }
       for (x=floor(rangeLow/tickSpacing)*tickSpacing;x<=ceil(rangeHigh/tickSpacing)*tickSpacing;x+=tickSpacing)
         if (x>=rangeLow && x<=rangeHigh)
         {
           tickx=(x-rangeLow)*width/range;
           ps.line2p(xy(tickx,0),xy(tickx,-0.1));
+          if (fabs(x/numberSpacing-rint(x/numberSpacing))<0.1)
+            ps.centerWrite(xy(tickx,-0.15),ldecimal(rint(x/tickSpacing)*tickSpacing,tickSpacing));
         }
       cout<<"Tick spacing "<<tickSpacing<<endl;
       break;
