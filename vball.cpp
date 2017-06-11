@@ -172,15 +172,3 @@ xyz decodedir(vball code)
     ret=ret*(EARTHRAD/ret.length());
   return ret;
 }
-
-vball roundeps(vball v)
-/* When converting a latlong representation of the North or South Pole to vball,
- * roundoff in cos(π/2) produces x and y coordinates of 3.9e-10 m, which result
- * in x and y coordinates of 6.123e-17 in vball. This function rounds these
- * numbers to 0, while moving points less than a nanometer.
- */
-{
-  v.x=rint(v.x/DBL_EPSILON)*DBL_EPSILON;
-  v.y=rint(v.y/DBL_EPSILON)*DBL_EPSILON;
-  return v;
-}

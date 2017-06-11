@@ -39,5 +39,4 @@ public:
 
 vball encodedir(xyz dir);
 xyz decodedir(vball code);
-vball roundeps(vball v);
 #endif

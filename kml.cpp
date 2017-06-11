@@ -115,7 +115,7 @@ gboundary gbounds(cylinterval cyl)
   {
     side=splitPoints(cyl.corner(corners[i]),cyl.corner(corners[(i+1)&3]));
     for (j=0;j<side.size();j++)
-      ret1.push_back(roundeps(encodedir(Sphere.geoc(side[j],0))));
+      ret1.push_back(encodedir(Sphere.geoc(side[j],0)));
   }
   ret1.setInner(false);
   ret.push_back(ret1);
