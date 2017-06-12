@@ -647,9 +647,10 @@ void readcarlsongsfheader(carlsongsfheader &hdr,istream &file)
 
 void writecarlsongsfheader(carlsongsfheader &hdr,ostream &file)
 {
-  file<<fixed<<setprecision(7)<<hdr.south<<endl<<hdr.west<<endl;
-  file<<fixed<<setprecision(7)<<hdr.north<<endl<<hdr.east<<endl;
-  file<<hdr.nlong<<endl<<hdr.nlat<<endl;
+  double prec=bintodeg(1)/2;
+  file<<fixed<<ldecimal(hdr.south,prec)<<'\n'<<ldecimal(hdr.west,prec)<<'\n';
+  file<<fixed<<ldecimal(hdr.north,prec)<<'\n'<<ldecimal(hdr.east,prec)<<'\n';
+  file<<hdr.nlong<<'\n'<<hdr.nlat<<endl;
 }
 
 int readcarlsongsf(geolattice &geo,string filename)
@@ -706,6 +707,17 @@ int readcarlsongsf(geolattice &geo,string filename)
 }
 
 void writecarlsongsf(geolattice &geo,string filename)
+/* Writes a GSF file. The use of ldecimal makes the output smaller.
+ * The NGS files have numbers to the nearest 100 µm. These are rounded
+ * to the nearest 1/65536 m when read in, then output to the GSF with
+ * an error of at most 1/131072. The first number in the Alaska file
+ * that is written out with five digits after the decimal point is:
+ * NGS: -0.9867
+ * *64K: -64664.3712
+ * Rounded: -64664
+ * /64k: -0.9866943359375
+ * GSF: -.98669
+ */
 {
   int i,j;
   fstream file;
@@ -715,7 +727,7 @@ void writecarlsongsf(geolattice &geo,string filename)
   writecarlsongsfheader(hdr,file);
   for (i=0;i<geo.height+1;i++)
     for (j=0;j<geo.width+1;j++)
-      file<<fixed<<setprecision(5)<<geo.undula[i*(geo.width+1)+j]/65536.<<endl;
+      file<<ldecimal(geo.undula[i*(geo.width+1)+j]/65536.,1/131072.)<<'\n';
   file.close();
 }
 
