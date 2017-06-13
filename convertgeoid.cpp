@@ -275,7 +275,10 @@ void frontformat(string fmt)
     if (formatlist[i].cmd==fmt)
       swap(formatlist[i],formatlist[i-1]);
   if (fmt!=formatlist[0].cmd)
+  {
     cout<<"Unrecognized format: "<<fmt<<endl;
+    commandError=true;
+  }
 }
 
 histogram errorspread()
