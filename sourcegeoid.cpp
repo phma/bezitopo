@@ -439,9 +439,10 @@ void readusngatxtheader(usngatxtheader &hdr,istream &file)
 
 void writeusngatxtheader(usngatxtheader &hdr,ostream &file)
 {
-  file<<fixed<<setprecision(7)<<hdr.south<<' '<<hdr.north<<' ';
-  file<<fixed<<setprecision(7)<<hdr.west<<' '<<hdr.east<<endl;
-  file<<ldecimal(hdr.latspace)<<' '<<ldecimal(hdr.longspace);
+  double prec=bintodeg(1)/2;
+  file<<fixed<<ldecimal(hdr.south,prec)<<' '<<ldecimal(hdr.north,prec)<<' ';
+  file<<fixed<<ldecimal(hdr.west,prec)<<' '<<ldecimal(hdr.east,prec)<<endl;
+  file<<ldecimal(hdr.latspace,prec)<<' '<<ldecimal(hdr.longspace,prec);
 }
 
 int readusngatxt(geolattice &geo,string filename)
@@ -513,10 +514,10 @@ void writeusngatxt(geolattice &geo,string filename)
     for (j=0;j<geo.width+1;j++)
     {
       if (j%16==0)
-        file<<endl;
+        file<<'\n';
       else
         file<<' ';
-      file<<fixed<<setprecision(5)<<geo.undula[i*(geo.width+1)+j]/65536.;
+      file<<ldecimal(geo.undula[i*(geo.width+1)+j]/65536.,1/131072.);
     }
   file<<endl;
   file.close();
