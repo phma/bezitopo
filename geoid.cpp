@@ -626,6 +626,24 @@ vector<cylinterval> geoquad::boundrects()
   return ret;
 }
 
+vector<double> geoquad::areas()
+{
+  vector<double> ret,subret;
+  int i,j;
+  if (subdivided())
+    for (i=0;i<4;i++)
+    {
+      subret=sub[i]->areas();
+      for (j=0;j<subret.size();j++)
+	ret.push_back(subret[j]);
+    }
+  else if (!isnan())
+  {
+    ret.push_back(area());
+  }
+  return ret;
+}
+
 array<vball,4> geoquad::bounds() const
 /* The four sides of a geoquad are segments of great circles.
  * This returns them as the centers of the great circles.
@@ -952,6 +970,19 @@ vector<cylinterval> cubemap::boundrects()
   for (i=0;i<6;i++)
   {
     subret=faces[i].boundrects();
+    for (j=0;j<subret.size();j++)
+      ret.push_back(subret[j]);
+  }
+  return ret;
+}
+
+vector<double> cubemap::areas()
+{
+  vector<double> ret,subret;
+  int i,j;
+  for (i=0;i<6;i++)
+  {
+    subret=faces[i].areas();
     for (j=0;j<subret.size();j++)
       ret.push_back(subret[j]);
   }

@@ -93,6 +93,7 @@ public:
 #endif
   std::array<unsigned,2> hash();
   std::vector<cylinterval> boundrects();
+  std::vector<double> areas();
   std::array<vball,4> bounds() const;
   gboundary gbounds();
   void writeBinary(std::ostream &ofile,int nesting=0);
@@ -115,6 +116,7 @@ public:
   double undulation(latlong ll);
   double undulation(xyz dir);
   std::vector<cylinterval> boundrects();
+  std::vector<double> areas();
   cylinterval boundrect();
   gboundary gbounds();
   void writeBinary(std::ostream &ofile);

@@ -303,6 +303,30 @@ histogram errorspread()
   return ret;
 }
 
+histogram quadsizes()
+{
+  histogram ret;
+  int h,i,j,sz;
+  double least=34,most=-100;
+  vector<double> areas;
+  if (outputgeoid.cmap)
+    areas=outputgeoid.cmap->areas();
+  sz=areas.size();
+  for (i=0;i<sz;i++)
+  {
+    if (least>log(areas[i]))
+      least=log(areas[i]);
+    if (most<log(areas[i]))
+      most=log(areas[i]);
+  }
+  if (least<most)
+    ret.clear(least,most);
+  h=relprime(sz);
+  for (i=j=0;i<sz;i++,j=(j+h)%sz)
+  ret<<log(areas[j]);
+  return ret;
+}
+
 void argpass1(int argc, char *argv[])
 {
   int i,j;
@@ -448,7 +472,7 @@ int main(int argc, char *argv[])
   int i;
   vball v;
   PostScript ps;
-  histogram errorHist;
+  histogram errorHist,areaHist;
   vector<cylinterval> excerptintervals,inputbounds;
   array<int,6> undrange;
   array<int,5> undhisto;
@@ -552,15 +576,26 @@ int main(int argc, char *argv[])
     //correctionHist.dump();
     cout<<"Computing error histogram"<<endl;
     errorHist=errorspread();
+    areaHist=quadsizes();
     if (outfilename.length())
     {
-      if (errorHist.gettotal())
+      if (errorHist.gettotal() || areaHist.gettotal())
       {
         ps.open(outfilename+".ps");
         ps.setpaper(papersizes["A4 portrait"],1);
         ps.prolog();
-        ps.startpage();
-        errorHist.plot(ps,HISTO_LINEAR);
+        if (errorHist.gettotal())
+        {
+          ps.startpage();
+          errorHist.plot(ps,HISTO_LINEAR);
+          ps.endpage();
+        }
+        if (areaHist.gettotal())
+        {
+          ps.startpage();
+          areaHist.plot(ps,HISTO_LOG);
+          ps.endpage();
+        }
         ps.close();
       }
       else
