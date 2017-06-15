@@ -24,6 +24,7 @@
 #include "hlattice.h"
 #include "relprime.h"
 #include "sourcegeoid.h"
+#include "ldecimal.h"
 using namespace std;
 
 manysum dataArea,totalArea;
@@ -33,7 +34,8 @@ histogram correctionHist(1,2);
 
 void outProgress()
 {
-  cout<<"Total area "<<totalArea.total()*1e-12<<" Data area "<<dataArea.total()*1e-12<<"    \r";
+  cout<<"Total area "<<ldecimal(totalArea.total()*1e-12,totalArea.total()*1e-18)
+    <<" Data area "<<ldecimal(dataArea.total()*1e-12,dataArea.total()*1e-18)<<"    \r";
   cout.flush();
 }
 
