@@ -3,7 +3,7 @@
 /* histogram.cpp - streaming histogram                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016 Pierre Abbat.
+/* Copyright 2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -22,11 +22,26 @@
 #include <cstring>
 #include <iostream>
 #include <iomanip>
+#include <set>
 #include "angle.h"
 #include "histogram.h"
 #include "polyline.h"
 #include "ldecimal.h"
 using namespace std;
+
+set<double> logTick(double decadeWidth)
+/* 1, 1000
+ * 1, 100
+ * 1, 10
+ * 1,3
+ * 1,2,5
+ * 1,3 × 1,2 = 1,2,3,6
+ * 1,2,5 × 1,2,3 = 1,15,2,3,4,5,6
+ * 1,3 × 1,2,3,4 = 1,12,2,3,4,6,9
+ * 1,3 × 1,2,3,4,5 = 1,12,15,2,3,4,5,6,9
+ */
+{
+}
 
 histogram::histogram()
 {

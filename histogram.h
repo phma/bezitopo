@@ -3,7 +3,7 @@
 /* histogram.h - streaming histogram                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016 Pierre Abbat.
+/* Copyright 2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify

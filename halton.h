@@ -59,5 +59,5 @@ public:
   latlong _onearth();
   latlong onearth();
   double _scalar(double x);
-  double scalar(double x); // this can return 1 because of roundoff
+  double scalar(double x); // this can return x because of roundoff
 };

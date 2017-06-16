@@ -2656,12 +2656,14 @@ void testbtreverse(unsigned long long n)
 
 void testhalton()
 {
-  unsigned int i;
+  unsigned int i,j;
   halton h;
   latlong ll;
   xyz pt;
-  double toler,expected;
+  double x,toler,expected;
   manysum xsqsum,ysqsum,zsqsum;
+  PostScript ps;
+  histogram histo;
   for (i=0;i<30;i++)
     printf("%7d ",btreversetable[i]);
   tassert(btreversetable[13]==37296);
@@ -2698,6 +2700,19 @@ void testhalton()
   tassert(fabs(xsqsum.total()-expected)<toler);
   tassert(fabs(ysqsum.total()-expected)<toler);
   tassert(fabs(zsqsum.total()-expected)<toler);
+  ps.open("halton.ps");
+  ps.setpaper(papersizes["A4 portrait"],1);
+  ps.prolog();
+  histo.clear();
+  for (i=0;i<746496;i++)
+  {
+    x=h.scalar(1);
+    histo<<x;
+  }
+  ps.startpage();
+  histo.plot(ps,HISTO_LOG);
+  ps.endpage();
+  ps.close();
 }
 
 xy intersection(polyline &p,xy start,xy end)
