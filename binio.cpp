@@ -3,7 +3,7 @@
 /* binio.cpp - binary input/output                    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -148,11 +148,31 @@ void writebefloat(std::ostream &file,float i)
   file.write(buf,4);
 }
 
+void writelefloat(std::ostream &file,float i)
+{
+  char buf[4];
+  *(float *)buf=i;
+#ifdef BIGENDIAN
+  endianflip(buf,4);
+#endif
+  file.write(buf,4);
+}
+
 void writebedouble(std::ostream &file,double i)
 {
   char buf[8];
   *(double *)buf=i;
 #ifndef BIGENDIAN
+  endianflip(buf,8);
+#endif
+  file.write(buf,8);
+}
+
+void writeledouble(std::ostream &file,double i)
+{
+  char buf[8];
+  *(double *)buf=i;
+#ifdef BIGENDIAN
   endianflip(buf,8);
 #endif
   file.write(buf,8);

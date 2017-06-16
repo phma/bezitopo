@@ -67,6 +67,7 @@ vector<option> options(
     {'f',"format","e.g. ngs","Format of the geoid file"},
     {'o',"output","filename","Output geoid file"},
     {'c',"circle","lat long radius","Excerpt a region"},
+    {'e',"endian","big/native/little","Output endianness (for ngs)"},
     {'q',"quadsample","n 4-16","Geoquad sampling fineness"}
   });
 
@@ -436,15 +437,36 @@ void argpass2()
 	if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
 	  i++;
+          if (cmdline[i].nonopt=="big")
+            setEndian(ENDIAN_BIG);
+          else if (cmdline[i].nonopt=="native")
+            setEndian(ENDIAN_NATIVE);
+          else if (cmdline[i].nonopt=="little")
+            setEndian(ENDIAN_LITTLE);
+          else
+          {
+            cerr<<"argument to -e/--endian should be  \"big\" or \"native\" or \"little\""<<endl;
+            commandError=true;
+          }
+	}
+	else
+	{
+	  cerr<<"-e / --endian requires an argument, an endianness"<<endl;
+          commandError=true;
+	}
+	break;
+      case 7:
+	if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
           qsz=stod(cmdline[i].nonopt);
 	}
 	else
 	{
-	  cout<<"-q / --quadsample requires an argument, an integer from 4 to 16"<<endl;
+	  cerr<<"-q / --quadsample requires an argument, an integer from 4 to 16"<<endl;
           commandError=true;
 	}
 	break;
-        
       default:
 	if (!helporversion)
 	  readgeoid(cmdline[i].nonopt);
@@ -478,6 +500,7 @@ int main(int argc, char *argv[])
   array<int,5> undhisto;
   cylinterval latticebound;
   int fineness=10800;
+  setEndian(ENDIAN_NATIVE);
   initformat("bol","bol","Bezitopo Boldatni",readboldatni,writeboldatni);
   initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin,writeusngsbin);
   initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf,writecarlsongsf);

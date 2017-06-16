@@ -3,7 +3,7 @@
 /* sourcegeoid.cpp - geoidal undulation source data   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cassert>
+#include "config.h"
 #include "sourcegeoid.h"
 #include "binio.h"
 #include "bicubic.h"
@@ -34,6 +35,53 @@ vector<geoid> geo;
 map<int,matrix> quadinv;
 vector<smallcircle> excerptcircles;
 cylinterval excerptinterval;
+bool outBigEndian;
+
+void setEndian(int n)
+{
+  if (n==ENDIAN_BIG)
+    outBigEndian=true;
+  if (n==ENDIAN_NATIVE)
+#ifdef BIGENDIAN
+    outBigEndian=true;
+#else
+    outBigEndian=false;
+#endif
+  if (n==ENDIAN_LITTLE)
+    outBigEndian=false;
+}
+
+void writebinshort(ostream &file,short i)
+{
+  if (outBigEndian)
+    writebeshort(file,i);
+  else
+    writeleshort(file,i);
+}
+
+void writebinint(ostream &file,int i)
+{
+  if (outBigEndian)
+    writebeint(file,i);
+  else
+    writeleint(file,i);
+}
+
+void writebinfloat(ostream &file,float f)
+{
+  if (outBigEndian)
+    writebefloat(file,f);
+  else
+    writelefloat(file,f);
+}
+
+void writebindouble(ostream &file,double f)
+{
+  if (outBigEndian)
+    writebedouble(file,f);
+  else
+    writeledouble(file,f);
+}
 
 bool smooth5(unsigned n)
 /* Used for deciding the number of divisions of a circle in a lat-long grid.
@@ -250,13 +298,13 @@ void readusngsbinheaderle(usngsheader &hdr,fstream &file)
 
 void writeusngsbinheader(usngsheader &hdr,ostream &file)
 {
-  writebedouble(file,hdr.south);
-  writebedouble(file,hdr.west);
-  writebedouble(file,hdr.latspace);
-  writebedouble(file,hdr.longspace);
-  writebeint(file,hdr.nlat);
-  writebeint(file,hdr.nlong);
-  writebeint(file,hdr.dtype);
+  writebindouble(file,hdr.south);
+  writebindouble(file,hdr.west);
+  writebindouble(file,hdr.latspace);
+  writebindouble(file,hdr.longspace);
+  writebinint(file,hdr.nlat);
+  writebinint(file,hdr.nlong);
+  writebinint(file,hdr.dtype);
 }
 
 bool sanitycheck(usngsheader &hdr)
@@ -806,7 +854,7 @@ void writeusngsbin(geolattice &geo,string filename)
   writeusngsbinheader(hdr,file);
   for (i=0;i<geo.height+1;i++)
     for (j=0;j<geo.width+1;j++)
-      writebefloat(file,geo.undula[i*(geo.width+1)+j]/65536.);
+      writebinfloat(file,geo.undula[i*(geo.width+1)+j]/65536.);
   file.close();
 }
 
