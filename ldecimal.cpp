@@ -31,7 +31,7 @@ using namespace std;
 string ldecimal(double x,double toler)
 {
   double x2;
-  int i,iexp,chexp;
+  int h,i,iexp,chexp;
   size_t zpos;
   char *dotpos,*epos;
   string ret,s,m,antissa,exponent;
@@ -45,11 +45,18 @@ string ldecimal(double x,double toler)
   }
   else
     iexp=DBL_DIG-1;
-  for (i=iexp,x2=-1/x;!(fabs(x-x2)<=toler) && i<DBL_DIG+3;i++)
+  h=-1;
+  i=iexp;
+  while (true)
   {
     sprintf(fmt,"%%.%de",i);
     sprintf(buffer,fmt,x);
     x2=atof(buffer);
+    if (h>0 && (fabs(x-x2)<=toler || i>=DBL_DIG+3))
+      break;
+    if (fabs(x-x2)>toler || i<=0)
+      h=1;
+    i+=h;
   }
   dotpos=strchr(buffer,'.');
   epos=strchr(buffer,'e');

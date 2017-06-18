@@ -761,11 +761,12 @@ void writecarlsongsf(geolattice &geo,string filename)
  * to the nearest 1/65536 m when read in, then output to the GSF with
  * an error of at most 1/131072. The first number in the Alaska file
  * that is written out with five digits after the decimal point is:
- * NGS: -0.9867
- * *64K: -64664.3712
- * Rounded: -64664
- * /64k: -0.9866943359375
- * GSF: -.98669
+ * NGS: 4.3433 (0x408afc50) (offset 0xfa8)
+ * *64K: 284642.5
+ * Rounded: 284642
+ * /64k: 4.343292236328125
+ * GSF: 4.34329
+ * NGS output: 4.34329 (0x408afc40)
  */
 {
   int i,j;

@@ -3172,6 +3172,12 @@ void testldecimal()
   bool looptests=false;
   cout<<ldecimal(1/3.)<<endl;
   cout<<ldecimal(M_PI)<<endl;
+  cout<<ldecimal(-64664./65536,1./131072)<<endl;
+  /* This is a number from the Alaska geoid file, -0.9867, which was output
+   * as -.98669 when converting to GSF. The bug is fixed. It still outputs
+   * a few numbers with an extra digit, but the input numbers are halfway
+   * between multiples of 1/65536, so that is not a bug.
+   */
   if (looptests)
   {
     for (d=M_SQRT_3-20*DBL_EPSILON;d<=M_SQRT_3+20*DBL_EPSILON;d+=DBL_EPSILON)
@@ -3198,6 +3204,7 @@ void testldecimal()
   tassert(ldecimal(3628800)=="3628800");
   tassert(ldecimal(1296000)=="1296e3");
   tassert(ldecimal(0.000016387064)=="1.6387064e-5");
+  tassert(ldecimal(-64664./65536,1./131072)=="-.9867");
 }
 
 void testellipsoid()
