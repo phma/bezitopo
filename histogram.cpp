@@ -29,7 +29,7 @@
 #include "ldecimal.h"
 using namespace std;
 
-set<double> logTick(double decadeWidth)
+set<double> logTick(double decadeWidth,bool num)
 /* 1, 1000
  * 1, 100
  * 1, 10
@@ -41,6 +41,29 @@ set<double> logTick(double decadeWidth)
  * 1,3 × 1,2,3,4,5 = 1,12,15,2,3,4,5,6,9
  */
 {
+  int i,j,n;
+  bool biquin;
+  set<double> ret;
+  double x;
+  if (decadeWidth>=1)
+  {
+    biquin=frac(decadeWidth/log(2))>log(1.5);
+    if (decadeWidth>log(5592405))
+      n=5592405;
+    else
+      n=trunc(1/expm1(1/decadeWidth));
+    for (i=1;i<=n;i++)
+      for (j=1;j<6;j=floor(j*(biquin?2.5:3)))
+      {
+        x=i*j;
+        while (x>=10)
+          x/=10;
+        ret.insert(log(x));
+      }
+  }
+  else
+    ret.insert(log(0.1));
+  return ret;
 }
 
 histogram::histogram()
@@ -203,6 +226,9 @@ void histogram::plot(PostScript &ps,int xtype)
   int i;
   histobar bar;
   polyline frame,barGraph;
+  set<double> logticks;
+  vector<double> logtic;
+  set<double>::iterator it;
   if (ps.aspectRatio()>1)
   {
     height=2;
@@ -271,7 +297,20 @@ void histogram::plot(PostScript &ps,int xtype)
       cout<<"Tick spacing "<<tickSpacing<<endl;
       break;
     case HISTO_LOG:
-      // TODO
+      logticks=logTick(60/(rangeHigh-rangeLow),false);
+      for (it=logticks.begin();it!=logticks.end();it++)
+        logtic.push_back(*it);
+      if (logtic[0]<0)
+        tickSpacing=-logtic[0];
+      else
+        tickSpacing=log(10);
+      for (i=0;i<logtic.size();i++)
+        for (x=floor((rangeLow-logtic[i])/tickSpacing)*tickSpacing+logtic[i];x<=ceil((rangeHigh-logtic[i])/tickSpacing)*tickSpacing+logtic[i];x+=tickSpacing)
+          if (x>=rangeLow && x<=rangeHigh)
+          {
+            tickx=(x-rangeLow)*width/range;
+            ps.line2p(xy(tickx,0),xy(tickx,-0.1));
+          }
       break;
   }
   ps.setcolor(0,0,1);

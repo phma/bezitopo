@@ -3,7 +3,7 @@
 /* angle.h - angles as binary fractions of rotation   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -38,6 +38,7 @@ class xy;
 #endif
 
 double sqr(double x);
+double frac(double x);
 
 double sin(int angle);
 double cos(int angle);

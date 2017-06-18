@@ -3,7 +3,7 @@
 /* angle.cpp - angles as binary fractions of rotation */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -29,6 +29,11 @@ using namespace std;
 double sqr(double x)
 {
   return x*x;
+}
+
+double frac(double x)
+{
+  return x-floor(x);
 }
 
 double sin(int angle)
