@@ -2656,14 +2656,12 @@ void testbtreverse(unsigned long long n)
 
 void testhalton()
 {
-  unsigned int i,j;
+  unsigned int i;
   halton h;
   latlong ll;
   xyz pt;
-  double x,toler,expected;
+  double toler,expected;
   manysum xsqsum,ysqsum,zsqsum;
-  PostScript ps;
-  histogram histo;
   for (i=0;i<30;i++)
     printf("%7d ",btreversetable[i]);
   tassert(btreversetable[13]==37296);
@@ -2700,19 +2698,6 @@ void testhalton()
   tassert(fabs(xsqsum.total()-expected)<toler);
   tassert(fabs(ysqsum.total()-expected)<toler);
   tassert(fabs(zsqsum.total()-expected)<toler);
-  ps.open("halton.ps");
-  ps.setpaper(papersizes["A4 portrait"],1);
-  ps.prolog();
-  histo.clear();
-  for (i=0;i<746496;i++)
-  {
-    x=h.scalar(1);
-    histo<<x;
-  }
-  ps.startpage();
-  histo.plot(ps,HISTO_LOG);
-  ps.endpage();
-  ps.close();
 }
 
 xy intersection(polyline &p,xy start,xy end)
@@ -3976,8 +3961,10 @@ void testhistogram()
 {
   histogram histo0(-1,1),histo1(-0.1,0.1),histo2(-10,10);
   histobar bar;
+  halton h;
   int i,bartot;
   double x;
+  PostScript ps;
   for (i=0;i<1000;i++)
   {
     x=sin((double)i);
@@ -4012,6 +3999,19 @@ void testhistogram()
   }
   cout<<bar.end<<endl;
   tassert(histo2.gettotal()==bartot);
+  ps.open("histogram.ps");
+  ps.setpaper(papersizes["A4 portrait"],1);
+  ps.prolog();
+  histo0.clear(0,1);
+  for (i=0;i<746496;i++)
+  {
+    x=h.scalar(1);
+    histo0<<x;
+  }
+  ps.startpage();
+  histo0.plot(ps,HISTO_LOG);
+  ps.endpage();
+  ps.close();
 }
 
 void testsmooth5()
