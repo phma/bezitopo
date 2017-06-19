@@ -19,7 +19,7 @@ Before 0.1.1:
 •Write a geolattice to any geolattice file it can read, if the format allows representing part of the earth. ✓
 •Output a KML file depicting the outline of a geoid file. ✓
 •Write an excerpt of a geoid file with specified center and distance. ✓
-•Draw statistical graphs of geoid conversion.
+•Draw statistical graphs of geoid conversion. ✓
 
 Before 0.1.2:
 •Implement type-0 breaklines.

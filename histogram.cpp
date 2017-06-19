@@ -29,7 +29,7 @@
 #include "ldecimal.h"
 using namespace std;
 
-set<double> logTick(double decadeWidth,bool num)
+vector<double> logTick(double decadeWidth,bool num)
 /* 1, 1000
  * 1, 100
  * 1, 10
@@ -43,27 +43,30 @@ set<double> logTick(double decadeWidth,bool num)
 {
   int i,j,n;
   bool biquin;
-  set<double> ret;
+  set<double> retset;
+  vector<double> ret;
+  set<double>::iterator it;
   double x;
   if (decadeWidth>=1)
   {
-    biquin=frac(decadeWidth/log(2))>log(1.5);
+    biquin=frac(decadeWidth/log(2))>log(1.5) || decadeWidth>log(10);
     if (decadeWidth>5592405)
-      n=5592405;
+      n=num?1398101:5592405;
     else
-      n=trunc(1/expm1(1/decadeWidth));
-    for (i=1;i<=n;i++)
-      for (j=1;j<6;j=floor(j*(biquin?2.5:3)))
+      n=trunc((num?0.25:1)/expm1(1/decadeWidth));
+    for (i=1;i<=n || i<2;i++)
+      for (j=1;j<(n?6:2);j=floor(j*(biquin?2.5:3)))
       {
         x=i*j;
         while (x>=10)
           x/=10;
-        ret.insert(log(x));
+        retset.insert(log(x));
       }
   }
   else
-    ret.insert(log(0.1));
-  cout<<"decadeWidth "<<decadeWidth<<" ret.size "<<ret.size()<<endl;
+    retset.insert(log(0.1));
+  for (it=retset.begin();it!=retset.end();it++)
+    ret.push_back(*it);
   return ret;
 }
 
@@ -227,9 +230,7 @@ void histogram::plot(PostScript &ps,int xtype)
   int i;
   histobar bar;
   polyline frame,barGraph;
-  set<double> logticks;
-  vector<double> logtic;
-  set<double>::iterator it;
+  vector<double> logtic,lognum;
   if (ps.aspectRatio()>1)
   {
     height=2;
@@ -298,19 +299,29 @@ void histogram::plot(PostScript &ps,int xtype)
       cout<<"Tick spacing "<<tickSpacing<<endl;
       break;
     case HISTO_LOG:
-      logticks=logTick(60/(rangeHigh-rangeLow),false);
-      for (it=logticks.begin();it!=logticks.end();it++)
-        logtic.push_back(*it);
+      logtic=logTick(60/(rangeHigh-rangeLow),false);
+      lognum=logTick(60/(rangeHigh-rangeLow),true);
       if (logtic[0]<0)
         tickSpacing=-logtic[0];
       else
         tickSpacing=log(10);
+      if (lognum[0]<0)
+        numberSpacing=-lognum[0];
+      else
+        numberSpacing=log(10);
       for (i=0;i<logtic.size();i++)
         for (x=floor((rangeLow-logtic[i])/tickSpacing)*tickSpacing+logtic[i];x<=ceil((rangeHigh-logtic[i])/tickSpacing)*tickSpacing+logtic[i];x+=tickSpacing)
           if (x>=rangeLow && x<=rangeHigh)
           {
             tickx=(x-rangeLow)*width/range;
             ps.line2p(xy(tickx,0),xy(tickx,-0.1));
+          }
+      for (i=0;i<lognum.size();i++)
+        for (x=floor((rangeLow-lognum[i])/numberSpacing)*numberSpacing+lognum[i];x<=ceil((rangeHigh-lognum[i])/numberSpacing)*numberSpacing+lognum[i];x+=numberSpacing)
+          if (x>=rangeLow && x<=rangeHigh)
+          {
+            tickx=(x-rangeLow)*width/range;
+            ps.centerWrite(xy(tickx,-0.15),ldecimal(exp(x),exp(x)/logtic.size()));
           }
       break;
   }
