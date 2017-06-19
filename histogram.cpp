@@ -48,7 +48,7 @@ set<double> logTick(double decadeWidth,bool num)
   if (decadeWidth>=1)
   {
     biquin=frac(decadeWidth/log(2))>log(1.5);
-    if (decadeWidth>log(5592405))
+    if (decadeWidth>5592405)
       n=5592405;
     else
       n=trunc(1/expm1(1/decadeWidth));
@@ -63,6 +63,7 @@ set<double> logTick(double decadeWidth,bool num)
   }
   else
     ret.insert(log(0.1));
+  cout<<"decadeWidth "<<decadeWidth<<" ret.size "<<ret.size()<<endl;
   return ret;
 }
 

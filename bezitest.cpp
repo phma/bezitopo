@@ -4003,7 +4003,7 @@ void testhistogram()
   ps.setpaper(papersizes["A4 portrait"],1);
   ps.prolog();
   histo0.clear(0,1);
-  for (i=0;i<746496;i++)
+  for (i=0;i<15625;i++)
   {
     x=h.scalar(1);
     histo0<<x;
