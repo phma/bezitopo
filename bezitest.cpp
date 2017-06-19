@@ -3962,8 +3962,8 @@ void testhistogram()
   histogram histo0(-1,1),histo1(-0.1,0.1),histo2(-10,10);
   histobar bar;
   halton h;
-  int i,bartot;
-  double x;
+  int i,j,bartot;
+  double x,wid,st;
   PostScript ps;
   for (i=0;i<1000;i++)
   {
@@ -4002,15 +4002,20 @@ void testhistogram()
   ps.open("histogram.ps");
   ps.setpaper(papersizes["A4 portrait"],1);
   ps.prolog();
-  histo0.clear(0,1);
-  for (i=0;i<15625;i++)
+  for (j=0;j<60;j++)
   {
-    x=h.scalar(1);
-    histo0<<x;
+    wid=exp((j-29.5)/8);
+    st=frac(j*M_1PHI)*log(10);
+    histo0.clear(st,st+wid);
+    for (i=0;i<15625;i++)
+    {
+      x=h.scalar(wid)+st;
+      histo0<<x;
+    }
+    ps.startpage();
+    histo0.plot(ps,HISTO_LOG);
+    ps.endpage();
   }
-  ps.startpage();
-  histo0.plot(ps,HISTO_LOG);
-  ps.endpage();
   ps.close();
 }
 
