@@ -1,6 +1,6 @@
 project(bezitopo)
 cmake_minimum_required(VERSION 2.8.12)
-# Copyright 2012,2013,2014,2015,2016 Pierre Abbat.
+# Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
 # This file is part of Bezitopo.
 # 
 # Bezitopo is free software: you can redistribute it and/or modify
@@ -48,6 +48,12 @@ target_compile_definitions(bezitest PUBLIC NUMSGEOID)
 
 include(TestBigEndian)
 include(CheckTypeSize)
+
+include(CheckIncludeFiles)
+check_include_files(time.h HAVE_TIME_H)
+check_include_files(sys/time.h HAVE_SYS_TIME_H)
+check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
+check_include_files(windows.h HAVE_WINDOWS_H)
 
 set(CMAKE_CXX_FLAGS "-std=c++11")
 install(TARGETS bezitopo convertgeoid DESTINATION bin)

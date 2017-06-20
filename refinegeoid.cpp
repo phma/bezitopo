@@ -3,7 +3,7 @@
 /* refinegeoid.cpp - refine geoid approximation       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016 Pierre Abbat.
+/* Copyright 2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -19,6 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "config.h"
+#ifdef HAVE_WINDOWS_H
+#include <windows.h>
+#endif
 #include <iostream>
 #include "refinegeoid.h"
 #include "hlattice.h"
@@ -53,7 +57,11 @@ void progress(geoquad &quad)
       dataArea+=qarea;
     totalArea+=qarea;
   }
+#ifdef HAVE_WINDOWS_H
+  now=GetTickCount()/1024;
+#else
   now=time(nullptr);
+#endif
   if (now!=progressTime)
   {
     progressTime=now;

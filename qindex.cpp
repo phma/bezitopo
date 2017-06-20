@@ -3,7 +3,7 @@
 /* qindex.cpp - quad index to tin                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013 Pierre Abbat.
+/* Copyright 2012,2013,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -46,6 +46,15 @@
    Hilbert-curve order.
    */
 using namespace std;
+
+#ifdef _WIN32
+// Linux and BSD have this function in the library; Windows doesn't.
+double significand(double x)
+{
+  int dummy;
+  return frexp(x,&dummy)*2;
+}
+#endif
 
 qindex::qindex()
 {

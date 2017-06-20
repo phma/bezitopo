@@ -3,7 +3,7 @@
 /* spiral.h - Cornu or Euler spirals                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #ifndef SPIRAL_H
 #define SPIRAL_H
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include "point.h"
 #include "xyz.h"
