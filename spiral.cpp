@@ -276,7 +276,7 @@ double spiralarc::in(xy pnt)
   if (fabs(endcur)>maxcur)
     maxcur=fabs(endcur);
   if ((dist(pnt,start)>len && dist(pnt,end)>len) || 
-      maxcur*len<(xy(start).length()+xy(end).length())*1e-12)
+      maxcur*len*len<(xy(start).length()+xy(end).length())*1e-12)
     return 0;
   else if (maxcur*len<2 && pnt==xy(start))
     return bintorot(foldangle(chordbearing()-startbearing()));

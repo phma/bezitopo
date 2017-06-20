@@ -2727,6 +2727,8 @@ xy intersection(polyline &p,xy start,xy end)
       start=mid;
       sin=min;
     }
+    else
+      break;
   }
   return mid;
 }
