@@ -3,7 +3,7 @@
 /* random.h - random numbers                          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014,2016 Pierre Abbat.
+/* Copyright 2012,2014,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "config.h"
 
 class randm
 {
@@ -29,7 +30,11 @@ public:
   unsigned char ucrandom();
   ~randm();
 private:
+#ifdef HAVE_WINDOWS_H
+  unsigned int usbuf,ucbuf,usnum,ucnum;
+#else
   FILE *randfil;
+#endif
 };
 
 extern randm rng;
