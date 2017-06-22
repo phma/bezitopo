@@ -67,6 +67,12 @@ vector<option> options(
     {'f',"format","e.g. ngs","Format of the geoid file"},
     {'o',"output","filename","Output geoid file"},
     {'c',"circle","lat long radius","Excerpt a region"},
+    {'k',"kml","","Write KML outline of input files"},
+    {'F',"fine","e.g. 1'","Fineness of both latitude and longitude"},
+    {'\0',"latfine","e.g. 1'","Fineness of latitude"},
+    {'\0',"lonfine","e.g. 1'","Fineness of longitude"},
+    {'t',"tolerance","number","Tolerance of geoquads, in millimeters"},
+    {'s',"subdiv","number","Subdivision limit of geoquads, in kilometers"},
     {'e',"endian","big/native/little","Output endianness (for ngs)"},
     {'q',"quadsample","n 4-16","Geoquad sampling fineness"}
   });
@@ -433,7 +439,7 @@ void argpass2()
 	}
 	i--;
 	break;
-      case 6:
+      case 12:
 	if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
 	  i++;
@@ -455,7 +461,7 @@ void argpass2()
           commandError=true;
 	}
 	break;
-      case 7:
+      case 13:
 	if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
 	  i++;
