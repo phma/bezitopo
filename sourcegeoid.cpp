@@ -88,6 +88,9 @@ bool smooth5(unsigned n)
  * This is in practice always a 5-smooth number, such as 21600.
  * 21600 (1 arc minute) is between 20736 and 21870.
  * 1440 (1/4 degree, 1 time minute) is between 1350 and 1458.
+ * The finest division that may be specified is 0.4 second of arc. The
+ * coarsest that may not be used is 0.3955 second (180°/1638400). Between
+ * those two, the criterion is 660 (0.3983 second).
  */
 {
   if (n==0)

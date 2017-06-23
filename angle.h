@@ -88,6 +88,8 @@ double gontorad(double angle);
  * As azimuths or bearings, 0x80000000 and 0x00000000 are equivalent; as deltas they are not.
  */
 
+#define SMOOTH5LIMIT 660
+// see sourcegeoid.cpp for explanation
 #define SEC1 1657
 #define MIN1 99421
 #define DEG1 5965232
