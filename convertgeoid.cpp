@@ -41,6 +41,7 @@ vector<geoformat> formatlist;
 int verbosity=1;
 bool helporversion=false,commandError=false;
 int qsz=4;
+int latFineness=10800,lonFineness=10800;
 int nInputFiles=0;
 vector<string> infilebasenames;
 string outfilename;
@@ -334,6 +335,15 @@ histogram quadsizes()
   return ret;
 }
 
+int parseFineness(string str)
+{
+  int angle;
+  angle=parseiangle(str,DEGREE);
+  if (angle<SMOOTH5LIMIT)
+    angle=SMOOTH5LIMIT;
+  return nearestSmooth(rint((double)DEG180/angle));
+}
+
 void argpass1(int argc, char *argv[])
 {
   int i,j;
@@ -438,6 +448,42 @@ void argpass2()
           commandError=true;
 	}
 	i--;
+	break;
+      case 7:
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+          latFineness=lonFineness=parseFineness(cmdline[i].nonopt);
+	}
+	else
+	{
+	  cerr<<"-F / --fine requires an argument, an angle"<<endl;
+          commandError=true;
+	}
+	break;
+      case 8:
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+          latFineness=parseFineness(cmdline[i].nonopt);
+	}
+	else
+	{
+	  cerr<<"--latfine requires an argument, an angle"<<endl;
+          commandError=true;
+	}
+	break;
+      case 9:
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+          lonFineness=parseFineness(cmdline[i].nonopt);
+	}
+	else
+	{
+	  cerr<<"--lonfine requires an argument, an angle"<<endl;
+          commandError=true;
+	}
 	break;
       case 12:
 	if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
@@ -573,6 +619,8 @@ int main(int argc, char *argv[])
     }
     else
     {
+      cout<<"Latitude fineness "<<latFineness<<" ("<<radtoangle(M_PI/latFineness,DEGREE+SEXAG2P2)<<")\n";
+      cout<<"Longitude fineness "<<lonFineness<<" ("<<radtoangle(M_PI/lonFineness,DEGREE+SEXAG2P2)<<")\n";
       outputgeoid.glat->setbound(latticebound);
       outputgeoid.glat->setfineness(fineness);
       outputgeoid.glat->setundula();
