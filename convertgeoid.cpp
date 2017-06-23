@@ -41,7 +41,7 @@ vector<geoformat> formatlist;
 int verbosity=1;
 bool helporversion=false,commandError=false;
 int qsz=4;
-int latFineness=10800,lonFineness=10800;
+int latFineness=0,lonFineness=0;
 int nInputFiles=0;
 vector<string> infilebasenames;
 string outfilename;
@@ -69,9 +69,9 @@ vector<option> options(
     {'o',"output","filename","Output geoid file"},
     {'c',"circle","lat long radius","Excerpt a region"},
     {'k',"kml","","Write KML outline of input files"},
-    {'F',"fine","e.g. 1'","Fineness of both latitude and longitude"},
-    {'\0',"latfine","e.g. 1'","Fineness of latitude"},
-    {'\0',"lonfine","e.g. 1'","Fineness of longitude"},
+    {'F',"fine","e.g. 0.17 or 0-01","Fineness of both latitude and longitude"},
+    {'\0',"latfine","e.g. 0.17 or 0-01","Fineness of latitude"},
+    {'\0',"lonfine","e.g. 0.17 or 0-01","Fineness of longitude"},
     {'t',"tolerance","number","Tolerance of geoquads, in millimeters"},
     {'s',"subdiv","number","Subdivision limit of geoquads, in kilometers"},
     {'e',"endian","big/native/little","Output endianness (for ngs)"},
@@ -545,6 +545,7 @@ int main(int argc, char *argv[])
   ofstream ofile;
   int i;
   vball v;
+  bool conversionError=false;
   PostScript ps;
   histogram errorHist,areaHist;
   vector<cylinterval> excerptintervals,inputbounds;
@@ -580,12 +581,18 @@ int main(int argc, char *argv[])
   for (i=0;i<excerptcircles.size();i++)
     excerptintervals.push_back(excerptcircles[i].boundrect());
   for (i=0;i<geo.size();i++)
+  {
     inputbounds.push_back(geo[i].boundrect());
+    if (latFineness==0)
+      latFineness=geo[i].getLatFineness();
+    if (lonFineness==0)
+      lonFineness=geo[i].getLonFineness();
+  }
   if (excerptintervals.size())
     excerptinterval=combine(excerptintervals);
   else
     excerptinterval.setfull();
-  excerptinterval.round(fineness);
+  excerptinterval.round(latFineness,lonFineness);
   latticebound=intersect(excerptinterval,combine(inputbounds));
   //cout<<"latticebound "<<formatlatlong(latlong(latticebound.sbd,latticebound.wbd),DEGREE+SEXAG2);
   //cout<<' '<<formatlatlong(latlong(latticebound.nbd,latticebound.ebd),DEGREE+SEXAG2)<<endl;
@@ -619,12 +626,22 @@ int main(int argc, char *argv[])
     }
     else
     {
-      cout<<"Latitude fineness "<<latFineness<<" ("<<radtoangle(M_PI/latFineness,DEGREE+SEXAG2P2)<<")\n";
-      cout<<"Longitude fineness "<<lonFineness<<" ("<<radtoangle(M_PI/lonFineness,DEGREE+SEXAG2P2)<<")\n";
-      outputgeoid.glat->setbound(latticebound);
-      outputgeoid.glat->setfineness(fineness);
-      outputgeoid.glat->setundula();
-      outputgeoid.glat->setslopes();
+      if (latFineness && lonFineness)
+      {
+        cout<<"Latitude fineness "<<latFineness<<" ("<<radtoangle(M_PI/latFineness,DEGREE+SEXAG2P2)<<")\n";
+        cout<<"Longitude fineness "<<lonFineness<<" ("<<radtoangle(M_PI/lonFineness,DEGREE+SEXAG2P2)<<")\n";
+        outputgeoid.glat->setbound(latticebound);
+        outputgeoid.glat->setfineness(latFineness,lonFineness);
+        outputgeoid.glat->setundula();
+        outputgeoid.glat->setslopes();
+      }
+      else
+      {
+        delete outputgeoid.glat;
+        outputgeoid.glat=nullptr;
+        cerr<<"No geolattice files read. Please specify -F when converting boldatni\nto any geolattice format."<<endl;
+        conversionError=true;
+      }
       delete outputgeoid.ghdr;
       delete outputgeoid.cmap;
       outputgeoid.ghdr=nullptr;
@@ -634,13 +651,16 @@ int main(int argc, char *argv[])
     {
       if (infilebasenames.size()==1)
       {
-        outfilename=infilebasenames[0]+"."+formatlist[0].ext;
-        cout<<"Writing "<<outfilename<<endl;
+        if (!conversionError)
+        {
+          outfilename=infilebasenames[0]+"."+formatlist[0].ext;
+          cout<<"Writing "<<outfilename<<endl;
+        }
       }
       else
         cout<<"Please specify a filename with -o"<<endl;
     }
-    if (outfilename.length())
+    if (outfilename.length() && !conversionError)
       if (formatlist[0].writefunc)
       {
         formatlist[0].writefunc(outputgeoid,outfilename);
@@ -649,12 +669,14 @@ int main(int argc, char *argv[])
       else
         cerr<<"Can't write in format "<<formatlist[0].cmd<<"; it is a whole-earth-only format."<<endl;
     //drawglobecube(1024,62,-7,&outputgeoid,0,"geoid.ppm");
-    cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
-    //correctionHist.dump();
-    cout<<"Computing error histogram"<<endl;
-    errorHist=errorspread();
-    areaHist=quadsizes();
-    if (outfilename.length())
+    if (!conversionError)
+    {
+      cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
+      cout<<"Computing error histogram"<<endl;
+      errorHist=errorspread();
+      areaHist=quadsizes();
+    }
+    if (outfilename.length() && !conversionError)
     {
       if (errorHist.gettotal() || areaHist.gettotal())
       {

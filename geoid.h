@@ -50,7 +50,7 @@ struct cylinterval
   double area();
   void setfull();
   void setempty();
-  void round(int fineness);
+  void round(int latfineness,int lonfineness);
   latlong corner(int n);
 };
 

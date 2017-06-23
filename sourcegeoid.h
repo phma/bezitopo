@@ -81,7 +81,9 @@ public:
   void cvtheader(usngatxtheader &hdr);
   void settest();
   void dump();
-  void setfineness(int fineness);
+  void setfineness(int latfineness,int lonfineness);
+  int getLatFineness();
+  int getLonFineness();
   cylinterval boundrect();
 };
 
@@ -108,6 +110,8 @@ struct geoid
   geoid(const geoid &b);
   double elev(int lat,int lon);
   double elev(xyz dir);
+  int getLatFineness();
+  int getLonFineness();
   cylinterval boundrect();
 };
 

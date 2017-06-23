@@ -479,14 +479,32 @@ void geolattice::settest()
   setslopes();
 }
 
-void geolattice::setfineness(int fineness)
+void geolattice::setfineness(int latfineness,int lonfineness)
 /* fineness is units per 180°. Doing this on a geolattice that already has
  * data in it will shear the data.
  */
 {
-  width=-rint((double)(wbd-ebd)*(double)fineness/DEG180);
-  height=-rint((double)(sbd-nbd)*(double)fineness/DEG180);
+  width=-rint((double)(wbd-ebd)*(double)lonfineness/DEG180);
+  height=-rint((double)(sbd-nbd)*(double)latfineness/DEG180);
   resize();
+}
+
+int geolattice::getLatFineness()
+{
+  double dfine=-(double)height*DEG180/(sbd-nbd);
+  if (dfine>0.6 && dfine<=DEG180)
+    return nearestSmooth(rint(dfine));
+  else
+    return 0;
+}
+
+int geolattice::getLonFineness()
+{
+  double dfine=-(double)width*DEG180/(wbd-ebd);
+  if (dfine>0.6 && dfine<=DEG180)
+    return nearestSmooth(rint(dfine));
+  else
+    return 0;
 }
 
 void readusngatxtheader(usngatxtheader &hdr,istream &file)
@@ -1190,6 +1208,22 @@ double geoid::elev(xyz dir)
     return glat->elev(dir);
   else
     return NAN;
+}
+
+int geoid::getLatFineness()
+{
+  if (glat)
+    return glat->getLatFineness();
+  else
+    return 0;
+}
+
+int geoid::getLonFineness()
+{
+  if (glat)
+    return glat->getLonFineness();
+  else
+    return 0;
 }
 
 cylinterval geoid::boundrect()
