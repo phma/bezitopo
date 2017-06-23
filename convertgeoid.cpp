@@ -86,7 +86,7 @@ void outhelp()
   int i,j;
   cout<<"Convertgeoid converts geoid files from one format to another and\n"
     <<"makes excerpts of them. Example:\n"
-    <<"convertgeoid g2012bu0.bin -c 38N99W 150 -f gsf -o Macksville.gsf\n"
+    <<"convertgeoid g2012bu0.bin -c 38N99W 150km -f gsf -o Macksville.gsf\n"
     <<"makes an excerpt containing a 150 km circle around Macksville, Kansas.\n";
   for (i=0;i<options.size();i++)
   {
@@ -374,7 +374,7 @@ void argpass1(int argc, char *argv[])
 
 void argpass2()
 {
-  int i,j;
+  int i,j,foundunit;
   string centerstr;
   latlong ll;
   double radius;
@@ -433,7 +433,7 @@ void argpass2()
 	}
 	i+=j;
 	if (ll.valid()==2 && i<cmdline.size() && cmdline[i].optnum<0)
-	  radius=stod(cmdline[i++].nonopt)*1000;
+	  radius=parse_length(cmdline[i++].nonopt);
 	if (radius>0 && radius<=1e7 && ll.lat>=-M_PI/2 && ll.lat<=M_PI/2)
 	{
 	  cout<<"Excerpt will be centered on "<<radtodeg(ll.lat)<<','<<radtodeg(ll.lon)<<" with radius "<<radius<<" m"<<endl;
@@ -443,8 +443,8 @@ void argpass2()
 	}
 	else
 	{
-	  cout<<"-c / --circle requires two arguments, a center (latitude/longitude) and a radius"<<endl;
-	  cout<<"radius is 10000 max, in kilometers"<<endl;
+	  cout<<"-c / --circle requires two arguments, a center (latitude/longitude) and a radius\n";
+	  cout<<"radius is 10000 km max"<<endl;
           commandError=true;
 	}
 	i--;
@@ -534,7 +534,7 @@ void argpass2()
  * Arguments not tagged by an option are input files.
  * 
  * Example:
- * convertgeoid -f ngs g2012bu0.bin -c 38N99W 150 -f gsf -o Macksville.gsf
+ * convertgeoid -f ngs g2012bu0.bin -c 38N99W 150km -f gsf -o Macksville.gsf
  * Reads the Lower 48 file in NGS format, outputs an excerpt called Macksville.gsf
  * containing a circle of radius 150 km centered at 38N99W in GSF format,
  * and outputs the boundary to file Macksville.gsf.kml .
