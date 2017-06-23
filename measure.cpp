@@ -3,7 +3,7 @@
 /* measure.cpp - measuring units                      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015,2016 Pierre Abbat.
+/* Copyright 2012,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -49,7 +49,8 @@ struct cf
 cf cfactors[]=
 {
   FOOT,		0.3048006096012192,	// ft (any of three)
-  CHAIN,	20.11684023368046736,	// ch
+  CHAIN,	20.11684023368046736,	// ch (any of three)
+  MILE,		1609.3472186944373889,	// mi (any of three)
   INTFOOT,	0.3048,			// 
   INTCHAIN,	20.1168,		//
   0,		1,			// unknown unit
@@ -98,6 +99,8 @@ symbol symbols[]=
   MICROMETER,	"µm", //0000b5 00006d
   MICROMETER,	"μm", //0003bc 00006d
   MICROMETER,	"um",
+  KILOMETER,	"km",
+  MILE,		"mi",
   FOOT,		"ft",
   FOOT,		"'",
   METER,	"m",
@@ -108,7 +111,7 @@ symbol symbols[]=
   KGPERL,	"kg/L",
   KGPERL,	"g/ml",
   KGPERL,	"g/mL",
-  LBPERIN3,      "lb/in³",
+  LBPERIN3,     "lb/in³",
   MILLILITER,	"ml",
   IN3,		"in³",
 };
@@ -275,6 +278,7 @@ void setfoot(int f)
       cfactors[0].factor=0.3047996;
   }
   cfactors[1].factor=cfactors[0].factor*66;
+  cfactors[2].factor=cfactors[1].factor*80;
 }
 
 double from_coherent(double measurement,int unitp)

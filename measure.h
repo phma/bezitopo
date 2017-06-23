@@ -3,7 +3,7 @@
 /* measure.h - measuring units                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015,2016 Pierre Abbat.
+/* Copyright 2012,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -44,6 +44,7 @@
 #define FOOT 0x0001f000
 #define INTCHAIN 0x0001f100
 #define CHAIN 0x0001f200
+#define MILE 0x0001f300
 #define GRAM 0x00021000
 #define KILOGRAM 0x00021300
 #define POUND 0x0002ed00
