@@ -4024,7 +4024,8 @@ void testhistogram()
 
 void testsmooth5()
 {
-  int i,lasti,previ,nsmooth=0,recip=2,lastrecip=1,prevrecip;
+  unsigned int i,lasti,previ;
+  int nsmooth=0,recip=2,lastrecip=1,prevrecip;
   for (i=17711;i<=28657;i++)
   {
     if (smooth5(i))
@@ -4047,6 +4048,10 @@ void testsmooth5()
       lasti=i;
     }
   cout<<"Finest angle usable is "<<previ<<" per 180°.\n"<<lasti<<" and "<<i<<" are too close."<<endl;
+  for (i=4294967295;!smooth5(i);--i);
+  cout<<"Largest smooth number is "<<i<<endl;
+  tassert(nearestSmooth(7)==8);
+  tassert(nearestSmooth(rint((double)DEG180/SMOOTH5LIMIT))==1620000);
 }
 
 void testquadhash()

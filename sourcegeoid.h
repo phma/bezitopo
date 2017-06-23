@@ -123,6 +123,7 @@ struct geoformat
 };
 
 bool smooth5(unsigned n);
+unsigned nearestSmooth(unsigned n);
 void setEndian(int n);
 std::string readword(std::istream &file);
 double readdouble(std::istream &file);

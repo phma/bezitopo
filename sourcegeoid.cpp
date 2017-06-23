@@ -104,6 +104,25 @@ bool smooth5(unsigned n)
   return n==1;
 }
 
+unsigned nearestSmooth(unsigned n)
+{
+  unsigned ub,lb;
+  if (n>4271484375)
+    n=4271484375;
+  if (n==0)
+    n=1;
+  ub=lb=n;
+  while (!smooth5(ub))
+    ub++;
+  while (!smooth5(lb))
+    lb--;
+  if (sqr(n)>(double)ub*lb)
+    n=ub;
+  else
+    n=lb;
+  return n;
+}
+
 string readword(istream &file)
 {
   int ch;
