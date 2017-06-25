@@ -4924,7 +4924,7 @@ void testsmallcircle()
   int r,i;
   array<int,2> count;
   PostScript ps;
-  smallcircle avl150,eho150,clt150; // Asheville, Shelby, Charlotte
+  smallcircle avl150,eho150,clt150,brw150; // Asheville, Shelby, Charlotte, Barrow
   smallcircle athwi45d; // Athens, Wisconsin, 45°N, to test a circle passing through the pole
   smallcircle ush4000; // circle encloses the pole
   smallcircle gps5311; // circle intersects five faces
@@ -4932,15 +4932,17 @@ void testsmallcircle()
   xyz xprod,qaraqoga;
   // Qaraqoğa, Pavlodar, Kazakhstan, is 10 Mm from both Asheville and Charlotte.
   vector<xyz> avlint,ehoint,cltint;
-  cylinterval avlcyl,ehocyl,cltcyl,athwicyl,ushcyl;
+  cylinterval avlcyl,ehocyl,cltcyl,brwcyl,athwicyl,ushcyl;
   avl150.center=Sphere.geoc(degtobin(35.58),degtobin(-82.56),0);
   eho150.center=Sphere.geoc(degtobin(35.29),degtobin(-81.54),0);
   clt150.center=Sphere.geoc(degtobin(35.23),degtobin(-80.84),0);
+  brw150.center=Sphere.geoc(degtobin(71.2906),degtobin(-156.789),0);
   qaraqoga=Sphere.geoc(degtobin(52.43),degtobin(75.07),0);
   r=radtobin(15e4/EARTHRAD);
   avl150.setradius(r);
   eho150.setradius(r);
   clt150.setradius(r);
+  brw150.setradius(r);
   tassert(eho150.farin(clt150.center)>eho150.farin(avl150.center));
   tassert(avl150.in(eho150.center));
   tassert(!avl150.in(clt150.center));
@@ -4972,6 +4974,7 @@ void testsmallcircle()
   avlcyl=avl150.boundrect();
   ehocyl=eho150.boundrect();
   cltcyl=clt150.boundrect();
+  brwcyl=brw150.boundrect();
   athwicyl=athwi45d.boundrect();
   ushcyl=ush4000.boundrect();
   cout<<"Asheville ";
@@ -4980,6 +4983,8 @@ void testsmallcircle()
   outcyl(ehocyl);
   cout<<endl<<"Charlotte ";
   outcyl(cltcyl);
+  cout<<endl<<"Barrow ";
+  outcyl(brwcyl);
   cout<<endl<<"Athens, WI ";
   outcyl(athwicyl);
   cout<<endl<<"Ushuaia ";
