@@ -604,7 +604,7 @@ int main(int argc, char *argv[])
       {
         //cout<<"Face "<<i+1;
         //cout.flush();
-        interroquad(outputgeoid.cmap->faces[i],3e5);
+        interroquad(outputgeoid.cmap->faces[i],outputgeoid.ghdr->spacing);
         /*if (cube.faces[i].isfull()>=0)
           cout<<" has data"<<endl;
         else
