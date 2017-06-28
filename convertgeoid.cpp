@@ -72,10 +72,11 @@ vector<option> options(
     {'F',"fine","e.g. 0.17 or 0-01","Fineness of both latitude and longitude"},
     {'\0',"latfine","e.g. 0.17 or 0-01","Fineness of latitude"},
     {'\0',"lonfine","e.g. 0.17 or 0-01","Fineness of longitude"},
-    {'t',"tolerance","number","Tolerance of geoquads, in millimeters"},
-    {'s',"subdiv","number","Subdivision limit of geoquads, in kilometers"},
+    {'t',"tolerance","distance","Tolerance of geoquads, typ. 1 mm"},
+    {'s',"subdiv","distance","Subdivision limit of geoquads, typ. 1 km"},
     {'e',"endian","big/native/little","Output endianness (for ngs)"},
-    {'q',"quadsample","n 4-16","Geoquad sampling fineness"}
+    {'q',"quadsample","n 4-16","Geoquad sampling fineness"},
+    {'S',"spacing","distance","Geoquad search spacing, typ. 100 km"}
   });
 
 vector<token> cmdline;
