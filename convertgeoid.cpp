@@ -39,11 +39,11 @@ using namespace std;
 document doc;
 vector<geoformat> formatlist;
 int verbosity=1;
-bool helporversion=false,commandError=false;
+bool helporversion=false,commandError=false,inputKml=false;
 int qsz=4;
 int latFineness=0,lonFineness=0;
 int nInputFiles=0;
-vector<string> infilebasenames;
+vector<string> infilebasenames,infilenames;
 string outfilename;
 
 struct option
@@ -69,9 +69,9 @@ vector<option> options(
     {'o',"output","filename","Output geoid file"},
     {'c',"circle","lat long radius","Excerpt a region"},
     {'k',"kml","","Write KML outline of input files"},
-    {'F',"fine","e.g. 0.17 or 0-01","Fineness of both latitude and longitude"},
-    {'\0',"latfine","e.g. 0.17 or 0-01","Fineness of latitude"},
-    {'\0',"lonfine","e.g. 0.17 or 0-01","Fineness of longitude"},
+    {'F',"fine","e.g. 0.017 or 0-01","Fineness of both latitude and longitude"},
+    {'\0',"latfine","e.g. 0.017 or 0-01","Fineness of latitude"},
+    {'\0',"lonfine","e.g. 0.017 or 0-01","Fineness of longitude"},
     {'t',"tolerance","distance","Tolerance of geoquads, typ. 1 mm"},
     {'s',"subdiv","distance","Subdivision limit of geoquads, typ. 1 km"},
     {'e',"endian","big/native/little","Output endianness (for ngs)"},
@@ -267,7 +267,7 @@ int readgeoid(string filename)
       basename=filename.substr(0,extpos);
     else
       basename=filename;
-    //cout<<"basename="<<basename<<endl;
+    infilenames.push_back(filename);
     infilebasenames.push_back(basename);
   }
   if (ret==1)
@@ -450,6 +450,9 @@ void argpass2()
 	}
 	i--;
 	break;
+      case 6:
+        inputKml=true;
+        break;
       case 7:
         if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
@@ -599,6 +602,9 @@ int main(int argc, char *argv[])
   //cout<<' '<<formatlatlong(latlong(latticebound.nbd,latticebound.ebd),DEGREE+SEXAG2)<<endl;
   if (!helporversion && !commandError && (geo.size() || !nInputFiles))
   {
+    if (inputKml)
+      for (i=0;i<geo.size();i++)
+        outKml(gbounds(geo[i]),infilenames[i]+".kml");
     if (formatlist[0].cmd=="bol")
     {
       for (i=0;i<6;i++)
