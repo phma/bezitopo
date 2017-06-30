@@ -39,7 +39,7 @@ using namespace std;
 document doc;
 vector<geoformat> formatlist;
 int verbosity=1;
-bool helporversion=false,commandError=false,inputKml=false;
+bool helporversion=false,commandError=false,inputKml=false,didConvert=false;
 int qsz=4;
 int latFineness=0,lonFineness=0;
 int nInputFiles=0;
@@ -605,78 +605,78 @@ int main(int argc, char *argv[])
     if (inputKml)
       for (i=0;i<geo.size();i++)
         outKml(gbounds(geo[i]),infilenames[i]+".kml");
-    if (formatlist[0].cmd=="bol")
-    {
-      for (i=0;i<6;i++)
-      {
-        //cout<<"Face "<<i+1;
-        //cout.flush();
-        interroquad(outputgeoid.cmap->faces[i],outputgeoid.ghdr->spacing);
-        /*if (cube.faces[i].isfull()>=0)
-          cout<<" has data"<<endl;
-        else
-          cout<<" is empty"<<endl;*/
-        refine(outputgeoid.cmap->faces[i],outputgeoid.cmap->scale,outputgeoid.ghdr->tolerance,outputgeoid.ghdr->sublimit,outputgeoid.ghdr->spacing,qsz);
-      }
-      outProgress();
-      cout<<endl;
-      undrange=outputgeoid.cmap->undrange();
-      cout<<"Undulation range: constant "<<undrange[0]<<'-'<<undrange[1];
-      cout<<" linear "<<undrange[2]<<'-'<<undrange[3];
-      cout<<" quadratic "<<undrange[4]<<'-'<<undrange[5]<<endl;
-      undhisto=outputgeoid.cmap->undhisto();
-      cout<<"1 byte "<<undhisto[0]<<"; 2 bytes "<<undhisto[1]<<"; 3 bytes "<<undhisto[2]<<"; 4 bytes "<<undhisto[3]<<endl;
-      if (dataArea.total()>510e12)
-        test360seam();
-      delete outputgeoid.glat;
-      outputgeoid.glat=nullptr;
-    }
-    else
-    {
-      if (latFineness && lonFineness)
-      {
-        cout<<"Latitude fineness "<<latFineness<<" ("<<radtoangle(M_PI/latFineness,DEGREE+SEXAG2P2)<<")\n";
-        cout<<"Longitude fineness "<<lonFineness<<" ("<<radtoangle(M_PI/lonFineness,DEGREE+SEXAG2P2)<<")\n";
-        outputgeoid.glat->setbound(latticebound);
-        outputgeoid.glat->setfineness(latFineness,lonFineness);
-        outputgeoid.glat->setundula();
-        outputgeoid.glat->setslopes();
-      }
-      else
-      {
-        delete outputgeoid.glat;
-        outputgeoid.glat=nullptr;
-        cerr<<"No geolattice files read. Please specify -F when converting boldatni\nto any geolattice format."<<endl;
-        conversionError=true;
-      }
-      delete outputgeoid.ghdr;
-      delete outputgeoid.cmap;
-      outputgeoid.ghdr=nullptr;
-      outputgeoid.cmap=nullptr;
-    }
     if (!outfilename.length())
     {
       if (infilebasenames.size()==1)
-      {
-        if (!conversionError)
-        {
-          outfilename=infilebasenames[0]+"."+formatlist[0].ext;
-          cout<<"Writing "<<outfilename<<endl;
-        }
-      }
+      outfilename=infilebasenames[0]+"."+formatlist[0].ext;
       else
         cout<<"Please specify a filename with -o"<<endl;
     }
+    if (outfilename.length())
+      if (formatlist[0].cmd=="bol")
+      {
+        for (i=0;i<6;i++)
+        {
+          //cout<<"Face "<<i+1;
+          //cout.flush();
+          interroquad(outputgeoid.cmap->faces[i],outputgeoid.ghdr->spacing);
+          /*if (cube.faces[i].isfull()>=0)
+            cout<<" has data"<<endl;
+          else
+            cout<<" is empty"<<endl;*/
+          refine(outputgeoid.cmap->faces[i],outputgeoid.cmap->scale,outputgeoid.ghdr->tolerance,outputgeoid.ghdr->sublimit,outputgeoid.ghdr->spacing,qsz);
+        }
+        outProgress();
+        cout<<endl;
+        undrange=outputgeoid.cmap->undrange();
+        cout<<"Undulation range: constant "<<undrange[0]<<'-'<<undrange[1];
+        cout<<" linear "<<undrange[2]<<'-'<<undrange[3];
+        cout<<" quadratic "<<undrange[4]<<'-'<<undrange[5]<<endl;
+        undhisto=outputgeoid.cmap->undhisto();
+        cout<<"1 byte "<<undhisto[0]<<"; 2 bytes "<<undhisto[1]<<"; 3 bytes "<<undhisto[2]<<"; 4 bytes "<<undhisto[3]<<endl;
+        if (dataArea.total()>510e12)
+          test360seam();
+        didConvert=dataArea.total()>0;
+        delete outputgeoid.glat;
+        outputgeoid.glat=nullptr;
+      }
+      else
+      {
+        if (latFineness && lonFineness)
+        {
+          cout<<"Latitude fineness "<<latFineness<<" ("<<radtoangle(M_PI/latFineness,DEGREE+SEXAG2P2)<<")\n";
+          cout<<"Longitude fineness "<<lonFineness<<" ("<<radtoangle(M_PI/lonFineness,DEGREE+SEXAG2P2)<<")\n";
+          outputgeoid.glat->setbound(latticebound);
+          outputgeoid.glat->setfineness(latFineness,lonFineness);
+          outputgeoid.glat->setundula();
+          outputgeoid.glat->setslopes();
+          didConvert=outputgeoid.boundrect().area()>0;
+        }
+        else
+        {
+          delete outputgeoid.glat;
+          outputgeoid.glat=nullptr;
+          cerr<<"No geolattice files read. Please specify -F when converting boldatni\nto any geolattice format."<<endl;
+          conversionError=true;
+        }
+        delete outputgeoid.ghdr;
+        delete outputgeoid.cmap;
+        outputgeoid.ghdr=nullptr;
+        outputgeoid.cmap=nullptr;
+      }
+    if (conversionError)
+    outfilename="";
     if (outfilename.length() && !conversionError)
       if (formatlist[0].writefunc)
       {
+        cout<<"Writing "<<outfilename<<endl;
         formatlist[0].writefunc(outputgeoid,outfilename);
         outKml(gbounds(outputgeoid),outfilename+".kml");
       }
       else
         cerr<<"Can't write in format "<<formatlist[0].cmd<<"; it is a whole-earth-only format."<<endl;
     //drawglobecube(1024,62,-7,&outputgeoid,0,"geoid.ppm");
-    if (!conversionError)
+    if (didConvert && !conversionError)
     {
       cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
       cout<<"Computing error histogram"<<endl;
