@@ -42,6 +42,7 @@ int verbosity=1;
 bool helporversion=false,commandError=false,inputKml=false,didConvert=false;
 int qsz=4;
 int latFineness=0,lonFineness=0;
+double bolTolerance=0,bolSubdivision=0,bolSpacing=0;
 int nInputFiles=0;
 vector<string> infilebasenames,infilenames;
 string outfilename;
@@ -489,6 +490,34 @@ void argpass2()
           commandError=true;
 	}
 	break;
+      case 10:
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+          bolTolerance=parse_length(cmdline[i].nonopt);
+          if (bolTolerance<sqrt(6)/65536) // about 37 µm
+            bolTolerance=sqrt(6)/65536; // sqrt(6) because a geoquad has six components
+	}
+	else
+	{
+	  cerr<<"--tolerance requires an argument, a distance"<<endl;
+          commandError=true;
+	}
+	break;
+      case 11:
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+          bolSubdivision=parse_length(cmdline[i].nonopt);
+          if (bolSubdivision<1)
+            bolSubdivision=1;
+	}
+	else
+	{
+	  cerr<<"--subdiv requires an argument, a distance"<<endl;
+          commandError=true;
+	}
+	break;
       case 12:
 	if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
@@ -520,6 +549,20 @@ void argpass2()
 	else
 	{
 	  cerr<<"-q / --quadsample requires an argument, an integer from 4 to 16"<<endl;
+          commandError=true;
+	}
+	break;
+      case 14:
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+          bolSpacing=parse_length(cmdline[i].nonopt);
+          if (bolSpacing<1) // limit in interroquad
+            bolSpacing=1;
+	}
+	else
+	{
+	  cerr<<"--spacing requires an argument, a distance"<<endl;
           commandError=true;
 	}
 	break;
@@ -591,6 +634,12 @@ int main(int argc, char *argv[])
       latFineness=geo[i].getLatFineness();
     if (lonFineness==0)
       lonFineness=geo[i].getLonFineness();
+    if (bolTolerance==0 && geo[i].ghdr)
+      bolTolerance=geo[i].ghdr->tolerance;
+    if (bolSubdivision==0 && geo[i].ghdr)
+      bolSubdivision=geo[i].ghdr->sublimit;
+    if (bolSpacing==0 && geo[i].ghdr)
+      bolSpacing=geo[i].ghdr->spacing;
   }
   if (excerptintervals.size())
     excerptinterval=combine(excerptintervals);
@@ -615,6 +664,15 @@ int main(int argc, char *argv[])
     if (outfilename.length())
       if (formatlist[0].cmd=="bol")
       {
+        if (bolTolerance<=0)
+          bolTolerance=0.001;
+        if (bolSubdivision<=0)
+          bolSubdivision=1000;
+        if (bolSpacing<=0)
+          bolSpacing=1e5;
+        outputgeoid.ghdr->tolerance=bolTolerance;
+        outputgeoid.ghdr->sublimit=bolSubdivision;
+        outputgeoid.ghdr->spacing=bolSpacing;
         for (i=0;i<6;i++)
         {
           //cout<<"Face "<<i+1;
