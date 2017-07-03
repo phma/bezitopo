@@ -159,22 +159,19 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
   biginterior=false;
   if (biginterior)
     cout<<"big interior quad ";
-  if (area<sqr(sublimit) || quad.isfull())
-  {
-    for (i=0;i<qsz;i++)
-      for (j=0;j<qsz;j++)
-      {
-	qpt=quad.center+xy(quad.scale,0)*qscale(i,qsz)+xy(0,quad.scale)*qscale(j,qsz);
-	v=vball(quad.face,qpt);
-	pt=decodedir(v);
-	qpoints[i][j]=avgelev(pt)/vscale;
-	if (std::isfinite(qpoints[i][j]))
-	  quad.nums.push_back(qpt);
-	else
-	  quad.nans.push_back(qpt);
-      }
-    avgelev_refinecount+=sqr(qsz);
-  }
+  for (i=0;i<qsz;i++)
+    for (j=0;j<qsz;j++)
+    {
+      qpt=quad.center+xy(quad.scale,0)*qscale(i,qsz)+xy(0,quad.scale)*qscale(j,qsz);
+      v=vball(quad.face,qpt);
+      pt=decodedir(v);
+      qpoints[i][j]=avgelev(pt)/vscale;
+      if (std::isfinite(qpoints[i][j]))
+        quad.nums.push_back(qpt);
+      else
+        quad.nans.push_back(qpt);
+    }
+  avgelev_refinecount+=sqr(qsz);
   for (ovlp=false,i=0;!ovlp && i<excerptcircles.size();i++)
     if (overlap(excerptcircles[i],quad))
       ovlp=true;
@@ -185,46 +182,43 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
   j=0;
   if (ovlp)
   {
-    if (area<sqr(sublimit) || quad.isfull()!=0)
+    for (numnums=i=0;i<qsz;i++)
+      for (j=0;j<qsz;j++)
+        if (std::isfinite(qpoints[i][j]))
+          numnums++;
+    j=0;
+    if (numnums*2>sqr(qsz))
     {
-      for (numnums=i=0;i<qsz;i++)
-        for (j=0;j<qsz;j++)
-          if (std::isfinite(qpoints[i][j]))
-            numnums++;
-      j=0;
-      if (numnums*2>sqr(qsz))
+      if (quad.isnan())
+        quad.und[0]=0;
+      corr=correction(quad,qpoints,qsz);
+      for (sqerror=i=0;i<6;i++)
+        sqerror+=sqr(corr[i]);
+      //cout<<"numnums "<<numnums<<" sqerror "<<sqerror<<" before ";
+      /* The program can get into an infinite loop in which one of the corrections
+      * is 0.5 and another is -0.5, then on the next iteration one is -0.5 and
+      * another is 0.5, and so on forever. This happens with the USGS data
+      * at point (3,-0.58112335205078125,-0.69258880615234375), which is near
+      * the overlap of the Alaska and Lower 48 files, but not at the edge of
+      * either. It takes two iterations to arrive at the infinite loop. But if
+      * only half of the points have known undulation, it can take as many as
+      * 1498 iterations to converge, so stop the loop at 1536.
+      */
+      for (j=0,ncorr=6;ncorr && j<1536;j++)
       {
-        if (quad.isnan())
-          quad.und[0]=0;
+        lastsqerror=sqerror;
+        for (i=ncorr=0;i<6;i++)
+        {
+          quad.und[i]+=rint(corr[i]);
+          ncorr+=rint(corr[i])!=0;
+        }
         corr=correction(quad,qpoints,qsz);
         for (sqerror=i=0;i<6;i++)
           sqerror+=sqr(corr[i]);
-        //cout<<"numnums "<<numnums<<" sqerror "<<sqerror<<" before ";
-        /* The program can get into an infinite loop in which one of the corrections
-        * is 0.5 and another is -0.5, then on the next iteration one is -0.5 and
-        * another is 0.5, and so on forever. This happens with the USGS data
-        * at point (3,-0.58112335205078125,-0.69258880615234375), which is near
-        * the overlap of the Alaska and Lower 48 files, but not at the edge of
-        * either. It takes two iterations to arrive at the infinite loop. But if
-        * only half of the points have known undulation, it can take as many as
-        * 1498 iterations to converge, so stop the loop at 1536.
-        */
-        for (j=0,ncorr=6;ncorr && j<1536;j++)
-        {
-          lastsqerror=sqerror;
-          for (i=ncorr=0;i<6;i++)
-          {
-            quad.und[i]+=rint(corr[i]);
-            ncorr+=rint(corr[i])!=0;
-          }
-          corr=correction(quad,qpoints,qsz);
-          for (sqerror=i=0;i<6;i++)
-            sqerror+=sqr(corr[i]);
-        }
       }
-      //else
-        //cout<<"numnums "<<numnums<<endl;
     }
+    //else
+      //cout<<"numnums "<<numnums<<endl;
     maxerr=maxerror(quad,qpoints,qsz);
     if (biginterior)
     {
@@ -241,7 +235,8 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
       }
       cout<<" maxerror "<<maxerr*vscale<<endl;
     }
-    if (area>=sqr(sublimit) && (quad.isfull()==0 || maxerr>tolerance/vscale))
+    if (area>=sqr(sublimit) && ((quad.isfull()==0 && 2*numnums<=sqr(qsz)) ||
+        maxerr>tolerance/vscale))
     {
       quad.subdivide();
       for (i=0;i<4;i++)
