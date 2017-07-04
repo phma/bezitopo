@@ -657,7 +657,14 @@ int main(int argc, char *argv[])
     if (!outfilename.length())
     {
       if (infilebasenames.size()==1)
-      outfilename=infilebasenames[0]+"."+formatlist[0].ext;
+      {
+        outfilename=infilebasenames[0]+"."+formatlist[0].ext;
+        if (outfilename==infilenames[0])
+        {
+          cout<<"Not overwriting "<<outfilename<<endl;
+          outfilename="";
+        }
+      }
       else
         cout<<"Please specify a filename with -o"<<endl;
     }
