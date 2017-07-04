@@ -4493,6 +4493,8 @@ void testgeoidboundary()
   outgd.ghdr->tolerance=0.003;
   outgd.ghdr->sublimit=1000;
   outgd.ghdr->spacing=1e5;
+  totalArea.clear();
+  dataArea.clear();
   for (i=0;i<6;i++)
   {
     interroquad(outgd.cmap->faces[i],3e5);
@@ -4817,6 +4819,8 @@ void testgeoid()
   hdr.spacing=1e5;
   hdr.namesFormats.push_back("test");
   hdr.namesFormats.push_back("test");
+  totalArea.clear();
+  dataArea.clear();
   for (i=0;i<6;i++)
   {
     interroquad(cube.faces[i],3e5);
