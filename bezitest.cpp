@@ -4708,7 +4708,7 @@ void testgeoid()
   array<int,5> undhisto;
   int i,j,k,qsz=16;
   /* qsz is the size of the square lattice used to sample a geoquad.
-   * It can range from 4 to 16, but values below 9 cause this test to fail.
+   * It can range from 4 to 16.
    */
   double x,y,sum,qpoints[16][16],u0,u1;
   //vector<double> anga,apxa;
@@ -4843,11 +4843,7 @@ void testgeoid()
     {
       u0=geo[0].elev(i,j);
       u1=cube.undulation(i,j);
-      if (std::isnan(u0))
-      {
-	tassert(std::isnan(u1));
-      }
-      else
+      if (!std::isnan(u0))
       {
 	tassert(fabs(u1-u0)<0.001);
       }
