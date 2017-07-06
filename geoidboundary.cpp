@@ -640,8 +640,8 @@ void gboundary::splitoff(int l)
   int i,j,k;
   bool found;
   vector<int> iseg;
-  if (l<0)
-    cout<<"splitoff: l<0"<<endl;
+  //if (l<0)
+    //cout<<"splitoff: l<0"<<endl;
   for (i=0;i<bdy.size();i++)
   {
     do
@@ -784,8 +784,8 @@ void gboundary::flattenBdy()
     {
       flatBdy.push_back(flatten(bdy[i]));
       areaSign.push_back(signbit(flatBdy.back().area()));
-      cout<<"bdy#"<<i<<" signbit "<<areaSign.back()<<" bdy size "<<bdy[i].size()<<
-        " around origin "<<flatBdy.back().in(xy(0,0))<<endl;
+      //cout<<"bdy#"<<i<<" signbit "<<areaSign.back()<<" bdy size "<<bdy[i].size()<<
+        //" around origin "<<flatBdy.back().in(xy(0,0))<<endl;
     }
   }
 }
