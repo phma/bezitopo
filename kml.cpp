@@ -148,7 +148,7 @@ void openkml(ofstream &file,string filename)
   file.open(filename);
   file<<"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
       <<"<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n"
-      <<"<Document><Placemark>\n";
+      <<"<Document>\n";
 }
 
 void kmlBoundary(ofstream &file,g1boundary g)
@@ -182,19 +182,19 @@ void kmlPolygon(ofstream &file,gboundary g)
 {
   int i;
   g1boundary g1;
-  file<<"<Polygon>\n";
+  file<<"<Placemark><Polygon>\n";
   for (i=0;i<g.size();i++)
   {
     g1=g[i];
     refine(g1);
     kmlBoundary(file,g1);
   }
-  file<<"</Polygon>"<<endl;
+  file<<"</Polygon></Placemark>"<<endl;
 }
 
 void closekml(ofstream &file)
 {
-  file<<"</Placemark></Document></kml>\n";
+  file<<"</Document></kml>\n";
   file.close();
 }
 
