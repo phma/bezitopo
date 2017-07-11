@@ -19,6 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+/* I am planning to use Qt5 as the GUI for Bezitopo, but the QQuaternion
+ * class uses floats, not doubles, as components. Floats are not adequate
+ * to represent a position on Earth to the nearest half meter.
+ */
 
 #include <cmath>
 #include <iostream>
