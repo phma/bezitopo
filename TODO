@@ -21,13 +21,14 @@ Before 0.1.1:
 •Write an excerpt of a geoid file with specified center and distance. ✓
 •Draw statistical graphs of geoid conversion. ✓
 
-Before 0.1.2:
+Before 0.1.2 (version number may be bumped by releases that add geoid formats or languages):
 •Implement type-0 breaklines.
 •Compute all intersections of two spirals.
 •Decide whether a point is inside a polyline/arc/spiral. ✓
 •Compute the area of a polyline/arc/spiral.
 •Tell whether a spiralarc is too curly, i.e. there is a line that intersects it more than three times.
 •Make a list of drawing objects, with layers, and a way for drawing objects to refer to other drawing objects so that it can easily find out what refers to an object (e.g. a dimension label refers to a segment or arc).
+•Make the PostScript output routine a class. ✓
 
 Before 0.2.0:
 •Save and open a file containing a scene.
@@ -48,5 +49,4 @@ For later:
 •Implement at least one map projection (Lambert conic).
 •Given two pointlists and a list of points in one pointlist and corresponding points in the other pointlist, rotate and translate one pointlist to match the other.
 •Add an interior point to a TIN. This will be used to approximate a road surface with a TIN.
-•Make the PostScript output routine a class. ✓
 •Make a road intersection object. Its boundary consists of alternating straight lines (which have cross-sections that match those of the roads) and circular arcs (fillets between the roads).
