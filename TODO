@@ -21,7 +21,7 @@ Before 0.1.1:
 •Write an excerpt of a geoid file with specified center and distance. ✓
 •Draw statistical graphs of geoid conversion. ✓
 
-Before 0.1.2 (version number may be bumped by releases that add geoid formats or languages):
+Before 0.2.0:
 •Implement type-0 breaklines.
 •Compute all intersections of two spirals.
 •Decide whether a point is inside a polyline/arc/spiral. ✓
@@ -29,12 +29,13 @@ Before 0.1.2 (version number may be bumped by releases that add geoid formats or
 •Tell whether a spiralarc is too curly, i.e. there is a line that intersects it more than three times.
 •Make a list of drawing objects, with layers, and a way for drawing objects to refer to other drawing objects so that it can easily find out what refers to an object (e.g. a dimension label refers to a segment or arc).
 •Make the PostScript output routine a class. ✓
+•Make a GUI program for viewing geoid files.
 
-Before 0.2.0:
+Before 0.3.0:
 •Save and open a file containing a scene.
 •Define paper sizes and layouts with paper space and model space windows (initially without clipping).
 •Print a scene, inverting the brightness while preserving (approximately) the hue.
-•Implement a GUI, which may be rudimentary (a visual display, but without hit-testing, and manipulated by typed commands).
+•Implement a GUI for CAD, which may be rudimentary (a visual display, but without hit-testing, and manipulated by typed commands).
 
 For later:
 •Find the volume of a surface in a boundary, using a quadtree of Halton generators. The test surface is a hemisphere; its boundary is a circle.
