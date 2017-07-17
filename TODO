@@ -30,6 +30,7 @@ Before 0.2.0:
 •Make a list of drawing objects, with layers, and a way for drawing objects to refer to other drawing objects so that it can easily find out what refers to an object (e.g. a dimension label refers to a segment or arc).
 •Make the PostScript output routine a class. ✓
 •Make a GUI program for viewing geoid files.
+•Produce a KML file showing how volleyball coordinates work.
 
 Before 0.3.0:
 •Save and open a file containing a scene.
