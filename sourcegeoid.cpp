@@ -635,7 +635,7 @@ int readusngabin(geolattice &geo,string filename)
  * The file consists of lines in this format:
  * n e e e e e e e e e e ... e e e e e e e e e e e n
  * where n is the total number of bytes of e's (i.e. 4 times the number of e's).
- * The first line is the South Pole, the last is the North Pole, and the first
+ * The first line is the North Pole, the last is the South Pole, and the first
  * number in each line has to be repeated at the end when reading it in.
  */
 {
