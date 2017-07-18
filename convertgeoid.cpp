@@ -715,7 +715,7 @@ int main(int argc, char *argv[])
           outputgeoid.glat->setfineness(latFineness,lonFineness);
           outputgeoid.glat->setundula();
           outputgeoid.glat->setslopes();
-          didConvert=outputgeoid.boundrect().area()>0;
+          didConvert=outputgeoid.glat->boundrect().area()>0;
         }
         else
         {
