@@ -3,7 +3,7 @@
 /* bezitopo.cpp - main program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2015,2016 Pierre Abbat.
+/* Copyright 2012,2013,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -425,7 +425,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
   doc.pl.resize(1);
-  cout<<"Bezitopo version "<<VERSION<<" © 2016 Pierre Abbat\n"
+  cout<<"Bezitopo version "<<VERSION<<" © 2017 Pierre Abbat\n"
   <<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
   while (cont)
   {
