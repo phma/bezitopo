@@ -33,25 +33,25 @@ Before 0.2.0:
 •Produce a KML file showing how volleyball coordinates work.
 •Adjust a traverse by least squares. Some points may have coordinates from GPS too.
 •Rotate and translate one pointlist to another pointlist, given a list of matching points.
+•Rewrite measure.cpp in more proper C++.
 
 Before 0.3.0:
 •Save and open a file containing a scene.
 •Define paper sizes and layouts with paper space and model space windows (initially without clipping).
 •Print a scene, inverting the brightness while preserving (approximately) the hue.
 •Implement a GUI for CAD, which may be rudimentary (a visual display, but without hit-testing, and manipulated by typed commands).
+•Given two pointlists and a list of points in one pointlist and corresponding points in the other pointlist, rotate and translate one pointlist to match the other.
+•Output an STL file.
+•Find the volume of a surface in a boundary, using a quadtree of Halton generators. The test surface is a hemisphere; its boundary is a circle.
+•Clip contours to a boundary. This requires intersecting a spiral with a line or arc.
+•Copy contours to two or three layers. If three, the contours in the finest layer are drawn only on very flat ground.
+•Implement at least one map projection (Lambert conic).
 
 For later:
-•Find the volume of a surface in a boundary, using a quadtree of Halton generators. The test surface is a hemisphere; its boundary is a circle.
-•Output an STL file.
 •Approximate a spiral arc by at least two circular arcs.
 •Implement cross-sections and interpolate between them.
 •Add a vector (or map indexed by integer) of segments, and one of arcs (but not spiralarcs), to serve as lot boundary lines, and a lot class, whose boundary is a vector of pointers to segments, some of which may be backward.
 •Make a text drawing object class.
 •Add cross-section windows (which require cross-sections) and line/curve/spiral tables (which require drawing text).
-•Clip contours to a boundary. This requires intersecting a spiral with a line or arc.
-•Copy contours to two or three layers. If three, the contours in the finest layer are drawn only on very flat ground.
-•Implement at least one map projection (Lambert conic).
-•Given two pointlists and a list of points in one pointlist and corresponding points in the other pointlist, rotate and translate one pointlist to match the other.
 •Add an interior point to a TIN. This will be used to approximate a road surface with a TIN.
 •Make a road intersection object. Its boundary consists of alternating straight lines (which have cross-sections that match those of the roads) and circular arcs (fillets between the roads).
-•Rewrite measure.cpp in more proper C++.
