@@ -73,7 +73,22 @@ signed char intable[3][3][3][3]=
 #define EQOPP(m,n) if (m+n==0 && m>0) {m=-m;n=-n;}
 double area3(xy a,xy b,xy c)
 {
-  double surface,temp,area[6];
+  double surface,temp,xl,xm,xh,yl,ym,yh,area[6];
+  xy m;
+  // Translate the points near the origin for greater precision.
+  xl=a.x;xm=b.x;xh=c.x;
+  yl=a.y;ym=b.y;yh=c.y;
+  CMPSWAP(xl,xm,surface);
+  CMPSWAP(yl,ym,temp);
+  CMPSWAP(xm,xh,surface);
+  CMPSWAP(ym,yh,temp);
+  CMPSWAP(xl,xm,surface);
+  CMPSWAP(yl,ym,temp);
+  m=xy(xm,ym);
+  a-=m;
+  b-=m;
+  c-=m;
+  // Compute the six areas.
   area[0]=a.x*b.y;
   area[1]=-b.x*a.y;
   area[2]=b.x*c.y;

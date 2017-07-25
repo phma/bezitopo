@@ -50,6 +50,7 @@ public:
   virtual void writeXml(std::ofstream &ofile);
   friend xy operator+(const xy &l,const xy &r);
   friend xy operator+=(xy &l,const xy &r);
+  friend xy operator-=(xy &l,const xy &r);
   friend xy operator-(const xy &l,const xy &r);
   friend xy operator-(const xy &r);
   friend xy operator*(const xy &l,double r);

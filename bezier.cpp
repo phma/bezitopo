@@ -25,6 +25,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cassert>
+#include <cfloat>
 #include "bezier.h"
 #include "angle.h"
 #include "ldecimal.h"
@@ -92,9 +93,14 @@ double triangle::elevation(xy pnt)
  */
 {
   double p,q,r; // Fraction of distance from a side to opposite corner. p+q+r=1.
-  p=area3(pnt,*b,*c)/sarea;
-  q=area3(*a,pnt,*c)/sarea;
-  r=area3(*a,*b,pnt)/sarea;
+  double totarea;
+  p=area3(pnt,*b,*c);
+  q=area3(*a,pnt,*c);
+  r=area3(*a,*b,pnt);
+  totarea=p+q+r; // should equal sarea, but because of roundoff it may be many ulps off
+  p/=totarea;
+  q/=totarea;
+  r/=totarea;
   return q*q*q*b->z+3*q*q*r*ctrl[5]+3*p*q*q*ctrl[2]+
          3*q*r*r*ctrl[6]+6*p*q*r*ctrl[3]+3*p*p*q*ctrl[0]+
          p*p*p*a->z+3*p*p*r*ctrl[1]+3*p*r*r*ctrl[4]+r*r*r*c->z;

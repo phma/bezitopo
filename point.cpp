@@ -114,6 +114,13 @@ xy operator+=(xy &l,const xy &r)
   return l;
 }
 
+xy operator-=(xy &l,const xy &r)
+{
+  l.x-=r.x;
+  l.y-=r.y;
+  return l;
+}
+
 xy operator*(double l,const xy &r)
 {
   xy prod(l*r.x,l*r.y);
