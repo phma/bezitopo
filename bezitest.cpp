@@ -3518,16 +3518,20 @@ void testcontour()
 {
   int i,j;
   double conterval;
+  manysum totalContourLength;
+  xyz offset;
+  //offset=xyz(-1000000,-1500000,0); // This offset makes a spike in contours[7].
   ofstream ofile("contour.bez");
   PostScript ps;
   ps.open("contour.ps");
   ps.prolog();
   ps.startpage();
-  ps.setscale(-10,-10,10,10,0);
+  ps.setscale(-10-offset.getx(),-10-offset.gety(),10-offset.getx(),10-offset.gety(),0);
   doc.pl[1].clear();
   setsurface(CIRPAR);
   aster(doc,100);
   moveup(doc,-0.001);
+  doc.changeOffset(offset);
   doc.pl[1].maketin();
   doc.pl[1].makegrad(0.);
   doc.pl[1].maketriangles();
@@ -3540,7 +3544,7 @@ void testcontour()
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
       ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
-  rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
+  rasterdraw(doc.pl[1],-offset,30,30,30,0,3,"contour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   conterval=0.03;
   roughcontours(doc.pl[1],conterval);
@@ -3551,12 +3555,12 @@ void testcontour()
   }
   ps.endpage();
   ps.startpage();
-  ps.setscale(-10,-10,10,10,0);
+  ps.setscale(-10-offset.getx(),-10-offset.gety(),10-offset.getx(),10-offset.gety(),0);
   ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
       ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
-  rasterdraw(doc.pl[1],xy(0,0),30,30,30,0,3,"contour.ppm");
+  rasterdraw(doc.pl[1],-offset,30,30,30,0,3,"contour.ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   //psclose();
   smoothcontours(doc.pl[1],conterval,false);
@@ -3564,12 +3568,15 @@ void testcontour()
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
     //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
+    totalContourLength+=doc.pl[1].contours[i].length();
     ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
   ps.endpage();
   ps.trailer();
   ps.close();
   doc.writeXml(ofile);
+  cout<<"Total contour length: "<<totalContourLength.total()<<endl;
+  tassert(fabs(totalContourLength.total()-2490.9)<0.1);
 }
 
 void testfoldcontour()
