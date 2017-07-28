@@ -3,7 +3,7 @@
 /* point.h - classes for points and gradients         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -35,8 +35,6 @@ class drawobj;
 class pointlist;
 class document;
 
-using std::string;
-
 extern const xy beforestart,afterend;
 /* Used to answer segment::nearpnt if the closest point is the start or end
  * and the line isn't normal to the segment/arc/spiralarc
@@ -57,8 +55,8 @@ public:
   using xyz::_roscat;
   //xy pagepos; //used when dumping a lozenge in PostScript
   point();
-  point(double e,double n,double h,string desc);
-  point(xy pnt,double h,string desc);
+  point(double e,double n,double h,std::string desc);
+  point(xy pnt,double h,std::string desc);
   point(const point &rhs);
   //~point();
   const point& operator=(const point &rhs);
@@ -66,7 +64,7 @@ public:
   //void dump(document doc);
   virtual void writeXml(std::ofstream &ofile,pointlist &pl);
   friend class edge;
-  friend void maketin(string filename);
+  friend void maketin(std::string filename);
   friend void rotate(document &doc,int n);
   friend void movesideways(document &doc,double sw);
   friend void moveup(document &doc,double sw);
@@ -77,7 +75,7 @@ public:
    * 2: an explicitly ignored point
    * 3: a point ignored because it's in a group that was merged
    */
-  string note;
+  std::string note;
   edge *line; // a line incident on this point in the TIN. Used to arrange the lines in order around their endpoints.
   edge *edg(triangle *tri);
   // tri.a->edg(tri) is the side opposite tri.b

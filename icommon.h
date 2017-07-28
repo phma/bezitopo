@@ -3,7 +3,7 @@
 /* icommon.h - common interactive routines            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -50,4 +50,4 @@ void setfoot_i(std::string args);
 void setlengthunit_i(std::string args);
 arangle parsearangle(std::string angstr,int unitp);
 xy parsexy(std::string xystr);
-void subexit(string args);
+void subexit(std::string args);

@@ -3,7 +3,7 @@
 /* pointlist.h - list of points                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -56,7 +56,7 @@ private:
   void dumpnext_ps(PostScript &ps);
 public:
   void dumpedges_ps(PostScript &ps,bool colorfibaster);
-  void maketin(string filename="",bool colorfibaster=false);
+  void maketin(std::string filename="",bool colorfibaster=false);
   void makegrad(double corr);
   void maketriangles();
   void makeqindex();
@@ -68,7 +68,7 @@ public:
 
 struct criterion
 {
-  string str;
+  std::string str;
   bool istopo;
 };
 

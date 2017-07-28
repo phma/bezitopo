@@ -3,7 +3,7 @@
 /* stl.h - stereolithography (3D printing) export     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2013 Pierre Abbat.
+/* Copyright 2013,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@
 struct stltriangle
 {
   xyz normal,a,b,c;
-  string attributes;
+  std::string attributes;
   stltriangle();
   stltriangle(xyz A,xyz B,xyz C);
 };

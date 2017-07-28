@@ -31,7 +31,7 @@ struct papersize
 {
   int width,height; // in micrometers
 };
-extern std::map<string,papersize> papersizes;
+extern std::map<std::string,papersize> papersizes;
 
 class PostScript
 {
@@ -73,7 +73,7 @@ public:
   void widen(double factor);
   void write(xy pnt,std::string text);
   void centerWrite(xy pnt,std::string text);
-  void comment(string text);
+  void comment(std::string text);
 };
 
 #endif
