@@ -41,6 +41,8 @@ public:
   std::map<int,edge> edges;
   std::map<int,triangle> triangles;
   std::vector<polyspiral> contours;
+  std::vector<std::vector<int> > type0Breaklines;
+  std::vector<std::vector<xy> > type1Breaklines;
   qindex qinx;
   void addpoint(int numb,point pnt,bool overwrite=false);
   void clear();
