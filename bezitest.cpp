@@ -1352,6 +1352,7 @@ void testsegment()
   tassert(std::isinf(a.radius(0)));
   tassert(a.curvature(0)==0);
   tassert(!isfinite(a.center().east()));
+  tassert(a.diffarea()==0);
   a.split(200,b,c);
   tassert(dist(b.station(123),a.station(123))<0.001);
   tassert(dist(c.station(200),a.station(400))<0.001);
@@ -1376,6 +1377,7 @@ void testarc()
   a.setdelta(degtobin(60));
   tassert(fabs(a.length()-523.599)<0.001);
   tassert(a.chordlength()==500);
+  tassert(fabs(a.diffarea()-(M_PI*sqr(500)/6-250*500*M_SQRT_3_4))<1e-4);
   a.setslope(START,0.3+a.avgslope());
   a.setslope(END,-0.1+a.avgslope());
   //printf("slope(250) %f\n",a.slope(250));
