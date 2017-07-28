@@ -1518,6 +1518,10 @@ void testspiralarc()
   aarc.setdelta(radtobin(0.01),0);
   cout<<"spiralarc "<<a.diffarea()<<" arc "<<aarc.diffarea()<<
     ' '<<ldecimal(a.diffarea()/aarc.diffarea())<<endl;
+  a.setdelta(DEG60,0);
+  aarc.setdelta(DEG60,0);
+  cout<<"spiralarc "<<a.diffarea()<<" arc "<<aarc.diffarea()<<
+    ' '<<ldecimal(a.diffarea()/aarc.diffarea())<<endl;
   ps.startpage();
   ps.setscale(-10,-10,10,10,degtobin(0));
   // Make something that resembles an Archimedean spiral

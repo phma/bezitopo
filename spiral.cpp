@@ -60,6 +60,9 @@ using namespace std;
 /* The most iterations in an actual run is 90 (was 45 before adding setcurvature).
  * This occurs at the ends of the bendiest curves in testspiral.
  */
+#define MAXTOTCUR 0.01
+#define MAXTOTCLO 0.01
+// When computing area, if the curve exceeds either of these, it will split it.
 vector<int> cornuhisto;
 
 xy cornu(double t)
@@ -297,7 +300,15 @@ double spiralarc::_diffarea()
 
 double spiralarc::diffarea()
 {
-  return _diffarea();
+  double totcur=len*cur,totclo=len*len*clo;
+  if (totcur<MAXTOTCUR && totclo<MAXTOTCLO)
+    return _diffarea();
+  else
+  {
+    spiralarc first,second;
+    split(len/2,first,second);
+    return area3(start,mid,end)+first.diffarea()+second.diffarea();
+  }
 }
 
 xyz spiralarc::station(double along) const
