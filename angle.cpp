@@ -31,6 +31,11 @@ double sqr(double x)
   return x*x;
 }
 
+double cub(double x)
+{
+  return x*x*x;
+}
+
 double frac(double x)
 {
   return x-floor(x);

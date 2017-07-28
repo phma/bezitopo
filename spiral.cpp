@@ -290,6 +290,16 @@ double spiralarc::in(xy pnt)
   }
 }
 
+double spiralarc::_diffarea()
+{
+  return len*len*(len*cur/12-cub(len*cur)/240);
+}
+
+double spiralarc::diffarea()
+{
+  return _diffarea();
+}
+
 xyz spiralarc::station(double along) const
 {
   double midlong;

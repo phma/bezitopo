@@ -39,6 +39,7 @@ class xy;
 #endif
 
 double sqr(double x);
+double cub(double x);
 double frac(double x);
 
 double sin(int angle);

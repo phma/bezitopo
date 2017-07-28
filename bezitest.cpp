@@ -1453,6 +1453,7 @@ void testspiralarc()
   xyz beg(0,0,3),end(300,400,7),sta;
   xy ctr;
   spiralarc a(beg,end),b(beg,0.001,0.001,end),c,arch[10];
+  arc aarc(beg,end);
   bezier3d a3d;
   PostScript ps;
   ps.open("spiralarc.ps");
@@ -1501,18 +1502,22 @@ void testspiralarc()
       {
 	tassert(fabs(a.curvature(0)-i/1000.)<1e-6);
 	tassert(fabs(a.curvature(a.length())-j/1000.)<1e-6);
-	cout<<'.';
+	//cout<<'.';
       }
       else
       {
 	nfail++;
-	cout<<' ';
+	//cout<<' ';
       }
     }
-    cout<<endl;
+    //cout<<endl;
   }
   cout<<"setcurvature: "<<nfail<<" failures"<<endl;
   tassert(nfail>656 && nfail<1066);
+  a.setdelta(radtobin(0.01),0);
+  aarc.setdelta(radtobin(0.01),0);
+  cout<<"spiralarc "<<a.diffarea()<<" arc "<<aarc.diffarea()<<
+    ' '<<ldecimal(a.diffarea()/aarc.diffarea())<<endl;
   ps.startpage();
   ps.setscale(-10,-10,10,10,degtobin(0));
   // Make something that resembles an Archimedean spiral

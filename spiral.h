@@ -53,6 +53,7 @@ private:
   xy mid;
   double cur,clo,len;
   int midbear;
+  double _diffarea();
 public:
   spiralarc();
   spiralarc(const segment &b);
@@ -62,6 +63,7 @@ public:
   spiralarc(xyz kra,int sbear,double c1,double c2,double length,double famElev);
   spiralarc(xyz kra,xyz mij,xyz fam,int mbear,double curvature,double clothance,double length);
   virtual double in(xy pnt);
+  virtual double diffarea();
   double length() const
   {
     return len;
