@@ -1448,7 +1448,7 @@ void testarc()
 void testspiralarc()
 {
   int i,j,nfail;
-  double bear[3],len;
+  double bear[3],len,begcur,endcur,arcarea,spiralarea;
   vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),sta;
   xy ctr;
@@ -1502,15 +1502,15 @@ void testspiralarc()
       {
 	tassert(fabs(a.curvature(0)-i/1000.)<1e-6);
 	tassert(fabs(a.curvature(a.length())-j/1000.)<1e-6);
-	//cout<<'.';
+	cout<<'.';
       }
       else
       {
 	nfail++;
-	//cout<<' ';
+	cout<<' ';
       }
     }
-    //cout<<endl;
+    cout<<endl;
   }
   cout<<"setcurvature: "<<nfail<<" failures"<<endl;
   tassert(nfail>656 && nfail<1066);
@@ -1522,6 +1522,25 @@ void testspiralarc()
   aarc.setdelta(DEG60,0);
   cout<<"spiralarc "<<a.diffarea()<<" arc "<<aarc.diffarea()<<
     ' '<<ldecimal(a.diffarea()/aarc.diffarea())<<endl;
+  tassert(fabs(a.diffarea()/aarc.diffarea()-1)<1e-10);
+  for (i=1;i<4;i++)
+  {
+    for (j=0;j<5;j++)
+    {
+      beg=xyz(cornu(-0.5,i*0.01,j*0.01),0);
+      end=xyz(cornu(0.5,i*0.01,j*0.01),0);
+      begcur=spiralcurvature(-0.5,i*0.01,j*0.01);
+      endcur=spiralcurvature(0.5,i*0.01,j*0.01);
+      c=spiralarc(beg,begcur,endcur,end);
+      tassert(fabs(c.length()-1)<1e-12);
+      spiralarea=c.diffarea();
+      if (j)
+        cout<<ldecimal(sqr(j*0.01)*(i*0.01)/(spiralarea-arcarea))<<' ';
+      else
+        arcarea=spiralarea;
+    }
+    cout<<endl;
+  }
   ps.startpage();
   ps.setscale(-10,-10,10,10,degtobin(0));
   // Make something that resembles an Archimedean spiral

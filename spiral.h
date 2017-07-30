@@ -53,7 +53,7 @@ private:
   xy mid;
   double cur,clo,len;
   int midbear;
-  double _diffarea();
+  double _diffarea(double totcur,double totclo);
 public:
   spiralarc();
   spiralarc(const segment &b);
