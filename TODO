@@ -49,6 +49,7 @@ Before 0.3.0:
 
 For later:
 •Approximate a spiral arc by at least two circular arcs.
+•Make an alignment class which can express horizontal and vertical curves.
 •Implement cross-sections and interpolate between them.
 •Add a vector (or map indexed by integer) of segments, and one of arcs (but not spiralarcs), to serve as lot boundary lines, and a lot class, whose boundary is a vector of pointers to segments, some of which may be backward.
 •Make a text drawing object class.
