@@ -2812,9 +2812,11 @@ void testpolyline()
    * 2.7956 is on the 4 side, and
    * 1.0219 is on the 3 side.
    */
-  cout<<"testpolyline: area of circle is "<<q.area()<<endl;
+  cout<<"testpolyline: area of circle is "<<q.area()<<" (arc), "<<r.area()<<" (spiral)"<<endl;
   tassert(fabs(q.length()-M_PI*5)<0.0005);
   tassert(fabs(q.area()-M_PI*6.25)<0.0005);
+  tassert(fabs(r.length()-M_PI*5)<0.0005);
+  tassert(fabs(r.area()-M_PI*6.25)<0.0005);
   cout<<q.getarc(0).center().north()<<endl;
   cout<<q.length()<<endl;
   cout<<"p: a "<<p.in(a)<<" b "<<p.in(b)<<" c "<<p.in(c)<<" d "<<p.in(d)

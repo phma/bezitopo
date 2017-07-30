@@ -446,6 +446,24 @@ double polyarc::area()
   return a.total();
 }
 
+double polyspiral::area()
+{
+  int i;
+  xy startpnt;
+  manysum a;
+  if (endpoints.size())
+    startpnt=endpoints[0];
+  if (isopen())
+    a+=NAN;
+  else
+    for (i=0;i<lengths.size();i++)
+    {
+      a+=area3(startpnt,endpoints[i],endpoints[(i+1)%endpoints.size()]);
+      a+=getspiralarc(i).diffarea();
+    }
+  return a.total();
+}
+
 double polyline::dirbound(int angle)
 {
   int i;
