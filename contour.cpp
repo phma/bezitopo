@@ -174,6 +174,8 @@ polyline trace(uintptr_t edgep,double elev)
     cerr<<"Tracing STARTS on Nan"<<endl;
     return ret;
   }
+  if (fabs(elev-0.21)<0.0000001) // debugging in testcontour
+    cout<<"Starting "<<ldecimal(firstcept.getx())<<' '<<ldecimal(firstcept.gety())<<endl;
   ret.insert(firstcept);
   do
   {
@@ -193,7 +195,11 @@ polyline trace(uintptr_t edgep,double elev)
 	if (thiscept.isfinite())
 	{
 	  if (thiscept!=lastcept)
+          {
+            if (fabs(elev-0.21)<0.0000001) // debugging in testcontour
+              cout<<"Interior "<<ldecimal(thiscept.getx())<<' '<<ldecimal(thiscept.gety())<<endl;
 	    ret.insert(thiscept);
+          }
 	  else
 	    cerr<<"Repeated contourcept: "<<edgep<<' '<<ret.size()<<endl;
 	  lastcept=thiscept;
@@ -236,7 +242,11 @@ polyline trace(uintptr_t edgep,double elev)
       {
 	thiscept=tri->contourcept(tri->subdir(edgep),elev);
 	if (thiscept!=lastcept && thiscept!=firstcept && thiscept.isfinite())
+        {
+          if (fabs(elev-0.21)<0.0000001) // debugging in testcontour
+            cout<<"Exterior "<<ldecimal(thiscept.getx())<<' '<<ldecimal(thiscept.gety())<<endl;
 	  ret.insert(thiscept);
+        }
 	lastcept=thiscept;
       }
       mark(edgep);

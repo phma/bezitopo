@@ -3551,6 +3551,8 @@ void testcontour()
   int i,j;
   double conterval;
   manysum totalContourLength;
+  triangle *tri;
+  segment seg;
   xyz offset;
   //offset=xyz(-1000000,-1500000,0); // This offset makes a spike in contours[7].
   ofstream ofile("contour.bez");
@@ -3572,6 +3574,13 @@ void testcontour()
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
+  tri=doc.pl[1].qinx.findt(xy(0.6438,3.85625)-xy(offset)); // the triangle where the spike occurs
+  for (i=0;i<tri->subdiv.size();i++)
+  {
+    seg=tri->subdiv[i];
+    cout<<"seg "<<i<<' '<<ldecimal(seg.getstart().getx(),0.001)<<','<<ldecimal(seg.getstart().gety(),0.001);
+    cout<<"->"<<ldecimal(seg.getend().getx(),0.001)<<','<<ldecimal(seg.getend().gety(),0.001)<<'\n';
+  }
   ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
@@ -3600,6 +3609,7 @@ void testcontour()
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
     //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
+    cout<<"Contour area: "<<doc.pl[1].contours[i].area()<<endl;
     totalContourLength+=doc.pl[1].contours[i].length();
     ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
