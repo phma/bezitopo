@@ -1504,6 +1504,8 @@ bool triangle::upleft(int subdir)
 xy triangle::contourcept(int subdir,double elevation)
 {
   subdir&=65535;
+  if (subdir<subdiv.size() && fabs(elevation-0.21)<0.01 && fabs(subdiv[subdir].startslope()+0.183)<0.001 && fabs(subdiv[subdir].endslope()+0.121)<0.001)
+    cout<<"Contour test spike segment"<<endl;
   if (subdir<subdiv.size())
     return subdiv[subdir].station(subdiv[subdir].contourcept(elevation));
   else

@@ -3580,6 +3580,8 @@ void testcontour()
     seg=tri->subdiv[i];
     cout<<"seg "<<i<<' '<<ldecimal(seg.getstart().getx(),0.001)<<','<<ldecimal(seg.getstart().gety(),0.001);
     cout<<"->"<<ldecimal(seg.getend().getx(),0.001)<<','<<ldecimal(seg.getend().gety(),0.001)<<'\n';
+    cout<<ldecimal(seg.getstart().getz(),0.001)<<' '<<ldecimal(seg.startslope(),0.001)
+      <<"  "<<ldecimal(seg.endslope(),0.001)<<' '<<ldecimal(seg.getend().getz(),0.001)<<'\n';
   }
   ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
