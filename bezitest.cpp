@@ -35,7 +35,7 @@
 #include "cogo.h"
 #include "bezitopo.h"
 #include "bezier.h"
-#include "brent.h"
+#include "rootfind.h"
 #include "test.h"
 #include "tin.h"
 #include "measure.h"

@@ -23,7 +23,7 @@
 #include <cmath>
 #include <iostream>
 #include "projection.h"
-#include "brent.h"
+#include "rootfind.h"
 #include "ldecimal.h"
 
 using namespace std;

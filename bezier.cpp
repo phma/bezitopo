@@ -30,7 +30,7 @@
 #include "angle.h"
 #include "ldecimal.h"
 #include "tin.h"
-#include "brent.h"
+#include "rootfind.h"
 using namespace std;
 
 const char ctrlpttab[16]=

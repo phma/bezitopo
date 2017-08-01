@@ -32,7 +32,7 @@
 #include "spiral.h"
 #include "ldecimal.h"
 #include "vcurve.h"
-#include "brent.h"
+#include "rootfind.h"
 
 using namespace std;
 
