@@ -119,6 +119,35 @@ double brent::init(double x0,double y0,double x1,double y1,bool intmode)
   return x;
 }
 
+/* This routine has a bug which shows up in testcontour, in the triangle
+ * centered at 0.6438,3.85625, on the subdivider of that triangle, which goes
+ * from (1.064,4.729) to (1.343,2.950), when offset by (-1000000,-1500000,0).
+ * When not offset, it proceeds from
+ * $4 = {a = 0, fa = 0.2589999999999999, b = 1.7924233852431699, 
+ *   fb = -2.9371782783726985e-12, c = 1.792423838572657, 
+ *   fc = -5.5101025270287707e-08, d = 1.793766453650733, 
+ *   fd = -0.00016323015394562046, x = 1.7924233852190035, side = 1, 
+ *   mflag = false, imode = false, debug = false}
+ * to
+ * $5 = {a = 1.7924233852431699, fa = -2.9371782783726985e-12, 
+ *   b = 1.7924233852190035, fb = 5.5511151231257827e-17, c = 1.7924233852431699, 
+ *   fc = -2.9371782783726985e-12, d = 1.792423838572657, 
+ *   fd = -5.5101025270287707e-08, x = 1.7924233852190039, side = 6, 
+ *   mflag = false, imode = false, debug = false}
+ * When offset, it proceeds from
+ * $4 = {a = 0, fa = 0.2589999999999999, b = 1.7924233851384037, 
+ *   fb = -2.9371782783726985e-12, c = 1.792423838467889, 
+ *   fc = -5.5101025103754253e-08, d = 1.7937664535460136, 
+ *   fd = -0.00016323015395466878, x = 1.7924233851142375, side = 1, 
+ *   mflag = false, imode = false, debug = false}
+ * to
+ * $5 = {a = 0, fa = 0.2589999999999999, b = 1.7924233851142375, 
+ *   fb = -2.7755575615628914e-17, c = 1.7924233851384037, 
+ *   fc = -2.9371782783726985e-12, d = 1.792423838467889, 
+ *   fd = -5.5101025103754253e-08, x = 1.7924233851142373, side = 1, 
+ *   mflag = false, imode = false, debug = false}
+ * and never changes a, resulting in garbage for the contourcept.
+ */
 double brent::step(double y)
 {
   double s,bsave=b,asave=a;
