@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* brent.cpp - Brent's root-finding method            */
+/* rootfind.cpp - root-finding methods                */
 /*                                                    */
 /******************************************************/
 /* Copyright 2016 Pierre Abbat.
@@ -25,7 +25,7 @@
 #include <cmath>
 #include "cogo.h"
 #include "ldecimal.h"
-#include "brent.h"
+#include "rootfind.h"
 
 using namespace std;
 
