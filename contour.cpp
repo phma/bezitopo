@@ -415,7 +415,8 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	    {
 	      pl.contours[i].insert(newpt,n+1);
 	      sz++;
-	      j=0;
+	      if (sz<3*origsz)
+                j=0;
 	    }
 	    if (log)
 	    {
