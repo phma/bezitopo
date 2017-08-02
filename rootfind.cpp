@@ -244,6 +244,7 @@ double brent::step(double y)
 double Newton::init(double x0,double y0,double z0,double x1,double y1,double z1)
 {
   done=false;
+  nodec=0;
   a=x0;
   fa=y0;
   da=z0;
@@ -285,6 +286,10 @@ double Newton::step(double y,double z)
       else
         x=a-fa/da;
     }
+    if (fabs(fa)>=fabs(fb))
+      nodec++;
+    if (nodec>64)
+      done=true;
   }
   return x;
 }

@@ -3584,7 +3584,7 @@ void testcontour()
   triangle *tri;
   segment seg;
   xyz offset;
-  //offset=xyz(-1000000,-1500000,0); // This offset makes a spike in contours[7].
+  offset=xyz(-1000000,-1500000,0); // This offset makes a spike in contours[7].
   ofstream ofile("contour.bez");
   PostScript ps;
   ps.open("contour.ps");

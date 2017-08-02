@@ -59,4 +59,5 @@ public:
 private:
   double a,fa,da,b,fb,db,x;
   bool done,debug;
+  int nodec;
 };

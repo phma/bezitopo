@@ -147,6 +147,27 @@ double segment::contourcept(double e)
 /* Finds ret such that elev(ret)=e. Used for tracing a contour from one subedge
  * to the next within a triangle.
  * 
+ * This uses Newton's method.
+ */
+{
+  double ret;
+  Newton ne;
+  ret=ne.init(0,elev(0)-e,slope(0),length(),elev(length())-e,slope(length()));
+  while (!ne.finished())
+  {
+    ret=ne.step(elev(ret)-e,slope(ret));
+  }
+  if (ret<0)
+    ret=0;
+  if (ret>length())
+    ret=length();
+  return ret;
+}
+
+double segment::contourcept_br(double e)
+/* Finds ret such that elev(ret)=e. Used for tracing a contour from one subedge
+ * to the next within a triangle.
+ * 
  * This uses Brent's method.
  * 
  * This needs to be tested when e=0. 3*DBL_EPSILON is apparently too small.
