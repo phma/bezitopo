@@ -304,7 +304,7 @@ double spiralarc::_diffarea(double totcur,double totclo)
 double spiralarc::diffarea()
 {
   double totcur=len*cur,totclo=len*len*clo;
-  if (totcur<MAXTOTCUR && totclo<MAXTOTCLO)
+  if ((totcur<MAXTOTCUR && totclo<MAXTOTCLO) || !valid())
     return _diffarea(totcur,totclo);
   else
   {
