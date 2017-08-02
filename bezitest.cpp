@@ -1166,6 +1166,36 @@ void testbrent()
   cout<<endl;
 }
 
+double newtonfun0(double x)
+{
+  return sqr(x)-3; // No exact solution in 8-byte floating point.
+}
+
+double newtonderiv0(double x)
+{
+  return x*2;
+}
+
+void testnewton()
+{
+  double x,y,z,res;
+  int i;
+  Newton ne;
+  x=ne.init(-1.7,newtonfun0(-1.7),newtonderiv0(-1.7),1.8,newtonfun0(1.8),newtonderiv0(1.8));
+  //ne.setdebug(true);
+  cout<<"fun0 init "<<ldecimal(x)<<' ';
+  for (i=0;i<200 && !ne.finished();i++)
+  {
+    y=newtonfun0(x);
+    z=newtonderiv0(x);
+    cout<<ldecimal(y)<<' '<<ldecimal(z)<<endl;
+    x=ne.step(y,z);
+    cout<<"step "<<ldecimal(x)<<' ';
+  }
+  cout<<endl;
+  tassert(fabs(sqr(x)-3)<1e-15);
+}
+
 void testmanysum()
 {
   manysum ms;
@@ -5434,6 +5464,8 @@ int main(int argc, char *argv[])
     testbreak0();
   if (shoulddo("brent"))
     testbrent();
+  if (shoulddo("newton"))
+    testnewton();
   if (shoulddo("manysum"))
     testmanysum();
   if (shoulddo("vcurve"))

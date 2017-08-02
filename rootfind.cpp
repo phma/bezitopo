@@ -240,3 +240,51 @@ double brent::step(double y)
     x=s;
   return s;
 }
+
+double Newton::init(double x0,double y0,double z0,double x1,double y1,double z1)
+{
+  done=false;
+  a=x0;
+  fa=y0;
+  da=z0;
+  b=x1;
+  fb=y1;
+  db=z1;
+  if (fabs(fa/da)>fabs(fb/db))
+  {
+    swap(a,b);
+    swap(fa,fb);
+    swap(da,db);
+  }
+  x=a-fa/da;
+  if (sign(fa)*sign(fb)<0 && sign(x-a)*sign(x-b)>=0)
+    x=(a+b)/2;
+  return x;
+}
+
+double Newton::step(double y,double z)
+{
+  if (!done)
+  {
+    b=a;
+    fb=fa;
+    db=da;
+    a=x;
+    fa=y;
+    da=z;
+    if (fa==0 || da==0)
+      done=true;
+    else
+    {
+      if (sign(fa)*sign(fb)<0)
+      {
+        x=(a+b)/2;
+        if (x==a || x==b)
+          done=true;
+      }
+      else
+        x=a-fa/da;
+    }
+  }
+  return x;
+}

@@ -41,3 +41,22 @@ private:
   bool mflag,imode,debug;
   bool between(double s);
 };
+
+class Newton
+{
+public:
+  double init(double x0,double y0,double z0,double x1,double y1,double z1);
+  // z0 is the derivative at x0.
+  double step(double y,double z);
+  bool finished()
+  {
+    return done;
+  }
+  void setdebug(bool dbg)
+  {
+    debug=dbg;
+  }
+private:
+  double a,fa,da,b,fb,db,x;
+  bool done,debug;
+};
