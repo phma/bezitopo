@@ -202,6 +202,22 @@ void lozenge(document &doc,int n)
   doc.pl[1].addpoint(n+2,point(pnt,testsurface(pnt),"test"));
 }
 
+void wheelwindow(document &doc,int n)
+{
+  int i;
+  double angle=2*M_PI/n;
+  xy pnt;
+  pnt=xy(0,0);
+  doc.pl[1].addpoint(1,point(pnt,testsurface(pnt),"test"));
+  for (i=0;i<n;i++)
+  {
+    pnt=cossin(angle*i)*sqrt(n+0.5);
+    doc.pl[1].addpoint(2*i+1,point(pnt,testsurface(pnt),"test"));
+    pnt=cossin(angle*(i+0.5))*sqrt(n+6.5);
+    doc.pl[1].addpoint(2*i+2,point(pnt,testsurface(pnt),"test"));
+  }
+}
+
 void rotate(document &doc,int n)
 {int i;
  double tmpx,tmpy;

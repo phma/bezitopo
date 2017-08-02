@@ -867,6 +867,21 @@ void testmaketinring()
   //Don't tassert the total length. There are over 10^56 (2^189) right answers to that.
 }
 
+void testmaketinwheel()
+{
+  double totallength;
+  int i;
+  doc.pl[1].clear();
+  wheelwindow(doc,100);
+  rotate(doc,30);
+  doc.pl[1].maketin(psoutput?"wheel.ps":"");
+  tassert(doc.pl[1].edges.size()==500);
+  for (totallength=i=0;i<doc.pl[1].edges.size();i++)
+    totallength+=doc.pl[1].edges[i].length();
+  printf("wheel edges total length %f\n",totallength);
+  tassert(fabs(totallength-1217.2716)<0.001);
+}
+
 void testmaketinellipse()
 {
   double totallength;
@@ -5464,6 +5479,8 @@ int main(int argc, char *argv[])
     testmaketinlozenge();
   if (shoulddo("maketinring"))
     testmaketinring();
+  if (shoulddo("maketinwheel"))
+    testmaketinwheel();
   if (shoulddo("maketinellipse"))
     testmaketinellipse();
   if (shoulddo("break0"))

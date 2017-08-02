@@ -3,7 +3,7 @@
 /* test.h - test patterns and functions               */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015 Pierre Abbat.
+/* Copyright 2012,2013,2014,2015,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -60,6 +60,7 @@ void ellipse(document &doc,int n);
 void longandthin(document &doc,int n);
 void straightrow(document &doc,int n);
 void lozenge(document &doc,int n);
+void wheelwindow(document &doc,int n);
 void rotate(document &doc,int n);
 void movesideways(document &doc,double sw);
 void moveup(document &doc,double sw);
