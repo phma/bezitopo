@@ -3576,26 +3576,19 @@ void testcolor()
   }
 }
 
-void testcontour()
+void test1contour(string contourName,xyz offset,xy tripoint,double expectedLength)
 {
   int i,j;
   double conterval;
   manysum totalContourLength;
   triangle *tri;
   segment seg;
-  xyz offset;
-  offset=xyz(-1000000,-1500000,0); // This offset makes a spike in contours[7].
-  ofstream ofile("contour.bez");
+  ofstream ofile(contourName+".bez");
   PostScript ps;
-  ps.open("contour.ps");
+  ps.open(contourName+".ps");
   ps.prolog();
   ps.startpage();
   ps.setscale(-10-offset.getx(),-10-offset.gety(),10-offset.getx(),10-offset.gety(),0);
-  doc.pl[1].clear();
-  setsurface(CIRPAR);
-  aster(doc,100);
-  moveup(doc,-0.001);
-  doc.changeOffset(offset);
   doc.pl[1].maketin();
   doc.pl[1].makegrad(0.);
   doc.pl[1].maketriangles();
@@ -3604,8 +3597,8 @@ void testcontour()
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
-  tri=doc.pl[1].qinx.findt(xy(0.6438,3.85625)-xy(offset)); // the triangle where the spike occurs
-  for (i=0;i<tri->subdiv.size();i++)
+  tri=doc.pl[1].qinx.findt(tripoint-xy(offset)); // the triangle where the spike occurs
+  for (i=0;tri && i<tri->subdiv.size();i++)
   {
     seg=tri->subdiv[i];
     cout<<"seg "<<i<<' '<<ldecimal(seg.getstart().getx(),0.001)<<','<<ldecimal(seg.getstart().gety(),0.001);
@@ -3650,7 +3643,20 @@ void testcontour()
   ps.close();
   doc.writeXml(ofile);
   cout<<"Total contour length: "<<totalContourLength.total()<<endl;
-  tassert(fabs(totalContourLength.total()-2490.9)<0.1);
+  tassert(expectedLength<0 || fabs(totalContourLength.total()-expectedLength)<0.1);
+}
+
+void testcontour()
+{
+  xyz offset;
+  offset=xyz(-1000000,-1500000,0); // This offset makes a spike in contours[7].
+  doc.pl[1].clear();
+  doc.changeOffset(xyz(0,0,0));
+  setsurface(CIRPAR);
+  aster(doc,100);
+  moveup(doc,-0.001);
+  doc.changeOffset(offset);
+  test1contour("contour",offset,xy(0.6438,3.85625),2490.9);
 }
 
 void testfoldcontour()
