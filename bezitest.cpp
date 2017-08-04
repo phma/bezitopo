@@ -3671,7 +3671,14 @@ void testcontour()
   aster(doc,100);
   moveup(doc,-0.001);
   doc.changeOffset(offset);
-  test1contour("contour",offset,xy(0.6438,3.85625),2490.9);
+  test1contour("contouraster",offset,xy(0.6438,3.85625),2490.9);
+  doc.pl[1].clear();
+  doc.changeOffset(xyz(0,0,0));
+  setsurface(HASH);
+  wheelwindow(doc,100);
+  moveup(doc,-0.001);
+  doc.changeOffset(offset);
+  test1contour("contourwheel",offset,xy(0.6438,3.85625),-2490.9);
 }
 
 void testfoldcontour()

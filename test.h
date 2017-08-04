@@ -50,6 +50,7 @@
 #define HYPAR 1
 #define CIRPAR 2
 #define FLATSLOPE 3
+#define HASH 4
 void setsurface(int surf);
 void dumppoints();
 void dumppointsvalence(document &doc);

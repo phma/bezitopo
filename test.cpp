@@ -95,6 +95,23 @@ xy cirpargrad(xy pnt)
   return xy(pnt.east()/25,pnt.north()/25);
 }
 
+double hash(xy pnt)
+{
+  int acc0,acc1,i;
+  char *p;
+  for (p=(char *)&pnt,i=acc0=acc1=0;i<sizeof(pnt);++i,++p)
+  {
+    acc0=((acc0<<8)+*p)%263;
+    acc1=((acc1<<8)+*p)%269;
+  }
+  return acc0/263.-acc1/269.;
+}
+
+xy hashgrad(xy pnt)
+{
+  return xy(NAN,NAN);
+}
+
 double (*testsurface)(xy pnt)=rugae;
 xy (*testsurfacegrad)(xy pnt)=rugaegrad;
 
@@ -113,6 +130,10 @@ void setsurface(int surf)
     case CIRPAR:
       testsurface=cirpar;
       testsurfacegrad=cirpargrad;
+      break;
+    case HASH:
+      testsurface=hash;
+      testsurfacegrad=hashgrad;
       break;
     case FLATSLOPE:
       testsurface=flatslope;
