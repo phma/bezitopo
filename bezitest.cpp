@@ -3600,6 +3600,7 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   ofstream ofile(contourName+".bez");
   PostScript ps;
   ps.open(contourName+".ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
   ps.startpage();
   ps.setscale(-10-offset.getx(),-10-offset.gety(),10-offset.getx(),10-offset.gety(),0);

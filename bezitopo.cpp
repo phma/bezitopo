@@ -127,9 +127,10 @@ void indpark(string args)
   doc.pl[1].removeperimeter();
   smoothcontours(doc.pl[1],0.1);
   ps.open("IndependencePark.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
   ps.startpage();
-  ps.setscale(-n,w,-s,e,DEG90);
+  ps.setscale(w,s,e,n,0);
   ps.setcolor(0,0.6,0.6);
   for (i=0;i<doc.pl[1].edges.size();i++)
     ps.spline(doc.pl[1].edges[i].getsegment().approx3d(1));
