@@ -3591,10 +3591,9 @@ void testcolor()
   }
 }
 
-void test1contour(string contourName,xyz offset,xy tripoint,double expectedLength)
+void test1contour(string contourName,xyz offset,xy tripoint,double conterval,double expectedLength)
 {
   int i,j;
-  double conterval;
   manysum totalContourLength;
   triangle *tri;
   segment seg;
@@ -3625,9 +3624,8 @@ void test1contour(string contourName,xyz offset,xy tripoint,double expectedLengt
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
       ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
-  rasterdraw(doc.pl[1],-offset,30,30,30,0,3,"contour.ppm");
+  rasterdraw(doc.pl[1],-offset,30,30,30,0,10*conterval,contourName+".ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
-  conterval=0.03;
   roughcontours(doc.pl[1],conterval);
   ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
@@ -3641,7 +3639,7 @@ void test1contour(string contourName,xyz offset,xy tripoint,double expectedLengt
   for (i=0;i<doc.pl[1].triangles.size();i++)
     for (j=0;j<doc.pl[1].triangles[i].subdiv.size();j++)
       ps.spline(doc.pl[1].triangles[i].subdiv[j].approx3d(1));
-  rasterdraw(doc.pl[1],-offset,30,30,30,0,3,"contour.ppm");
+  rasterdraw(doc.pl[1],-offset,30,30,30,0,10*conterval,contourName+".ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   //psclose();
   smoothcontours(doc.pl[1],conterval,false);
@@ -3664,21 +3662,21 @@ void test1contour(string contourName,xyz offset,xy tripoint,double expectedLengt
 void testcontour()
 {
   xyz offset;
-  offset=xyz(-1000000,-1500000,0); // This offset makes a spike in contours[7].
+  //offset=xyz(-1000000,-1500000,0); // This offset makes a spike in contours[7].
   doc.pl[1].clear();
   doc.changeOffset(xyz(0,0,0));
   setsurface(CIRPAR);
   aster(doc,100);
   moveup(doc,-0.001);
   doc.changeOffset(offset);
-  test1contour("contouraster",offset,xy(0.6438,3.85625),2490.9);
+  test1contour("contouraster",offset,xy(0.6438,3.85625),0.03,2490.9);
   doc.pl[1].clear();
   doc.changeOffset(xyz(0,0,0));
   setsurface(HASH);
   wheelwindow(doc,100);
   moveup(doc,-0.001);
   doc.changeOffset(offset);
-  test1contour("contourwheel",offset,xy(0.6438,3.85625),-2490.9);
+  test1contour("contourwheel",offset,xy(0.6438,3.85625),0.3,-2490.9);
 }
 
 void testfoldcontour()
