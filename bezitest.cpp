@@ -3594,7 +3594,7 @@ void testcolor()
 void test1contour(string contourName,xyz offset,xy tripoint,double conterval,double expectedLength)
 {
   int i,j;
-  double prec=0.000;
+  double prec=0.0000001;
   manysum totalContourLength;
   triangle *tri;
   segment seg;
@@ -3685,9 +3685,9 @@ void testcontour()
   wheelwindow(doc,100);
   moveup(doc,-0.001);
   doc.changeOffset(offset);
-  // The triangle with center (-9.288,4.019) is where tracing gets lost.
+  // The triangle with center (4.923,-8.954) is where tracing gets lost.
   // It has different numbers of subdiv segments when displaced than not.
-  test1contour("contourwheel",offset,xy(-9.288,4.019),0.3,-2490.9);
+  test1contour("contourwheel",offset,xy(4.923,-8.954),0.3,-2490.9);
 }
 
 void testfoldcontour()
