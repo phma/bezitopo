@@ -3594,10 +3594,11 @@ void testcolor()
 void test1contour(string contourName,xyz offset,xy tripoint,double conterval,double expectedLength)
 {
   int i,j;
-  double prec=0.001;
+  double prec=0.000;
   manysum totalContourLength;
   triangle *tri;
   segment seg;
+  xy crit;
   ofstream ofile(contourName+".bez");
   PostScript ps;
   ps.open(contourName+".ps");
@@ -3614,6 +3615,11 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
   tri=doc.pl[1].qinx.findt(tripoint-xy(offset)); // the triangle where the spike occurs
+  for (i=0;tri && i<tri->critpoints.size();i++)
+  {
+    crit=tri->critpoints[i];
+    cout<<"crit "<<i<<' '<<ldecimal(crit.getx(),prec)<<','<<ldecimal(crit.gety(),prec)<<'\n';
+  }
   for (i=0;tri && i<tri->subdiv.size();i++)
   {
     seg=tri->subdiv[i];

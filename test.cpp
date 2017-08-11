@@ -98,11 +98,12 @@ xy cirpargrad(xy pnt)
 double hash(xy pnt)
 {
   int acc0,acc1,i;
-  char *p;
-  for (p=(char *)&pnt,i=acc0=acc1=0;i<sizeof(pnt);++i,++p)
+  double x=pnt.getx(),y=pnt.gety();
+  char *p,*q;
+  for (p=(char *)&x,q=(char *)&y,i=acc0=acc1=0;i<sizeof(x);++i,++p,++q)
   {
     acc0=((acc0<<8)+*p)%263;
-    acc1=((acc1<<8)+*p)%269;
+    acc1=((acc1<<8)+*q)%269;
   }
   return acc0/263.-acc1/269.;
 }
