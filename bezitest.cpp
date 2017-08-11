@@ -3594,6 +3594,7 @@ void testcolor()
 void test1contour(string contourName,xyz offset,xy tripoint,double conterval,double expectedLength)
 {
   int i,j;
+  double prec=0.001;
   manysum totalContourLength;
   triangle *tri;
   segment seg;
@@ -3616,10 +3617,10 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   for (i=0;tri && i<tri->subdiv.size();i++)
   {
     seg=tri->subdiv[i];
-    cout<<"seg "<<i<<' '<<ldecimal(seg.getstart().getx(),0.001)<<','<<ldecimal(seg.getstart().gety(),0.001);
-    cout<<"->"<<ldecimal(seg.getend().getx(),0.001)<<','<<ldecimal(seg.getend().gety(),0.001)<<'\n';
-    cout<<ldecimal(seg.getstart().getz(),0.001)<<' '<<ldecimal(seg.startslope(),0.001)
-      <<"  "<<ldecimal(seg.endslope(),0.001)<<' '<<ldecimal(seg.getend().getz(),0.001)<<'\n';
+    cout<<"seg "<<i<<' '<<ldecimal(seg.getstart().getx(),prec)<<','<<ldecimal(seg.getstart().gety(),prec);
+    cout<<"->"<<ldecimal(seg.getend().getx(),prec)<<','<<ldecimal(seg.getend().gety(),prec)<<'\n';
+    cout<<ldecimal(seg.getstart().getz(),prec)<<' '<<ldecimal(seg.startslope(),prec)
+      <<"  "<<ldecimal(seg.endslope(),prec)<<' '<<ldecimal(seg.getend().getz(),prec)<<'\n';
   }
   ps.setcolor(0,1,1);
   for (i=0;i<doc.pl[1].triangles.size();i++)
@@ -3670,6 +3671,7 @@ void testcontour()
   aster(doc,100);
   moveup(doc,-0.001);
   doc.changeOffset(offset);
+  // The triangle with center (0.6438,3.85625) had a spike in a contour.
   test1contour("contouraster",offset,xy(0.6438,3.85625),0.03,2490.9);
   doc.pl[1].clear();
   doc.changeOffset(xyz(0,0,0));
@@ -3677,7 +3679,9 @@ void testcontour()
   wheelwindow(doc,100);
   moveup(doc,-0.001);
   doc.changeOffset(offset);
-  test1contour("contourwheel",offset,xy(0.6438,3.85625),0.3,-2490.9);
+  // The triangle with center (-9.288,4.019) is where tracing gets lost.
+  // It has different numbers of subdiv segments when displaced than not.
+  test1contour("contourwheel",offset,xy(-9.288,4.019),0.3,-2490.9);
 }
 
 void testfoldcontour()
