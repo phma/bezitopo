@@ -982,11 +982,17 @@ void triangle::subdivide()
 	{
 	  case NOINT:
 	  case COINC: // can't happen
+            break;
 	  case COLIN: // may need special treatment
+            cout<<"subdiv COLIN\n";
+            break;
 	  case IMPOS:
+            cout<<"subdiv IMPOS\n";
+            break;
 	  case ACVBD:
 	    break;
 	  case ACTBD: // This case is unusual and would require deleting subdiv[j].
+            cout<<"subdiv ACTBD\n";
 	    break;    // I'm ignoring it for now.
 	  case BDTAC:
 	  case ACXBD:
@@ -1089,6 +1095,14 @@ void triangle::subdivide()
   while (newcrit>0 && round<1);
   /*for (i=0;i<subdiv.size();i++)
     cout<<i<<' '<<setprecision(3)<<bintodeg(subdiv[i].chordbearing())<<' '<<subdiv[i].startslope()<<' '<<subdiv[i].endslope()<<' '<<next[i]<<' '<<lens[i]<<endl;*/
+  /* Tracing errors are caused by extra subdivision segments. The correct
+   * number is 1 segment for every side critical point and 3 for every
+   * interior critical point. With the boundary added, it's 2 for every
+   * side critical point and 3 for every interior critical point plus 3.
+   */
+  if (subdiv.size()!=3*morecritpoints.size()+sidea.size()+sideb.size()+sidec.size())
+    cout<<morecritpoints.size()<<" interior critpoints "<<sidea.size()+sideb.size()+sidec.size()
+        <<" side critpoints "<<subdiv.size()<<" subdivs\n";
 }
 
 /* 2015-07-12: There was a bug in addperimeter.
