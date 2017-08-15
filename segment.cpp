@@ -334,7 +334,7 @@ double segment::closest(xy topoint,double closesofar,bool offends)
 	vertex=-vertex;
       if (vertex>len && vertex<3*len/2)
 	vertex=2*len-vertex;
-      if (stdist.count(vertex) && vertex!=k1->first)
+      if (stdist.count(vertex) && vertex!=k1->first || (k1->second-k0->second)*(k2->second-k1->second)>0)
 	delenda.insert(k1->first);
       if (!stdist.count(vertex) && vertex>=0 && vertex<=len)
 	inserenda.insert(vertex);
