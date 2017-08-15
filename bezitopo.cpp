@@ -100,7 +100,7 @@ void indpark(string args)
   crit1.istopo=false; // The point labeled FH has a nonsensical elevation and must be removed.
   crit.push_back(crit1);
   doc.copytopopoints(crit);
-  doc.changeOffset(xyz(443392,164096,208));
+  //doc.changeOffset(xyz(443392,164096,208));
   doc.pl[1].maketin("bezitopo.ps");
   doc.pl[1].makegrad(0.15);
   doc.pl[1].maketriangles();
