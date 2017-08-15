@@ -1101,8 +1101,11 @@ void triangle::subdivide()
    * side critical point and 3 for every interior critical point plus 3.
    */
   if (subdiv.size()!=3*morecritpoints.size()+sidea.size()+sideb.size()+sidec.size())
-    cout<<morecritpoints.size()<<" interior critpoints "<<sidea.size()+sideb.size()+sidec.size()
-        <<" side critpoints "<<subdiv.size()<<" subdivs\n";
+  {
+    cout<<"centroid "<<ldecimal(centroid().getx())<<','<<ldecimal(centroid().gety())<<'\n';
+    cout<<morecritpoints.size()<<" interior critpoints ("<<morecritpoints.size()-critpoints.size()<<" secondary) ";
+    cout<<sidea.size()+sideb.size()+sidec.size()<<" side critpoints "<<subdiv.size()<<" subdivs\n";
+  }
 }
 
 /* 2015-07-12: There was a bug in addperimeter.
