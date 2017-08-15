@@ -3670,7 +3670,7 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
 void testcontour()
 {
   xyz offset;
-  //offset=xyz(-1000000,-1500000,0); // This offset makes a spike in contours[7].
+  offset=xyz(-1000000,-1500000,0); // This offset makes a spike in contours[7].
   doc.pl[1].clear();
   doc.changeOffset(xyz(0,0,0));
   setsurface(CIRPAR);

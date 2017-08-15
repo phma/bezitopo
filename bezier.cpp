@@ -1033,6 +1033,9 @@ void triangle::subdivide()
 	subdiv[i].split(vex[0],newseg0,newseg1);
 	subdiv[i]=newseg0;
 	subdiv.push_back(newseg1);
+        if (subdiv[i].chordbearing()!=subdiv.back().chordbearing())
+          cout<<"splitting segment "<<i<<' '<<foldangle(subdiv[i].chordbearing()-critdir.back())
+            <<' '<<foldangle(subdiv.back().chordbearing()-critdir.back())<<endl;
       }
     }
     subdivcopy.clear();
@@ -1043,25 +1046,25 @@ void triangle::subdivide()
       for (j=0;j<i;j++)
       {
         newseg0=segment(cr,xyz(morecritpoints[j],elevation(morecritpoints[j])));
-	if (((critdir[i]-newseg0.chordbearing()+1)&(DEG180-1))>2)
+	if (abs(foldangle(critdir[i]-newseg0.chordbearing()))>100)
 	  subdivcopy.push_back(newseg0);
       }
       for (j=0;j<sidea.size();j++)
       {
         newseg0=segment(cr,sidea[j]);
-	if (((critdir[i]-newseg0.chordbearing()+1)&(DEG180-1))>2)
+	if (abs(foldangle(critdir[i]-newseg0.chordbearing()))>100)
 	  subdivcopy.push_back(newseg0);
       }
       for (j=0;j<sideb.size();j++)
       {
         newseg0=segment(cr,sideb[j]);
-	if (((critdir[i]-newseg0.chordbearing()+1)&(DEG180-1))>2)
+	if (abs(foldangle(critdir[i]-newseg0.chordbearing()))>100)
 	  subdivcopy.push_back(newseg0);
       }
       for (j=0;j<sidec.size();j++)
       {
         newseg0=segment(cr,sidec[j]);
-	if (((critdir[i]-newseg0.chordbearing()+1)&(DEG180-1))>2)
+	if (abs(foldangle(critdir[i]-newseg0.chordbearing()))>100)
 	  subdivcopy.push_back(newseg0);
       }
       newseg0=segment(cr,*a);
@@ -1080,7 +1083,12 @@ void triangle::subdivide()
       for (j=0;j<subdiv.size();j++)
       {
 	itype=intersection_type(subdivcopy[i],subdiv[j]);
-	if (itype==ACXBD || (subdivcopy[i]==subdiv[j]))
+        /* For some strange reason, sometimes subdiv[j] and subdivcopy[i]
+         * have the same xy coordinates of their start and end points,
+         * in reverse order, but different z coordinates. Therefore the
+         * collinearity test is necessary.
+         */
+        if (itype==ACXBD || itype==COLIN || subdivcopy[i]==subdiv[j] || subdivcopy[i]==-subdiv[j])
 	  j=2*subdiv.size()+1;
       }
       if (j==subdiv.size())

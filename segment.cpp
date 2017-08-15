@@ -83,6 +83,11 @@ bool segment::operator==(const segment b) const
   return start==b.start && end==b.end && control1==b.control1 && control2==b.control2;
 }
 
+segment segment::operator-() const
+{
+  return segment(end,control2,control1,start);
+}
+
 double segment::length() const
 {
   return dist(xy(start),xy(end));
