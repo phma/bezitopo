@@ -115,7 +115,7 @@ void indpark(string args)
   n=-doc.pl[1].dirbound(degtobin(270));
   cout<<"Writing topo with curved triangles"<<endl;
   rasterdraw(doc.pl[1],xy((e+w)/2,(n+s)/2),e-w,n-s,10,0,10,"IndependencePark.ppm");
-  /* There's a tangle in a red contour. Draw the surrounding region.
+  /* There's a tangle in a red contour at elevation 212. Draw the surrounding region.
    */
   rasterdraw(doc.pl[1],xy(443482.5,164115.5)-(xy)doc.offset,0.25,0.35,1000,0,10,"IPmicro.ppm");
   rasterdraw(doc.pl[1],xy(443482.5,164115.5)-(xy)doc.offset,7,7,100,0,10,"IPmini.ppm");
@@ -126,8 +126,8 @@ void indpark(string args)
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
   ps.startpage();
-  //ps.setscale(w,s,e,n,0);
-  ps.setscale(443479,164112,443486,164119,0);
+  ps.setscale(w,s,e,n,0);
+  //ps.setscale(443479,164112,443486,164119,0);
   ps.setcolor(0,0.6,0.6);
   for (i=0;i<doc.pl[1].edges.size();i++)
     ps.spline(doc.pl[1].edges[i].getsegment().approx3d(1));
@@ -142,7 +142,7 @@ void indpark(string args)
     {
       ps.endpage();
       ps.startpage();
-      ps.setscale(-n,w,-s,e,DEG90);
+      ps.setscale(w,s,e,n,0);
     }
     switch (lrint(doc.pl[1].contours[i].getElevation()/0.1)%10)
     {
