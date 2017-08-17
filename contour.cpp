@@ -160,28 +160,24 @@ polyline trace(uintptr_t edgep,double elev)
   bool wasmarked;
   xy lastcept,thiscept,firstcept;
   triangle *tri,*ntri;
-  if (fabs(elev-205.6)<0.0000001) // debugging, see below
-    cout<<"edgep "<<edgep<<" elev "<<elev<<endl;
   tri=((edge *)(edgep&-4))->tria;
   ntri=((edge *)(edgep&-4))->trib;
   if (tri==nullptr || !tri->upleft(tri->subdir(edgep)))
     tri=ntri;
   mark(edgep);
-  //cout<<"Start edgep "<<edgep<<endl;
   firstcept=lastcept=tri->contourcept(tri->subdir(edgep),elev);
   if (firstcept.isnan())
   {
     cerr<<"Tracing STARTS on Nan"<<endl;
     return ret;
   }
-  if (fabs(elev-0.21)<0.0000001) // debugging in testcontour
-    cout<<"Starting "<<ldecimal(firstcept.getx())<<' '<<ldecimal(firstcept.gety())<<endl;
+  //if (fabs(elev-0.21)<0.0000001) // debugging in testcontour
+    //cout<<"Starting "<<ldecimal(firstcept.getx())<<' '<<ldecimal(firstcept.gety())<<endl;
   ret.insert(firstcept);
   do
   {
     prevedgep=edgep;
     subedge=tri->subdir(edgep);
-    //cout<<"before loop "<<subedge<<' '<<subnext<<endl;
     i=0;
     do
     {
@@ -196,16 +192,16 @@ polyline trace(uintptr_t edgep,double elev)
 	{
 	  if (thiscept!=lastcept)
           {
-            if (fabs(elev-0.21)<0.0000001) // debugging in testcontour
-              cout<<"Interior "<<ldecimal(thiscept.getx())<<' '<<ldecimal(thiscept.gety())<<endl;
+            //if (fabs(elev-0.21)<0.0000001) // debugging in testcontour
+              //cout<<"Interior "<<ldecimal(thiscept.getx())<<' '<<ldecimal(thiscept.gety())<<endl;
 	    ret.insert(thiscept);
           }
 	  else
 	    cerr<<"Repeated contourcept: "<<edgep<<' '<<ret.size()<<endl;
 	  lastcept=thiscept;
 	}
-	//else
-	  //cerr<<"NaN contourcept"<<endl;
+	else
+	  cerr<<"NaN contourcept"<<endl;
       }
     } while (subnext>=0 && ++i<256);
     //cout<<"after loop "<<subedge<<' '<<subnext<<endl;
@@ -226,10 +222,6 @@ polyline trace(uintptr_t edgep,double elev)
     }
     if (edgep==0)
     {
-      /* This happens in Independence Park triangle (697 681 564) at elevation 205.6.
-       * The cause is that the control points in triangles (697 681 564) and
-       * (681 697 562) 1/3 of the way from 681 to 697 disagree by 99 mm.
-       */
       ntri=nullptr;
       cout<<"Tracing stopped in middle of a triangle "<<ret.size()<<endl;
       subedge=tri->subdir(prevedgep);
@@ -243,8 +235,8 @@ polyline trace(uintptr_t edgep,double elev)
 	thiscept=tri->contourcept(tri->subdir(edgep),elev);
 	if (thiscept!=lastcept && thiscept!=firstcept && thiscept.isfinite())
         {
-          if (fabs(elev-0.21)<0.0000001) // debugging in testcontour
-            cout<<"Exterior "<<ldecimal(thiscept.getx())<<' '<<ldecimal(thiscept.gety())<<endl;
+          //if (fabs(elev-0.21)<0.0000001) // debugging in testcontour
+            //cout<<"Exterior "<<ldecimal(thiscept.getx())<<' '<<ldecimal(thiscept.gety())<<endl;
 	  ret.insert(thiscept);
         }
 	lastcept=thiscept;
@@ -275,7 +267,7 @@ void checkedgediscrepancies(pointlist &pl)
       edgenums.push_back(i);
     }
   }
-  cout<<"Edge discrepancies:"<<endl;
+  //cout<<"Edge discrepancies:"<<endl;
   for (i=0;i<discs.size();i++)
   {
     cout<<edgenums[i];
@@ -340,10 +332,10 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
   so=pl.dirbound(DEG90);
   ea=-pl.dirbound(DEG180);
   no=-pl.dirbound(DEG270);
-  we=443479;
-  so=164112;
-  ea=443486;
-  no=164119;
+  //we=443479;
+  //so=164112;
+  //ea=443486;
+  //no=164119;
   if (log)
   {
     ps.open("smoothcontours.ps");
@@ -353,8 +345,6 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
   {
     cout<<"smoothcontours "<<i<<'/'<<pl.contours.size()<<" elev "<<pl.contours[i].getElevation()<<" \r";
     cout.flush();
-    if (fabs(pl.contours[i].getElevation()-203.2)<1e-9 && pl.contours[i].size()==11)
-      cout<<"203.2 11"<<endl;
     /* Smooth the contours in two passes. The first works with straight lines
      * and uses 1/2 the conterval for tolerance. The second works with spiral
      * curves and uses 1/10 the conterval for tolerance.
@@ -373,8 +363,6 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	rpt=sarc.station(sarc.length()*(1-CCHALONG));
 	if (lpt.isfinite() && rpt.isfinite())
 	{
-	  if (sarc.getdelta()==883276262)
-	    cout<<"883276262"<<endl;
 	  midptri=pl.qinx.findt((sarc.getstart()+sarc.getend())/2);
 	  if (midptri)
 	    if (midptri->in(sarc.getstart()) && midptri->in(sarc.getend()) &&
@@ -390,9 +378,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	  if (sp && sarc.length()>conterval)
 	  {
 	    //cout<<"segment "<<n<<" of "<<sz<<" of contour "<<i<<" needs splitting at "<<sp<<endl;
-            if (ps.getPages()==60)
-              cout<<"About to make an error"<<endl;
-	    spt=sarc.getstart()+sp*(sarc.getend()-sarc.getstart());
+            spt=sarc.getstart()+sp*(sarc.getend()-sarc.getstart());
 	    splitseg=pl.qinx.findt(spt)->dirclip(spt,dir(xy(sarc.getend()),xy(sarc.getstart()))+DEG90);
 	    if (splitseg.getstart().elev()<splitseg.getend().elev()
                 || splitseg.startslope()>0 || splitseg.endslope()>0)
@@ -425,7 +411,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	      if (sz<3*origsz)
                 j=0;
 	    }
-	    if (log && pl.contours[i].getElevation()==212)
+	    if (log)
 	    {
 	      ps.startpage();
 	      ps.setscale(we,so,ea,no,0);

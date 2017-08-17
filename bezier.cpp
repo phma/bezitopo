@@ -1033,9 +1033,9 @@ void triangle::subdivide()
 	subdiv[i].split(vex[0],newseg0,newseg1);
 	subdiv[i]=newseg0;
 	subdiv.push_back(newseg1);
-        if (subdiv[i].chordbearing()!=subdiv.back().chordbearing())
-          cout<<"splitting segment "<<i<<' '<<foldangle(subdiv[i].chordbearing()-critdir.back())
-            <<' '<<foldangle(subdiv.back().chordbearing()-critdir.back())<<endl;
+        //if (subdiv[i].chordbearing()!=subdiv.back().chordbearing())
+          //cout<<"splitting segment "<<i<<' '<<foldangle(subdiv[i].chordbearing()-critdir.back())
+            //<<' '<<foldangle(subdiv.back().chordbearing()-critdir.back())<<endl;
       }
     }
     subdivcopy.clear();
