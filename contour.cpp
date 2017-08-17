@@ -340,6 +340,10 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
   so=pl.dirbound(DEG90);
   ea=-pl.dirbound(DEG180);
   no=-pl.dirbound(DEG270);
+  we=443479;
+  so=164112;
+  ea=443486;
+  no=164119;
   if (log)
   {
     ps.open("smoothcontours.ps");
@@ -386,6 +390,8 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	  if (sp && sarc.length()>conterval)
 	  {
 	    //cout<<"segment "<<n<<" of "<<sz<<" of contour "<<i<<" needs splitting at "<<sp<<endl;
+            if (ps.getPages()==60)
+              cout<<"About to make an error"<<endl;
 	    spt=sarc.getstart()+sp*(sarc.getend()-sarc.getstart());
 	    splitseg=pl.qinx.findt(spt)->dirclip(spt,dir(xy(sarc.getend()),xy(sarc.getstart()))+DEG90);
 	    if (splitseg.getstart().elev()<splitseg.getend().elev())
@@ -418,7 +424,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	      if (sz<3*origsz)
                 j=0;
 	    }
-	    if (log)
+	    if (log && pl.contours[i].getElevation()==212)
 	    {
 	      ps.startpage();
 	      ps.setscale(we,so,ea,no,0);

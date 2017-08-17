@@ -121,7 +121,7 @@ void indpark(string args)
   rasterdraw(doc.pl[1],xy(443482.5,164115.5)-(xy)doc.offset,7,7,100,0,10,"IPmini.ppm");
   roughcontours(doc.pl[1],0.1);
   doc.pl[1].removeperimeter();
-  smoothcontours(doc.pl[1],0.1);
+  smoothcontours(doc.pl[1],0.1,true);
   ps.open("IndependencePark.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();

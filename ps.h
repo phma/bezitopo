@@ -56,6 +56,7 @@ public:
   void trailer();
   void close();
   void setDoc(document &docu);
+  int getPages();
   double xscale(double x);
   double yscale(double y);
   std::string escape(std::string text);

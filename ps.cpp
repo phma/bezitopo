@@ -194,6 +194,11 @@ void PostScript::setDoc(document &docu)
   doc=&docu;
 }
 
+int PostScript::getPages()
+{
+  return pages;
+}
+
 double PostScript::xscale(double x)
 {
   return scale*(x-modelcenter.east())+paper.getx()/2;
