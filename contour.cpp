@@ -394,11 +394,12 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
               cout<<"About to make an error"<<endl;
 	    spt=sarc.getstart()+sp*(sarc.getend()-sarc.getstart());
 	    splitseg=pl.qinx.findt(spt)->dirclip(spt,dir(xy(sarc.getend()),xy(sarc.getstart()))+DEG90);
-	    if (splitseg.getstart().elev()<splitseg.getend().elev())
+	    if (splitseg.getstart().elev()<splitseg.getend().elev()
+                || splitseg.startslope()>0 || splitseg.endslope()>0)
 	    {
 	      /* This is the foldcontour bug. If the contour is folded, a splitseg
-	       * can intersect the contour twice. In that case, if the end is higher
-	       * than the start, contourcept picks the wrong intersection,
+	       * can intersect the contour twice. In that case, depending on the
+	       * slopes and elevations, contourcept may pick the wrong intersection,
 	       * and part of the contour is traced three or more times. Since the
 	       * contour is always traced with the high side on the left, splitseg
 	       * should always be pointing downhill. If it isn't, it must have
