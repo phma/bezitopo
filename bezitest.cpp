@@ -3687,9 +3687,10 @@ void testcontour()
   wheelwindow(doc,100);
   moveup(doc,-0.001);
   doc.changeOffset(offset);
-  // The triangle with center (4.923,-8.954) is where tracing gets lost.
+  // The triangle with center (-6.677,-0.21) is where tracing gets lost.
   // It has different numbers of subdiv segments when displaced than not.
-  test1contour("contourwheel",offset,xy(4.923,-8.954),0.3,-2490.9);
+  // This intermittent bug remained after the main bug was fixed.
+  test1contour("contourwheel",offset,xy(-6.677,-0.21),0.3,-2490.9);
 }
 
 void testfoldcontour()
