@@ -317,13 +317,13 @@ void roughcontours(pointlist &pl,double conterval)
 
 void smoothcontours(pointlist &pl,double conterval,bool log)
 {
-  int i,j,k,n=0,sz,origsz;
-  double sp,wide;
+  int i,j,k,n=0,sz,origsz,whichParts;
+  double sp,wide,thisElev;
   double we,ea,so,no;
   xyz lpt,rpt,newpt;
   xy spt;
   PostScript ps;
-  segment splitseg,part0,part1;
+  segment splitseg,part0,part1,part2,parta;
   vector<double> vex;
   spiralarc sarc;
   triangle *midptri;
@@ -343,7 +343,8 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
   }
   for (i=0;i<pl.contours.size();i++)
   {
-    cout<<"smoothcontours "<<i<<'/'<<pl.contours.size()<<" elev "<<pl.contours[i].getElevation()<<" \r";
+    thisElev=pl.contours[i].getElevation();
+    cout<<"smoothcontours "<<i<<'/'<<pl.contours.size()<<" elev "<<thisElev<<" \r";
     cout.flush();
     /* Smooth the contours in two passes. The first works with straight lines
      * and uses 1/2 the conterval for tolerance. The second works with spiral
@@ -392,7 +393,6 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	       * an extremum. Split it there, and keep the downhill part.
 	       */
 	      vex=splitseg.vextrema(false);
-	      //assert(vex.size()<=1); // if it's ever 2, and there are two downhill parts, what to do?
 	      if (vex.size()==1)
 	      {
 		//cout<<"splitseg backward"<<endl;
@@ -402,6 +402,35 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 		else
 		  splitseg=part0;
 	      }
+	      if (vex.size()==2)
+              {
+                //cout<<"splitseg three parts - contour elevation "<<pl.contours[i].getElevation();
+                //cout<<'\n'<<splitseg.getstart().elev()<<' '<<splitseg.getend().elev()<<endl;
+                splitseg.split(vex[1],parta,part2);
+                parta.split(vex[0],part0,part1);
+                whichParts=0;
+                if (part0.getstart().elev()>thisElev && part0.getend().elev()<thisElev)
+                  whichParts+=1;
+                if (part1.getstart().elev()>thisElev && part1.getend().elev()<thisElev)
+                  whichParts+=2;
+                if (part2.getstart().elev()>thisElev && part2.getend().elev()<thisElev)
+                  whichParts+=4;
+                switch (whichParts)
+                {
+                  case 1:
+                    splitseg=part0;
+                    break;
+                  case 2:
+                    splitseg=part1;
+                    break;
+                  case 4:
+                    splitseg=part2;
+                    break;
+                  case 5:
+                    cerr<<"splitseg crosses contour elevation twice downward"<<endl;
+                    break;
+                }
+              }
 	    }
 	    newpt=splitseg.station(splitseg.contourcept(pl.contours[i].getElevation()));
 	    if (newpt.isfinite())
