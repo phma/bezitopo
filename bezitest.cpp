@@ -3650,11 +3650,13 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   rasterdraw(doc.pl[1],-offset,30,30,30,0,10*conterval,contourName+".ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   //psclose();
-  smoothcontours(doc.pl[1],conterval,false);
+  smoothcontours(doc.pl[1],conterval,conterval>0.1);
   ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
-    //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<endl;
+    if (isnan(doc.pl[1].contours[i].length()))
+      cout<<"nan\n";
+    cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<' ';
     cout<<"Contour area: "<<doc.pl[1].contours[i].area()<<endl;
     totalContourLength+=doc.pl[1].contours[i].length();
     ps.spline(doc.pl[1].contours[i].approx3d(1));

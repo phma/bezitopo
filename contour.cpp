@@ -322,6 +322,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
   double we,ea,so,no;
   xyz lpt,rpt,newpt;
   xy spt;
+  bool nanseg;
   PostScript ps;
   segment splitseg,part0,part1,part2,parta;
   vector<double> vex;
@@ -360,6 +361,9 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	n=(n+relprime(sz))%sz;
 	wide=((sz>2*(origsz+27))?(sz/(origsz+27.0)-1):1)*(k?0.5:0.1);
 	sarc=pl.contours[i].getspiralarc(n);
+        nanseg=!sarc.valid();
+        if (nanseg)
+          sarc.setdelta(0,0);
 	lpt=sarc.station(sarc.length()*CCHALONG);
 	rpt=sarc.station(sarc.length()*(1-CCHALONG));
 	if (lpt.isfinite() && rpt.isfinite())
@@ -376,6 +380,8 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	    sp=0.5;
 	    cerr<<"can't happen: midptri is null"<<endl;
 	  }
+	  if (sp==0 && nanseg)
+            sp=0.5; // if the segment is NaN, it must be split, to produce non-NaN segments
 	  if (sp && sarc.length()>conterval)
 	  {
 	    //cout<<"segment "<<n<<" of "<<sz<<" of contour "<<i<<" needs splitting at "<<sp<<endl;

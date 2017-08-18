@@ -51,6 +51,7 @@
 #include <vector>
 #include <cstdio>
 #include <iostream>
+#include <cfloat>
 #include "spiral.h"
 #include "angle.h"
 #include "vcurve.h"
@@ -389,6 +390,7 @@ void spiralarc::setdelta(int d,int s)
  */
 {
   int lastmidbear,chordbear,rot,i;
+  double looseness;
   xy lastmid;
   chordbear=chordbearing();
   if (!valid())
@@ -408,9 +410,15 @@ void spiralarc::setdelta(int d,int s)
     _fixends(1-i/257.);
     i++;
     //cout<<"iter "<<i<<" midbear "<<midbear<<" cur "<<cur<<" clo "<<clo<<endl;
+    looseness=DEG60*((len/mid.length())/DBL_EPSILON)+1;
+    /* When a spiralarc is short (like 10 µm, which appears in some contours)
+     * and far from the origin (like 1-2 Mm, due to false easting), the
+     * bearing between start and end cannot assume every value, but jumps by
+     * a few thousand, or a couple of seconds of arc.
+     */
   }
-  while ((abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6) && i<256);
-  if (abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6)
+  while ((abs(midbear-lastmidbear)>looseness || dist(mid,lastmid)>1e-6) && i<256);
+  if (abs(midbear-lastmidbear)>looseness || dist(mid,lastmid)>1e-6)
     cur=clo=len=NAN;
 }
 
