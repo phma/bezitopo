@@ -3687,9 +3687,26 @@ void testcontour()
   wheelwindow(doc,100);
   moveup(doc,-0.001);
   doc.changeOffset(offset);
-  // The triangle with center (-6.677,-0.21) is where tracing gets lost.
-  // It has different numbers of subdiv segments when displaced than not.
-  // This intermittent bug remained after the main bug was fixed.
+  /* The triangle with center (-6.677,-0.21) is where tracing gets lost.
+   * It has different numbers of subdiv segments when displaced than not.
+   * This intermittent bug remained after the main bug was fixed.
+   * This is the triangle with corners (102 104 1). When the corners are
+   * assigned to points A,B,C in that order, there is no problem. In some
+   * other order, it fails, as follows:
+   * A is point 102, 10.025 m W of point 1 (but it's not A when it fails).
+   * B is point 104, S86.4W 10,025 from point 1.
+   * C is point 1, at (0,0) or displaced to (1 Mm,1.5 Mm).
+   * D is the primary critical point, S88.1574W 0.0254 from C.
+   * E is on CA near D.
+   * F is on BC near D.
+   * G is on AB near B.
+   * H is on BC near B.
+   * I is the secondary critical point, on DH near H.
+   * It subdivides the triangle with DE, DF, DC, GH, DG, DA, DI, IH, IF, and IG.
+   * However, it sometimes keeps IC, thinking that it intersects DF at F,
+   * instead of between D and F. One of the three possible values for point I
+   * causes the problem.
+   */
   test1contour("contourwheel",offset,xy(-6.677,-0.21),0.3,-2490.9);
 }
 

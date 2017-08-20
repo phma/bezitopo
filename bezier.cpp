@@ -1029,6 +1029,10 @@ void triangle::subdivide()
       {
 	++newcrit;
 	morecritpoints.push_back(subdiv[i].station(vex[0]));
+        if (fabs(frac(morecritpoints.back().getx())-0.152)<0.001
+            && fabs(frac(morecritpoints.back().gety())-0.380)<0.001)
+          cout<<"point I "<<ldecimal(morecritpoints.back().getx())<<','<<
+                ldecimal(morecritpoints.back().gety())<<endl; // See testcontour.
 	critdir.push_back(subdiv[i].chordbearing());
 	subdiv[i].split(vex[0],newseg0,newseg1);
 	subdiv[i]=newseg0;
