@@ -1117,6 +1117,10 @@ void triangle::subdivide()
     cout<<"centroid "<<ldecimal(centroid().getx())<<','<<ldecimal(centroid().gety())<<'\n';
     cout<<morecritpoints.size()<<" interior critpoints ("<<morecritpoints.size()-critpoints.size()<<" secondary) ";
     cout<<sidea.size()+sideb.size()+sidec.size()<<" side critpoints "<<subdiv.size()<<" subdivs\n";
+    for (i=subdivcopy.size();i<subdiv.size();i++)
+      for (j=0;j<subdivcopy.size();j++)
+        cout<<i<<' '<<j<<' '<<inttype_str(intersection_type(subdiv[i],subdiv[j]))
+          <<' '<<missDistance(subdiv[i],subdiv[j])<<endl;
   }
 }
 

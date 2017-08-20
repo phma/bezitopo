@@ -136,26 +136,53 @@ xy intersection (xy a,xy c,xy b,xy d)
 
 int intstype (xy a,xy c,xy b,xy d,double &maxarea,double &maxcoord)
 //Intersection type - one of 81 numbers, not all possible.
-{double A,B,C,D;
- A=area3(b,c,d);
- B=area3(c,d,a);
- C=area3(d,a,b);
- D=area3(a,b,c);
- maxarea=maxcoord=0;
- setmaxabs(maxarea,A);
- setmaxabs(maxarea,B);
- setmaxabs(maxarea,C);
- setmaxabs(maxarea,B);
- setmaxabs(maxcoord,a.east());
- setmaxabs(maxcoord,a.north());
- setmaxabs(maxcoord,b.east());
- setmaxabs(maxcoord,b.north());
- setmaxabs(maxcoord,c.east());
- setmaxabs(maxcoord,c.north());
- setmaxabs(maxcoord,d.east());
- setmaxabs(maxcoord,d.north());
- return (27*sign(A)+9*sign(C)+3*sign(B)+sign(D));
- }
+{
+  double A,B,C,D;
+  A=area3(b,c,d);
+  B=area3(c,d,a);
+  C=area3(d,a,b);
+  D=area3(a,b,c);
+  maxarea=maxcoord=0;
+  setmaxabs(maxarea,A);
+  setmaxabs(maxarea,B);
+  setmaxabs(maxarea,C);
+  setmaxabs(maxarea,B);
+  setmaxabs(maxcoord,a.east());
+  setmaxabs(maxcoord,a.north());
+  setmaxabs(maxcoord,b.east());
+  setmaxabs(maxcoord,b.north());
+  setmaxabs(maxcoord,c.east());
+  setmaxabs(maxcoord,c.north());
+  setmaxabs(maxcoord,d.east());
+  setmaxabs(maxcoord,d.north());
+  return (27*sign(A)+9*sign(C)+3*sign(B)+sign(D));
+}
+
+double missDistance (xy a,xy c,xy b,xy d)
+/* If the intersection type is NOINT, but is close to ACTBD or BDTAC,
+ * this returns the distance one segment has to move to intersect the other.
+ * It is used if there is an extra segment in triangle subdivision,
+ * because of roundoff error, to determine which is the extra segment.
+ */
+{
+  double A,B,C,D,totarea,aclen,bdlen,ret=0;
+  A=area3(b,c,d);
+  B=area3(c,d,a);
+  C=area3(d,a,b);
+  D=area3(a,b,c);
+  aclen=dist(a,c);
+  bdlen=dist(b,d);
+  totarea=(A+B+C+D)/2;
+  if (sign(A)*sign(totarea)<0)
+    ret+=A/bdlen;
+  if (sign(B)*sign(totarea)<0)
+    ret+=B/aclen;
+  if (sign(C)*sign(totarea)<0)
+    ret+=C/bdlen;
+  if (sign(D)*sign(totarea)<0)
+    ret+=D/aclen;
+  return fabs(ret);
+}
 
 inttype intersection_type(xy a,xy c,xy b,xy d)
 {

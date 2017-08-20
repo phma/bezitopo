@@ -283,6 +283,11 @@ inttype intersection_type(segment seg1,segment seg2)
   return intersection_type(seg1.start,seg1.end,seg2.start,seg2.end);
 }
 
+double missDistance(segment seg1,segment seg2)
+{
+  return missDistance(seg1.start,seg1.end,seg2.start,seg2.end);
+}
+
 double segment::closest(xy topoint,double closesofar,bool offends)
 /* Finds the closest point on the segment/arc/spiralarc to the point topoint.
  * Does successive parabolic interpolation on the square of the distance.
