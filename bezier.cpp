@@ -889,7 +889,7 @@ void triangle::setsubslopes(segment &s)
 
 void triangle::subdivide()
 {
-  int h,i,j,n,newcrit,round;
+  int h,i,j,n,newcrit,round,nExtraSegments;
   inttype itype;
   bool del;
   xyz cr;
@@ -902,6 +902,8 @@ void triangle::subdivide()
   vector<xy> morecritpoints;
   vector<int> critdir;
   vector<segment> subdivcopy;
+  multimap<double,int> failIntersection;
+  multimap<double,int>::iterator fi;
   morecritpoints=critpoints;
   for (i=0;i<critpoints.size();i++)
     critdir.push_back(INT_MAX);
@@ -1114,13 +1116,24 @@ void triangle::subdivide()
    */
   if (subdiv.size()!=3*morecritpoints.size()+sidea.size()+sideb.size()+sidec.size())
   {
+    nExtraSegments=subdiv.size()-3*morecritpoints.size()-sidea.size()-sideb.size()-sidec.size();
     cout<<"centroid "<<ldecimal(centroid().getx())<<','<<ldecimal(centroid().gety())<<'\n';
     cout<<morecritpoints.size()<<" interior critpoints ("<<morecritpoints.size()-critpoints.size()<<" secondary) ";
     cout<<sidea.size()+sideb.size()+sidec.size()<<" side critpoints "<<subdiv.size()<<" subdivs\n";
     for (i=subdivcopy.size();i<subdiv.size();i++)
       for (j=0;j<subdivcopy.size();j++)
+      {
         cout<<i<<' '<<j<<' '<<inttype_str(intersection_type(subdiv[i],subdiv[j]))
           <<' '<<missDistance(subdiv[i],subdiv[j])<<endl;
+        if (intersection_type(subdiv[i],subdiv[j])==NOINT)
+          failIntersection.insert(pair<double,int>(missDistance(subdiv[i],subdiv[j]),i));
+      }
+    for (fi=failIntersection.begin();nExtraSegments && fi!=failIntersection.end();++fi)
+    {
+      if (subdiv[fi->second].length())
+        nExtraSegments--;
+      subdiv[fi->second]=segment();
+    }
   }
 }
 
