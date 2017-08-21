@@ -1031,10 +1031,10 @@ void triangle::subdivide()
       {
 	++newcrit;
 	morecritpoints.push_back(subdiv[i].station(vex[0]));
-        if (fabs(frac(morecritpoints.back().getx())-0.152)<0.001
-            && fabs(frac(morecritpoints.back().gety())-0.380)<0.001)
-          cout<<"point I "<<ldecimal(morecritpoints.back().getx())<<','<<
-                ldecimal(morecritpoints.back().gety())<<endl; // See testcontour.
+        //if (fabs(frac(morecritpoints.back().getx())-0.152)<0.001
+        //    && fabs(frac(morecritpoints.back().gety())-0.380)<0.001)
+        //  cout<<"point I "<<ldecimal(morecritpoints.back().getx())<<','<<
+        //        ldecimal(morecritpoints.back().gety())<<endl; // See testcontour.
 	critdir.push_back(subdiv[i].chordbearing());
 	subdiv[i].split(vex[0],newseg0,newseg1);
 	subdiv[i]=newseg0;
@@ -1117,14 +1117,14 @@ void triangle::subdivide()
   if (subdiv.size()!=3*morecritpoints.size()+sidea.size()+sideb.size()+sidec.size())
   {
     nExtraSegments=subdiv.size()-3*morecritpoints.size()-sidea.size()-sideb.size()-sidec.size();
-    cout<<"centroid "<<ldecimal(centroid().getx())<<','<<ldecimal(centroid().gety())<<'\n';
-    cout<<morecritpoints.size()<<" interior critpoints ("<<morecritpoints.size()-critpoints.size()<<" secondary) ";
-    cout<<sidea.size()+sideb.size()+sidec.size()<<" side critpoints "<<subdiv.size()<<" subdivs\n";
+    //cout<<"centroid "<<ldecimal(centroid().getx())<<','<<ldecimal(centroid().gety())<<'\n';
+    //cout<<morecritpoints.size()<<" interior critpoints ("<<morecritpoints.size()-critpoints.size()<<" secondary) ";
+    //cout<<sidea.size()+sideb.size()+sidec.size()<<" side critpoints "<<subdiv.size()<<" subdivs\n";
     for (i=subdivcopy.size();i<subdiv.size();i++)
       for (j=0;j<subdivcopy.size();j++)
       {
-        cout<<i<<' '<<j<<' '<<inttype_str(intersection_type(subdiv[i],subdiv[j]))
-          <<' '<<missDistance(subdiv[i],subdiv[j])<<endl;
+        //cout<<i<<' '<<j<<' '<<inttype_str(intersection_type(subdiv[i],subdiv[j]))
+          //<<' '<<missDistance(subdiv[i],subdiv[j])<<endl;
         if (intersection_type(subdiv[i],subdiv[j])==NOINT)
           failIntersection.insert(pair<double,int>(missDistance(subdiv[i],subdiv[j]),i));
       }
@@ -1560,8 +1560,8 @@ bool triangle::upleft(int subdir)
 xy triangle::contourcept(int subdir,double elevation)
 {
   subdir&=65535;
-  if (subdir<subdiv.size() && fabs(elevation-0.21)<0.01 && fabs(subdiv[subdir].startslope()+0.183)<0.001 && fabs(subdiv[subdir].endslope()+0.121)<0.001)
-    cout<<"Contour test spike segment"<<endl;
+  //if (subdir<subdiv.size() && fabs(elevation-0.21)<0.01 && fabs(subdiv[subdir].startslope()+0.183)<0.001 && fabs(subdiv[subdir].endslope()+0.121)<0.001)
+  //  cout<<"Contour test spike segment"<<endl;
   if (subdir<subdiv.size())
     return subdiv[subdir].station(subdiv[subdir].contourcept(elevation));
   else
