@@ -1134,6 +1134,16 @@ void triangle::subdivide()
         nExtraSegments--;
       subdiv[fi->second]=segment();
     }
+    for (i=0,j=subdiv.size()-1;i<j;)
+    {
+      while (i<subdiv.size() && subdiv[i].length()>0)
+        i++;
+      while (j>=0 && subdiv[j].length()==0)
+        j--;
+      if (i<j)
+        swap(subdiv[i],subdiv[j]);
+    }
+    subdiv.resize(i);
   }
 }
 
