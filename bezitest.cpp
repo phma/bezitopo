@@ -3656,8 +3656,8 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   {
     if (isnan(doc.pl[1].contours[i].length()))
       cout<<"nan\n";
-    cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<' ';
-    cout<<"Contour area: "<<doc.pl[1].contours[i].area()<<endl;
+    //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<' ';
+    //cout<<"Contour area: "<<doc.pl[1].contours[i].area()<<endl;
     totalContourLength+=doc.pl[1].contours[i].length();
     ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
@@ -3665,14 +3665,14 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   ps.trailer();
   ps.close();
   doc.writeXml(ofile);
-  cout<<"Total contour length: "<<totalContourLength.total()<<endl;
+  cout<<"Total contour length: "<<totalContourLength.total()<<"  "<<endl;
   tassert(expectedLength<0 || fabs(totalContourLength.total()-expectedLength)<0.1);
 }
 
 void testcontour()
 {
   xyz offset;
-  offset=xyz(-1000000,-1500000,0); // This offset makes a spike in contours[7].
+  offset=xyz(-1000000,-1500000,0); // This offset made a spike in contours[7].
   doc.pl[1].clear();
   doc.changeOffset(xyz(0,0,0));
   setsurface(CIRPAR);
@@ -3687,12 +3687,12 @@ void testcontour()
   wheelwindow(doc,100);
   moveup(doc,-0.001);
   doc.changeOffset(offset);
-  /* The triangle with center (-6.677,-0.21) is where tracing gets lost.
-   * It has different numbers of subdiv segments when displaced than not.
+  /* The triangle with center (-6.677,-0.21) is where tracing got lost.
+   * It had different numbers of subdiv segments when displaced than not.
    * This intermittent bug remained after the main bug was fixed.
    * This is the triangle with corners (102 104 1). When the corners are
    * assigned to points A,B,C in that order, there is no problem. In some
-   * other order, it fails, as follows:
+   * other order, it failed, as follows:
    * A is point 102, 10.025 m W of point 1 (but it's not A when it fails).
    * B is point 104, S86.4W 10,025 from point 1.
    * C is point 1, at (0,0) or displaced to (1 Mm,1.5 Mm).
@@ -3703,11 +3703,11 @@ void testcontour()
    * H is on BC near B.
    * I is the secondary critical point, on DH near H.
    * It subdivides the triangle with DE, DF, DC, GH, DG, DA, DI, IH, IF, and IG.
-   * However, it sometimes keeps IC, thinking that it intersects DF at F,
+   * However, it sometimes kept IC, thinking that it intersects DF at F,
    * instead of between D and F. One of the three possible values for point I
-   * causes the problem.
+   * caused the problem.
    */
-  test1contour("contourwheel",offset,xy(-106.677,-0.21),0.3,-2490.9);
+  test1contour("contourwheel",offset,xy(-106.677,-0.21),0.3,1836.62);
 }
 
 void testfoldcontour()
