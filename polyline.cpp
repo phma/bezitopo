@@ -178,6 +178,8 @@ void polyline::dedup()
   vector<xy>::iterator ptit;
   vector<double>::iterator lenit;
   xy avg;
+  //if (dist(endpoints[0],xy(999992.534,1499993.823))<0.001)
+  //  cout<<"Debug contour\r";
   for (i=0;i<endpoints.size() && endpoints.size()>2;i++)
   {
     h=i-1;
@@ -198,7 +200,7 @@ void polyline::dedup()
 	k--;
       else
 	k-=endpoints.size();
-    if (i!=j && (dist(endpoints[i],endpoints[j])*16777216<=dist(endpoints[h],endpoints[i]) || dist(endpoints[i],endpoints[j])*16777216<=dist(endpoints[j],endpoints[k]) || endpoints[j].isnan()))
+    if (i!=j && (dist(endpoints[i],endpoints[j])*16777216<=dist(endpoints[h],endpoints[i]) || dist(endpoints[i],endpoints[j])*16777216<=dist(endpoints[j],endpoints[k]) || dist(endpoints[i],endpoints[j])*281474976710656.<=dist(endpoints[i],-endpoints[j]) || endpoints[j].isnan()))
     {
       avg=(endpoints[i]+endpoints[j])/2;
       ptit=endpoints.begin()+i;
@@ -207,9 +209,12 @@ void polyline::dedup()
       lengths.erase(lenit);
       if (h>i)
 	h--;
-      j-i;
       if (k>i)
 	k--;
+      if (j>i)
+        j=i;
+      else
+        i=j; // deleted the last element, what [i] was is no longer valid
       if (avg.isfinite())
 	endpoints[i]=avg;
       if (i!=h)
