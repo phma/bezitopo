@@ -340,6 +340,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
   if (log)
   {
     ps.open("smoothcontours.ps");
+    ps.setpaper(papersizes["A4 portrait"],0);
     ps.prolog();
   }
   for (i=0;i<pl.contours.size();i++)
@@ -451,7 +452,11 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	      ps.startpage();
 	      ps.setscale(we,so,ea,no,0);
 	      ps.setcolor(0,0,0);
-	      ps.spline(pl.contours[i].approx3d(0.1));
+	      ps.comment("Elevation "+ldecimal(pl.contours[i].getElevation())+" Contour #"+to_string(i));
+              sarc=pl.contours[i].getspiralarc(0);
+              ps.comment("Starting point "+ldecimal(sarc.getstart().getx())
+                         +','+ldecimal(sarc.getstart().gety()));
+              ps.spline(pl.contours[i].approx3d(0.1));
 	      ps.setcolor(0,0,1);
 	      ps.spline(splitseg.approx3d(0.1));
 	      ps.endpage();
