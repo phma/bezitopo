@@ -346,6 +346,9 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
   for (i=0;i<pl.contours.size();i++)
   {
     thisElev=pl.contours[i].getElevation();
+    sarc=pl.contours[i].getspiralarc(0);
+    if (dist(sarc.getstart(),xyz(999992.534,1499993.823,-1.5))<0.001)
+      cout<<"Debug contour\r";
     cout<<"smoothcontours "<<i<<'/'<<pl.contours.size()<<" elev "<<thisElev<<" \r";
     cout.flush();
     /* Smooth the contours in two passes. The first works with straight lines
@@ -360,7 +363,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
       for (j=0;j<sz;j++)
       {
 	n=(n+relprime(sz))%sz;
-	wide=((sz>2*(origsz+27))?(sz/(origsz+27.0)-1):1)*(k?0.5:0.1);
+	wide=((sz>2*(origsz+27))?(sz/(origsz+27.0)-1):1)*(k?0.1:0.5);
 	sarc=pl.contours[i].getspiralarc(n);
         nanseg=!sarc.valid();
         if (nanseg)
