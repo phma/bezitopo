@@ -358,7 +358,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
       if (k)
 	pl.contours[i].smooth();
       origsz=sz=pl.contours[i].size();
-      for (j=0;j<sz;j++)
+      for (j=0;j<=sz;j++)
       {
 	n=(n+relprime(sz))%sz;
 	wide=((sz>2*(origsz+27))?(sz/(origsz+27.0)-1):1)*(k?0.1:0.5);
