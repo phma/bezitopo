@@ -25,6 +25,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <array>
 #include "point.h"
 #include "tin.h"
 #include "bezier.h"
@@ -64,7 +65,7 @@ public:
   void makeqindex();
   double elevation(xy location);
   double dirbound(int angle);
-  std::vector<double> lohi();
+  std::array<double,2> lohi();
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
 };
 

@@ -3,7 +3,7 @@
 /* bezier.h - Bézier triangles                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 #ifndef BEZIER_H
 #define BEZIER_H
 #include <vector>
+#include <array>
 #include "cogo.h"
 #include "segment.h"
 #define M_SQRT_3_4 0.86602540378443864676372317
@@ -116,7 +117,7 @@ public:
   void addperimeter();
   void removeperimeter();
   uintptr_t edgepart(int subdir);
-  std::vector<double> lohi();
+  std::array<double,4> lohi();
   int subdir(uintptr_t edgepart);
   int proceed(int subdir,double elevation);
   bool crosses(int subdir,double elevation);

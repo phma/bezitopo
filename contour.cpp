@@ -284,12 +284,12 @@ void roughcontours(pointlist &pl,double conterval)
  * less than 5 µm or of Chomolungma with conterval less than 4 µm. It will fail.
  */
 {
-  vector<double> tinlohi;
+  array<double,2> tinlohi;
   vector<uintptr_t> cstarts;
   polyline ctour;
   int i,j;
   pl.contours.clear();
-  tinlohi=pl.lohi(); // FIXME produces garbage for Independence Park
+  tinlohi=pl.lohi();
   for (i=floor(tinlohi[0]/conterval);i<=ceil(tinlohi[1]/conterval);i++)
   {
     cstarts=contstarts(pl,i*conterval);

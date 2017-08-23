@@ -1257,8 +1257,8 @@ void triangle::removeperimeter()
     assert(acnt==2 && bcnt==2 && ccnt==2);
 }
 
-vector<double> triangle::lohi()
-/* Returns a vector of four numbers: the lowest elevation anywhere in the triangle,
+array<double,4> triangle::lohi()
+/* Returns an array of four numbers: the lowest elevation anywhere in the triangle,
  * the lowest elevation on the perimeter, the highest elevation on the perimeter,
  * and the highest elevation anywhere.
  */
@@ -1266,7 +1266,7 @@ vector<double> triangle::lohi()
   int i;
   double e;
   edge *sid=NULL;
-  vector<double> ret(4,0);
+  array<double,4> ret;
   ret[1]=ret[2]=a->z;
   if (b->z<ret[1])
     ret[1]=b->z;

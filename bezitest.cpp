@@ -2288,7 +2288,8 @@ void testrasterdraw()
 
 void test1tri(string triname,int excrits)
 {
-  vector<double> xs,lh;
+  vector<double> xs;
+  array<double,4> lh;
   vector<xyz> slice;
   vector<xy> crits;
   PostScript ps;
@@ -3665,7 +3666,7 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   ps.trailer();
   ps.close();
   doc.writeXml(ofile);
-  cout<<"Total contour length: "<<totalContourLength.total()<<"  "<<endl;
+  cout<<"Total contour length: "<<totalContourLength.total()<<"   "<<endl;
   tassert(expectedLength<0 || fabs(totalContourLength.total()-expectedLength)<0.1);
 }
 

@@ -3,7 +3,7 @@
 /* tin.cpp - triangulated irregular network           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -737,17 +737,16 @@ void pointlist::maketriangles()
     }
 }
 
-vector<double> pointlist::lohi()
+array<double,2> pointlist::lohi()
 {
   int i;
-  vector<double> ret,tlohi;;
-  ret.push_back(INFINITY);
-  ret.push_back(-INFINITY);
+  array<double,2> ret;
+  array<double,4> tlohi;
+  ret[0]=INFINITY;
+  ret[1]=-INFINITY;
   for (i=0;i<triangles.size();i++)
   {
     tlohi=triangles[i].lohi();
-    //if (tlohi[0]<180 || tlohi[3]>220)
-      //cerr<<"Indpark out of range"<<endl;
     if (ret[0]>tlohi[0])
       ret[0]=tlohi[0];
     if (ret[1]<tlohi[3])

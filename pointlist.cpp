@@ -101,10 +101,6 @@ void pointlist::setgradient(bool flat)
       triangles[i].setgradient(*triangles[i].c,triangles[i].c->gradient);
       triangles[i].setcentercp();
     }
-  /* TODO: check all triangles for mismatched control points on each side
-   * of an edge and set the ones on the more acicular side to match those
-   * on the less acicular side.
-   */
 }
 
 double pointlist::dirbound(int angle)
