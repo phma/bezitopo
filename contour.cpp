@@ -425,6 +425,9 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
                   whichParts+=4;
                 switch (whichParts)
                 {
+                  case 0:
+                    cerr<<"splitseg doesn't cross contour elevation downward"<<endl;
+                    break;
                   case 1:
                     splitseg=part0;
                     break;
@@ -437,6 +440,8 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
                   case 5:
                     cerr<<"splitseg crosses contour elevation twice downward"<<endl;
                     break;
+                  default:
+                    cerr<<"impossible value of whichParts"<<endl;
                 }
               }
 	    }
