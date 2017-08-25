@@ -2031,7 +2031,7 @@ void testtriangle()
     tri.ctrl[i]=1;
   elev=tri.elevation(o);
   printf("elevation=%f\n",elev);
-  tassert(elev==1);
+  tassert(fabs(elev-1)<1e-15);
   // Now make a linear surface.
   doc.pl[0].points[1].setelev(1);
   doc.pl[0].points[2].setelev(0);

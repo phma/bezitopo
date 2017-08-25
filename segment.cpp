@@ -163,9 +163,9 @@ double segment::contourcept(double e)
     ret=ne.step(elev(ret)-e,slope(ret));
   }
   if (ret<0)
-    ret=0;
+    ret=NAN;
   if (ret>length())
-    ret=length();
+    ret=NAN;
   return ret;
 }
 
