@@ -31,8 +31,10 @@
 
 extern int bendlimit;
 /* The maximum angle through which a segment of polyspiral can bend. If the bend
- * is greater, it will be replaced with a straight line segment. This prevents
- * messes when drawing contours. Normal value is 120°.
+ * is greater, it will be replaced with a straight line segment. If angles in
+ * contours have extra bulbs, it is too high; if smooth curves in contours have
+ * straight line segments, it is too low. Default value is 120°. Setting it to
+ * DEG360 will not work; set it to DEG360-1 instead.
  */
 
 /* Polylines and alignments are very similar. The differences are:

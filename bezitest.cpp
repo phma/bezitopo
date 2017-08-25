@@ -3671,6 +3671,9 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
 }
 
 void testcontour()
+/* The total lengths of contours, especially of the wheel pattern, are
+ * sensitive to bendlimit. The values 2490.48 and 1836.62 are for bendlimit=120°.
+ */
 {
   xyz offset;
   offset=xyz(-1000000,-1500000,0); // This offset made a spike in contours[7].
