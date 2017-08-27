@@ -5475,6 +5475,19 @@ bool shoulddo(string testname)
   return ret;
 }
 
+void testlooseness()
+{
+  double looseness,len,midlength;
+  len=1e-5;
+  midlength=1.8e6;
+  looseness=DEG60/((len/midlength)/DBL_EPSILON*2)+1;
+  cout<<looseness<<endl;
+  len=200;
+  midlength=1.41421356;
+  looseness=DEG60/((len/midlength)/DBL_EPSILON*2)+1;
+  cout<<looseness<<endl;
+}
+
 int main(int argc, char *argv[])
 {
   int i;
@@ -5627,7 +5640,7 @@ int main(int argc, char *argv[])
   //splitcubic();
   //printf("sin(int)=%f sin(float)=%f\n",sin(65536),sin(65536.));
   //cornustats();
-  //closure_i();
+  //testlooseness();
   cout<<"\nTest "<<(testfail?"failed":"passed")<<endl;
   return testfail;
 }

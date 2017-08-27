@@ -412,7 +412,7 @@ void spiralarc::setdelta(int d,int s)
     _fixends(1-i/257.);
     i++;
     //cout<<"iter "<<i<<" midbear "<<midbear<<" cur "<<cur<<" clo "<<clo<<endl;
-    looseness=DEG60*((len/mid.length())/DBL_EPSILON)+1;
+    looseness=DEG60/((len/mid.length())/DBL_EPSILON*2)+1;
     /* When a spiralarc is short (like 10 µm, which appears in some contours)
      * and far from the origin (like 1-2 Mm, due to false easting), the
      * bearing between start and end cannot assume every value, but jumps by
