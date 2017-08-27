@@ -360,7 +360,7 @@ void spiralarc::split(double along,spiralarc &a,spiralarc &b)
   xyz mida,midb;
   int midbeara,midbearb;
   double cura,curb;
-  if (isinf(along))
+  if (std::isinf(along))
     cerr<<"along=inf"<<endl;
   xyz splitpoint=station(along);
   mida=station(along/2);

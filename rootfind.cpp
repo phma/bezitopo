@@ -291,7 +291,7 @@ double Newton::step(double y,double z)
     if (nodec>64)
       done=true;
   }
-  if (isnan(x))
+  if (std::isnan(x))
     done=true;
   return x;
 }

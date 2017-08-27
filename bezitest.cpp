@@ -3655,7 +3655,7 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
-    if (isnan(doc.pl[1].contours[i].length()))
+    if (std::isnan(doc.pl[1].contours[i].length()))
       cout<<"nan\n";
     //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<' ';
     //cout<<"Contour area: "<<doc.pl[1].contours[i].area()<<endl;
