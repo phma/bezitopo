@@ -352,14 +352,19 @@ void polyarc::insert(xy newpoint,int pos)
   }
 }
 
+/* After inserting, opening, or closing, call setlengths before calling
+ * length or station. If insert called setlengths, manipulation would take
+ * too long. So do a lot of inserts, then call setlengths.
+ */
 void polyline::setlengths()
 {
   int i;
   manysum m;
+  assert(lengths.size()==cumLengths.size());
   for (i=0;i<lengths.size();i++)
   {
     lengths[i]=getsegment(i).length();
-    m+=(i?cumLengths[i-1]:0)+lengths[i];
+    m+=lengths[i];
     cumLengths[i]=m.total();
   }
 }
@@ -368,11 +373,12 @@ void polyarc::setlengths()
 {
   int i;
   manysum m;
+  assert(lengths.size()==cumLengths.size());
   assert(lengths.size()==deltas.size());
   for (i=0;i<deltas.size();i++)
   {
     lengths[i]=getarc(i).length();
-    m+=(i?cumLengths[i-1]:0)+lengths[i];
+    m+=lengths[i];
     cumLengths[i]=m.total();
   }
 }
@@ -381,11 +387,12 @@ void polyspiral::setlengths()
 {
   int i;
   manysum m;
+  assert(lengths.size()==cumLengths.size());
   assert(lengths.size()==deltas.size());
   for (i=0;i<deltas.size();i++)
   {
     lengths[i]=getspiralarc(i).length();
-    m+=(i?cumLengths[i-1]:0)+lengths[i];
+    m+=lengths[i];
     cumLengths[i]=m.total();
   }
 }
@@ -446,11 +453,10 @@ double polyspiral::in(xy point)
 
 double polyline::length()
 {
-  int i;
-  double len;
-  for (len=i=0;i<lengths.size();i++)
-    len+=lengths[i];
-  return len;
+  if (cumLengths.size())
+    return cumLengths.back();
+  else
+    return 0;
 }
 
 double polyline::area()
@@ -585,6 +591,7 @@ void polyarc::close()
 {
   deltas.resize(endpoints.size());
   lengths.resize(endpoints.size());
+  cumLengths.resize(endpoints.size());
   if (lengths.size())
     if (lengths.size()>1)
       cumLengths[lengths.size()-1]=cumLengths[lengths.size()-2]+lengths[lengths.size()-1];
@@ -601,6 +608,7 @@ void polyspiral::close()
   delta2s.resize(endpoints.size());
   deltas.resize(endpoints.size());
   lengths.resize(endpoints.size());
+  cumLengths.resize(endpoints.size());
   if (lengths.size())
     if (lengths.size()>1)
       cumLengths[lengths.size()-1]=cumLengths[lengths.size()-2]+lengths[lengths.size()-1];

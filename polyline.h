@@ -69,7 +69,7 @@ public:
   virtual void open();
   virtual void close();
   virtual double in(xy point);
-  virtual double length();
+  double length();
   virtual double area();
   virtual double dirbound(int angle);
   virtual void writeXml(std::ofstream &ofile);
@@ -93,7 +93,6 @@ public:
   virtual void open();
   virtual void close();
   virtual double in(xy point);
-  //virtual double length();
   virtual double area();
   virtual double dirbound(int angle);
   virtual void writeXml(std::ofstream &ofile);
@@ -123,7 +122,6 @@ public:
   virtual void open();
   virtual void close();
   virtual double in(xy point);
-  //virtual double length();
   virtual double area();
   virtual double dirbound(int angle);
   virtual void writeXml(std::ofstream &ofile);

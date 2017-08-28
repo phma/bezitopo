@@ -308,6 +308,7 @@ void roughcontours(pointlist &pl,double conterval)
       ctour=intrace(&pl.triangles[j],i*conterval);
       if (ctour.size())
       {
+        ctour.setlengths();
 	pl.contours.push_back(ctour);
 	//cout<<"Contour length: "<<ctour.length()<<endl;
       }
@@ -471,6 +472,7 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
 	}
       }
     }
+    pl.contours[i].setlengths();
   }
   if (log)
   {

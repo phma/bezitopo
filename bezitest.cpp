@@ -2830,12 +2830,16 @@ void testpolyline()
   p.insert(xy(3,0));
   q.insert(xy(3,0));
   r.insert(xy(3,0));
+  p.setlengths();
+  q.setlengths();
+  r.setlengths();
   cout<<p.length()<<' '<<r.length()<<endl;
   tassert(p.length()==6);
   tassert(fabs(r.length()-3*M_PI)<1e-6);
   p.insert(xy(3,4));
   q.insert(xy(3,4));
   r.insert(xy(3,4));
+  p.setlengths();
   cout<<p.length()<<endl;
   tassert(p.length()==12);
   q.setlengths();
