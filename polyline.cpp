@@ -77,6 +77,7 @@ polyarc::polyarc(polyline &p)
   elevation=p.elevation;
   endpoints=p.endpoints;
   lengths=p.lengths;
+  cumLengths=p.cumLengths;
   deltas.resize(lengths.size());
 }
 
@@ -86,6 +87,7 @@ polyspiral::polyspiral(polyline &p)
   elevation=p.elevation;
   endpoints=p.endpoints;
   lengths=p.lengths;
+  cumLengths=p.cumLengths;
   deltas.resize(lengths.size());
   delta2s.resize(lengths.size());
   bearings.resize(endpoints.size());
@@ -207,6 +209,8 @@ void polyline::dedup()
       lenit=lengths.begin()+i;
       endpoints.erase(ptit);
       lengths.erase(lenit);
+      lenit=cumLengths.begin()+i;
+      cumLengths.erase(lenit);
       if (h>i)
 	h--;
       if (k>i)
@@ -250,6 +254,11 @@ void polyline::insert(xy newpoint,int pos)
   lenit=lengths.begin()+pos;
   endpoints.insert(ptit,newpoint);
   lengths.insert(lenit,0);
+  lenit=cumLengths.begin()+pos;
+  if (pos<cumLengths.size())
+    cumLengths.insert(lenit,cumLengths[pos]);
+  else
+    cumLengths.insert(lenit,0);
   pos--;
   if (pos<0)
     if (wasopen)
@@ -289,6 +298,11 @@ void polyarc::insert(xy newpoint,int pos)
   endpoints.insert(ptit,newpoint);
   deltas.insert(arcit,0);
   lengths.insert(lenit,0);
+  lenit=cumLengths.begin()+pos;
+  if (pos<cumLengths.size())
+    cumLengths.insert(lenit,cumLengths[pos]);
+  else
+    cumLengths.insert(lenit,0);
   pos--;
   if (pos<0)
     if (wasopen)
@@ -341,16 +355,26 @@ void polyarc::insert(xy newpoint,int pos)
 void polyline::setlengths()
 {
   int i;
+  manysum m;
   for (i=0;i<lengths.size();i++)
+  {
     lengths[i]=getsegment(i).length();
+    m+=(i?cumLengths[i-1]:0)+lengths[i];
+    cumLengths[i]=m.total();
+  }
 }
 
 void polyarc::setlengths()
 {
   int i;
+  manysum m;
   assert(lengths.size()==deltas.size());
   for (i=0;i<deltas.size();i++)
+  {
     lengths[i]=getarc(i).length();
+    m+=(i?cumLengths[i-1]:0)+lengths[i];
+    cumLengths[i]=m.total();
+  }
 }
 
 void polyarc::setdelta(int i,int delta)
@@ -511,12 +535,14 @@ double polyspiral::dirbound(int angle)
 void polyline::open()
 {
   lengths.resize(endpoints.size()-1);
+  cumLengths.resize(endpoints.size()-1);
 }
 
 void polyarc::open()
 {
   deltas.resize(endpoints.size()-1);
   lengths.resize(endpoints.size()-1);
+  cumLengths.resize(endpoints.size()-1);
 }
 
 void polyspiral::open()
@@ -528,17 +554,29 @@ void polyspiral::open()
   delta2s.resize(endpoints.size()-1);
   deltas.resize(endpoints.size()-1);
   lengths.resize(endpoints.size()-1);
+  cumLengths.resize(endpoints.size()-1);
 }
 
 void polyline::close()
 {
   lengths.resize(endpoints.size());
+  cumLengths.resize(endpoints.size());
+  if (lengths.size())
+    if (lengths.size()>1)
+      cumLengths[lengths.size()-1]=cumLengths[lengths.size()-2]+lengths[lengths.size()-1];
+    else
+      cumLengths[0]=lengths[0];
 }
 
 void polyarc::close()
 {
   deltas.resize(endpoints.size());
   lengths.resize(endpoints.size());
+  if (lengths.size())
+    if (lengths.size()>1)
+      cumLengths[lengths.size()-1]=cumLengths[lengths.size()-2]+lengths[lengths.size()-1];
+    else
+      cumLengths[0]=lengths[0];
 }
 
 void polyspiral::close()
@@ -550,6 +588,11 @@ void polyspiral::close()
   delta2s.resize(endpoints.size());
   deltas.resize(endpoints.size());
   lengths.resize(endpoints.size());
+  if (lengths.size())
+    if (lengths.size()>1)
+      cumLengths[lengths.size()-1]=cumLengths[lengths.size()-2]+lengths[lengths.size()-1];
+    else
+      cumLengths[0]=lengths[0];
 }
 
 void polyspiral::insert(xy newpoint,int pos)
@@ -593,6 +636,8 @@ void polyspiral::insert(xy newpoint,int pos)
   midbearings.insert(mbrit,0);
   curvatures.insert(crvit,0);
   clothances.insert(cloit,0);
+  lenit=cumLengths.begin()+pos;
+  cumLengths.insert(lenit,0);
   for (i=-1;i<2;i++)
     setbear((pos+i+endpoints.size())%endpoints.size());
   for (i=-1;i<3;i++)
@@ -619,6 +664,7 @@ void polyspiral::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
   for (i=0;i<lengths.size();i++)
   {
     lengths[i]*=sca;
+    cumLengths[i]*=sca;
     midbearings[i]+=ro;
     curvatures[i]/=sca;
     clothances[i]/=sqr(sca);

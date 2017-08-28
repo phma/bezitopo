@@ -48,7 +48,7 @@ class polyline: public drawobj
 protected:
   double elevation;
   std::vector<xy> endpoints;
-  std::vector<double> lengths;
+  std::vector<double> lengths,cumLengths;
 public:
   friend class polyarc;
   friend class polyspiral;
