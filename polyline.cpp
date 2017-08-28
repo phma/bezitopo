@@ -377,6 +377,19 @@ void polyarc::setlengths()
   }
 }
 
+void polyspiral::setlengths()
+{
+  int i;
+  manysum m;
+  assert(lengths.size()==deltas.size());
+  for (i=0;i<deltas.size();i++)
+  {
+    lengths[i]=getspiralarc(i).length();
+    m+=(i?cumLengths[i-1]:0)+lengths[i];
+    cumLengths[i]=m.total();
+  }
+}
+
 void polyarc::setdelta(int i,int delta)
 {
   i%=deltas.size();

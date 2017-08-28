@@ -39,7 +39,8 @@ extern int bendlimit;
 
 /* Polylines and alignments are very similar. The differences are:
  * polylines are in a horizontal plane, whereas alignments have vertical curves;
- * polylines consist of arcs, whereas alignments can have spirals (once I figure out how).
+ * polylines have derived classes with arcs and spirals, whereas alignments
+ * always have complete spiral data.
  */
 int midarcdir(xy a,xy b,xy c);
 
@@ -118,7 +119,7 @@ public:
   void setspiral(int i);
   void smooth();
   //void setdelta(int i,int delta);
-  //virtual void setlengths();
+  virtual void setlengths();
   virtual void open();
   virtual void close();
   virtual double in(xy point);

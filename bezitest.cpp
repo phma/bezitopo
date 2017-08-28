@@ -2841,6 +2841,7 @@ void testpolyline()
   q.setlengths();
   tassert(q.length()==12);
   tassert(q.area()==6);
+  r.setlengths();
   tassert(fabs(r.length()-5*M_PI)<1e-6);
   q.open();
   tassert(q.length()==7);
