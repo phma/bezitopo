@@ -459,6 +459,56 @@ double polyline::length()
     return 0;
 }
 
+int polyline::stationSegment(double along)
+{
+  int before=-1,after=cumLengths.size();
+  int middle,i;
+  double midalong;
+  while (before<after-1)
+  {
+    middle=(before+after+(i&1))/2;
+    if (middle>=cumLengths.size())
+      midalong=length();
+    else if (middle<0)
+      midalong=0;
+    else
+      midalong=cumLengths[middle];
+    if (midalong>along)
+      after=middle;
+    else
+      before=middle;
+    ++i;
+  }
+  return after;
+}
+
+xyz polyline::station(double along)
+{
+  int seg=stationSegment(along);
+  if (seg<0 || seg>=lengths.size())
+    return xyz(NAN,NAN,NAN);
+  else
+    return getsegment(seg).station(along-(cumLengths[seg]-lengths[seg]));
+}
+
+xyz polyarc::station(double along)
+{
+  int seg=stationSegment(along);
+  if (seg<0 || seg>=lengths.size())
+    return xyz(NAN,NAN,NAN);
+  else
+    return getarc(seg).station(along-(cumLengths[seg]-lengths[seg]));
+}
+
+xyz polyspiral::station(double along)
+{
+  int seg=stationSegment(along);
+  if (seg<0 || seg>=lengths.size())
+    return xyz(NAN,NAN,NAN);
+  else
+    return getspiralarc(seg).station(along-(cumLengths[seg]-lengths[seg]));
+}
+
 double polyline::area()
 {
   int i;

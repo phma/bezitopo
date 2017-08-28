@@ -50,6 +50,7 @@ protected:
   double elevation;
   std::vector<xy> endpoints;
   std::vector<double> lengths,cumLengths;
+  int stationSegment(double along);
 public:
   friend class polyarc;
   friend class polyspiral;
@@ -70,6 +71,7 @@ public:
   virtual void close();
   virtual double in(xy point);
   double length();
+  virtual xyz station(double along);
   virtual double area();
   virtual double dirbound(int angle);
   virtual void writeXml(std::ofstream &ofile);
@@ -93,6 +95,7 @@ public:
   virtual void open();
   virtual void close();
   virtual double in(xy point);
+  virtual xyz station(double along);
   virtual double area();
   virtual double dirbound(int angle);
   virtual void writeXml(std::ofstream &ofile);
@@ -122,6 +125,7 @@ public:
   virtual void open();
   virtual void close();
   virtual double in(xy point);
+  virtual xyz station(double along);
   virtual double area();
   virtual double dirbound(int angle);
   virtual void writeXml(std::ofstream &ofile);
