@@ -20,13 +20,13 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* A polyline can be open or closed. Smoothing a polyline does this:
-   If it is open, it tries various starting angles until it finds the shortest total length.
-   If it is closed and has an odd number of points, it computes the two starting angles
-   that make the ending angle the same, and chooses the one with the shortest total length.
-   If it is closed and has an even number of points, it distributes the angular misclosure
-   evenly among the points, and makes the shortest total length.
-   */
+/* A polyline can be open or closed. Smoothing a polyspiral does this:
+ * Each point, except the ends of an open polyspiral, is assigned the bearing
+ * at that point of the arc that passes through its predecessor, it, and
+ * its successor. Each segment of the polyspiral is redrawn to be tangent
+ * to the bearings at its ends, unless it would exceed bendlimit, in which case
+ * it is redrawn as a straight line.
+ */
 
 #include <cassert>
 #include <iostream>
