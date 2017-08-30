@@ -23,6 +23,7 @@
 #define _CRT_RAND_S
 #include <cstdlib>
 #include <cstdio>
+#include <cmath>
 #include "random.h"
 
 #ifdef HAVE_WINDOWS_H
@@ -94,5 +95,20 @@ unsigned char randm::ucrandom()
   return n;
 }
 #endif
+
+double randm::expirandom()
+{
+  return -log((uirandom()+0.5)/4294967296.);
+}
+
+double randm::expsrandom()
+{
+  return -log((usrandom()+0.5)/65536.);
+}
+
+double randm::expcrandom()
+{
+  return -log((ucrandom()+0.5)/256.);
+}
 
 randm rng;

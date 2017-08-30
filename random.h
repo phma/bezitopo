@@ -28,6 +28,9 @@ public:
   unsigned int uirandom();
   unsigned short usrandom();
   unsigned char ucrandom();
+  double expirandom();
+  double expsrandom();
+  double expcrandom();
   ~randm();
 private:
 #ifdef HAVE_WINDOWS_H
