@@ -34,7 +34,7 @@
 #include "manysum.h"
 #include "ldecimal.h"
 using namespace std;
-int bendlimit=DEG120;
+int bendlimit=DEG180;
 
 int midarcdir(xy a,xy b,xy c)
 /* Returns the bearing of the arc abc at point b. May be off by 360°;
