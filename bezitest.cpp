@@ -3599,12 +3599,13 @@ void testcolor()
 
 void test1contour(string contourName,xyz offset,xy tripoint,double conterval,double expectedLength)
 {
-  int i,j;
-  double prec=0.0000001;
+  int i,j,excessElevCount=0;
+  double prec=0.0000001,along,elevError,maxElevError=0;
+  histogram h(-conterval/10,conterval/10);
   manysum totalContourLength;
   triangle *tri;
   segment seg;
-  xy crit;
+  xy crit,sta;
   ofstream ofile(contourName+".bez");
   PostScript ps;
   ps.open(contourName+".ps");
@@ -3662,22 +3663,59 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   {
     if (std::isnan(doc.pl[1].contours[i].length()))
       cout<<"nan\n";
+    tassert(std::isfinite(doc.pl[1].contours[i].length()));
     //cout<<"Contour length: "<<doc.pl[1].contours[i].length()<<' ';
     //cout<<"Contour area: "<<doc.pl[1].contours[i].area()<<endl;
     totalContourLength+=doc.pl[1].contours[i].length();
     ps.spline(doc.pl[1].contours[i].approx3d(1));
   }
   ps.endpage();
+  ps.setpaper(papersizes["A4 portrait"],1);
+  ps.startpage();
+  along=rng.expirandom();
+  /* Generate random points along contours with a Poisson process and make
+   * a histogram of the elevation errors.
+   */
+  for (i=0;i<doc.pl[1].contours.size();i++)
+    if (std::isfinite(doc.pl[1].contours[i].length()))
+    {
+      while (along<=doc.pl[1].contours[i].length())
+      {
+        sta=doc.pl[1].contours[i].station(along);
+        elevError=doc.pl[1].elevation(sta)-doc.pl[1].contours[i].getElevation();
+        h<<elevError;
+        excessElevCount+=fabs(elevError)>conterval/10;
+        along+=rng.expcrandom();
+        if (fabs(elevError)>maxElevError)
+          maxElevError=fabs(elevError);
+      }
+      along-=doc.pl[1].contours[i].length();
+    }
+  h.plot(ps,HISTO_LINEAR);
+  ps.endpage();
   ps.trailer();
   ps.close();
   doc.writeXml(ofile);
-  cout<<"Total contour length: "<<totalContourLength.total()<<"   "<<endl;
+  cout<<"Total contour length: "<<totalContourLength.total()<<"   \n";
   tassert(expectedLength<0 || fabs(totalContourLength.total()-expectedLength)<0.1);
+  cout<<h.gettotal()<<" points sampled, "<<excessElevCount<<" out of tolerance\n";
+  cout<<"Maximum error "<<maxElevError<<" Contour interval "<<conterval<<endl;
+  tassert(sqr(h.gettotal()-totalContourLength.total())<9*totalContourLength.total());
+  tassert(sqr(excessElevCount)<9*totalContourLength.total());
+  /* Ideally excessElevCount is 0, and for the well-behaved contouraster it is,
+   * but for the ill-behaved contourwheel, it is not.
+   */
+  tassert(maxElevError<conterval);
 }
 
 void testcontour()
 /* The total lengths of contours, especially of the wheel pattern, are
  * sensitive to bendlimit. The values 2490.48 and 1836.62 are for bendlimit=120°.
+ * The contours of the wheel pattern also depend on the processor and the
+ * operating system. 1386.62 is for Intel Core I7 running Linux. On DragonFly
+ * BSD, the top, left, and bottom are different because there is no M_PIl.
+ * On Raspberry Pi, the contours are completely different because there are no
+ * ten-byte floats.
  */
 {
   xyz offset;
@@ -3716,7 +3754,7 @@ void testcontour()
    * instead of between D and F. One of the three possible values for point I
    * caused the problem.
    */
-  test1contour("contourwheel",offset,xy(-106.677,-0.21),0.3,1836.62);
+  test1contour("contourwheel",offset,xy(-106.677,-0.21),0.3,-1836.62);
 }
 
 void testfoldcontour()
