@@ -1197,7 +1197,7 @@ double geoid::elev(int lat,int lon)
   else if (glat)
     return glat->elev(lat,lon);
   else
-    return NAN;
+    return elev(Sphere.geoc(lat,lon,0));
 }
 
 double geoid::elev(xyz dir)
@@ -1206,8 +1206,11 @@ double geoid::elev(xyz dir)
     return cmap->undulation(dir);
   else if (glat)
     return glat->elev(dir);
-  else
-    return NAN;
+  else // fake geoid for testing
+    return cos(dist(dir,xyz(3678298.565,3678298.565,3678298.565))/1e5)*30
+          +cos(dist(dir,xyz(3678298.565,-3678298.-565,3678298.565))/1.1892e5)*36
+          +cos(dist(dir,xyz(-3678298.565,3678298.565,-3678298.565))/1.4142e5)*42
+          +cos(dist(dir,xyz(-3678298.565,-3678298.565,3678298.565))/1.6818e5)*50;
 }
 
 int geoid::getLatFineness()

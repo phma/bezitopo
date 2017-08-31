@@ -4659,14 +4659,7 @@ void testgeoidboundary()
   c.setradius(223132877);
   excerptcircles.push_back(c);
   geo.clear();
-  r=readusngatxt(gd,"ww15mgh.grd");
-  if (r<2) // TODO generate a fake geoid internally
-    r=readusngatxt(gd,"../ww15mgh.grd");
-  if (r<2)
-    cerr<<"Please download ww15mgh.grd; it is needed for the geoidboundary test."<<endl;
-  else
-    geo.push_back(gd);
-  tassert(r==2);
+  geo.push_back(gd);
   outgd.ghdr=new geoheader;
   outgd.cmap=new cubemap;
   outgd.cmap->scale=1/65536.;
