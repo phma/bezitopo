@@ -218,6 +218,7 @@ polyarc flatten(g1boundary g1)
     }
     ret.setdelta(i,tmp.getdelta());
   }
+  ret.setlengths();
   return ret;
 }
 
