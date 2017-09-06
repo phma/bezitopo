@@ -77,6 +77,7 @@
 #include "matrix.h"
 #include "quaternion.h"
 #include "kml.h"
+#include "zoom.h"
 
 #define psoutput false
 // affects only maketin
@@ -1074,6 +1075,15 @@ void testrelprime()
   tassert(relprime(4)==3);
   tassert(relprime(5)==3);
   tassert(relprime(6)==5);
+}
+
+void testzoom()
+{
+  int i;
+  cout<<"zoom\n";
+  for (i=-10;i<=10;i++)
+    cout<<setw(3)<<i<<' '<<ldecimal(zoomratio(i))<<endl;
+  tassert(fabs(zoomratio(30)-1012)<0.1);
 }
 
 double brentfun0(double x)
@@ -5534,6 +5544,8 @@ int main(int argc, char *argv[])
     testarea3();
   if (shoulddo("relprime"))
     testrelprime();
+  if (shoulddo("zoom"))
+    testzoom();
   if (shoulddo("random"))
     testrandom();
   if (shoulddo("intersection"))

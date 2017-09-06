@@ -46,7 +46,7 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                pointlist.cpp polyline.cpp projection.cpp ps.cpp qindex.cpp quaternion.cpp
                random.cpp raster.cpp refinegeoid.cpp relprime.cpp rootfind.cpp
                sourcegeoid.cpp spiral.cpp spolygon.cpp
-               stl.cpp test.cpp segment.cpp tin.cpp vball.cpp vcurve.cpp)
+               stl.cpp test.cpp segment.cpp tin.cpp vball.cpp vcurve.cpp zoom.cpp)
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
                binio.cpp cogo.cpp convertgeoid.cpp document.cpp drawobj.cpp
                ellipsoid.cpp geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp
@@ -55,8 +55,8 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp sourcegeoid.cpp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
-add_executable(viewtin tinwindow.cpp viewtin.cpp)
-add_executable(pangeoid geoidwindow.cpp pangeoid.cpp)
+add_executable(viewtin tinwindow.cpp viewtin.cpp zoom.cpp)
+add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
 target_link_libraries(viewtin Qt5::Widgets Qt5::Core)
 target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)
 target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID NUMSGEOID)
@@ -92,7 +92,7 @@ include(CPack)
 
 include(CTest)
 add_test(geom bezitest area3 in intersection invalidintersectionlozenge invalidintersectionaster)
-add_test(arith bezitest relprime manysum brent newton)
+add_test(arith bezitest relprime manysum brent newton zoom)
 add_test(calculus bezitest parabinter derivs)
 add_test(random bezitest random)
 add_test(matrix bezitest matrix)
