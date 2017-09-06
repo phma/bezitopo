@@ -21,8 +21,38 @@
  */
 #include <QMainWindow>
 #include <QTimer>
+#include <QtWidgets>
+#include <QPixmap>
+#include "document.h"
+
+extern document doc;
+
+class TinCanvas: public QWidget
+{
+  Q_OBJECT
+public:
+  TinCanvas(QWidget *parent=0);
+signals:
+public slots:
+private:
+  document doc;
+  xy windowCenter,worldCenter;
+  int scale;
+  /* scale is the logarithm, in major thirds (see zoom), of the number of
+   * windowSize lengths in a meter. It is thus usually negative.
+   */
+  int rotation; // rotation is stepped by compass points (DEG45/4)
+  double windowSize; // length of a perpendicular from corner to diagonal
+};
 
 class TinWindow: public QMainWindow
 {
   Q_OBJECT
+public:
+  TinWindow(QWidget *parent=0);
+  ~TinWindow();
+signals:
+public slots:
+private:
+  TinCanvas *canvas;
 };

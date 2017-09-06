@@ -55,7 +55,12 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp sourcegeoid.cpp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
-add_executable(viewtin tinwindow.cpp viewtin.cpp zoom.cpp)
+add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp cogo.cpp
+               document.cpp drawobj.cpp
+               latlong.cpp ldecimal.cpp manysum.cpp measure.cpp pnezd.cpp
+               point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
+               rootfind.cpp segment.cpp spiral.cpp tin.cpp
+               tinwindow.cpp vcurve.cpp viewtin.cpp zoom.cpp)
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
 target_link_libraries(viewtin Qt5::Widgets Qt5::Core)
 target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)

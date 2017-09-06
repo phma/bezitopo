@@ -20,3 +20,24 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "tinwindow.h"
+
+document doc; // FIXME needs fixing in ps.cpp
+
+TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
+{
+}
+
+TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
+{
+  resize(707,500);
+  setWindowTitle(QApplication::translate("main", "ViewTIN"));
+  show();
+  canvas=new TinCanvas(this);
+  setCentralWidget(canvas);
+  canvas->show();
+}
+
+TinWindow::~TinWindow()
+{
+  delete canvas;
+}
