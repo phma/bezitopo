@@ -1,5 +1,5 @@
 project(bezitopo)
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.1.0)
 # Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
 # This file is part of Bezitopo.
 # 
@@ -15,6 +15,17 @@ cmake_minimum_required(VERSION 2.8.12)
 #
 # You should have received a copy of the GNU General Public License
 # along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
+
+include(TestBigEndian)
+include(CheckTypeSize)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+
+find_package(Qt5Core)
+find_package(Qt5Widgets)
+find_package(Qt5Gui)
+
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitopo.cpp binio.cpp closure.cpp cogo.cpp cogospiral.cpp
                color.cpp contour.cpp cvtmeas.cpp document.cpp drawobj.cpp
@@ -44,11 +55,13 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp sourcegeoid.cpp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
+add_executable(viewtin tinwindow.cpp viewtin.cpp)
+add_executable(pangeoid geoidwindow.cpp pangeoid.cpp)
+target_link_libraries(viewtin Qt5::Widgets Qt5::Core)
+target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)
 target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID NUMSGEOID)
 target_compile_definitions(bezitest PUBLIC NUMSGEOID)
-
-include(TestBigEndian)
-include(CheckTypeSize)
+#target_compile_definitions(pangeoid PUBLIC CONVERTGEOID NUMSGEOID)
 
 include(CheckIncludeFiles)
 check_include_files(time.h HAVE_TIME_H)
