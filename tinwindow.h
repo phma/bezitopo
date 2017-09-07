@@ -32,6 +32,10 @@ public:
   TinCanvas(QWidget *parent=0);
 signals:
 public slots:
+  void sizeToFit();
+protected:
+  void setSize();
+  void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 private:
   document doc;
   xy windowCenter,worldCenter;

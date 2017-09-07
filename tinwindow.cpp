@@ -20,9 +20,57 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "tinwindow.h"
+#include "zoom.h"
 
 TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
 {
+}
+
+void TinCanvas::sizeToFit()
+{
+  double top,left,bottom,right;
+  int plnum;
+  int vscale,hscale;
+  plnum=doc.pl.size()-1;
+  if (plnum<0)
+  {
+    top=1;
+    left=-1;
+    bottom=-1;
+    right=1;
+  }
+  else
+  {
+    top=-doc.pl[plnum].dirbound(DEG270-rotation);
+    left=doc.pl[plnum].dirbound(-rotation);
+    bottom=doc.pl[plnum].dirbound(DEG90-rotation);
+    right=-doc.pl[plnum].dirbound(DEG180-rotation);
+    if (top<=bottom)
+    {
+      top=1;
+      bottom=-1;
+    }
+    if (left>=right)
+    {
+      left=-1;
+      right=1;
+    }
+  }
+  worldCenter=xy((left+right)/2,(top+bottom)/2);
+  vscale=largestFit(height()/windowSize/(top-bottom));
+  hscale=largestFit(width()/windowSize/(right-left));
+}
+
+void TinCanvas::setSize()
+{
+  windowCenter=xy(width(),height())/2.;
+  windowSize=1/sqrt(1/sqr(width())+1/sqr(height()));
+}
+
+void TinCanvas::resizeEvent(QResizeEvent *event)
+{
+  setSize();
+  QWidget::resizeEvent(event);
 }
 
 TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
