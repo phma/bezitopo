@@ -146,12 +146,46 @@ TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
   resize(707,500);
   setWindowTitle(QApplication::translate("main", "ViewTIN"));
   show();
+  toolbar=new QToolBar(this);
+  addToolBar(Qt::TopToolBarArea,toolbar);
   canvas=new TinCanvas(this);
   setCentralWidget(canvas);
   canvas->show();
+  makeActions();
 }
 
 TinWindow::~TinWindow()
 {
+  unmakeActions();
   delete canvas;
+}
+
+void TinWindow::makeActions()
+{
+  int i;
+  zoomButtons[0]=new ZoomButton(this,-10);
+  zoomButtons[0]->setIcon(QIcon(":/tenth.png"));
+  zoomButtons[1]=new ZoomButton(this,-3);
+  zoomButtons[1]->setIcon(QIcon(":/half.png"));
+  zoomButtons[2]=new ZoomButton(this,-1);
+  zoomButtons[2]->setIcon(QIcon(":/four-fifths.png"));
+  zoomButtons[3]=new ZoomButton(this,1);
+  zoomButtons[3]->setIcon(QIcon(":/five-fourths.png"));
+  zoomButtons[4]=new ZoomButton(this,3);
+  zoomButtons[4]->setIcon(QIcon(":/two.png"));
+  zoomButtons[5]=new ZoomButton(this,10);
+  zoomButtons[5]->setIcon(QIcon(":/ten.png"));
+  for (i=0;i<6;i++)
+    toolbar->addAction(zoomButtons[i]);
+}
+
+void TinWindow::unmakeActions()
+{
+  int i;
+  for (i=0;i<6;i++)
+  {
+    toolbar->removeAction(zoomButtons[i]);
+    delete zoomButtons[i];
+    zoomButtons[i]=nullptr;
+  }
 }

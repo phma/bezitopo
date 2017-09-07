@@ -23,7 +23,9 @@
 #include <QTimer>
 #include <QtWidgets>
 #include <QPixmap>
+#include <array>
 #include "document.h"
+#include "zoombutton.h"
 
 class TinCanvas: public QWidget
 {
@@ -60,8 +62,12 @@ class TinWindow: public QMainWindow
 public:
   TinWindow(QWidget *parent=0);
   ~TinWindow();
+  void makeActions();
+  void unmakeActions();
 signals:
 public slots:
 private:
   TinCanvas *canvas;
+  QToolBar *toolbar;
+  std::array<ZoomButton *,6> zoomButtons;
 };

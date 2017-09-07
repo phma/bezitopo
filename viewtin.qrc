@@ -1,5 +1,11 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-    <file>half.png</file>
+  <!-- These icons are on toolbar buttons that zoom by the indicated factor. -->
+  <file>tenth.png</file>
+  <file>half.png</file>
+  <file>four-fifths.png</file>
+  <file>five-fourths.png</file>
+  <file>two.png</file>
+  <file>ten.png</file>
 </qresource>
 </RCC>
