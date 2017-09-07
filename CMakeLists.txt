@@ -25,6 +25,7 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt5Core)
 find_package(Qt5Widgets)
 find_package(Qt5Gui)
+qt5_add_resources(lib_resources viewtin.qrc)
 
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitopo.cpp binio.cpp closure.cpp cogo.cpp cogospiral.cpp
@@ -60,7 +61,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp cogo.cpp
                latlong.cpp ldecimal.cpp manysum.cpp measure.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
                rootfind.cpp segment.cpp spiral.cpp test.cpp tin.cpp
-               tinwindow.cpp vcurve.cpp viewtin.cpp zoom.cpp)
+               tinwindow.cpp vcurve.cpp viewtin.cpp zoom.cpp ${lib_resources})
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
 target_link_libraries(viewtin Qt5::Widgets Qt5::Core)
 target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)
