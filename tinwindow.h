@@ -30,14 +30,21 @@ class TinCanvas: public QWidget
   Q_OBJECT
 public:
   TinCanvas(QWidget *parent=0);
+  void setPen(const QPen &qpen);
+  void setBrush(const QBrush &qbrush);
+  QPointF worldToWindow(xy pnt);
+  xy windowToWorld(QPointF pnt);
 signals:
 public slots:
   void sizeToFit();
 protected:
   void setSize();
+  void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
   void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
 private:
   document doc;
+  QPen pen;
+  QBrush brush;
   xy windowCenter,worldCenter;
   int scale;
   /* scale is the logarithm, in major thirds (see zoom), of the number of

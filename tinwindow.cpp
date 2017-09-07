@@ -24,6 +24,34 @@
 
 TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
 {
+  setAutoFillBackground(true);
+  setBackgroundRole(QPalette::Base);
+  setPen(QPen(Qt::black));
+  show();
+}
+
+QPointF TinCanvas::worldToWindow(xy pnt)
+{
+  pnt.roscat(worldCenter,rotation,zoomratio(scale),windowCenter);
+  QPointF ret(pnt.getx(),height()-pnt.gety());
+  return ret;
+}
+
+xy TinCanvas::windowToWorld(QPointF pnt)
+{
+  xy ret(pnt.x(),height()-pnt.y());
+  ret.roscat(windowCenter,-rotation,zoomratio(-scale),worldCenter);
+  return ret;
+}
+
+void TinCanvas::setPen(const QPen &qpen)
+{
+  pen=qpen;
+}
+
+void TinCanvas::setBrush(const QBrush &qbrush)
+{
+  brush=qbrush;
 }
 
 void TinCanvas::sizeToFit()
@@ -59,6 +87,22 @@ void TinCanvas::sizeToFit()
   worldCenter=xy((left+right)/2,(top+bottom)/2);
   vscale=largestFit(height()/windowSize/(top-bottom));
   hscale=largestFit(width()/windowSize/(right-left));
+}
+
+void TinCanvas::paintEvent(QPaintEvent *event)
+{
+  int i,plnum;
+  QPainter painter(this);
+  segment seg;
+  painter.setPen(pen);
+  painter.setBrush(brush);
+  painter.setRenderHint(QPainter::Antialiasing,true);
+  plnum=doc.pl.size()-1;
+  for (i=0;plnum>=0 && i<doc.pl[plnum].edges.size();i++)
+  {
+    seg=doc.pl[plnum].edges[i].getsegment();
+    painter.drawLine(worldToWindow(seg.getstart()),worldToWindow(seg.getend()));
+  }
 }
 
 void TinCanvas::setSize()
