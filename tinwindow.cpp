@@ -19,9 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <iostream>
+#include <cmath>
 #include "tinwindow.h"
 #include "zoom.h"
 #include "test.h"
+
+using namespace std;
 
 TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
 {
@@ -96,8 +100,17 @@ void TinCanvas::sizeToFit()
     }
   }
   worldCenter=xy((left+right)/2,(top+bottom)/2);
-  vscale=largestFit(height()/windowSize/(top-bottom));
-  hscale=largestFit(width()/windowSize/(right-left));
+  if (windowSize)
+  {
+    vscale=largestFit(height()/windowSize/(top-bottom));
+    hscale=largestFit(width()/windowSize/(right-left));
+  }
+  else
+  { // If the widget size is not known yet, assume it's square.
+    vscale=largestFit(M_SQRT2/(top-bottom));
+    hscale=largestFit(M_SQRT2/(right-left));
+  }
+  scale=(hscale<vscale)?hscale:vscale;
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)
