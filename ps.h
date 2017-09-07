@@ -25,7 +25,7 @@
 #include <iostream>
 #include <map>
 #include "bezier3d.h"
-class document;
+class pointlist;
 
 struct papersize
 {
@@ -43,7 +43,7 @@ protected:
   int orientation,pageorientation;
   double oldr,oldg,oldb;
   xy paper,modelcenter;
-  document *doc;
+  pointlist *pl;
 public:
   PostScript();
   ~PostScript();
@@ -56,6 +56,7 @@ public:
   void trailer();
   void close();
   void setDoc(document &docu);
+  void setPointlist(pointlist &plist);
   int getPages();
   double xscale(double x);
   double yscale(double y);

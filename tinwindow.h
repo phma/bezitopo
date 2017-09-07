@@ -25,8 +25,6 @@
 #include <QPixmap>
 #include "document.h"
 
-extern document doc;
-
 class TinCanvas: public QWidget
 {
   Q_OBJECT

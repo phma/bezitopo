@@ -353,7 +353,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
  {
    ps.open(filename);
    ps.prolog();
-   ps.setDoc(doc); //TODO set a pointlist instead of a document
+   ps.setPointlist(*this);
  }
  for (m2=0,fail=true;m2<100 && fail;m2++)
      {edges.clear();

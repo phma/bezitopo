@@ -191,7 +191,12 @@ void PostScript::close()
 
 void PostScript::setDoc(document &docu)
 {
-  doc=&docu;
+  pl=&docu.pl[1];
+}
+
+void PostScript::setPointlist(pointlist &plist)
+{
+  pl=&plist;
 }
 
 int PostScript::getPages()
@@ -298,7 +303,7 @@ void PostScript::line(edge lin,int num,bool colorfibaster,bool directed)
   b=turn(b,orientation);
   if (lin.delaunay())
     if (colorfibaster)
-      switch (fibmod3(abs(doc->pl[1].revpoints[lin.a]-doc->pl[1].revpoints[lin.b])))
+      switch (fibmod3(abs(pl->revpoints[lin.a]-pl->revpoints[lin.b])))
       {
 	case -1:
 	  setcolor(0.3,0.3,0.3);

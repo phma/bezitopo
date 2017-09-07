@@ -21,8 +21,6 @@
  */
 #include "tinwindow.h"
 
-document doc; // FIXME needs fixing in ps.cpp
-
 TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
 {
 }
