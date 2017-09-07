@@ -21,18 +21,29 @@
  */
 #include "tinwindow.h"
 #include "zoom.h"
+#include "test.h"
 
 TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
 {
   setAutoFillBackground(true);
   setBackgroundRole(QPalette::Base);
   setPen(QPen(Qt::black));
+  doc.pl.resize(2);
+  aster(doc,100);
+  doc.pl[1].maketin("",false);
+  doc.pl[1].makegrad(0.);
+  doc.pl[1].maketriangles();
+  doc.pl[1].setgradient();
+  doc.pl[1].makeqindex();
+  doc.pl[1].findcriticalpts();
+  doc.pl[1].addperimeter();
+  sizeToFit();
   show();
 }
 
 QPointF TinCanvas::worldToWindow(xy pnt)
 {
-  pnt.roscat(worldCenter,rotation,zoomratio(scale),windowCenter);
+  pnt.roscat(worldCenter,rotation,zoomratio(scale)*windowSize,windowCenter);
   QPointF ret(pnt.getx(),height()-pnt.gety());
   return ret;
 }
@@ -40,7 +51,7 @@ QPointF TinCanvas::worldToWindow(xy pnt)
 xy TinCanvas::windowToWorld(QPointF pnt)
 {
   xy ret(pnt.x(),height()-pnt.y());
-  ret.roscat(windowCenter,-rotation,zoomratio(-scale),worldCenter);
+  ret.roscat(windowCenter,-rotation,zoomratio(-scale)/windowSize,worldCenter);
   return ret;
 }
 

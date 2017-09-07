@@ -59,7 +59,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp cogo.cpp
                document.cpp drawobj.cpp
                latlong.cpp ldecimal.cpp manysum.cpp measure.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
-               rootfind.cpp segment.cpp spiral.cpp tin.cpp
+               rootfind.cpp segment.cpp spiral.cpp test.cpp tin.cpp
                tinwindow.cpp vcurve.cpp viewtin.cpp zoom.cpp)
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
 target_link_libraries(viewtin Qt5::Widgets Qt5::Core)
