@@ -21,3 +21,4 @@
  */
 
 double zoomratio(int n);
+int largestFit(double ratio);

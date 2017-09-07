@@ -1084,6 +1084,8 @@ void testzoom()
   for (i=-10;i<=10;i++)
     cout<<setw(3)<<i<<' '<<ldecimal(zoomratio(i))<<endl;
   tassert(fabs(zoomratio(30)-1012)<0.1);
+  tassert(largestFit(1000)==29);
+  tassert(largestFit(1024)==30);
 }
 
 double brentfun0(double x)

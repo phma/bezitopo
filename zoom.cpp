@@ -21,6 +21,7 @@
  */
 #include <map>
 #include <cmath>
+#include <cassert>
 #include "zoom.h"
 #define ZOOMSTEP 1.259423
 /* Used in GUI windows for zooming. 3 zoom steps are just under a ratio of 2;
@@ -36,5 +37,15 @@ double zoomratio(int n)
   double ret=zooms[n];
   if (ret==0)
     zooms[n]=ret=pow(ZOOMSTEP,n);
+  return ret;
+}
+
+int largestFit(double ratio)
+// Returns the largest n such that zoomratio(n)<=ratio.
+{
+  int ret=floor(log(ratio)/log(ZOOMSTEP));
+  assert(ratio>0);
+  if (zoomratio(ret)>ratio)
+    ret--;
   return ret;
 }
