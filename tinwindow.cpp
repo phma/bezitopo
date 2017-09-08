@@ -113,6 +113,13 @@ void TinCanvas::sizeToFit()
   scale=(hscale<vscale)?hscale:vscale;
 }
 
+void TinCanvas::zoom(int steps)
+{
+  scale+=steps;
+  cout<<"New scale "<<scale<<endl;
+  update();
+}
+
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
   int i,plnum;
@@ -152,6 +159,7 @@ TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
   setCentralWidget(canvas);
   canvas->show();
   makeActions();
+  connect(this,SIGNAL(zoomCanvas(int)),canvas,SLOT(zoom(int)));
 }
 
 TinWindow::~TinWindow()
@@ -176,7 +184,11 @@ void TinWindow::makeActions()
   zoomButtons[5]=new ZoomButton(this,10);
   zoomButtons[5]->setIcon(QIcon(":/ten.png"));
   for (i=0;i<6;i++)
+  {
     toolbar->addAction(zoomButtons[i]);
+    connect(zoomButtons[i],SIGNAL(zoomSteps(int)),this,SLOT(prepareZoomSteps(int)));
+    connect(zoomButtons[i],SIGNAL(triggered(bool)),this,SLOT(zoomSteps(bool)));
+  }
 }
 
 void TinWindow::unmakeActions()
@@ -188,4 +200,15 @@ void TinWindow::unmakeActions()
     delete zoomButtons[i];
     zoomButtons[i]=nullptr;
   }
+}
+
+void TinWindow::prepareZoomSteps(int steps)
+{
+  cout<<"prepareZoomSteps "<<steps<<endl;
+  preZoomStep=steps;
+}
+
+void TinWindow::zoomSteps(bool checked)
+{
+  zoomCanvas(preZoomStep);
 }

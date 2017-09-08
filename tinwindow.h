@@ -39,6 +39,7 @@ public:
 signals:
 public slots:
   void sizeToFit();
+  void zoom(int steps);
 protected:
   void setSize();
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -65,9 +66,13 @@ public:
   void makeActions();
   void unmakeActions();
 signals:
+  void zoomCanvas(int steps);
 public slots:
+  void prepareZoomSteps(int steps);
+  void zoomSteps(bool checked);
 private:
   TinCanvas *canvas;
   QToolBar *toolbar;
+  int preZoomStep;
   std::array<ZoomButton *,6> zoomButtons;
 };

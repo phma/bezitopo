@@ -19,18 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <iostream>
 #include "zoombutton.h"
+
+using namespace std;
 
 ZoomButton::ZoomButton(QObject *parent,int steps):QAction(parent)
 {
   mySteps=steps;
+  setCheckable(true);
 }
 
 void ZoomButton::activate(ActionEvent event)
 {
+  cout<<"Button event "<<event<<endl;
   if (event==QAction::Trigger)
   {
-    //cout<<"Button "<<myKind<<" triggered"<<endl;
+    cout<<"Button "<<mySteps<<" triggered"<<endl;
     zoomSteps(mySteps);
   }
   QAction::activate(event);
@@ -38,7 +43,7 @@ void ZoomButton::activate(ActionEvent event)
 
 bool ZoomButton::event(QEvent *e)
 {
-  //cout<<"button "<<myKind<<" event "<<e->type()<<endl;
+  cout<<"button "<<mySteps<<" event "<<e->type()<<endl;
   if (e->type()==QEvent::ActionChanged)
     zoomSteps(mySteps);
   return QAction::event(e);

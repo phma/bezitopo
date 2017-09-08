@@ -28,8 +28,8 @@ class ZoomButton: public QAction
   Q_OBJECT
 public:
   ZoomButton(QObject *parent=nullptr,int steps=0);
-public slots:
   void activate(ActionEvent event);
+public slots:
 signals:
   void zoomSteps(int steps); // emitted on activate(triggered)
 protected:
