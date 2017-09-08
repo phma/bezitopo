@@ -120,6 +120,36 @@ void TinCanvas::zoom(int steps)
   update();
 }
 
+void TinCanvas::zoomm10()
+{
+  zoom(-10);
+}
+
+void TinCanvas::zoomm3()
+{
+  zoom(-3);
+}
+
+void TinCanvas::zoomm1()
+{
+  zoom(-1);
+}
+
+void TinCanvas::zoomp1()
+{
+  zoom(1);
+}
+
+void TinCanvas::zoomp3()
+{
+  zoom(3);
+}
+
+void TinCanvas::zoomp10()
+{
+  zoom(10);
+}
+
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
   int i,plnum;
@@ -173,21 +203,25 @@ void TinWindow::makeActions()
   int i;
   zoomButtons[0]=new ZoomButton(this,-10);
   zoomButtons[0]->setIcon(QIcon(":/tenth.png"));
+  connect(zoomButtons[0],SIGNAL(triggered(bool)),canvas,SLOT(zoomm10()));
   zoomButtons[1]=new ZoomButton(this,-3);
   zoomButtons[1]->setIcon(QIcon(":/half.png"));
+  connect(zoomButtons[1],SIGNAL(triggered(bool)),canvas,SLOT(zoomm3()));
   zoomButtons[2]=new ZoomButton(this,-1);
   zoomButtons[2]->setIcon(QIcon(":/four-fifths.png"));
+  connect(zoomButtons[2],SIGNAL(triggered(bool)),canvas,SLOT(zoomm1()));
   zoomButtons[3]=new ZoomButton(this,1);
   zoomButtons[3]->setIcon(QIcon(":/five-fourths.png"));
+  connect(zoomButtons[3],SIGNAL(triggered(bool)),canvas,SLOT(zoomp1()));
   zoomButtons[4]=new ZoomButton(this,3);
   zoomButtons[4]->setIcon(QIcon(":/two.png"));
+  connect(zoomButtons[4],SIGNAL(triggered(bool)),canvas,SLOT(zoomp3()));
   zoomButtons[5]=new ZoomButton(this,10);
   zoomButtons[5]->setIcon(QIcon(":/ten.png"));
+  connect(zoomButtons[5],SIGNAL(triggered(bool)),canvas,SLOT(zoomp10()));
   for (i=0;i<6;i++)
   {
     toolbar->addAction(zoomButtons[i]);
-    connect(zoomButtons[i],SIGNAL(zoomSteps(int)),this,SLOT(prepareZoomSteps(int)));
-    connect(zoomButtons[i],SIGNAL(triggered(bool)),this,SLOT(zoomSteps(bool)));
   }
 }
 

@@ -27,7 +27,6 @@ using namespace std;
 ZoomButton::ZoomButton(QObject *parent,int steps):QAction(parent)
 {
   mySteps=steps;
-  setCheckable(true);
 }
 
 void ZoomButton::activate(ActionEvent event)

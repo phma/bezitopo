@@ -40,6 +40,12 @@ signals:
 public slots:
   void sizeToFit();
   void zoom(int steps);
+  void zoomm10();
+  void zoomm3();
+  void zoomm1();
+  void zoomp1();
+  void zoomp3();
+  void zoomp10();
 protected:
   void setSize();
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
