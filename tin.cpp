@@ -228,8 +228,11 @@ segment edge::getsegment()
     tri=tria;
   else
     tri=trib;
-  ret.setctrl(START,tri->ctrlpt(*a,*b));
-  ret.setctrl(END,tri->ctrlpt(*b,*a));
+  if (tri)
+  {
+    ret.setctrl(START,tri->ctrlpt(*a,*b));
+    ret.setctrl(END,tri->ctrlpt(*b,*a));
+  }
   return ret;
 }
 

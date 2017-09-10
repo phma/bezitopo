@@ -35,12 +35,6 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   doc.pl.resize(2);
   aster(doc,100);
   doc.pl[1].maketin("",false);
-  doc.pl[1].makegrad(0.);
-  doc.pl[1].maketriangles();
-  doc.pl[1].setgradient();
-  doc.pl[1].makeqindex();
-  doc.pl[1].findcriticalpts();
-  doc.pl[1].addperimeter();
   sizeToFit();
   show();
 }
