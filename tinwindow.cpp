@@ -24,6 +24,7 @@
 #include "tinwindow.h"
 #include "zoom.h"
 #include "test.h"
+#include "ldecimal.h"
 
 using namespace std;
 
@@ -189,7 +190,7 @@ void TinCanvas::mouseMoveEvent(QMouseEvent *event)
     update(); // No need to update dragStart, since it's dragged.
   }
   else
-    ; // hit-testing tooltip code goes here
+    QToolTip::showText(event->pos(),QString::fromStdString(ldecimal(eventLoc.east())+','+ldecimal(eventLoc.north())),this);
   //cout<<"mouseMove "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
 }
 
