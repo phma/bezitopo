@@ -50,11 +50,14 @@ protected:
   void setSize();
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
   void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+  void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+  void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+  void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 private:
   document doc;
   QPen pen;
   QBrush brush;
-  xy windowCenter,worldCenter;
+  xy windowCenter,worldCenter,dragStart;
   int scale;
   /* scale is the logarithm, in major thirds (see zoom), of the number of
    * windowSize lengths in a meter. It is thus usually negative.

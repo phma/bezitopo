@@ -30,6 +30,7 @@ using namespace std;
 TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
 {
   setAutoFillBackground(true);
+  setMouseTracking(true);
   setBackgroundRole(QPalette::Base);
   setPen(QPen(Qt::black));
   doc.pl.resize(2);
@@ -169,6 +170,38 @@ void TinCanvas::resizeEvent(QResizeEvent *event)
 {
   setSize();
   QWidget::resizeEvent(event);
+}
+
+void TinCanvas::mousePressEvent(QMouseEvent *event)
+{
+  xy eventLoc=windowToWorld(event->pos());
+  if (event->button()==Qt::LeftButton)
+    dragStart=eventLoc;
+  //cout<<"mousePress "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
+}
+
+void TinCanvas::mouseMoveEvent(QMouseEvent *event)
+{
+  xy eventLoc=windowToWorld(event->pos());
+  if (event->buttons()&Qt::LeftButton)
+  {
+    worldCenter+=dragStart-eventLoc;
+    update(); // No need to update dragStart, since it's dragged.
+  }
+  else
+    ; // hit-testing tooltip code goes here
+  //cout<<"mouseMove "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
+}
+
+void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
+{
+  xy eventLoc=windowToWorld(event->pos());
+  if (event->buttons()&Qt::LeftButton)
+  {
+    worldCenter+=eventLoc-dragStart;
+    update(); // No need to update dragStart, since it's dragged.
+  }
+  //cout<<"mouseRelease "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
 }
 
 TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
