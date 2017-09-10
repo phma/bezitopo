@@ -110,7 +110,6 @@ void TinCanvas::sizeToFit()
 void TinCanvas::zoom(int steps)
 {
   scale+=steps;
-  cout<<"New scale "<<scale<<endl;
   update();
 }
 

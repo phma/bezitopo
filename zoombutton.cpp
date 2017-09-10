@@ -31,10 +31,8 @@ ZoomButton::ZoomButton(QObject *parent,int steps):QAction(parent)
 
 void ZoomButton::activate(ActionEvent event)
 {
-  cout<<"Button event "<<event<<endl;
   if (event==QAction::Trigger)
   {
-    cout<<"Button "<<mySteps<<" triggered"<<endl;
     zoomSteps(mySteps);
   }
   QAction::activate(event);
@@ -42,7 +40,6 @@ void ZoomButton::activate(ActionEvent event)
 
 bool ZoomButton::event(QEvent *e)
 {
-  cout<<"button "<<mySteps<<" event "<<e->type()<<endl;
   if (e->type()==QEvent::ActionChanged)
     zoomSteps(mySteps);
   return QAction::event(e);
