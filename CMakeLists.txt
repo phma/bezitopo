@@ -28,18 +28,18 @@ find_package(Qt5Gui)
 qt5_add_resources(lib_resources viewtin.qrc)
 
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitopo.cpp binio.cpp closure.cpp cogo.cpp cogospiral.cpp
-               color.cpp contour.cpp cvtmeas.cpp document.cpp drawobj.cpp
-               ellipsoid.cpp geoid.cpp geoidboundary.cpp halton.cpp icommon.cpp
-               kml.cpp latlong.cpp layer.cpp ldecimal.cpp
+               bezitopo.cpp binio.cpp breakline.cpp closure.cpp cogo.cpp
+               cogospiral.cpp color.cpp contour.cpp cvtmeas.cpp document.cpp
+               drawobj.cpp ellipsoid.cpp geoid.cpp geoidboundary.cpp halton.cpp
+               icommon.cpp kml.cpp latlong.cpp layer.cpp ldecimal.cpp
                manysum.cpp measure.cpp mkpoint.cpp objlist.cpp plot.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp projection.cpp ps.cpp qindex.cpp
                quaternion.cpp random.cpp raster.cpp relprime.cpp rootfind.cpp
                scalefactor.cpp spiral.cpp spolygon.cpp stl.cpp test.cpp segment.cpp
                tin.cpp vball.cpp vcurve.cpp)
 add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitest.cpp bicubic.cpp binio.cpp cogo.cpp cogospiral.cpp
-               color.cpp contour.cpp document.cpp drawobj.cpp
+               bezitest.cpp bicubic.cpp binio.cpp breakline.cpp cogo.cpp
+               cogospiral.cpp color.cpp contour.cpp document.cpp drawobj.cpp
                ellipsoid.cpp geoid.cpp geoidboundary.cpp
                halton.cpp histogram.cpp hlattice.cpp hnum.cpp kml.cpp
                latlong.cpp layer.cpp ldecimal.cpp manysum.cpp
@@ -56,8 +56,8 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp sourcegeoid.cpp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
-add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp cogo.cpp
-               document.cpp drawobj.cpp
+add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp breakline.cpp
+               cogo.cpp document.cpp drawobj.cpp
                latlong.cpp ldecimal.cpp manysum.cpp measure.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
                rootfind.cpp segment.cpp spiral.cpp test.cpp tin.cpp
