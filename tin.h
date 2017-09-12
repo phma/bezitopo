@@ -56,6 +56,7 @@ public:
   /* Log base 2 of the number of pieces this edge is split into
    * when writing an STL file.
    */
+  edge();
   void flip(pointlist *topopoints);
   point* otherend(point* end);
   triangle* othertri(triangle* t);

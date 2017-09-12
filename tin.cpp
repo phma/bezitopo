@@ -39,6 +39,15 @@ using std::multimap;
 using std::vector;
 using namespace std;
 
+edge::edge()
+{
+  a=b=nullptr;
+  nexta=nextb=nullptr;
+  tria=trib=nullptr;
+  extrema[0]=extrema[1]=NAN;
+  broken=contour=stlsplit=0;
+}
+
 edge* edge::next(point* end)
 {if (end==a)
     return nexta;
