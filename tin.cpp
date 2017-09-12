@@ -623,7 +623,7 @@ void pointlist::makegrad(double corr)
       //i->second.gradient=xy(0,0);
       sum1=sumx=sumy=sumz=sumxx=sumxy=sumxz=sumzz=sumyy=sumyz=0;
       for (m=0,e=i->second.line;m==0 || e!=i->second.line;m++,e=e->next(&i->second))
-      if (!e->broken)
+      if (!(e->broken&2))
       {
 	gradthere=e->otherend(&i->second)->gradient;
 	diff=(xy)(*e->otherend(&i->second))-(xy)i->second;

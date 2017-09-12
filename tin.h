@@ -42,7 +42,10 @@ public:
   edge *nexta,*nextb;
   triangle *tria,*trib;
   double extrema[2];
-  bool broken; //true if a breakline crosses this edge
+  char broken;
+  /* Bit 0 is used in viewtin to mean that the edge is in a type-0 breakline.
+   * Bit 1 means that a type-1 breakline crosses the edge.
+   */
   char contour;
   /* When drawing a contour, set one of the low 3 bits of edge::contour to true
    * for each edge that crosses the contour. Keep the flags set when you go to
