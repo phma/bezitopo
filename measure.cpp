@@ -470,3 +470,28 @@ std::string format_length_unit(double measurement)
 {
   return format_meas_unit(measurement,length_unit);
 }
+
+Measure::Measure()
+{
+  int i;
+  for (i=0;i<sizeof(cfactors)/sizeof(cf);i++)
+    conversionFactors[cfactors[i].unitp]=cfactors[i].factor;
+  whichFoot=0;
+}
+
+void Measure::setFoot(int which)
+{
+  switch (which)
+  {
+    case (INTERNATIONAL):
+      conversionFactors[FOOT]=0.3048;
+      break;
+    case (USSURVEY):
+      conversionFactors[FOOT]=12e2/3937;
+      break;
+    case (INSURVEY):
+      conversionFactors[FOOT]=0.3047996;
+  }
+  conversionFactors[CHAIN]=conversionFactors[FOOT]*66;
+  conversionFactors[MILE]=conversionFactors[CHAIN]*80;
+}

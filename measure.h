@@ -24,6 +24,9 @@
 #define MEASURE_H
 
 #include <string>
+#include <map>
+#include <vector>
+#include "zoom.h"
 
 /* These are unit codes. Codes pertaining to angles are defined in angle.h.
  * This file has two codes for the foot: one for the international foot, and
@@ -128,4 +131,15 @@ double parse_length(const char *meas);
 double parse_length(std::string meas);
 std::string format_length(double measurement);
 std::string format_length_unit(double measurement);
+
+class Measure
+{
+public:
+  Measure();
+  void setFoot(int which);
+private:
+  int whichFoot;
+  std::map<int,double> conversionFactors;
+  std::vector<int> availableUnits;
+};
 #endif
