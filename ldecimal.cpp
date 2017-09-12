@@ -33,10 +33,14 @@ string ldecimal(double x,double toler)
   double x2;
   int h,i,iexp,chexp;
   size_t zpos;
-  char *dotpos,*epos;
-  string ret,s,m,antissa,exponent;
+  char *dotpos,*epos,*pLcNumeric;
+  string ret,s,m,antissa,exponent,saveLcNumeric;
   char buffer[32],fmt[8];
   assert(toler>=0);
+  pLcNumeric=getenv("LC_NUMERIC");
+  if (pLcNumeric)
+    saveLcNumeric=pLcNumeric;
+  setenv("LC_NUMERIC","C",true);
   if (toler>0 && x!=0)
   {
     iexp=floor(log10(fabs(x/toler))-1);
@@ -115,5 +119,6 @@ string ldecimal(double x,double toler)
   }
   else
     ret=buffer;
+  setenv("LC_NUMERIC",saveLcNumeric.c_str(),true);
   return ret;
 }
