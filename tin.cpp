@@ -137,23 +137,42 @@ void edge::flip(pointlist *topopoints)
 bool edge::isinterior()
 // Returns true if this edge is in the interior; false if it's in the convex hull -
 // or if the pointers are messed up.
-{point *tempa,*tempb;
- tempa=nexta->otherend(a);
- tempb=nextb->otherend(b);
- return nexta->next(tempa)->otherend(tempa)==b && nextb->next(tempb)->otherend(tempb)==a && tempa!=tempb;
- }
+{
+  point *tempa,*tempb;
+  tempa=nexta->otherend(a);
+  tempb=nextb->otherend(b);
+  return nexta->next(tempa)->otherend(tempa)==b &&
+         nextb->next(tempb)->otherend(tempb)==a &&
+         tempa!=tempb;
+}
+
+bool edge::isFlippable()
+/* Returns true if the edge is interior and is the diagonal
+ * of a convex quadrilateral. Flipping an edge that is the diagonal
+ * of a concave quadrilateral results in an overhanging cliff or cave.
+ */
+{
+  point *tempa,*tempb;
+  tempa=nexta->otherend(a);
+  tempb=nextb->otherend(b);
+  return nexta->next(tempa)->otherend(tempa)==b &&
+         nextb->next(tempb)->otherend(tempb)==a &&
+         tempa!=tempb &&
+         intersection_type(*a,*b,*tempa,*tempb)==ACXBD;
+}
 
 bool edge::delaunay()
-{point *tempa,*tempb;
- if (nexta==NULL || nextb==NULL)
- {
-   std::cerr<<"null next edge in delaunay\n";
-   return true;
- }
- tempa=nexta->otherend(a);
- tempb=nextb->otherend(b);
- return (!isinterior()) || ::delaunay(*a,*b,*tempa,*tempb);
- }
+{
+  point *tempa,*tempb;
+  if (nexta==NULL || nextb==NULL)
+  {
+    std::cerr<<"null next edge in delaunay\n";
+    return true;
+  }
+  tempa=nexta->otherend(a);
+  tempb=nextb->otherend(b);
+  return (!isinterior()) || ::delaunay(*a,*b,*tempa,*tempb);
+}
 
 multimap<double,point*> convexhull;
 // The points are ordered by their azimuth from the starting point.

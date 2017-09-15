@@ -66,6 +66,7 @@ public:
   xy midpoint();
   void setnext(point* end,edge* enext);
   bool isinterior();
+  bool isFlippable();
   bool delaunay();
   void dump(pointlist *topopoints);
   double length();
