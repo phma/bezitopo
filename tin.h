@@ -41,6 +41,7 @@ public:
   point *a,*b;
   edge *nexta,*nextb;
   triangle *tria,*trib;
+  // When going from a to b, tria is on the right and trib on the left.
   double extrema[2];
   char broken;
   /* Bit 0 is used in viewtin to mean that the edge is in a type-0 breakline.
