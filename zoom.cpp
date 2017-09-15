@@ -23,7 +23,7 @@
 #include <cmath>
 #include <cassert>
 #include "zoom.h"
-#define ZOOMSTEP 1.259423
+#define ZOOMSTEP 1.259423132456698482765476450823
 /* Used in GUI windows for zooming. 3 zoom steps are just under a ratio of 2;
  * 10 zoom steps are just over a ratio of 10.
  */
