@@ -129,6 +129,51 @@ xy triangle::gradient(xy pnt)
   return xy(g2[0],g2[1]);
 }
 
+triangleHit triangle::hitTest(xy pnt)
+{
+  double p,q,r; // Fraction of distance from a side to opposite corner. p+q+r=1.
+  double totarea;
+  int flags;
+  triangleHit ret;
+  ret.tri=nullptr;
+  ret.edg=nullptr;
+  ret.cor=nullptr;
+  p=area3(pnt,*b,*c);
+  q=area3(*a,pnt,*c);
+  r=area3(*a,*b,pnt);
+  totarea=p+q+r; // should equal sarea, but because of roundoff it may be many ulps off
+  p/=totarea;
+  q/=totarea;
+  r/=totarea;
+  flags=(p<0.1)+2*(q<0.1)+4*(r<0.1)+8*(p>0.9)+16*(q>0.9)+32*(r>0.9);
+  // TODO: handle 3, 5, and 6, which are 3% of the triangle
+  switch (flags)
+  {
+    case 0:
+      ret.tri=this;
+      break;
+    case 1:
+      ret.edg=c->edg(this); // A
+      break;
+    case 2:
+      ret.edg=a->edg(this); // B
+      break;
+    case 4:
+      ret.edg=b->edg(this); // C
+      break;
+    case 14:
+      ret.cor=a;
+      break;
+    case 21:
+      ret.cor=b;
+      break;
+    case 35:
+      ret.cor=c;
+      break;
+  }
+  return ret;
+}
+
 void triangle::setgradmat()
 {
   xy scalt;

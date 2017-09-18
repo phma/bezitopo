@@ -49,6 +49,13 @@ public:
 double parabinter(testfunc func,double start,double startz,double end,double endz);
 #endif
 
+struct triangleHit
+{
+  triangle *tri;
+  edge *edg;
+  point *cor;
+};
+
 class triangle
 /* A triangle has three corners and seven other control points, arranged as follows:
          a
@@ -91,6 +98,7 @@ public:
   void flatten();
   xyz gradient3(xy pnt);
   xy gradient(xy pnt);
+  triangleHit hitTest(xy pnt);
   bool in(xy pnt);
   bool iscorner(point *v);
   triangle *nexttoward(xy pnt);
