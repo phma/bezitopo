@@ -148,6 +148,14 @@ void pointlist::removeperimeter()
     t->second.removeperimeter();
 }
 
+string pointlist::hitTestString(triangleHit hit)
+{
+  string ret;
+  if (hit.cor)
+    ret=to_string(revpoints[hit.cor]);
+  return ret;
+}
+
 void pointlist::writeXml(ofstream &ofile)
 {
   int i;

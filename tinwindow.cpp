@@ -190,13 +190,28 @@ void TinCanvas::mousePressEvent(QMouseEvent *event)
 void TinCanvas::mouseMoveEvent(QMouseEvent *event)
 {
   xy eventLoc=windowToWorld(event->pos());
+  triangleHit hitRec;
+  triangle *tri;
+  int plnum;
+  string tipString;
   if (event->buttons()&Qt::LeftButton)
   {
     worldCenter+=dragStart-eventLoc;
     update(); // No need to update dragStart, since it's dragged.
   }
   else
-    QToolTip::showText(event->pos(),QString::fromStdString(ldecimal(eventLoc.east())+','+ldecimal(eventLoc.north())),this);
+  {
+    plnum=doc.pl.size()-1;
+    tri=doc.pl[plnum].qinx.findt(eventLoc,false);
+    if (tri)
+    {
+      hitRec=tri->hitTest(eventLoc);
+      tipString=doc.pl[plnum].hitTestString(hitRec);
+    }
+    else
+      tipString=ldecimal(eventLoc.east())+','+ldecimal(eventLoc.north());
+    QToolTip::showText(event->pos(),QString::fromStdString(tipString),this);
+  }
   //cout<<"mouseMove "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
 }
 
