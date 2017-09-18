@@ -33,7 +33,9 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   setAutoFillBackground(true);
   setMouseTracking(true);
   setBackgroundRole(QPalette::Base);
-  setPen(QPen(Qt::black));
+  normalEdgePen=QPen(Qt::black);
+  breakEdgePen=QPen(Qt::darkBlue);
+  flipEdgePen=QPen(Qt::blue);
   doc.pl.resize(2);
   aster(doc,100);
   doc.pl[1].maketin("",false);
@@ -59,11 +61,6 @@ xy TinCanvas::windowToWorld(QPointF pnt)
   xy ret(pnt.x(),height()-pnt.y());
   ret.roscat(windowCenter,-rotation,zoomratio(-scale)/windowSize,worldCenter);
   return ret;
-}
-
-void TinCanvas::setPen(const QPen &qpen)
-{
-  pen=qpen;
 }
 
 void TinCanvas::setBrush(const QBrush &qbrush)
@@ -156,13 +153,19 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   int i,plnum;
   QPainter painter(this);
   segment seg;
-  painter.setPen(pen);
   painter.setBrush(brush);
   painter.setRenderHint(QPainter::Antialiasing,true);
   plnum=doc.pl.size()-1;
   for (i=0;plnum>=0 && i<doc.pl[plnum].edges.size();i++)
   {
     seg=doc.pl[plnum].edges[i].getsegment();
+    if (doc.pl[plnum].edges[i].delaunay())
+      if (doc.pl[plnum].edges[i].broken&1)
+        painter.setPen(breakEdgePen);
+      else
+        painter.setPen(normalEdgePen);
+    else
+      painter.setPen(flipEdgePen);
     painter.drawLine(worldToWindow(seg.getstart()),worldToWindow(seg.getend()));
   }
 }
@@ -185,6 +188,7 @@ void TinCanvas::mousePressEvent(QMouseEvent *event)
   if (event->button()==Qt::LeftButton)
     dragStart=eventLoc;
   //cout<<"mousePress "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
+  mouseClicked=true;
 }
 
 void TinCanvas::mouseMoveEvent(QMouseEvent *event)
@@ -213,14 +217,31 @@ void TinCanvas::mouseMoveEvent(QMouseEvent *event)
     QToolTip::showText(event->globalPos(),QString::fromStdString(tipString),this);
   }
   //cout<<"mouseMove "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
+  mouseClicked=false;
 }
 
 void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
 {
+  int plnum;
+  triangleHit hitRec;
+  triangle *tri;
+  plnum=doc.pl.size()-1;
   xy eventLoc=windowToWorld(event->pos());
-  if (event->buttons()&Qt::LeftButton)
+  tri=doc.pl[plnum].qinx.findt(eventLoc,true);
+  if (event->button()&Qt::LeftButton)
   {
-    worldCenter+=eventLoc-dragStart;
+    if (mouseClicked)
+    {
+      //cout<<"click"<<endl;
+      if (tri)
+      {
+        hitRec=tri->hitTest(eventLoc);
+        if (hitRec.edg)
+          hitRec.edg->broken^=1;
+      }
+    }
+    else
+      worldCenter+=eventLoc-dragStart;
     update(); // No need to update dragStart, since it's dragged.
   }
   //cout<<"mouseRelease "<<eventLoc.east()<<','<<eventLoc.north()<<endl;

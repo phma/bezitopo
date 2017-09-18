@@ -32,7 +32,6 @@ class TinCanvas: public QWidget
   Q_OBJECT
 public:
   TinCanvas(QWidget *parent=0);
-  void setPen(const QPen &qpen);
   void setBrush(const QBrush &qbrush);
   QPointF worldToWindow(xy pnt);
   xy windowToWorld(QPointF pnt);
@@ -55,7 +54,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 private:
   document doc;
-  QPen pen;
+  QPen normalEdgePen,breakEdgePen,flipEdgePen;
   QBrush brush;
   xy windowCenter,worldCenter,dragStart;
   int scale;
@@ -64,6 +63,7 @@ private:
    */
   int rotation; // rotation is stepped by compass points (DEG45/4)
   double windowSize; // length of a perpendicular from corner to diagonal
+  bool mouseClicked;
 };
 
 class TinWindow: public QMainWindow
