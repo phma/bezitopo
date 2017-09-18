@@ -202,7 +202,7 @@ void TinCanvas::mouseMoveEvent(QMouseEvent *event)
   else
   {
     plnum=doc.pl.size()-1;
-    tri=doc.pl[plnum].qinx.findt(eventLoc,false);
+    tri=doc.pl[plnum].qinx.findt(eventLoc,true); // Change this to false to see the locale bug.
     if (tri)
     {
       hitRec=tri->hitTest(eventLoc);

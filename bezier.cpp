@@ -146,7 +146,12 @@ triangleHit triangle::hitTest(xy pnt)
   q/=totarea;
   r/=totarea;
   flags=(p<0.1)+2*(q<0.1)+4*(r<0.1)+8*(p>0.9)+16*(q>0.9)+32*(r>0.9);
-  // TODO: handle 3, 5, and 6, which are 3% of the triangle
+  if (flags==3)
+    flags=(p<q)?1:2;
+  if (flags==6)
+    flags=(q<r)?2:4;
+  if (flags==5)
+    flags=(r<p)?4:1;
   switch (flags)
   {
     case 0:
