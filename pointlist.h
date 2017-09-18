@@ -52,6 +52,7 @@ public:
   void findcriticalpts();
   void addperimeter();
   void removeperimeter();
+  triangle *findt(xy pnt,bool clip=false);
   std::string hitTestString(triangleHit hit);
   virtual void writeXml(std::ofstream &ofile);
   // the following methods are in tin.cpp

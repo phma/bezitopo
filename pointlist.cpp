@@ -3,7 +3,7 @@
 /* pointlist.cpp - list of points                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2015,2016 Pierre Abbat.
+/* Copyright 2012,2013,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -146,6 +146,11 @@ void pointlist::removeperimeter()
   map<int,triangle>::iterator t;
   for (t=triangles.begin();t!=triangles.end();t++)
     t->second.removeperimeter();
+}
+
+triangle *pointlist::findt(xy pnt,bool clip)
+{
+  return qinx.findt(pnt,clip);
 }
 
 string pointlist::hitTestString(triangleHit hit)
