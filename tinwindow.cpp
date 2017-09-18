@@ -210,7 +210,7 @@ void TinCanvas::mouseMoveEvent(QMouseEvent *event)
     }
     else
       tipString=ldecimal(eventLoc.east())+','+ldecimal(eventLoc.north());
-    QToolTip::showText(event->pos(),QString::fromStdString(tipString),this);
+    QToolTip::showText(event->globalPos(),QString::fromStdString(tipString),this);
   }
   //cout<<"mouseMove "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
 }
