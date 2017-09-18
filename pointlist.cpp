@@ -152,7 +152,13 @@ string pointlist::hitTestString(triangleHit hit)
 {
   string ret;
   if (hit.cor)
-    ret=to_string(revpoints[hit.cor]);
+    ret=to_string(revpoints[hit.cor])+' '+hit.cor->note;
+  if (hit.edg)
+    ret=to_string(revpoints[hit.edg->a])+'-'+to_string(revpoints[hit.edg->b]);
+  if (hit.tri)
+    ret='('+to_string(revpoints[hit.tri->a])+' '+
+        to_string(revpoints[hit.tri->b])+' '+
+        to_string(revpoints[hit.tri->c])+')';
   return ret;
 }
 
