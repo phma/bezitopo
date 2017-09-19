@@ -46,6 +46,7 @@ bool pointlist::checkTinConsistency()
 {
   bool ret=true;
   int i;
+  long long totturn;
   ptlist::iterator p;
   vector<int> edgebearings;
   edge *ed;
@@ -67,6 +68,13 @@ bool pointlist::checkTinConsistency()
     {
       ret=false;
       cerr<<"Point "<<p->first<<" next pointers do not return to line pointer.\n";
+    }
+    for (totturn=i=0;i<edgebearings.size();i++)
+      totturn+=(edgebearings[(i+1)%edgebearings.size()]-edgebearings[i])&(DEG360-1);
+    if (totturn!=(long long)DEG360) // DEG360 is construed as positive when cast to long long
+    {
+      ret=false;
+      cerr<<"Point "<<p->first<<" bearings do not wind once counterclockwise.\n";
     }
   }
   return ret;
