@@ -65,6 +65,7 @@ public:
   triangle* tri(point* end);
   xy midpoint();
   void setnext(point* end,edge* enext);
+  void setNeighbors();
   bool isinterior();
   bool isFlippable();
   bool delaunay();

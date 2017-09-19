@@ -69,6 +69,16 @@ void edge::setnext(point* end,edge* enext)
     nextb=enext;
  }
 
+void edge::setNeighbors()
+// Sets the triangles on the sides of the edge to point to each other.
+{
+  if (tria && trib)
+  {
+    tria->setneighbor(trib);
+    trib->setneighbor(tria);
+  }
+}
+
 point* edge::otherend(point* end)
 {
   assert(end==a || end==b);
@@ -98,41 +108,54 @@ void edge::dump(pointlist *topopoints)
 
 void edge::flip(pointlist *topopoints)
 /* Given an edge which is a diagonal of a quadrilateral,
-   sets it to the other diagonal.
-   */
-{edge *temp1,*temp2;
- int i,size;
- size=topopoints->points.size();
- for (i=0;i<size && a->line->next(a)!=this;i++)
+ * sets it to the other diagonal. It is rotated clockwise.
+ */
+{
+  edge *temp1,*temp2;
+  int i,size;
+  size=topopoints->points.size();
+  for (i=0;i<size && a->line->next(a)!=this;i++)
     a->line=a->line->next(a);
- assert(i<size); //If this assertion fails, the nexta and nextb pointers are messed up.
- for (i=0;i<size && b->line->next(b)!=this;i++)
+  assert(i<size); //If this assertion fails, the nexta and nextb pointers are messed up.
+  for (i=0;i<size && b->line->next(b)!=this;i++)
     b->line=b->line->next(b);
- assert(i<size);
- // The four edges of the quadrilateral are now nexta, a->line, nextb, and b->line.
- if (nexta->a==a)
+  assert(i<size);
+  // The four edges of the quadrilateral are now nexta, a->line, nextb, and b->line.
+  if (nexta->a==a)
     nexta->nextb=this;
- else
+  else
     nexta->nexta=this;
- if (nextb->b==b)
+  if (nextb->b==b)
     nextb->nexta=this;
- else
+  else
     nextb->nextb=this;
- if (a->line->a==a)
+  if (a->line->a==a)
     a->line->nexta=nexta;
- else
+  else
     a->line->nextb=nexta;
- if (b->line->b==b)
+  if (b->line->b==b)
     b->line->nextb=nextb;
- else
+  else
     b->line->nexta=nextb;
- temp1=b->line;
- temp2=a->line;
- a=nexta->otherend(a);
- b=nextb->otherend(b);
- nexta=temp1;
- nextb=temp2;
- }
+  temp1=b->line;
+  temp2=a->line;
+  a=nexta->otherend(a);
+  b=nextb->otherend(b);
+  nexta=temp1;
+  nextb=temp2;
+  /* Now adjust the triangles, if there are any. When showing the TIN on screen
+   * and letting the user flip edges, the triangles are needed for hit-testing.
+   * The control points are unaffected, so elevations are garbage, unless you
+   * flip the same edge four times and the edge was side a of both triangles
+   * before flipping.
+   */
+  if (tria)
+  {
+    tria->a=nexta->otherend(a);
+    tria->b=b;
+    tria->c=a;
+  }
+}
 
 bool edge::isinterior()
 // Returns true if this edge is in the interior; false if it's in the convex hull -
@@ -761,11 +784,7 @@ void pointlist::maketriangles()
       edges[j].trib=edges[j].nexta->tri(edges[j].a);
   }
   for (i=0;i<edges.size();i++)
-    if (edges[i].tria && edges[i].trib)
-    {
-      edges[i].tria->setneighbor(edges[i].trib);
-      edges[i].trib->setneighbor(edges[i].tria);
-    }
+    edges[i].setNeighbors();
 }
 
 array<double,2> pointlist::lohi()
