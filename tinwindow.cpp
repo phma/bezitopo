@@ -30,6 +30,7 @@ using namespace std;
 
 TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
 {
+  int i;
   setAutoFillBackground(true);
   setMouseTracking(true);
   setBackgroundRole(QPalette::Base);
@@ -45,6 +46,8 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
+  //for (i=0;i<doc.pl[1].edges.size();i++)
+    //doc.pl[1].edges[i].dump(&doc.pl[1]);
   sizeToFit();
   show();
 }

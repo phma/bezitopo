@@ -780,6 +780,8 @@ void testmaketinaster()
   for (totallength=i=0;i<doc.pl[1].edges.size();i++)
     totallength+=doc.pl[1].edges[i].length();
   tassert(fabs(totallength-600.689)<0.001);
+  doc.pl[1].maketriangles();
+  tassert(doc.pl[1].checkTinConsistency());
 }
 
 void testmaketinbigaster()

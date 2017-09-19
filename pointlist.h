@@ -41,6 +41,11 @@ public:
   revptlist revpoints;
   std::map<int,edge> edges;
   std::map<int,triangle> triangles;
+  /* edges and triangles are logically arrays from 0 to size()-1, but are
+   * implemented as maps, because they have pointers to each other, and points
+   * point to edges, and the pointers would be messed up by moving memory
+   * when a vector is resized.
+   */
   std::vector<polyspiral> contours;
   std::vector<std::vector<int> > type0Breaklines;
   std::vector<std::vector<xy> > type1Breaklines;
@@ -48,6 +53,7 @@ public:
   void addpoint(int numb,point pnt,bool overwrite=false);
   void clear();
   void clearmarks();
+  bool checkTinConsistency();
   void setgradient(bool flat=false);
   void findcriticalpts();
   void addperimeter();

@@ -40,6 +40,7 @@ class edge
 public:
   point *a,*b;
   edge *nexta,*nextb;
+  // nexta points to the next edge counterclockwise about a.
   triangle *tria,*trib;
   // When going from a to b, tria is on the right and trib on the left.
   double extrema[2];

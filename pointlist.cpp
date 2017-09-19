@@ -42,6 +42,36 @@ void pointlist::clearmarks()
     e->second.clearmarks();
 }
 
+bool pointlist::checkTinConsistency()
+{
+  bool ret=true;
+  int i;
+  ptlist::iterator p;
+  vector<int> edgebearings;
+  edge *ed;
+  for (p=points.begin();p!=points.end();p++)
+  {
+    ed=p->second.line;
+    if (ed->a!=&p->second && ed->b!=&p->second)
+    {
+      ret=false;
+      cerr<<"Point "<<p->first<<" line pointer is wrong.\n";
+    }
+    edgebearings.clear();
+    do
+    {
+      ed=ed->next(&p->second);
+      edgebearings.push_back(ed->getsegment().chordbearing()+DEG180*(ed->b==&p->second));
+    } while (ed!=p->second.line && edgebearings.size()<=edges.size());
+    if (edgebearings.size()>=edges.size())
+    {
+      ret=false;
+      cerr<<"Point "<<p->first<<" next pointers do not return to line pointer.\n";
+    }
+  }
+  return ret;
+}
+
 void pointlist::addpoint(int numb,point pnt,bool overwrite)
 // If numb<0, it's a point added by bezitopo.
 {int a;
