@@ -166,6 +166,8 @@ void edge::flip(pointlist *topopoints)
       a->line->tria=tria;
     a->line->setNeighbors();
     nextb->setNeighbors();
+    tria->peri=tria->perimeter();
+    tria->sarea=tria->area();
   }
   if (trib)
   {
@@ -178,6 +180,8 @@ void edge::flip(pointlist *topopoints)
       b->line->tria=trib;
     b->line->setNeighbors();
     nexta->setNeighbors();
+    trib->peri=tria->perimeter();
+    trib->sarea=tria->area();
   }
   setNeighbors();
 }

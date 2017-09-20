@@ -194,6 +194,13 @@ void TinCanvas::mousePressEvent(QMouseEvent *event)
   mouseClicked=true;
 }
 
+void TinCanvas::mouseDoubleClickEvent(QMouseEvent *event)
+{
+  xy eventLoc=windowToWorld(event->pos());
+  //cout<<"mouseDoubleClick "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
+  mouseDoubleClicked=true;
+}
+
 void TinCanvas::mouseMoveEvent(QMouseEvent *event)
 {
   xy eventLoc=windowToWorld(event->pos());
@@ -220,7 +227,7 @@ void TinCanvas::mouseMoveEvent(QMouseEvent *event)
     QToolTip::showText(event->globalPos(),QString::fromStdString(tipString),this);
   }
   //cout<<"mouseMove "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
-  mouseClicked=false;
+  mouseClicked=mouseDoubleClicked=false;
 }
 
 void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
@@ -233,7 +240,16 @@ void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
   tri=doc.pl[plnum].qinx.findt(eventLoc,true);
   if (event->button()&Qt::LeftButton)
   {
-    if (mouseClicked)
+    if (mouseDoubleClicked)
+    {
+      if (tri)
+      {
+        hitRec=tri->hitTest(eventLoc);
+        if (hitRec.edg && hitRec.edg->isFlippable())
+          hitRec.edg->flip(&doc.pl[plnum]);
+      }
+    }
+    else if (mouseClicked)
     {
       //cout<<"click"<<endl;
       if (tri)
@@ -248,6 +264,7 @@ void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
     update(); // No need to update dragStart, since it's dragged.
   }
   //cout<<"mouseRelease "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
+  mouseClicked=mouseDoubleClicked=false;
 }
 
 TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
