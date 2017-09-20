@@ -45,6 +45,7 @@ public slots:
   void zoomp1();
   void zoomp3();
   void zoomp10();
+  void updateEdge(edge *e);
 protected:
   void setSize();
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;

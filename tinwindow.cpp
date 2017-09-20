@@ -151,6 +151,14 @@ void TinCanvas::zoomp10()
   zoom(10);
 }
 
+void TinCanvas::updateEdge(edge *e)
+{
+  QPointF aWindow=worldToWindow(*e->a);
+  QPointF bWindow=worldToWindow(*e->b);
+  QRectF rect(aWindow,bWindow);
+  update(rect.toRect());
+}
+
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
   int i,plnum;
@@ -246,7 +254,10 @@ void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
       {
         hitRec=tri->hitTest(eventLoc);
         if (hitRec.edg && hitRec.edg->isFlippable())
+        {
           hitRec.edg->flip(&doc.pl[plnum]);
+          update();
+        }
       }
     }
     else if (mouseClicked)
@@ -256,12 +267,17 @@ void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
       {
         hitRec=tri->hitTest(eventLoc);
         if (hitRec.edg)
+        {
           hitRec.edg->broken^=1;
+          updateEdge(hitRec.edg);
+        }
       }
     }
     else
+    {
       worldCenter+=eventLoc-dragStart;
-    update(); // No need to update dragStart, since it's dragged.
+      update(); // No need to update dragStart, since it's dragged.
+    }
   }
   //cout<<"mouseRelease "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
   mouseClicked=mouseDoubleClicked=false;
