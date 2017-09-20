@@ -45,7 +45,8 @@ void pointlist::clearmarks()
 bool pointlist::checkTinConsistency()
 {
   bool ret=true;
-  int i;
+  int i,n;
+  double a;
   long long totturn;
   ptlist::iterator p;
   vector<int> edgebearings;
@@ -75,6 +76,66 @@ bool pointlist::checkTinConsistency()
     {
       ret=false;
       cerr<<"Point "<<p->first<<" bearings do not wind once counterclockwise.\n";
+    }
+  }
+  for (i=0;i<edges.size();i++)
+  {
+    if ((edges[i].tria!=nullptr)+(edges[i].trib!=nullptr)!=1+edges[i].isinterior())
+    {
+      ret=false;
+      cerr<<"Edge "<<i<<" has wrong number of adjacent triangles.\n";
+    }
+    if (edges[i].tria)
+    {
+      a=n=0;
+      if (edges[i].tria->a==edges[i].a || edges[i].tria->a==edges[i].b)
+        n++;
+      else
+        a+=area3(*edges[i].a,*edges[i].b,*edges[i].tria->a);
+      if (edges[i].tria->b==edges[i].a || edges[i].tria->b==edges[i].b)
+        n++;
+      else
+        a+=area3(*edges[i].a,*edges[i].b,*edges[i].tria->b);
+      if (edges[i].tria->c==edges[i].a || edges[i].tria->c==edges[i].b)
+        n++;
+      else
+        a+=area3(*edges[i].a,*edges[i].b,*edges[i].tria->c);
+      if (n!=2)
+      {
+        ret=false;
+        cerr<<"Edge "<<i<<" triangle a does not have edge as a side.\n";
+      }
+      if (a>=0)
+      {
+        ret=false;
+        cerr<<"Edge "<<i<<" triangle a is on the wrong side.\n";
+      }
+    }
+    if (edges[i].trib)
+    {
+      a=n=0;
+      if (edges[i].trib->a==edges[i].a || edges[i].trib->a==edges[i].b)
+        n++;
+      else
+        a+=area3(*edges[i].a,*edges[i].b,*edges[i].trib->a);
+      if (edges[i].trib->b==edges[i].a || edges[i].trib->b==edges[i].b)
+        n++;
+      else
+        a+=area3(*edges[i].a,*edges[i].b,*edges[i].trib->b);
+      if (edges[i].trib->c==edges[i].a || edges[i].trib->c==edges[i].b)
+        n++;
+      else
+        a+=area3(*edges[i].a,*edges[i].b,*edges[i].trib->c);
+      if (n!=2)
+      {
+        ret=false;
+        cerr<<"Edge "<<i<<" triangle b does not have edge as a side.\n";
+      }
+      if (a<=0)
+      {
+        ret=false;
+        cerr<<"Edge "<<i<<" triangle b is on the wrong side.\n";
+      }
     }
   }
   return ret;
