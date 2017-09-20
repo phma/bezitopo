@@ -149,12 +149,37 @@ void edge::flip(pointlist *topopoints)
    * flip the same edge four times and the edge was side a of both triangles
    * before flipping.
    */
+  for (i=0;i<size && a->line->next(a)!=this;i++)
+    a->line=a->line->next(a);
+  assert(i<size);
+  for (i=0;i<size && b->line->next(b)!=this;i++)
+    b->line=b->line->next(b);
+  assert(i<size);
   if (tria)
   {
-    tria->a=nexta->otherend(a);
+    tria->a=nextb->otherend(b);
     tria->b=b;
     tria->c=a;
+    if (a->line->a==a)
+      a->line->trib=tria;
+    else
+      a->line->tria=tria;
+    a->line->setNeighbors();
+    nextb->setNeighbors();
   }
+  if (trib)
+  {
+    trib->a=nexta->otherend(a);
+    trib->b=a;
+    trib->c=b;
+    if (b->line->a==b)
+      b->line->trib=trib;
+    else
+      b->line->tria=trib;
+    b->line->setNeighbors();
+    nexta->setNeighbors();
+  }
+  setNeighbors();
 }
 
 bool edge::isinterior()

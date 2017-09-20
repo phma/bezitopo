@@ -772,7 +772,7 @@ void testmaketindouble()
 void testmaketinaster()
 {
   double totallength;
-  int i;
+  int i,edgerand;
   doc.pl[1].clear();
   aster(doc,100);
   doc.pl[1].maketin(psoutput?"aster.ps":"",false);
@@ -781,6 +781,14 @@ void testmaketinaster()
     totallength+=doc.pl[1].edges[i].length();
   tassert(fabs(totallength-600.689)<0.001);
   doc.pl[1].maketriangles();
+  tassert(doc.pl[1].checkTinConsistency());
+  edgerand=rng.uirandom();
+  for (i=0;i<32;i++)
+    if ((edgerand&(1<<i)) && doc.pl[1].edges[i].isFlippable())
+    {
+      doc.pl[1].edges[i].flip(&doc.pl[1]);
+      doc.pl[1].edges[i].flip(&doc.pl[1]);
+    }
   tassert(doc.pl[1].checkTinConsistency());
 }
 
