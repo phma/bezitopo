@@ -159,6 +159,17 @@ void TinCanvas::updateEdge(edge *e)
   update(rect.toRect());
 }
 
+void TinCanvas::updateEdgeNeighbors(edge *e)
+{
+  QPointF aWindow=worldToWindow(*e->a);
+  QPointF bWindow=worldToWindow(*e->b);
+  QPointF cWindow=worldToWindow(*e->nexta->otherend(e->a));
+  QPointF dWindow=worldToWindow(*e->nextb->otherend(e->b));
+  QRectF rect1(aWindow,bWindow),rect2(cWindow,dWindow);
+  QRectF rect=rect1.united(rect2);
+  update(rect.toRect());
+}
+
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
   int i,plnum;
@@ -256,7 +267,7 @@ void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
         if (hitRec.edg && hitRec.edg->isFlippable())
         {
           hitRec.edg->flip(&doc.pl[plnum]);
-          update();
+          updateEdgeNeighbors(hitRec.edg);
         }
       }
     }
