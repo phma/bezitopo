@@ -45,7 +45,7 @@ void pointlist::clearmarks()
 bool pointlist::checkTinConsistency()
 {
   bool ret=true;
-  int i,n;
+  int i,n,nInteriorEdges=0,nNeighborTriangles=0;
   double a;
   long long totturn;
   ptlist::iterator p;
@@ -80,6 +80,8 @@ bool pointlist::checkTinConsistency()
   }
   for (i=0;i<edges.size();i++)
   {
+    if (edges[i].isinterior())
+      nInteriorEdges++;
     if ((edges[i].tria!=nullptr)+(edges[i].trib!=nullptr)!=1+edges[i].isinterior())
     {
       ret=false;
@@ -137,6 +139,47 @@ bool pointlist::checkTinConsistency()
         cerr<<"Edge "<<i<<" triangle b is on the wrong side.\n";
       }
     }
+  }
+  for (i=0;i<triangles.size();i++)
+  {
+    if (triangles[i].aneigh)
+    {
+      nNeighborTriangles++;
+      if ( triangles[i].aneigh->iscorner(triangles[i].a) ||
+          !triangles[i].aneigh->iscorner(triangles[i].b) ||
+          !triangles[i].aneigh->iscorner(triangles[i].c))
+      {
+        ret=false;
+        cerr<<"Triangle "<<i<<" neighbor a is wrong.\n";
+      }
+    }
+    if (triangles[i].bneigh)
+    {
+      nNeighborTriangles++;
+      if (!triangles[i].bneigh->iscorner(triangles[i].a) ||
+           triangles[i].bneigh->iscorner(triangles[i].b) ||
+          !triangles[i].bneigh->iscorner(triangles[i].c))
+      {
+        ret=false;
+        cerr<<"Triangle "<<i<<" neighbor b is wrong.\n";
+      }
+    }
+    if (triangles[i].cneigh)
+    {
+      nNeighborTriangles++;
+      if (!triangles[i].cneigh->iscorner(triangles[i].a) ||
+          !triangles[i].cneigh->iscorner(triangles[i].b) ||
+           triangles[i].cneigh->iscorner(triangles[i].c))
+      {
+        ret=false;
+        cerr<<"Triangle "<<i<<" neighbor c is wrong.\n";
+      }
+    }
+  }
+  if (nInteriorEdges*2!=nNeighborTriangles)
+  {
+    ret=false;
+    cerr<<"Interior edges and neighbor triangles don't match.\n";
   }
   return ret;
 }
