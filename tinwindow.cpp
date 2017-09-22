@@ -48,8 +48,8 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   doc.pl[1].addperimeter();
   //for (i=0;i<doc.pl[1].edges.size();i++)
     //doc.pl[1].edges[i].dump(&doc.pl[1]);
-  sizeToFit();
   show();
+  sizeToFit();
 }
 
 QPointF TinCanvas::worldToWindow(xy pnt)
