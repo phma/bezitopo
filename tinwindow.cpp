@@ -153,21 +153,25 @@ void TinCanvas::zoomp10()
 
 void TinCanvas::updateEdge(edge *e)
 {
+  QMarginsF marge(1,1,1,1);
   QPointF aWindow=worldToWindow(*e->a);
   QPointF bWindow=worldToWindow(*e->b);
   QRectF rect(aWindow,bWindow);
-  update(rect.toRect());
+  rect+=marge;
+  update(rect.toAlignedRect());
 }
 
 void TinCanvas::updateEdgeNeighbors(edge *e)
 {
+  QMarginsF marge(1,1,1,1);
   QPointF aWindow=worldToWindow(*e->a);
   QPointF bWindow=worldToWindow(*e->b);
   QPointF cWindow=worldToWindow(*e->nexta->otherend(e->a));
   QPointF dWindow=worldToWindow(*e->nextb->otherend(e->b));
   QRectF rect1(aWindow,bWindow),rect2(cWindow,dWindow);
   QRectF rect=rect1.united(rect2);
-  update(rect.toRect());
+  rect+=marge;
+  update(rect.toAlignedRect());
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)
