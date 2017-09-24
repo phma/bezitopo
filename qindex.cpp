@@ -143,9 +143,7 @@ void qindex::sizefit(vector<xy> pnts)
 }
 
 void qindex::split(vector<xy> pnts)
-/* Computes size, x, and y such that size is a power of 2, x and y are multiples
- * of size/16, and all points are in the resulting square.
- */
+// Splits qindex so that each leaf has at most three points.
 {
   vector<xy> subpnts[4];
   int i,q;
