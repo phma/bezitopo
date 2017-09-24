@@ -35,6 +35,7 @@ public:
   void setBrush(const QBrush &qbrush);
   QPointF worldToWindow(xy pnt);
   xy windowToWorld(QPointF pnt);
+  double pixelScale();
 signals:
 public slots:
   void sizeToFit();

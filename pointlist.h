@@ -60,6 +60,7 @@ public:
   void removeperimeter();
   triangle *findt(xy pnt,bool clip=false);
   std::string hitTestString(triangleHit hit);
+  std::string hitTestPointString(xy pnt,double radius);
   virtual void writeXml(std::ofstream &ofile);
   // the following methods are in tin.cpp
 private:

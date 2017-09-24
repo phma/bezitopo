@@ -69,6 +69,11 @@ xy TinCanvas::windowToWorld(QPointF pnt)
   return ret;
 }
 
+double TinCanvas::pixelScale()
+{
+  return zoomratio(-scale)/windowSize;
+}
+
 void TinCanvas::setBrush(const QBrush &qbrush)
 {
   brush=qbrush;
@@ -254,14 +259,18 @@ void TinCanvas::mouseMoveEvent(QMouseEvent *event)
   else
   {
     plnum=doc.pl.size()-1;
-    tri=doc.pl[plnum].findt(eventLoc,true); // Change this to false to see the locale bug.
+    tri=doc.pl[plnum].findt(eventLoc,false);
     if (tri)
     {
       hitRec=tri->hitTest(eventLoc);
       tipString=doc.pl[plnum].hitTestString(hitRec);
     }
     else
-      tipString=ldecimal(eventLoc.east())+','+ldecimal(eventLoc.north());
+    {
+      tipString=doc.pl[plnum].hitTestPointString(eventLoc,pixelScale()*15);
+      //if (tipString=="") // Uncomment these two lines to see the locale bug.
+        //tipString=ldecimal(eventLoc.east())+','+ldecimal(eventLoc.north());
+    }
     QToolTip::showText(event->globalPos(),QString::fromStdString(tipString),this);
   }
   //cout<<"mouseMove "<<eventLoc.east()<<','<<eventLoc.north()<<endl;

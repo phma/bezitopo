@@ -320,6 +320,22 @@ string pointlist::hitTestString(triangleHit hit)
   return ret;
 }
 
+string pointlist::hitTestPointString(xy pnt,double radius)
+{
+  ptlist::iterator i;
+  string ret;
+  for (i=points.begin();i!=points.end();++i)
+  {
+    if (dist(i->second,pnt)<radius)
+    {
+      if (ret.length())
+        ret+=' ';
+      ret+=to_string(i->first)+' '+i->second.note;
+    }
+  }
+  return ret;
+}
+
 void pointlist::writeXml(ofstream &ofile)
 {
   int i;
