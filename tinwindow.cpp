@@ -35,8 +35,8 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   setMouseTracking(true);
   setBackgroundRole(QPalette::Base);
   normalEdgePen=QPen(Qt::black);
-  breakEdgePen=QPen(Qt::darkBlue);
-  flipEdgePen=QPen(Qt::blue);
+  breakEdgePen=QPen(Qt::blue);
+  flipEdgePen=QPen(Qt::blue,1,Qt::DashLine);
   doc.pl.resize(2);
   aster(doc,100);
   doc.pl[1].maketin("",false);
