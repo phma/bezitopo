@@ -217,7 +217,18 @@ void pointlist::makeqindex()
     plist.push_back(i->second);
   qinx.sizefit(plist);
   qinx.split(plist);
-  qinx.settri(&triangles[0]);
+  if (triangles.size())
+    qinx.settri(&triangles[0]);
+}
+
+void pointlist::updateqindex()
+/* Use this when you already have a quad index, split to cover all the points,
+ * but the leaves don't point to the right triangles because you've flipped
+ * some edges.
+ */
+{
+  if (triangles.size())
+    qinx.settri(&triangles[0]);
 }
 
 double pointlist::elevation(xy location)
