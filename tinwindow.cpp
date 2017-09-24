@@ -37,11 +37,14 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   normalEdgePen=QPen(Qt::black);
   breakEdgePen=QPen(Qt::blue);
   flipEdgePen=QPen(Qt::blue,1,Qt::DashLine);
+  circlePen[0]=QPen(Qt::red);
+  circlePen[1]=QPen(Qt::darkGreen);
+  circlePen[2]=QPen(Qt::blue);
   doc.pl.resize(2);
   aster(doc,100);
   doc.pl[1].maketin("",false);
   doc.pl[1].makegrad(0.);
-  doc.pl[1].maketriangles();
+  //doc.pl[1].maketriangles();
   doc.pl[1].setgradient();
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
@@ -177,23 +180,35 @@ void TinCanvas::updateEdgeNeighbors(edge *e)
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
   int i,plnum;
+  double r;
+  ptlist::iterator j;
   QPainter painter(this);
   segment seg;
   painter.setBrush(brush);
   painter.setRenderHint(QPainter::Antialiasing,true);
   plnum=doc.pl.size()-1;
-  for (i=0;plnum>=0 && i<doc.pl[plnum].edges.size();i++)
-  {
-    seg=doc.pl[plnum].edges[i].getsegment();
-    if (doc.pl[plnum].edges[i].delaunay())
-      if (doc.pl[plnum].edges[i].broken&1)
-        painter.setPen(breakEdgePen);
+  if (doc.pl[plnum].triangles.size())
+    for (i=0;plnum>=0 && i<doc.pl[plnum].edges.size();i++)
+    {
+      seg=doc.pl[plnum].edges[i].getsegment();
+      if (doc.pl[plnum].edges[i].delaunay())
+        if (doc.pl[plnum].edges[i].broken&1)
+          painter.setPen(breakEdgePen);
+        else
+          painter.setPen(normalEdgePen);
       else
-        painter.setPen(normalEdgePen);
-    else
-      painter.setPen(flipEdgePen);
-    painter.drawLine(worldToWindow(seg.getstart()),worldToWindow(seg.getend()));
-  }
+        painter.setPen(flipEdgePen);
+      painter.drawLine(worldToWindow(seg.getstart()),worldToWindow(seg.getend()));
+    }
+  else
+    for (j=doc.pl[plnum].points.begin();j!=doc.pl[plnum].points.end();++j)
+      for (i=0;i<3;i++)
+      {
+        painter.setPen(circlePen[i]);
+        r=(i+1)*5+sin((double)j->first*(1<<2*i));
+        // The radius variation is so that, if two points coincide, it's obvious.
+        painter.drawEllipse(worldToWindow(j->second),r,r);
+      }
 }
 
 void TinCanvas::setSize()

@@ -58,6 +58,7 @@ protected:
 private:
   document doc;
   QPen normalEdgePen,breakEdgePen,flipEdgePen;
+  QPen circlePen[3];
   QBrush brush;
   xy windowCenter,worldCenter,dragStart;
   int scale;
