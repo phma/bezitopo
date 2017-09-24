@@ -41,10 +41,11 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   circlePen[1]=QPen(Qt::darkGreen);
   circlePen[2]=QPen(Qt::blue);
   doc.pl.resize(2);
+  plnum=1;
   aster(doc,100);
   doc.pl[1].maketin("",false);
   doc.pl[1].makegrad(0.);
-  //doc.pl[1].maketriangles();
+  doc.pl[1].maketriangles();
   doc.pl[1].setgradient();
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
@@ -82,9 +83,7 @@ void TinCanvas::setBrush(const QBrush &qbrush)
 void TinCanvas::sizeToFit()
 {
   double top,left,bottom,right;
-  int plnum;
   int vscale,hscale;
-  plnum=doc.pl.size()-1;
   if (plnum<0)
   {
     top=1;
@@ -184,14 +183,13 @@ void TinCanvas::updateEdgeNeighbors(edge *e)
 
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
-  int i,plnum;
+  int i;
   double r;
   ptlist::iterator j;
   QPainter painter(this);
   segment seg;
   painter.setBrush(brush);
   painter.setRenderHint(QPainter::Antialiasing,true);
-  plnum=doc.pl.size()-1;
   if (doc.pl[plnum].triangles.size())
     for (i=0;plnum>=0 && i<doc.pl[plnum].edges.size();i++)
     {
@@ -249,7 +247,6 @@ void TinCanvas::mouseMoveEvent(QMouseEvent *event)
   xy eventLoc=windowToWorld(event->pos());
   triangleHit hitRec;
   triangle *tri;
-  int plnum;
   string tipString;
   if (event->buttons()&Qt::LeftButton)
   {
@@ -258,7 +255,6 @@ void TinCanvas::mouseMoveEvent(QMouseEvent *event)
   }
   else
   {
-    plnum=doc.pl.size()-1;
     tri=doc.pl[plnum].findt(eventLoc,false);
     if (tri)
     {
@@ -279,10 +275,8 @@ void TinCanvas::mouseMoveEvent(QMouseEvent *event)
 
 void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
 {
-  int plnum;
   triangleHit hitRec;
   triangle *tri;
-  plnum=doc.pl.size()-1;
   xy eventLoc=windowToWorld(event->pos());
   tri=doc.pl[plnum].qinx.findt(eventLoc,true);
   if (event->button()&Qt::LeftButton)

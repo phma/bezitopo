@@ -58,6 +58,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 private:
   document doc;
+  int plnum;
   QPen normalEdgePen,breakEdgePen,flipEdgePen;
   QPen circlePen[3];
   QBrush brush;
