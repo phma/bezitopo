@@ -1235,7 +1235,7 @@ void testnewton()
 
 void testmanysum()
 {
-  manysum ms;
+  manysum ms,negms;
   int i,j,h;
   double x,naiveforwardsum,forwardsum,pairforwardsum,naivebackwardsum,backwardsum,pairbackwardsum;
   vector<double> summands;
@@ -1250,11 +1250,13 @@ void testmanysum()
     {
       naiveforwardsum+=x;
       ms+=x;
+      negms-=x;
       summands.push_back(x);
     }
   }
   ms.prune();
   forwardsum=ms.total();
+  tassert(forwardsum==-negms.total());
   pairforwardsum=pairwisesum(summands);
   ms.clear();
   summands.clear();

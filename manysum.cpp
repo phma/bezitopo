@@ -92,12 +92,15 @@ manysum& manysum::operator+=(double x)
 
 manysum& manysum::operator-=(double x)
 {
-  int i,j;
+  int i=DBL_MAX_EXP+3,j=DBL_MAX_EXP+3;
   double d;
   x=-x;
   while (x!=0)
   {
-    frexp(x,&i);
+    if (std::isfinite(x))
+      frexp(x,&i);
+    else
+      i=DBL_MAX_EXP+5;
     bucket[i]+=x;
     frexp(d=bucket[i],&j);
     if (j>i)
