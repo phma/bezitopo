@@ -43,6 +43,30 @@ void document::copytopopoints(criteria crit)
   }
 }
 
+void document::copytopopoints(int dst,int src)
+/* Uses the criteria in the destination. If the destination doesn't exist,
+ * creates it, with no criteria. But if the source doesn't exist, it throws.
+ */
+{
+  ptlist::iterator i;
+  if (dst==src || src<0 || src>=pl.size())
+    throw unsetsource;
+  if (pl.size()<dst+1)
+    pl.resize(dst+1);
+  pl[dst].clear();
+  int j;
+  bool include;
+  for (i=pl[src].points.begin();i!=pl[src].points.end();i++)
+  {
+    include=false;
+    for (j=0;j<pl[dst].crit.size();j++)
+      if (pl[dst].crit[j].match(i->second,i->first))
+	include=pl[dst].crit[j].istopo;
+    if (include)
+      pl[1].addpoint(i->first,i->second);
+  }
+}
+
 int document::readpnezd(string fname,bool overwrite)
 {
   return ::readpnezd(this,fname,overwrite);

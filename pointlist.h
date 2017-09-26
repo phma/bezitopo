@@ -46,6 +46,9 @@ public:
 };
 
 typedef std::vector<criterion> criteria;
+/* The last criterion that matches the point determines whether the point
+ * is included in the topo. If none matches, it is not included.
+ */
 
 class pointlist
 {
