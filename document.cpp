@@ -3,7 +3,7 @@
 /* document.cpp - main document class                 */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -24,6 +24,12 @@
 #include "document.h"
 using namespace std;
 
+void document::makepointlist(int n)
+{
+  if (pl.size()<n+1)
+    pl.resize(n+1);
+}
+
 void document::copytopopoints(int dst,int src)
 /* Uses the criteria in the destination. If the destination doesn't exist,
  * creates it, with no criteria. But if the source doesn't exist, it throws.
@@ -32,8 +38,7 @@ void document::copytopopoints(int dst,int src)
   ptlist::iterator i;
   if (dst==src || src<0 || src>=pl.size())
     throw unsetsource;
-  if (pl.size()<dst+1)
-    pl.resize(dst+1);
+  makepointlist(dst);
   pl[dst].clear();
   int j;
   bool include;
@@ -50,6 +55,7 @@ void document::copytopopoints(int dst,int src)
 
 int document::readpnezd(string fname,bool overwrite)
 {
+  makepointlist(0);
   return ::readpnezd(this,fname,overwrite);
 }
 
@@ -60,6 +66,7 @@ int document::writepnezd(string fname)
 
 int document::readpenzd(string fname,bool overwrite)
 {
+  makepointlist(0);
   return ::readpenzd(this,fname,overwrite);
 }
 

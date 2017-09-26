@@ -82,7 +82,7 @@ void indpark(string args)
   criterion crit1;
   PostScript ps;
   doc.offset=xyz(0,0,0);
-  doc.pl.resize(2);
+  doc.makepointlist(1);
   doc.pl[0].clear();
   setfoot(USSURVEY);
   set_length_unit(FOOT+DEC2);
@@ -201,8 +201,7 @@ void maketin_i(string args)
   int error=0;
   //criteria crit;
   criterion crit1;
-  if (doc.pl.size()<2)
-    doc.pl.resize(2);
+  doc.makepointlist(1);
   crit1.str="";
   crit1.istopo=true;
   doc.pl[1].crit.clear();

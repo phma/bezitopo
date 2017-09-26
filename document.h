@@ -3,7 +3,7 @@
 /* document.h - main document class                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -51,6 +51,7 @@ public:
   /* pointlists[0] is the points downloaded from the total station.
    * pointlists[1] and farther are used for surfaces.
    */
+  void makepointlist(int n);
   void copytopopoints(int dst,int src);
   int readpnezd(std::string fname,bool overwrite=false);
   int writepnezd(std::string fname);

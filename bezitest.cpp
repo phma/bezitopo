@@ -567,8 +567,8 @@ void testcopytopopoints()
 {
   //criteria crit;
   criterion crit1;
+  doc.makepointlist(1);
   doc.pl[0].clear();
-  doc.pl.resize(2);
   doc.copytopopoints(1,0);
   tassert(doc.pl[1].points.size()==0);
   doc.pl[0].addpoint(1,point(0,0,0,"eip"));
@@ -610,6 +610,7 @@ void testinvalidintersectionlozenge()
   int i,j,k,l,m,itype;
   char rightanswers[9][9][9][9];
   cout<<"Checking for invalid intersections (lozenge)";
+  doc.makepointlist(1);
   doc.pl[1].clear();
   lozenge(doc,7);
   for (j=1;j<=9;j++)
@@ -652,6 +653,7 @@ void testinvalidintersectionaster()
   char rightanswers[9][9][9][9];
   double shift;
   cout<<"Checking for invalid intersections (aster)";
+  doc.makepointlist(1);
   doc.pl[1].clear();
   aster(doc,9);
   for (j=1;j<=9;j++)
@@ -716,6 +718,7 @@ void testpointedg()
 void testmaketin123()
 {
   int i;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   aster(doc,1);
   i=0;
@@ -757,6 +760,7 @@ void testmaketin123()
 void testmaketindouble()
 {
   int i;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   aster(doc,100);
   for (i=1;i<101;i++)
@@ -779,6 +783,7 @@ void testmaketinaster()
 {
   double totallength;
   int i,edgerand;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   aster(doc,100);
   doc.pl[1].maketin(psoutput?"aster.ps":"",false);
@@ -802,6 +807,7 @@ void testmaketinbigaster()
 {
   double totallength;
   int i;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   aster(doc,5972);
   doc.pl[1].maketin(psoutput?"bigaster.ps":"",true);
@@ -825,6 +831,7 @@ void testmaketinstraightrow()
 {
   double totallength;
   int i;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   straightrow(doc,100);
   rotate(doc,30);
@@ -843,6 +850,7 @@ void testmaketinlongandthin()
 {
   double totallength;
   int i;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   longandthin(doc,100);
   rotate(doc,30);
@@ -858,6 +866,7 @@ void testmaketinlozenge()
 {
   double totallength;
   int i;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   lozenge(doc,100);
   rotate(doc,30);
@@ -873,6 +882,7 @@ void testmaketinring()
 {
   double totallength;
   int i;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   ring(doc,100);
   rotate(doc,30);
@@ -888,6 +898,7 @@ void testmaketinwheel()
 {
   double totallength;
   int i;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   wheelwindow(doc,100);
   rotate(doc,30);
@@ -903,6 +914,7 @@ void testmaketinellipse()
 {
   double totallength;
   int i;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   ellipse(doc,100);
   doc.pl[1].maketin(psoutput?"ellipse.ps":"");
@@ -919,8 +931,8 @@ void testbreak0()
   int rotation=DEG90,i;
   criterion crit1;
   PostScript ps;
+  doc.makepointlist(1);
   doc.pl[0].clear();
-  doc.pl.resize(2);
   doc.copytopopoints(1,0);
   tassert(doc.pl[1].points.size()==0);
   crit1.str="";
@@ -2113,6 +2125,7 @@ void testqindex()
   vector<qindex*> hilbertpath;
   xy offset(16,8),bone1(3,4),bone2(-3,-4),bone3(49,-64);
   PostScript ps;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   plist.clear();
   doc.pl[1].addpoint(1,point(0.3,0.3,0,""));
@@ -2272,6 +2285,7 @@ void testmakegrad()
   double avgerror,maxerror,corr;
   xy grad63,grad63half;
   PostScript ps;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   setsurface(HYPAR);
   aster(doc,100);
@@ -2302,6 +2316,7 @@ void testmakegrad()
 
 void testrasterdraw()
 {
+  doc.makepointlist(1);
   doc.pl[1].clear();
   setsurface(HYPAR);
   aster(doc,100);
@@ -2507,6 +2522,7 @@ void trianglecontours()
   {0xd3,0x06,0xed,0xc9,0x6e,0x91,0xf8,0xad,0xcc};
   string fname;
   xy tilt;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   regpolygon(doc,3);
   enlarge(doc,10);
@@ -2587,6 +2603,7 @@ void trianglecontours()
 void testgrad()
 {
   int j;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   setsurface(FLATSLOPE);
   regpolygon(doc,3);
@@ -2664,6 +2681,7 @@ void testderivs()
 void teststl()
 {
   stltriangle stltri;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   setsurface(HYPAR);
   aster(doc,3);
@@ -2681,6 +2699,7 @@ void testdirbound()
   int i;
   xyz beg(-3,4,0),end(3,-4,0);
   spiralarc s(beg,end);
+  doc.makepointlist(1);
   doc.pl[1].clear();
   aster(doc,100);
   bound=doc.pl[1].dirbound(degtobin(0));
@@ -3750,6 +3769,7 @@ void testcontour()
 {
   xyz offset;
   offset=xyz(-1000000,-1500000,0); // This offset made a spike in contours[7].
+  doc.makepointlist(1);
   doc.pl[1].clear();
   doc.changeOffset(xyz(0,0,0));
   setsurface(CIRPAR);
@@ -3802,6 +3822,7 @@ void testfoldcontour()
   ps.prolog();
   ps.startpage();
   ps.setscale(194,-143,221,182,-DEG60);
+  doc.makepointlist(1);
   doc.pl[1].clear();
   doc.pl[1].addpoint(1,point(-56.185204978391994,267.41484378968016,206.0516647193294,"BC")); // 956
   doc.pl[1].addpoint(2,point(13.2558628396946,217.37694386590738,208.42972517145031,"TP L")); // 1112
@@ -3872,6 +3893,7 @@ void testtracingstop()
   ps.prolog();
   ps.startpage();
   ps.setscale(144,51,147,54,0);
+  doc.makepointlist(1);
   doc.pl[1].clear();
   doc.pl[1].addpoint(1,point(146.51216865633614,53.34791973582469,205.6513304546609,"CENTER SW")); // 697
   doc.pl[1].addpoint(2,point(144.90511658618925,51.606410972832236,205.68529743459484,"SW")); // 681
@@ -3935,6 +3957,7 @@ void testzigzagcontour()
   ps.prolog();
   ps.startpage();
   ps.setscale(15111,14793,15346,15108,0);
+  doc.makepointlist(1);
   doc.pl[1].clear();
   doc.pl[1].addpoint(1,point(15345.127559055116,15064.447223774447,281.5871780543561,"VRS DEL")); // 1009
   doc.pl[1].addpoint(2,point(15202.258582677165,15107.048442976886,280.3079298958598,"OL PK397")); // 398
