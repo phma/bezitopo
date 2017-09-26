@@ -24,25 +24,6 @@
 #include "document.h"
 using namespace std;
 
-void document::copytopopoints(criteria crit)
-{
-  ptlist::iterator i;
-  if (pl.size()<2)
-    pl.resize(2);
-  pl[1].clear();
-  int j;
-  bool include;
-  for (i=pl[0].points.begin();i!=pl[0].points.end();i++)
-  {
-    include=false;
-    for (j=0;j<crit.size();j++)
-      if (crit[j].match(i->second,i->first))
-	include=crit[j].istopo;
-    if (include)
-      pl[1].addpoint(i->first,i->second);
-  }
-}
-
 void document::copytopopoints(int dst,int src)
 /* Uses the criteria in the destination. If the destination doesn't exist,
  * creates it, with no criteria. But if the source doesn't exist, it throws.

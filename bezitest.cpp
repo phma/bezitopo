@@ -565,10 +565,11 @@ void testquaternion()
 
 void testcopytopopoints()
 {
-  criteria crit;
+  //criteria crit;
   criterion crit1;
   doc.pl[0].clear();
-  doc.copytopopoints(crit);
+  doc.pl.resize(2);
+  doc.copytopopoints(1,0);
   tassert(doc.pl[1].points.size()==0);
   doc.pl[0].addpoint(1,point(0,0,0,"eip"));
   doc.pl[0].addpoint(1,point(25,0,0,"eip"));
@@ -585,13 +586,13 @@ void testcopytopopoints()
   doc.pl[0].addpoint(1,point(12.5,38,0,"topo"));
   crit1.str="topo";
   crit1.istopo=true;
-  crit.push_back(crit1);
-  doc.copytopopoints(crit);
+  doc.pl[1].crit.push_back(crit1);
+  doc.copytopopoints(1,0);
   tassert(doc.pl[1].points.size()==3);
-  crit[0].str="";
-  crit[0].lo=4;
-  crit[0].hi=7;
-  doc.copytopopoints(crit);
+  doc.pl[1].crit[0].str="";
+  doc.pl[1].crit[0].lo=4;
+  doc.pl[1].crit[0].hi=7;
+  doc.copytopopoints(1,0);
   tassert(doc.pl[1].points.size()==4);
 }
 
@@ -916,15 +917,15 @@ void testbreak0()
 {
   double leftedge,bottomedge,rightedge,topedge,conterval;
   int rotation=DEG90,i;
-  criteria crit;
   criterion crit1;
   PostScript ps;
   doc.pl[0].clear();
-  doc.copytopopoints(crit);
+  doc.pl.resize(2);
+  doc.copytopopoints(1,0);
   tassert(doc.pl[1].points.size()==0);
   crit1.str="";
   crit1.istopo=true;
-  crit.push_back(crit1);
+  doc.pl[1].crit.push_back(crit1);
   doc.pl[0].addpoint( 20,point(42.088,86.580,271.739,"TCR 30 CONCRETE"));
   doc.pl[0].addpoint( 22,point(45.789,86.320,271.322,"P11"));
   doc.pl[0].addpoint( 23,point(45.794,86.365,271.373,"TP11"));
@@ -1037,7 +1038,7 @@ void testbreak0()
   bottomedge=doc.pl[0].dirbound(-rotation+DEG90);
   rightedge=-doc.pl[0].dirbound(-rotation+DEG180);
   topedge=-doc.pl[0].dirbound(-rotation-DEG90);
-  doc.copytopopoints(crit);
+  doc.copytopopoints(1,0);
   doc.pl[1].maketin();
   // TODO: Insert breakline code here
   doc.pl[1].makegrad(0.);

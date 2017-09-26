@@ -79,10 +79,11 @@ void indpark(string args)
   int i,j,itype,npoints;
   double w,e,s,n;
   ofstream ofile("IndependencePark.bez");
-  criteria crit;
   criterion crit1;
   PostScript ps;
   doc.offset=xyz(0,0,0);
+  doc.pl.resize(2);
+  doc.pl[0].clear();
   setfoot(USSURVEY);
   set_length_unit(FOOT+DEC2);
   npoints=doc.readpnezd("topo0.asc");
@@ -95,11 +96,11 @@ void indpark(string args)
   }
   crit1.str="";
   crit1.istopo=true;
-  crit.push_back(crit1);
+  doc.pl[1].crit.push_back(crit1);
   crit1.str="FH";
   crit1.istopo=false; // The point labeled FH has a nonsensical elevation and must be removed.
-  crit.push_back(crit1);
-  doc.copytopopoints(crit);
+  doc.pl[1].crit.push_back(crit1);
+  doc.copytopopoints(1,0);
   //doc.changeOffset(xyz(443392,164096,208));
   doc.pl[1].maketin("bezitopo.ps");
   doc.pl[1].makegrad(0.15);
@@ -198,12 +199,15 @@ void writepoints(string args)
 void maketin_i(string args)
 {
   int error=0;
-  criteria crit;
+  //criteria crit;
   criterion crit1;
+  if (doc.pl.size()<2)
+    doc.pl.resize(2);
   crit1.str="";
   crit1.istopo=true;
-  crit.push_back(crit1); // will later make a point-selection command
-  doc.copytopopoints(crit);
+  doc.pl[1].crit.clear();
+  doc.pl[1].crit.push_back(crit1); // will later make a point-selection command
+  doc.copytopopoints(1,0);
   try
   {
     doc.pl[1].maketin("maketin.ps");
