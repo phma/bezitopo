@@ -36,7 +36,7 @@ void document::copytopopoints(criteria crit)
   {
     include=false;
     for (j=0;j<crit.size();j++)
-      if (i->second.note.find(crit[j].str)!=string::npos)
+      if (crit[j].match(i->second,i->first))
 	include=crit[j].istopo;
     if (include)
       pl[1].addpoint(i->first,i->second);

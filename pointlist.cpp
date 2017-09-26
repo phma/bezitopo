@@ -27,10 +27,23 @@
 
 using namespace std;
 
-//vector<pointlist> pointlists;
+criterion::criterion()
+{
+  lo=hi=0;
+  istopo=false;
+}
+
+bool criterion::match(point &pnt,int num)
+{
+  return (str.length()==0 || pnt.note.find(str)!=string::npos) &&
+    ((lo==0 && hi==0) || (num>=lo && num<=hi));
+}
 
 void pointlist::clear()
 {
+  contours.clear();
+  triangles.clear();
+  edges.clear();
   points.clear();
   revpoints.clear();
 }

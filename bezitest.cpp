@@ -588,6 +588,11 @@ void testcopytopopoints()
   crit.push_back(crit1);
   doc.copytopopoints(crit);
   tassert(doc.pl[1].points.size()==3);
+  crit[0].str="";
+  crit[0].lo=4;
+  crit[0].hi=7;
+  doc.copytopopoints(crit);
+  tassert(doc.pl[1].points.size()==4);
 }
 
 void checkimpos(int itype,xy a,xy c,xy b,xy d)

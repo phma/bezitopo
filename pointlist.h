@@ -34,6 +34,19 @@
 
 typedef std::map<int,point> ptlist;
 typedef std::map<point*,int> revptlist;
+
+class criterion
+{
+public:
+  criterion();
+  bool match(point &pnt,int num);
+  std::string str;
+  int lo,hi;
+  bool istopo;
+};
+
+typedef std::vector<criterion> criteria;
+
 class pointlist
 {
 public:
@@ -47,6 +60,7 @@ public:
    * when a vector is resized.
    */
   std::vector<polyspiral> contours;
+  criteria crit;
   std::vector<std::vector<int> > type0Breaklines;
   std::vector<std::vector<xy> > type1Breaklines;
   qindex qinx;
@@ -78,15 +92,5 @@ public:
   std::array<double,2> lohi();
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
 };
-
-struct criterion
-{
-  std::string str;
-  bool istopo;
-};
-
-typedef std::vector<criterion> criteria;
-
-//extern std::vector<pointlist> pointlists;
 
 #endif
