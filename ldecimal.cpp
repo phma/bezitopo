@@ -25,6 +25,7 @@
 #include <cstring>
 #include <cmath>
 #include <cassert>
+#include <clocale>
 #include "ldecimal.h"
 using namespace std;
 
@@ -37,10 +38,10 @@ string ldecimal(double x,double toler)
   string ret,s,m,antissa,exponent,saveLcNumeric;
   char buffer[32],fmt[8];
   assert(toler>=0);
-  pLcNumeric=getenv("LC_NUMERIC");
+  pLcNumeric=setlocale(LC_NUMERIC,nullptr);
   if (pLcNumeric)
     saveLcNumeric=pLcNumeric;
-  setenv("LC_NUMERIC","C",true);
+  setlocale(LC_NUMERIC,"C");
   if (toler>0 && x!=0)
   {
     iexp=floor(log10(fabs(x/toler))-1);
@@ -119,6 +120,6 @@ string ldecimal(double x,double toler)
   }
   else
     ret=buffer;
-  setenv("LC_NUMERIC",saveLcNumeric.c_str(),true);
+  setlocale(LC_NUMERIC,saveLcNumeric.c_str());
   return ret;
 }
