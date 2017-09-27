@@ -74,6 +74,11 @@
 #define PERHOUR 0x0036ee00
 #define MILLILITER 0x00282d00
 #define IN3 0x0028ec00
+// These are physical quantity codes.
+#define LENGTH 0x00010000
+#define MASS 0x00020000
+#define AREA 0x00270000
+#define VOLUME 0x00280000
 /* These convert as different units depending on the selected measuring system. */
 #define MASS1 0x0002fe00
 #define MASS2 0x0002fd00
@@ -137,9 +142,17 @@ class Measure
 public:
   Measure();
   void setFoot(int which);
+  void addUnit(int unit);
+  void removeUnit(int unit);
+  void clearUnits();
+  void setDefaultUnit(int quantity,double magnitude);
+  void setDefaultPrecision(int quantity,double magnitude);
+  int findUnit(int quantity,double magnitude);
+  int findUnit(int quantity);
 private:
   int whichFoot;
   std::map<int,double> conversionFactors;
   std::vector<int> availableUnits;
+  std::map<int,double> defaultUnit,defaultPrecision;
 };
 #endif

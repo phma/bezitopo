@@ -494,4 +494,81 @@ void Measure::setFoot(int which)
   }
   conversionFactors[CHAIN]=conversionFactors[FOOT]*66;
   conversionFactors[MILE]=conversionFactors[CHAIN]*80;
+  whichFoot=which;
+}
+
+void Measure::addUnit(int unit)
+{
+  int i;
+  bool found=false;
+  for (i=0;i<availableUnits.size();i++)
+    if (same_unit(availableUnits[i],unit))
+    {
+      availableUnits[i]=unit;
+      found=true;
+    }
+  if (!found)
+    availableUnits.push_back(unit);
+}
+
+void Measure::removeUnit(int unit)
+{
+  int i;
+  int found=-1;
+  for (i=0;i<availableUnits.size();i++)
+    if (same_unit(availableUnits[i],unit))
+      found=i;
+  if (found+1)
+  {
+    if (found+1<availableUnits.size())
+      swap(availableUnits[i],availableUnits.back());
+    availableUnits.resize(availableUnits.size()-1);
+  }
+}
+
+void Measure::clearUnits()
+{
+  availableUnits.clear();
+}
+
+void Measure::setDefaultUnit(int quantity,double magnitude)
+{
+  defaultUnit[quantity&0xffff0000]=magnitude;
+}
+
+void Measure::setDefaultPrecision(int quantity,double magnitude)
+{
+  defaultPrecision[quantity&0xffff0000]=magnitude;
+}
+
+int Measure::findUnit(int quantity,double magnitude)
+/* Finds the available unit of quantity closest to magnitude.
+ * E.g. if magnitude is 0.552, quantity is LENGTH, and available units
+ * are the meter with all prefixes, returns METER.
+ * If magnitude is 0.552, quantity is LENGTH, and available units
+ * include INCH, FOOT, ROD, and MILE, returns FOOT. But if you make
+ * the yard available, returns YARD, which is closer to 0.552 m.
+ * Ignores units of mass, time, and anything other than length.
+ */
+{
+  int i,closeUnit=0;
+  double unitRatio,maxUnitRatio=0;
+  for (i=0;i<availableUnits.size();i++)
+    if (compatible_units(availableUnits[i],quantity))
+    {
+      unitRatio=magnitude/conversionFactors[availableUnits[i]&0xffffff00];
+      if (unitRatio>1)
+        unitRatio=1/unitRatio;
+      if (unitRatio>maxUnitRatio)
+      {
+        maxUnitRatio=unitRatio;
+        closeUnit=availableUnits[i];
+      }
+    }
+  return closeUnit;
+}
+
+int Measure::findUnit(int quantity)
+{
+  return findUnit(quantity,defaultUnit[quantity&0xffff0000]);
 }

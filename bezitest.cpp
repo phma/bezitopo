@@ -2115,6 +2115,28 @@ void testtriangle()
   tassert(abs(elev-1)<1e-7);
 }
 
+void testmeasure()
+{
+  Measure meas;
+  double easting=443615.85705156205; // of point H, an EIR in Independence Park
+  meas.addUnit(KILOMETER);
+  meas.addUnit(METER);
+  meas.addUnit(MILLIMETER);
+  meas.addUnit(GRAM);
+  meas.addUnit(KILOGRAM);
+  meas.setDefaultUnit(LENGTH,0.552); // geometric mean of meter and foot
+  meas.setDefaultPrecision(LENGTH,1.746e-3); // g.m. of 1 mm and 0.01 ft
+  meas.setDefaultUnit(MASS,0.6735);
+  tassert(meas.findUnit(LENGTH)==METER);
+  tassert(meas.findUnit(MASS)==KILOGRAM);
+  meas.clearUnits();
+  meas.addUnit(FOOT);
+  meas.addUnit(CHAIN);
+  meas.addUnit(POUND);
+  tassert(meas.findUnit(LENGTH)==FOOT);
+  tassert(meas.findUnit(MASS)==POUND);
+}
+
 void testqindex()
 {
   qindex qinx;
@@ -5597,6 +5619,8 @@ int main(int argc, char *argv[])
     testin();
   if (shoulddo("triangle"))
     testtriangle();
+  if (shoulddo("measure"))
+    testmeasure();
   if (shoulddo("matrix"))
     testmatrix();
   if (shoulddo("quaternion"))
