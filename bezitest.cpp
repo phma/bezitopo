@@ -2129,12 +2129,14 @@ void testmeasure()
   meas.setDefaultUnit(MASS,0.6735);
   tassert(meas.findUnit(LENGTH)==METER);
   tassert(meas.findUnit(MASS)==KILOGRAM);
+  tassert(meas.findPrecision(LENGTH)==3);
   meas.clearUnits();
   meas.addUnit(FOOT);
   meas.addUnit(CHAIN);
   meas.addUnit(POUND);
   tassert(meas.findUnit(LENGTH)==FOOT);
   tassert(meas.findUnit(MASS)==POUND);
+  tassert(meas.findPrecision(LENGTH)==2);
 }
 
 void testqindex()

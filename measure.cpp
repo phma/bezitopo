@@ -572,3 +572,23 @@ int Measure::findUnit(int quantity)
 {
   return findUnit(quantity,defaultUnit[quantity&0xffff0000]);
 }
+
+int Measure::findPrecision(int unit,double magnitude)
+{
+  double factor;
+  int ret;
+  if ((unit&0xff00)==0)
+    unit=findUnit(unit);
+  factor=conversionFactors[unit];
+  if (factor<=0 || std::isnan(factor) || std::isinf(factor))
+    factor=1;
+  ret=rint(log10(factor/magnitude));
+  if (ret<0)
+    ret=0;
+  return ret;
+}
+
+int Measure::findPrecision(int unit)
+{
+  return findPrecision(unit,defaultPrecision[unit&0xffff0000]);
+}
