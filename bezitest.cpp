@@ -2118,6 +2118,7 @@ void testtriangle()
 void testmeasure()
 {
   Measure meas;
+  string measStr;
   double easting=443615.85705156205; // of point H, an EIR in Independence Park
   meas.addUnit(KILOMETER);
   meas.addUnit(METER);
@@ -2130,6 +2131,9 @@ void testmeasure()
   tassert(meas.findUnit(LENGTH)==METER);
   tassert(meas.findUnit(MASS)==KILOGRAM);
   tassert(meas.findPrecision(LENGTH)==3);
+  measStr=meas.formatMeasurement(easting,LENGTH);
+  cout<<"In meters, easting is "<<measStr<<endl;
+  meas.setFoot(INTERNATIONAL);
   meas.clearUnits();
   meas.addUnit(FOOT);
   meas.addUnit(CHAIN);
@@ -2137,6 +2141,11 @@ void testmeasure()
   tassert(meas.findUnit(LENGTH)==FOOT);
   tassert(meas.findUnit(MASS)==POUND);
   tassert(meas.findPrecision(LENGTH)==2);
+  measStr=meas.formatMeasurement(easting,LENGTH);
+  cout<<"In international feet, easting is "<<measStr<<endl;
+  meas.setFoot(USSURVEY);
+  measStr=meas.formatMeasurement(easting,LENGTH);
+  cout<<"In US survey feet, easting is "<<measStr<<endl;
 }
 
 void testqindex()

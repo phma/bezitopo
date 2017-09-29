@@ -149,6 +149,7 @@ public:
   void setDefaultPrecision(int quantity,double magnitude);
   int findUnit(int quantity,double magnitude=0);
   int findPrecision(int unit,double magnitude=0);
+  std::string formatMeasurement(double measurement,int unit,double unitMagnitude=0,double precisionMagnitude=0);
 private:
   int whichFoot;
   std::map<int,double> conversionFactors;

@@ -589,3 +589,29 @@ int Measure::findPrecision(int unit,double magnitude)
     ret=0;
   return ret;
 }
+
+string Measure::formatMeasurement(double measurement,int unit,double unitMagnitude,double precisionMagnitude)
+{
+  int prec,len;
+  double m;
+  vector<char> format,output;
+  if ((unit&0xffff)==0)
+    unit=findUnit(unit,unitMagnitude);
+  prec=findPrecision(unit,precisionMagnitude);
+  format.resize(8);
+  len=snprintf(&format[0],format.size(),"%%.%df",prec);
+  if (len+1>format.size())
+  {
+    format.resize(len+1);
+    len=snprintf(&format[0],format.size(),"%%.%df",prec);
+  }
+  m=measurement/conversionFactors[unit];
+  output.resize(8);
+  len=snprintf(&output[0],output.size(),&format[0],m);
+  if (len+1>output.size())
+  {
+    output.resize(len+1);
+    len=snprintf(&output[0],output.size(),&format[0],m);
+  }
+  return string(&output[0]);
+}
