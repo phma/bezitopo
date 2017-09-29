@@ -553,6 +553,8 @@ int Measure::findUnit(int quantity,double magnitude)
 {
   int i,closeUnit=0;
   double unitRatio,maxUnitRatio=0;
+  if (magnitude<=0)
+    magnitude=defaultUnit[quantity&0xffff0000];
   for (i=0;i<availableUnits.size();i++)
     if (compatible_units(availableUnits[i],quantity))
     {
@@ -568,17 +570,17 @@ int Measure::findUnit(int quantity,double magnitude)
   return closeUnit;
 }
 
-int Measure::findUnit(int quantity)
-{
-  return findUnit(quantity,defaultUnit[quantity&0xffff0000]);
-}
-
 int Measure::findPrecision(int unit,double magnitude)
+/* This returns a number of decimal places. If sexagesimal or binary places
+ * are needed, I'll do them later.
+ */
 {
   double factor;
   int ret;
   if ((unit&0xff00)==0)
     unit=findUnit(unit);
+  if (magnitude<=0)
+    magnitude=defaultPrecision[unit&0xffff0000];
   factor=conversionFactors[unit];
   if (factor<=0 || std::isnan(factor) || std::isinf(factor))
     factor=1;
@@ -586,9 +588,4 @@ int Measure::findPrecision(int unit,double magnitude)
   if (ret<0)
     ret=0;
   return ret;
-}
-
-int Measure::findPrecision(int unit)
-{
-  return findPrecision(unit,defaultPrecision[unit&0xffff0000]);
 }

@@ -147,10 +147,8 @@ public:
   void clearUnits();
   void setDefaultUnit(int quantity,double magnitude);
   void setDefaultPrecision(int quantity,double magnitude);
-  int findUnit(int quantity,double magnitude);
-  int findUnit(int quantity);
-  int findPrecision(int unit,double magnitude);
-  int findPrecision(int unit);
+  int findUnit(int quantity,double magnitude=0);
+  int findPrecision(int unit,double magnitude=0);
 private:
   int whichFoot;
   std::map<int,double> conversionFactors;
