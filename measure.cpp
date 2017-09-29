@@ -615,3 +615,10 @@ string Measure::formatMeasurement(double measurement,int unit,double unitMagnitu
   }
   return string(&output[0]);
 }
+
+string Measure::formatMeasurementUnit(double measurement,int unit,double unitMagnitude,double precisionMagnitude)
+{
+  if ((unit&0xffff)==0)
+    unit=findUnit(unit,unitMagnitude);
+  return formatMeasurement(measurement,unit,unitMagnitude,precisionMagnitude)+' '+symbol(unit);
+}

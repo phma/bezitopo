@@ -2131,8 +2131,9 @@ void testmeasure()
   tassert(meas.findUnit(LENGTH)==METER);
   tassert(meas.findUnit(MASS)==KILOGRAM);
   tassert(meas.findPrecision(LENGTH)==3);
-  measStr=meas.formatMeasurement(easting,LENGTH);
+  measStr=meas.formatMeasurementUnit(easting,LENGTH);
   cout<<"In meters, easting is "<<measStr<<endl;
+  tassert(measStr=="443615.857 m");
   meas.setFoot(INTERNATIONAL);
   meas.clearUnits();
   meas.addUnit(FOOT);
@@ -2141,11 +2142,13 @@ void testmeasure()
   tassert(meas.findUnit(LENGTH)==FOOT);
   tassert(meas.findUnit(MASS)==POUND);
   tassert(meas.findPrecision(LENGTH)==2);
-  measStr=meas.formatMeasurement(easting,LENGTH);
+  measStr=meas.formatMeasurementUnit(easting,LENGTH);
   cout<<"In international feet, easting is "<<measStr<<endl;
+  tassert(measStr=="1455432.60 ft");
   meas.setFoot(USSURVEY);
-  measStr=meas.formatMeasurement(easting,LENGTH);
+  measStr=meas.formatMeasurementUnit(easting,LENGTH);
   cout<<"In US survey feet, easting is "<<measStr<<endl;
+  tassert(measStr=="1455429.69 ft");
 }
 
 void testqindex()
