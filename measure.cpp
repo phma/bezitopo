@@ -471,6 +471,26 @@ std::string format_length_unit(double measurement)
   return format_meas_unit(measurement,length_unit);
 }
 
+void trim(string &str)
+{
+  size_t pos;
+  pos=str.find_first_not_of(' ');
+  if (pos<=str.length())
+    str.erase(0,pos);
+  pos=str.find_last_not_of(' ');
+  if (pos<=str.length())
+    str.erase(pos+1);
+}
+
+int parseSymbol(string unitStr)
+{
+  int i,ret=0;
+  for (i=0;i<nsymbols;i++)
+    if (unitStr==symbols[i].symb)
+      ret=symbols[i].unitp;
+  return ret;
+}
+
 Measure::Measure()
 {
   int i;
@@ -642,4 +662,31 @@ string Measure::formatMeasurementUnit(double measurement,int unit,double unitMag
   if ((unit&0xffff)==0)
     unit=findUnit(unit,unitMagnitude);
   return formatMeasurement(measurement,unit,unitMagnitude,precisionMagnitude)+' '+symbol(unit);
+}
+
+Measurement Measure::parseMeasurement(string measStr,int quantity)
+{
+  char *pLcNumeric;
+  string saveLcNumeric,unitStr;
+  double valueInUnit;
+  size_t endOfNumber;
+  Measurement ret;
+  pLcNumeric=setlocale(LC_NUMERIC,nullptr);
+  if (pLcNumeric)
+    saveLcNumeric=pLcNumeric;
+  if (!localized)
+    setlocale(LC_NUMERIC,"C");
+  valueInUnit=stod(measStr,&endOfNumber); // TODO later: handle 12+3/8 when needed
+  unitStr=measStr.substr(endOfNumber);
+  trim(unitStr);
+  if (unitStr.length())
+    ret.unit=parseSymbol(unitStr);
+  else
+    ret.unit=findUnit(quantity);
+  if (!localized)
+    setlocale(LC_NUMERIC,saveLcNumeric.c_str());
+  if (ret.unit==0)
+    throw badunits;
+  ret.magnitude=valueInUnit*conversionFactors[ret.unit];
+  return ret;
 }
