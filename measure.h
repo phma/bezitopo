@@ -137,6 +137,12 @@ double parse_length(std::string meas);
 std::string format_length(double measurement);
 std::string format_length_unit(double measurement);
 
+struct Measurement
+{
+  double magnitude; // always in a coherent SI unit regardless of what unit is
+  int unit;
+};
+
 class Measure
 {
 public:
@@ -145,6 +151,7 @@ public:
   void addUnit(int unit);
   void removeUnit(int unit);
   void clearUnits();
+  void localize(bool loc);
   void setDefaultUnit(int quantity,double magnitude);
   void setDefaultPrecision(int quantity,double magnitude);
   int findUnit(int quantity,double magnitude=0);
@@ -153,6 +160,7 @@ public:
   std::string formatMeasurementUnit(double measurement,int unit,double unitMagnitude=0,double precisionMagnitude=0);
 private:
   int whichFoot;
+  bool localized;
   std::map<int,double> conversionFactors;
   std::vector<int> availableUnits;
   std::map<int,double> defaultUnit,defaultPrecision;

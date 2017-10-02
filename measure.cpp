@@ -476,7 +476,8 @@ Measure::Measure()
   int i;
   for (i=0;i<sizeof(cfactors)/sizeof(cf);i++)
     conversionFactors[cfactors[i].unitp]=cfactors[i].factor;
-  whichFoot=0;
+  whichFoot=INTERNATIONAL;
+  localized=false;
 }
 
 void Measure::setFoot(int which)
@@ -529,6 +530,16 @@ void Measure::removeUnit(int unit)
 void Measure::clearUnits()
 {
   availableUnits.clear();
+}
+
+void Measure::localize(bool loc)
+/* If loc is true, and your locale says that commas are used as decimal points,
+ * it will convert measurements using commas and expect commas when parsing.
+ * When reading and writing data files, turn it off. Turn on only when dealing
+ * with the user.
+ */
+{
+  localized=loc;
 }
 
 void Measure::setDefaultUnit(int quantity,double magnitude)
@@ -594,10 +605,16 @@ string Measure::formatMeasurement(double measurement,int unit,double unitMagnitu
 {
   int prec,len;
   double m;
+  char *pLcNumeric;
+  string saveLcNumeric;
   vector<char> format,output;
   if ((unit&0xffff)==0)
     unit=findUnit(unit,unitMagnitude);
   prec=findPrecision(unit,precisionMagnitude);
+  pLcNumeric=setlocale(LC_NUMERIC,nullptr);
+  if (pLcNumeric)
+    saveLcNumeric=pLcNumeric;
+  setlocale(LC_NUMERIC,"C");
   format.resize(8);
   len=snprintf(&format[0],format.size(),"%%.%df",prec);
   if (len+1>format.size())
@@ -606,6 +623,8 @@ string Measure::formatMeasurement(double measurement,int unit,double unitMagnitu
     len=snprintf(&format[0],format.size(),"%%.%df",prec);
   }
   m=measurement/conversionFactors[unit];
+  if (localized)
+    setlocale(LC_NUMERIC,saveLcNumeric.c_str());
   output.resize(8);
   len=snprintf(&output[0],output.size(),&format[0],m);
   if (len+1>output.size())
@@ -613,6 +632,8 @@ string Measure::formatMeasurement(double measurement,int unit,double unitMagnitu
     output.resize(len+1);
     len=snprintf(&output[0],output.size(),&format[0],m);
   }
+  if (!localized)
+    setlocale(LC_NUMERIC,saveLcNumeric.c_str());
   return string(&output[0]);
 }
 
