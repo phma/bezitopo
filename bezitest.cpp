@@ -3339,7 +3339,9 @@ void testpnezd()
   doc.pl[1].clear();
   aster(doc,3);
   doc.copytopopoints(0,1);
-  set_length_unit(FOOT+DEC2);
+  doc.ms.clearUnits();
+  doc.ms.addUnit(FOOT);
+  //set_length_unit(FOOT+DEC2);
   doc.writepnezd("pnezd.csv");
   file.open("pnezd.csv",ios::in);
   getline(file,content);
@@ -3357,7 +3359,9 @@ void testpnezd()
   a=area3(doc.pl[0].points[1],doc.pl[0].points[2],doc.pl[0].points[3]);
   tassert(fabs(a+1.5034)<1e-3);
   cout<<a<<endl;
-  set_length_unit(METER+DEC3);
+  doc.ms.clearUnits();
+  doc.ms.addUnit(METER);
+  //set_length_unit(METER+DEC3);
   doc.writepnezd("pnezd.csv");
   file.open("pnezd.csv",ios::in);
   getline(file,content);

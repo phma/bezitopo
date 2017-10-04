@@ -164,9 +164,9 @@ int readpnezd(document *doc,string fname,bool overwrite)
 	if (zstr!="z" && zstr!="Elevation")
 	{
 	  p=atoi(pstr.c_str());
-	  n=parse_length(nstr.c_str());
-	  e=parse_length(estr.c_str());
-	  z=parse_length(zstr.c_str());
+	  n=doc->ms.parseMeasurement(nstr,LENGTH).magnitude;
+	  e=doc->ms.parseMeasurement(estr,LENGTH).magnitude;
+	  z=doc->ms.parseMeasurement(zstr,LENGTH).magnitude;
 	  doc->pl[0].addpoint(p,point(e,n,z,d),overwrite);
 	  npoints++;
 	}
@@ -204,9 +204,9 @@ int writepnezd(document *doc,string fname)
       z=i->second.elev();
       d=i->second.note;
       pstr=to_string(p);
-      nstr=ldecimal(from_coherent_length(n));
-      estr=ldecimal(from_coherent_length(e));
-      zstr=ldecimal(from_coherent_length(z));
+      nstr=ldecimal(doc->ms.fromCoherent(n,LENGTH));
+      estr=ldecimal(doc->ms.fromCoherent(e,LENGTH));
+      zstr=ldecimal(doc->ms.fromCoherent(z,LENGTH));
       words.clear();
       words.push_back(pstr);
       words.push_back(nstr);
@@ -252,9 +252,9 @@ int readpenzd(document *doc,string fname,bool overwrite)
 	if (zstr!="z" && zstr!="Elevation")
 	{
 	  p=atoi(pstr.c_str());
-	  n=parse_length(nstr.c_str());
-	  e=parse_length(estr.c_str());
-	  z=parse_length(zstr.c_str());
+	  n=doc->ms.parseMeasurement(nstr,LENGTH).magnitude;
+	  e=doc->ms.parseMeasurement(estr,LENGTH).magnitude;
+	  z=doc->ms.parseMeasurement(zstr,LENGTH).magnitude;
 	  doc->pl[0].addpoint(p,point(e,n,z,d),overwrite);
 	  npoints++;
 	}
@@ -292,9 +292,9 @@ int writepenzd(document *doc,string fname)
       z=i->second.elev();
       d=i->second.note;
       pstr=to_string(p);
-      nstr=ldecimal(from_coherent_length(n));
-      estr=ldecimal(from_coherent_length(e));
-      zstr=ldecimal(from_coherent_length(z));
+      nstr=ldecimal(doc->ms.fromCoherent(n,LENGTH));
+      estr=ldecimal(doc->ms.fromCoherent(e,LENGTH));
+      zstr=ldecimal(doc->ms.fromCoherent(z,LENGTH));
       words.clear();
       words.push_back(pstr);
       words.push_back(estr);

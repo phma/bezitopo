@@ -583,7 +583,7 @@ int Measure::findUnit(int quantity,double magnitude)
  */
 {
   int i,closeUnit=0;
-  double unitRatio,maxUnitRatio=0;
+  double unitRatio,maxUnitRatio=-1;
   if (magnitude<=0)
     magnitude=defaultUnit[quantity&0xffff0000];
   for (i=0;i<availableUnits.size();i++)
@@ -619,6 +619,20 @@ int Measure::findPrecision(int unit,double magnitude)
   if (ret<0)
     ret=0;
   return ret;
+}
+
+double Measure::toCoherent(double measurement,int unit,double unitMagnitude)
+{
+  if ((unit&0xffff)==0)
+    unit=findUnit(unit,unitMagnitude);
+  return measurement*conversionFactors[unit];
+}
+
+double Measure::fromCoherent(double measurement,int unit,double unitMagnitude)
+{
+  if ((unit&0xffff)==0)
+    unit=findUnit(unit,unitMagnitude);
+  return measurement/conversionFactors[unit];
 }
 
 string Measure::formatMeasurement(double measurement,int unit,double unitMagnitude,double precisionMagnitude)
