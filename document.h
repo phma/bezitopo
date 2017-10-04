@@ -38,6 +38,7 @@
 #include "pointlist.h"
 #include "layer.h"
 #include "objlist.h"
+#include "measure.h"
 #define unsetsource 9
 
 class document
@@ -51,6 +52,7 @@ public:
   /* pointlists[0] is the points downloaded from the total station.
    * pointlists[1] and farther are used for surfaces.
    */
+  Measure ms;
   void makepointlist(int n);
   void copytopopoints(int dst,int src);
   int readpnezd(std::string fname,bool overwrite=false);
