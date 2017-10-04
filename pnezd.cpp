@@ -135,7 +135,7 @@ string makecsvline(vector<string> words)
   return ret;
 }
 
-int readpnezd(document *doc,string fname,bool overwrite)
+int readpnezd(document *doc,string fname,Measure ms,bool overwrite)
 {
   ifstream infile;
   size_t size=0,pos1,pos2;
@@ -164,9 +164,9 @@ int readpnezd(document *doc,string fname,bool overwrite)
 	if (zstr!="z" && zstr!="Elevation")
 	{
 	  p=atoi(pstr.c_str());
-	  n=doc->ms.parseMeasurement(nstr,LENGTH).magnitude;
-	  e=doc->ms.parseMeasurement(estr,LENGTH).magnitude;
-	  z=doc->ms.parseMeasurement(zstr,LENGTH).magnitude;
+	  n=ms.parseMeasurement(nstr,LENGTH).magnitude;
+	  e=ms.parseMeasurement(estr,LENGTH).magnitude;
+	  z=ms.parseMeasurement(zstr,LENGTH).magnitude;
 	  doc->pl[0].addpoint(p,point(e,n,z,d),overwrite);
 	  npoints++;
 	}
@@ -182,7 +182,7 @@ int readpnezd(document *doc,string fname,bool overwrite)
   return npoints;
 }
 
-int writepnezd(document *doc,string fname)
+int writepnezd(document *doc,string fname,Measure ms)
 {
   ofstream outfile;
   size_t size=0,pos1,pos2;
@@ -204,9 +204,9 @@ int writepnezd(document *doc,string fname)
       z=i->second.elev();
       d=i->second.note;
       pstr=to_string(p);
-      nstr=ldecimal(doc->ms.fromCoherent(n,LENGTH));
-      estr=ldecimal(doc->ms.fromCoherent(e,LENGTH));
-      zstr=ldecimal(doc->ms.fromCoherent(z,LENGTH));
+      nstr=ldecimal(ms.fromCoherent(n,LENGTH));
+      estr=ldecimal(ms.fromCoherent(e,LENGTH));
+      zstr=ldecimal(ms.fromCoherent(z,LENGTH));
       words.clear();
       words.push_back(pstr);
       words.push_back(nstr);
@@ -223,7 +223,7 @@ int writepnezd(document *doc,string fname)
   return npoints;
 }
 
-int readpenzd(document *doc,string fname,bool overwrite)
+int readpenzd(document *doc,string fname,Measure ms,bool overwrite)
 {
   ifstream infile;
   size_t size=0,pos1,pos2;
@@ -252,9 +252,9 @@ int readpenzd(document *doc,string fname,bool overwrite)
 	if (zstr!="z" && zstr!="Elevation")
 	{
 	  p=atoi(pstr.c_str());
-	  n=doc->ms.parseMeasurement(nstr,LENGTH).magnitude;
-	  e=doc->ms.parseMeasurement(estr,LENGTH).magnitude;
-	  z=doc->ms.parseMeasurement(zstr,LENGTH).magnitude;
+	  n=ms.parseMeasurement(nstr,LENGTH).magnitude;
+	  e=ms.parseMeasurement(estr,LENGTH).magnitude;
+	  z=ms.parseMeasurement(zstr,LENGTH).magnitude;
 	  doc->pl[0].addpoint(p,point(e,n,z,d),overwrite);
 	  npoints++;
 	}
@@ -270,7 +270,7 @@ int readpenzd(document *doc,string fname,bool overwrite)
   return npoints;
 }
 
-int writepenzd(document *doc,string fname)
+int writepenzd(document *doc,string fname,Measure ms)
 {
   ofstream outfile;
   size_t size=0,pos1,pos2;
@@ -292,9 +292,9 @@ int writepenzd(document *doc,string fname)
       z=i->second.elev();
       d=i->second.note;
       pstr=to_string(p);
-      nstr=ldecimal(doc->ms.fromCoherent(n,LENGTH));
-      estr=ldecimal(doc->ms.fromCoherent(e,LENGTH));
-      zstr=ldecimal(doc->ms.fromCoherent(z,LENGTH));
+      nstr=ldecimal(ms.fromCoherent(n,LENGTH));
+      estr=ldecimal(ms.fromCoherent(e,LENGTH));
+      zstr=ldecimal(ms.fromCoherent(z,LENGTH));
       words.clear();
       words.push_back(pstr);
       words.push_back(estr);

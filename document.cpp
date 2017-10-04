@@ -55,24 +55,32 @@ void document::copytopopoints(int dst,int src)
 
 int document::readpnezd(string fname,bool overwrite)
 {
+  Measure mscopy=ms; // Make an unlocalized copy of ms so that the file
+  mscopy.localize(false); // will be read with periods for decimal points.
   makepointlist(0);
-  return ::readpnezd(this,fname,overwrite);
+  return ::readpnezd(this,fname,mscopy,overwrite);
 }
 
 int document::writepnezd(string fname)
 {
-  ::writepnezd(this,fname);
+  Measure mscopy=ms;
+  mscopy.localize(false);
+  ::writepnezd(this,fname,mscopy);
 }
 
 int document::readpenzd(string fname,bool overwrite)
 {
+  Measure mscopy=ms;
+  mscopy.localize(false);
   makepointlist(0);
-  return ::readpenzd(this,fname,overwrite);
+  return ::readpenzd(this,fname,mscopy,overwrite);
 }
 
 int document::writepenzd(string fname)
 {
-  ::writepenzd(this,fname);
+  Measure mscopy=ms;
+  mscopy.localize(false);
+  ::writepenzd(this,fname,mscopy);
 }
 
 void document::addobject(drawobj *obj)

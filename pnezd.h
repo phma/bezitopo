@@ -23,12 +23,13 @@
 
 #include <vector>
 #include <string>
+#include "measure.h"
 
 class document;
 
 std::vector<std::string> parsecsvline(std::string line);
 std::string makecsvline(std::vector<std::string> words);
-int readpnezd(document *doc,std::string fname,bool overwrite=false);
-int writepnezd(document *doc,std::string fname);
-int readpenzd(document *doc,std::string fname,bool overwrite=false);
-int writepenzd(document *doc,std::string fname);
+int readpnezd(document *doc,std::string fname,Measure ms,bool overwrite=false);
+int writepnezd(document *doc,std::string fname,Measure ms);
+int readpenzd(document *doc,std::string fname,Measure ms,bool overwrite=false);
+int writepenzd(document *doc,std::string fname,Measure ms);
