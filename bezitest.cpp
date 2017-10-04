@@ -3326,6 +3326,57 @@ void testcsvline()
   tassert(makecsvline(words)==line);
 }
 
+void testpnezd()
+{
+  double a;
+  ifstream file;
+  string content;
+  criterion crit1;
+  crit1.istopo=true;
+  doc.pl[0].crit.clear();
+  doc.pl[0].crit.push_back(crit1);
+  doc.pl[0].clear();
+  doc.pl[1].clear();
+  aster(doc,3);
+  doc.copytopopoints(0,1);
+  set_length_unit(FOOT+DEC2);
+  doc.writepnezd("pnezd.csv");
+  file.open("pnezd.csv",ios::in);
+  getline(file,content);
+  tassert(content.find("2.319")==4);
+  cout<<content<<endl;
+  getline(file,content);
+  tassert(content.find("2.714")==3);
+  cout<<content<<endl;
+  getline(file,content);
+  tassert(content.find(".4535")<40);
+  cout<<content<<endl;
+  file.close();
+  doc.pl[0].clear();
+  doc.readpnezd("pnezd.csv");
+  a=area3(doc.pl[0].points[1],doc.pl[0].points[2],doc.pl[0].points[3]);
+  tassert(fabs(a+1.5034)<1e-3);
+  cout<<a<<endl;
+  set_length_unit(METER+DEC3);
+  doc.writepnezd("pnezd.csv");
+  file.open("pnezd.csv",ios::in);
+  getline(file,content);
+  tassert(content.find(".7071")==4);
+  cout<<content<<endl;
+  getline(file,content);
+  tassert(content.find(".8273")==3);
+  cout<<content<<endl;
+  getline(file,content);
+  tassert(content.find(".1382")<40);
+  cout<<content<<endl;
+  file.close();
+  doc.pl[0].clear();
+  doc.readpnezd("pnezd.csv");
+  a=area3(doc.pl[0].points[1],doc.pl[0].points[2],doc.pl[0].points[3]);
+  tassert(fabs(a+1.5034)<1e-3);
+  cout<<a<<endl;
+}
+
 void testldecimal()
 {
   double d;
@@ -5725,6 +5776,8 @@ int main(int argc, char *argv[])
     testgrad();
   if (shoulddo("csvline"))
     testcsvline();
+  if (shoulddo("pnezd"))
+    testpnezd();
   if (shoulddo("ldecimal"))
     testldecimal();
   if (shoulddo("ellipsoid"))

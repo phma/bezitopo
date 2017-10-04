@@ -49,7 +49,7 @@ void document::copytopopoints(int dst,int src)
       if (pl[dst].crit[j].match(i->second,i->first))
 	include=pl[dst].crit[j].istopo;
     if (include)
-      pl[1].addpoint(i->first,i->second);
+      pl[dst].addpoint(i->first,i->second);
   }
 }
 
