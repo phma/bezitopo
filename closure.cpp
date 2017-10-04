@@ -29,6 +29,7 @@
 #include "point.h"
 #include "cogo.h"
 #include "angle.h"
+#include "bezitopo.h"
 using namespace std;
 vector<command> clcommands;
 xy startpoint,endpoint;
@@ -78,7 +79,6 @@ void closure_i(string args)
   size_t chpos;
   int bearing,unitp,i,cmd;
   double distance;
-  char *distcpy=NULL;
   string input,bearingstr,distancestr,cmdstr,argstr;
   bool validbearing;
   endpoint=startpoint=xy(0,0);
@@ -125,9 +125,7 @@ void closure_i(string args)
       {
 	validbearing=false;
       }
-      distcpy=(char *)realloc(distcpy,distancestr.length()+1);
-      strcpy(distcpy,distancestr.c_str());
-      distance=parse_length(distcpy);
+      distance=doc.ms.parseMeasurement(distancestr,LENGTH).magnitude;
     }
     if (cmd>=0)
       clcommands[cmd].fun(argstr);
@@ -153,5 +151,4 @@ void closure_i(string args)
   cout<<"Perimeter: "<<perimeter<<endl;
   cout<<"Area: "<<area<<endl;
   cout<<"Ratio of precision: 1:"<<perimeter/misclosure<<endl;
-  free(distcpy);
 }

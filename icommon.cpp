@@ -3,7 +3,7 @@
 /* icommon.cpp - common interactive routines          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -23,6 +23,8 @@
 #include <iostream>
 #include "icommon.h"
 #include "measure.h"
+#include "bezitopo.h"
+
 using namespace std;
 
 bool subcont;
@@ -65,11 +67,11 @@ void setfoot_i(string args)
 {
   args=trim(args);
   if (args=="int'l")
-    setfoot(INTERNATIONAL);
+    doc.ms.setFoot(INTERNATIONAL);
   else if (args=="US")
-    setfoot(USSURVEY);
+    doc.ms.setFoot(USSURVEY);
   else if (args=="Indian")
-    setfoot(INSURVEY);
+    doc.ms.setFoot(INSURVEY);
   else
     cout<<"I don't recognize that foot"<<endl;
 }
@@ -78,11 +80,23 @@ void setlengthunit_i(string args)
 {
   args=trim(args);
   if (args=="m")
-    set_length_unit(METER+DEC3);
+  {
+    doc.ms.setMetric();
+    doc.ms.setDefaultUnit(LENGTH,0.552); // geometric mean of meter and foot
+    doc.ms.setDefaultPrecision(LENGTH,1.746e-3); // g.m. of 1 mm and 0.01 ft
+  }
   else if (args=="ft")
-    set_length_unit(FOOT+DEC2);
+  {
+    doc.ms.setCustomary();
+    doc.ms.setDefaultUnit(LENGTH,0.552);
+    doc.ms.setDefaultPrecision(LENGTH,1.746e-3);
+  }
   else if (args=="ch")
-    set_length_unit(CHAIN+DEC2);
+  {
+    doc.ms.setCustomary();
+    doc.ms.setDefaultUnit(LENGTH,14.18);
+    doc.ms.setDefaultPrecision(LENGTH,0.1418);
+  }
   else
     cout<<"I don't recognize that length unit"<<endl;
 }
@@ -119,6 +133,7 @@ xy parsexy(string xystr)
   size_t pos;
   string xstr,ystr;
   xy ret;
+  Measurement xmeas,ymeas;
   int dummy;
   pos=xystr.find(',');
   if (pos==string::npos)
@@ -127,7 +142,9 @@ xy parsexy(string xystr)
   {
     xstr=xystr.substr(0,pos);
     ystr=xystr.substr(pos+1);
-    ret=xy(parse_length(xstr),parse_length(ystr));
+    xmeas=doc.ms.parseMeasurement(xstr,LENGTH);
+    ymeas=doc.ms.parseMeasurement(ystr,LENGTH);
+    ret=xy(xmeas.magnitude,ymeas.magnitude);
   }
   return ret;
 }

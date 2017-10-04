@@ -562,6 +562,22 @@ void Measure::localize(bool loc)
   localized=loc;
 }
 
+void Measure::setMetric()
+{
+  clearUnits();
+  addUnit(MILLIMETER);
+  addUnit(METER);
+  addUnit(KILOMETER);
+}
+
+void Measure::setCustomary()
+{
+  clearUnits();
+  addUnit(FOOT);
+  addUnit(CHAIN);
+  addUnit(MILE);
+}
+
 void Measure::setDefaultUnit(int quantity,double magnitude)
 {
   defaultUnit[quantity&0xffff0000]=magnitude;

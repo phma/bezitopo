@@ -152,6 +152,8 @@ public:
   void removeUnit(int unit);
   void clearUnits();
   void localize(bool loc);
+  void setMetric();
+  void setCustomary();
   void setDefaultUnit(int quantity,double magnitude);
   void setDefaultPrecision(int quantity,double magnitude);
   int findUnit(int quantity,double magnitude=0);

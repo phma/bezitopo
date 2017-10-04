@@ -3,7 +3,7 @@
 /* mkpoint.cpp - make new points                      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -81,8 +81,9 @@ void label_mk(string args)
 
 void outpnt(point pnt)
 {
-  cout<<format_length(pnt.east())<<','<<format_length(pnt.north())<<',';
-  cout<<format_length(pnt.elev())<<' '<<pnt.note;
+  cout<<doc.ms.formatMeasurement(pnt.east(),LENGTH)<<',';
+  cout<<doc.ms.formatMeasurement(pnt.north(),LENGTH)<<',';
+  cout<<doc.ms.formatMeasurement(pnt.elev(),LENGTH)<<' '<<pnt.note;
 }
 
 void listpoints(string args)

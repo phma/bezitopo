@@ -85,8 +85,7 @@ void indpark(string args)
   doc.makepointlist(1);
   doc.pl[0].clear();
   doc.ms.setFoot(USSURVEY);
-  doc.ms.clearUnits();
-  doc.ms.addUnit(FOOT);
+  doc.ms.setCustomary();
   doc.ms.setDefaultUnit(LENGTH,0.552); // geometric mean of meter and foot
   doc.ms.setDefaultPrecision(LENGTH,1.746e-3); // g.m. of 1 mm and 0.01 ft
   npoints=doc.readpnezd("topo0.asc");
@@ -429,6 +428,10 @@ int main(int argc, char *argv[])
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));
   doc.pl.resize(1);
+  doc.ms.setFoot(INTERNATIONAL);
+  doc.ms.setMetric();
+  doc.ms.setDefaultUnit(LENGTH,0.552); // geometric mean of meter and foot
+  doc.ms.setDefaultPrecision(LENGTH,1.746e-3); // g.m. of 1 mm and 0.01 ft
   cout<<"Bezitopo version "<<VERSION<<" © 2017 Pierre Abbat\n"
   <<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
   while (cont)
