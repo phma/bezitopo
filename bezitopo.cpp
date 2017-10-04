@@ -84,8 +84,11 @@ void indpark(string args)
   doc.offset=xyz(0,0,0);
   doc.makepointlist(1);
   doc.pl[0].clear();
-  setfoot(USSURVEY);
-  set_length_unit(FOOT+DEC2);
+  doc.ms.setFoot(USSURVEY);
+  doc.ms.clearUnits();
+  doc.ms.addUnit(FOOT);
+  doc.ms.setDefaultUnit(LENGTH,0.552); // geometric mean of meter and foot
+  doc.ms.setDefaultPrecision(LENGTH,1.746e-3); // g.m. of 1 mm and 0.01 ft
   npoints=doc.readpnezd("topo0.asc");
   if (npoints<0)
     npoints=doc.readpnezd("../topo0.asc");
