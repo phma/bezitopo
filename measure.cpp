@@ -706,7 +706,14 @@ Measurement Measure::parseMeasurement(string measStr,int quantity)
     saveLcNumeric=pLcNumeric;
   if (!localized)
     setlocale(LC_NUMERIC,"C");
-  valueInUnit=stod(measStr,&endOfNumber); // TODO later: handle 12+3/8 when needed
+  try
+  {
+    valueInUnit=stod(measStr,&endOfNumber); // TODO later: handle 12+3/8 when needed
+  }
+  catch (...)
+  {
+    throw badnumber;
+  }
   unitStr=measStr.substr(endOfNumber);
   trim(unitStr);
   if (unitStr.length())

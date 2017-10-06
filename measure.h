@@ -107,6 +107,7 @@
 #define same_unit(unitp1,unitp2) (((unitp1)&0xffffff00)==((unitp2)&0xffffff00))
 
 #define badunits 4
+#define badnumber 10
 // error thrown by conversion routine
 
 int is_exact(double measurement, unsigned int unitp,int is_toler);

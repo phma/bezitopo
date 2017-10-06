@@ -80,7 +80,7 @@ void closure_i(string args)
   int bearing,unitp,i,cmd;
   double distance;
   string input,bearingstr,distancestr,cmdstr,argstr;
-  bool validbearing;
+  bool validbearing,validdistance;
   endpoint=startpoint=xy(0,0);
   spstatus=0;
   clcommands.clear();
@@ -109,14 +109,14 @@ void closure_i(string args)
       if (clcommands[i].word==cmdstr)
 	cmd=i;
     chpos=input.find_last_of("0123456789");
-    if (chpos>0 && chpos!=string::npos)
+    if (cmd<0 && chpos>0 && chpos!=string::npos)
     {
       chpos=input.find_last_of(' ',chpos); // split the string at the last space before the last digit
       if (chpos>input.length())
 	chpos=input.length();
       bearingstr=input.substr(0,chpos);
       distancestr=input.substr(chpos);
-      validbearing=true;
+      validbearing=validdistance=true;
       try
       {
 	bearing=parsebearing(bearingstr,DEGREE);
@@ -125,13 +125,22 @@ void closure_i(string args)
       {
 	validbearing=false;
       }
-      distance=doc.ms.parseMeasurement(distancestr,LENGTH).magnitude;
+      try
+      {
+        distance=doc.ms.parseMeasurement(distancestr,LENGTH).magnitude;
+      }
+      catch(...)
+      {
+        validdistance=false;
+      }
     }
+    else
+      validbearing=validdistance=false;
     if (cmd>=0)
       clcommands[cmd].fun(argstr);
     else
     {
-      if (validbearing)
+      if (validbearing && validdistance)
       {
 	vector=cossin(bearing)*distance;
 	area+=area3(xy(0,0),displacement,displacement+vector);
@@ -142,7 +151,12 @@ void closure_i(string args)
 	  spstatus++;
       }
       else if (input.length())
-	cout<<"Could not parse \""<<bearingstr<<"\" as a bearing"<<endl;
+      {
+        if (!validbearing)
+          cout<<"Could not parse \""<<bearingstr<<"\" as a bearing"<<endl;
+        if (!validdistance)
+          cout<<"Could not parse \""<<distancestr<<"\" as a distance"<<endl;
+      }
     }
   }
   while (input.length());
