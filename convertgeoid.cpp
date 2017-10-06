@@ -435,7 +435,15 @@ void argpass2()
 	}
 	i+=j;
 	if (ll.valid()==2 && i<cmdline.size() && cmdline[i].optnum<0)
-	  radius=parse_length(cmdline[i++].nonopt);
+        {
+          try
+          {
+            radius=doc.ms.parseMeasurement(cmdline[i++].nonopt,LENGTH).magnitude;
+          }
+          catch (...)
+          {
+          }
+        }
 	if (radius>0 && radius<=1e7 && ll.lat>=-M_PI/2 && ll.lat<=M_PI/2)
 	{
 	  cout<<"Excerpt will be centered on "<<radtodeg(ll.lat)<<','<<radtodeg(ll.lon)<<" with radius "<<radius<<" m"<<endl;
@@ -494,9 +502,17 @@ void argpass2()
         if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
 	  i++;
-          bolTolerance=parse_length(cmdline[i].nonopt);
-          if (bolTolerance<sqrt(6)/65536) // about 37 µm
-            bolTolerance=sqrt(6)/65536; // sqrt(6) because a geoquad has six components
+          try
+          {
+            bolTolerance=doc.ms.parseMeasurement(cmdline[i].nonopt,LENGTH).magnitude;
+            if (bolTolerance<sqrt(6)/65536) // about 37 µm
+              bolTolerance=sqrt(6)/65536; // sqrt(6) because a geoquad has six components
+          }
+          catch (...)
+          {
+            cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a distance"<<endl;
+            commandError=true;
+          }
 	}
 	else
 	{
@@ -508,9 +524,17 @@ void argpass2()
         if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
 	  i++;
-          bolSubdivision=parse_length(cmdline[i].nonopt);
-          if (bolSubdivision<1)
-            bolSubdivision=1;
+          try
+          {
+            bolSubdivision=doc.ms.parseMeasurement(cmdline[i].nonopt,LENGTH).magnitude;
+            if (bolSubdivision<1)
+              bolSubdivision=1;
+          }
+          catch (...)
+          {
+            cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a distance"<<endl;
+            commandError=true;
+          }
 	}
 	else
 	{
@@ -556,9 +580,17 @@ void argpass2()
         if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
 	  i++;
-          bolSpacing=parse_length(cmdline[i].nonopt);
-          if (bolSpacing<1) // limit in interroquad
-            bolSpacing=1;
+          try
+          {
+            bolSpacing=doc.ms.parseMeasurement(cmdline[i].nonopt,LENGTH).magnitude;
+            if (bolSpacing<1) // limit in interroquad
+              bolSpacing=1;
+          }
+          catch (...)
+          {
+            cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a distance"<<endl;
+            commandError=true;
+          }
 	}
 	else
 	{
