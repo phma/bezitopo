@@ -568,6 +568,8 @@ void Measure::setMetric()
   addUnit(MILLIMETER);
   addUnit(METER);
   addUnit(KILOMETER);
+  addUnit(GRAM);
+  addUnit(KILOGRAM);
 }
 
 void Measure::setCustomary()
@@ -576,6 +578,7 @@ void Measure::setCustomary()
   addUnit(FOOT);
   addUnit(CHAIN);
   addUnit(MILE);
+  addUnit(POUND);
 }
 
 void Measure::setDefaultUnit(int quantity,double magnitude)
@@ -695,6 +698,14 @@ string Measure::formatMeasurementUnit(double measurement,int unit,double unitMag
 }
 
 Measurement Measure::parseMeasurement(string measStr,int quantity)
+/* quantity is a code for physical quantity (e.g. LENGTH) or 0, which means
+ * accept any unit. If quantity is nonzero and no unit symbol is supplied,
+ * it assumes whatever available unit of that quantity is closest to that
+ * quantity's magnitude (see setDefaultUnit). If quantity is zero, a unit
+ * symbol must be supplied. If quantity is 0 and there is no unit symbol, or
+ * quantity is nonzero and the unit symbol doesn't match it, throws badunits.
+ * If the number is missing, throws badnumber.
+ */
 {
   char *pLcNumeric;
   string saveLcNumeric,unitStr;
@@ -722,7 +733,7 @@ Measurement Measure::parseMeasurement(string measStr,int quantity)
     ret.unit=findUnit(quantity);
   if (!localized)
     setlocale(LC_NUMERIC,saveLcNumeric.c_str());
-  if (ret.unit==0)
+  if (ret.unit==0 || (quantity>0 && !compatible_units(ret.unit,quantity)))
     throw badunits;
   ret.magnitude=valueInUnit*conversionFactors[ret.unit];
   return ret;
