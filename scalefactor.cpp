@@ -3,7 +3,7 @@
 /* scalefactor.cpp - elevation and grid scale factors */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016 Pierre Abbat.
+/* Copyright 2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -62,9 +62,9 @@ void scalefactor_i(string args)
 	  if (elevstr.length())
 	  {
 	    elevation=parse_length(elevstr);
-	    cout<<"Geoid is "<<format_length_unit(separation)<<" above ellipsoid"<<endl;
+	    cout<<"Geoid is "<<doc.ms.formatMeasurementUnit(separation,LENGTH)<<" above ellipsoid"<<endl;
 	    radius=GRS80.radiusAtLatitude(ll,DEG45);
-	    cout<<"Average radius of curvature is "<<format_length_unit(radius)<<endl;
+	    cout<<"Average radius of curvature is "<<doc.ms.formatMeasurementUnit(radius,LENGTH)<<endl;
 	    elevfactor=radius/(radius+elevation+separation);
 	    cout<<"Elevation factor is "<<ldecimal(elevfactor)<<endl;
 	  }

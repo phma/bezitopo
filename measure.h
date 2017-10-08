@@ -152,8 +152,6 @@ double from_coherent_length(double measurement);
 double to_coherent_length(double measurement);
 double parse_length(const char *meas);
 double parse_length(std::string meas);
-std::string format_length(double measurement);
-std::string format_length_unit(double measurement);
 
 struct Measurement
 {
