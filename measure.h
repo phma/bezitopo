@@ -103,12 +103,29 @@
 #define USSURVEY 1
 #define INSURVEY 2
 
-#define compatible_units(unitp1,unitp2) (((unitp1)&0xffff0000)==((unitp2)&0xffff0000))
-#define same_unit(unitp1,unitp2) (((unitp1)&0xffffff00)==((unitp2)&0xffffff00))
-
 #define badunits 4
 #define badnumber 10
 // error thrown by conversion routine
+
+inline int physicalQuantity(int unitp)
+{
+  return unitp&0xffff0000;
+}
+
+inline int physicalUnit(int unitp)
+{
+  return unitp&0xffffff00;
+}
+
+inline bool compatibleUnits(int unitp1,int unitp2)
+{
+  return physicalQuantity(unitp1)==physicalQuantity(unitp2);
+}
+
+inline bool sameUnit(int unitp1,int unitp2)
+{
+  return physicalUnit(unitp1)==physicalUnit(unitp2);
+}
 
 int is_exact(double measurement, unsigned int unitp,int is_toler);
 /* Checks whether the given measurement is exact in that unit.

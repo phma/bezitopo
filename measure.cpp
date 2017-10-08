@@ -132,14 +132,14 @@ int is_int(double a)
 double cfactor(int unitp)
 {int i;
  for (i=0;i<nunits;i++)
-     if (same_unit(unitp,cfactors[i].unitp))
+     if (sameUnit(unitp,cfactors[i].unitp))
         return cfactors[i].factor;
  //fprintf(stdout,"Conversion factor for %x missing!\n",unitp);
  return NAN;
  }
 
 void set_length_unit(int unitp)
-{if (compatible_units(unitp,METER) && cfactor(unitp)>0)
+{if (compatibleUnits(unitp,METER) && cfactor(unitp)>0)
     {length_unit=unitp;
      length_factor=cfactor(unitp);
      }
@@ -148,7 +148,7 @@ void set_length_unit(int unitp)
 char *symbol(int unitp)
 {int i;
  for (i=0;i<nsymbols;i++)
-     if (same_unit(unitp,symbols[i].unitp))
+     if (sameUnit(unitp,symbols[i].unitp))
         return symbols[i].symb;
  return "unk";
  }
@@ -523,7 +523,7 @@ void Measure::addUnit(int unit)
   int i;
   bool found=false;
   for (i=0;i<availableUnits.size();i++)
-    if (same_unit(availableUnits[i],unit))
+    if (sameUnit(availableUnits[i],unit))
     {
       availableUnits[i]=unit;
       found=true;
@@ -537,7 +537,7 @@ void Measure::removeUnit(int unit)
   int i;
   int found=-1;
   for (i=0;i<availableUnits.size();i++)
-    if (same_unit(availableUnits[i],unit))
+    if (sameUnit(availableUnits[i],unit))
       found=i;
   if (found+1)
   {
@@ -606,7 +606,7 @@ int Measure::findUnit(int quantity,double magnitude)
   if (magnitude<=0)
     magnitude=defaultUnit[quantity&0xffff0000];
   for (i=0;i<availableUnits.size();i++)
-    if (compatible_units(availableUnits[i],quantity))
+    if (compatibleUnits(availableUnits[i],quantity))
     {
       unitRatio=magnitude/conversionFactors[availableUnits[i]&0xffffff00];
       if (unitRatio>1)
@@ -733,7 +733,7 @@ Measurement Measure::parseMeasurement(string measStr,int quantity)
     ret.unit=findUnit(quantity);
   if (!localized)
     setlocale(LC_NUMERIC,saveLcNumeric.c_str());
-  if (ret.unit==0 || (quantity>0 && !compatible_units(ret.unit,quantity)))
+  if (ret.unit==0 || (quantity>0 && !compatibleUnits(ret.unit,quantity)))
     throw badunits;
   ret.magnitude=valueInUnit*conversionFactors[ret.unit];
   return ret;

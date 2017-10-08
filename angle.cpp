@@ -207,7 +207,7 @@ string radtoangle(double angle,int unitp)
   string ret,unitsign;
   char digit[8];
   int i,base,sign,dig;
-  if (!compatible_units(unitp,ANGLE))
+  if (!compatibleUnits(unitp,ANGLE))
     throw badunits;
   base=unitp&0xf0;
   switch (base)
