@@ -150,8 +150,6 @@ double from_coherent(double measurement,int unitp);
 double to_coherent(double measurement,int unitp);
 double from_coherent_length(double measurement);
 double to_coherent_length(double measurement);
-double parse_length(const char *meas);
-double parse_length(std::string meas);
 
 struct Measurement
 {

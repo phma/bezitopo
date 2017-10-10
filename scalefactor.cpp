@@ -61,12 +61,19 @@ void scalefactor_i(string args)
 	  getline(cin,elevstr);
 	  if (elevstr.length())
 	  {
-	    elevation=parse_length(elevstr);
-	    cout<<"Geoid is "<<doc.ms.formatMeasurementUnit(separation,LENGTH)<<" above ellipsoid"<<endl;
-	    radius=GRS80.radiusAtLatitude(ll,DEG45);
-	    cout<<"Average radius of curvature is "<<doc.ms.formatMeasurementUnit(radius,LENGTH)<<endl;
-	    elevfactor=radius/(radius+elevation+separation);
-	    cout<<"Elevation factor is "<<ldecimal(elevfactor)<<endl;
+            try
+            {
+              elevation=doc.ms.parseMeasurement(elevstr,LENGTH).magnitude;
+              cout<<"Geoid is "<<doc.ms.formatMeasurementUnit(separation,LENGTH)<<" above ellipsoid"<<endl;
+              radius=GRS80.radiusAtLatitude(ll,DEG45);
+              cout<<"Average radius of curvature is "<<doc.ms.formatMeasurementUnit(radius,LENGTH)<<endl;
+              elevfactor=radius/(radius+elevation+separation);
+              cout<<"Elevation factor is "<<ldecimal(elevfactor)<<endl;
+            }
+            catch (int e)
+            {
+              cerr<<"Elevation should be a length"<<endl;
+            }
 	  }
 	  else
 	    subcont=false;

@@ -291,14 +291,29 @@ void rasterdraw_i(string args)
 void contourdraw_i(string args)
 {
   string contervalstr;
-  double conterval;
+  double conterval=0;
   double w,e,s,n;
   int i,j;
   PostScript ps;
   contervalstr=firstarg(args);
-  conterval=parse_length(contervalstr);
+  try
+  {
+    conterval=doc.ms.parseMeasurement(contervalstr,LENGTH).magnitude;
+  }
+  catch (int e)
+  {
+    cerr<<"\""<<contervalstr<<"\": ";
+    if (e==badunits)
+      cerr<<"unit symbol is not a length unit";
+    else if (e==badnumber)
+      cerr<<"number is missing";
+    else
+      cerr<<"an error happened";
+    cerr<<endl;
+    conterval=NAN;
+  }
   if (conterval>5e-6 && conterval<1e5)
-    if (doc.pl[1].edges.size())
+    if (doc.pl.size()>1 && doc.pl[1].edges.size())
     {
       doc.pl[1].findcriticalpts();
       doc.pl[1].addperimeter();
@@ -342,7 +357,7 @@ void contourdraw_i(string args)
     }
     else
       cout<<"No TIN present. Please make a TIN first."<<endl;
-  else
+  else if (std::isfinite(conterval))
     cout<<"Contour interval should be between 5 µm and 10 km"<<endl;
 }
 

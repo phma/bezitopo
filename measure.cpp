@@ -438,29 +438,6 @@ double parse_meas(char *meas,int unitp,int *found_unit)
  return (intpart+num/denom)*factor;
  }
 
-double parse_length(const char *meas)
-{int found_unit;
- double num;
- char *meascpy;
- meascpy=(char *)malloc(strlen(meas)+1);
- strcpy(meascpy,meas);
- num=parse_meas(meascpy,length_unit,&found_unit);
- free(meascpy);
- return num;
- }
-
-double parse_length(string meas)
-{
-  int found_unit;
-  double num;
-  char *meascpy;
-  meascpy=(char *)malloc(meas.length()+1);
-  strcpy(meascpy,meas.c_str());
-  num=parse_meas(meascpy,length_unit,&found_unit);
-  free(meascpy);
-  return num;
-}
-
 void trim(string &str)
 {
   size_t pos;
