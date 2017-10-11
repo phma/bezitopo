@@ -130,15 +130,6 @@ inline bool sameUnit(int unitp1,int unitp2)
   return physicalUnit(unitp1)==physicalUnit(unitp2);
 }
 
-int is_exact(double measurement, unsigned int unitp,int is_toler);
-/* Checks whether the given measurement is exact in that unit.
-   If the measurement is a tolerance and is divisible by 127, returns false;
-   this means that a tolerance in inches is being checked in millimeters. */
-//char *format_meas(double measurement, unsigned int unitp);
-//char *format_meas_unit(double measurement, unsigned int unitp);
-//double parse_meas(char *meas, int unitp,int *found_unit);
-/* Given a string representing a measurement, in the unit unitp unless specified otherwise,
-   returns its value in the program's internal unit. */
 double precision(int unitp);
 
 struct Measurement
