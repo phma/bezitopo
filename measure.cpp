@@ -38,6 +38,7 @@
 #include <cstdlib>
 #include <cctype>
 #include "measure.h"
+#include "angle.h"
 using namespace std;
 
 struct cf
@@ -48,16 +49,18 @@ struct cf
 
 cf cfactors[]=
 {
-  FOOT,		0.3048006096012192,	// ft (any of three)
-  CHAIN,	20.11684023368046736,	// ch (any of three)
-  MILE,		1609.3472186944373889,	// mi (any of three)
-  INTFOOT,	0.3048,			// 
-  INTCHAIN,	20.1168,		//
+  FOOT,		0.3048,			// ft (any of three)
+  CHAIN,	20.1168,		// ch (any of three)
+  MILE,		1609.344,		// mi (any of three)
   0,		1,			// unknown unit
   MILLIMETER,	0.001,			// mm
   MICROMETER,	0.000001,		// μm
   KILOMETER,	1000,			// km
   METER,	1,			// m
+  SQUAREMETER,	1,			// m²
+  SQUAREFOOT,	0.09290304,		// ft²
+  HECTARE,	10000,			// ha
+  ACRE,		4046.8564224,		// ac
   GRAM,		0.001,			// g
   KILOGRAM,	1.0,			// kg
   POUND,	0.45359237,		// lb
@@ -104,6 +107,10 @@ symbol symbols[]=
   FOOT,		"ft",
   FOOT,		"'",
   METER,	"m",
+  SQUAREMETER,	"m²",
+  SQUAREFOOT,	"ft²",
+  HECTARE,	"ha",
+  ACRE,		"ac",
   GRAM,		"g",
   KILOGRAM,	"kg",
   POUND,	"lb",
@@ -438,6 +445,8 @@ void Measure::setFoot(int which)
   }
   conversionFactors[CHAIN]=conversionFactors[FOOT]*66;
   conversionFactors[MILE]=conversionFactors[CHAIN]*80;
+  conversionFactors[SQUAREFOOT]=sqr(conversionFactors[FOOT]);
+  conversionFactors[ACRE]=conversionFactors[SQUAREFOOT]*66*660;
   whichFoot=which;
 }
 
@@ -491,6 +500,8 @@ void Measure::setMetric()
   addUnit(MILLIMETER);
   addUnit(METER);
   addUnit(KILOMETER);
+  addUnit(SQUAREMETER);
+  addUnit(HECTARE);
   addUnit(GRAM);
   addUnit(KILOGRAM);
 }
@@ -501,6 +512,8 @@ void Measure::setCustomary()
   addUnit(FOOT);
   addUnit(CHAIN);
   addUnit(MILE);
+  addUnit(SQUAREFOOT);
+  addUnit(ACRE);
   addUnit(POUND);
 }
 
