@@ -131,25 +131,12 @@ int is_exact(double measurement, unsigned int unitp,int is_toler);
 /* Checks whether the given measurement is exact in that unit.
    If the measurement is a tolerance and is divisible by 127, returns false;
    this means that a tolerance in inches is being checked in millimeters. */
-char *format_meas(double measurement, unsigned int unitp);
-char *format_meas_unit(double measurement, unsigned int unitp);
-double parse_meas(char *meas, int unitp,int *found_unit);
+//char *format_meas(double measurement, unsigned int unitp);
+//char *format_meas_unit(double measurement, unsigned int unitp);
+//double parse_meas(char *meas, int unitp,int *found_unit);
 /* Given a string representing a measurement, in the unit unitp unless specified otherwise,
    returns its value in the program's internal unit. */
-char *trim(char *str);
-/* Removes spaces from both ends of a string in place. */
-void setfoot(int f);
-/* Switches between international and survey feet. */
-void set_length_unit(int unitp);
 double precision(int unitp);
-/* Converts measurements to and from coherent SI units (internal units)
- * without formatting to a precision. Used when writing coordinate files
- * that may be in feet or meters.
- */
-double from_coherent(double measurement,int unitp);
-double to_coherent(double measurement,int unitp);
-double from_coherent_length(double measurement);
-double to_coherent_length(double measurement);
 
 struct Measurement
 {

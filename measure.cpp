@@ -138,13 +138,6 @@ double cfactor(int unitp)
  return NAN;
  }
 
-void set_length_unit(int unitp)
-{if (compatibleUnits(unitp,METER) && cfactor(unitp)>0)
-    {length_unit=unitp;
-     length_factor=cfactor(unitp);
-     }
- }
-
 char *symbol(int unitp)
 {int i;
  for (i=0;i<nsymbols;i++)
@@ -263,43 +256,6 @@ int moreprecise(int unitp1,int unitp2)
  else
     return unitp2;
  }
-
-void setfoot(int f)
-{
-  switch (f)
-  {
-    case (INTERNATIONAL):
-      cfactors[0].factor=0.3048;
-      break;
-    case (USSURVEY):
-      cfactors[0].factor=12e2/3937;
-      break;
-    case (INSURVEY):
-      cfactors[0].factor=0.3047996;
-  }
-  cfactors[1].factor=cfactors[0].factor*66;
-  cfactors[2].factor=cfactors[1].factor*80;
-}
-
-double from_coherent(double measurement,int unitp)
-{
-  return measurement/cfactor(unitp);
-}
-
-double to_coherent(double measurement,int unitp)
-{
-  return measurement*cfactor(unitp);
-}
-
-double from_coherent_length(double measurement)
-{
-  return from_coherent(measurement,length_unit);
-}
-
-double to_coherent_length(double measurement)
-{
-  return to_coherent(measurement,length_unit);
-}
 
 char *format_meas(double measurement, unsigned int unitp)
 {static char output[80],format[80];

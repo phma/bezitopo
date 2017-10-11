@@ -161,8 +161,8 @@ void closure_i(string args)
   }
   while (input.length());
   misclosure=(startpoint+displacement-endpoint).length();
-  cout<<"Misclosure: "<<format_meas_unit(misclosure,METER+DEC3)<<endl;
-  cout<<"Perimeter: "<<perimeter<<endl;
-  cout<<"Area: "<<area<<endl;
+  cout<<"Misclosure: "<<doc.ms.formatMeasurementUnit(misclosure,LENGTH)<<endl;
+  cout<<"Perimeter: "<<doc.ms.formatMeasurementUnit(perimeter,LENGTH)<<endl;
+  cout<<"Area: "<<doc.ms.formatMeasurementUnit(area,AREA)<<endl;
   cout<<"Ratio of precision: 1:"<<perimeter/misclosure<<endl;
 }
