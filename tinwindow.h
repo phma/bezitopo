@@ -88,6 +88,7 @@ public slots:
 private:
   TinCanvas *canvas;
   QToolBar *toolbar;
+  QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu;
   int preZoomStep;
   std::array<ZoomButton *,6> zoomButtons;
   QAction *meterAction;

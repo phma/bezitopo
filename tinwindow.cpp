@@ -340,31 +340,44 @@ TinWindow::~TinWindow()
 void TinWindow::makeActions()
 {
   int i;
+  fileMenu=menuBar()->addMenu(tr("&File"));
+  editMenu=menuBar()->addMenu(tr("&Edit"));
+  viewMenu=menuBar()->addMenu(tr("&View"));
+  unitsMenu=menuBar()->addMenu(tr("&Units"));
   zoomButtons[0]=new ZoomButton(this,-10);
   zoomButtons[0]->setIcon(QIcon(":/tenth.png"));
+  zoomButtons[0]->setText(tr("Zoom out 10"));
   connect(zoomButtons[0],SIGNAL(triggered(bool)),canvas,SLOT(zoomm10()));
   zoomButtons[1]=new ZoomButton(this,-3);
   zoomButtons[1]->setIcon(QIcon(":/half.png"));
+  zoomButtons[1]->setText(tr("Zoom out 2"));
   connect(zoomButtons[1],SIGNAL(triggered(bool)),canvas,SLOT(zoomm3()));
   zoomButtons[2]=new ZoomButton(this,-1);
   zoomButtons[2]->setIcon(QIcon(":/four-fifths.png"));
+  zoomButtons[2]->setText(tr("Zoom out"));
   connect(zoomButtons[2],SIGNAL(triggered(bool)),canvas,SLOT(zoomm1()));
   zoomButtons[3]=new ZoomButton(this,1);
   zoomButtons[3]->setIcon(QIcon(":/five-fourths.png"));
+  zoomButtons[3]->setText(tr("Zoom in"));
   connect(zoomButtons[3],SIGNAL(triggered(bool)),canvas,SLOT(zoomp1()));
   zoomButtons[4]=new ZoomButton(this,3);
   zoomButtons[4]->setIcon(QIcon(":/two.png"));
+  zoomButtons[4]->setText(tr("Zoom in 2"));
   connect(zoomButtons[4],SIGNAL(triggered(bool)),canvas,SLOT(zoomp3()));
   zoomButtons[5]=new ZoomButton(this,10);
   zoomButtons[5]->setIcon(QIcon(":/ten.png"));
+  zoomButtons[5]->setText(tr("Zoom in 10"));
   connect(zoomButtons[5],SIGNAL(triggered(bool)),canvas,SLOT(zoomp10()));
   for (i=0;i<6;i++)
   {
     toolbar->addAction(zoomButtons[i]);
+    viewMenu->addAction(zoomButtons[i]);
   }
   meterAction=new QAction(this);
   meterAction->setIcon(QIcon(":/meter.png"));
+  meterAction->setText(tr("Metric"));
   toolbar->addAction(meterAction);
+  unitsMenu->addAction(meterAction);
 }
 
 void TinWindow::unmakeActions()
@@ -373,10 +386,12 @@ void TinWindow::unmakeActions()
   for (i=0;i<6;i++)
   {
     toolbar->removeAction(zoomButtons[i]);
+    viewMenu->removeAction(zoomButtons[i]);
     delete zoomButtons[i];
     zoomButtons[i]=nullptr;
   }
   toolbar->removeAction(meterAction);
+  unitsMenu->removeAction(meterAction);
   meterAction=nullptr;
 }
 
