@@ -40,7 +40,8 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   circlePen[0]=QPen(Qt::red);
   circlePen[1]=QPen(Qt::darkGreen);
   circlePen[2]=QPen(Qt::blue);
-  doc.pl.resize(2);
+  plnum=-1;
+  /*doc.pl.resize(2);
   plnum=1;
   aster(doc,100);
   doc.pl[1].maketin("",false);
@@ -49,7 +50,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   doc.pl[1].setgradient();
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
-  doc.pl[1].addperimeter();
+  doc.pl[1].addperimeter();*/
   //for (i=0;i<doc.pl[1].edges.size();i++)
     //doc.pl[1].edges[i].dump(&doc.pl[1]);
   show();
@@ -190,28 +191,31 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   segment seg;
   painter.setBrush(brush);
   painter.setRenderHint(QPainter::Antialiasing,true);
-  if (doc.pl[plnum].triangles.size())
-    for (i=0;plnum>=0 && i<doc.pl[plnum].edges.size();i++)
-    {
-      seg=doc.pl[plnum].edges[i].getsegment();
-      if (doc.pl[plnum].edges[i].delaunay())
-        if (doc.pl[plnum].edges[i].broken&1)
-          painter.setPen(breakEdgePen);
-        else
-          painter.setPen(normalEdgePen);
-      else
-        painter.setPen(flipEdgePen);
-      painter.drawLine(worldToWindow(seg.getstart()),worldToWindow(seg.getend()));
-    }
-  else
-    for (j=doc.pl[plnum].points.begin();j!=doc.pl[plnum].points.end();++j)
-      for (i=0;i<3;i++)
+  if (plnum<doc.pl.size() && plnum>=0)
+    if (doc.pl[plnum].triangles.size())
+      for (i=0;plnum>=0 && i<doc.pl[plnum].edges.size();i++)
       {
-        painter.setPen(circlePen[i]);
-        r=(i+1)*5+sin((double)j->first*(1<<2*i));
-        // The radius variation is so that, if two points coincide, it's obvious.
-        painter.drawEllipse(worldToWindow(j->second),r,r);
+        seg=doc.pl[plnum].edges[i].getsegment();
+        if (doc.pl[plnum].edges[i].delaunay())
+          if (doc.pl[plnum].edges[i].broken&1)
+            painter.setPen(breakEdgePen);
+          else
+            painter.setPen(normalEdgePen);
+        else
+          painter.setPen(flipEdgePen);
+        painter.drawLine(worldToWindow(seg.getstart()),worldToWindow(seg.getend()));
       }
+    else
+      for (j=doc.pl[plnum].points.begin();j!=doc.pl[plnum].points.end();++j)
+        for (i=0;i<3;i++)
+        {
+          painter.setPen(circlePen[i]);
+          r=(i+1)*5+sin((double)j->first*(1<<2*i));
+          // The radius variation is so that, if two points coincide, it's obvious.
+          painter.drawEllipse(worldToWindow(j->second),r,r);
+        }
+  else
+    ; // nothing to paint, since plnum is not the index of a pointlist
 }
 
 void TinCanvas::setSize()
@@ -253,7 +257,7 @@ void TinCanvas::mouseMoveEvent(QMouseEvent *event)
     worldCenter+=dragStart-eventLoc;
     update(); // No need to update dragStart, since it's dragged.
   }
-  else
+  else if (plnum<doc.pl.size() && plnum>=0)
   {
     tri=doc.pl[plnum].findt(eventLoc,false);
     if (tri)
@@ -276,9 +280,10 @@ void TinCanvas::mouseMoveEvent(QMouseEvent *event)
 void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
 {
   triangleHit hitRec;
-  triangle *tri;
+  triangle *tri=nullptr;
   xy eventLoc=windowToWorld(event->pos());
-  tri=doc.pl[plnum].qinx.findt(eventLoc,true);
+  if (plnum<doc.pl.size() && plnum>=0)
+    tri=doc.pl[plnum].qinx.findt(eventLoc,true);
   if (event->button()&Qt::LeftButton)
   {
     if (mouseDoubleClicked)
