@@ -90,4 +90,5 @@ private:
   QToolBar *toolbar;
   int preZoomStep;
   std::array<ZoomButton *,6> zoomButtons;
+  QAction *meterAction;
 };

@@ -323,6 +323,7 @@ TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
   show();
   toolbar=new QToolBar(this);
   addToolBar(Qt::TopToolBarArea,toolbar);
+  toolbar->setIconSize(QSize(40,40));
   canvas=new TinCanvas(this);
   setCentralWidget(canvas);
   canvas->show();
@@ -361,6 +362,9 @@ void TinWindow::makeActions()
   {
     toolbar->addAction(zoomButtons[i]);
   }
+  meterAction=new QAction(this);
+  meterAction->setIcon(QIcon(":/meter.png"));
+  toolbar->addAction(meterAction);
 }
 
 void TinWindow::unmakeActions()
@@ -372,6 +376,8 @@ void TinWindow::unmakeActions()
     delete zoomButtons[i];
     zoomButtons[i]=nullptr;
   }
+  toolbar->removeAction(meterAction);
+  meterAction=nullptr;
 }
 
 void TinWindow::prepareZoomSteps(int steps)

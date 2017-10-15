@@ -7,5 +7,7 @@
   <file>five-fourths.png</file>
   <file>two.png</file>
   <file>ten.png</file>
+  <!-- These icons are on buttons that choose measuring units. -->
+  <file>meter.png</file>
 </qresource>
 </RCC>
