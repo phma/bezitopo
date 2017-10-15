@@ -323,7 +323,7 @@ TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
   show();
   toolbar=new QToolBar(this);
   addToolBar(Qt::TopToolBarArea,toolbar);
-  toolbar->setIconSize(QSize(40,40));
+  //toolbar->setIconSize(QSize(40,40));
   canvas=new TinCanvas(this);
   setCentralWidget(canvas);
   canvas->show();
