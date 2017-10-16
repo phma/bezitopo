@@ -41,16 +41,6 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   circlePen[1]=QPen(Qt::darkGreen);
   circlePen[2]=QPen(Qt::blue);
   plnum=-1;
-  /*doc.pl.resize(2);
-  plnum=1;
-  aster(doc,100);
-  doc.pl[1].maketin("",false);
-  doc.pl[1].makegrad(0.);
-  doc.pl[1].maketriangles();
-  doc.pl[1].setgradient();
-  doc.pl[1].makeqindex();
-  doc.pl[1].findcriticalpts();
-  doc.pl[1].addperimeter();*/
   //for (i=0;i<doc.pl[1].edges.size();i++)
     //doc.pl[1].edges[i].dump(&doc.pl[1]);
   show();
@@ -121,6 +111,7 @@ void TinCanvas::sizeToFit()
     hscale=largestFit(M_SQRT2/(right-left));
   }
   scale=(hscale<vscale)?hscale:vscale;
+  update();
 }
 
 void TinCanvas::zoom(int steps)
@@ -180,6 +171,27 @@ void TinCanvas::updateEdgeNeighbors(edge *e)
   QRectF rect=rect1.united(rect2);
   rect+=marge;
   update(rect.toAlignedRect());
+}
+
+void TinCanvas::testPatternAster()
+{
+  doc.makepointlist(1);
+  plnum=1;
+  aster(doc,100);
+  sizeToFit();
+}
+void TinCanvas::makeTin()
+{
+  doc.makepointlist(1);
+  plnum=1;
+  doc.pl[1].maketin("",false);
+  doc.pl[1].makegrad(0.);
+  doc.pl[1].maketriangles();
+  doc.pl[1].setgradient();
+  doc.pl[1].makeqindex();
+  doc.pl[1].findcriticalpts();
+  doc.pl[1].addperimeter();
+  update();
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)
@@ -349,6 +361,7 @@ void TinWindow::makeActions()
   editMenu=menuBar()->addMenu(tr("&Edit"));
   viewMenu=menuBar()->addMenu(tr("&View"));
   unitsMenu=menuBar()->addMenu(tr("&Units"));
+  contourMenu=menuBar()->addMenu(tr("&Contour"));
   zoomButtons[0]=new ZoomButton(this,-10);
   zoomButtons[0]->setIcon(QIcon(":/tenth.png"));
   zoomButtons[0]->setText(tr("Zoom out 10"));
@@ -378,6 +391,16 @@ void TinWindow::makeActions()
     toolbar->addAction(zoomButtons[i]);
     viewMenu->addAction(zoomButtons[i]);
   }
+  asterAction=new QAction(this);
+  //asterAction->setIcon(QIcon(":/aster.png"));
+  asterAction->setText(tr("Test pattern Aster"));
+  fileMenu->addAction(asterAction);
+  connect(asterAction,SIGNAL(triggered(bool)),canvas,SLOT(testPatternAster()));
+  makeTinAction=new QAction(this);
+  //makeTinAction->setIcon(QIcon(":/maketin.png"));
+  makeTinAction->setText(tr("Make TIN"));
+  contourMenu->addAction(makeTinAction);
+  connect(makeTinAction,SIGNAL(triggered(bool)),canvas,SLOT(makeTin()));
   meterAction=new QAction(this);
   meterAction->setIcon(QIcon(":/meter.png"));
   meterAction->setText(tr("Metric"));
@@ -398,6 +421,8 @@ void TinWindow::unmakeActions()
   toolbar->removeAction(meterAction);
   unitsMenu->removeAction(meterAction);
   meterAction=nullptr;
+  fileMenu->removeAction(asterAction);
+  asterAction=nullptr;
 }
 
 void TinWindow::prepareZoomSteps(int steps)

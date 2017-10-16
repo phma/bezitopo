@@ -48,6 +48,8 @@ public slots:
   void zoomp10();
   void updateEdge(edge *e);
   void updateEdgeNeighbors(edge *e);
+  void testPatternAster();
+  void makeTin();
 protected:
   void setSize();
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -88,8 +90,8 @@ public slots:
 private:
   TinCanvas *canvas;
   QToolBar *toolbar;
-  QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu;
+  QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu,*contourMenu;
   int preZoomStep;
   std::array<ZoomButton *,6> zoomButtons;
-  QAction *meterAction;
+  QAction *asterAction,*tinAction,*meterAction,*makeTinAction;
 };
