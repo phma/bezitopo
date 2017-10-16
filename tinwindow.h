@@ -64,6 +64,7 @@ private:
   QPen normalEdgePen,breakEdgePen,flipEdgePen;
   QPen circlePen[3];
   QBrush brush;
+  QErrorMessage *errorMessage;
   xy windowCenter,worldCenter,dragStart;
   int scale;
   /* scale is the logarithm, in major thirds (see zoom), of the number of

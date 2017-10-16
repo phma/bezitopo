@@ -40,6 +40,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   circlePen[0]=QPen(Qt::red);
   circlePen[1]=QPen(Qt::darkGreen);
   circlePen[2]=QPen(Qt::blue);
+  errorMessage=new QErrorMessage(this);
   plnum=-1;
   //for (i=0;i<doc.pl[1].edges.size();i++)
     //doc.pl[1].edges[i].dump(&doc.pl[1]);
@@ -184,13 +185,21 @@ void TinCanvas::makeTin()
 {
   doc.makepointlist(1);
   plnum=1;
-  doc.pl[1].maketin("",false);
-  doc.pl[1].makegrad(0.);
-  doc.pl[1].maketriangles();
-  doc.pl[1].setgradient();
-  doc.pl[1].makeqindex();
-  doc.pl[1].findcriticalpts();
-  doc.pl[1].addperimeter();
+  try
+  {
+    doc.pl[1].maketin("",false);
+    doc.pl[1].makegrad(0.);
+    doc.pl[1].maketriangles();
+    doc.pl[1].setgradient();
+    doc.pl[1].makeqindex();
+    doc.pl[1].findcriticalpts();
+    doc.pl[1].addperimeter();
+  }
+  catch (int e)
+  { // TODO: translate the thrown error into something intelligible
+    QString msg=tr("Can't make TIN. Error: ")+QString::fromStdString(to_string(e));
+    errorMessage->showMessage(msg);
+  }
   update();
 }
 
