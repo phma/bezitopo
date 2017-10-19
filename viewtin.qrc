@@ -9,5 +9,6 @@
   <file>ten.png</file>
   <!-- These icons are on buttons that choose measuring units. -->
   <file>meter.png</file>
+  <file>foot.png</file>
 </qresource>
 </RCC>

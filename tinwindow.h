@@ -94,5 +94,5 @@ private:
   QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu,*contourMenu;
   int preZoomStep;
   std::array<ZoomButton *,6> zoomButtons;
-  QAction *asterAction,*tinAction,*meterAction,*makeTinAction;
+  QAction *asterAction,*tinAction,*meterAction,*footAction,*makeTinAction;
 };

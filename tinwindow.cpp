@@ -412,9 +412,14 @@ void TinWindow::makeActions()
   connect(makeTinAction,SIGNAL(triggered(bool)),canvas,SLOT(makeTin()));
   meterAction=new QAction(this);
   meterAction->setIcon(QIcon(":/meter.png"));
-  meterAction->setText(tr("Metric"));
+  meterAction->setText(tr("Meter"));
   toolbar->addAction(meterAction);
   unitsMenu->addAction(meterAction);
+  footAction=new QAction(this);
+  footAction->setIcon(QIcon(":/foot.png"));
+  footAction->setText(tr("Foot"));
+  toolbar->addAction(footAction);
+  unitsMenu->addAction(footAction);
 }
 
 void TinWindow::unmakeActions()
