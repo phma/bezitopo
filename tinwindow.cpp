@@ -35,8 +35,8 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   setMouseTracking(true);
   setBackgroundRole(QPalette::Base);
   normalEdgePen=QPen(Qt::black);
-  breakEdgePen=QPen(Qt::blue);
-  flipEdgePen=QPen(Qt::blue,1,Qt::DashLine);
+  breakEdgePen=QPen(Qt::blue,2); // TODO These colors should be user-selectable.
+  flipEdgePen=QPen(Qt::blue,2,Qt::DashLine);
   circlePen[0]=QPen(Qt::red);
   circlePen[1]=QPen(Qt::darkGreen);
   circlePen[2]=QPen(Qt::blue);
