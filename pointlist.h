@@ -31,6 +31,7 @@
 #include "bezier.h"
 #include "qindex.h"
 #include "polyline.h"
+#include "contour.h"
 
 typedef std::map<int,point> ptlist;
 typedef std::map<point*,int> revptlist;
@@ -64,6 +65,7 @@ public:
    */
   std::vector<polyspiral> contours;
   criteria crit;
+  ContourInterval contourInterval;
   std::vector<std::vector<int> > type0Breaklines;
   std::vector<std::vector<xy> > type1Breaklines;
   qindex qinx;
