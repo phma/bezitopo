@@ -151,6 +151,18 @@ void TinCanvas::zoomp10()
   zoom(10);
 }
 
+void TinCanvas::setMeter()
+{
+  doc.ms.setMetric();
+  measureChanged(doc.ms);
+}
+
+void TinCanvas::setFoot()
+{
+  doc.ms.setCustomary();
+  measureChanged(doc.ms);
+}
+
 void TinCanvas::updateEdge(edge *e)
 {
   QMarginsF marge(1,1,1,1);
@@ -354,6 +366,7 @@ TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
   setCentralWidget(canvas);
   canvas->show();
   makeActions();
+  canvas->setMeter();
   connect(this,SIGNAL(zoomCanvas(int)),canvas,SLOT(zoom(int)));
 }
 
@@ -410,16 +423,20 @@ void TinWindow::makeActions()
   makeTinAction->setText(tr("Make TIN"));
   contourMenu->addAction(makeTinAction);
   connect(makeTinAction,SIGNAL(triggered(bool)),canvas,SLOT(makeTin()));
-  meterAction=new QAction(this);
-  meterAction->setIcon(QIcon(":/meter.png"));
-  meterAction->setText(tr("Meter"));
-  toolbar->addAction(meterAction);
-  unitsMenu->addAction(meterAction);
-  footAction=new QAction(this);
-  footAction->setIcon(QIcon(":/foot.png"));
-  footAction->setText(tr("Foot"));
-  toolbar->addAction(footAction);
-  unitsMenu->addAction(footAction);
+  measureButtons.push_back(new MeasureButton(this,METER,0));
+  measureButtons.back()->setIcon(QIcon(":/meter.png"));
+  measureButtons.back()->setText(tr("Meter"));
+  toolbar->addAction(measureButtons.back());
+  unitsMenu->addAction(measureButtons.back());
+  connect(measureButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(setMeter()));
+  measureButtons.push_back(new MeasureButton(this,FOOT,0));
+  measureButtons.back()->setIcon(QIcon(":/foot.png"));
+  measureButtons.back()->setText(tr("Foot"));
+  toolbar->addAction(measureButtons.back());
+  unitsMenu->addAction(measureButtons.back());
+  connect(measureButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(setFoot()));
+  for (i=0;i<measureButtons.size();i++)
+    connect(canvas,SIGNAL(measureChanged(Measure)),measureButtons[i],SLOT(setMeasure(Measure)));
 }
 
 void TinWindow::unmakeActions()
@@ -432,10 +449,15 @@ void TinWindow::unmakeActions()
     delete zoomButtons[i];
     zoomButtons[i]=nullptr;
   }
-  toolbar->removeAction(meterAction);
-  unitsMenu->removeAction(meterAction);
-  meterAction=nullptr;
+  for (i=0;i<measureButtons.size();i++)
+  {
+    toolbar->removeAction(measureButtons[i]);
+    unitsMenu->removeAction(measureButtons[i]);
+    delete measureButtons[i];
+  }
+  measureButtons.clear();
   fileMenu->removeAction(asterAction);
+  delete asterAction;
   asterAction=nullptr;
 }
 

@@ -31,7 +31,7 @@ public:
   MeasureButton(QObject *parent=nullptr,int lunit=0,int whichFoot=INTERNATIONAL);
   void activate(ActionEvent event);
 public slots:
-  void measureChanged(Measure newMeasure);
+  void setMeasure(Measure newMeasure);
 signals:
 protected:
 private:

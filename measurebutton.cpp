@@ -36,7 +36,7 @@ MeasureButton::MeasureButton(QObject *parent,int lunit,int whichFoot):QAction(pa
   myFoot=whichFoot;
 }
 
-void MeasureButton::measureChanged(Measure newMeasure)
+void MeasureButton::setMeasure(Measure newMeasure)
 {
   if (myUnit)
     setChecked(myUnit==newMeasure.findUnit(LENGTH,0.552));

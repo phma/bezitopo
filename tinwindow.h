@@ -26,6 +26,7 @@
 #include <array>
 #include "document.h"
 #include "zoombutton.h"
+#include "measurebutton.h"
 
 class TinCanvas: public QWidget
 {
@@ -37,6 +38,7 @@ public:
   xy windowToWorld(QPointF pnt);
   double pixelScale();
 signals:
+  void measureChanged(Measure newMeasure);
 public slots:
   void sizeToFit();
   void zoom(int steps);
@@ -46,6 +48,8 @@ public slots:
   void zoomp1();
   void zoomp3();
   void zoomp10();
+  void setMeter();
+  void setFoot();
   void updateEdge(edge *e);
   void updateEdgeNeighbors(edge *e);
   void testPatternAster();
@@ -94,5 +98,6 @@ private:
   QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu,*contourMenu;
   int preZoomStep;
   std::array<ZoomButton *,6> zoomButtons;
-  QAction *asterAction,*tinAction,*meterAction,*footAction,*makeTinAction;
+  std::vector<MeasureButton *> measureButtons;
+  QAction *asterAction,*tinAction,*makeTinAction;
 };
