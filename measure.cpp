@@ -294,6 +294,11 @@ void Measure::setFoot(int which)
   whichFoot=which;
 }
 
+int Measure::getFoot()
+{
+  return whichFoot;
+}
+
 void Measure::addUnit(int unit)
 {
   int i;

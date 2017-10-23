@@ -143,6 +143,7 @@ class Measure
 public:
   Measure();
   void setFoot(int which);
+  int getFoot();
   void addUnit(int unit);
   void removeUnit(int unit);
   void clearUnits();

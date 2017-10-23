@@ -58,9 +58,9 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
 add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp breakline.cpp
                cogo.cpp document.cpp drawobj.cpp
-               latlong.cpp ldecimal.cpp manysum.cpp measure.cpp pnezd.cpp
-               point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp random.cpp
-               rootfind.cpp segment.cpp spiral.cpp test.cpp tin.cpp
+               latlong.cpp ldecimal.cpp manysum.cpp measure.cpp measurebutton.cpp
+               pnezd.cpp point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp
+               random.cpp rootfind.cpp segment.cpp spiral.cpp test.cpp tin.cpp
                tinwindow.cpp vcurve.cpp viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources})
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
