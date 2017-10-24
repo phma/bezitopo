@@ -49,7 +49,8 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                sourcegeoid.cpp spiral.cpp spolygon.cpp
                stl.cpp test.cpp segment.cpp tin.cpp vball.cpp vcurve.cpp zoom.cpp)
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
-               binio.cpp cogo.cpp convertgeoid.cpp document.cpp drawobj.cpp
+               binio.cpp cogo.cpp contour.cpp
+               convertgeoid.cpp document.cpp drawobj.cpp
                ellipsoid.cpp geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp
                hlattice.cpp kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
                matrix.cpp measure.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp
@@ -57,10 +58,11 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp sourcegeoid.cpp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
 add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp breakline.cpp
-               cogo.cpp document.cpp drawobj.cpp
+               cogo.cpp contour.cpp document.cpp drawobj.cpp
                latlong.cpp ldecimal.cpp manysum.cpp measure.cpp measurebutton.cpp
                pnezd.cpp point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp
-               random.cpp rootfind.cpp segment.cpp spiral.cpp test.cpp tin.cpp
+               random.cpp relprime.cpp
+               rootfind.cpp segment.cpp spiral.cpp test.cpp tin.cpp
                tinwindow.cpp vcurve.cpp viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources})
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)

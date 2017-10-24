@@ -45,8 +45,8 @@ class ContourInterval
    * the medium, tells which contours are drawn only on nearly flat ground.
    */
 public:
-  double interval;
-  int fineRatio,coarseRatio;
+  ContourInterval();
+  ContourInterval(double unit,int icode,bool fine);
   double fineInterval()
   {
     return interval;
@@ -59,6 +59,9 @@ public:
   {
     return interval*fineRatio*coarseRatio;
   };
+private:
+  double interval;
+  int fineRatio,coarseRatio;
 };
 
 std::vector<uintptr_t> contstarts(pointlist &pts,double elev);

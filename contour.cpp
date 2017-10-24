@@ -48,6 +48,60 @@ float splittab[65]=
   0.3773,0.3862,0.3955,0.4053,0.4153,0.4256,0.4362,0.4469,0.4577,0.4684,0.4792,0.4897,0.5000
 };
 
+ContourInterval::ContourInterval()
+{
+  interval=1;
+  fineRatio=5;
+  coarseRatio=4;
+}
+
+ContourInterval::ContourInterval(double unit,int icode,bool fine)
+/* icode encodes the medium interval, as follows:
+ * -3 0.1
+ * -2 0.2
+ * -1 0.5
+ * 0  1
+ * 1  2
+ * 2  5
+ * 3  10
+ * If fine is true, the fine contour interval is enabled.
+ */
+{
+  int i;
+  fineRatio=1;
+  while (icode>1)
+  {
+    icode-=3;
+    unit*=10;
+  }
+  while (icode<-1)
+  {
+    icode+=3;
+    unit*=0.1;
+  }
+  switch (icode)
+  {
+    case -1:
+      interval=unit/2;
+      coarseRatio=4;
+      if (fine)
+        interval/=fineRatio=5;
+      break;
+    case 0:
+      interval=unit;
+      coarseRatio=5;
+      if (fine)
+        interval/=fineRatio=5;
+      break;
+    case 1:
+      interval=unit*2;
+      coarseRatio=5;
+      if (fine)
+        interval/=fineRatio=4;
+      break;
+  }
+}
+
 float splitpoint(double leftclamp,double rightclamp,double tolerance)
 /* If the values at the clamp points indicate that the curve may be out of tolerance,
  * returns the point to split it at, as a fraction of the length. If not, returns 0.
