@@ -163,6 +163,24 @@ void TinCanvas::setFoot()
   measureChanged(doc.ms);
 }
 
+void TinCanvas::setInternationalFoot()
+{
+  doc.ms.setFoot(INTERNATIONAL);
+  measureChanged(doc.ms);
+}
+
+void TinCanvas::setUSFoot()
+{
+  doc.ms.setFoot(USSURVEY);
+  measureChanged(doc.ms);
+}
+
+void TinCanvas::setIndianFoot()
+{
+  doc.ms.setFoot(INSURVEY);
+  measureChanged(doc.ms);
+}
+
 void TinCanvas::updateEdge(edge *e)
 {
   QMarginsF marge(1,1,1,1);
@@ -435,6 +453,24 @@ void TinWindow::makeActions()
   toolbar->addAction(measureButtons.back());
   unitsMenu->addAction(measureButtons.back());
   connect(measureButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(setFoot()));
+  measureButtons.push_back(new MeasureButton(this,0,INTERNATIONAL));
+  measureButtons.back()->setIcon(QIcon(":/international-foot.png"));
+  measureButtons.back()->setText(tr("International foot"));
+  toolbar->addAction(measureButtons.back());
+  unitsMenu->addAction(measureButtons.back());
+  connect(measureButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(setInternationalFoot()));
+  measureButtons.push_back(new MeasureButton(this,0,USSURVEY));
+  measureButtons.back()->setIcon(QIcon(":/us-foot.png"));
+  measureButtons.back()->setText(tr("US survey foot"));
+  toolbar->addAction(measureButtons.back());
+  unitsMenu->addAction(measureButtons.back());
+  connect(measureButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(setUSFoot()));
+  measureButtons.push_back(new MeasureButton(this,0,INSURVEY));
+  measureButtons.back()->setIcon(QIcon(":/indian-foot.png"));
+  measureButtons.back()->setText(tr("Indian survey foot"));
+  toolbar->addAction(measureButtons.back());
+  unitsMenu->addAction(measureButtons.back());
+  connect(measureButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(setIndianFoot()));
   for (i=0;i<measureButtons.size();i++)
     connect(canvas,SIGNAL(measureChanged(Measure)),measureButtons[i],SLOT(setMeasure(Measure)));
 }

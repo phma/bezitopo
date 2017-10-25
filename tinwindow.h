@@ -50,6 +50,9 @@ public slots:
   void zoomp10();
   void setMeter();
   void setFoot();
+  void setInternationalFoot();
+  void setUSFoot();
+  void setIndianFoot();
   void updateEdge(edge *e);
   void updateEdgeNeighbors(edge *e);
   void testPatternAster();
