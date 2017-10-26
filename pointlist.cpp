@@ -48,6 +48,11 @@ void pointlist::clear()
   revpoints.clear();
 }
 
+int pointlist::size()
+{
+  return points.size();
+}
+
 void pointlist::clearmarks()
 {
   map<int,edge>::iterator e;

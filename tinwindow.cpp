@@ -236,6 +236,15 @@ void TinCanvas::importPnezd()
 void TinCanvas::makeTin()
 {
   doc.makepointlist(1);
+  if (doc.pl[1].size()==0 && doc.pl[0].size()>0)
+  {
+    if (doc.pl[1].crit.size()==0)
+    {
+      doc.pl[1].crit.resize(1);
+      doc.pl[1].crit[0].istopo=true;
+    }
+    doc.copytopopoints(1,0);
+  }
   plnum=1;
   try
   {

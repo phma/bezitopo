@@ -71,6 +71,7 @@ public:
   qindex qinx;
   void addpoint(int numb,point pnt,bool overwrite=false);
   void clear();
+  int size();
   void clearmarks();
   bool checkTinConsistency();
   void setgradient(bool flat=false);
