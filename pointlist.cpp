@@ -24,6 +24,7 @@
 #include "angle.h"
 #include "bezitopo.h"
 #include "pointlist.h"
+#include "pnezd.h"
 
 using namespace std;
 
@@ -200,6 +201,53 @@ bool pointlist::checkTinConsistency()
     cerr<<"Interior edges and neighbor triangles don't match.\n";
   }
   return ret;
+}
+
+int pointlist::readCriteria(string fname)
+{
+  ifstream infile;
+  size_t size=0,pos1,pos2;
+  ssize_t len;
+  int p,ncrit;
+  criterion crit1;
+  vector<string> words;
+  string line,minstr,maxstr,d,instr;
+  infile.open(fname);
+  ncrit=-(!infile.is_open());
+  if (infile.is_open())
+  {
+    crit.clear();
+    do
+    {
+      getline(infile,line);
+      while (line.back()=='\n' || line.back()=='\r')
+	line.pop_back();
+      words=parsecsvline(line);
+      if (words.size()==4)
+      {
+	minstr=words[0];
+	maxstr=words[1];
+	d=words[2];
+	instr=words[3];
+	if (true)
+	{
+	  crit1.lo=atoi(minstr.c_str());
+	  crit1.hi=atoi(maxstr.c_str());
+          crit1.str=d;
+          crit1.istopo=atoi(instr.c_str())!=0;
+          crit.push_back(crit1);
+	  ncrit++;
+	}
+	//puts(d.c_str());
+      }
+      else if (words.size()==0 || (words.size()==1 && words[0].length() && words[0][0]<32))
+	; // blank line or end-of-file character
+      else
+	cerr<<"Ignored line: "<<line<<endl;
+    } while (infile.good());
+    infile.close();
+  }
+  return ncrit;
 }
 
 void pointlist::addpoint(int numb,point pnt,bool overwrite)

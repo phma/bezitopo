@@ -74,6 +74,7 @@ public:
   int size();
   void clearmarks();
   bool checkTinConsistency();
+  int readCriteria(std::string fname);
   void setgradient(bool flat=false);
   void findcriticalpts();
   void addperimeter();
