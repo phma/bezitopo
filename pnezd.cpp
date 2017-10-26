@@ -4,7 +4,7 @@
 /* point-northing-easting-z-description format        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015,2016 Pierre Abbat.
+/* Copyright 2012,2015,2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -30,6 +30,7 @@
 #include "pointlist.h"
 #include "ldecimal.h"
 #include "document.h"
+#include "csv.h"
 using namespace std;
 
 /* The file produced by Total Open Station has a first line consisting of column
@@ -37,103 +38,6 @@ using namespace std;
  * to be stripped. The file downloaded from the Nikon total station has a last line
  * consisting of ^Z; it must be ignored.
  */
-
-vector<string> parsecsvline(string line)
-{
-  bool inquote,endquote;
-  size_t pos;
-  int ch;
-  vector<string> ret;
-  inquote=endquote=false;
-  while (line.length())
-  {
-    if (ret.size()==0)
-      ret.push_back("");
-    pos=line.find_first_of("\",");
-    if (pos<line.length())
-      ch=line[pos];
-    else
-    {
-      ch=-512;
-      pos=line.length();
-    }
-    if (pos>0)
-    {
-      ret.back()+=line.substr(0,pos);
-      line.erase(0,pos);
-      endquote=false;
-    }
-    if (ch==',')
-    {
-      if (inquote)
-	ret.back()+=ch;
-      else
-	ret.push_back("");
-      endquote=false;
-    }
-    if (ch=='"')
-    {
-      if (inquote)
-      {
-	inquote=false;
-	endquote=true;
-      }
-      else
-      {
-	if (endquote)
-	  ret.back()+=ch;
-	endquote=false;
-	inquote=true;
-      }
-    }
-    if (line.length())
-      line.erase(0,1);
-  }
-  return ret;
-}
-
-string makecsvword(string word)
-{
-  string ret;
-  size_t pos;
-  if (word.find_first_of("\",")==string::npos)
-    ret=word;
-  else
-  {
-    ret="\"";
-    while (word.length())
-    {
-      pos=word.find_first_of('"');
-      if (pos==string::npos)
-      {
-	ret+=word;
-	word="";
-      }
-      else
-      {
-	ret+=word.substr(0,pos+1)+'"';
-	word.erase(0,pos+1);
-      }
-    }
-    ret+='"';
-  }
-  return ret;
-}
-
-string makecsvline(vector<string> words)
-{
-  string ret;
-  int i;
-  if (words.size()==1 && words[0].length()==0)
-    ret="\"\""; // special case: a single empty word must be quoted
-  for (i=0;i<words.size();i++)
-  {
-    if (i)
-      ret+=',';
-    ret+=makecsvword(words[i]);
-  }
-  return ret;
-}
 
 int readpnezd(document *doc,string fname,Measure ms,bool overwrite)
 {

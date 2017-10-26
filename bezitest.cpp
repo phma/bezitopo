@@ -40,6 +40,7 @@
 #include "tin.h"
 #include "measure.h"
 #include "pnezd.h"
+#include "csv.h"
 #include "angle.h"
 #include "pointlist.h"
 #include "vcurve.h"
