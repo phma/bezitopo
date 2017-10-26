@@ -41,6 +41,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   circlePen[1]=QPen(Qt::darkGreen);
   circlePen[2]=QPen(Qt::blue);
   errorMessage=new QErrorMessage(this);
+  fileDialog=new QFileDialog(this);
   plnum=-1;
   //for (i=0;i<doc.pl[1].edges.size();i++)
     //doc.pl[1].edges[i].dump(&doc.pl[1]);
@@ -211,6 +212,27 @@ void TinCanvas::testPatternAster()
   aster(doc,100);
   sizeToFit();
 }
+
+void TinCanvas::importPnezd()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  fileDialog->setWindowTitle(tr("Open PNEZD File"));
+  fileDialog->setFileMode(QFileDialog::ExistingFile);
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    doc.makepointlist(0);
+    doc.pl[0].clear();
+    doc.readpnezd(fileName);
+    plnum=0;
+    sizeToFit();
+  }
+}
+
 void TinCanvas::makeTin()
 {
   doc.makepointlist(1);
@@ -436,6 +458,11 @@ void TinWindow::makeActions()
   asterAction->setText(tr("Test pattern Aster"));
   fileMenu->addAction(asterAction);
   connect(asterAction,SIGNAL(triggered(bool)),canvas,SLOT(testPatternAster()));
+  importPnezdAction=new QAction(this);
+  //importPnezdAction->setIcon(QIcon(":/pnezd.png"));
+  importPnezdAction->setText(tr("Import PNEZD file"));
+  fileMenu->addAction(importPnezdAction);
+  connect(importPnezdAction,SIGNAL(triggered(bool)),canvas,SLOT(importPnezd()));
   makeTinAction=new QAction(this);
   //makeTinAction->setIcon(QIcon(":/maketin.png"));
   makeTinAction->setText(tr("Make TIN"));
@@ -495,6 +522,9 @@ void TinWindow::unmakeActions()
   fileMenu->removeAction(asterAction);
   delete asterAction;
   asterAction=nullptr;
+  fileMenu->removeAction(importPnezdAction);
+  delete importPnezdAction;
+  importPnezdAction=nullptr;
 }
 
 void TinWindow::prepareZoomSteps(int steps)

@@ -56,6 +56,7 @@ public slots:
   void updateEdge(edge *e);
   void updateEdgeNeighbors(edge *e);
   void testPatternAster();
+  void importPnezd();
   void makeTin();
 protected:
   void setSize();
@@ -72,6 +73,7 @@ private:
   QPen circlePen[3];
   QBrush brush;
   QErrorMessage *errorMessage;
+  QFileDialog *fileDialog;
   xy windowCenter,worldCenter,dragStart;
   int scale;
   /* scale is the logarithm, in major thirds (see zoom), of the number of
@@ -102,5 +104,5 @@ private:
   int preZoomStep;
   std::array<ZoomButton *,6> zoomButtons;
   std::vector<MeasureButton *> measureButtons;
-  QAction *asterAction,*tinAction,*makeTinAction;
+  QAction *asterAction,*importPnezdAction,*makeTinAction;
 };
