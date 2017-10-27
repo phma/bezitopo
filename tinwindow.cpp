@@ -43,6 +43,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   errorMessage=new QErrorMessage(this);
   fileDialog=new QFileDialog(this);
   plnum=-1;
+  rotation=0;
   //for (i=0;i<doc.pl[1].edges.size();i++)
     //doc.pl[1].edges[i].dump(&doc.pl[1]);
   show();
