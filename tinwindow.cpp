@@ -103,6 +103,7 @@ void TinCanvas::sizeToFit()
     }
   }
   worldCenter=xy((left+right)/2,(top+bottom)/2);
+  worldCenter.roscat(xy(0,0),-rotation,1,xy(0,0));
   if (windowSize)
   {
     vscale=largestFit(height()/windowSize/(top-bottom));
