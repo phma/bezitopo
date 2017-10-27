@@ -433,31 +433,31 @@ void TinWindow::makeActions()
   viewMenu=menuBar()->addMenu(tr("&View"));
   unitsMenu=menuBar()->addMenu(tr("&Units"));
   contourMenu=menuBar()->addMenu(tr("&Contour"));
-  zoomButtons[0]=new ZoomButton(this,-10);
-  zoomButtons[0]->setIcon(QIcon(":/tenth.png"));
-  zoomButtons[0]->setText(tr("Zoom out 10"));
-  connect(zoomButtons[0],SIGNAL(triggered(bool)),canvas,SLOT(zoomm10()));
-  zoomButtons[1]=new ZoomButton(this,-3);
-  zoomButtons[1]->setIcon(QIcon(":/half.png"));
-  zoomButtons[1]->setText(tr("Zoom out 2"));
-  connect(zoomButtons[1],SIGNAL(triggered(bool)),canvas,SLOT(zoomm3()));
-  zoomButtons[2]=new ZoomButton(this,-1);
-  zoomButtons[2]->setIcon(QIcon(":/four-fifths.png"));
-  zoomButtons[2]->setText(tr("Zoom out"));
-  connect(zoomButtons[2],SIGNAL(triggered(bool)),canvas,SLOT(zoomm1()));
-  zoomButtons[3]=new ZoomButton(this,1);
-  zoomButtons[3]->setIcon(QIcon(":/five-fourths.png"));
-  zoomButtons[3]->setText(tr("Zoom in"));
-  connect(zoomButtons[3],SIGNAL(triggered(bool)),canvas,SLOT(zoomp1()));
-  zoomButtons[4]=new ZoomButton(this,3);
-  zoomButtons[4]->setIcon(QIcon(":/two.png"));
-  zoomButtons[4]->setText(tr("Zoom in 2"));
-  connect(zoomButtons[4],SIGNAL(triggered(bool)),canvas,SLOT(zoomp3()));
-  zoomButtons[5]=new ZoomButton(this,10);
-  zoomButtons[5]->setIcon(QIcon(":/ten.png"));
-  zoomButtons[5]->setText(tr("Zoom in 10"));
-  connect(zoomButtons[5],SIGNAL(triggered(bool)),canvas,SLOT(zoomp10()));
-  for (i=0;i<6;i++)
+  zoomButtons.push_back(new ZoomButton(this,-10));
+  zoomButtons.back()->setIcon(QIcon(":/tenth.png"));
+  zoomButtons.back()->setText(tr("Zoom out 10"));
+  connect(zoomButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(zoomm10()));
+  zoomButtons.push_back(new ZoomButton(this,-3));
+  zoomButtons.back()->setIcon(QIcon(":/half.png"));
+  zoomButtons.back()->setText(tr("Zoom out 2"));
+  connect(zoomButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(zoomm3()));
+  zoomButtons.push_back(new ZoomButton(this,-1));
+  zoomButtons.back()->setIcon(QIcon(":/four-fifths.png"));
+  zoomButtons.back()->setText(tr("Zoom out"));
+  connect(zoomButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(zoomm1()));
+  zoomButtons.push_back(new ZoomButton(this,1));
+  zoomButtons.back()->setIcon(QIcon(":/five-fourths.png"));
+  zoomButtons.back()->setText(tr("Zoom in"));
+  connect(zoomButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(zoomp1()));
+  zoomButtons.push_back(new ZoomButton(this,3));
+  zoomButtons.back()->setIcon(QIcon(":/two.png"));
+  zoomButtons.back()->setText(tr("Zoom in 2"));
+  connect(zoomButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(zoomp3()));
+  zoomButtons.push_back(new ZoomButton(this,10));
+  zoomButtons.back()->setIcon(QIcon(":/ten.png"));
+  zoomButtons.back()->setText(tr("Zoom in 10"));
+  connect(zoomButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(zoomp10()));
+  for (i=0;i<zoomButtons.size();i++)
   {
     toolbar->addAction(zoomButtons[i]);
     viewMenu->addAction(zoomButtons[i]);
@@ -514,13 +514,13 @@ void TinWindow::makeActions()
 void TinWindow::unmakeActions()
 {
   int i;
-  for (i=0;i<6;i++)
+  for (i=0;i<zoomButtons.size();i++)
   {
     toolbar->removeAction(zoomButtons[i]);
     viewMenu->removeAction(zoomButtons[i]);
     delete zoomButtons[i];
-    zoomButtons[i]=nullptr;
   }
+  zoomButtons.clear();
   for (i=0;i<measureButtons.size();i++)
   {
     toolbar->removeAction(measureButtons[i]);

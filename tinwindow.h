@@ -102,7 +102,7 @@ private:
   QToolBar *toolbar;
   QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu,*contourMenu;
   int preZoomStep;
-  std::array<ZoomButton *,6> zoomButtons;
+  std::vector<ZoomButton *> zoomButtons;
   std::vector<MeasureButton *> measureButtons;
   QAction *asterAction,*importPnezdAction,*makeTinAction;
 };
