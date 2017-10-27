@@ -48,6 +48,8 @@ public slots:
   void zoomp1();
   void zoomp3();
   void zoomp10();
+  void rotatecw();
+  void rotateccw();
   void setMeter();
   void setFoot();
   void setInternationalFoot();

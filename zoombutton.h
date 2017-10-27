@@ -27,7 +27,7 @@ class ZoomButton: public QAction
 {
   Q_OBJECT
 public:
-  ZoomButton(QObject *parent=nullptr,int steps=0);
+  ZoomButton(QObject *parent=nullptr,int steps=0,int angle=0);
   void activate(ActionEvent event);
 public slots:
 signals:
@@ -36,5 +36,6 @@ protected:
   bool event(QEvent *e);
 private:
   int mySteps;
+  int myAngle;
 };
 #endif

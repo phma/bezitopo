@@ -24,9 +24,10 @@
 
 using namespace std;
 
-ZoomButton::ZoomButton(QObject *parent,int steps):QAction(parent)
+ZoomButton::ZoomButton(QObject *parent,int steps,int angle):QAction(parent)
 {
   mySteps=steps;
+  myAngle=angle;
 }
 
 void ZoomButton::activate(ActionEvent event)

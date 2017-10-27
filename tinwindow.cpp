@@ -154,6 +154,18 @@ void TinCanvas::zoomp10()
   zoom(10);
 }
 
+void TinCanvas::rotatecw()
+{
+  rotation-=DEG45/4;
+  update();
+}
+
+void TinCanvas::rotateccw()
+{
+  rotation+=DEG45/4;
+  update();
+}
+
 void TinCanvas::setMeter()
 {
   doc.ms.setMetric();
@@ -459,6 +471,14 @@ void TinWindow::makeActions()
   zoomButtons.back()->setIcon(QIcon(":/ten.png"));
   zoomButtons.back()->setText(tr("Zoom in 10"));
   connect(zoomButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(zoomp10()));
+  zoomButtons.push_back(new ZoomButton(this,0,-DEG45/4));
+  zoomButtons.back()->setIcon(QIcon(":/cw.png"));
+  zoomButtons.back()->setText(tr("Rotate right"));
+  connect(zoomButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(rotatecw()));
+  zoomButtons.push_back(new ZoomButton(this,0,DEG45/4));
+  zoomButtons.back()->setIcon(QIcon(":/ccw.png"));
+  zoomButtons.back()->setText(tr("Rotate left"));
+  connect(zoomButtons.back(),SIGNAL(triggered(bool)),canvas,SLOT(rotateccw()));
   for (i=0;i<zoomButtons.size();i++)
   {
     toolbar->addAction(zoomButtons[i]);
