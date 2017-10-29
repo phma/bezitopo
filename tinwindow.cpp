@@ -247,6 +247,23 @@ void TinCanvas::importPnezd()
   }
 }
 
+void TinCanvas::importCriteria()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  fileDialog->setWindowTitle(tr("Open Criteria File"));
+  fileDialog->setFileMode(QFileDialog::ExistingFile);
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    doc.makepointlist(1);
+    doc.pl[1].readCriteria(fileName);
+  }
+}
+
 void TinCanvas::makeTin()
 {
   doc.makepointlist(1);
@@ -494,6 +511,11 @@ void TinWindow::makeActions()
   importPnezdAction->setText(tr("Import PNEZD file"));
   fileMenu->addAction(importPnezdAction);
   connect(importPnezdAction,SIGNAL(triggered(bool)),canvas,SLOT(importPnezd()));
+  importCriteriaAction=new QAction(this);
+  //importPnezdAction->setIcon(QIcon(":/criteria.png"));
+  importCriteriaAction->setText(tr("Import Criteria file"));
+  fileMenu->addAction(importCriteriaAction);
+  connect(importCriteriaAction,SIGNAL(triggered(bool)),canvas,SLOT(importCriteria()));
   makeTinAction=new QAction(this);
   //makeTinAction->setIcon(QIcon(":/maketin.png"));
   makeTinAction->setText(tr("Make TIN"));

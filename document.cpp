@@ -33,6 +33,8 @@ void document::makepointlist(int n)
 void document::copytopopoints(int dst,int src)
 /* Uses the criteria in the destination. If the destination doesn't exist,
  * creates it, with no criteria. But if the source doesn't exist, it throws.
+ * If you want points included unless they match a criterion, begin the
+ * criteria file with "0,0,,1".
  */
 {
   ptlist::iterator i;

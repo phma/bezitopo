@@ -59,6 +59,7 @@ public slots:
   void updateEdgeNeighbors(edge *e);
   void testPatternAster();
   void importPnezd();
+  void importCriteria();
   void makeTin();
 protected:
   void setSize();
@@ -106,5 +107,5 @@ private:
   int preZoomStep;
   std::vector<ZoomButton *> zoomButtons;
   std::vector<MeasureButton *> measureButtons;
-  QAction *asterAction,*importPnezdAction,*makeTinAction;
+  QAction *asterAction,*importPnezdAction,*importCriteriaAction,*makeTinAction;
 };
