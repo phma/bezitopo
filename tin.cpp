@@ -480,26 +480,28 @@ bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
   convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
   //printf("edges %d\n",edges.size());
   /* Before:
-  A-----B
-  |    /|
-  |   / |
-  |  /  |
-  | /   |
-  |/    |
-  C-----D
-
-  E
-  outward=(D,C,B,A,E)
-  edges=(DC,BD,BC,AB,AC)
-  After:
-  edges=(DC,BD,BC,AB,AC,EC,ED,EB)
-  */
+   * A-----B
+   * |    /|
+   * |   / |
+   * |  /  |
+   * | /   |
+   * |/    |
+   * C-----D
+   *
+   *          E
+   * outward=(D,C,B,A,E)
+   * edges=(DC,BD,BC,AB,AC)
+   * After:
+   * edges=(DC,BD,BC,AB,AC,EC,ED,EB)
+   */
   for (j++;j!=outward.end();j++)
   {
     convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
     inspos=convexhull.find(dir(startpnt,*(j->second)));
-    // First find how much the convex hull subtends as seen from the new point,
-    // expressed as distance from the startpnt to the line between an old point and the new point.
+    /* First find how much the convex hull subtends as seen from the new point,
+     * expressed as distance from the startpnt to the line between an old point
+     * and the new point.
+     */
     mindist=dist(startpnt,*(j->second));
     maxdist=-mindist;
     for (left=inspos,idist=n=0;/*idist>=maxdist && */n<convexhull.size();left--,n++)
@@ -507,7 +509,7 @@ bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
       if (left->second==j->second)
         idist=0;
       else
-      {                          //i points to a list of points, j to a map of pointers to points
+      { // i points to a list of points, j to a map of pointers to points
         idist=pldist(startpnt,*(left->second),*(j->second));
         if (idist>maxdist)
           maxdist=idist;
@@ -529,7 +531,9 @@ bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
       }
     }
     //printf("maxdist=%f mindist=%f\n",maxdist,mindist);
-    // Then find which convex hull points are the rightmost and leftmost that can be seen from the new point.
+    /* Then find which convex hull points are the rightmost and leftmost
+     * that can be seen from the new point.
+     */
     for (left=inspos,idist=n=0;n<2||idist<maxdist;left--,n++)
     {
       if (left->second==j->second)
@@ -558,17 +562,16 @@ bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
     {
       if (k==convexhull.end())
         k=convexhull.begin();
-      if (k!=inspos)             // skip the point just added - don't join it to itself
+      if (k!=inspos) // skip the point just added - don't join it to itself
       {
-        visible.push_back(k->second);
-                                 // this adds one element, hence -1 in next line
+        visible.push_back(k->second); // this adds one element, hence -1 in next line
         edges[edges.size()].a=j->second;
         edges[edges.size()-1].b=k->second;
       }
       if (k==right || n==maxedges)
         m=-1;
     }
-    val=--n;                     //subtract one for the point itself
+    val=--n; // subtract one for the point itself
     //printf("%d points visible\n",n);
     // Now delete old convex hull points that are now in the interior.
     for (m=1;m<visible.size()-1;m++)
@@ -582,7 +585,6 @@ bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
       if (visible[n]->line)
       {
         assert(n+edgeoff<edges.size() && n+edgeoff>=0);
-                                 // crashes here
         edges[n+edgeoff].nextb=visible[n]->line->next(visible[n]);
         visible[n]->line->setnext(visible[n],&edges[n+edgeoff]);
       }
@@ -630,9 +632,9 @@ int pointlist::flipPass(PostScript &ps,bool colorfibaster)
 
 void pointlist::maketin(string filename,bool colorfibaster)
 /* Makes a triangulated irregular network. If <3 points, throws notri without altering
-   the existing TIN. If two points are equal, or close enough to likely cause problems,
-   throws samepnts; the TIN is partially constructed and will have to be destroyed.
-   */
+ * the existing TIN. If two points are equal, or close enough to likely cause problems,
+ * throws samepnts; the TIN is partially constructed and will have to be destroyed.
+ */
 {
   ptlist::iterator i;
   int m,m2,n,flipcount,passcount,cycles;
@@ -645,10 +647,11 @@ void pointlist::maketin(string filename,bool colorfibaster)
     startpnt+=i->second;
   startpnt/=points.size();
   edges.clear();
-  //startpnt has to be
-  //within or out the side of the triangle formed by the three nearest points.
-  //In a 100-point asteraceous pattern, the centroid is out one corner, and
-  //the first triangle is drawn negative, with point 0 connected wrong.
+  /* startpnt has to be within or out the side of the triangle formed
+   * by the three nearest points. In a 100-point asteraceous pattern,
+   * the centroid is out one corner, and the first triangle is drawn
+   * negative, with point 0 connected wrong.
+   */
   startpnt=points.begin()->second;
   if (filename.length())
   {
@@ -659,7 +662,12 @@ void pointlist::maketin(string filename,bool colorfibaster)
   for (m2=0,fail=true;m2<100 && fail;m2++)
     fail=tryStartPoint(ps,startpnt);
   if (fail)
-    throw flattri;               // Failing to make a proper TIN, after trying a hundred start points, normally means that all triangles are flat.
+  {
+    throw flattri;
+    /* Failing to make a proper TIN, after trying a hundred start points,
+     * normally means that all triangles are flat.
+     */
+  }
   if (ps.isOpen())
   {
     ps.startpage();
