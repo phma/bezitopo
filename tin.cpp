@@ -599,92 +599,103 @@ bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
   return fail;
 }
 
+int pointlist::flipPass(PostScript &ps,bool colorfibaster)
+{
+  int m,n;
+  for (m=n=0;n<edges.size();n++)
+    if (!edges[n].delaunay())
+    {
+      edges[n].flip(this);
+      m++;
+      //debugdel=0;
+      if (n>680 && n<680)
+      {
+        ps.startpage();
+        dumpedges_ps(ps,colorfibaster);
+        ps.endpage();
+      }
+      //debugdel=1;
+    }
+  debugdel=0;
+  if (ps.isOpen())
+  {
+    ps.startpage();
+    dumpedges_ps(ps,colorfibaster);
+    //dumpnext_ps();
+    ps.endpage();
+  }
+  //debugdel=1;
+  return m;
+}
+
 void pointlist::maketin(string filename,bool colorfibaster)
 /* Makes a triangulated irregular network. If <3 points, throws notri without altering
    the existing TIN. If two points are equal, or close enough to likely cause problems,
    throws samepnts; the TIN is partially constructed and will have to be destroyed.
    */
-{ptlist::iterator i;
- int m,m2,n,flipcount,passcount,cycles;
- bool fail;
- PostScript ps;
- if (points.size()<3)
+{
+  ptlist::iterator i;
+  int m,m2,n,flipcount,passcount,cycles;
+  bool fail;
+  PostScript ps;
+  if (points.size()<3)
     throw notri;
- startpnt=xy(0,0);
- for (i=points.begin();i!=points.end();i++)
-     startpnt+=i->second;
- startpnt/=points.size();
- edges.clear();
- //startpnt has to be
- //within or out the side of the triangle formed by the three nearest points.
- //In a 100-point asteraceous pattern, the centroid is out one corner, and
- //the first triangle is drawn negative, with point 0 connected wrong.
- startpnt=points.begin()->second;
- if (filename.length())
- {
-   ps.open(filename);
-   ps.prolog();
-   ps.setPointlist(*this);
- }
- for (m2=0,fail=true;m2<100 && fail;m2++)
-   fail=tryStartPoint(ps,startpnt);
- if (fail)
-   throw flattri; // Failing to make a proper TIN, after trying a hundred start points, normally means that all triangles are flat.
- if (filename.length())
- {
-   ps.startpage();
-   dumpedges_ps(ps,colorfibaster);
-   //dumpnext_ps();
-   ps.dot(startpnt);
-   ps.endpage();
- }
- flipcount=passcount=0;
- //debugdel=1;
- /* The flipping algorithm can take quadratic time, but usually does not
-    on real-world data. It can also get stuck in a loop because of roundoff error.
-    This requires at least five points in a perfect circle with nothing else
-    inside. The test datum {ring(1000);rotate(30);} results in flipping edges
-    around 13 points forever. To stop this, I put a cap on the number of passes.
-    The worst cases are ring with lots of rotation and ellipse. They take about
-    280 passes for 1000 points. I think that a cap of 1 pass per 3 points is
-    reasonable.
-    */
- do {for (m=n=0;n<edges.size();n++)
-         if (!edges[n].delaunay())
-            {//printf("Flipping edge %d\n",n);
-             edges[n].flip(this);
-             m++;
-             flipcount++;
-             //debugdel=0;
-             if (n>680 && n<680)
-                {ps.startpage();
-                 dumpedges_ps(ps,colorfibaster);
-                 ps.endpage();
-                 }
-             //debugdel=1;
-             }
-     debugdel=0;
-     if (filename.length())
-     {
-       ps.startpage();
-       dumpedges_ps(ps,colorfibaster);
-       //dumpnext_ps();
-       ps.endpage();
-     }
-     //debugdel=1;
-     passcount++;
-     } while (m && passcount*3<=points.size());
- //printf("Total %d edges flipped in %d passes\n",flipcount,passcount);
- if (filename.length())
- {
-   ps.startpage();
-   dumpedges_ps(ps,colorfibaster);
-   ps.dot(startpnt);
-   ps.endpage();
-   ps.trailer();
-   ps.close();
- }
- }
+  startpnt=xy(0,0);
+  for (i=points.begin();i!=points.end();i++)
+    startpnt+=i->second;
+  startpnt/=points.size();
+  edges.clear();
+  //startpnt has to be
+  //within or out the side of the triangle formed by the three nearest points.
+  //In a 100-point asteraceous pattern, the centroid is out one corner, and
+  //the first triangle is drawn negative, with point 0 connected wrong.
+  startpnt=points.begin()->second;
+  if (filename.length())
+  {
+    ps.open(filename);
+    ps.prolog();
+    ps.setPointlist(*this);
+  }
+  for (m2=0,fail=true;m2<100 && fail;m2++)
+    fail=tryStartPoint(ps,startpnt);
+  if (fail)
+    throw flattri;               // Failing to make a proper TIN, after trying a hundred start points, normally means that all triangles are flat.
+  if (ps.isOpen())
+  {
+    ps.startpage();
+    dumpedges_ps(ps,colorfibaster);
+    //dumpnext_ps();
+    ps.dot(startpnt);
+    ps.endpage();
+  }
+  flipcount=passcount=0;
+  //debugdel=1;
+  /* The flipping algorithm can take quadratic time, but usually does not
+   * on real-world data. It can also get stuck in a loop because of roundoff error.
+   * This requires at least five points in a perfect circle with nothing else
+   * inside. The test datum {ring(1000);rotate(30);} results in flipping edges
+   * around 13 points forever. To stop this, I put a cap on the number of passes.
+   * The worst cases are ring with lots of rotation and ellipse. They take about
+   * 280 passes for 1000 points. I think that a cap of 1 pass per 3 points is
+   * reasonable.
+   */
+  flipcount=passcount=0;
+  do
+  {
+    flipcount+=m=flipPass(ps,colorfibaster);
+    passcount++;
+  } while (m && passcount*3<=points.size());
+  //printf("Total %d edges flipped in %d passes\n",flipcount,passcount);
+  if (ps.isOpen())
+  {
+    ps.startpage();
+    dumpedges_ps(ps,colorfibaster);
+    ps.dot(startpnt);
+    ps.endpage();
+    ps.trailer();
+    ps.close();
+  }
+}
 
 void pointlist::makegrad(double corr)
 // Compute the gradient at each point.

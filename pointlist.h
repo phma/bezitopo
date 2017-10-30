@@ -90,6 +90,7 @@ private:
 public:
   void dumpedges_ps(PostScript &ps,bool colorfibaster);
   bool tryStartPoint(PostScript &ps,xy &startpnt);
+  int flipPass(PostScript &ps,bool colorfibaster);
   void maketin(std::string filename="",bool colorfibaster=false);
   void makegrad(double corr);
   void maketriangles();
