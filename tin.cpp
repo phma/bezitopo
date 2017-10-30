@@ -406,18 +406,207 @@ bool goodcenter(xy a,xy b,xy c,xy d)
  return n>1;
  }
 
+bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
+{
+  int m,n,val,maxedges,edgeoff;
+  double maxdist,mindist,idist,minx,miny,maxx,maxy;
+  xy A,B,C,farthest;
+  multimap<double,point*>::iterator j,k,inspos,left,right;
+  vector<point*> visible; // points of convex hull visible from new point
+  ptlist::iterator i;
+  bool fail;
+  maxedges=3*points.size()-6;
+  edges.clear();
+  convexhull.clear();
+  for (m=0;m<100;m++)
+  {
+    outward.clear();
+    for (i=points.begin();i!=points.end();i++)
+      outward.insert(ipoint(dist(startpnt,i->second),&i->second));
+    for (j=outward.begin(),n=0;j!=outward.end();j++,n++)
+    {
+      if (n==0)
+        A=*(j->second);
+      if (n==1)
+        B=*(j->second);
+      if (n==2)
+        C=*(j->second);
+      farthest=*(j->second);
+    }
+    //printf("m=%d startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
+    if (m>0 && goodcenter(startpnt,A,B,C))
+    {
+      //printf("m=%d found good center\n",m);
+      break;
+    }
+    if (m&4)
+      startpnt=rand2p(startpnt,farthest);
+    else
+      startpnt=rand2p(startpnt,C);
+  }
+  miny=maxy=startpnt.north();
+  minx=maxx=startpnt.east();
+  for (i=points.begin();i!=points.end();i++)
+  {
+    if (i->second.east()>maxx)
+      maxx=i->second.east();
+    if (i->second.east()<minx)
+      minx=i->second.east();
+    if (i->second.north()>maxy)
+      maxy=i->second.north();
+    if (i->second.north()<miny)
+      miny=i->second.north();
+  }
+  if (ps.isOpen())
+  {
+    ps.setscale(minx,miny,maxx,maxy);
+    ps.startpage();
+    ps.setcolor(0,0,1);
+    ps.dot(startpnt);
+    ps.setcolor(1,.5,0);
+    for (i=points.begin();i!=points.end();i++)
+      ps.dot(i->second,to_string(revpoints[&i->second]));
+    ps.endpage();
+  }
+  j=outward.begin();
+  //printf("edges %d\n",edges.size());
+  edges[0].a=j->second;
+  j->second->line=&(edges[0]);
+  convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
+  j++;
+  edges[0].b=j->second;
+  j->second->line=&(edges[0]);
+  edges[0].nexta=edges[0].nextb=&(edges[0]);
+  convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
+  //printf("edges %d\n",edges.size());
+  /* Before:
+  A-----B
+  |    /|
+  |   / |
+  |  /  |
+  | /   |
+  |/    |
+  C-----D
+
+  E
+  outward=(D,C,B,A,E)
+  edges=(DC,BD,BC,AB,AC)
+  After:
+  edges=(DC,BD,BC,AB,AC,EC,ED,EB)
+  */
+  for (j++;j!=outward.end();j++)
+  {
+    convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
+    inspos=convexhull.find(dir(startpnt,*(j->second)));
+    // First find how much the convex hull subtends as seen from the new point,
+    // expressed as distance from the startpnt to the line between an old point and the new point.
+    mindist=dist(startpnt,*(j->second));
+    maxdist=-mindist;
+    for (left=inspos,idist=n=0;/*idist>=maxdist && */n<convexhull.size();left--,n++)
+    {
+      if (left->second==j->second)
+        idist=0;
+      else
+      {                          //i points to a list of points, j to a map of pointers to points
+        idist=pldist(startpnt,*(left->second),*(j->second));
+        if (idist>maxdist)
+          maxdist=idist;
+      }
+      if (left==convexhull.begin())
+        left=convexhull.end();
+    }
+    for (right=inspos,idist=n=0;/*idist<=mindist && */n<convexhull.size();right++,n++)
+    {
+      if (right==convexhull.end())
+        right=convexhull.begin();
+      if (right->second==j->second)
+        idist=0;
+      else
+      {
+        idist=pldist(startpnt,*(right->second),*(j->second));
+        if (idist<mindist)
+          mindist=idist;
+      }
+    }
+    //printf("maxdist=%f mindist=%f\n",maxdist,mindist);
+    // Then find which convex hull points are the rightmost and leftmost that can be seen from the new point.
+    for (left=inspos,idist=n=0;n<2||idist<maxdist;left--,n++)
+    {
+      if (left->second==j->second)
+        idist=0;
+      else
+        idist=pldist(startpnt,*(left->second),*(j->second));
+      if (left==convexhull.begin())
+        left=convexhull.end();
+    }
+    left++;
+    for (right=inspos,idist=n=0;n<2||idist>mindist;right++,n++)
+    {
+      if (right==convexhull.end())
+        right=convexhull.begin();
+      if (right->second==j->second)
+        idist=0;
+      else
+        idist=pldist(startpnt,*(right->second),*(j->second));
+    }
+    right--;
+    //putchar('\n');
+    // Now make a list of the visible points. There are 3 on average.
+    visible.clear();
+    edgeoff=edges.size();
+    for (k=left,n=0,m=1;m;k++,n++,m++)
+    {
+      if (k==convexhull.end())
+        k=convexhull.begin();
+      if (k!=inspos)             // skip the point just added - don't join it to itself
+      {
+        visible.push_back(k->second);
+                                 // this adds one element, hence -1 in next line
+        edges[edges.size()].a=j->second;
+        edges[edges.size()-1].b=k->second;
+      }
+      if (k==right || n==maxedges)
+        m=-1;
+    }
+    val=--n;                     //subtract one for the point itself
+    //printf("%d points visible\n",n);
+    // Now delete old convex hull points that are now in the interior.
+    for (m=1;m<visible.size()-1;m++)
+      if (convexhull.erase(dir(startpnt,*visible[m]))>1)
+        throw(samepnts);
+    //dumppoints();
+    //dumpedges();
+    for (n=0;n<val;n++)
+    {
+      edges[(n+1)%val+edgeoff].nexta=&edges[n+edgeoff];
+      if (visible[n]->line)
+      {
+        assert(n+edgeoff<edges.size() && n+edgeoff>=0);
+                                 // crashes here
+        edges[n+edgeoff].nextb=visible[n]->line->next(visible[n]);
+        visible[n]->line->setnext(visible[n],&edges[n+edgeoff]);
+      }
+    }
+    for (fail=false,n=edgeoff;n<edges.size();n++)
+      if (edges[n].nexta==NULL || edges[n].nextb==NULL)
+        fail=true;
+    if (fail)
+      break;
+    //dumpedges();
+    j->second->line=&edges[edgeoff];
+    visible[val-1]->line=&edges[edgeoff+val-1];
+  }
+  return fail;
+}
+
 void pointlist::maketin(string filename,bool colorfibaster)
 /* Makes a triangulated irregular network. If <3 points, throws notri without altering
    the existing TIN. If two points are equal, or close enough to likely cause problems,
    throws samepnts; the TIN is partially constructed and will have to be destroyed.
    */
 {ptlist::iterator i;
- multimap<double,point*>::iterator j,k,inspos,left,right;
- vector<point*> visible; // points of convex hull visible from new point
- int m,m2,n,edgeoff,val,maxedges,flipcount,passcount,cycles;
+ int m,m2,n,flipcount,passcount,cycles;
  bool fail;
- double maxdist,mindist,idist,minx,miny,maxx,maxy;
- xy A,B,C,farthest;
  PostScript ps;
  if (points.size()<3)
     throw notri;
@@ -426,7 +615,6 @@ void pointlist::maketin(string filename,bool colorfibaster)
      startpnt+=i->second;
  startpnt/=points.size();
  edges.clear();
- maxedges=3*points.size()-6;
  //startpnt has to be
  //within or out the side of the triangle formed by the three nearest points.
  //In a 100-point asteraceous pattern, the centroid is out one corner, and
@@ -439,192 +627,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
    ps.setPointlist(*this);
  }
  for (m2=0,fail=true;m2<100 && fail;m2++)
-     {edges.clear();
-      convexhull.clear();
-      for (m=0;m<100;m++)
-          {outward.clear();
-           for (i=points.begin();i!=points.end();i++)
-               outward.insert(ipoint(dist(startpnt,i->second),&i->second));
-           for (j=outward.begin(),n=0;j!=outward.end();j++,n++)
-               {if (n==0)
-                   A=*(j->second);
-                if (n==1)
-                   B=*(j->second);
-                if (n==2)
-                   C=*(j->second);
-                farthest=*(j->second);
-                }
-           //printf("m=%d startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
-           if (m>0 && goodcenter(startpnt,A,B,C))
-	   {
-	     //printf("m=%d found good center\n",m);
-             break;
-	   }
-           if (m&4)
-	     startpnt=rand2p(startpnt,farthest);
-	   else
-	     startpnt=rand2p(startpnt,C);
-           }
-      // The point (-7.8578111411563043,-4.6782453265676276) came up in a run and caused the program to crash.
-      //startpnt=xy(-7.8578111411563043,-4.6782453265676276);
-      //printf("Took %d tries to choose startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
-      miny=maxy=startpnt.north();
-      minx=maxx=startpnt.east();
-      for (i=points.begin();i!=points.end();i++)
-          {if (i->second.east()>maxx)
-              maxx=i->second.east();
-           if (i->second.east()<minx)
-              minx=i->second.east();
-           if (i->second.north()>maxy)
-              maxy=i->second.north();
-           if (i->second.north()<miny)
-              miny=i->second.north();
-           }
-      if (filename.length())
-      {
-        ps.setscale(minx,miny,maxx,maxy);
-        ps.startpage();
-        ps.setcolor(0,0,1);
-        ps.dot(startpnt);
-        ps.setcolor(1,.5,0);
-        for (i=points.begin();i!=points.end();i++)
-            ps.dot(i->second,to_string(revpoints[&i->second]));
-        ps.endpage();
-      }
-      j=outward.begin();
-      //printf("edges %d\n",edges.size());
-      edges[0].a=j->second;
-      j->second->line=&(edges[0]);
-      convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
-      j++;
-      edges[0].b=j->second;
-      j->second->line=&(edges[0]);
-      edges[0].nexta=edges[0].nextb=&(edges[0]);
-      convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
-      //printf("edges %d\n",edges.size());
-      /* Before:
-         A-----B
-         |    /|
-         |   / |
-         |  /  |
-         | /   |
-         |/    |
-         C-----D
-         
-                  E
-         outward=(D,C,B,A,E)
-         edges=(DC,BD,BC,AB,AC)
-         After:
-         edges=(DC,BD,BC,AB,AC,EC,ED,EB)
-         */
-      for (j++;j!=outward.end();j++)
-          {//printf("\nSTART LOOP\n");
-           convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
-           inspos=convexhull.find(dir(startpnt,*(j->second)));
-           // First find how much the convex hull subtends as seen from the new point,
-           // expressed as distance from the startpnt to the line between an old point and the new point.
-           mindist=dist(startpnt,*(j->second));
-           maxdist=-mindist;
-           for (left=inspos,idist=n=0;/*idist>=maxdist && */n<convexhull.size();left--,n++)
-               {//printf("n=%d left->second=%p ",n,left->second);
-                if (left->second==j->second)
-                   idist=0;
-                else
-                   {idist=pldist(startpnt,*(left->second),*(j->second)); //i points to a list of points, j to a map of pointers to points
-                    if (idist>maxdist)
-                       maxdist=idist;
-                    }
-                //printf("idist=%f\n",idist);
-                if (left==convexhull.begin())
-                   left=convexhull.end();
-                }
-           for (right=inspos,idist=n=0;/*idist<=mindist && */n<convexhull.size();right++,n++)
-               {if (right==convexhull.end())
-                   right=convexhull.begin();
-                if (right->second==j->second)
-                   idist=0;
-                else
-                   {idist=pldist(startpnt,*(right->second),*(j->second));
-                    if (idist<mindist)
-                       mindist=idist;
-                    }
-                }
-           //printf("maxdist=%f mindist=%f\n",maxdist,mindist);
-           // Then find which convex hull points are the rightmost and leftmost that can be seen from the new point.
-           for (left=inspos,idist=n=0;n<2||idist<maxdist;left--,n++)
-               {//putchar('<');
-                if (left->second==j->second)
-                   idist=0;
-                else
-                   idist=pldist(startpnt,*(left->second),*(j->second));
-                if (left==convexhull.begin())
-                   left=convexhull.end();
-                }
-           left++;
-           for (right=inspos,idist=n=0;n<2||idist>mindist;right++,n++)
-               {//putchar('>');
-                if (right==convexhull.end())
-                   right=convexhull.begin();
-                if (right->second==j->second)
-                   idist=0;
-                else
-                   idist=pldist(startpnt,*(right->second),*(j->second));
-                }
-           right--;
-           //putchar('\n');
-           // Now make a list of the visible points. There are 3 on average.
-           visible.clear();
-           edgeoff=edges.size();
-           for (k=left,n=0,m=1;m;k++,n++,m++)
-               {if (k==convexhull.end())
-                   k=convexhull.begin();
-                if (k!=inspos) // skip the point just added - don't join it to itself
-                   {visible.push_back(k->second);
-                    edges[edges.size()].a=j->second; // this adds one element, hence -1 in next line
-                    edges[edges.size()-1].b=k->second;
-                    //printf("Adding edge from %p to %p\n",j->second,k->second);
-                    }
-                if (k==right || n==maxedges)
-		  m=-1;
-                }
-           val=--n; //subtract one for the point itself
-           //printf("%d points visible\n",n);
-           // Now delete old convex hull points that are now in the interior.
-           for (m=1;m<visible.size()-1;m++)
-               if (convexhull.erase(dir(startpnt,*visible[m]))>1)
-                  throw(samepnts);
-           //dumppoints();
-           //dumpedges();
-           for (n=0;n<val;n++)
-           {
-	     edges[(n+1)%val+edgeoff].nexta=&edges[n+edgeoff];
-	     if (visible[n]->line)
-	     {
-	       assert(n+edgeoff<edges.size() && n+edgeoff>=0);
-               edges[n+edgeoff].nextb=visible[n]->line->next(visible[n]); // crashes here
-               visible[n]->line->setnext(visible[n],&edges[n+edgeoff]);
-	     }
-           }
-           for (fail=false,n=edgeoff;n<edges.size();n++)
-               if (edges[n].nexta==NULL || edges[n].nextb==NULL)
-                  fail=true;
-           if (fail)
-	   {
-	     //dumpedges();
-             break;
-           }
-           //dumpedges();
-           j->second->line=&edges[edgeoff];
-           visible[val-1]->line=&edges[edgeoff+val-1];
-           /*ps.startpage();
-           //dumphull();
-           ps.dot(startpnt);
-           dumphull_ps();
-           dumpedges_ps(colorfibaster);
-           ps.endpage();*/
-           //dumpedges();
-           }
-      }
+   fail=tryStartPoint(ps,startpnt);
  if (fail)
    throw flattri; // Failing to make a proper TIN, after trying a hundred start points, normally means that all triangles are flat.
  if (filename.length())

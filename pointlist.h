@@ -89,6 +89,7 @@ private:
   void dumpnext_ps(PostScript &ps);
 public:
   void dumpedges_ps(PostScript &ps,bool colorfibaster);
+  bool tryStartPoint(PostScript &ps,xy &startpnt);
   void maketin(std::string filename="",bool colorfibaster=false);
   void makegrad(double corr);
   void maketriangles();

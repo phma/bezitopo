@@ -50,6 +50,7 @@ public:
   void setpaper(papersize pap,int ori);
   double aspectRatio();
   void open(std::string psfname);
+  bool isOpen();
   void prolog();
   void startpage();
   void endpage();

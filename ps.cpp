@@ -129,6 +129,11 @@ void PostScript::open(string psfname)
   psfile=new ofstream(psfname);
 }
 
+bool PostScript::isOpen()
+{
+  return psfile!=nullptr;
+}
+
 void PostScript::prolog()
 {
   if (psfile && !indocument)
