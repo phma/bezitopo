@@ -407,6 +407,10 @@ bool goodcenter(xy a,xy b,xy c,xy d)
  }
 
 bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
+/* This is the sweep-hull algorithm (http://s-hull.org), except that the
+ * startpoint is random instead of the circumcenter of three points.
+ * I did not know about the algorithm when I wrote it.
+ */
 {
   int m,n,val,maxedges,edgeoff;
   double maxdist,mindist,idist,minx,miny,maxx,maxy;
