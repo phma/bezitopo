@@ -42,6 +42,9 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   circlePen[2]=QPen(Qt::blue);
   errorMessage=new QErrorMessage(this);
   fileDialog=new QFileDialog(this);
+  progressDialog=new QProgressDialog(this);
+  progressDialog->reset();
+  timer=new QTimer(this);
   plnum=-1;
   rotation=0;
   //for (i=0;i<doc.pl[1].edges.size();i++)
@@ -277,9 +280,37 @@ void TinCanvas::makeTin()
     doc.copytopopoints(1,0);
   }
   plnum=1;
+  tinerror=0;
   try
   {
     doc.pl[1].maketin("",false);
+  }
+  catch (int e)
+  {
+    tinerror=e;
+  }
+  connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
+  timer->start(0);
+}
+
+void TinCanvas::tryStartPoint()
+{
+}
+
+void TinCanvas::flipPass()
+{
+}
+
+void TinCanvas::makeTinFinish()
+{
+  if (tinerror)
+  { // TODO: translate the thrown error into something intelligible
+    QString msg=tr("Can't make TIN. Error: ")+QString::fromStdString(to_string(tinerror));
+    doc.pl[1].clearTin();
+    errorMessage->showMessage(msg);
+  }
+  else
+  {
     doc.pl[1].makegrad(0.);
     doc.pl[1].maketriangles();
     doc.pl[1].setgradient();
@@ -287,12 +318,8 @@ void TinCanvas::makeTin()
     doc.pl[1].findcriticalpts();
     doc.pl[1].addperimeter();
   }
-  catch (int e)
-  { // TODO: translate the thrown error into something intelligible
-    QString msg=tr("Can't make TIN. Error: ")+QString::fromStdString(to_string(e));
-    errorMessage->showMessage(msg);
-  }
   update();
+  timer->stop();
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)

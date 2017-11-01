@@ -49,6 +49,12 @@ void pointlist::clear()
   revpoints.clear();
 }
 
+void pointlist::clearTin()
+{
+  triangles.clear();
+  edges.clear();
+}
+
 int pointlist::size()
 {
   return points.size();

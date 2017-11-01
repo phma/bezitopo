@@ -61,6 +61,9 @@ public slots:
   void importPnezd();
   void importCriteria();
   void makeTin();
+  void tryStartPoint();
+  void flipPass();
+  void makeTinFinish();
 protected:
   void setSize();
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -77,6 +80,8 @@ private:
   QBrush brush;
   QErrorMessage *errorMessage;
   QFileDialog *fileDialog;
+  QProgressDialog *progressDialog;
+  QTimer *timer;
   xy windowCenter,worldCenter,dragStart;
   int scale;
   /* scale is the logarithm, in major thirds (see zoom), of the number of
@@ -85,6 +90,7 @@ private:
   int rotation; // rotation is stepped by compass points (DEG45/4)
   double windowSize; // length of a perpendicular from corner to diagonal
   bool mouseClicked,mouseDoubleClicked;
+  int tinerror;
 };
 
 class TinWindow: public QMainWindow

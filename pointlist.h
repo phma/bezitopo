@@ -73,6 +73,7 @@ public:
   void clear();
   int size();
   void clearmarks();
+  void clearTin();
   bool checkTinConsistency();
   int readCriteria(std::string fname);
   void setgradient(bool flat=false);
