@@ -280,8 +280,8 @@ void TinCanvas::makeTin()
     doc.copytopopoints(1,0);
   }
   plnum=1;
-  tinerror=startPointTries=0;
-  if (doc.pl[1].size()<3)
+  tinerror=startPointTries=passCount=0;
+  if (doc.pl[plnum].size()<3)
     tinerror=notri;
   else
     startPoint=doc.pl[1].points.begin()->second;
@@ -301,18 +301,19 @@ void TinCanvas::tryStartPoint()
   if (tinerror)
   {
     disconnect(timer,SIGNAL(timeout()),this,SLOT(tryStartPoint()));
-    connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(flipPass()));
   }
   else
   {
     try
     {
-      if (doc.pl[1].tryStartPoint(dummyPs,startPoint))
+      if (doc.pl[plnum].tryStartPoint(dummyPs,startPoint))
         progressDialog->setValue(++startPointTries);
       else
       {
         disconnect(timer,SIGNAL(timeout()),this,SLOT(tryStartPoint()));
-        connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
+        connect(timer,SIGNAL(timeout()),this,SLOT(flipPass()));
+        progressDialog->setRange(0,doc.pl[plnum].edges.size());
         progressDialog->setLabelText(tr("Flipping edges..."));
       }
     }
@@ -325,6 +326,34 @@ void TinCanvas::tryStartPoint()
 
 void TinCanvas::flipPass()
 {
+  int nFlip,nGoodEdges,i;
+  bool tooLong=false;
+  if (passCount*3>doc.pl[plnum].size())
+    tooLong=true; // tooLong is not an error. The TIN should be valid; it's just
+  if (tinerror || tooLong) // repeatedly flipping edges in a circle.
+  {
+    disconnect(timer,SIGNAL(timeout()),this,SLOT(flipPass()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
+  }
+  else
+  {
+    try
+    {
+      nFlip=doc.pl[plnum].flipPass(dummyPs,false);
+      nGoodEdges=doc.pl[plnum].edges.size()-nFlip;
+      progressDialog->setValue(nGoodEdges);
+      ++passCount;
+      if (!nFlip)
+      {
+        disconnect(timer,SIGNAL(timeout()),this,SLOT(flipPass()));
+        connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
+      }
+    }
+    catch (int e)
+    {
+      tinerror=e;
+    }
+  }
 }
 
 void TinCanvas::makeTinFinish()
@@ -345,6 +374,7 @@ void TinCanvas::makeTinFinish()
     doc.pl[1].addperimeter();
   }
   update();
+  disconnect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
   timer->stop();
   progressDialog->reset();
 }

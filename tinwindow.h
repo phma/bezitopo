@@ -90,7 +90,7 @@ private:
   int rotation; // rotation is stepped by compass points (DEG45/4)
   double windowSize; // length of a perpendicular from corner to diagonal
   bool mouseClicked,mouseDoubleClicked;
-  int tinerror,startPointTries;
+  int tinerror,startPointTries,passCount;
   PostScript dummyPs;
   xy startPoint;
 };
