@@ -280,21 +280,47 @@ void TinCanvas::makeTin()
     doc.copytopopoints(1,0);
   }
   plnum=1;
-  tinerror=0;
-  try
-  {
-    doc.pl[1].maketin("",false);
-  }
-  catch (int e)
-  {
-    tinerror=e;
-  }
-  connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
+  tinerror=startPointTries=0;
+  if (doc.pl[1].size()<3)
+    tinerror=notri;
+  else
+    startPoint=doc.pl[1].points.begin()->second;
+  progressDialog->setRange(0,100);
+  progressDialog->setWindowModality(Qt::WindowModal);
+  progressDialog->setWindowTitle(tr("Making TIN"));
+  progressDialog->setLabelText(tr("Sweeping convex hull..."));
+  progressDialog->show();
+  connect(timer,SIGNAL(timeout()),this,SLOT(tryStartPoint()));
   timer->start(0);
 }
 
 void TinCanvas::tryStartPoint()
 {
+  if (startPointTries>=100)
+    tinerror=flattri;
+  if (tinerror)
+  {
+    disconnect(timer,SIGNAL(timeout()),this,SLOT(tryStartPoint()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
+  }
+  else
+  {
+    try
+    {
+      if (doc.pl[1].tryStartPoint(dummyPs,startPoint))
+        progressDialog->setValue(++startPointTries);
+      else
+      {
+        disconnect(timer,SIGNAL(timeout()),this,SLOT(tryStartPoint()));
+        connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
+        progressDialog->setLabelText(tr("Flipping edges..."));
+      }
+    }
+    catch (int e)
+    {
+      tinerror=e;
+    }
+  }
 }
 
 void TinCanvas::flipPass()
@@ -320,6 +346,7 @@ void TinCanvas::makeTinFinish()
   }
   update();
   timer->stop();
+  progressDialog->reset();
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)
