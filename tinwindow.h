@@ -63,6 +63,7 @@ public slots:
   void makeTin();
   void tryStartPoint();
   void flipPass();
+  void findCriticalPoints();
   void makeTinFinish();
 protected:
   void setSize();
@@ -90,7 +91,7 @@ private:
   int rotation; // rotation is stepped by compass points (DEG45/4)
   double windowSize; // length of a perpendicular from corner to diagonal
   bool mouseClicked,mouseDoubleClicked;
-  int tinerror,startPointTries,passCount;
+  int tinerror,startPointTries,passCount,triCount;
   PostScript dummyPs;
   xy startPoint;
 };

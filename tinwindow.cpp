@@ -333,7 +333,7 @@ void TinCanvas::flipPass()
   if (tinerror || tooLong) // repeatedly flipping edges in a circle.
   {
     disconnect(timer,SIGNAL(timeout()),this,SLOT(flipPass()));
-    connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
   }
   else
   {
@@ -346,6 +346,40 @@ void TinCanvas::flipPass()
       if (!nFlip)
       {
         disconnect(timer,SIGNAL(timeout()),this,SLOT(flipPass()));
+        connect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
+        doc.pl[plnum].makegrad(0.);
+        doc.pl[plnum].maketriangles();
+        doc.pl[plnum].setgradient();
+        doc.pl[plnum].makeqindex();           // These five are all fast. It's finding the
+        doc.pl[plnum].findedgecriticalpts();  // critical points of a triangle that's slow.
+        progressDialog->setRange(0,doc.pl[plnum].triangles.size());
+        progressDialog->setLabelText(tr("Finding critical points..."));
+        triCount=0;
+      }
+    }
+    catch (int e)
+    {
+      tinerror=e;
+    }
+  }
+}
+
+void TinCanvas::findCriticalPoints()
+{
+  if (tinerror)
+  {
+    disconnect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
+  }
+  else
+  {
+    try
+    {
+      doc.pl[plnum].triangles[triCount++].findcriticalpts();
+      progressDialog->setValue(triCount);
+      if (triCount==doc.pl[plnum].triangles.size())
+      {
+        disconnect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
         connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
       }
     }
@@ -361,17 +395,12 @@ void TinCanvas::makeTinFinish()
   if (tinerror)
   { // TODO: translate the thrown error into something intelligible
     QString msg=tr("Can't make TIN. Error: ")+QString::fromStdString(to_string(tinerror));
-    doc.pl[1].clearTin();
+    doc.pl[plnum].clearTin();
     errorMessage->showMessage(msg);
   }
   else
   {
-    doc.pl[1].makegrad(0.);
-    doc.pl[1].maketriangles();
-    doc.pl[1].setgradient();
-    doc.pl[1].makeqindex();
-    doc.pl[1].findcriticalpts();
-    doc.pl[1].addperimeter();
+    doc.pl[plnum].addperimeter();
   }
   update();
   disconnect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
