@@ -77,6 +77,7 @@ public:
   bool checkTinConsistency();
   int readCriteria(std::string fname);
   void setgradient(bool flat=false);
+  void findedgecriticalpts();
   void findcriticalpts();
   void addperimeter();
   void removeperimeter();

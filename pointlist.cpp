@@ -346,12 +346,17 @@ double pointlist::dirbound(int angle)
   return bound;
 }
 
-void pointlist::findcriticalpts()
+void pointlist::findedgecriticalpts()
 {
   map<int,edge>::iterator e;
-  map<int,triangle>::iterator t;
   for (e=edges.begin();e!=edges.end();e++)
     e->second.findextrema();
+}
+
+void pointlist::findcriticalpts()
+{
+  map<int,triangle>::iterator t;
+  findedgecriticalpts();
   for (t=triangles.begin();t!=triangles.end();t++)
   {
     t->second.findcriticalpts();
