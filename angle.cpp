@@ -24,6 +24,7 @@
 #include <cstdio>
 #include <vector>
 #include "angle.h"
+#include "except.h"
 using namespace std;
 
 double sqr(double x)

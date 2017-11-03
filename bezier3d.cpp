@@ -3,7 +3,7 @@
 /* bezier3d.cpp - 3d Bézier splines                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2014,2015,2016 Pierre Abbat.
+/* Copyright 2014-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@
  * Of course the 3d approximation of a vertical curve is exact.
  */
 #include <cmath>
-#include <stdexcept>
+#include "except.h"
 #include "bezier3d.h"
 #include "angle.h"
 using namespace std;

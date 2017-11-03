@@ -3,7 +3,7 @@
 /* sourcegeoid.cpp - geoidal undulation source data   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2017 Pierre Abbat.
+/* Copyright 2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -29,6 +29,7 @@
 #include "bicubic.h"
 #include "manysum.h"
 #include "ldecimal.h"
+#include "except.h"
 
 using namespace std;
 vector<geoid> geo;

@@ -3,7 +3,7 @@
 /* sourcegeoid.h - geoidal undulation source data     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2017 Pierre Abbat.
+/* Copyright 2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -34,7 +34,6 @@
 
 #define HASHPRIME 729683249
 // Used for hashing 256-bit patterns of which samples in a geoquad are valid.
-#define unsetgeoid 8
 #define ENDIAN_BIG 192
 #define ENDIAN_NATIVE 24
 #define ENDIAN_LITTLE 3

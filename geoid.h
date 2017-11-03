@@ -3,7 +3,7 @@
 /* geoid.h - geoidal undulation                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2017 Pierre Abbat.
+/* Copyright 2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -36,8 +36,6 @@
 #define BOL_EARTH 0
 #define BOL_UNDULATION 0
 #define BOL_VARLENGTH 1
-#define badheader 5
-#define baddata 6
 
 class gboundary;
 

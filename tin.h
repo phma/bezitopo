@@ -3,7 +3,7 @@
 /* tin.h - triangulated irregular network             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012,2013,2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -82,21 +82,5 @@ public:
 };
 
 typedef std::pair<double,point*> ipoint;
-/*
-class notriangle: public exception
-{virtual const char* what() const throw()
-   {return "Must have at least three points to define a surface.";
-    }
- } notri;
-
-class samepoints: public exception
-{virtual const char* what() const throw()
-   {return "Two of the points are the same.";
-    }
- } samepnts;
-*/
-#define notri 1
-#define samepnts 2
-#define flattri 3
 
 #endif

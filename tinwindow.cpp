@@ -21,6 +21,7 @@
  */
 #include <iostream>
 #include <cmath>
+#include "except.h"
 #include "tinwindow.h"
 #include "zoom.h"
 #include "test.h"

@@ -3,7 +3,7 @@
 /* measure.cpp - measuring units                      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012,2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -39,6 +39,7 @@
 #include <cctype>
 #include "measure.h"
 #include "angle.h"
+#include "except.h"
 using namespace std;
 
 struct cf

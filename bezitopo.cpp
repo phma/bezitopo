@@ -3,7 +3,7 @@
 /* bezitopo.cpp - main program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012,2013,2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 #include "point.h"
 #include "cogo.h"
 #include "bezitopo.h"
+#include "except.h"
 #include "test.h"
 #include "tin.h"
 #include "measure.h"

@@ -3,7 +3,7 @@
 /* matrix.cpp - matrices                              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016 Pierre Abbat.
+/* Copyright 2016,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 #include <iostream>
 #include <iomanip>
 #include "matrix.h"
+#include "except.h"
 #include "manysum.h"
 #include "random.h"
 #include "angle.h"

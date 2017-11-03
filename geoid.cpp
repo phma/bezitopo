@@ -3,7 +3,7 @@
 /* geoid.cpp - geoidal undulation                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2017 Pierre Abbat.
+/* Copyright 2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cassert>
 #include <map>
+#include "except.h"
 #include "geoid.h"
 #include "binio.h"
 #include "angle.h"

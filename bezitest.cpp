@@ -3,7 +3,7 @@
 /* bezitest.cpp - test program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -47,6 +47,7 @@
 #include "segment.h"
 #include "arc.h"
 #include "spiral.h"
+#include "except.h"
 #include "cogospiral.h"
 #include "qindex.h"
 #include "random.h"
