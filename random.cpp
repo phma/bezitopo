@@ -26,7 +26,7 @@
 #include <cmath>
 #include "random.h"
 
-#ifdef HAVE_WINDOWS_H
+#if defined(_WIN32) || defined(__CYGWIN__)
 randm::randm()
 {
   ucnum=usnum=0;
