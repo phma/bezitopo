@@ -47,7 +47,7 @@
    */
 using namespace std;
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__CYGWIN__)
 // Linux and BSD have this function in the library; Windows doesn't.
 double significand(double x)
 {
