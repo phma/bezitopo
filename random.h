@@ -33,7 +33,7 @@ public:
   double expcrandom();
   ~randm();
 private:
-#ifdef HAVE_WINDOWS_H
+#if defined(_WIN32) || defined(__CYGWIN__)
   unsigned int usbuf,ucbuf,usnum,ucnum;
 #else
   FILE *randfil;
