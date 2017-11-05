@@ -33,7 +33,7 @@ public:
   double expcrandom();
   ~randm();
 private:
-#if defined(_WIN32) || defined(__CYGWIN__)
+#if defined(_WIN32)
   unsigned int usbuf,ucbuf,usnum,ucnum;
 #else
   FILE *randfil;

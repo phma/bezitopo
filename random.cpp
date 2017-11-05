@@ -26,7 +26,8 @@
 #include <cmath>
 #include "random.h"
 
-#if defined(_WIN32) || defined(__CYGWIN__)
+// Cygwin does not define _WIN32, but does have /dev/urandom
+#if defined(_WIN32)
 randm::randm()
 {
   ucnum=usnum=0;
