@@ -78,7 +78,7 @@ check_include_files(sys/time.h HAVE_SYS_TIME_H)
 check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_files(windows.h HAVE_WINDOWS_H)
 
-set(CMAKE_CXX_FLAGS "-std=c++11")
+set(CMAKE_CXX_FLAGS "-std=gnu++11")
 install(TARGETS bezitopo convertgeoid DESTINATION bin)
 
 test_big_endian(BIGENDIAN)
