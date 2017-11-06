@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef CIDIALOG_H
+#define CIDIALOG_H
 #include <vector>
 #include <QDialog>
 #include <QLabel>
@@ -33,14 +35,19 @@
 
 class ContourIntervalDialog: public QDialog
 {
+  Q_OBJECT
 public:
   ContourIntervalDialog(QWidget *parent=0);
   void set(ContourInterval *ci,Measure meas);
+signals:
+public slots:
+  void selectInterval(int n);
 private:
-  ContourInterval *contourInterval;
+  ContourInterval *contourInterval,selectedInterval;
   QLabel *currentInterval;
   QComboBox *comboBox;
   QPushButton *okButton,*cancelButton;
   QGridLayout *gridLayout;
   std::vector<ContourInterval> ciList;
 };
+#endif

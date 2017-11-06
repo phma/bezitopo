@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <iostream>
 #include "cidialog.h"
 using namespace std;
 
@@ -36,6 +37,7 @@ ContourIntervalDialog::ContourIntervalDialog(QWidget *parent):QDialog(parent)
   gridLayout->addWidget(cancelButton,1,1);
   contourInterval=nullptr;
   okButton->setEnabled(false);
+  connect(comboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(selectInterval(int)));
 }
 
 void ContourIntervalDialog::set(ContourInterval *ci,Measure meas)
@@ -75,5 +77,14 @@ void ContourIntervalDialog::set(ContourInterval *ci,Measure meas)
   {
     currentInterval->setText(tr("None"));
     okButton->setEnabled(false);
+  }
+}
+
+void ContourIntervalDialog::selectInterval(int n)
+{
+  if (n>=0 && n<ciList.size())
+  {
+    cout<<n<<" selected"<<endl;
+    selectedInterval=ciList[n];
   }
 }
