@@ -3865,6 +3865,20 @@ void testcontour()
  */
 {
   xyz offset;
+  ContourInterval oneMeter(1,0,false),twoMeter(1,1,false),fiveMeter(1,2,false);
+  ContourInterval oneFoot(0.3048,0,false),twoFoot(0.3048,1,false),fiveFoot(0.3048,2,false);
+  assert(oneMeter.mediumInterval()==1);
+  assert(twoMeter.mediumInterval()==2);
+  assert(fiveMeter.mediumInterval()==5);
+  assert(oneMeter.coarseInterval()==5);
+  assert(twoMeter.coarseInterval()==10);
+  assert(fiveMeter.coarseInterval()==20);
+  assert(oneFoot.mediumInterval()==0.3048);
+  assert(twoFoot.mediumInterval()==0.6096);
+  assert(fiveFoot.mediumInterval()==1.524);
+  assert(oneFoot.coarseInterval()==1.524);
+  assert(twoFoot.coarseInterval()==3.048);
+  assert(fiveFoot.coarseInterval()==6.096);
   offset=xyz(-1000000,-1500000,0); // This offset made a spike in contours[7].
   doc.makepointlist(1);
   doc.pl[1].clear();
