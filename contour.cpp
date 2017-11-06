@@ -107,7 +107,7 @@ string ContourInterval::valueString(Measure meas,bool precise)
  * Uses 7 digits if precise to distinguish which foot it was set in.
  */
 {
-  return meas.formatMeasurementUnit(mediumInterval(),LENGTH,mediumInterval()/M_SQRT_10/(precise?1e6:1));
+  return meas.formatMeasurementUnit(mediumInterval(),LENGTH,0,mediumInterval()/M_SQRT_10/(precise?1e6:1));
 }
 
 float splitpoint(double leftclamp,double rightclamp,double tolerance)
