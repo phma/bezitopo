@@ -41,8 +41,12 @@ ContourIntervalDialog::ContourIntervalDialog(QWidget *parent):QDialog(parent)
 void ContourIntervalDialog::set(ContourInterval *ci,Measure meas)
 {
   bool precise;
+  int i;
+  ContourInterval temp;
   double mantissa;
   contourInterval=ci;
+  comboBox->clear();
+  ciList.clear();
   if (ci)
   {
     /* The Indian and US feet are 1.3 ppm less and 2 ppm more than the
@@ -56,6 +60,16 @@ void ContourIntervalDialog::set(ContourInterval *ci,Measure meas)
             fabs(mantissa-0.69897)>0.0000005 && fabs(mantissa-1)>0.0000005;
     currentInterval->setText(QString::fromStdString(ci->valueString(meas,precise)));
     okButton->setEnabled(true);
+    for (i=rint(3*log10(meas.fromCoherent(MININTERVAL/3,LENGTH)));
+         i<=rint(3*log10(meas.fromCoherent(MAXINTERVAL*3,LENGTH)));i++)
+    {
+      temp=ContourInterval(meas.toCoherent(1,LENGTH),i,false);
+      if (temp.mediumInterval()>=MININTERVAL && temp.mediumInterval()<=MAXINTERVAL)
+      {
+        ciList.push_back(temp);
+        comboBox->addItem(QString::fromStdString(temp.valueString(meas,false)));
+      }
+    }
   }
   else
   {
