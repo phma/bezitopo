@@ -28,6 +28,12 @@ ContourIntervalDialog::ContourIntervalDialog(QWidget *parent):QDialog(parent)
   comboBox=new QComboBox(this);
   okButton=new QPushButton(tr("OK"),this);
   cancelButton=new QPushButton(tr("Cancel"),this);
+  gridLayout=new QGridLayout(this);
+  setLayout(gridLayout);
+  gridLayout->addWidget(currentInterval,0,0);
+  gridLayout->addWidget(comboBox,0,1);
+  gridLayout->addWidget(okButton,1,0);
+  gridLayout->addWidget(cancelButton,1,1);
   contourInterval=nullptr;
   okButton->setEnabled(false);
 }
@@ -36,6 +42,7 @@ void ContourIntervalDialog::set(ContourInterval *ci,Measure meas)
 {
   bool precise;
   double mantissa;
+  contourInterval=ci;
   if (ci)
   {
     /* The Indian and US feet are 1.3 ppm less and 2 ppm more than the

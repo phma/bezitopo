@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QPushButton>
+#include <QGridLayout>
 #include "contour.h"
 
 #define MININTERVAL 0.03
@@ -40,5 +41,6 @@ private:
   QLabel *currentInterval;
   QComboBox *comboBox;
   QPushButton *okButton,*cancelButton;
+  QGridLayout *gridLayout;
   std::vector<ContourInterval> ciList;
 };
