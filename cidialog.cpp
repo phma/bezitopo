@@ -37,7 +37,10 @@ ContourIntervalDialog::ContourIntervalDialog(QWidget *parent):QDialog(parent)
   gridLayout->addWidget(cancelButton,1,1);
   contourInterval=nullptr;
   okButton->setEnabled(false);
+  okButton->setDefault(true);
   connect(comboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(selectInterval(int)));
+  connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
+  connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
 }
 
 void ContourIntervalDialog::set(ContourInterval *ci,Measure meas)
@@ -84,7 +87,14 @@ void ContourIntervalDialog::selectInterval(int n)
 {
   if (n>=0 && n<ciList.size())
   {
-    cout<<n<<" selected"<<endl;
+    //cout<<n<<" selected"<<endl;
     selectedInterval=ciList[n];
   }
+}
+
+void ContourIntervalDialog::accept()
+{
+  if (contourInterval)
+    *contourInterval=selectedInterval;
+  QDialog::accept();
 }

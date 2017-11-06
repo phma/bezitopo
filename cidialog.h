@@ -42,6 +42,7 @@ public:
 signals:
 public slots:
   void selectInterval(int n);
+  virtual void accept();
 private:
   ContourInterval *contourInterval,selectedInterval;
   QLabel *currentInterval;
