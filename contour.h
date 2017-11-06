@@ -3,7 +3,7 @@
 /* contour.h - generates contours                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015,2016 Pierre Abbat.
+/* Copyright 2012,2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -24,8 +24,10 @@
 #define CONTOUR_H
 #include <vector>
 #include "polyline.h"
+#include "measure.h"
 #define CCHALONG 0.30754991027012474516361707317
 // This is sqrt(4/27) of the way from 0.5 to 0. See clampcubic.
+#define M_SQRT_10 3.16227766016837933199889354
 
 class pointlist;
 
@@ -59,6 +61,7 @@ public:
   {
     return interval*fineRatio*coarseRatio;
   };
+  std::string valueString(Measure meas,bool precise=false);
 private:
   double interval;
   int fineRatio,coarseRatio;

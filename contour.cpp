@@ -3,7 +3,7 @@
 /* contour.cpp - generates contours                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015,2016 Pierre Abbat.
+/* Copyright 2012,2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -100,6 +100,14 @@ ContourInterval::ContourInterval(double unit,int icode,bool fine)
         interval/=fineRatio=4;
       break;
   }
+}
+
+string ContourInterval::valueString(Measure meas,bool precise)
+/* Returns the value of mediumInterval with 1 or 7 significant digits.
+ * Uses 7 digits if precise to distinguish which foot it was set in.
+ */
+{
+  return meas.formatMeasurementUnit(mediumInterval(),LENGTH,mediumInterval()/M_SQRT_10/(precise?1e6:1));
 }
 
 float splitpoint(double leftclamp,double rightclamp,double tolerance)

@@ -1,0 +1,58 @@
+/******************************************************/
+/*                                                    */
+/* cidialog.cpp - contour interval dialog             */
+/*                                                    */
+/******************************************************/
+/* Copyright 2017 Pierre Abbat.
+ * This file is part of Bezitopo.
+ * 
+ * Bezitopo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Bezitopo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
+ */
+#include "cidialog.h"
+using namespace std;
+
+ContourIntervalDialog::ContourIntervalDialog(QWidget *parent):QDialog(parent)
+{
+  currentInterval=new QLabel(tr("None"),this);
+  comboBox=new QComboBox(this);
+  okButton=new QPushButton(tr("OK"),this);
+  cancelButton=new QPushButton(tr("Cancel"),this);
+  contourInterval=nullptr;
+  okButton->setEnabled(false);
+}
+
+void ContourIntervalDialog::set(ContourInterval *ci,Measure meas)
+{
+  bool precise;
+  double mantissa;
+  if (ci)
+  {
+    /* The Indian and US feet are 1.3 ppm less and 2 ppm more than the
+     * international foot. If the current contour interval differs by more
+     * than 1.15 ppm from 1, 2, or 5 times a power of 10 in the current unit,
+     * display it with six more digits of precision to show that it's in
+     * a different unit.
+     */
+    mantissa=frac(log10(ci->mediumInterval()/meas.toCoherent(1,LENGTH)));
+    precise=fabs(mantissa)>0.0000005 && fabs(mantissa-0.30103)>0.0000005 &&
+            fabs(mantissa-0.69897)>0.0000005 && fabs(mantissa-1)>0.0000005;
+    currentInterval->setText(QString::fromStdString(ci->valueString(meas,precise)));
+    okButton->setEnabled(true);
+  }
+  else
+  {
+    currentInterval->setText(tr("None"));
+    okButton->setEnabled(false);
+  }
+}

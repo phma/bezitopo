@@ -58,7 +58,7 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp sourcegeoid.cpp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
 add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp breakline.cpp
-               cogo.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
+               cidialog.cpp cogo.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
                latlong.cpp ldecimal.cpp manysum.cpp measure.cpp measurebutton.cpp
                pnezd.cpp point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp
                random.cpp relprime.cpp
