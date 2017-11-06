@@ -45,6 +45,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   fileDialog=new QFileDialog(this);
   progressDialog=new QProgressDialog(this);
   progressDialog->reset();
+  ciDialog=new ContourIntervalDialog(this);
   timer=new QTimer(this);
   plnum=-1;
   rotation=0;
@@ -409,6 +410,15 @@ void TinCanvas::makeTinFinish()
   progressDialog->reset();
 }
 
+void TinCanvas::selectContourInterval()
+{
+  if (plnum>=0 && plnum<doc.pl.size())
+    ciDialog->set(&doc.pl[plnum].contourInterval,doc.ms);
+  else
+    ciDialog->set(nullptr,doc.ms);
+  ciDialog->exec();
+}
+
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
   int i;
@@ -635,6 +645,11 @@ void TinWindow::makeActions()
   makeTinAction->setText(tr("Make TIN"));
   contourMenu->addAction(makeTinAction);
   connect(makeTinAction,SIGNAL(triggered(bool)),canvas,SLOT(makeTin()));
+  selectContourIntervalAction=new QAction(this);
+  //makeTinAction->setIcon(QIcon(":/selectci.png"));
+  selectContourIntervalAction->setText(tr("Select contour interval"));
+  contourMenu->addAction(selectContourIntervalAction);
+  connect(selectContourIntervalAction,SIGNAL(triggered(bool)),canvas,SLOT(selectContourInterval()));
   measureButtons.push_back(new MeasureButton(this,METER,0));
   measureButtons.back()->setIcon(QIcon(":/meter.png"));
   measureButtons.back()->setText(tr("Meter"));

@@ -27,6 +27,7 @@
 #include "document.h"
 #include "zoombutton.h"
 #include "measurebutton.h"
+#include "cidialog.h"
 
 class TinCanvas: public QWidget
 {
@@ -65,6 +66,7 @@ public slots:
   void flipPass();
   void findCriticalPoints();
   void makeTinFinish();
+  void selectContourInterval();
 protected:
   void setSize();
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -83,6 +85,7 @@ private:
   QFileDialog *fileDialog;
   QProgressDialog *progressDialog;
   QTimer *timer;
+  ContourIntervalDialog *ciDialog;
   xy windowCenter,worldCenter,dragStart;
   int scale;
   /* scale is the logarithm, in major thirds (see zoom), of the number of
@@ -116,5 +119,6 @@ private:
   int preZoomStep;
   std::vector<ZoomButton *> zoomButtons;
   std::vector<MeasureButton *> measureButtons;
-  QAction *asterAction,*importPnezdAction,*importCriteriaAction,*makeTinAction;
+  QAction *asterAction,*importPnezdAction,*importCriteriaAction;
+  QAction *makeTinAction,*selectContourIntervalAction;
 };
