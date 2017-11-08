@@ -1820,7 +1820,7 @@ void testmanyarc()
  */
 {
   segment cubic(xyz(-30,0,-27),27,-27,xyz(30,0,27));
-  bool halfpiece=false;
+  bool halfpiece=true;
   vector<segment> approx;
   vector<double> ordinate;
   double startslope,endslope,abscissa,lastabscissa;
@@ -1834,9 +1834,10 @@ void testmanyarc()
   ps.setDoc(doc);
   ps.startpage();
   ps.setscale(-30,-27,30,27);
-  narcs=2;
+  narcs=3;
   ordinate.push_back(-27);
-  ordinate.push_back(0);
+  ordinate.push_back(-3.375);
+  ordinate.push_back(3.375);
   ordinate.push_back(27);
   lastabscissa=-30;
   spl=cubic.approx3d(1);
