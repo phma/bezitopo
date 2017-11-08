@@ -133,3 +133,10 @@ double bez3destimate(xy kra,int bear0,double len,int bear1,xy fam)
   corr2=1-cos(bear0+bear1-2*direc); //this is 0 for circular curves
   return ((sqr(corr0)+sqr(corr1))/20+pow(corr2,1.5)/30+sqrt(corr2)/3000)*len;
 }
+
+void bezier3d::rotate(Quaternion q)
+{
+  int i;
+  for (i=0;i<controlpoints.size();i++)
+    controlpoints[i]=q.rotate(controlpoints[i]);
+}

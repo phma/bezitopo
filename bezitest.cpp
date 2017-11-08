@@ -1825,11 +1825,25 @@ void testmanyarc()
   vector<double> ordinate;
   double startslope,endslope,abscissa,lastabscissa;
   int narcs,i,j;
+  PostScript ps;
+  bezier3d spl;
+  Quaternion flip=versor(xyz(1,0,0),-DEG90);
+  ps.open("manyarc.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  ps.setDoc(doc);
+  ps.startpage();
+  ps.setscale(-30,-27,30,27);
   narcs=2;
   ordinate.push_back(-27);
   ordinate.push_back(0);
   ordinate.push_back(27);
   lastabscissa=-30;
+  spl=cubic.approx3d(1);
+  spl.rotate(flip);
+  ps.setcolor(0,0,1);
+  ps.spline(spl);
+  spl=bezier3d();
   for (i=0;i<narcs;i++)
   {
     if (i)
@@ -1844,9 +1858,15 @@ void testmanyarc()
     approx.push_back(segment(xyz(lastabscissa,0,ordinate[i]),xyz(abscissa,0,ordinate[i+1])));
     approx[i].setslope(START,startslope);
     approx[i].setslope(END,endslope);
+    spl+=approx[i].approx3d(1);
     lastabscissa=abscissa;
   }
+  spl.rotate(flip);
+  ps.setcolor(1,0,0);
+  ps.spline(spl);
   cout<<"endslope is "<<endslope<<", should be "<<cubic.endslope()<<endl;
+  ps.endpage();
+  ps.close();
 }
 
 void testclosest()

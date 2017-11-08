@@ -24,6 +24,7 @@
 #define BEZIER3D_H
 #include <vector>
 #include "point.h"
+#include "quaternion.h"
 
 class bezier3d
 {
@@ -38,6 +39,7 @@ public:
   xyz station(double along);
   friend bezier3d operator+(const bezier3d &l,const bezier3d &r); // concatenates, not adds
   bezier3d& operator+=(const bezier3d &r);
+  void rotate(Quaternion q);
 };
 
 double bez3destimate(xy kra,int bear0,double len,int bear1,xy fam);

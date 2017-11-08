@@ -61,7 +61,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp breakline.cpp
                cidialog.cpp cogo.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
                latlong.cpp ldecimal.cpp manysum.cpp measure.cpp measurebutton.cpp
                pnezd.cpp point.cpp pointlist.cpp polyline.cpp ps.cpp qindex.cpp
-               random.cpp relprime.cpp
+               quaternion.cpp random.cpp relprime.cpp
                rootfind.cpp segment.cpp spiral.cpp test.cpp tin.cpp
                tinwindow.cpp vcurve.cpp viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources})
