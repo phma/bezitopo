@@ -1812,6 +1812,43 @@ void testcogospiral()
   spiralmicroscope(g,3.2175384147219286,h,1.419003418926355,"tangentmicro",0x669);
 }
 
+void testmanyarc()
+/* Preliminary research for approximating a spiralarc by a sequence of arcs.
+ * In the approximation where the difference in curvature times the square
+ * of the length is small, this approaches the problem of approximating a cubic
+ * by a sequence of quadratics.
+ */
+{
+  segment cubic(xyz(-30,0,-27),27,-27,xyz(30,0,27));
+  bool halfpiece=false;
+  vector<segment> approx;
+  vector<double> ordinate;
+  double startslope,endslope,abscissa,lastabscissa;
+  int narcs,i,j;
+  narcs=2;
+  ordinate.push_back(-27);
+  ordinate.push_back(0);
+  ordinate.push_back(27);
+  lastabscissa=-30;
+  for (i=0;i<narcs;i++)
+  {
+    if (i)
+      startslope=approx[i-1].endslope();
+    else
+      startslope=cubic.startslope();
+    if (halfpiece && i<narcs-1)
+      abscissa=60*(i+0.5)/(narcs-1)-30;
+    else
+      abscissa=60*(i+1)/narcs-30;
+    endslope=2*(ordinate[i+1]-ordinate[i])/(abscissa-lastabscissa)-startslope;
+    approx.push_back(segment(xyz(lastabscissa,0,ordinate[i]),xyz(abscissa,0,ordinate[i+1])));
+    approx[i].setslope(START,startslope);
+    approx[i].setslope(END,endslope);
+    lastabscissa=abscissa;
+  }
+  cout<<"endslope is "<<endslope<<", should be "<<cubic.endslope()<<endl;
+}
+
 void testclosest()
 {
   xyz beg(-30,0,0),end(30,0,0);
@@ -5764,6 +5801,8 @@ int main(int argc, char *argv[])
     testspiralarc();
   if (shoulddo("cogospiral"))
     testcogospiral();
+  if (shoulddo("manyarc"))
+    testmanyarc();
   if (shoulddo("closest"))
     testclosest();
   if (shoulddo("qindex"))
