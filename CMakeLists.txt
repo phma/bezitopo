@@ -78,6 +78,8 @@ check_include_files(sys/time.h HAVE_SYS_TIME_H)
 check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_files(windows.h HAVE_WINDOWS_H)
 
+# This needs to be gnu++11 to get M_PI in Cygwin, but c++11 for non-GNU
+# compilers such as the one in Visual Studio. Needs a conditional.
 set(CMAKE_CXX_FLAGS "-std=gnu++11")
 install(TARGETS bezitopo convertgeoid DESTINATION bin)
 
