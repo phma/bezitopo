@@ -25,6 +25,7 @@
 #include <vector>
 #include "polyline.h"
 #include "measure.h"
+#include "ps.h"
 #define CCHALONG 0.30754991027012474516361707317
 // This is sqrt(4/27) of the way from 0.5 to 0. See clampcubic.
 #define M_SQRT_10 3.16227766016837933199889354
@@ -74,6 +75,8 @@ polyline intrace(triangle *tri,double elev);
 bool ismarked(uintptr_t ep);
 void rough1contour(pointlist &pl,double elev);
 void roughcontours(pointlist &pl,double conterval);
+void smooth1contour(pointlist &pl,double conterval,int i,bool spiral,PostScript &ps,
+                    double we,double ea,double so,double no);
 void smoothcontours(pointlist &pl,double conterval,bool spiral=true,bool log=false);
 void checkedgediscrepancies(pointlist &pl);
 #endif
