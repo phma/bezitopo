@@ -1069,7 +1069,7 @@ void testbreak0()
   ps.setscale(leftedge,bottomedge,rightedge,topedge,rotation);
   conterval=0.2;
   roughcontours(doc.pl[1],conterval);
-  smoothcontours(doc.pl[1],conterval,false);
+  smoothcontours(doc.pl[1],conterval,true,false);
   ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
@@ -3880,7 +3880,7 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   rasterdraw(doc.pl[1],-offset,30,30,30,0,10*conterval,contourName+".ppm");
   //cout<<"Lowest "<<tinlohi[0]<<" Highest "<<tinlohi[1]<<endl;
   //psclose();
-  smoothcontours(doc.pl[1],conterval,false);
+  smoothcontours(doc.pl[1],conterval,true,false);
   ps.setcolor(0,0,0);
   for (i=0;i<doc.pl[1].contours.size();i++)
   {

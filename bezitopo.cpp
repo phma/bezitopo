@@ -320,7 +320,7 @@ void contourdraw_i(string args)
       doc.pl[1].addperimeter();
       roughcontours(doc.pl[1],conterval);
       doc.pl[1].removeperimeter();
-      smoothcontours(doc.pl[1],conterval,true);
+      smoothcontours(doc.pl[1],conterval,true,true);
       w=doc.pl[1].dirbound(degtobin(0));
       s=doc.pl[1].dirbound(degtobin(90));
       e=-doc.pl[1].dirbound(degtobin(180));

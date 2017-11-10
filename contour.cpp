@@ -409,7 +409,7 @@ void roughcontours(pointlist &pl,double conterval)
     rough1contour(pl,i*conterval);
 }
 
-void smoothcontours(pointlist &pl,double conterval,bool log)
+void smoothcontours(pointlist &pl,double conterval,bool spiral,bool log)
 {
   int i,j,k,n=0,sz,origsz,whichParts;
   double sp,wide,thisElev;
@@ -445,11 +445,12 @@ void smoothcontours(pointlist &pl,double conterval,bool log)
     cout.flush();
     /* Smooth the contours in two passes. The first works with straight lines
      * and uses 1/2 the conterval for tolerance. The second works with spiral
-     * curves and uses 1/10 the conterval for tolerance.
+     * curves (if spiral is true, which is the default) and uses 1/10 the
+     * conterval for tolerance.
      */
     for (k=0;k<2;k++)
     {
-      if (k)
+      if (k && spiral)
 	pl.contours[i].smooth();
       origsz=sz=pl.contours[i].size();
       for (j=0;j<=sz;j++)
