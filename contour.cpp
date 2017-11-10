@@ -110,6 +110,36 @@ string ContourInterval::valueString(Measure meas,bool precise)
   return meas.formatMeasurementUnit(mediumInterval(),LENGTH,0,mediumInterval()/M_SQRT_10/(precise?1e6:1));
 }
 
+int ContourInterval::contourType(double elev)
+/* Returns the sum of two numbers:
+ * 0 for fine contours, 256 for medium contours, 512 for coarse (index) contours.
+ * 0 for contours that are not subdivisions of coarser contours, 4, 5, 8, 10,
+ * 12, 15, or 16 for those that are.
+ */
+{
+  int iElev,ret,rem;
+  iElev=rint(elev/interval);
+  ret=0;
+  rem=iElev%fineRatio;
+  if (rem<0)
+    rem+=fineRatio;
+  if (rem)
+    ret+=rem*20/fineRatio;
+  else
+  {
+    ret+=256;
+    iElev/=fineRatio;
+    rem=iElev%coarseRatio;
+    if (rem<0)
+      rem+=coarseRatio;
+    if (rem)
+      ret+=rem*20/coarseRatio;
+    else
+      ret+=256;
+  }
+  return ret;
+}
+
 float splitpoint(double leftclamp,double rightclamp,double tolerance)
 /* If the values at the clamp points indicate that the curve may be out of tolerance,
  * returns the point to split it at, as a fraction of the length. If not, returns 0.
