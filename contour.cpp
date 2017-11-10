@@ -369,6 +369,31 @@ void checkedgediscrepancies(pointlist &pl)
   }
 }
 
+void rough1contour(pointlist &pl,double elev)
+{
+  vector<uintptr_t> cstarts;
+  polyline ctour;
+  int j;
+  cstarts=contstarts(pl,elev);
+  pl.clearmarks();
+  for (j=0;j<cstarts.size();j++)
+    if (!ismarked(cstarts[j]))
+    {
+      ctour=trace(cstarts[j],elev);
+      ctour.dedup();
+      pl.contours.push_back(ctour);
+    }
+  for (j=0;j<pl.triangles.size();j++)
+  {
+    ctour=intrace(&pl.triangles[j],elev);
+    if (ctour.size())
+    {
+      ctour.setlengths();
+      pl.contours.push_back(ctour);
+    }
+  }
+}
+
 void roughcontours(pointlist &pl,double conterval)
 /* Draws contours consisting of line segments.
  * The perimeter must be present in the triangles.
@@ -377,35 +402,11 @@ void roughcontours(pointlist &pl,double conterval)
  */
 {
   array<double,2> tinlohi;
-  vector<uintptr_t> cstarts;
-  polyline ctour;
-  int i,j;
+  int i;
   pl.contours.clear();
   tinlohi=pl.lohi();
   for (i=floor(tinlohi[0]/conterval);i<=ceil(tinlohi[1]/conterval);i++)
-  {
-    cstarts=contstarts(pl,i*conterval);
-    pl.clearmarks();
-    for (j=0;j<cstarts.size();j++)
-      if (!ismarked(cstarts[j]))
-      {
-	ctour=trace(cstarts[j],i*conterval);
-	ctour.dedup();
-	//for (j=0;j<ctour.size();j++)
-	//cout<<"Contour length: "<<ctour.length()<<endl;
-	pl.contours.push_back(ctour);
-      }
-    for (j=0;j<pl.triangles.size();j++)
-    {
-      ctour=intrace(&pl.triangles[j],i*conterval);
-      if (ctour.size())
-      {
-        ctour.setlengths();
-	pl.contours.push_back(ctour);
-	//cout<<"Contour length: "<<ctour.length()<<endl;
-      }
-    }
-  }
+    rough1contour(pl,i*conterval);
 }
 
 void smoothcontours(pointlist &pl,double conterval,bool log)

@@ -72,6 +72,7 @@ std::vector<uintptr_t> contstarts(pointlist &pts,double elev);
 polyline trace(uintptr_t edgep,double elev);
 polyline intrace(triangle *tri,double elev);
 bool ismarked(uintptr_t ep);
+void rough1contour(pointlist &pl,double elev);
 void roughcontours(pointlist &pl,double conterval);
 void smoothcontours(pointlist &pl,double conterval,bool log=false);
 void checkedgediscrepancies(pointlist &pl);
