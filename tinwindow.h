@@ -29,6 +29,12 @@
 #include "measurebutton.h"
 #include "cidialog.h"
 
+// goals
+#define DONE 0
+#define MAKE_TIN 1
+#define ROUGH_CONTOURS 2
+#define SMOOTH_CONTOURS 3
+
 class TinCanvas: public QWidget
 {
   Q_OBJECT
@@ -64,9 +70,13 @@ public slots:
   void makeTin();
   void tryStartPoint();
   void flipPass();
+  void redoSurface();
   void findCriticalPoints();
   void makeTinFinish();
   void selectContourInterval();
+  void roughContours();
+  void rough1Contour();
+  void roughContoursFinish();
 protected:
   void setSize();
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -97,6 +107,11 @@ private:
   int tinerror,startPointTries,passCount,triCount;
   PostScript dummyPs;
   xy startPoint;
+  int goal;
+  int progInx; // used in progress bar loops
+  std::array<double,2> tinlohi;
+  bool surfaceValid; // If false, to do rough contours, must first set gradient.
+  bool roughContoursValid; // If false, to do smooth contours, must first do rough contours.
 };
 
 class TinWindow: public QMainWindow

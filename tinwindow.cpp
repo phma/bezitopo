@@ -255,6 +255,8 @@ void TinCanvas::importPnezd()
     doc.readpnezd(fileName);
     plnum=0;
     sizeToFit();
+    surfaceValid=false;
+    roughContoursValid=false;
   }
 }
 
@@ -272,6 +274,8 @@ void TinCanvas::importCriteria()
     fileName=files[0].toStdString();
     doc.makepointlist(1);
     doc.pl[1].readCriteria(fileName);
+    surfaceValid=false;
+    roughContoursValid=false;
   }
 }
 
@@ -354,15 +358,7 @@ void TinCanvas::flipPass()
       if (!nFlip)
       {
         disconnect(timer,SIGNAL(timeout()),this,SLOT(flipPass()));
-        connect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
-        doc.pl[plnum].makegrad(0.);
-        doc.pl[plnum].maketriangles();
-        doc.pl[plnum].setgradient();
-        doc.pl[plnum].makeqindex();           // These five are all fast. It's finding the
-        doc.pl[plnum].findedgecriticalpts();  // critical points of a triangle that's slow.
-        progressDialog->setRange(0,doc.pl[plnum].triangles.size());
-        progressDialog->setLabelText(tr("Finding critical points..."));
-        triCount=0;
+        connect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
       }
     }
     catch (int e)
@@ -370,6 +366,23 @@ void TinCanvas::flipPass()
       tinerror=e;
     }
   }
+}
+
+void TinCanvas::redoSurface()
+/* This can be done as part of making the TIN, or when making the contours it
+ * can find that this needs to be done first.
+ */
+{
+  doc.pl[plnum].makegrad(0.);
+  doc.pl[plnum].maketriangles();
+  doc.pl[plnum].setgradient();
+  doc.pl[plnum].makeqindex();           // These five are all fast. It's finding the
+  doc.pl[plnum].findedgecriticalpts();  // critical points of a triangle that's slow.
+  progressDialog->setRange(0,doc.pl[plnum].triangles.size());
+  progressDialog->setLabelText(tr("Finding critical points..."));
+  triCount=0;
+  disconnect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
+  connect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
 }
 
 void TinCanvas::findCriticalPoints()
@@ -414,6 +427,8 @@ void TinCanvas::makeTinFinish()
   disconnect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
   timer->stop();
   progressDialog->reset();
+  roughContoursValid=false;
+  surfaceValid=true;
 }
 
 void TinCanvas::selectContourInterval()
@@ -423,6 +438,18 @@ void TinCanvas::selectContourInterval()
   else
     ciDialog->set(nullptr,doc.ms);
   ciDialog->exec();
+}
+
+void TinCanvas::roughContours()
+{
+}
+
+void TinCanvas::rough1Contour()
+{
+}
+
+void TinCanvas::roughContoursFinish()
+{
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)
@@ -538,6 +565,8 @@ void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
         {
           hitRec.edg->flip(&doc.pl[plnum]);
           updateEdgeNeighbors(hitRec.edg);
+          roughContoursValid=false;
+          surfaceValid=false;
         }
       }
     }
