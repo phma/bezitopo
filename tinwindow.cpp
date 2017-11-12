@@ -302,9 +302,13 @@ void TinCanvas::makeTin()
   progressDialog->setWindowModality(Qt::WindowModal);
   progressDialog->setWindowTitle(tr("Making TIN"));
   progressDialog->setLabelText(tr("Sweeping convex hull..."));
-  progressDialog->show();
+  if (goal==DONE)
+  {
+    goal=MAKE_TIN;
+    timer->start(0);
+    progressDialog->show();
+  }
   connect(timer,SIGNAL(timeout()),this,SLOT(tryStartPoint()));
-  timer->start(0);
 }
 
 void TinCanvas::tryStartPoint()
@@ -426,8 +430,17 @@ void TinCanvas::makeTinFinish()
   }
   update();
   disconnect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
-  timer->stop();
-  progressDialog->reset();
+  switch (goal)
+  {
+    case MAKE_TIN:
+      goal=DONE;
+      progressDialog->reset();
+      timer->stop();
+      break;
+    case ROUGH_CONTOURS:
+      connect(timer,SIGNAL(timeout()),this,SLOT(roughContours()));
+      break;
+  }
   roughContoursValid=false;
   surfaceValid=true;
 }
