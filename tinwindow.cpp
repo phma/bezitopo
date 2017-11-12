@@ -374,7 +374,7 @@ void TinCanvas::redoSurface()
  * can find that this needs to be done first.
  */
 {
-  doc.pl[plnum].makegrad(0.);
+  doc.pl[plnum].makegrad(0.15);
   doc.pl[plnum].maketriangles();
   doc.pl[plnum].setgradient();
   doc.pl[plnum].makeqindex();           // These five are all fast. It's finding the
