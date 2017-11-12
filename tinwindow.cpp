@@ -54,6 +54,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   ciDialog=new ContourIntervalDialog(this);
   timer=new QTimer(this);
   plnum=-1;
+  goal=DONE;
   rotation=0;
   //for (i=0;i<doc.pl[1].edges.size();i++)
     //doc.pl[1].edges[i].dump(&doc.pl[1]);
@@ -442,14 +443,53 @@ void TinCanvas::selectContourInterval()
 
 void TinCanvas::roughContours()
 {
+  double conterval=doc.pl[plnum].contourInterval.fineInterval();
+  if (goal==DONE)
+  {
+    goal=ROUGH_CONTOURS;
+    timer->start(0);
+    progressDialog->show();
+  }
+  tinlohi=doc.pl[plnum].lohi();
+  elevLo=floor(tinlohi[0]/conterval);
+  elevHi=ceil(tinlohi[1]/conterval);
+  progInx=elevLo;
+  progressDialog->setRange(elevLo,elevHi);
+  progressDialog->setValue(progInx);
+  progressDialog->setLabelText(tr("Drawing rough contours..."));
+  disconnect(timer,SIGNAL(timeout()),this,SLOT(roughContours()));
+  if (surfaceValid)
+    connect(timer,SIGNAL(timeout()),this,SLOT(rough1Contour()));
+  else
+    connect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
 }
 
 void TinCanvas::rough1Contour()
 {
+  double conterval=doc.pl[plnum].contourInterval.fineInterval();
+  rough1contour(doc.pl[plnum],progInx*conterval);
+  if (++progInx>elevHi)
+  {
+    disconnect(timer,SIGNAL(timeout()),this,SLOT(rough1Contour()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(roughContoursFinish()));
+  }
+  else
+    progressDialog->setValue(progInx);
 }
 
 void TinCanvas::roughContoursFinish()
 {
+  switch (goal)
+  {
+    case ROUGH_CONTOURS:
+      goal=DONE;
+      progressDialog->reset();
+      timer->stop();
+      break;
+  }
+  disconnect(timer,SIGNAL(timeout()),this,SLOT(roughContoursFinish()));
+  roughContoursValid=true;
+  update();
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)
@@ -685,6 +725,11 @@ void TinWindow::makeActions()
   selectContourIntervalAction->setText(tr("Select contour interval"));
   contourMenu->addAction(selectContourIntervalAction);
   connect(selectContourIntervalAction,SIGNAL(triggered(bool)),canvas,SLOT(selectContourInterval()));
+  roughContoursAction=new QAction(this);
+  //makeTinAction->setIcon(QIcon(":/roughcon.png"));
+  roughContoursAction->setText(tr("Draw rough contours"));
+  contourMenu->addAction(roughContoursAction);
+  connect(roughContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(roughContours()));
   measureButtons.push_back(new MeasureButton(this,METER,0));
   measureButtons.back()->setIcon(QIcon(":/meter.png"));
   measureButtons.back()->setText(tr("Meter"));

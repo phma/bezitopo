@@ -109,6 +109,7 @@ private:
   xy startPoint;
   int goal;
   int progInx; // used in progress bar loops
+  int elevHi,elevLo; // in contour interval unit
   std::array<double,2> tinlohi;
   bool surfaceValid; // If false, to do rough contours, must first set gradient.
   bool roughContoursValid; // If false, to do smooth contours, must first do rough contours.
@@ -136,4 +137,5 @@ private:
   std::vector<MeasureButton *> measureButtons;
   QAction *asterAction,*importPnezdAction,*importCriteriaAction;
   QAction *makeTinAction,*selectContourIntervalAction;
+  QAction *roughContoursAction,*smoothContoursAction;
 };
