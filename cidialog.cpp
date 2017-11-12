@@ -46,9 +46,9 @@ ContourIntervalDialog::ContourIntervalDialog(QWidget *parent):QDialog(parent)
 void ContourIntervalDialog::set(ContourInterval *ci,Measure meas)
 {
   bool precise;
-  int i;
+  int i,closeInx=-1;
   ContourInterval temp;
-  double mantissa;
+  double mantissa,closeDiff=INFINITY;
   contourInterval=ci;
   comboBox->clear();
   ciList.clear();
@@ -69,12 +69,18 @@ void ContourIntervalDialog::set(ContourInterval *ci,Measure meas)
          i<=rint(3*log10(meas.fromCoherent(MAXINTERVAL*3,LENGTH)));i++)
     {
       temp=ContourInterval(meas.toCoherent(1,LENGTH),i,false);
+      if (fabs(log(ci->mediumInterval()/temp.mediumInterval()))<closeDiff)
+      {
+        closeDiff=fabs(log(ci->mediumInterval()/temp.mediumInterval()));
+        closeInx=comboBox->count();
+      }
       if (temp.mediumInterval()>=MININTERVAL && temp.mediumInterval()<=MAXINTERVAL)
       {
         ciList.push_back(temp);
         comboBox->addItem(QString::fromStdString(temp.valueString(meas,false)));
       }
     }
+    comboBox->setCurrentIndex(closeInx);
   }
   else
   {
