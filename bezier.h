@@ -87,8 +87,9 @@ public:
   double peri,sarea;
   triangle *aneigh,*bneigh,*cneigh;
   int nocubedir; // set to MAXINT if critpoints have not been looked for
+  int totcritpointcount; // includes the secondary critpoints
   double gradmat[2][3]; // to compute gradient from three partial gradients
-  std::vector<xy> critpoints;
+  std::vector<xy> critpoints; // does not include secondary critpoints
   std::vector<segment> subdiv;
   triangle();
   void setneighbor(triangle *neigh);

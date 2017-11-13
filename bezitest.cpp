@@ -2554,6 +2554,7 @@ void test1tri(string triname,int excrits)
     cout<<j<<"R: "<<doc.pl[1].triangles[0].proceed(j+65536,0)<<endl;
   }*/
   doc.pl[1].triangles[0].removeperimeter();
+  doc.pl[1].triangles[0].removeperimeter();
   size2=doc.pl[1].triangles[0].subdiv.size();
   tassert(size0==size2);
   cout<<size1-size0<<" monotonic segments in perimeter"<<endl;

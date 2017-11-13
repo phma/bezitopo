@@ -1164,9 +1164,10 @@ void triangle::subdivide()
    * interior critical point. With the boundary added, it's 2 for every
    * side critical point and 3 for every interior critical point plus 3.
    */
-  if (subdiv.size()!=3*morecritpoints.size()+sidea.size()+sideb.size()+sidec.size())
+  totcritpointcount=morecritpoints.size();
+  if (subdiv.size()!=3*totcritpointcount+sidea.size()+sideb.size()+sidec.size())
   {
-    nExtraSegments=subdiv.size()-3*morecritpoints.size()-sidea.size()-sideb.size()-sidec.size();
+    nExtraSegments=subdiv.size()-3*totcritpointcount-sidea.size()-sideb.size()-sidec.size();
     //cout<<"centroid "<<ldecimal(centroid().getx())<<','<<ldecimal(centroid().gety())<<'\n';
     //cout<<morecritpoints.size()<<" interior critpoints ("<<morecritpoints.size()-critpoints.size()<<" secondary) ";
     //cout<<sidea.size()+sideb.size()+sidec.size()<<" side critpoints "<<subdiv.size()<<" subdivs\n";
@@ -1281,30 +1282,51 @@ void triangle::addperimeter()
 void triangle::removeperimeter()
 {
   int acnt,bcnt,ccnt,i;
-  for (i=subdiv.size()-1,acnt=bcnt=ccnt=0;i>=0 && acnt<3 && bcnt<3 && ccnt<3 && acnt+bcnt+ccnt<6;i--)
+  int sizeWithPerimeter,sizeWithoutPerimeter;
+  edge *sid;
+  vector<xyz> sidea,sideb,sidec;
+  sid=a->edg(this);
+  for (i=0;i<2;i++)
+    if (isfinite(sid->extrema[i]))
+      sideb.push_back(sid->critpoint(i));
+  sid=b->edg(this);
+  for (i=0;i<2;i++)
+    if (isfinite(sid->extrema[i]))
+      sidec.push_back(sid->critpoint(i));
+  sid=c->edg(this);
+  for (i=0;i<2;i++)
+    if (isfinite(sid->extrema[i]))
+      sidea.push_back(sid->critpoint(i));
+  sizeWithPerimeter=2*(sidea.size()+sideb.size()+sidec.size())+3*totcritpointcount+3;
+  sizeWithoutPerimeter=(sidea.size()+sideb.size()+sidec.size())+3*totcritpointcount;
+  if (subdiv.size()>sizeWithoutPerimeter)
   {
-    if (subdiv[i].getstart()==*a)
-      acnt++;
-    if (subdiv[i].getend()==*a)
-      acnt++;
-    if (subdiv[i].getstart()==*b)
-      bcnt++;
-    if (subdiv[i].getend()==*b)
-      bcnt++;
-    if (subdiv[i].getstart()==*c)
-      ccnt++;
-    if (subdiv[i].getend()==*c)
-      ccnt++;
+    for (i=subdiv.size()-1,acnt=bcnt=ccnt=0;i>=0 && acnt<3 && bcnt<3 && ccnt<3 && acnt+bcnt+ccnt<6;i--)
+    {
+      if (subdiv[i].getstart()==*a)
+        acnt++;
+      if (subdiv[i].getend()==*a)
+        acnt++;
+      if (subdiv[i].getstart()==*b)
+        bcnt++;
+      if (subdiv[i].getend()==*b)
+        bcnt++;
+      if (subdiv[i].getstart()==*c)
+        ccnt++;
+      if (subdiv[i].getend()==*c)
+        ccnt++;
+    }
+    i++;
+    assert(subdiv.size()-i<=9);
+    if (acnt==2 && bcnt==2 && ccnt==2)
+    {
+      subdiv.resize(i);
+      subdiv.shrink_to_fit();
+    }
+    else
+      assert(acnt==2 && bcnt==2 && ccnt==2);
   }
-  i++;
-  assert(subdiv.size()-i<=9);
-  if (acnt==2 && bcnt==2 && ccnt==2)
-  {
-    subdiv.resize(i);
-    subdiv.shrink_to_fit();
-  }
-  else
-    assert(acnt==2 && bcnt==2 && ccnt==2);
+  assert(subdiv.size()==sizeWithoutPerimeter);
 }
 
 array<double,4> triangle::lohi()
