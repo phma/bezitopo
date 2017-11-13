@@ -1227,6 +1227,7 @@ void triangle::subdivide()
 void triangle::addperimeter()
 {
   int i,oldnumber;
+  int sizeWithPerimeter,sizeWithoutPerimeter;
   edge *sid;
   vector<xyz> sidea,sideb,sidec;
   sid=a->edg(this);
@@ -1247,36 +1248,41 @@ void triangle::addperimeter()
     swap(sidea[0],sidea[1]);
   if (sideb.size()>1 && dist(xy(*c),xy(sideb[0]))>dist(xy(*c),xy(sideb[1])))
     swap(sideb[0],sideb[1]);
+  sizeWithPerimeter=2*(sidea.size()+sideb.size()+sidec.size())+3*totcritpointcount+3;
+  sizeWithoutPerimeter=(sidea.size()+sideb.size()+sidec.size())+3*totcritpointcount;
   oldnumber=subdiv.size();
-  if (sidec.size())
+  if (oldnumber<sizeWithPerimeter)
   {
-    subdiv.push_back(segment(*a,sidec[0]));
-    for (i=0;i<sidec.size()-1;i++)
-      subdiv.push_back(segment(sidec[i],sidec[i+1]));
-    subdiv.push_back(segment(sidec[i],*b));
+    if (sidec.size())
+    {
+      subdiv.push_back(segment(*a,sidec[0]));
+      for (i=0;i<sidec.size()-1;i++)
+        subdiv.push_back(segment(sidec[i],sidec[i+1]));
+      subdiv.push_back(segment(sidec[i],*b));
+    }
+    else
+      subdiv.push_back(segment(*a,*b));
+    if (sidea.size())
+    {
+      subdiv.push_back(segment(*b,sidea[0]));
+      for (i=0;i<sidea.size()-1;i++)
+        subdiv.push_back(segment(sidea[i],sidea[i+1]));
+      subdiv.push_back(segment(sidea[i],*c));
+    }
+    else
+      subdiv.push_back(segment(*b,*c));
+    if (sideb.size())
+    {
+      subdiv.push_back(segment(*c,sideb[0]));
+      for (i=0;i<sideb.size()-1;i++)
+        subdiv.push_back(segment(sideb[i],sideb[i+1]));
+      subdiv.push_back(segment(sideb[i],*a));
+    }
+    else
+      subdiv.push_back(segment(*c,*a));
+    for (i=oldnumber;i<subdiv.size();i++)
+      setsubslopes(subdiv[i]);
   }
-  else
-    subdiv.push_back(segment(*a,*b));
-  if (sidea.size())
-  {
-    subdiv.push_back(segment(*b,sidea[0]));
-    for (i=0;i<sidea.size()-1;i++)
-      subdiv.push_back(segment(sidea[i],sidea[i+1]));
-    subdiv.push_back(segment(sidea[i],*c));
-  }
-  else
-    subdiv.push_back(segment(*b,*c));
-  if (sideb.size())
-  {
-    subdiv.push_back(segment(*c,sideb[0]));
-    for (i=0;i<sideb.size()-1;i++)
-      subdiv.push_back(segment(sideb[i],sideb[i+1]));
-    subdiv.push_back(segment(sideb[i],*a));
-  }
-  else
-    subdiv.push_back(segment(*c,*a));
-  for (i=oldnumber;i<subdiv.size();i++)
-    setsubslopes(subdiv[i]);
 }
 
 void triangle::removeperimeter()
