@@ -401,7 +401,8 @@ void TinCanvas::findCriticalPoints()
   {
     try
     {
-      doc.pl[plnum].triangles[triCount++].findcriticalpts();
+      doc.pl[plnum].triangles[triCount].findcriticalpts();
+      doc.pl[plnum].triangles[triCount++].subdivide();
       progressDialog->setValue(triCount);
       if (triCount==doc.pl[plnum].triangles.size())
       {
