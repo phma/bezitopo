@@ -89,7 +89,7 @@ private:
   document doc;
   int plnum;
   QPen normalEdgePen,breakEdgePen,flipEdgePen;
-  QPen circlePen[3];
+  QPen circlePen[3],contourPen[3][20];
   QBrush brush;
   QErrorMessage *errorMessage;
   QFileDialog *fileDialog;

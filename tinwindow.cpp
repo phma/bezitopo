@@ -26,12 +26,13 @@
 #include "zoom.h"
 #include "test.h"
 #include "ldecimal.h"
+#include "color.h"
 
 using namespace std;
 
 TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
 {
-  int i;
+  int i,j,rgb;
   doc.ms.setFoot(INTERNATIONAL);
   doc.ms.setMetric();
   doc.ms.setDefaultUnit(LENGTH,0.552); // geometric mean of meter and foot
@@ -47,6 +48,13 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   circlePen[0]=QPen(Qt::red);
   circlePen[1]=QPen(Qt::darkGreen);
   circlePen[2]=QPen(Qt::blue);
+  for (i=0;i<3;i++)
+    for (j=0;j<20;j++)
+    {
+      rgb=colorint(RED+CYAN/39*j);
+      contourPen[i][j]=QPen(QColor((rgb>>16)&0xff,(rgb>>8)&0xff,(rgb>>0)&0xff),
+                            (i+1)/2.,i?Qt::SolidLine:Qt::DashLine);
+    }
   errorMessage=new QErrorMessage(this);
   fileDialog=new QFileDialog(this);
   progressDialog=new QProgressDialog(this);
@@ -465,6 +473,7 @@ void TinCanvas::roughContours()
     progressDialog->show();
   }
   tinlohi=doc.pl[plnum].lohi();
+  doc.pl[plnum].contours.clear();
   elevLo=floor(tinlohi[0]/conterval);
   elevHi=ceil(tinlohi[1]/conterval);
   progInx=elevLo;
@@ -508,14 +517,18 @@ void TinCanvas::roughContoursFinish()
 
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
-  int i;
+  int i,k,contourType;
   double r;
+  bezier3d b3d;
   ptlist::iterator j;
   QPainter painter(this);
+  QPainterPath path;
+  vector<xyz> beziseg;
   segment seg;
   painter.setBrush(brush);
   painter.setRenderHint(QPainter::Antialiasing,true);
   if (plnum<doc.pl.size() && plnum>=0)
+  {
     if (doc.pl[plnum].triangles.size())
       for (i=0;plnum>=0 && i<doc.pl[plnum].edges.size();i++)
       {
@@ -538,6 +551,23 @@ void TinCanvas::paintEvent(QPaintEvent *event)
           // The radius variation is so that, if two points coincide, it's obvious.
           painter.drawEllipse(worldToWindow(j->second),r,r);
         }
+    for (i=0;i<doc.pl[plnum].contours.size();i++)
+    {
+      b3d=doc.pl[plnum].contours[i].approx3d(pixelScale());
+      path=QPainterPath();
+      for (k=0;k<b3d.size();k++)
+      {
+        beziseg=b3d[k];
+        if (k==0)
+          path.moveTo(worldToWindow(beziseg[0]));
+        path.cubicTo(worldToWindow(beziseg[1]),worldToWindow(beziseg[2]),worldToWindow(beziseg[3]));
+      }
+      if (!doc.pl[plnum].contours[i].isopen())
+        path.closeSubpath();
+      contourType=doc.pl[plnum].contourInterval.contourType(doc.pl[plnum].contours[i].getElevation());
+      painter.strokePath(path,contourPen[contourType>>8][contourType&31]);
+    }
+  }
   else
     ; // nothing to paint, since plnum is not the index of a pointlist
 }
