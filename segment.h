@@ -66,6 +66,7 @@ public:
   }
   double elev(double along) const;
   double slope(double along);
+  double accel(double along);
   double startslope();
   double endslope();
   double contourcept(double e);

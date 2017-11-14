@@ -129,6 +129,11 @@ double segment::slope(double along)
   return vslope(start.elev(),control1,control2,end.elev(),along/length())/length();
 }
 
+double segment::accel(double along)
+{
+  return vaccel(start.elev(),control1,control2,end.elev(),along/length())/sqr(length());
+}
+
 double segment::startslope()
 {
   return (control1-start.elev())*3/length();
