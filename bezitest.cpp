@@ -1821,11 +1821,10 @@ void testmanyarc()
 {
   segment cubic(xyz(-30,0,-27),27,-27,xyz(30,0,27));
   vector<segment> approx;
-  vector<double> ordinate,abscissa;
+  double abscissa,lastabscissa,ordinate,lastordinate;
   double startslope,endslope;
-  double x;
-  // narcs=3: -30,-12.426406871192857,12.426406871192857,30
-  bool brenting=true;
+  double x,length,accel;
+  bool brenting=false;
   int narcs,i,j;
   PostScript ps;
   bezier3d spl;
@@ -1835,57 +1834,67 @@ void testmanyarc()
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
   ps.setDoc(doc);
-  ps.startpage();
-  ps.setscale(-30,-27,30,27);
-  narcs=3;
-  if (brenting)
-    x=br.init(10,-0.4,15,0.45);
-  else
-    x=15;
-  do
+  for (narcs=2;narcs<=20;narcs++)
   {
-    abscissa.clear();
-    ordinate.clear();
-    abscissa.push_back(-30);
-    for (i=1;i<narcs;i++)
-    {
-      if (i*2<narcs)
-        abscissa.push_back(-x);
-      if (i*2==narcs)
-        abscissa.push_back(0);
-      if (i*2>narcs)
-        abscissa.push_back(x);
-    }
-    abscissa.push_back(30);
-    for (i=0;i<=narcs;i++)
-      ordinate.push_back(cubic.elev(abscissa[i]+30));
-    spl=cubic.approx3d(1);
-    spl.rotate(flip);
-    ps.setcolor(0,0,1);
-    ps.spline(spl);
-    spl=bezier3d();
-    for (i=0;i<narcs;i++)
-    {
-      if (i)
-        startslope=approx[i-1].endslope();
-      else
-        startslope=cubic.startslope();
-      endslope=2*(ordinate[i+1]-ordinate[i])/(abscissa[i+1]-abscissa[i])-startslope;
-      approx.push_back(segment(xyz(abscissa[i],0,ordinate[i]),xyz(abscissa[i+1],0,ordinate[i+1])));
-      approx[i].setslope(START,startslope);
-      approx[i].setslope(END,endslope);
-      spl+=approx[i].approx3d(1);
-    }
-    spl.rotate(flip);
-    ps.setcolor(1,0,0);
-    ps.spline(spl);
-    cout<<"endslope is "<<endslope<<", should be "<<cubic.endslope()<<' '<<ldecimal(endslope-cubic.endslope())<<endl;
+    ps.startpage();
+    ps.setscale(-30,-27,30,27);
     if (brenting)
-      x=br.step(endslope-cubic.endslope());
-  } while (brenting && !br.finished());
-  if (brenting)
+      x=br.init(0,108,1,-2.16);
+    else
+      x=2*sqr(narcs-1)/(2*sqr(narcs-1)+1.);
+    /* x=0 always gives y=135
+    * narcs x
+    *   2  2/3
+    *   3  8/9
+    *   4 18/19
+    *   5 32/33
+    *   6 50/51
+    */
+    do
+    {
+      spl=cubic.approx3d(1);
+      spl.rotate(flip);
+      approx.clear();
+      ps.setcolor(0,0,1);
+      ps.spline(spl);
+      spl=bezier3d();
+      for (i=0;i<narcs;i++)
+      {
+        if (i)
+          startslope=approx[i-1].endslope();
+        else
+          startslope=cubic.startslope();
+        accel=cubic.accel((2*i/(narcs-1.)-1)*x*30+30);
+        cout<<"accel at "<<(2*i/(narcs-1.)-1)*x*30<<" is "<<accel<<endl;
+        abscissa=((2*i+1)/(narcs-1.)-1)*30;
+        lastabscissa=((2*i-1)/(narcs-1.)-1)*30;
+        if (lastabscissa<-30)
+          lastabscissa=-30;
+        if (abscissa>30)
+          abscissa=30;
+        cout<<lastabscissa<<" - "<<abscissa<<endl;
+        endslope=startslope+(abscissa-lastabscissa)*accel;
+        if (lastabscissa==-30)
+          lastordinate=-27;
+        else
+          lastordinate=approx.back().getend().elev();
+        ordinate=lastordinate+(abscissa-lastabscissa)*(startslope+endslope)/2;
+        approx.push_back(segment(xyz(lastabscissa,0,lastordinate),xyz(abscissa,0,ordinate)));
+        approx[i].setslope(START,startslope);
+        approx[i].setslope(END,endslope);
+        spl+=approx[i].approx3d(1);
+      }
+      spl.rotate(flip);
+      ps.setcolor(1,0,0);
+      ps.spline(spl);
+      cout<<"endslope is "<<endslope<<", should be "<<cubic.endslope()<<' '<<ldecimal(endslope-cubic.endslope())<<endl;
+      cout<<"ordinate is "<<ordinate<<", should be "<<27<<endl;
+      if (brenting)
+        x=br.step(ordinate-27);
+    } while (brenting && !br.finished());
     cout<<"x="<<ldecimal(x)<<endl;
-  ps.endpage();
+    ps.endpage();
+  }
   ps.close();
 }
 
