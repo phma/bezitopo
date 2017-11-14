@@ -3,7 +3,7 @@
 /* cogospiral.h - intersections of spirals            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015 Pierre Abbat.
+/* Copyright 2015,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -40,6 +40,23 @@
 #include <vector>
 #include "point.h"
 #include "spiral.h"
+
+/* Constants for Gaussian quadrature of sixth-degree polynomial resulting from
+ * squaring a cubic, for calculating the RMS distance between a spiral and
+ * the approximation thereto.
+ * GAUSSQ4P0P=(1-sqrt(3/7+2/7*sqrt(6/5)))/2
+ * GAUSSQ4P1P=(1-sqrt(3/7-2/7*sqrt(6/5)))/2
+ * GAUSSQ4P0W=(18-sqrt(30))/72
+ * GAUSSQ4P1W=(18+sqrt(30))/72
+ * GAUSSQ4P2P=1-GAUSSQ4P1P
+ * GAUSSQ4P3P=1-GAUSSQ4P0P
+ * GAUSSQ4P2W=GAUSSQ4P1W
+ * GAUSSQ4P3W=GAUSSQ4P0W
+ */
+#define GAUSSQ4P0P .06943184420297371239
+#define GAUSSQ4P1P .33000947820757186760
+#define GAUSSQ4P0W .17392742256872692868
+#define GAUSSQ4P1W .32607257743127307131
 
 struct alosta
 {
