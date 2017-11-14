@@ -30,12 +30,24 @@ alosta::alosta()
 {
   along=0;
   station=xy(0,0);
+  bearing=0;
+  curvature=0;
 }
 
 alosta::alosta(double a,xy s)
 {
   along=a;
   station=s;
+  bearing=0;
+  curvature=0;
+}
+
+alosta::alosta(double a,xy s,int b,double c)
+{
+  along=a;
+  station=s;
+  bearing=b;
+  curvature=c;
 }
 
 bool sortpts(alosta a[],alosta b[])

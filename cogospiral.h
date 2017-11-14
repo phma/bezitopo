@@ -45,8 +45,11 @@ struct alosta
 {
   double along;
   xy station;
+  int bearing;
+  double curvature;
   alosta();
   alosta(double a,xy s);
+  alosta(double a,xy s,int b,double c);
 };
 
 std::vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double b1,double b2,bool extend=false);
