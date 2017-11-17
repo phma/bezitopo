@@ -32,8 +32,8 @@
  */
 #include <iostream>
 #include <cassert>
-#include "contour.h"
 #include "pointlist.h"
+#include "contour.h"
 #include "relprime.h"
 #include "ldecimal.h"
 using namespace std;

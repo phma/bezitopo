@@ -39,6 +39,8 @@
 
 class gboundary;
 
+unsigned byteswap(unsigned n);
+
 struct cylinterval
 /* A rectangle on a cylindrical map. Used when excerpting
  * a geoid file into a geolattice.

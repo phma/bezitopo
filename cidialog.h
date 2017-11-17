@@ -27,6 +27,7 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QGridLayout>
+#include "pointlist.h"
 #include "contour.h"
 
 #define MININTERVAL 0.03

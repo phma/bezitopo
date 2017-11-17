@@ -3,7 +3,7 @@
 /* drawobj.cpp - drawing object base class            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 
 #include <cmath>
 #include "drawobj.h"
+#include "geoid.h"
 using namespace std;
 
 string xmlEscape(string str)
@@ -56,6 +57,17 @@ string xmlEscape(string str)
   return ret;
 }
 
+unsigned memHash(unsigned *mem,unsigned len,unsigned previous)
+/* This is used to tell whether a drawing object has changed
+ * and must therefore be regenerated.
+ */
+{
+  unsigned i;
+  for (i=0;i<len;i++)
+    previous=byteswap(previous*59049+mem[i]);
+  return previous;
+}
+
 bsph drawobj::boundsphere()
 {
   bsph ret;
@@ -77,6 +89,16 @@ void drawobj::roscat(xy tfrom,int ro,double sca,xy tto)
  * which has no location. 
  */
 {
+}
+
+int drawobj::hash()
+{
+  return 0;
+}
+
+vector<drawingElement> drawobj::render3d(double precision)
+{
+  return vector<drawingElement>();
 }
 
 void drawobj::writeXml(ofstream &ofile)

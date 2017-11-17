@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* bezier3d.h - 3d Bézier splines                     */
+/* penwidth.h - pen width                             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2014,2015,2016 Pierre Abbat.
+/* Copyright 2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -19,28 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#define SAMEWIDTH 0x5555
+#define ZEROWIDTH (-0x5555)
 
-#ifndef BEZIER3D_H
-#define BEZIER3D_H
-#include <vector>
-#include "xyz.h"
-#include "quaternion.h"
+/* Pen widths are stored in a short in a logarithmic scale. 0 represents
+ * a width of 1, 12 a width of 2, etc. What a width of 1 means depends on
+ * the device. Add an offset to adjust the width to the device.
+ * 
+ * SAMEWIDTH means that the width will be set to that of the layer. Any value
+ * greater than 200 (which represents a ridiculously large width of 4.77M) is
+ * taken to be SAMEWIDTH; any value less than -200 is taken to be ZEROWIDTH.
+ */
 
-class bezier3d
-{
-private:
-  std::vector<xyz> controlpoints;
-public:
-  bezier3d(xyz kra,xyz con1,xyz con2,xyz fam);
-  bezier3d(xyz kra,int bear0,double slp0,double slp1,int bear1,xyz fam);
-  bezier3d();
-  int size() const; // number of Bézier segments
-  std::vector<xyz> operator[](int n);
-  xyz station(double along);
-  friend bezier3d operator+(const bezier3d &l,const bezier3d &r); // concatenates, not adds
-  bezier3d& operator+=(const bezier3d &r);
-  void rotate(Quaternion q);
-};
-
-double bez3destimate(xy kra,int bear0,double len,int bear1,xy fam);
-#endif
+double penWidthRatio(int penWidthCode);

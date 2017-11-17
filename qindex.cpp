@@ -21,8 +21,8 @@
  */
 
 #include <cmath>
-#include "qindex.h"
 #include "ps.h"
+#include "qindex.h"
 
 /* The index enables quickly finding a triangle containing a given point.
    x and y are the bottom left corner. side is always a power of 2,

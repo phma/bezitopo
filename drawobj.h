@@ -3,7 +3,7 @@
 /* drawobj.h - drawing object base class              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -24,9 +24,12 @@
 #define DRAWOBJ_H
 #include <fstream>
 #include <string>
+#include <vector>
 #include "xyz.h"
+#include "bezier3d.h"
 
 std::string xmlEscape(std::string str);
+unsigned memHash(unsigned *mem,unsigned len,unsigned previous=0);
 
 class bsph
 {
@@ -41,6 +44,15 @@ public:
   xyz dir,pnt;
 };
 
+class drawingElement
+{
+public:
+  short color; // Normally returned as SAMECOLOR, unless it's a component of a block.
+  short width;
+  bool filled;
+  bezier3d path;
+};
+
 class drawobj
 {
 public:
@@ -50,9 +62,8 @@ public:
   {
   }
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
-  /* This will also have a method to draw on a device. It will be passed
-   * a callback of some sort and will pass bezier3d objects to the callback.
-   */
+  virtual int hash();
+  virtual std::vector<drawingElement> render3d(double precision);
   virtual void writeXml(std::ofstream &ofile);
 };
 

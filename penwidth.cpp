@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* bezier3d.h - 3d Bézier splines                     */
+/* penwidth.cpp - pen width                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2014,2015,2016 Pierre Abbat.
+/* Copyright 2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -19,28 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "penwidth.h"
+#define PENSTEP 1.07991744123616394147
 
-#ifndef BEZIER3D_H
-#define BEZIER3D_H
-#include <vector>
-#include "xyz.h"
-#include "quaternion.h"
-
-class bezier3d
+double penWidthRatio(int penWidthCode)
 {
-private:
-  std::vector<xyz> controlpoints;
-public:
-  bezier3d(xyz kra,xyz con1,xyz con2,xyz fam);
-  bezier3d(xyz kra,int bear0,double slp0,double slp1,int bear1,xyz fam);
-  bezier3d();
-  int size() const; // number of Bézier segments
-  std::vector<xyz> operator[](int n);
-  xyz station(double along);
-  friend bezier3d operator+(const bezier3d &l,const bezier3d &r); // concatenates, not adds
-  bezier3d& operator+=(const bezier3d &r);
-  void rotate(Quaternion q);
-};
-
-double bez3destimate(xy kra,int bear0,double len,int bear1,xy fam);
-#endif
+  assert(penWidthCode<=200); // SAMEWIDTH should be replaced with an actual width code before calling this function.
+  if (penWidthCode)<-200)
+    return 0;
+  else
+    return pow(PENSTEP,penWidthCode);
+}

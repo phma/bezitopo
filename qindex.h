@@ -3,7 +3,7 @@
 /* qindex.h - quad index to tin                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013 Pierre Abbat.
+/* Copyright 2012,2013,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -23,9 +23,13 @@
 #ifndef QINDEX_H
 #define QINDEX_H
 #include <vector>
+#include "pointlist.h"
 #include "bezier.h"
 #include "ps.h"
 #include "point.h"
+
+class PostScript;
+
 class qindex
 {
 public:

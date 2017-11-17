@@ -35,10 +35,8 @@
 #include "config.h"
 #include "ps.h"
 #include "point.h"
-#include "tin.h"
 #include "pointlist.h"
 #include "plot.h"
-#include "document.h"
 using namespace std;
 
 #define PAPERRES 0.004

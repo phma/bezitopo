@@ -25,6 +25,8 @@
 #include <iostream>
 #include <map>
 #include "bezier3d.h"
+#include "document.h"
+#include "tin.h"
 class pointlist;
 
 struct papersize
