@@ -49,6 +49,9 @@ extern const xy beforestart,afterend;
 farna perp(farna dir);*/
 
 class point: public xyz, public drawobj
+/* No render3d method. A point is drawn as three concentric circles when
+ * there are no edges and you're viewing a pointlist.
+ */
 {
 public:
   using xyz::roscat;
@@ -79,7 +82,7 @@ public:
   edge *line; // a line incident on this point in the TIN. Used to arrange the lines in order around their endpoints.
   edge *edg(triangle *tri);
   // tri.a->edg(tri) is the side opposite tri.b
-  public:
+public:
   xy newgradient,gradient,oldgradient; // may be redone later, but for now a point has one gradient, and type 0 breaklines merely force edges to be in the TIN.
   int valence();
 };

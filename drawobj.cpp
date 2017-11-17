@@ -22,6 +22,8 @@
 
 #include <cmath>
 #include "drawobj.h"
+#include "penwidth.h"
+#include "color.h"
 #include "geoid.h"
 using namespace std;
 
@@ -55,6 +57,21 @@ string xmlEscape(string str)
     str.erase(0,pos+(pos!=string::npos));
   } while (str.length());
   return ret;
+}
+
+drawingElement::drawingElement()
+{
+  color=SAMECOLOR;
+  width=SAMEWIDTH;
+  filled=false;
+}
+
+drawingElement::drawingElement(bezier3d b3d)
+{
+  color=SAMECOLOR;
+  width=SAMEWIDTH;
+  filled=false;
+  path=b3d;
 }
 
 unsigned memHash(unsigned *mem,unsigned len,unsigned previous)

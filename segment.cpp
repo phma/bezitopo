@@ -275,6 +275,13 @@ bezier3d segment::approx3d(double precision)
   return ret;
 }
 
+vector<drawingElement> segment::render3d(double precision)
+{
+  vector<drawingElement> ret;
+  ret.push_back(drawingElement(approx3d(precision)));
+  return ret;
+}
+
 xy intersection (segment seg1,segment seg2)
 /* This might should return a vector of xyz,
  * and will need versions for arc and maybe spiralarc.

@@ -142,6 +142,7 @@ public:
   double dirbound(int angle,double boundsofar=INFINITY);
   virtual void split(double along,segment &a,segment &b);
   bezier3d approx3d(double precision);
+  virtual std::vector<drawingElement> render3d(double precision);
   friend xy intersection (segment seg1,segment seg2);
   friend inttype intersection_type(segment seg1,segment seg2);
   friend double missDistance(segment seg1,segment seg2);

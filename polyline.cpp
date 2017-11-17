@@ -170,6 +170,14 @@ bezier3d polyspiral::approx3d(double precision)
   return ret;
 }
 
+vector<drawingElement> polyline::render3d(double precision)
+{
+  vector<drawingElement> ret;
+  ret.push_back(drawingElement(approx3d(precision)));
+  // polylines aren't filled, but if they are in the future, set filled=true
+  return ret;
+}
+
 void polyline::dedup()
 /* Collapses into one adjacent points that are too close together.
  * They result from running contourcept on two segments that are the same

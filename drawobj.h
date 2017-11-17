@@ -51,6 +51,8 @@ public:
   short width;
   bool filled;
   bezier3d path;
+  drawingElement();
+  drawingElement(bezier3d b3d);
 };
 
 class drawobj

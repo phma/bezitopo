@@ -65,6 +65,7 @@ public:
   segment getsegment(int i);
   void dedup();
   virtual bezier3d approx3d(double precision);
+  virtual std::vector<drawingElement> render3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
   virtual void setlengths();
   virtual void open();
