@@ -134,11 +134,28 @@ public:
 };
 
 class alignment
+/* An alignment consists of a sequence of horizontal curves (all are spirals,
+ * possibly with zero clothance or curvature) and a sequence of vertical
+ * curves (all with degree 3 or less). The stations along the horizontal
+ * and vertical curves (cumLengths and vCumLengths) must start and end at the
+ * same number (they don't have to start at 0) but their internal endpoints
+ * generally are unrelated.
+ * 
+ * Normally one plans the horizontal curves first. During this phase, the
+ * vertical curve is a single horizontal line at elevation 0. Then one takes
+ * cross-sections along the path and designs the vertical curves.
+ */
 {
 public:
-  std::vector<xyz> endpoints;
-  std::vector<int> deltas;
-  std::vector<double> lengths;
+  std::vector<xy> endpoints;
+  std::vector<int> deltas,delta2s;
+  std::vector<int> bearings; // correspond to endpoints
+  std::vector<int> midbearings;
+  std::vector<xy> midpoints;
+  std::vector<double> clothances,curvatures;
+  std::vector<double> lengths,cumLengths;
+  std::vector<double> vLengths,vCumLengths;
+  std::vector<double> controlPoints;
 };
 
 #endif
