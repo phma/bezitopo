@@ -31,7 +31,7 @@ find_package(Qt5Gui)
 qt5_add_resources(lib_resources viewtin.qrc)
 
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitopo.cpp binio.cpp breakline.cpp closure.cpp cogo.cpp
+               bezitopo.cpp binio.cpp breakline.cpp circle.cpp closure.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp cvtmeas.cpp document.cpp
                drawobj.cpp ellipsoid.cpp geoid.cpp geoidboundary.cpp halton.cpp
                icommon.cpp kml.cpp latlong.cpp layer.cpp ldecimal.cpp
@@ -41,7 +41,7 @@ add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                scalefactor.cpp spiral.cpp spolygon.cpp stl.cpp test.cpp segment.cpp
                tin.cpp vball.cpp vcurve.cpp)
 add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitest.cpp bicubic.cpp binio.cpp breakline.cpp cogo.cpp
+               bezitest.cpp bicubic.cpp binio.cpp breakline.cpp circle.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
                ellipsoid.cpp geoid.cpp geoidboundary.cpp
                halton.cpp histogram.cpp hlattice.cpp hnum.cpp kml.cpp
@@ -61,7 +61,7 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp sourcegeoid.cpp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
 add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp breakline.cpp
-               cidialog.cpp cogo.cpp color.cpp
+               cidialog.cpp circle.cpp cogo.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp ellipsoid.cpp
                geoid.cpp geoidboundary.cpp kml.cpp
                latlong.cpp ldecimal.cpp manysum.cpp measure.cpp measurebutton.cpp
