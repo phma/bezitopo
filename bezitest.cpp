@@ -166,6 +166,26 @@ void test1intersection(xy a,xy c,xy b,xy d,xy inte,int type)
   tassert(itype==type);
 }
 
+void testbbintersection(xy a,xy b,xy c)
+{
+  int aBear,bBear;
+  xy inters;
+  aBear=dir(a,c);
+  bBear=dir(b,c);
+  inters=intersection(a,aBear,b,bBear);
+  if ((bBear-aBear)&(DEG180-1))
+  {
+    tassert(dist(c,inters)<1e-6);
+    cout<<"c="<<ldecimal(c.getx())<<','<<ldecimal(c.gety());
+    cout<<" inters="<<ldecimal(inters.getx())<<','<<ldecimal(inters.gety())<<endl;
+  }
+  else
+  {
+    tassert(inters.isnan());
+    cout<<"a, b, and c are collinear\n";
+  }
+}
+
 void testintersection()
 {
   xy a(1,0),b(-0.5,0.866),c(-0.5,-0.866),d(-0.5,0),e(0.25,-0.433),f(0.25,0.433),o(0,0);
@@ -191,6 +211,21 @@ void testintersection()
   test1intersection(b,c,d,b,c,COLIN);
   test1intersection(c,a,e,c,a,COLIN);
   test1intersection(a,b,f,a,b,COLIN);
+  testbbintersection(a,b,c); // These are at 60° angles.
+  testbbintersection(b,a,c);
+  testbbintersection(b,c,a);
+  testbbintersection(c,b,a);
+  testbbintersection(c,a,b);
+  testbbintersection(a,c,b);
+  testbbintersection(a,o,d); // These are collinear.
+  testbbintersection(a,d,o);
+  testbbintersection(b,o,e);
+  testbbintersection(b,e,o);
+  testbbintersection(c,o,f);
+  testbbintersection(c,f,o);
+  testbbintersection(a,o,o); // This one it says is collinear,
+  testbbintersection(b,o,o); // but not these two, because
+  testbbintersection(c,o,o); // the bearing of o from o is 0.
 }
 
 void test1in(xy p,xy a,xy b,xy c,double windnum)

@@ -136,9 +136,9 @@ xy intersection (xy a,xy c,xy b,xy d)
 xy intersection (xy a,int aBear,xy b,int bBear)
 {
   double length=dist(a,b);
-  if (length=0)
+  if (length==0)
     length=a.length();
-  if (length=0)
+  if (length==0)
     length=1;
   if ((bBear-aBear)&(DEG180-1))
     return intersection(a,a+length*cossin(aBear),b,b+length*cossin(bBear));
