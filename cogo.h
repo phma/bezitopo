@@ -38,6 +38,8 @@ extern FILE *randfil;
 double area3(xy a,xy b,xy c);
 xy intersection (xy a,xy c,xy b,xy d);
 //Intersection of lines ac and bd.
+xy intersection (xy a,int aBear,xy b,int bBear);
+//Bearing-bearing intersection.
 double missDistance (xy a,xy c,xy b,xy d);
 //Distance by which lines miss intersecting.
 inttype intersection_type(xy a,xy c,xy b,xy d);

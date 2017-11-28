@@ -3,7 +3,7 @@
 /* cogo.cpp - coordinate geometry                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012,2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -124,13 +124,27 @@ double area3(xy a,xy b,xy c)
 
 xy intersection (xy a,xy c,xy b,xy d)
 //Intersection of lines ac and bd.
-{double A,B,C,D;
- A=area3(b,c,d);
- B=area3(c,d,a);
- C=area3(d,a,b);
- D=area3(a,b,c);
- return ((a*A+c*C)+(b*B+d*D))/((A+C)+(B+D));
- }
+{
+  double A,B,C,D;
+  A=area3(b,c,d);
+  B=area3(c,d,a);
+  C=area3(d,a,b);
+  D=area3(a,b,c);
+  return ((a*A+c*C)+(b*B+d*D))/((A+C)+(B+D));
+}
+
+xy intersection (xy a,int aBear,xy b,int bBear)
+{
+  double length=dist(a,b);
+  if (length=0)
+    length=a.length();
+  if (length=0)
+    length=1;
+  if ((bBear-aBear)&(DEG180-1))
+    return intersection(a,a+length*cossin(aBear),b,b+length*cossin(bBear));
+  else
+    return(xy(NAN,NAN));
+}
 
 #define setmaxabs(a,b) a=(fabs(b)>a)?fabs(b):a
 
