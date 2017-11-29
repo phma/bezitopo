@@ -69,5 +69,6 @@ bool delaunay(xy a,xy c,xy b,xy d);
 xy rand2p(xy a,xy b);
 /* A random point in the circle with diameter ab. */
 char *inttype_str(inttype i);
-
+double distanceInDirection(xy a,xy b,int dir);
+// Distance from a to b in the direction dir. Used for tangents of spirals.
 #endif

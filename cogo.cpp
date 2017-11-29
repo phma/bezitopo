@@ -286,3 +286,8 @@ char *inttype_str(inttype i)
 {
   return inttstr+6*i;
 }
+
+double distanceInDirection(xy a,xy b,int dir)
+{
+  return dot(b-a,cossin(dir));
+}
