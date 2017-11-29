@@ -302,6 +302,19 @@ double spiralarc::_diffarea(double totcur,double totclo)
    */
 }
 
+xy spiralarc::pointOfIntersection()
+{
+  return intersection(start,startbearing(),end,endbearing());
+}
+
+double spiralarc::tangentLength(int which)
+{
+  if (which==START)
+    return distanceInDirection(start,pointOfIntersection(),startbearing());
+  if (which==END)
+    return distanceInDirection(pointOfIntersection(),end,endbearing());
+}
+
 double spiralarc::diffarea()
 {
   double totcur=len*cur,totclo=len*len*clo;

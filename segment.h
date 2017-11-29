@@ -122,6 +122,8 @@ public:
   }
   xy center();
   xyz midpoint() const;
+  virtual xy pointOfIntersection();
+  virtual double tangentLength(int which);
   virtual int diffinside(xy pnt)
   {
     return 0;

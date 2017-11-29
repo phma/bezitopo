@@ -96,6 +96,16 @@ double arc::length() const
     return chordlength();
 }
 
+xy arc::pointOfIntersection()
+{
+  return ((xy(start)+xy(end))/2-turn90((xy(end)-xy(start))/2*tanhalf(delta)));
+}
+
+double arc::tangentLength(int which)
+{
+  return chordlength()/2/coshalf(delta);
+}
+
 double arc::diffarea()
 {
   double r;

@@ -46,6 +46,8 @@ public:
   {
     return 2*sinhalf(delta)/chordlength();
   }
+  virtual xy pointOfIntersection();
+  virtual double tangentLength(int which);
   virtual double diffarea();
   int startbearing() const
   {

@@ -219,6 +219,19 @@ xy segment::center()
   return xy(nan(""),nan(""));
 }
 
+xy segment::pointOfIntersection()
+/* The PI of a segment is indeterminate. Arbitrarily pick the midpoint,
+ * which is the limit of the PI of an arc as the delta approaches zero.
+ */
+{
+  return midpoint();
+}
+
+double segment::tangentLength(int which)
+{
+  return length()/2;
+}
+
 void segment::split(double along,segment &a,segment &b)
 {
   double dummy;
