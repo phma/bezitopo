@@ -110,7 +110,7 @@ void drawobj::roscat(xy tfrom,int ro,double sca,xy tto)
 {
 }
 
-int drawobj::hash()
+unsigned drawobj::hash()
 {
   return 0;
 }

@@ -60,6 +60,7 @@ public:
   {
     return elevation;
   }
+  virtual unsigned hash();
   bool isopen();
   int size();
   segment getsegment(int i);
@@ -88,6 +89,7 @@ public:
   polyarc();
   polyarc(double e);
   polyarc(polyline &p);
+  virtual unsigned hash();
   arc getarc(int i);
   virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
@@ -115,6 +117,7 @@ public:
   polyspiral();
   polyspiral(double e);
   polyspiral(polyline &p);
+  virtual unsigned hash();
   spiralarc getspiralarc(int i);
   virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);

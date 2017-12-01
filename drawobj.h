@@ -64,7 +64,7 @@ public:
   {
   }
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
-  virtual int hash();
+  virtual unsigned hash();
   virtual std::vector<drawingElement> render3d(double precision);
   virtual void writeXml(std::ofstream &ofile);
 };

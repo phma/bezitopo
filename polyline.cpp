@@ -117,6 +117,38 @@ int polyline::size()
   return lengths.size();
 }
 
+unsigned polyline::hash()
+{
+  return memHash(&lengths[0],lengths.size()*sizeof(double),
+         memHash(&cumLengths[0],cumLengths.size()*sizeof(double),
+         memHash(&endpoints[0],endpoints.size()*sizeof(xy),
+         memHash(&elevation,sizeof(double)))));
+}
+
+unsigned polyarc::hash()
+{
+  return memHash(&deltas[0],deltas.size()*sizeof(int),
+         memHash(&lengths[0],lengths.size()*sizeof(double),
+         memHash(&cumLengths[0],cumLengths.size()*sizeof(double),
+         memHash(&endpoints[0],endpoints.size()*sizeof(xy),
+         memHash(&elevation,sizeof(double))))));
+}
+
+unsigned polyspiral::hash()
+{
+  return memHash(&bearings[0],bearings.size()*sizeof(int),
+         memHash(&delta2s[0],delta2s.size()*sizeof(int),
+         memHash(&midbearings[0],midbearings.size()*sizeof(int),
+         memHash(&midpoints[0],midpoints.size()*sizeof(xy),
+         memHash(&curvatures[0],curvatures.size()*sizeof(double),
+         memHash(&clothances[0],clothances.size()*sizeof(double),
+         memHash(&deltas[0],deltas.size()*sizeof(int),
+         memHash(&lengths[0],lengths.size()*sizeof(double),
+         memHash(&cumLengths[0],cumLengths.size()*sizeof(double),
+         memHash(&endpoints[0],endpoints.size()*sizeof(xy),
+         memHash(&elevation,sizeof(double))))))))))));
+}
+
 segment polyline::getsegment(int i)
 {
   i%=lengths.size();
