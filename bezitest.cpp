@@ -3867,6 +3867,7 @@ void testcolor()
 void test1contour(string contourName,xyz offset,xy tripoint,double conterval,double expectedLength)
 {
   int i,j,excessElevCount=0;
+  unsigned tothash=0;
   double prec=0.0000001,along,elevError,maxElevError=0;
   histogram h(-conterval/10,conterval/10);
   manysum totalContourLength;
@@ -3913,6 +3914,7 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   for (i=0;i<doc.pl[1].contours.size();i++)
   {
     ps.spline(doc.pl[1].contours[i].approx3d(1));
+    tothash+=doc.pl[1].contours[i].hash();
   }
   ps.endpage();
   ps.startpage();
@@ -3935,6 +3937,7 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
     //cout<<"Contour area: "<<doc.pl[1].contours[i].area()<<endl;
     totalContourLength+=doc.pl[1].contours[i].length();
     ps.spline(doc.pl[1].contours[i].approx3d(1));
+    tothash+=doc.pl[1].contours[i].hash();
   }
   ps.endpage();
   ps.setpaper(papersizes["A4 portrait"],1);
@@ -3972,6 +3975,7 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   /* Ideally excessElevCount is 0, and for the well-behaved contouraster it is,
    * but for the ill-behaved contourwheel, it is not.
    */
+  cout<<"Total hash "<<tothash<<endl;
   tassert(maxElevError<conterval);
 }
 
