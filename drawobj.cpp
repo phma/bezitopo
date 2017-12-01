@@ -74,14 +74,16 @@ drawingElement::drawingElement(bezier3d b3d)
   path=b3d;
 }
 
-unsigned memHash(unsigned *mem,unsigned len,unsigned previous)
+unsigned memHash(void *mem,unsigned len,unsigned previous)
 /* This is used to tell whether a drawing object has changed
  * and must therefore be regenerated.
  */
 {
   unsigned i;
-  for (i=0;i<len;i++)
-    previous=byteswap(previous*59049+mem[i]);
+  unsigned *umem=reinterpret_cast<unsigned *>(mem);
+  unsigned ulen=len/sizeof(unsigned);
+  for (i=0;i<ulen;i++)
+    previous=byteswap(previous*59049+umem[i]);
   return previous;
 }
 

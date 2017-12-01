@@ -29,7 +29,7 @@
 #include "bezier3d.h"
 
 std::string xmlEscape(std::string str);
-unsigned memHash(unsigned *mem,unsigned len,unsigned previous=0);
+unsigned memHash(void *mem,unsigned len,unsigned previous=0);
 
 class bsph
 {
