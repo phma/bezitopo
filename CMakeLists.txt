@@ -64,13 +64,17 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp break
                cidialog.cpp circle.cpp cogo.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp ellipsoid.cpp
                geoid.cpp geoidboundary.cpp kml.cpp
-               latlong.cpp ldecimal.cpp manysum.cpp measure.cpp measurebutton.cpp
+               latlong.cpp ldecimal.cpp linetype.cpp
+               manysum.cpp measure.cpp measurebutton.cpp
                pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
                ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
                rootfind.cpp segment.cpp spiral.cpp spolygon.cpp test.cpp tin.cpp
                tinwindow.cpp vball.cpp vcurve.cpp viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources})
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
+target_link_libraries(bezitopo Qt5::Widgets Qt5::Core)
+target_link_libraries(bezitest Qt5::Widgets Qt5::Core)
+target_link_libraries(convertgeoid Qt5::Widgets Qt5::Core)
 target_link_libraries(viewtin Qt5::Widgets Qt5::Core)
 target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)
 target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID NUMSGEOID)
