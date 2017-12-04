@@ -63,11 +63,11 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
 add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp breakline.cpp
                cidialog.cpp circle.cpp cogo.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp ellipsoid.cpp
-               geoid.cpp geoidboundary.cpp kml.cpp
+               geoid.cpp geoidboundary.cpp halton.cpp kml.cpp
                latlong.cpp ldecimal.cpp linetype.cpp
                manysum.cpp measure.cpp measurebutton.cpp
                pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
-               ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
+               ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp rendercache.cpp
                rootfind.cpp segment.cpp spiral.cpp spolygon.cpp test.cpp tin.cpp
                tinwindow.cpp vball.cpp vcurve.cpp viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources})
