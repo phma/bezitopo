@@ -288,10 +288,10 @@ bezier3d segment::approx3d(double precision)
   return ret;
 }
 
-vector<drawingElement> segment::render3d(double precision)
+vector<drawingElement> segment::render3d(double precision,int layer,int color,int width,int linetype)
 {
   vector<drawingElement> ret;
-  ret.push_back(drawingElement(approx3d(precision)));
+  ret.push_back(drawingElement(approx3d(precision),color,width,linetype));
   return ret;
 }
 

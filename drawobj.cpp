@@ -24,6 +24,7 @@
 #include "drawobj.h"
 #include "penwidth.h"
 #include "color.h"
+#include "linetype.h"
 #include "geoid.h"
 using namespace std;
 
@@ -63,6 +64,7 @@ drawingElement::drawingElement()
 {
   color=SAMECOLOR;
   width=SAMEWIDTH;
+  linetype=SAMELINETYPE;
   filled=false;
 }
 
@@ -70,6 +72,16 @@ drawingElement::drawingElement(bezier3d b3d)
 {
   color=SAMECOLOR;
   width=SAMEWIDTH;
+  linetype=SAMELINETYPE;
+  filled=false;
+  path=b3d;
+}
+
+drawingElement::drawingElement(bezier3d b3d,int c,int w,int lt)
+{
+  color=c;
+  width=w;
+  linetype=lt;
   filled=false;
   path=b3d;
 }
@@ -115,7 +127,7 @@ unsigned drawobj::hash()
   return 0;
 }
 
-vector<drawingElement> drawobj::render3d(double precision)
+vector<drawingElement> drawobj::render3d(double precision,int layer,int color,int width,int linetype)
 {
   return vector<drawingElement>();
 }

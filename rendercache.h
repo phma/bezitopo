@@ -41,7 +41,9 @@
 class RenderItem
 {
 public:
-  unsigned short ltype,colr,thik;
+  unsigned short colr;
+  short thik;
+  unsigned short ltype;
   bool present;
   unsigned hash;
   double pixelScale;
@@ -58,5 +60,5 @@ public:
   void clear();
   void clearPresent();
   void deleteAbsent();
-  void checkInObject(drawobj *obj,double pixelScale,unsigned short ltype,unsigned short colr,unsigned short thik);
+  void checkInObject(drawobj *obj,double pixelScale,int layr,int colr,int thik,int ltype);
 };

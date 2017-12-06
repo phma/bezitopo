@@ -57,20 +57,20 @@ bool RenderCache::shouldRerender(double oldScale,double newScale)
   return prob<1 && subrand.scalar(1)>=prob;
 }
 
-void RenderCache::checkInObject(drawobj *obj,double pixelScale,unsigned short ltype,unsigned short colr,unsigned short thik)
+void RenderCache::checkInObject(drawobj *obj,double pixelScale,int layr,int colr,int thik,int ltype)
 {
   unsigned objHash;
   if (!renderMap.count(obj))
     renderMap[obj].pixelScale=INFINITY;
-  renderMap[obj].ltype=ltype;
   renderMap[obj].colr=colr;
   renderMap[obj].thik=thik;
+  renderMap[obj].ltype=ltype;
   renderMap[obj].present=true;
   objHash=obj->hash(); // Computing the hash of a large polyspiral takes 1/20 as much time as rendering it.
   if (shouldRerender(renderMap[obj].pixelScale,pixelScale) ||
       objHash!=renderMap[obj].hash)
   {
-    renderMap[obj].rendering=obj->render3d(pixelScale);
+    renderMap[obj].rendering=obj->render3d(pixelScale,layr,colr,thik,ltype);
     renderMap[obj].pixelScale=pixelScale;
     renderMap[obj].hash=objHash;
   }

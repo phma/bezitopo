@@ -47,12 +47,14 @@ public:
 class drawingElement
 {
 public:
-  short color; // Normally returned as SAMECOLOR, unless it's a component of a block.
+  unsigned short color;
   short width;
+  unsigned short linetype;
   bool filled;
   bezier3d path;
   drawingElement();
   drawingElement(bezier3d b3d);
+  drawingElement(bezier3d b3d,int c,int w,int lt);
 };
 
 class drawobj
@@ -65,7 +67,12 @@ public:
   }
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
   virtual unsigned hash();
-  virtual std::vector<drawingElement> render3d(double precision);
+  virtual std::vector<drawingElement> render3d(double precision,int layer,int color,int width,int linetype);
+  /* render3d is normally called with layer=-1 and color, width, and linetype
+   * set to actual values, or layer set to an actual value and color, width,
+   * and linetype set to SAMEfoo. The latter won't happen until I implement
+   * layers.
+   */
   virtual void writeXml(std::ofstream &ofile);
 };
 
