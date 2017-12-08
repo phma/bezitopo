@@ -3,7 +3,7 @@
 /* color.h - drawing colors                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015 Pierre Abbat.
+/* Copyright 2015,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -30,6 +30,7 @@
  * • Invert light and dark, leaving hue alone. This is difficult.
  * This operation is done on the 24-bit color.
  */
+#include <QPen>
 
 #define SAMECOLOR 65535
 #define BLACK 0
@@ -44,3 +45,4 @@
 int colorint(unsigned short colorshort);
 unsigned short colorshort(int colorint);
 int printingcolor(int color,int op);
+void setColor(QPen &pen,unsigned short color);

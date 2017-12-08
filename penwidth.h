@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <QPen>
 #define SAMEWIDTH 0x5555
 #define ZEROWIDTH (-0x5555)
 
@@ -32,3 +33,4 @@
  */
 
 double penWidthRatio(int penWidthCode);
+void setWidth(QPen &pen,short penWidthCode);

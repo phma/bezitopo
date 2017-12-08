@@ -30,3 +30,8 @@ double penWidthRatio(int penWidthCode)
   else
     return pow(PENSTEP,penWidthCode);
 }
+
+void setWidth(QPen &pen,short penWidthCode)
+{
+  pen.setWidthF(penWidthRatio(penWidthCode));
+}

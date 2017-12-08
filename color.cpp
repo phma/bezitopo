@@ -3,7 +3,7 @@
 /* color.cpp - drawing colors                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015 Pierre Abbat.
+/* Copyright 2015,2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -286,4 +286,10 @@ int printingcolor(int color,int op)
   if (op&4)
     color=fliphue(color);
   return color;
+}
+
+void setColor(QPen &pen,unsigned short color)
+{
+  assert(color<64000);
+  pen.setColor(QColor((QRgb)(colorint(color)|0xff000000)));
 }
