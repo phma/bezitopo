@@ -48,6 +48,7 @@ void RenderCache::deleteAbsent()
       delenda.push_back(i->first);
   for (j=0;j<delenda.size();j++)
     renderMap.erase(delenda[j]);
+  next=renderMap.begin();
 }
 
 bool RenderCache::shouldRerender(double oldScale,double newScale)
@@ -76,4 +77,15 @@ void RenderCache::checkInObject(drawobj *obj,double pixelScale,int layr,int colr
   }
 }
 
-      
+RenderItem RenderCache::nextRenderItem()
+{
+  RenderItem ret;
+  if (next==renderMap.end())
+    ret.present=false;
+  else
+  {
+    ret=next->second;
+    ++next;
+  }
+  return ret;
+}

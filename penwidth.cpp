@@ -19,13 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <cassert>
 #include "penwidth.h"
 #define PENSTEP 1.07991744123616394147
 
 double penWidthRatio(int penWidthCode)
 {
   assert(penWidthCode<=200); // SAMEWIDTH should be replaced with an actual width code before calling this function.
-  if (penWidthCode)<-200)
+  if (penWidthCode<-200)
     return 0;
   else
     return pow(PENSTEP,penWidthCode);

@@ -65,7 +65,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp break
                contour.cpp csv.cpp document.cpp drawobj.cpp ellipsoid.cpp
                geoid.cpp geoidboundary.cpp halton.cpp kml.cpp
                latlong.cpp ldecimal.cpp linetype.cpp
-               manysum.cpp measure.cpp measurebutton.cpp
+               manysum.cpp measure.cpp measurebutton.cpp penwidth.cpp
                pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
                ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp rendercache.cpp
                rootfind.cpp segment.cpp spiral.cpp spolygon.cpp test.cpp tin.cpp

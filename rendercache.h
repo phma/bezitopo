@@ -56,9 +56,11 @@ private:
   halton subrand;
   std::map<drawobj *,RenderItem> renderMap;
   bool shouldRerender(double oldScale,double newScale);
+  std::map<drawobj *,RenderItem>::iterator next;
 public:
   void clear();
   void clearPresent();
   void deleteAbsent();
   void checkInObject(drawobj *obj,double pixelScale,int layr,int colr,int thik,int ltype);
+  RenderItem nextRenderItem();
 };

@@ -27,6 +27,9 @@
 #include "test.h"
 #include "ldecimal.h"
 #include "color.h"
+#include "penwidth.h"
+
+#define CACHEDRAW
 
 using namespace std;
 
@@ -528,6 +531,8 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   double r;
   bezier3d b3d;
   ptlist::iterator j;
+  RenderItem ri;
+  QPen itemPen;
   QPainter painter(this);
   QPainterPath path;
   vector<xyz> beziseg;
@@ -558,6 +563,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
           // The radius variation is so that, if two points coincide, it's obvious.
           painter.drawEllipse(worldToWindow(j->second),r,r);
         }
+#ifdef CACHEDRAW
     contourCache.clearPresent();
     for (i=0;i<doc.pl[plnum].contours.size();i++)
     {
@@ -566,6 +572,29 @@ void TinCanvas::paintEvent(QPaintEvent *event)
                                  -1,contourColor[contourType&31],contourThickness[contourType>>8],contourLineType[contourType>>8]);
     }
     contourCache.deleteAbsent();
+    do
+    {
+      ri=contourCache.nextRenderItem();
+      for (i=0;ri.present && i<ri.rendering.size();i++)
+      {
+        setColor(itemPen,ri.rendering[i].color);
+        setWidth(itemPen,ri.rendering[i].width);
+        setLineType(itemPen,ri.rendering[i].linetype);
+        b3d=ri.rendering[i].path;
+        path=QPainterPath();
+        for (k=0;k<b3d.size();k++)
+        {
+          beziseg=b3d[k];
+          if (k==0)
+            path.moveTo(worldToWindow(beziseg[0]));
+          path.cubicTo(worldToWindow(beziseg[1]),worldToWindow(beziseg[2]),worldToWindow(beziseg[3]));
+        }
+        /*if (!doc.pl[plnum].contours[i].isopen())
+          path.closeSubpath();*/
+        painter.strokePath(path,itemPen);
+      }
+    } while (ri.present);
+#else
     for (i=0;i<doc.pl[plnum].contours.size();i++)
     {
       b3d=doc.pl[plnum].contours[i].approx3d(pixelScale());
@@ -582,6 +611,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       contourType=doc.pl[plnum].contourInterval.contourType(doc.pl[plnum].contours[i].getElevation());
       painter.strokePath(path,contourPen[contourType>>8][contourType&31]);
     }
+#endif
   }
   else
     ; // nothing to paint, since plnum is not the index of a pointlist
