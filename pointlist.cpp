@@ -31,6 +31,7 @@ using namespace std;
 criterion::criterion()
 {
   lo=hi=0;
+  elo=ehi=NAN;
   istopo=false;
 }
 

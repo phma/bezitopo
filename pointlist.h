@@ -42,7 +42,8 @@ public:
   criterion();
   bool match(point &pnt,int num);
   std::string str;
-  int lo,hi;
+  int lo,hi; // point number range
+  double elo,ehi; // elevation range
   bool istopo;
 };
 
