@@ -532,11 +532,13 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   bezier3d b3d;
   ptlist::iterator j;
   RenderItem ri;
+  QTime paintTime;
   QPen itemPen;
   QPainter painter(this);
   QPainterPath path;
   vector<xyz> beziseg;
   segment seg;
+  paintTime.start();
   painter.setBrush(brush);
   painter.setRenderHint(QPainter::Antialiasing,true);
   if (plnum<doc.pl.size() && plnum>=0)
@@ -615,6 +617,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   }
   else
     ; // nothing to paint, since plnum is not the index of a pointlist
+  //cout<<"Painting took "<<paintTime.elapsed()<<" ms"<<endl;
 }
 
 void TinCanvas::setSize()
