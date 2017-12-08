@@ -64,12 +64,23 @@ int bezier3d::size() const
   return controlpoints.size()/3;
 }
 
+void bezier3d::close()
+{
+  if (controlpoints.size()>3 && controlpoints.size()%3 && controlpoints.back()==controlpoints[0])
+    controlpoints.resize(controlpoints.size()-1);
+}
+
+bool bezier3d::isopen()
+{
+  return controlpoints.size()%3>0;
+}
+
 vector<xyz> bezier3d::operator[](int n)
 {
   vector<xyz> ret;
   int i;
   for (i=0;i<4;i++)
-    ret.push_back(controlpoints[3*n+i]);
+    ret.push_back(controlpoints[(3*n+i)%controlpoints.size()]);
   return ret;
 }
 

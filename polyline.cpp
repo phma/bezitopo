@@ -181,6 +181,8 @@ bezier3d polyline::approx3d(double precision)
   int i;
   for (i=0;i<size();i++)
     ret+=getsegment(i).approx3d(precision);
+  if (!isopen())
+    ret.close();
   return ret;
 }
 
@@ -190,6 +192,8 @@ bezier3d polyarc::approx3d(double precision)
   int i;
   for (i=0;i<size();i++)
     ret+=getarc(i).approx3d(precision);
+  if (!isopen())
+    ret.close();
   return ret;
 }
 
@@ -199,6 +203,8 @@ bezier3d polyspiral::approx3d(double precision)
   int i;
   for (i=0;i<size();i++)
     ret+=getspiralarc(i).approx3d(precision);
+  if (!isopen())
+    ret.close();
   return ret;
 }
 

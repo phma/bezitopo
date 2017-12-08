@@ -3,7 +3,7 @@
 /* bezier3d.h - 3d Bézier splines                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2014,2015,2016 Pierre Abbat.
+/* Copyright 2014-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -35,6 +35,8 @@ public:
   bezier3d(xyz kra,int bear0,double slp0,double slp1,int bear1,xyz fam);
   bezier3d();
   int size() const; // number of Bézier segments
+  void close();
+  bool isopen();
   std::vector<xyz> operator[](int n);
   xyz station(double along);
   friend bezier3d operator+(const bezier3d &l,const bezier3d &r); // concatenates, not adds

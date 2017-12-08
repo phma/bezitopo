@@ -591,8 +591,8 @@ void TinCanvas::paintEvent(QPaintEvent *event)
             path.moveTo(worldToWindow(beziseg[0]));
           path.cubicTo(worldToWindow(beziseg[1]),worldToWindow(beziseg[2]),worldToWindow(beziseg[3]));
         }
-        /*if (!doc.pl[plnum].contours[i].isopen())
-          path.closeSubpath();*/
+        if (!b3d.isopen())
+          path.closeSubpath();
         painter.strokePath(path,itemPen);
       }
     } while (ri.present);
