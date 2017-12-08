@@ -28,6 +28,7 @@
 #include "zoombutton.h"
 #include "measurebutton.h"
 #include "cidialog.h"
+#include "rendercache.h"
 
 // goals
 #define DONE 0
@@ -90,6 +91,9 @@ private:
   int plnum;
   QPen normalEdgePen,breakEdgePen,flipEdgePen;
   QPen circlePen[3],contourPen[3][20];
+  unsigned short contourColor[20];
+  short contourLineType[3];
+  unsigned short contourThickness[3];
   QBrush brush;
   QErrorMessage *errorMessage;
   QFileDialog *fileDialog;
@@ -97,6 +101,7 @@ private:
   QTimer *timer;
   ContourIntervalDialog *ciDialog;
   xy windowCenter,worldCenter,dragStart;
+  RenderCache contourCache;
   int scale;
   /* scale is the logarithm, in major thirds (see zoom), of the number of
    * windowSize lengths in a meter. It is thus usually negative.

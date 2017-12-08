@@ -48,10 +48,17 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   circlePen[0]=QPen(Qt::red);
   circlePen[1]=QPen(Qt::darkGreen);
   circlePen[2]=QPen(Qt::blue);
+  contourLineType[0]=16262;
+  contourLineType[1]=SOLIDLINE;
+  contourLineType[2]=SOLIDLINE;
+  contourThickness[0]=-12;
+  contourThickness[1]=0;
+  contourThickness[2]=7;
   for (i=0;i<3;i++)
     for (j=0;j<20;j++)
     {
-      rgb=colorint(RED+CYAN/39*j);
+      contourColor[j]=RED+CYAN/39*j;
+      rgb=colorint(contourColor[j]);
       contourPen[i][j]=QPen(QColor((rgb>>16)&0xff,(rgb>>8)&0xff,(rgb>>0)&0xff),
                             (i+1)/2.,i?Qt::SolidLine:Qt::DashLine);
     }
@@ -551,6 +558,14 @@ void TinCanvas::paintEvent(QPaintEvent *event)
           // The radius variation is so that, if two points coincide, it's obvious.
           painter.drawEllipse(worldToWindow(j->second),r,r);
         }
+    contourCache.clearPresent();
+    for (i=0;i<doc.pl[plnum].contours.size();i++)
+    {
+      contourType=doc.pl[plnum].contourInterval.contourType(doc.pl[plnum].contours[i].getElevation());
+      contourCache.checkInObject(&doc.pl[plnum].contours[i],pixelScale(),
+                                 -1,contourColor[contourType&31],contourThickness[contourType>>8],contourLineType[contourType>>8]);
+    }
+    contourCache.deleteAbsent();
     for (i=0;i<doc.pl[plnum].contours.size();i++)
     {
       b3d=doc.pl[plnum].contours[i].approx3d(pixelScale());
