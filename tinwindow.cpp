@@ -296,7 +296,7 @@ void TinCanvas::importCriteria()
     doc.pl[1].readCriteria(fileName);
     tinValid=false;
     surfaceValid=false;
-    roughContoursValid=false;
+    roughContoursValid=smoothContoursValid=false;
   }
 }
 
@@ -416,7 +416,7 @@ void TinCanvas::redoSurface()
   progressDialog->setRange(0,doc.pl[plnum].triangles.size());
   progressDialog->setLabelText(tr("Finding critical points..."));
   triCount=0;
-  roughContoursValid=false;
+  roughContoursValid=smoothContoursValid=false;
   disconnect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
   if (tinValid)
     connect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
@@ -475,10 +475,11 @@ void TinCanvas::makeTinFinish()
       timer->stop();
       break;
     case ROUGH_CONTOURS:
+    case SMOOTH_CONTOURS:
       connect(timer,SIGNAL(timeout()),this,SLOT(roughContours()));
       break;
   }
-  roughContoursValid=false;
+  roughContoursValid=smoothContoursValid=false;
   surfaceValid=true;
 }
 
@@ -542,6 +543,7 @@ void TinCanvas::rough1Contour()
 
 void TinCanvas::roughContoursFinish()
 {
+  disconnect(timer,SIGNAL(timeout()),this,SLOT(roughContoursFinish()));
   switch (goal)
   {
     case ROUGH_CONTOURS:
@@ -549,9 +551,12 @@ void TinCanvas::roughContoursFinish()
       progressDialog->reset();
       timer->stop();
       break;
+    case SMOOTH_CONTOURS:
+      connect(timer,SIGNAL(timeout()),this,SLOT(smoothContours()));
+      break;
   }
-  disconnect(timer,SIGNAL(timeout()),this,SLOT(roughContoursFinish()));
   roughContoursValid=true;
+  smoothContoursValid=false;
   update();
 }
 
@@ -561,6 +566,57 @@ void TinCanvas::contoursCancel()
   progressDialog->reset();
   timer->stop();
   disconnect(timer,SIGNAL(timeout()),0,0);
+  update();
+}
+
+void TinCanvas::smoothContours()
+{
+  double conterval=doc.pl[plnum].contourInterval.fineInterval();
+  if (goal==DONE)
+  {
+    goal=SMOOTH_CONTOURS;
+    timer->start(0);
+    progressDialog->show();
+  }
+  progInx=0;
+  progressDialog->setRange(0,doc.pl[plnum].contours.size());
+  progressDialog->setValue(0);
+  progressDialog->setLabelText(tr("Drawing smooth contours..."));
+  connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
+  disconnect(timer,SIGNAL(timeout()),0,0);
+  if (roughContoursValid)
+    connect(timer,SIGNAL(timeout()),this,SLOT(smooth1Contour()));
+  else
+    connect(timer,SIGNAL(timeout()),this,SLOT(roughContours()));
+}
+
+void TinCanvas::smooth1Contour()
+{
+  double conterval=doc.pl[plnum].contourInterval.fineInterval();
+  if (progInx<doc.pl[plnum].contours.size())
+  {
+    smooth1contour(doc.pl[plnum],conterval,progInx,true,dummyPs,0,0,0,0);
+    progressDialog->setValue(++progInx);
+  }
+  else
+  {
+    disconnect(timer,SIGNAL(timeout()),0,0);
+    connect(timer,SIGNAL(timeout()),this,SLOT(smoothContoursFinish()));
+  }
+}
+
+void TinCanvas::smoothContoursFinish()
+{
+  switch (goal)
+  {
+    case SMOOTH_CONTOURS:
+      goal=DONE;
+      progressDialog->reset();
+      timer->stop();
+      break;
+  }
+  disconnect(timer,SIGNAL(timeout()),0,0);
+  smoothContoursValid=true;
   update();
 }
 
@@ -861,6 +917,11 @@ void TinWindow::makeActions()
   roughContoursAction->setText(tr("Draw rough contours"));
   contourMenu->addAction(roughContoursAction);
   connect(roughContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(roughContours()));
+  smoothContoursAction=new QAction(this);
+  //makeTinAction->setIcon(QIcon(":/smoothcon.png"));
+  smoothContoursAction->setText(tr("Draw smooth contours"));
+  contourMenu->addAction(smoothContoursAction);
+  connect(smoothContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(smoothContours()));
   measureButtons.push_back(new MeasureButton(this,METER,0));
   measureButtons.back()->setIcon(QIcon(":/meter.png"));
   measureButtons.back()->setText(tr("Meter"));

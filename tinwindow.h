@@ -80,6 +80,9 @@ public slots:
   void rough1Contour();
   void roughContoursFinish();
   void contoursCancel();
+  void smoothContours();
+  void smooth1Contour();
+  void smoothContoursFinish();
 protected:
   void setSize();
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -121,6 +124,7 @@ private:
   bool tinValid; // If false, to set gradient, must first make TIN.
   bool surfaceValid; // If false, to do rough contours, must first set gradient.
   bool roughContoursValid; // If false, to do smooth contours, must first do rough contours.
+  bool smoothContoursValid;
 };
 
 class TinWindow: public QMainWindow
