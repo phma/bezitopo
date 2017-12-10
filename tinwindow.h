@@ -74,10 +74,12 @@ public slots:
   void redoSurface();
   void findCriticalPoints();
   void makeTinFinish();
+  void tinCancel();
   void selectContourInterval();
   void roughContours();
   void rough1Contour();
   void roughContoursFinish();
+  void contoursCancel();
 protected:
   void setSize();
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;

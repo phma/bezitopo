@@ -331,6 +331,7 @@ void TinCanvas::makeTin()
   }
   disconnect(timer,SIGNAL(timeout()),0,0);
   connect(timer,SIGNAL(timeout()),this,SLOT(tryStartPoint()));
+  connect(progressDialog,SIGNAL(canceled()),this,SLOT(tinCancel()));
 }
 
 void TinCanvas::tryStartPoint()
@@ -415,6 +416,7 @@ void TinCanvas::redoSurface()
   progressDialog->setRange(0,doc.pl[plnum].triangles.size());
   progressDialog->setLabelText(tr("Finding critical points..."));
   triCount=0;
+  roughContoursValid=false;
   disconnect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
   if (tinValid)
     connect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
@@ -480,6 +482,15 @@ void TinCanvas::makeTinFinish()
   surfaceValid=true;
 }
 
+void TinCanvas::tinCancel()
+{
+  goal=DONE;
+  progressDialog->reset();
+  timer->stop();
+  disconnect(timer,SIGNAL(timeout()),0,0);
+  update();
+}
+
 void TinCanvas::selectContourInterval()
 {
   if (plnum>=0 && plnum<doc.pl.size())
@@ -506,7 +517,8 @@ void TinCanvas::roughContours()
   progressDialog->setRange(elevLo,elevHi);
   progressDialog->setValue(progInx);
   progressDialog->setLabelText(tr("Drawing rough contours..."));
-  disconnect(timer,SIGNAL(timeout()),this,SLOT(roughContours()));
+  connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
+  disconnect(timer,SIGNAL(timeout()),0,0);
   if (surfaceValid)
     connect(timer,SIGNAL(timeout()),this,SLOT(rough1Contour()));
   else if (tinValid)
@@ -540,6 +552,15 @@ void TinCanvas::roughContoursFinish()
   }
   disconnect(timer,SIGNAL(timeout()),this,SLOT(roughContoursFinish()));
   roughContoursValid=true;
+  update();
+}
+
+void TinCanvas::contoursCancel()
+{
+  goal=DONE;
+  progressDialog->reset();
+  timer->stop();
+  disconnect(timer,SIGNAL(timeout()),0,0);
   update();
 }
 
