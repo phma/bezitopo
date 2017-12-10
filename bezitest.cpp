@@ -968,6 +968,7 @@ void testbreak0()
   int rotation=DEG90,i;
   criterion crit1;
   PostScript ps;
+  Breakline0 bl1,bl2,bl3;
   doc.makepointlist(1);
   doc.pl[0].clear();
   doc.copytopopoints(1,0);
@@ -975,6 +976,7 @@ void testbreak0()
   crit1.str="";
   crit1.istopo=true;
   doc.pl[1].crit.push_back(crit1);
+  // Data are from some project of Travis Pruitt.
   doc.pl[0].addpoint( 20,point(42.088,86.580,271.739,"TCR 30 CONCRETE"));
   doc.pl[0].addpoint( 22,point(45.789,86.320,271.322,"P11"));
   doc.pl[0].addpoint( 23,point(45.794,86.365,271.373,"TP11"));
@@ -1076,20 +1078,19 @@ void testbreak0()
   doc.pl[0].addpoint(211,point(68.815,73.038,270.250,"G"));
   doc.pl[0].addpoint(220,point(75.304,72.656,269.885,"G"));
   doc.pl[0].addpoint(221,point(83.154,72.543,269.327,"G"));
-  /* Breakline 1
-   * 029,032,039,042,043,047
-   * Breakline 2
-   * 133,136,137,142,143,146
-   * Breakline 3
-   * 019,020
-   */
+  bl1<<29<<32<<39<<42<<43<<47;
+  bl2<<133<<136<<137<<142<<143<<146;
+  bl3<<19<<20;
   leftedge=doc.pl[0].dirbound(-rotation);
   bottomedge=doc.pl[0].dirbound(-rotation+DEG90);
   rightedge=-doc.pl[0].dirbound(-rotation+DEG180);
   topedge=-doc.pl[0].dirbound(-rotation-DEG90);
   doc.copytopopoints(1,0);
+  ps.open("break0.ps");
+  ps.setDoc(doc);
+  ps.prolog();
+  ps.startpage();
   doc.pl[1].maketin();
-  // TODO: Insert breakline code here
   doc.pl[1].makegrad(0.);
   doc.pl[1].maketriangles();
   doc.pl[1].setgradient();
@@ -1097,10 +1098,35 @@ void testbreak0()
   doc.pl[1].makeqindex();
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
-  ps.open("break0.ps");
-  ps.setDoc(doc);
-  ps.prolog();
+  ps.setscale(leftedge,bottomedge,rightedge,topedge,rotation);
+  conterval=0.2;
+  roughcontours(doc.pl[1],conterval);
+  smoothcontours(doc.pl[1],conterval,true,false);
+  ps.setcolor(0,0,0);
+  for (i=0;i<doc.pl[1].contours.size();i++)
+  {
+    ps.spline(doc.pl[1].contours[i].approx3d(1));
+  }
+  ps.endpage();
   ps.startpage();
+  ps.setscale(leftedge,bottomedge,rightedge,topedge,rotation);
+  for (i=0;i<doc.pl[1].edges.size();i++)
+  {
+    ps.line(doc.pl[1].edges[i],i,false);
+  }
+  ps.endpage();
+  ps.startpage();
+  doc.pl[1].type0Breaklines.push_back(bl1);
+  doc.pl[1].type0Breaklines.push_back(bl2);
+  //doc.pl[1].type0Breaklines.push_back(bl3); // omit bl3 until I get point 19
+  doc.pl[1].maketin();
+  doc.pl[1].makegrad(0.);
+  doc.pl[1].maketriangles();
+  doc.pl[1].setgradient();
+  checkedgediscrepancies(doc.pl[1]);
+  doc.pl[1].makeqindex();
+  doc.pl[1].findcriticalpts();
+  doc.pl[1].addperimeter();
   ps.setscale(leftedge,bottomedge,rightedge,topedge,rotation);
   conterval=0.2;
   roughcontours(doc.pl[1],conterval);

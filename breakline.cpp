@@ -95,6 +95,12 @@ int Breakline0::size()
   return sz;
 }
 
+Breakline0& Breakline0::operator<<(int endp)
+{
+  nodes.push_back(endp);
+  return *this;
+}
+
 bool jungible(Breakline0 &a,Breakline0 &b)
 {
   bool ret=a.isOpen() && b.isOpen();
