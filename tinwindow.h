@@ -116,6 +116,7 @@ private:
   int progInx; // used in progress bar loops
   int elevHi,elevLo; // in contour interval unit
   std::array<double,2> tinlohi;
+  bool tinValid; // If false, to set gradient, must first make TIN.
   bool surfaceValid; // If false, to do rough contours, must first set gradient.
   bool roughContoursValid; // If false, to do smooth contours, must first do rough contours.
 };

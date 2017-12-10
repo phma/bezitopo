@@ -274,6 +274,7 @@ void TinCanvas::importPnezd()
     doc.readpnezd(fileName);
     plnum=0;
     sizeToFit();
+    tinValid=false;
     surfaceValid=false;
     roughContoursValid=false;
   }
@@ -293,6 +294,7 @@ void TinCanvas::importCriteria()
     fileName=files[0].toStdString();
     doc.makepointlist(1);
     doc.pl[1].readCriteria(fileName);
+    tinValid=false;
     surfaceValid=false;
     roughContoursValid=false;
   }
@@ -300,6 +302,7 @@ void TinCanvas::importCriteria()
 
 void TinCanvas::makeTin()
 {
+  //cout<<"makeTin"<<endl;
   doc.makepointlist(1);
   if (doc.pl[1].size()==0 && doc.pl[0].size()>0)
   {
@@ -326,11 +329,13 @@ void TinCanvas::makeTin()
     timer->start(0);
     progressDialog->show();
   }
+  disconnect(timer,SIGNAL(timeout()),0,0);
   connect(timer,SIGNAL(timeout()),this,SLOT(tryStartPoint()));
 }
 
 void TinCanvas::tryStartPoint()
 {
+  //cout<<"tryStartPoint"<<endl;
   if (startPointTries>=100)
     tinerror=flattri;
   if (tinerror)
@@ -361,6 +366,7 @@ void TinCanvas::tryStartPoint()
 
 void TinCanvas::flipPass()
 {
+  //cout<<"flipPass"<<endl;
   int nFlip,nGoodEdges,i;
   bool tooLong=false;
   if (passCount*3>doc.pl[plnum].size())
@@ -382,6 +388,7 @@ void TinCanvas::flipPass()
       {
         disconnect(timer,SIGNAL(timeout()),this,SLOT(flipPass()));
         connect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
+        tinValid=true;
       }
     }
     catch (int e)
@@ -396,20 +403,28 @@ void TinCanvas::redoSurface()
  * can find that this needs to be done first.
  */
 {
-  doc.pl[plnum].makegrad(0.15);
-  doc.pl[plnum].maketriangles();
-  doc.pl[plnum].setgradient();
-  doc.pl[plnum].makeqindex();           // These five are all fast. It's finding the
-  doc.pl[plnum].findedgecriticalpts();  // critical points of a triangle that's slow.
+  //cout<<"redoSurface"<<endl;
+  if (tinValid)
+  {
+    doc.pl[plnum].makegrad(0.15);
+    doc.pl[plnum].maketriangles();
+    doc.pl[plnum].setgradient();
+    doc.pl[plnum].makeqindex();           // These five are all fast. It's finding the
+    doc.pl[plnum].findedgecriticalpts();  // critical points of a triangle that's slow.
+  }
   progressDialog->setRange(0,doc.pl[plnum].triangles.size());
   progressDialog->setLabelText(tr("Finding critical points..."));
   triCount=0;
   disconnect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
-  connect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
+  if (tinValid)
+    connect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
+  else
+    connect(timer,SIGNAL(timeout()),this,SLOT(makeTin()));
 }
 
 void TinCanvas::findCriticalPoints()
 {
+  //cout<<"findCriticalPoints"<<endl;
   if (tinerror)
   {
     disconnect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
@@ -437,6 +452,7 @@ void TinCanvas::findCriticalPoints()
 
 void TinCanvas::makeTinFinish()
 {
+  //cout<<"makeTinFinish"<<endl;
   if (tinerror)
   { // TODO: translate the thrown error into something intelligible
     QString msg=tr("Can't make TIN. Error: ")+QString::fromStdString(to_string(tinerror));
@@ -493,8 +509,10 @@ void TinCanvas::roughContours()
   disconnect(timer,SIGNAL(timeout()),this,SLOT(roughContours()));
   if (surfaceValid)
     connect(timer,SIGNAL(timeout()),this,SLOT(rough1Contour()));
-  else
+  else if (tinValid)
     connect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
+  else
+    connect(timer,SIGNAL(timeout()),this,SLOT(makeTin()));
 }
 
 void TinCanvas::rough1Contour()
