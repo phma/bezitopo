@@ -20,6 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <vector>
+#include <array>
 /* Bezitopo has two types of breaklines. A type-0 breakline is a sequence
  * of point numbers which are forced to be adjacent in the TIN. A type-1
  * breakline is a polyline which crosses some edges in the TIN and makes
@@ -39,6 +40,7 @@ public:
   int highEnd();
   int size(); // number of segments, not nodes
   Breakline0& operator<<(int endp);
+  std::array<int,2> operator[](int n);
   friend bool jungible(Breakline0 &a,Breakline0 &b);
   friend Breakline0 operator+(Breakline0 &a,Breakline0 &b);
 private:

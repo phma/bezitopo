@@ -52,7 +52,7 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                sourcegeoid.cpp spiral.cpp spolygon.cpp
                stl.cpp test.cpp segment.cpp tin.cpp vball.cpp vcurve.cpp zoom.cpp)
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
-               binio.cpp cogo.cpp contour.cpp
+               binio.cpp breakline.cpp cogo.cpp contour.cpp
                convertgeoid.cpp csv.cpp document.cpp drawobj.cpp
                ellipsoid.cpp geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp
                hlattice.cpp kml.cpp latlong.cpp ldecimal.cpp manysum.cpp

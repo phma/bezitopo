@@ -101,6 +101,14 @@ Breakline0& Breakline0::operator<<(int endp)
   return *this;
 }
 
+array<int,2> Breakline0::operator[](int n)
+{
+  array<int,2> ret;
+  ret[0]=nodes[n];
+  ret[1]=nodes[n+1];
+  return ret;
+}
+
 bool jungible(Breakline0 &a,Breakline0 &b)
 {
   bool ret=a.isOpen() && b.isOpen();

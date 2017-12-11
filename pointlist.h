@@ -55,6 +55,8 @@ typedef std::vector<criterion> criteria;
 
 class pointlist
 {
+private:
+  std::vector<segment> break0;
 public:
   ptlist points;
   revptlist revpoints;
@@ -93,6 +95,7 @@ private:
   void dumpnext_ps(PostScript &ps);
 public:
   void dumpedges_ps(PostScript &ps,bool colorfibaster);
+  void splitBreaklines();
   bool tryStartPoint(PostScript &ps,xy &startpnt);
   int flipPass(PostScript &ps,bool colorfibaster);
   void maketin(std::string filename="",bool colorfibaster=false);

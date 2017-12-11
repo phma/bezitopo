@@ -319,6 +319,7 @@ void TinCanvas::makeTin()
     tinerror=notri;
   else
     startPoint=doc.pl[1].points.begin()->second;
+  doc.pl[plnum].splitBreaklines();
   progressDialog->setRange(0,100);
   progressDialog->setWindowModality(Qt::WindowModal);
   progressDialog->setWindowTitle(tr("Making TIN"));

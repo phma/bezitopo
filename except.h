@@ -46,3 +46,7 @@
 // unrecognized unit symbol in a measurement
 #define badnumber 11
 // malformatted (empty) number in a measurement
+#define badbreaklineend 12
+// a breakline endpoint number is not the number of any point
+#define breaklinescross 13
+// two breakline segments intersect

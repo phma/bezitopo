@@ -293,6 +293,22 @@ void dumphull_ps(PostScript &ps)
   ps.widen(0.2);
 }
 
+void pointlist::splitBreaklines()
+// Split the breaklines, which are lists of points, into individual line segments.
+{
+  int i,j;
+  array<int,2> bl;
+  break0.clear();
+  for (i=0;i<type0Breaklines.size();i++)
+    for (j=0;j<type0Breaklines[i].size();j++)
+    {
+      bl=type0Breaklines[i][j];
+      if (points.count(bl[0])==0 || points.count(bl[1])==0)
+        throw badbreaklineend;
+      break0.push_back(segment(points[bl[0]],points[bl[1]]));
+    }
+}
+
 double edge::length()
 {
   xy c,d;
@@ -652,6 +668,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
     startpnt+=i->second;
   startpnt/=points.size();
   edges.clear();
+  splitBreaklines();
   /* startpnt has to be within or out the side of the triangle formed
    * by the three nearest points. In a 100-point asteraceous pattern,
    * the centroid is out one corner, and the first triangle is drawn
