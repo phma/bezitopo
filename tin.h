@@ -46,7 +46,11 @@ public:
   double extrema[2];
   char broken;
   /* Bit 0 is used in viewtin to mean that the edge is in a type-0 breakline.
-   * Bit 1 means that a type-1 breakline crosses the edge.
+   * Bit 0 is used when making the TIN to mean that the edge coincides with a type-0 breakline.
+   * Bit 1 means that the edge crosses a type-0 breakline.
+   * If bits 0 and 1 are both set, two type-0 breaklines cross, which is an error.
+   * Bit 2 means that bits 0 and 1 are up to date.
+   * Bit 3 means that a type-1 breakline crosses the edge.
    */
   char contour;
   /* When drawing a contour, set one of the low 3 bits of edge::contour to true
