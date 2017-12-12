@@ -402,26 +402,47 @@ bool goodcenter(xy a,xy b,xy c,xy d)
    way to pick the point, then, is to allow points out the side, but check
    for failure, and if it happens, try another point.
    */
-{double A,B,C,D,perim;
- int n;
- A=area3(b,c,d);
- B=area3(a,c,d);
- C=area3(b,a,d);
- D=area3(b,c,a);
- if (A<0)
-    {A=-A;
-     B=-B;
-     C=-C;
-     D=-D;
-     }
- n=(B>A/THR)+(C>A/THR)+(D>A/THR);
- if (fabs(B/THR)>A || fabs(C/THR)>A || fabs(D/THR)>A)
+{
+  double A,B,C,D,perim;
+  int n;
+  A=area3(b,c,d);
+  B=area3(a,c,d);
+  C=area3(b,a,d);
+  D=area3(b,c,a);
+  if (A<0)
+    {
+      A=-A;
+      B=-B;
+      C=-C;
+      D=-D;
+    }
+  n=(B>A/THR)+(C>A/THR)+(D>A/THR);
+  if (fabs(B/THR)>A || fabs(C/THR)>A || fabs(D/THR)>A)
     n=0;
- perim=dist(b,c)+dist(c,d)+dist(d,b);
- if (A<perim*perim/THR)
+  perim=dist(b,c)+dist(c,d)+dist(d,b);
+  if (A<perim*perim/THR)
     n=0;
- return n>1;
- }
+  return n>1;
+}
+
+int pointlist::checkBreak0(edge &e)
+{
+  int i;
+  segment s;
+  if ((e.broken&4)==0)
+  {
+    e.broken&=-4;
+    s=e.getsegment();
+    for (i=0;i<break0.size();i++)
+    {
+      if (intersection_type(s,break0[i])==ACXBD)
+        e.broken|=2;
+      if (sameXyz(s,break0[i]))
+        e.broken|=1;
+    }
+  }
+  return e.broken&3;
+}
 
 bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
 /* This is the sweep-hull algorithm (http://s-hull.org), except that the

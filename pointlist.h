@@ -96,6 +96,7 @@ private:
 public:
   void dumpedges_ps(PostScript &ps,bool colorfibaster);
   void splitBreaklines();
+  int checkBreak0(edge &e);
   bool tryStartPoint(PostScript &ps,xy &startpnt);
   int flipPass(PostScript &ps,bool colorfibaster);
   void maketin(std::string filename="",bool colorfibaster=false);

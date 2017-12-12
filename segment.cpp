@@ -308,6 +308,12 @@ inttype intersection_type(segment seg1,segment seg2)
   return intersection_type(seg1.start,seg1.end,seg2.start,seg2.end);
 }
 
+bool sameXyz(segment seg1,segment seg2)
+{
+  return (seg1.start==seg2.start && seg1.end==seg2.end)
+      || (seg1.start==seg2.end && seg1.end==seg2.start);
+}
+
 double missDistance(segment seg1,segment seg2)
 {
   return missDistance(seg1.start,seg1.end,seg2.start,seg2.end);
