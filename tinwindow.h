@@ -105,6 +105,7 @@ private:
   QProgressDialog *progressDialog;
   QTimer *timer;
   ContourIntervalDialog *ciDialog;
+  double conterval;
   xy windowCenter,worldCenter,dragStart;
   RenderCache contourCache;
   int scale;

@@ -504,7 +504,7 @@ void TinCanvas::selectContourInterval()
 
 void TinCanvas::roughContours()
 {
-  double conterval=doc.pl[plnum].contourInterval.fineInterval();
+  conterval=doc.pl[plnum].contourInterval.fineInterval();
   if (goal==DONE)
   {
     goal=ROUGH_CONTOURS;
@@ -531,7 +531,6 @@ void TinCanvas::roughContours()
 
 void TinCanvas::rough1Contour()
 {
-  double conterval=doc.pl[plnum].contourInterval.fineInterval();
   rough1contour(doc.pl[plnum],progInx*conterval);
   if (++progInx>elevHi)
   {
@@ -572,7 +571,6 @@ void TinCanvas::contoursCancel()
 
 void TinCanvas::smoothContours()
 {
-  double conterval=doc.pl[plnum].contourInterval.fineInterval();
   if (goal==DONE)
   {
     goal=SMOOTH_CONTOURS;
@@ -585,7 +583,7 @@ void TinCanvas::smoothContours()
   progressDialog->setLabelText(tr("Drawing smooth contours..."));
   connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
-  if (roughContoursValid)
+  if (roughContoursValid && conterval==doc.pl[plnum].contourInterval.fineInterval())
     connect(timer,SIGNAL(timeout()),this,SLOT(smooth1Contour()));
   else
     connect(timer,SIGNAL(timeout()),this,SLOT(roughContours()));
@@ -593,7 +591,6 @@ void TinCanvas::smoothContours()
 
 void TinCanvas::smooth1Contour()
 {
-  double conterval=doc.pl[plnum].contourInterval.fineInterval();
   if (progInx<doc.pl[plnum].contours.size())
   {
     smooth1contour(doc.pl[plnum],conterval,progInx,true,dummyPs,0,0,0,0);
