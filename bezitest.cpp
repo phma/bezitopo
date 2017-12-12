@@ -977,6 +977,9 @@ void testbreak0()
   crit1.istopo=true;
   doc.pl[1].crit.push_back(crit1);
   // Data are from some project of Travis Pruitt.
+  doc.pl[0].addpoint( 17,point(42.093,87.960,271.810,"SW20"));
+  doc.pl[0].addpoint( 18,point(46.493,87.947,271.528,"SW20"));
+  doc.pl[0].addpoint( 19,point(45.760,86.557,271.511,"SW20XB TCR"));
   doc.pl[0].addpoint( 20,point(42.088,86.580,271.739,"TCR 30 CONCRETE"));
   doc.pl[0].addpoint( 22,point(45.789,86.320,271.322,"P11"));
   doc.pl[0].addpoint( 23,point(45.794,86.365,271.373,"TP11"));
@@ -1118,7 +1121,7 @@ void testbreak0()
   ps.startpage();
   doc.pl[1].type0Breaklines.push_back(bl1);
   doc.pl[1].type0Breaklines.push_back(bl2);
-  //doc.pl[1].type0Breaklines.push_back(bl3); // omit bl3 until I get point 19
+  doc.pl[1].type0Breaklines.push_back(bl3);
   doc.pl[1].maketin();
   doc.pl[1].makegrad(0.);
   doc.pl[1].maketriangles();
