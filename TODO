@@ -22,7 +22,7 @@ Before 0.1.1:
 •Draw statistical graphs of geoid conversion. ✓
 
 Before 0.2.0:
-•Implement type-0 breaklines.
+•Implement type-0 breaklines. ✓
 •Compute all intersections of two spirals.
 •Decide whether a point is inside a polyline/arc/spiral. ✓
 •Compute the area of a polyline/arc/spiral. ✓

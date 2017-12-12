@@ -444,6 +444,27 @@ int pointlist::checkBreak0(edge &e)
   return e.broken&3;
 }
 
+bool pointlist::shouldFlip(edge &e)
+{
+  bool ret;
+  switch (checkBreak0(e))
+  {
+    case 0: // no breaklines here, check Delaunay
+      ret=!e.delaunay();
+      break;
+    case 1: // edge is in a breakline, don't flip
+      ret=false;
+      break;
+    case 2: // edge crosses a breakline, flip if possible
+      ret=e.isFlippable();
+      break;
+    case 3: // edge is in one breakline and crosses another, error
+      throw breaklinescross;
+      break;
+  }
+  return ret;
+}
+
 bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
 /* This is the sweep-hull algorithm (http://s-hull.org), except that the
  * startpoint is random instead of the circumcenter of three points.
@@ -647,7 +668,7 @@ int pointlist::flipPass(PostScript &ps,bool colorfibaster)
 {
   int m,n;
   for (m=n=0;n<edges.size();n++)
-    if (!edges[n].delaunay())
+    if (shouldFlip(edges[n]))
     {
       edges[n].flip(this);
       m++;
