@@ -287,8 +287,17 @@ polyline trace(uintptr_t edgep,double elev)
               //cout<<"Interior "<<ldecimal(thiscept.getx())<<' '<<ldecimal(thiscept.gety())<<endl;
 	    ret.insert(thiscept);
           }
-	  else
-	    cerr<<"Repeated contourcept: "<<edgep<<' '<<ret.size()<<endl;
+	  //else
+	    //cerr<<"Repeated contourcept: "<<edgep<<' '<<ret.size()<<endl;
+          /* "Repeated contourcept" was originally put in to look for contour
+           * tracing bugs. After fixing these bugs, I ran bezitopo on home.asc
+           * and got this message. It turned out to be caused by tracing the
+           * contour with elevation 0 through point 1, whose elevation is 0.
+           * Tracing it through a triangle where point 1 is a local maximum
+           * produced two (or more) consecutive occurrences of (0,0), thus
+           * triggering the message. The contour is traced correctly; it's
+           * not a bug.
+           */
 	  lastcept=thiscept;
 	}
 	else
