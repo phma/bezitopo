@@ -251,6 +251,7 @@ void TinCanvas::updateEdgeNeighbors(edge *e)
 
 void TinCanvas::testPatternAster()
 {
+  doc.pl.clear();
   doc.makepointlist(1);
   plnum=1;
   aster(doc,100);
@@ -269,8 +270,9 @@ void TinCanvas::importPnezd()
   {
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
+    // TODO check whether there are unsaved changes to breaklines
+    doc.pl.clear();
     doc.makepointlist(0);
-    doc.pl[0].clear();
     doc.readpnezd(fileName);
     plnum=0;
     sizeToFit();
