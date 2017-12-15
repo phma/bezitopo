@@ -1122,6 +1122,11 @@ void testbreak0()
   doc.pl[1].type0Breaklines.push_back(bl1);
   doc.pl[1].type0Breaklines.push_back(bl2);
   doc.pl[1].type0Breaklines.push_back(bl3);
+  for (i=0;i<doc.pl[1].type0Breaklines.size();i++)
+  {
+    doc.pl[1].type0Breaklines[i].writeXml(cout);
+    cout<<'\n';
+  }
   doc.pl[1].maketin();
   doc.pl[1].makegrad(0.);
   doc.pl[1].maketriangles();

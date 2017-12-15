@@ -21,6 +21,7 @@
  */
 #include <cstring>
 #include <climits>
+#include <string>
 #include "breakline.h"
 using namespace std;
 
@@ -167,4 +168,17 @@ Breakline0 operator+(Breakline0 &a,Breakline0 &b)
     ret.normalize();
   }
   return ret;
+}
+
+void Breakline0::writeXml(ostream &ofile)
+{
+  int i;
+  ofile<<"<break0>";
+  for (i=0;i<nodes.size();i++)
+  {
+    if (i)
+      ofile<<' ';
+    ofile<<nodes[i];
+  }
+  ofile<<"</break0>";
 }
