@@ -1119,12 +1119,13 @@ void testbreak0()
   }
   ps.endpage();
   ps.startpage();
+  cout<<'\n';
   doc.pl[1].type0Breaklines.push_back(bl1);
   doc.pl[1].type0Breaklines.push_back(bl2);
   doc.pl[1].type0Breaklines.push_back(bl3);
   for (i=0;i<doc.pl[1].type0Breaklines.size();i++)
   {
-    doc.pl[1].type0Breaklines[i].writeXml(cout);
+    doc.pl[1].type0Breaklines[i].writeText(cout);
     cout<<'\n';
   }
   doc.pl[1].maketin();

@@ -170,6 +170,17 @@ Breakline0 operator+(Breakline0 &a,Breakline0 &b)
   return ret;
 }
 
+void Breakline0::writeText(ostream &ofile)
+{
+  int i;
+  for (i=0;i<nodes.size();i++)
+  {
+    if (i)
+      ofile<<'-';
+    ofile<<nodes[i];
+  }
+}
+
 void Breakline0::writeXml(ostream &ofile)
 {
   int i;

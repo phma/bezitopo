@@ -44,6 +44,7 @@ public:
   std::array<int,2> operator[](int n);
   friend bool jungible(Breakline0 &a,Breakline0 &b);
   friend Breakline0 operator+(Breakline0 &a,Breakline0 &b);
+  void writeText(std::ostream &ofile);
   void writeXml(std::ostream &ofile);
 private:
   std::vector<int> nodes;
