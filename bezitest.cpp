@@ -962,10 +962,22 @@ void testmaketinellipse()
   tassert(fabs(totallength-1329.4675)<0.001);
 }
 
+void test1break0graph(pointlist &pl,string plname)
+{
+  int i,j,k;
+  cout<<plname<<endl;
+  for (i=0;i<pl.type0Breaklines.size();i++)
+  {
+    pl.type0Breaklines[i].writeText(cout);
+    cout<<endl;
+  }
+}
+
 void testbreak0()
 {
   double leftedge,bottomedge,rightedge,topedge,conterval;
-  int rotation=DEG90,i;
+  pointlist bull,octahedron,frucht,cycle17,chain17;
+  int rotation=DEG90,i,j;
   criterion crit1;
   PostScript ps;
   Breakline0 bl1,bl2,bl3;
@@ -1155,6 +1167,36 @@ void testbreak0()
   ps.endpage();
   ps.trailer();
   ps.close();
+  cout<<'\n';
+  // Now test joining single edges into breaklines.
+  bull.type0Breaklines.push_back(Breakline0(1,2));
+  bull.type0Breaklines.push_back(Breakline0(2,3));
+  bull.type0Breaklines.push_back(Breakline0(3,4));
+  bull.type0Breaklines.push_back(Breakline0(4,2));
+  bull.type0Breaklines.push_back(Breakline0(4,5));
+  test1break0graph(bull,"bull");
+  for (i=1;i<7;i++)
+    for (j=i+1;j<7;j++)
+      if (i+j!=7)
+        octahedron.type0Breaklines.push_back(Breakline0(i,j));
+  test1break0graph(octahedron,"octahedron");
+  for (i=1;i<13;i++)
+    frucht.type0Breaklines.push_back(Breakline0(i,i+1));
+  frucht.type0Breaklines.push_back(Breakline0(12,1));
+  frucht.type0Breaklines.push_back(Breakline0(1,3));
+  frucht.type0Breaklines.push_back(Breakline0(4,6));
+  frucht.type0Breaklines.push_back(Breakline0(7,9));
+  frucht.type0Breaklines.push_back(Breakline0(2,10));
+  frucht.type0Breaklines.push_back(Breakline0(12,5));
+  frucht.type0Breaklines.push_back(Breakline0(8,11));
+  test1break0graph(frucht,"Frucht");
+  for (i=1;i<17;i++)
+    cycle17.type0Breaklines.push_back(Breakline0(i,i+1));
+  cycle17.type0Breaklines.push_back(Breakline0(17,1));
+  test1break0graph(cycle17,"cycle17");
+  for (i=1;i<17;i++)
+    chain17.type0Breaklines.push_back(Breakline0(i,i+1));
+  test1break0graph(chain17,"chain17");
 }
 
 void testrelprime()
