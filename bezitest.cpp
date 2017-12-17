@@ -964,9 +964,26 @@ void testmaketinellipse()
 
 void test1break0graph(pointlist &pl,string plname)
 {
-  int i,j,k;
+  int i,j,k,niter,off[4],sz;
   cout<<plname<<endl;
-  for (i=0;i<pl.type0Breaklines.size();i++)
+  sz=pl.type0Breaklines.size();
+  niter=ceil(sz*log(sz)/log(256));
+  //cout<<niter*4<<" possible flips\n";
+  off[3]=relprime(sz);
+  off[2]=relprime(off[3]);
+  off[1]=relprime(off[2]);
+  off[0]=0;
+  for (i=0;i<niter;i++)
+  {
+    k=rng.ucrandom();
+    for (j=0;j<8;j+=2)
+    {
+      if ((k>>j)&1)
+        pl.type0Breaklines[(i+j/2)%sz].reverse();
+      swap(pl.type0Breaklines[(i+j/2)%sz],pl.type0Breaklines[(i+j/2+off[(k>>j)&3])%sz]);
+    }
+  }
+  for (i=0;i<sz;i++)
   {
     pl.type0Breaklines[i].writeText(cout);
     cout<<endl;

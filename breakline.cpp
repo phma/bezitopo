@@ -96,6 +96,13 @@ int Breakline0::size()
   return sz;
 }
 
+void Breakline0::reverse()
+{
+  int i;
+  for (i=0;2*i<nodes.size();i++)
+    swap(nodes[i],nodes[nodes.size()-1-i]);
+}
+
 Breakline0& Breakline0::operator<<(int endp)
 {
   nodes.push_back(endp);

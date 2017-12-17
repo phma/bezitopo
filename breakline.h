@@ -40,6 +40,7 @@ public:
   int lowEnd();
   int highEnd();
   int size(); // number of segments, not nodes
+  void reverse();
   Breakline0& operator<<(int endp);
   std::array<int,2> operator[](int n);
   friend bool jungible(Breakline0 &a,Breakline0 &b);
