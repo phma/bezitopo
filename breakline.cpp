@@ -146,28 +146,28 @@ Breakline0 operator+(Breakline0 &a,Breakline0 &b)
     atailbtail=a.highEnd()==b.highEnd();
     if (aheadbhead)
     {
-      for (i=a.nodes.size();i>=0;i--)
+      for (i=a.nodes.size()-1;i>=0;i--)
         ret.nodes.push_back(a.nodes[i]);
       for (i=1;i<b.nodes.size();i++)
         ret.nodes.push_back(b.nodes[i]);
     }
     else if (aheadbtail)
     {
-      for (i=a.nodes.size();i>=0;i--)
+      for (i=a.nodes.size()-1;i>=0;i--)
         ret.nodes.push_back(a.nodes[i]);
       for (i=b.nodes.size()-2;i>=0;i--)
         ret.nodes.push_back(b.nodes[i]);
     }
     else if (atailbhead)
     {
-      for (i=0;i<=a.nodes.size();i--)
+      for (i=0;i<a.nodes.size();i++)
         ret.nodes.push_back(a.nodes[i]);
       for (i=1;i<b.nodes.size();i++)
         ret.nodes.push_back(b.nodes[i]);
     }
     else
     {
-      for (i=0;i<=a.nodes.size();i--)
+      for (i=0;i<a.nodes.size();i++)
         ret.nodes.push_back(a.nodes[i]);
       for (i=b.nodes.size()-2;i>=0;i--)
         ret.nodes.push_back(b.nodes[i]);

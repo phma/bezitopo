@@ -396,7 +396,8 @@ bool pointlist::join2break0()
   for (i=0;i<sz;i++)
     for (j=i+1;j<sz;j++)
       if (jungible(type0Breaklines[i],type0Breaklines[j]))
-        break;
+        goto jung;
+  jung:
   if (i<sz && j<sz)
   {
     cat=type0Breaklines[i]+type0Breaklines[j];
