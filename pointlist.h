@@ -86,6 +86,7 @@ public:
   void addperimeter();
   void removeperimeter();
   triangle *findt(xy pnt,bool clip=false);
+  bool join2break0();
   std::string hitTestString(triangleHit hit);
   std::string hitTestPointString(xy pnt,double radius);
   virtual void writeXml(std::ofstream &ofile);

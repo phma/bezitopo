@@ -988,6 +988,12 @@ void test1break0graph(pointlist &pl,string plname)
     pl.type0Breaklines[i].writeText(cout);
     cout<<endl;
   }
+  cout<<(pl.join2break0()?"-----\n":".....\n");
+  for (i=0;i<sz;i++)
+  {
+    pl.type0Breaklines[i].writeText(cout);
+    cout<<endl;
+  }
 }
 
 void testbreak0()

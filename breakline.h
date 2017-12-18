@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef BREAKLINE_H
+#define BREAKLINE_H
 #include <vector>
 #include <array>
 #include <iostream>
@@ -50,3 +52,4 @@ public:
 private:
   std::vector<int> nodes;
 };
+#endif

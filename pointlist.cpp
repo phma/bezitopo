@@ -25,6 +25,7 @@
 #include "bezitopo.h"
 #include "pointlist.h"
 #include "csv.h"
+#include "breakline.h"
 
 using namespace std;
 
@@ -382,6 +383,39 @@ void pointlist::removeperimeter()
 triangle *pointlist::findt(xy pnt,bool clip)
 {
   return qinx.findt(pnt,clip);
+}
+
+bool pointlist::join2break0()
+/* Joins two fragments of type-0 breakline and returns true,
+ * or returns false if there are none that can be joined.
+ */
+{
+  int i,j;
+  int sz=type0Breaklines.size();
+  Breakline0 cat;
+  for (i=0;i<sz;i++)
+    for (j=i+1;j<sz;j++)
+      if (jungible(type0Breaklines[i],type0Breaklines[j]))
+        break;
+  if (i<sz && j<sz)
+  {
+    cat=type0Breaklines[i]+type0Breaklines[j];
+    type0Breaklines[j]=cat;
+    while (j+1<sz && type0Breaklines[j].size()>type0Breaklines[j+1].size())
+    {
+      swap(type0Breaklines[j],type0Breaklines[j+1]);
+      j++;
+    }
+    while (i+1<sz)
+    {
+      swap(type0Breaklines[i],type0Breaklines[i+1]);
+      i++;
+    }
+    type0Breaklines.resize(sz-1);
+    return true;
+  }
+  else
+    return false;
 }
 
 string pointlist::hitTestString(triangleHit hit)
