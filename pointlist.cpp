@@ -419,6 +419,11 @@ bool pointlist::join2break0()
     return false;
 }
 
+void pointlist::joinBreaklines()
+{
+  while (join2break0());
+}
+
 string pointlist::hitTestString(triangleHit hit)
 {
   string ret;
