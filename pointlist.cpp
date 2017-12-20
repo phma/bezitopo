@@ -424,6 +424,16 @@ void pointlist::joinBreaklines()
   while (join2break0());
 }
 
+void pointlist::edgesToBreaklines()
+{
+  int i;
+  type0Breaklines.clear();
+  for (i=0;i<edges.size();i++)
+    if (!edges[i].delaunay() || (edges[i].broken&1))
+      type0Breaklines.push_back(Breakline0(revpoints[edges[i].a],revpoints[edges[i].b]));
+  joinBreaklines();
+}
+
 string pointlist::hitTestString(triangleHit hit)
 {
   string ret;
