@@ -1003,10 +1003,11 @@ void testbreak0()
 {
   double leftedge,bottomedge,rightedge,topedge,conterval;
   pointlist bull,octahedron,frucht,cycle17,chain17;
-  int rotation=DEG90,i,j;
+  int rotation=DEG90,i,j,sum,nopen;
   criterion crit1;
   PostScript ps;
   Breakline0 bl1,bl2,bl3;
+  array<int,2> edg;
   doc.makepointlist(1);
   doc.pl[0].clear();
   doc.copytopopoints(1,0);
@@ -1194,19 +1195,43 @@ void testbreak0()
   ps.trailer();
   ps.close();
   cout<<'\n';
-  // Now test joining single edges into breaklines.
+  /* Now test joining single edges into breaklines.
+   * The number of open trails is an invariant of the graph,
+   * equal to half the number of odd-degree vertices.
+   */
   bull.type0Breaklines.push_back(Breakline0(1,2));
   bull.type0Breaklines.push_back(Breakline0(2,3));
   bull.type0Breaklines.push_back(Breakline0(3,4));
   bull.type0Breaklines.push_back(Breakline0(4,2));
   bull.type0Breaklines.push_back(Breakline0(4,5));
   test1break0graph(bull,"bull");
+  for (i=sum=nopen=0;i<bull.type0Breaklines.size();i++)
+  {
+    sum+=bull.type0Breaklines[i].size();
+    nopen+=bull.type0Breaklines[i].isOpen();
+  }
+  tassert(sum==5);
+  tassert(nopen==2);
+  tassert(i<4 && i>1);
   for (i=1;i<7;i++)
     for (j=i+1;j<7;j++)
       if (i+j!=7)
         octahedron.type0Breaklines.push_back(Breakline0(i,j));
   test1break0graph(octahedron,"octahedron");
-  for (i=1;i<13;i++)
+  for (i=sum=nopen=0;i<octahedron.type0Breaklines.size();i++)
+  {
+    /* Can't assert that the cycle sizes are divisible by 3 or 4. It is
+     * possible to get a 5-cycle and a 7-cycle. One can also get four
+     * 3-cycles or three 4-cycles.
+     */
+    tassert(octahedron.type0Breaklines[i].size()>2);
+    sum+=octahedron.type0Breaklines[i].size();
+    nopen+=octahedron.type0Breaklines[i].isOpen();
+  }
+  tassert(sum==12);
+  tassert(i<5);
+  tassert(nopen==0);
+  for (i=1;i<12;i++)
     frucht.type0Breaklines.push_back(Breakline0(i,i+1));
   frucht.type0Breaklines.push_back(Breakline0(12,1));
   frucht.type0Breaklines.push_back(Breakline0(1,3));
@@ -1216,13 +1241,49 @@ void testbreak0()
   frucht.type0Breaklines.push_back(Breakline0(12,5));
   frucht.type0Breaklines.push_back(Breakline0(8,11));
   test1break0graph(frucht,"Frucht");
+  for (i=sum=nopen=0;i<frucht.type0Breaklines.size();i++)
+  {
+    sum+=frucht.type0Breaklines[i].size();
+    nopen+=frucht.type0Breaklines[i].isOpen();
+  }
+  tassert(sum==18);
+  tassert(i>5 && i<10); // the most disjoint cycles is 3
+  tassert(nopen==6);
   for (i=1;i<17;i++)
     cycle17.type0Breaklines.push_back(Breakline0(i,i+1));
   cycle17.type0Breaklines.push_back(Breakline0(17,1));
   test1break0graph(cycle17,"cycle17");
+  for (i=sum=nopen=0;i<cycle17.type0Breaklines.size();i++)
+  {
+    sum+=cycle17.type0Breaklines[i].size();
+    nopen+=cycle17.type0Breaklines[i].isOpen();
+    for (j=0;j<cycle17.type0Breaklines[i].size();j++)
+    {
+      edg=cycle17.type0Breaklines[i][j];
+      tassert(edg[0]==j+1);
+      tassert((edg[1]-j-2)%17==0);
+    }
+  }
+  tassert(sum==17);
+  tassert(i==1);
+  tassert(nopen==0);
   for (i=1;i<17;i++)
     chain17.type0Breaklines.push_back(Breakline0(i,i+1));
   test1break0graph(chain17,"chain17");
+  for (i=sum=nopen=0;i<chain17.type0Breaklines.size();i++)
+  {
+    sum+=chain17.type0Breaklines[i].size();
+    nopen+=chain17.type0Breaklines[i].isOpen();
+    for (j=0;j<chain17.type0Breaklines[i].size();j++)
+    {
+      edg=chain17.type0Breaklines[i][j];
+      tassert(edg[0]==j+1);
+      tassert(edg[1]==j+2);
+    }
+  }
+  tassert(sum==16);
+  tassert(i==1);
+  tassert(nopen==1);
 }
 
 void testrelprime()
