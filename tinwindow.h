@@ -68,6 +68,7 @@ public slots:
   void testPatternAster();
   void importPnezd();
   void importCriteria();
+  void exportBreaklines();
   void makeTin();
   void tryStartPoint();
   void flipPass();
@@ -151,4 +152,5 @@ private:
   QAction *asterAction,*importPnezdAction,*importCriteriaAction;
   QAction *makeTinAction,*selectContourIntervalAction;
   QAction *roughContoursAction,*smoothContoursAction;
+  QAction *importBreaklinesAction,*exportBreaklinesAction;
 };

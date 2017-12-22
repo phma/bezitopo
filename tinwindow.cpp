@@ -302,6 +302,17 @@ void TinCanvas::importCriteria()
   }
 }
 
+void TinCanvas::exportBreaklines()
+{
+  int i;
+  doc.pl[plnum].edgesToBreaklines();
+  for (i=0;i<doc.pl[plnum].type0Breaklines.size();i++)
+  {
+    doc.pl[plnum].type0Breaklines[i].writeText(cout);
+    cout<<endl;
+  }
+}
+
 void TinCanvas::makeTin()
 {
   //cout<<"makeTin"<<endl;
@@ -898,10 +909,20 @@ void TinWindow::makeActions()
   fileMenu->addAction(importPnezdAction);
   connect(importPnezdAction,SIGNAL(triggered(bool)),canvas,SLOT(importPnezd()));
   importCriteriaAction=new QAction(this);
-  //importPnezdAction->setIcon(QIcon(":/criteria.png"));
+  //importCriteriaAction->setIcon(QIcon(":/criteria.png"));
   importCriteriaAction->setText(tr("Import Criteria file"));
   fileMenu->addAction(importCriteriaAction);
   connect(importCriteriaAction,SIGNAL(triggered(bool)),canvas,SLOT(importCriteria()));
+  importBreaklinesAction=new QAction(this);
+  //importBreaklinesAction->setIcon(QIcon(":/importbreak.png"));
+  importBreaklinesAction->setText(tr("Import Breaklines file"));
+  //fileMenu->addAction(importBreaklinesAction);
+  //connect(importBreaklinesAction,SIGNAL(triggered(bool)),canvas,SLOT(importBreaklines()));
+  exportBreaklinesAction=new QAction(this);
+  //exportBreaklinesAction->setIcon(QIcon(":/exportbreak.png"));
+  exportBreaklinesAction->setText(tr("Export Breaklines file"));
+  fileMenu->addAction(exportBreaklinesAction);
+  connect(exportBreaklinesAction,SIGNAL(triggered(bool)),canvas,SLOT(exportBreaklines()));
   makeTinAction=new QAction(this);
   //makeTinAction->setIcon(QIcon(":/maketin.png"));
   makeTinAction->setText(tr("Make TIN"));
