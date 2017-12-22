@@ -200,3 +200,17 @@ void Breakline0::writeXml(ostream &ofile)
   }
   ofile<<"</break0>";
 }
+
+vector<string> parseBreakline(string line)
+{
+  vector<string> ret;
+  size_t pos;
+  while ((pos=line.find('-'))<line.length())
+  {
+    ret.push_back(line.substr(0,pos));
+    line.erase(0,pos+1);
+  }
+  if (line.length() || ret.size())
+    ret.push_back(line);
+  return ret;
+}

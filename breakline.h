@@ -52,4 +52,6 @@ public:
 private:
   std::vector<int> nodes;
 };
+
+std::vector<std::string> parseBreakline(std::string line);
 #endif
