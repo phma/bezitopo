@@ -305,11 +305,24 @@ void TinCanvas::importCriteria()
 void TinCanvas::exportBreaklines()
 {
   int i;
-  doc.pl[plnum].edgesToBreaklines();
-  for (i=0;i<doc.pl[plnum].type0Breaklines.size();i++)
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  fstream file;
+  fileDialog->setWindowTitle(tr("Save Breakline File"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
   {
-    doc.pl[plnum].type0Breaklines[i].writeText(cout);
-    cout<<endl;
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    file.open(fileName,fstream::out);
+    doc.pl[plnum].edgesToBreaklines();
+    for (i=0;i<doc.pl[plnum].type0Breaklines.size();i++)
+    {
+      doc.pl[plnum].type0Breaklines[i].writeText(file);
+      file<<endl;
+    }
   }
 }
 
