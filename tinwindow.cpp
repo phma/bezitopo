@@ -687,12 +687,12 @@ void TinCanvas::smoothContoursFinish()
 
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
-  int i,k,contourType;
+  int i,k,contourType,renderTime=0,pathTime=0,strokeTime=0;
   double r;
   bezier3d b3d;
   ptlist::iterator j;
   RenderItem ri;
-  QTime paintTime;
+  QTime paintTime,subTime;
   QPen itemPen;
   QPainter painter(this);
   QPainterPath path;
@@ -727,6 +727,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
         }
 #ifdef CACHEDRAW
     contourCache.clearPresent();
+    subTime.start();
     for (i=0;i<doc.pl[plnum].contours.size();i++)
     {
       contourType=doc.pl[plnum].contourInterval.contourType(doc.pl[plnum].contours[i].getElevation());
@@ -734,6 +735,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
                                  -1,contourColor[contourType&31],contourThickness[contourType>>8],contourLineType[contourType>>8]);
     }
     contourCache.deleteAbsent();
+    renderTime+=subTime.elapsed();
     do
     {
       ri=contourCache.nextRenderItem();
@@ -743,6 +745,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
         setWidth(itemPen,ri.rendering[i].width);
         setLineType(itemPen,ri.rendering[i].linetype);
         b3d=ri.rendering[i].path;
+        subTime.start();
         path=QPainterPath();
         for (k=0;k<b3d.size();k++)
         {
@@ -753,7 +756,9 @@ void TinCanvas::paintEvent(QPaintEvent *event)
         }
         if (!b3d.isopen())
           path.closeSubpath();
+        pathTime+=subTime.restart();
         painter.strokePath(path,itemPen);
+        strokeTime+=subTime.elapsed();
       }
     } while (ri.present);
 #else
@@ -777,7 +782,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   }
   else
     ; // nothing to paint, since plnum is not the index of a pointlist
-  //cout<<"Painting took "<<paintTime.elapsed()<<" ms"<<endl;
+  //cout<<"Painting took "<<paintTime.elapsed()<<" ms, rendering "<<renderTime<<", paths "<<pathTime<<", stroke "<<strokeTime<<endl;
 }
 
 void TinCanvas::setSize()
