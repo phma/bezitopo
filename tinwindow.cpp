@@ -302,6 +302,47 @@ void TinCanvas::importCriteria()
   }
 }
 
+void TinCanvas::importBreaklines()
+{
+  int i,err=0;
+  int dialogResult;
+  QStringList files;
+  string fileName,line;
+  fstream file;
+  vector<Breakline0> saveBreaklines0;
+  fileDialog->setWindowTitle(tr("Open Breakline File"));
+  fileDialog->setFileMode(QFileDialog::ExistingFile);
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    saveBreaklines0=doc.pl[plnum].type0Breaklines;
+    try
+    {
+      doc.pl[plnum].type0Breaklines.clear();
+      file.open(fileName,fstream::in);
+      while (!file.eof() && !file.fail())
+      {
+        getline(file,line);
+        doc.pl[plnum].stringToBreakline(line);
+      }
+      if (!file.eof())
+        throw fileerror;
+    }
+    catch (int e)
+    {
+      err=e;
+    }
+    if (err)
+    { // TODO: translate the thrown error into something intelligible
+      QString msg=tr("Can't read breaklines. Error: ")+QString::fromStdString(to_string(err));
+      doc.pl[plnum].type0Breaklines=saveBreaklines0;
+      errorMessage->showMessage(msg);
+    }
+  }
+}
+
 void TinCanvas::exportBreaklines()
 {
   int i;
@@ -929,8 +970,8 @@ void TinWindow::makeActions()
   importBreaklinesAction=new QAction(this);
   //importBreaklinesAction->setIcon(QIcon(":/importbreak.png"));
   importBreaklinesAction->setText(tr("Import Breaklines file"));
-  //fileMenu->addAction(importBreaklinesAction);
-  //connect(importBreaklinesAction,SIGNAL(triggered(bool)),canvas,SLOT(importBreaklines()));
+  fileMenu->addAction(importBreaklinesAction);
+  connect(importBreaklinesAction,SIGNAL(triggered(bool)),canvas,SLOT(importBreaklines()));
   exportBreaklinesAction=new QAction(this);
   //exportBreaklinesAction->setIcon(QIcon(":/exportbreak.png"));
   exportBreaklinesAction->setText(tr("Export Breaklines file"));

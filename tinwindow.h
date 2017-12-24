@@ -68,6 +68,7 @@ public slots:
   void testPatternAster();
   void importPnezd();
   void importCriteria();
+  void importBreaklines();
   void exportBreaklines();
   void makeTin();
   void tryStartPoint();

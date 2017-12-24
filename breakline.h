@@ -36,6 +36,7 @@ class Breakline0
 public:
   Breakline0();
   Breakline0(int a,int b);
+  Breakline0(std::vector<std::string> numbers); // can throw
   bool isEmpty();
   bool isOpen();
   void normalize();
@@ -53,5 +54,5 @@ private:
   std::vector<int> nodes;
 };
 
-std::vector<std::string> parseBreakline(std::string line);
+std::vector<std::string> parseBreakline(std::string line,char delim);
 #endif

@@ -50,3 +50,7 @@
 // a breakline endpoint number is not the number of any point
 #define breaklinescross 13
 // two breakline segments intersect
+#define badbreaklineformat 14
+// malformatted breakline text representation
+#define fileerror 15
+// any error reading or writing a file

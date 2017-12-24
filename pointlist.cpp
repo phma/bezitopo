@@ -434,6 +434,28 @@ void pointlist::edgesToBreaklines()
   joinBreaklines();
 }
 
+void pointlist::stringToBreakline(string line)
+/* Insert one line read from a breakline file into the breaklines.
+ * Comments begin with '#'. Blank lines are ignored.
+ * Type-0 breaklines look like "5-6-7-8-9-5".
+ * Type-1 breaklines look like "1,0;-.5,.866;-.5,.866;1,0".
+ * Can throw badbreaklineformat.
+ */
+{
+  size_t hashpos=line.find('#');
+  vector<string> lineWords;
+  int i;
+  if (hashpos<line.length())
+    line.erase(hashpos);
+  if (line.length())
+  {
+    if (line.find(',')<line.length())
+      ; // type-1 is not implemented yet
+    else
+      type0Breaklines.push_back(Breakline0(parseBreakline(line,'-')));
+  }
+}
+
 string pointlist::hitTestString(triangleHit hit)
 {
   string ret;

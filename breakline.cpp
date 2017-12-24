@@ -23,6 +23,7 @@
 #include <climits>
 #include <string>
 #include "breakline.h"
+#include "except.h"
 using namespace std;
 
 Breakline0::Breakline0()
@@ -33,6 +34,32 @@ Breakline0::Breakline0(int a,int b)
 {
   nodes.push_back(a);
   nodes.push_back(b);
+}
+
+Breakline0::Breakline0(vector<string> numbers)
+/* Some bad values (shown with hyphens):
+ *              empty
+ * 238          only one number, no edge
+ * 91-92-9z-94  9z is not a number
+ */
+{
+  int i;
+  size_t idx;
+  try
+  {
+    for (i=0;i<numbers.size();i++)
+    {
+      nodes.push_back(stoi(numbers[i],&idx));
+      if (idx<numbers[i].length())
+        throw idx;
+    }
+  }
+  catch (...)
+  {
+    i=-1;
+  }
+  if (i<2)
+    throw badbreaklineformat;
 }
 
 /* The breakline () is empty and open, and thus can be joined with any
@@ -201,11 +228,11 @@ void Breakline0::writeXml(ostream &ofile)
   ofile<<"</break0>";
 }
 
-vector<string> parseBreakline(string line)
+vector<string> parseBreakline(string line,char delim)
 {
   vector<string> ret;
   size_t pos;
-  while ((pos=line.find('-'))<line.length())
+  while ((pos=line.find(delim))<line.length())
   {
     ret.push_back(line.substr(0,pos));
     line.erase(0,pos+1);

@@ -89,6 +89,7 @@ public:
   bool join2break0();
   void joinBreaklines();
   void edgesToBreaklines();
+  void stringToBreakline(std::string line); // for import, with hyphens
   std::string hitTestString(triangleHit hit);
   std::string hitTestPointString(xy pnt,double radius);
   virtual void writeXml(std::ofstream &ofile);
