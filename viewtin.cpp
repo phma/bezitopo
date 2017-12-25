@@ -21,11 +21,15 @@
  */
 #include <QtGui>
 #include <QtWidgets>
+#include <QTranslator>
 #include "tinwindow.h"
 
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
+  QTranslator translator;
+  if (translator.load(QLocale(),QLatin1String("bezitopo"),QLatin1String("_"),QLatin1String(":")))
+    app.installTranslator(&translator);
   TinWindow window;
   window.show();
   return app.exec();

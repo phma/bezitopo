@@ -28,7 +28,9 @@ set(CMAKE_CXX_EXTENSIONS ON)
 find_package(Qt5Core)
 find_package(Qt5Widgets)
 find_package(Qt5Gui)
+find_package(Qt5LinguistTools)
 qt5_add_resources(lib_resources viewtin.qrc)
+qt5_add_translation(qm_files bezitopo_en.ts bezitopo_es.ts)
 
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitopo.cpp binio.cpp breakline.cpp circle.cpp closure.cpp cogo.cpp
@@ -70,7 +72,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp break
                ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp rendercache.cpp
                rootfind.cpp segment.cpp spiral.cpp spolygon.cpp test.cpp tin.cpp
                tinwindow.cpp vball.cpp vcurve.cpp viewtin.cpp zoom.cpp zoombutton.cpp
-               ${lib_resources})
+               ${lib_resources} ${qm_files})
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
 target_link_libraries(bezitopo Qt5::Widgets Qt5::Core)
 target_link_libraries(bezitest Qt5::Widgets Qt5::Core)
