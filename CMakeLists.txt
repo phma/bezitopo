@@ -89,7 +89,7 @@ check_include_files(sys/time.h HAVE_SYS_TIME_H)
 check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_files(windows.h HAVE_WINDOWS_H)
 
-install(TARGETS bezitopo convertgeoid DESTINATION bin)
+install(TARGETS bezitopo convertgeoid viewtin DESTINATION bin)
 install(FILES ${qm_files} DESTINATION share/bezitopo)
 
 test_big_endian(BIGENDIAN)
