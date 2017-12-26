@@ -66,7 +66,7 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
 add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp breakline.cpp
                cidialog.cpp circle.cpp cogo.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp ellipsoid.cpp
-               geoid.cpp geoidboundary.cpp halton.cpp kml.cpp
+               except.cpp geoid.cpp geoidboundary.cpp halton.cpp kml.cpp
                latlong.cpp ldecimal.cpp linetype.cpp
                manysum.cpp measure.cpp measurebutton.cpp penwidth.cpp
                pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp

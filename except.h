@@ -19,11 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <QException>
 
-/* For now, I'm just collecting the various integers thrown as exceptions.
- * Later, I'll make an exception class which can carry additional data
- * to the catch site. This will require all programs to be linked with Qt.
- */
 #define notri 1
 // less than 3 points, no triangle
 #define samepnts 2
@@ -54,3 +51,21 @@
 // malformatted breakline text representation
 #define fileerror 15
 // any error reading or writing a file
+#define N_EXCEPTIONS 16
+
+class BeziExcept: public QException
+{
+public:
+  BeziExcept(const BeziExcept &a);
+  BeziExcept(int num);
+  int exceptNumber;
+  int pointNumber[2];
+  void raise() const
+  {
+    throw *this;
+  }
+  BeziExcept *clone() const
+  {
+    return new BeziExcept(*this);
+  }
+};
