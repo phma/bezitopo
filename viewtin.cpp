@@ -24,12 +24,24 @@
 #include <QTranslator>
 #include "tinwindow.h"
 
+using namespace std;
+
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
   QTranslator translator;
-  if (translator.load(QLocale(),QLatin1String("bezitopo"),QLatin1String("_"),QLatin1String(":")))
+  if (translator.load(QLocale(),QLatin1String("bezitopo"),
+                      QLatin1String("_"),QLatin1String(".")))
+  {
+    //cout<<"Translations found in current directory"<<endl;
     app.installTranslator(&translator);
+  }
+  else if (translator.load(QLocale(),QLatin1String("bezitopo"),
+                      QLatin1String("_"),QLatin1String(SHARE_DIR)))
+  {
+    //cout<<"Translations found in share directory"<<endl;
+    app.installTranslator(&translator);
+  }
   TinWindow window;
   window.show();
   return app.exec();

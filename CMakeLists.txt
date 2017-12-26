@@ -24,6 +24,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
+set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/bezitopo)
 
 find_package(Qt5Core)
 find_package(Qt5Widgets)
