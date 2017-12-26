@@ -31,7 +31,7 @@ find_package(Qt5Widgets)
 find_package(Qt5Gui)
 find_package(Qt5LinguistTools)
 qt5_add_resources(lib_resources viewtin.qrc)
-qt5_add_translation(qm_files bezitopo_en.ts bezitopo_es.ts)
+qt5_create_translation(qm_files bezitopo_en.ts bezitopo_es.ts)
 
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitopo.cpp binio.cpp breakline.cpp circle.cpp closure.cpp cogo.cpp
