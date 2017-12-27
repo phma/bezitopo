@@ -329,6 +329,7 @@ void TinCanvas::importBreaklines()
       }
       if (!file.eof())
         throw fileerror;
+      tinValid=surfaceValid=roughContoursValid=smoothContoursValid=false;
     }
     catch (int e)
     {
@@ -578,7 +579,8 @@ void TinCanvas::roughContours()
     timer->start(0);
     progressDialog->show();
   }
-  tinlohi=doc.pl[plnum].lohi();
+  if (tinValid)
+    tinlohi=doc.pl[plnum].lohi();
   doc.pl[plnum].contours.clear();
   elevLo=floor(tinlohi[0]/conterval);
   elevHi=ceil(tinlohi[1]/conterval);
