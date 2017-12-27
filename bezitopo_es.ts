@@ -2,6 +2,89 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="es_ES">
 <context>
+    <name>BeziExcept</name>
+    <message>
+        <location filename="except.cpp" line="26"/>
+        <source>noerror</source>
+        <translation>No hay error</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="27"/>
+        <source>notri</source>
+        <translation>No hay suficientes puntos para hacer triángulo.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="28"/>
+        <source>samepnts</source>
+        <translation>Dos puntos tienen mismas coordenadas (x,y).</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="29"/>
+        <source>flattri</source>
+        <translation>Todos los puntos son en línea recta.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="30"/>
+        <source>badheader</source>
+        <translation>Fichero de geoide tiene encabezado malo.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="31"/>
+        <source>baddata</source>
+        <translation>Fichero de geoide tiene datos malos.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="32"/>
+        <source>matrixmismatch</source>
+        <translation>Tamaños de matrices no concuerdan.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="33"/>
+        <source>singularmatrix</source>
+        <translation>Intento invertir una matriz singular.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="34"/>
+        <source>unsetgeoid</source>
+        <translation>Estructura de datos de geoide no es inicializada.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="35"/>
+        <source>unsetsource</source>
+        <translation>Fuente de copia no existe.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="36"/>
+        <source>badunits</source>
+        <translation>Símbolo de unidad es equivocado o desconocido.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="37"/>
+        <source>badnumber</source>
+        <translation>Medida carece número.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="38"/>
+        <source>badbreaklineend</source>
+        <translation>Número de punto equivocado en línea de rotura.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="39"/>
+        <source>breaklinescross</source>
+        <translation>Líneas de rotura se cruzan.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="40"/>
+        <source>badbreaklineformat</source>
+        <translation>Fichero de líneas de rotura es mal formatado.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="41"/>
+        <source>fileerror</source>
+        <translation>Error leyendo fichero.</translation>
+    </message>
+</context>
+<context>
     <name>ContourIntervalDialog</name>
     <message>
         <location filename="cidialog.cpp" line="28"/>

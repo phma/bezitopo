@@ -23,22 +23,22 @@
 
 char exceptionNames[N_EXCEPTIONS][24]=
 {
-  "noerror",
-  "notri",
-  "samepnts",
-  "flattri",
-  "badheader",
-  "baddata",
-  "matrixmismatch",
-  "singularmatrix",
-  "unsetgeoid",
-  "unsetsource",
-  "badunits",
-  "badnumber",
-  "badbreaklineend",
-  "breaklinescross",
-  "badbreaklineformat",
-  "fileerror"
+  QT_TRANSLATE_NOOP("BeziExcept","noerror"),
+  QT_TRANSLATE_NOOP("BeziExcept","notri"),
+  QT_TRANSLATE_NOOP("BeziExcept","samepnts"),
+  QT_TRANSLATE_NOOP("BeziExcept","flattri"),
+  QT_TRANSLATE_NOOP("BeziExcept","badheader"),
+  QT_TRANSLATE_NOOP("BeziExcept","baddata"),
+  QT_TRANSLATE_NOOP("BeziExcept","matrixmismatch"),
+  QT_TRANSLATE_NOOP("BeziExcept","singularmatrix"),
+  QT_TRANSLATE_NOOP("BeziExcept","unsetgeoid"),
+  QT_TRANSLATE_NOOP("BeziExcept","unsetsource"),
+  QT_TRANSLATE_NOOP("BeziExcept","badunits"),
+  QT_TRANSLATE_NOOP("BeziExcept","badnumber"),
+  QT_TRANSLATE_NOOP("BeziExcept","badbreaklineend"),
+  QT_TRANSLATE_NOOP("BeziExcept","breaklinescross"),
+  QT_TRANSLATE_NOOP("BeziExcept","badbreaklineformat"),
+  QT_TRANSLATE_NOOP("BeziExcept","fileerror")
 };
 
 BeziExcept::BeziExcept(const BeziExcept &a)

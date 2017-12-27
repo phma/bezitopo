@@ -2,6 +2,89 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="en_US">
 <context>
+    <name>BeziExcept</name>
+    <message>
+        <location filename="except.cpp" line="26"/>
+        <source>noerror</source>
+        <translation>No error</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="27"/>
+        <source>notri</source>
+        <translation>Not enough points to make a triangle.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="28"/>
+        <source>samepnts</source>
+        <translation>Two points with same (x,y) coordinates.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="29"/>
+        <source>flattri</source>
+        <translation>All points are in a straight line.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="30"/>
+        <source>badheader</source>
+        <translation>Geoid file has bad header.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="31"/>
+        <source>baddata</source>
+        <translation>Geoid file has bad data.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="32"/>
+        <source>matrixmismatch</source>
+        <translation>Matrix sizes do not match.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="33"/>
+        <source>singularmatrix</source>
+        <translation>Attempt to invert a singular matrix.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="34"/>
+        <source>unsetgeoid</source>
+        <translation>Geoid data structure is not initialized.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="35"/>
+        <source>unsetsource</source>
+        <translation>Source of copy does not exist.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="36"/>
+        <source>badunits</source>
+        <translation>Unit symbol is mismatched or unknown.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="37"/>
+        <source>badnumber</source>
+        <translation>Missing number in measurement.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="38"/>
+        <source>badbreaklineend</source>
+        <translation>Wrong point number in breakline.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="39"/>
+        <source>breaklinescross</source>
+        <translation>Breaklines intersect.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="40"/>
+        <source>badbreaklineformat</source>
+        <translation>Breakline file is malformatted.</translation>
+    </message>
+    <message>
+        <location filename="except.cpp" line="41"/>
+        <source>fileerror</source>
+        <translation>Error reading file.</translation>
+    </message>
+</context>
+<context>
     <name>ContourIntervalDialog</name>
     <message>
         <location filename="cidialog.cpp" line="28"/>
