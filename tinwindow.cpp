@@ -60,7 +60,7 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   for (i=0;i<3;i++)
     for (j=0;j<20;j++)
     {
-      contourColor[j]=RED+CYAN/39*j;
+      contourColor[j]=RED/39*(39-j)+BLUE/39*j;
       rgb=colorint(contourColor[j]);
       contourPen[i][j]=QPen(QColor((rgb>>16)&0xff,(rgb>>8)&0xff,(rgb>>0)&0xff),
                             (i+1)/2.,i?Qt::SolidLine:Qt::DashLine);
