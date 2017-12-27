@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="es_ES">
+<TS version="2.0" language="es_ES">
 <context>
     <name>BeziExcept</name>
     <message>
@@ -196,32 +196,32 @@
     <message>
         <location filename="tinwindow.cpp" line="927"/>
         <source>Zoom out 10</source>
-        <translation>Ampliar par 10</translation>
+        <translation>Reducir par 10</translation>
     </message>
     <message>
         <location filename="tinwindow.cpp" line="931"/>
         <source>Zoom out 2</source>
-        <translation>Ampliar par 2</translation>
+        <translation>Reducir par 2</translation>
     </message>
     <message>
         <location filename="tinwindow.cpp" line="935"/>
         <source>Zoom out</source>
-        <translation>Ampliar</translation>
+        <translation>Reducir</translation>
     </message>
     <message>
         <location filename="tinwindow.cpp" line="939"/>
         <source>Zoom in</source>
-        <translation>Reducir</translation>
+        <translation>Ampliar</translation>
     </message>
     <message>
         <location filename="tinwindow.cpp" line="943"/>
         <source>Zoom in 2</source>
-        <translation>Reducir par 2</translation>
+        <translation>Ampliar par 2</translation>
     </message>
     <message>
         <location filename="tinwindow.cpp" line="947"/>
         <source>Zoom in 10</source>
-        <translation>Reducir par 10</translation>
+        <translation>Ampliar par 10</translation>
     </message>
     <message>
         <location filename="tinwindow.cpp" line="951"/>
