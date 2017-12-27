@@ -353,6 +353,7 @@ void TinCanvas::exportBreaklines()
   fstream file;
   fileDialog->setWindowTitle(tr("Save Breakline File"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
