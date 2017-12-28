@@ -185,6 +185,7 @@ void edge::flip(pointlist *topopoints)
     trib->sarea=tria->area();
   }
   setNeighbors();
+  broken&=~4; // checkBreak0 has to recompute bits 0 and 1
 }
 
 bool edge::isinterior()
