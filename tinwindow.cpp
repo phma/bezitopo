@@ -453,7 +453,9 @@ void TinCanvas::flipPass()
   if (tinerror || tooLong) // repeatedly flipping edges in a circle.
   {
     disconnect(timer,SIGNAL(timeout()),this,SLOT(flipPass()));
-    connect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
+    tinValid=true;
+    errorMessage->showMessage(tr("Took too long to make TIN"));
   }
   else
   {
