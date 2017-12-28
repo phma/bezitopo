@@ -440,6 +440,7 @@ int pointlist::checkBreak0(edge &e)
       if (sameXyz(s,break0[i]))
         e.broken|=1;
     }
+    e.broken|=4;
   }
   return e.broken&3;
 }
