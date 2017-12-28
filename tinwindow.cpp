@@ -226,6 +226,13 @@ void TinCanvas::setIndianFoot()
   measureChanged(doc.ms);
 }
 
+void TinCanvas::repaintSeldom()
+// Spends up to 5% of the time repainting during long operations.
+{
+  if (lastPaintTime.elapsed()>20*lastPaintDuration)
+    repaint();
+}
+
 void TinCanvas::updateEdge(edge *e)
 {
   QMarginsF marge(1,1,1,1);
@@ -433,6 +440,7 @@ void TinCanvas::tryStartPoint()
       tinerror=e;
     }
   }
+  repaintSeldom();
 }
 
 void TinCanvas::flipPass()
@@ -467,6 +475,7 @@ void TinCanvas::flipPass()
       tinerror=e;
     }
   }
+  repaintSeldom();
 }
 
 void TinCanvas::redoSurface()
@@ -609,6 +618,7 @@ void TinCanvas::rough1Contour()
   }
   else
     progressDialog->setValue(progInx);
+  repaintSeldom();
 }
 
 void TinCanvas::roughContoursFinish()
@@ -671,6 +681,7 @@ void TinCanvas::smooth1Contour()
     disconnect(timer,SIGNAL(timeout()),0,0);
     connect(timer,SIGNAL(timeout()),this,SLOT(smoothContoursFinish()));
   }
+  repaintSeldom();
 }
 
 void TinCanvas::smoothContoursFinish()
@@ -786,6 +797,8 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   else
     ; // nothing to paint, since plnum is not the index of a pointlist
   //cout<<"Painting took "<<paintTime.elapsed()<<" ms, rendering "<<renderTime<<", paths "<<pathTime<<", stroke "<<strokeTime<<endl;
+  lastPaintTime=paintTime;
+  lastPaintDuration=paintTime.elapsed();
 }
 
 void TinCanvas::setSize()

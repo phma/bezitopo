@@ -45,6 +45,7 @@ public:
   QPointF worldToWindow(xy pnt);
   xy windowToWorld(QPointF pnt);
   double pixelScale();
+  void repaintSeldom();
 signals:
   void measureChanged(Measure newMeasure);
 public slots:
@@ -128,6 +129,8 @@ private:
   bool surfaceValid; // If false, to do rough contours, must first set gradient.
   bool roughContoursValid; // If false, to do smooth contours, must first do rough contours.
   bool smoothContoursValid;
+  QTime lastPaintTime;
+  int lastPaintDuration;
 };
 
 class TinWindow: public QMainWindow
