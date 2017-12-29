@@ -3,7 +3,7 @@
 /* ellipsoid.cpp - ellipsoids                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include "ellipsoid.h"
+#include "rootfind.h"
 
 /* Unlike most of the program, which represents angles as integers,
  * ellipsoid and projection require double precision for angles.
@@ -138,6 +139,45 @@ double ellipsoid::radiusAtLatitude(latlong ll,int bearing)
   rprime=eqr/sqrt(latfactor);
   rmerid=rprime*(1-ecc2)/latfactor;
   return 1/(bearfactor/rmerid+(1-bearfactor)/rprime);
+}
+
+double ellipsoid::conformalLatitude(double lat)
+/* Returns the latitude on a sphere that a latitude on this ellipsoid
+ * would conformally project to.
+ */
+{
+  double ecc=eccentricity();
+  return asin(tanh(atanh(sin(lat))-ecc*atanh(ecc*sin(lat))));
+}
+
+double ellipsoid::apxConLatDeriv(double lat)
+/* This is actually the geocentric latitude's derivative,
+ * which is close enough for root finding purposes.
+ * FIXME: this isn't really the geoc lad's deriv.
+ */
+{
+  double x,z,x1,z1,x2,z2,rtsumsq,rtsumsq1,rtsumsq2;
+  x=cos(lat);
+  z=sin(lat);
+  rtsumsq=sqrt(sqr(x*eqr)+sqr(z*por));
+  x1=x*eqr/rtsumsq;
+  z1=z*por/rtsumsq;
+  rtsumsq1=sqrt(sqr(x1*por)+sqr(z1*eqr));
+  return sqr(rtsumsq1/rtsumsq);
+}
+
+double ellipsoid::inverseConformalLatitude(double lat)
+{
+  double ret;
+  Newton ne;
+  double lo=lat*por/eqr,hi=(lat-M_PI/2)*por/eqr+M_PI/2;
+  ret=ne.init(lo,conformalLatitude(lo)-lat,apxConLatDeriv(lo),
+              hi,conformalLatitude(hi)-lat,apxConLatDeriv(hi));
+  while (!ne.finished())
+  {
+    ret=ne.step(conformalLatitude(ret)-lat,apxConLatDeriv(ret));
+  }
+  return ret;
 }
 
 ellipsoid Sphere(6371000,0,0);

@@ -3711,7 +3711,8 @@ void testldecimal()
 
 void testellipsoid()
 {
-  double rad;
+  double rad,cenlat,conlat,invconlat;
+  int i;
   xyz sealevel,kmhigh,noffset,soffset,diff,benin,bengal,howland,galapagos,npole,spole;
   latlongelev greenhill,greenhill2;
   xyz gh;
@@ -3732,6 +3733,20 @@ void testellipsoid()
   cout<<diff.east()<<' '<<diff.north()<<' '<<diff.elev()<<endl;
   tassert(abs(diff.east()+diff.elev())<1e-6);
   cout<<"average radius "<<ldecimal(test1.avgradius())<<endl;
+  for (i=0;i<=0;i++)
+  {
+    diff=test1.geoc(degtorad(i),0.,0.);
+    cenlat=radtodeg(atan2(diff.getz(),diff.getx()));
+    cout<<setw(2)<<i<<setw(15)<<cenlat<<setw(15)<<radtodeg(test1.conformalLatitude(degtorad(i)))
+        <<setw(15)<<test1.apxConLatDeriv(degtorad(i))<<endl;
+  }
+  for (i=0;i<=90;i++)
+  {
+    conlat=test1.conformalLatitude(degtorad(i));
+    invconlat=test1.inverseConformalLatitude(conlat);
+    cout<<setw(2)<<i<<setw(15)<<radtodeg(conlat)<<setw(15)<<radtodeg(invconlat)<<endl;
+    tassert(fabs(invconlat-degtorad(i))<1e-10);
+  }
   benin=Sphere.geoc(0,0,0);
   bengal=Sphere.geoc(0,DEG90,0);
   howland=Sphere.geoc(0,DEG180,0);

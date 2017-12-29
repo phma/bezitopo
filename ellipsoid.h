@@ -3,7 +3,7 @@
 /* ellipsoid.h - ellipsoids                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -49,6 +49,9 @@ public:
   };
   double eccentricity();
   double radiusAtLatitude(latlong ll,int bearing); // bearing is 0 for east; use DEG45 for average radius
+  double conformalLatitude(double lat);
+  double apxConLatDeriv(double lat);
+  double inverseConformalLatitude(double lat);
 };
 
 extern ellipsoid Sphere,Clarke,GRS80,WGS84,ITRS;
