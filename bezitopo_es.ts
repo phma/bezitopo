@@ -194,7 +194,7 @@
     <message>
         <location filename="tinwindow.cpp" line="873"/>
         <source>Do you want to edit?</source>
-        <translation>Tentas editar una línea de rotura, pero las líneas de rotura leídas de fichero están más nuevas que las en el TIN. ¿Quieres editar líneas de rotura?</translation>
+        <translation>Tientas editar una línea de rotura, pero las líneas de rotura leídas de fichero están más nuevas que las en el TIN. ¿Quieres editar líneas de rotura?</translation>
     </message>
 </context>
 <context>
