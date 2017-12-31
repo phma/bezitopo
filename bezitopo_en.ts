@@ -116,195 +116,221 @@
         <translation>Open Criteria File</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="320"/>
+        <location filename="tinwindow.cpp" line="321"/>
         <source>Open Breakline File</source>
         <translation>Open Breakline File</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="347"/>
+        <location filename="tinwindow.cpp" line="329"/>
+        <location filename="tinwindow.cpp" line="407"/>
+        <source>You have edited breaklines.</source>
+        <translation>You have edited breaklines.</translation>
+    </message>
+    <message>
+        <location filename="tinwindow.cpp" line="330"/>
+        <source>Do you want to load?</source>
+        <translation>You are asking to import breaklines, but the breaklines in the TIN are newer than the ones read from file. Do you want to read breaklines from a file?</translation>
+    </message>
+    <message>
+        <location filename="tinwindow.cpp" line="363"/>
         <source>Can&apos;t read breaklines. Error: </source>
         <translation>Can&apos;t read breaklines. Error:</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="361"/>
+        <location filename="tinwindow.cpp" line="378"/>
         <source>Save Breakline File</source>
         <translation>Save Breakline File</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="401"/>
+        <location filename="tinwindow.cpp" line="408"/>
+        <source>Do you want to make TIN?</source>
+        <translation>You are asking to make a TIN, but you have edited the breaklines in the TIN since you last read them from a file. Do you want to make a new TIN?</translation>
+    </message>
+    <message>
+        <location filename="tinwindow.cpp" line="443"/>
         <source>Making TIN</source>
         <translation>Making TIN</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="402"/>
+        <location filename="tinwindow.cpp" line="444"/>
         <source>Sweeping convex hull...</source>
         <translation>Sweeping convex hull...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="435"/>
+        <location filename="tinwindow.cpp" line="478"/>
         <source>Flipping edges...</source>
         <translation>Flipping edges...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="458"/>
+        <location filename="tinwindow.cpp" line="501"/>
         <source>Took too long to make TIN</source>
         <translation>Took too long to make TIN</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="498"/>
+        <location filename="tinwindow.cpp" line="541"/>
         <source>Finding critical points...</source>
         <translation>Finding critical points...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="541"/>
+        <location filename="tinwindow.cpp" line="584"/>
         <source>Can&apos;t make TIN. Error: </source>
         <translation>Can&apos;t make TIN. Error:</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="602"/>
+        <location filename="tinwindow.cpp" line="646"/>
         <source>Drawing rough contours...</source>
         <translation>Drawing rough contours...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="665"/>
+        <location filename="tinwindow.cpp" line="709"/>
         <source>Drawing smooth contours...</source>
         <translation>Drawing smooth contours...</translation>
+    </message>
+    <message>
+        <location filename="tinwindow.cpp" line="872"/>
+        <source>You have imported breaklines.</source>
+        <translation>You have imported breaklines.</translation>
+    </message>
+    <message>
+        <location filename="tinwindow.cpp" line="873"/>
+        <source>Do you want to edit?</source>
+        <translation>You are trying to edit a breakline, but the breaklines read from file are newer than the ones in the TIN. Do you want to edit breaklines?</translation>
     </message>
 </context>
 <context>
     <name>TinWindow</name>
     <message>
-        <location filename="tinwindow.cpp" line="936"/>
+        <location filename="tinwindow.cpp" line="1004"/>
         <source>&amp;File</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="937"/>
+        <location filename="tinwindow.cpp" line="1005"/>
         <source>&amp;Edit</source>
         <translation>&amp;Edit</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="938"/>
+        <location filename="tinwindow.cpp" line="1006"/>
         <source>&amp;View</source>
         <translation>&amp;View</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="939"/>
+        <location filename="tinwindow.cpp" line="1007"/>
         <source>&amp;Units</source>
         <translation>&amp;Units</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="940"/>
+        <location filename="tinwindow.cpp" line="1008"/>
         <source>&amp;Contour</source>
         <translation>&amp;Contour</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="943"/>
+        <location filename="tinwindow.cpp" line="1011"/>
         <source>Zoom out 10</source>
         <translation>Zoom out 10</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="947"/>
+        <location filename="tinwindow.cpp" line="1015"/>
         <source>Zoom out 2</source>
         <translation>Zoom out 2</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="951"/>
+        <location filename="tinwindow.cpp" line="1019"/>
         <source>Zoom out</source>
         <translation>Zoom out</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="955"/>
+        <location filename="tinwindow.cpp" line="1023"/>
         <source>Zoom in</source>
         <translation>Zoom in</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="959"/>
+        <location filename="tinwindow.cpp" line="1027"/>
         <source>Zoom in 2</source>
         <translation>Zoom in 2</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="963"/>
+        <location filename="tinwindow.cpp" line="1031"/>
         <source>Zoom in 10</source>
         <translation>Zoom in 10</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="967"/>
+        <location filename="tinwindow.cpp" line="1035"/>
         <source>Rotate right</source>
         <translation>Rotate right</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="971"/>
+        <location filename="tinwindow.cpp" line="1039"/>
         <source>Rotate left</source>
         <translation>Rotate left</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="980"/>
+        <location filename="tinwindow.cpp" line="1048"/>
         <source>Test pattern Aster</source>
         <translation>Test pattern Aster</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="985"/>
+        <location filename="tinwindow.cpp" line="1053"/>
         <source>Import PNEZD file</source>
         <translation>Import PNEZD file</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="990"/>
+        <location filename="tinwindow.cpp" line="1058"/>
         <source>Import Criteria file</source>
         <translation>Import Criteria file</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="995"/>
+        <location filename="tinwindow.cpp" line="1063"/>
         <source>Import Breaklines file</source>
         <translation>Import Breaklines file</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1000"/>
+        <location filename="tinwindow.cpp" line="1068"/>
         <source>Export Breaklines file</source>
         <translation>Export Breaklines file</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1005"/>
+        <location filename="tinwindow.cpp" line="1073"/>
         <source>Make TIN</source>
         <translation>Make TIN</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1010"/>
+        <location filename="tinwindow.cpp" line="1078"/>
         <source>Select contour interval</source>
         <translation>Select contour interval</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1015"/>
+        <location filename="tinwindow.cpp" line="1083"/>
         <source>Draw rough contours</source>
         <translation>Draw rough contours</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1020"/>
+        <location filename="tinwindow.cpp" line="1088"/>
         <source>Draw smooth contours</source>
         <translation>Draw smooth contours</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1025"/>
+        <location filename="tinwindow.cpp" line="1093"/>
         <source>Meter</source>
         <translation>Meter</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1031"/>
+        <location filename="tinwindow.cpp" line="1099"/>
         <source>Foot</source>
         <translation>Foot</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1037"/>
+        <location filename="tinwindow.cpp" line="1105"/>
         <source>International foot</source>
         <translation>International foot</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1043"/>
+        <location filename="tinwindow.cpp" line="1111"/>
         <source>US survey foot</source>
         <translation>US survey foot</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1049"/>
+        <location filename="tinwindow.cpp" line="1117"/>
         <source>Indian survey foot</source>
         <translation>Indian survey foot</translation>
     </message>
@@ -312,7 +338,7 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="tinwindow.cpp" line="914"/>
+        <location filename="tinwindow.cpp" line="982"/>
         <source>ViewTIN</source>
         <translation>ViewTIN</translation>
     </message>
