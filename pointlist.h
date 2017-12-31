@@ -72,6 +72,12 @@ public:
   ContourInterval contourInterval;
   std::vector<Breakline0> type0Breaklines;
   std::vector<std::vector<xy> > type1Breaklines;
+  int whichBreak0Valid;
+  /* 0: means same as 3; it hasn't been set because there are no breaklines.
+   * 1: type0Breaklines is the valid one (you just loaded breaklines from a file).
+   * 2: edges is the valid one (you just clicked on an edge).
+   * 3: both are valid (you just made a TIN, or you just saved breaklines to a file).
+   */
   qindex qinx;
   void addpoint(int numb,point pnt,bool overwrite=false);
   void clear();

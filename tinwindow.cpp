@@ -312,6 +312,7 @@ void TinCanvas::importCriteria()
 void TinCanvas::importBreaklines()
 {
   int i,err=0;
+  bool loadAnyway;
   int dialogResult;
   QStringList files;
   string fileName,line;
@@ -322,31 +323,47 @@ void TinCanvas::importBreaklines()
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
-    files=fileDialog->selectedFiles();
-    fileName=files[0].toStdString();
-    saveBreaklines0=doc.pl[plnum].type0Breaklines;
-    try
+    if (doc.pl[plnum].whichBreak0Valid==2)
     {
-      doc.pl[plnum].type0Breaklines.clear();
-      file.open(fileName,fstream::in);
-      while (!file.eof() && !file.fail())
+      QMessageBox msgBox(this);
+      msgBox.setText(tr("You have edited breaklines."));
+      msgBox.setInformativeText(tr("Do you want to load?"));
+      msgBox.setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+      msgBox.setIcon(QMessageBox::Question);
+      msgBox.setDefaultButton(QMessageBox::No);
+      loadAnyway=msgBox.exec()==QMessageBox::Yes;
+    }
+    else
+      loadAnyway=true;
+    if (loadAnyway)
+    {
+      files=fileDialog->selectedFiles();
+      fileName=files[0].toStdString();
+      saveBreaklines0=doc.pl[plnum].type0Breaklines;
+      try
       {
-        getline(file,line);
-        doc.pl[plnum].stringToBreakline(line);
+        doc.pl[plnum].type0Breaklines.clear();
+        file.open(fileName,fstream::in);
+        while (!file.eof() && !file.fail())
+        {
+          getline(file,line);
+          doc.pl[plnum].stringToBreakline(line);
+        }
+        if (!file.eof())
+          throw fileerror;
+        tinValid=surfaceValid=roughContoursValid=smoothContoursValid=false;
+        doc.pl[plnum].whichBreak0Valid=1;
       }
-      if (!file.eof())
-        throw fileerror;
-      tinValid=surfaceValid=roughContoursValid=smoothContoursValid=false;
-    }
-    catch (int e)
-    {
-      err=e;
-    }
-    if (err)
-    { // TODO: translate the thrown error into something intelligible
-      QString msg=tr("Can't read breaklines. Error: ")+QString::fromStdString(to_string(err));
-      doc.pl[plnum].type0Breaklines=saveBreaklines0;
-      errorMessage->showMessage(msg);
+      catch (int e)
+      {
+        err=e;
+      }
+      if (err)
+      { // TODO: translate the thrown error into something intelligible
+        QString msg=tr("Can't read breaklines. Error: ")+QString::fromStdString(to_string(err));
+        doc.pl[plnum].type0Breaklines=saveBreaklines0;
+        errorMessage->showMessage(msg);
+      }
     }
   }
 }
@@ -367,13 +384,36 @@ void TinCanvas::exportBreaklines()
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
     file.open(fileName,fstream::out);
-    doc.pl[plnum].edgesToBreaklines();
+    if (doc.pl[plnum].whichBreak0Valid!=1)
+      doc.pl[plnum].edgesToBreaklines();
     for (i=0;i<doc.pl[plnum].type0Breaklines.size();i++)
     {
       doc.pl[plnum].type0Breaklines[i].writeText(file);
       file<<endl;
     }
   }
+}
+
+bool TinCanvas::makeTinCheckEdited()
+/* If the user asks to make the TIN, but the edited TIN is more recent
+ * than the imported breaklines, pops up a message box and asks if he wants
+ * to make the TIN. Else returns true.
+ */
+{
+  bool ret;
+  if (doc.pl[plnum].whichBreak0Valid==2)
+  {
+    QMessageBox msgBox(this);
+    msgBox.setText(tr("You have edited breaklines."));
+    msgBox.setInformativeText(tr("Do you want to make TIN?"));
+    msgBox.setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+    msgBox.setIcon(QMessageBox::Question);
+    msgBox.setDefaultButton(QMessageBox::No);
+    ret=msgBox.exec()==QMessageBox::Yes;
+  }
+  else
+    ret=true;
+  return ret;
 }
 
 void TinCanvas::makeTin()
@@ -395,20 +435,23 @@ void TinCanvas::makeTin()
     tinerror=notri;
   else
     startPoint=doc.pl[1].points.begin()->second;
-  doc.pl[plnum].splitBreaklines();
-  progressDialog->setRange(0,100);
-  progressDialog->setWindowModality(Qt::WindowModal);
-  progressDialog->setWindowTitle(tr("Making TIN"));
-  progressDialog->setLabelText(tr("Sweeping convex hull..."));
-  if (goal==DONE)
+  if (makeTinCheckEdited())
   {
-    goal=MAKE_TIN;
-    timer->start(0);
-    progressDialog->show();
+    doc.pl[plnum].splitBreaklines();
+    progressDialog->setRange(0,100);
+    progressDialog->setWindowModality(Qt::WindowModal);
+    progressDialog->setWindowTitle(tr("Making TIN"));
+    progressDialog->setLabelText(tr("Sweeping convex hull..."));
+    if (goal==DONE)
+    {
+      goal=MAKE_TIN;
+      timer->start(0);
+      progressDialog->show();
+    }
+    disconnect(timer,SIGNAL(timeout()),0,0);
+    connect(timer,SIGNAL(timeout()),this,SLOT(tryStartPoint()));
+    connect(progressDialog,SIGNAL(canceled()),this,SLOT(tinCancel()));
   }
-  disconnect(timer,SIGNAL(timeout()),0,0);
-  connect(timer,SIGNAL(timeout()),this,SLOT(tryStartPoint()));
-  connect(progressDialog,SIGNAL(canceled()),this,SLOT(tinCancel()));
 }
 
 void TinCanvas::tryStartPoint()
@@ -545,6 +588,7 @@ void TinCanvas::makeTinFinish()
   else
   {
     doc.pl[plnum].addperimeter();
+    doc.pl[plnum].whichBreak0Valid=3;
   }
   update();
   disconnect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
@@ -815,6 +859,28 @@ void TinCanvas::resizeEvent(QResizeEvent *event)
   QWidget::resizeEvent(event);
 }
 
+bool TinCanvas::mouseCheckImported()
+/* If the user clicks on an edge to edit the breaklines in the TIN, but the
+ * breaklines imported from a file are more recent, pops up a message box
+ * and asks if he wants to edit the TIN. Else returns true.
+ */
+{
+  bool ret;
+  if (doc.pl[plnum].whichBreak0Valid==1)
+  {
+    QMessageBox msgBox(this);
+    msgBox.setText(tr("You have imported breaklines."));
+    msgBox.setInformativeText(tr("Do you want to edit?"));
+    msgBox.setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+    msgBox.setIcon(QMessageBox::Question);
+    msgBox.setDefaultButton(QMessageBox::No);
+    ret=msgBox.exec()==QMessageBox::Yes;
+  }
+  else
+    ret=true;
+  return ret;
+}
+
 void TinCanvas::mousePressEvent(QMouseEvent *event)
 {
   xy eventLoc=windowToWorld(event->pos());
@@ -876,12 +942,13 @@ void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
       if (tri)
       {
         hitRec=tri->hitTest(eventLoc);
-        if (hitRec.edg && hitRec.edg->isFlippable())
+        if (hitRec.edg && hitRec.edg->isFlippable() && mouseCheckImported())
         {
           hitRec.edg->flip(&doc.pl[plnum]);
           updateEdgeNeighbors(hitRec.edg);
           roughContoursValid=false;
           surfaceValid=false;
+          doc.pl[plnum].whichBreak0Valid=2;
         }
       }
     }
@@ -891,10 +958,11 @@ void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
       if (tri)
       {
         hitRec=tri->hitTest(eventLoc);
-        if (hitRec.edg)
+        if (hitRec.edg && mouseCheckImported())
         {
           hitRec.edg->broken^=1;
           updateEdge(hitRec.edg);
+          doc.pl[plnum].whichBreak0Valid=2;
         }
       }
     }

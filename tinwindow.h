@@ -46,6 +46,8 @@ public:
   xy windowToWorld(QPointF pnt);
   double pixelScale();
   void repaintSeldom();
+  bool mouseCheckImported();
+  bool makeTinCheckEdited();
 signals:
   void measureChanged(Measure newMeasure);
 public slots:
