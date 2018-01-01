@@ -30,6 +30,8 @@
 #include "point.h"
 #include "pointlist.h"
 #include "ldecimal.h"
+#include "random.h"
+#include "relprime.h"
 
 #define THR 16777216
 //threshold for goodcenter to determine if a point is sufficiently
@@ -672,14 +674,21 @@ bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
 
 int pointlist::flipPass(PostScript &ps,bool colorfibaster)
 {
-  int m,n;
+  int m,n,e,step;
+  e=rng.usrandom()%edges.size();
+  step=rng.usrandom();
+  do
+  {
+    step=(step+relprime(edges.size()))%edges.size();
+  } while (gcd(step,edges.size())>1);
   for (m=n=0;n<edges.size();n++)
-    if (shouldFlip(edges[n]))
+  {
+    if (shouldFlip(edges[e]))
     {
-      edges[n].flip(this);
+      edges[e].flip(this);
       m++;
       //debugdel=0;
-      if (n>680 && n<680)
+      if (e>680 && e<680)
       {
         ps.startpage();
         dumpedges_ps(ps,colorfibaster);
@@ -687,6 +696,8 @@ int pointlist::flipPass(PostScript &ps,bool colorfibaster)
       }
       //debugdel=1;
     }
+    e=(e+step)%edges.size();
+  }
   debugdel=0;
   if (ps.isOpen())
   {
