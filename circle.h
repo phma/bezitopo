@@ -37,8 +37,16 @@ public:
   Circle();
   Circle(xy c,double r);
   Circle(xy m,int b,double c=0);
+  xyz station(double along) const;
+  double length() const;
+  virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
+  virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
+  virtual unsigned hash();
+  //virtual std::vector<drawingElement> render3d(double precision,int layer,int color,int width,int linetype);
+  virtual void writeXml(std::ofstream &ofile);
 private:
   xy mid;
   int bear;
+  double rbear; // chordbearing in radians
   double cur;
 };
