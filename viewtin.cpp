@@ -23,6 +23,7 @@
 #include <QtWidgets>
 #include <QTranslator>
 #include "tinwindow.h"
+#include "except.h"
 
 using namespace std;
 
@@ -42,6 +43,7 @@ int main(int argc, char *argv[])
     //cout<<"Translations found in share directory"<<endl;
     app.installTranslator(&translator);
   }
+  initTranslateException();
   TinWindow window;
   window.show();
   return app.exec();

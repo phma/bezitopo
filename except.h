@@ -20,6 +20,8 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <QException>
+#include <QString>
+#include <QCoreApplication>
 
 #define notri 1
 // less than 3 points, no triangle
@@ -55,6 +57,7 @@
 
 class BeziExcept: public QException
 {
+  Q_DECLARE_TR_FUNCTIONS(BeziExcept)
 public:
   BeziExcept(const BeziExcept &a);
   BeziExcept(int num);
@@ -69,3 +72,6 @@ public:
     return new BeziExcept(*this);
   }
 };
+
+const QString &translateException(int n);
+void initTranslateException();

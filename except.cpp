@@ -19,7 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <vector>
 #include "except.h"
+
+using namespace std;
 
 char exceptionNames[N_EXCEPTIONS][24]=
 {
@@ -40,6 +43,7 @@ char exceptionNames[N_EXCEPTIONS][24]=
   QT_TRANSLATE_NOOP("BeziExcept","badbreaklineformat"),
   QT_TRANSLATE_NOOP("BeziExcept","fileerror")
 };
+vector<QString> translatedExceptions;
 
 BeziExcept::BeziExcept(const BeziExcept &a)
 {
@@ -52,4 +56,17 @@ BeziExcept::BeziExcept(int num)
 {
   exceptNumber=num;
   pointNumber[0]=pointNumber[1]=0;
+}
+
+const QString &translateException(int n)
+{
+  return translatedExceptions[n];
+}
+
+void initTranslateException()
+{
+  int i;
+  translatedExceptions.clear();
+  for (i=0;i<N_EXCEPTIONS;i++)
+    translatedExceptions.push_back(BeziExcept::tr(exceptionNames[i]));
 }
