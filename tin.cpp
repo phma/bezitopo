@@ -47,6 +47,7 @@ edge::edge()
   tria=trib=nullptr;
   extrema[0]=extrema[1]=NAN;
   broken=contour=stlsplit=0;
+  flipcnt=0;
 }
 
 edge* edge::next(point* end)
@@ -186,6 +187,7 @@ void edge::flip(pointlist *topopoints)
   }
   setNeighbors();
   broken&=~4; // checkBreak0 has to recompute bits 0 and 1
+  flipcnt++;
 }
 
 bool edge::isinterior()
@@ -449,6 +451,8 @@ int pointlist::checkBreak0(edge &e)
 bool pointlist::shouldFlip(edge &e)
 {
   bool ret;
+  if (e.flipcnt>30)
+    cout<<"overflip"<<endl;
   switch (checkBreak0(e))
   {
     case 0: // no breaklines here, check Delaunay

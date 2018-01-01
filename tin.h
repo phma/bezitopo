@@ -62,6 +62,7 @@ public:
   /* Log base 2 of the number of pieces this edge is split into
    * when writing an STL file.
    */
+  short flipcnt;
   edge();
   void flip(pointlist *topopoints);
   point* otherend(point* end);
