@@ -63,6 +63,11 @@ const QString &translateException(int n)
   return translatedExceptions[n];
 }
 
+const QString &BeziExcept::message()
+{
+  return translatedExceptions[exceptNumber];
+}
+
 void initTranslateException()
 {
   int i;

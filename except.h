@@ -61,7 +61,6 @@ class BeziExcept: public QException
 public:
   BeziExcept(const BeziExcept &a);
   BeziExcept(int num);
-  int exceptNumber;
   int pointNumber[2];
   void raise() const
   {
@@ -71,6 +70,14 @@ public:
   {
     return new BeziExcept(*this);
   }
+  void clear();
+  const QString &message();
+  int getNumber()
+  {
+    return exceptNumber;
+  }
+private:
+  int exceptNumber;
 };
 
 const QString &translateException(int n);
