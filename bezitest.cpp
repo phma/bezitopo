@@ -1284,6 +1284,7 @@ void testbreak0()
   tassert(sum==16);
   tassert(i==1);
   tassert(nopen==1);
+  doc.pl.clear();
 }
 
 void testrelprime()
@@ -2118,6 +2119,7 @@ void testclosest()
   bool showinaccurate=false;
   double close,close15,minquick,d,d15;
   PostScript ps;
+  doc.makepointlist(1);
   doc.pl[1].clear();
   aster(doc,1000);
   ps.open("closest.ps");
