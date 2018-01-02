@@ -522,7 +522,7 @@ void readusngatxtheader(usngatxtheader &hdr,istream &file)
   }
   catch (...)
   {
-    throw badheader;
+    throw badHeader;
   }
 }
 
@@ -628,7 +628,7 @@ void writeusngatxt(geoid &geo,string filename)
   if (geo.glat)
     writeusngatxt(*geo.glat,filename);
   else
-    throw unsetgeoid;
+    throw unsetGeoid;
 }
 
 int readusngabin(geolattice &geo,string filename)
@@ -729,10 +729,10 @@ void readcarlsongsfheader(carlsongsfheader &hdr,istream &file)
   }
   catch (...)
   {
-    throw badheader;
+    throw badHeader;
   }
   if (hdr.nlong!=dnlong || hdr.nlat!=dnlat)
-    throw badheader;
+    throw badHeader;
 }
 
 void writecarlsongsfheader(carlsongsfheader &hdr,ostream &file)
@@ -838,7 +838,7 @@ void writecarlsongsf(geoid &geo,string filename)
   if (geo.glat)
     writecarlsongsf(*geo.glat,filename);
   else
-    throw unsetgeoid;
+    throw unsetGeoid;
 }
 
 int readusngsbin(geolattice &geo,string filename)
@@ -916,7 +916,7 @@ void writeusngsbin(geoid &geo,string filename)
   if (geo.glat)
     writeusngsbin(*geo.glat,filename);
   else
-    throw unsetgeoid;
+    throw unsetGeoid;
 }
 
 int readboldatni(geoid &geo,string filename)
@@ -960,7 +960,7 @@ void writeboldatni(geoid &geo,string filename)
     geo.cmap->writeBinary(file);
   }
   else
-    throw unsetgeoid;
+    throw unsetGeoid;
 }
 
 double avgelev(xyz dir)

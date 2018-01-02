@@ -93,7 +93,7 @@ xyz bezier3d::station(double along)
   if (segment==size())
     segment--;
   if (segment<0 || segment>=size())
-    throw(range_error("bezier3d::station: along out of range"));
+    throw(stationOutOfRange);
   p=along-segment;
   q=1-p;
   p=1-q;

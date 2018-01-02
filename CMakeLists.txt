@@ -37,7 +37,8 @@ qt5_add_translation(qm_files bezitopo_en.ts bezitopo_es.ts)
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitopo.cpp binio.cpp breakline.cpp circle.cpp closure.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp cvtmeas.cpp document.cpp
-               drawobj.cpp ellipsoid.cpp geoid.cpp geoidboundary.cpp halton.cpp
+               drawobj.cpp ellipsoid.cpp except.cpp
+               geoid.cpp geoidboundary.cpp halton.cpp
                icommon.cpp kml.cpp latlong.cpp layer.cpp ldecimal.cpp
                manysum.cpp measure.cpp mkpoint.cpp objlist.cpp plot.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp projection.cpp ps.cpp qindex.cpp
@@ -47,7 +48,7 @@ add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
 add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitest.cpp bicubic.cpp binio.cpp breakline.cpp circle.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
-               ellipsoid.cpp geoid.cpp geoidboundary.cpp
+               ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
                halton.cpp histogram.cpp hlattice.cpp hnum.cpp kml.cpp
                latlong.cpp layer.cpp ldecimal.cpp manysum.cpp
                matrix.cpp measure.cpp objlist.cpp plot.cpp pnezd.cpp point.cpp
@@ -58,7 +59,8 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
                binio.cpp breakline.cpp cogo.cpp contour.cpp
                convertgeoid.cpp csv.cpp document.cpp drawobj.cpp
-               ellipsoid.cpp geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp
+               ellipsoid.cpp except.cpp
+               geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp
                hlattice.cpp kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
                matrix.cpp measure.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp

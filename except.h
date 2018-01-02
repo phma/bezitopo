@@ -53,7 +53,9 @@
 // malformatted breakline text representation
 #define fileerror 15
 // any error reading or writing a file
-#define N_EXCEPTIONS 16
+#define stationoutofrange 16
+// along is out of range in a station function
+#define N_EXCEPTIONS 17
 
 class BeziExcept: public QException
 {
@@ -89,3 +91,4 @@ extern BeziExcept singularMatrix,unsetGeoid;
 extern BeziExcept unsetSource,badUnits,badNumber;
 extern BeziExcept badBreaklineEnd,breaklinesCross;
 extern BeziExcept badBreaklineFormat,fileError;
+extern BeziExcept stationOutOfRange;

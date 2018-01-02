@@ -489,8 +489,8 @@ Measurement Measure::parseMeasurement(string measStr,int quantity)
  * it assumes whatever available unit of that quantity is closest to that
  * quantity's magnitude (see setDefaultUnit). If quantity is zero, a unit
  * symbol must be supplied. If quantity is 0 and there is no unit symbol, or
- * quantity is nonzero and the unit symbol doesn't match it, throws badunits.
- * If the number is missing, throws badnumber.
+ * quantity is nonzero and the unit symbol doesn't match it, throws badUnits.
+ * If the number is missing, throws badNumber.
  */
 {
   char *pLcNumeric;
@@ -509,7 +509,7 @@ Measurement Measure::parseMeasurement(string measStr,int quantity)
   }
   catch (...)
   {
-    throw badnumber;
+    throw badNumber;
   }
   unitStr=measStr.substr(endOfNumber);
   trim(unitStr);
@@ -520,7 +520,7 @@ Measurement Measure::parseMeasurement(string measStr,int quantity)
   if (!localized)
     setlocale(LC_NUMERIC,saveLcNumeric.c_str());
   if (ret.unit==0 || (quantity>0 && !compatibleUnits(ret.unit,quantity)))
-    throw badunits;
+    throw badUnits;
   ret.magnitude=valueInUnit*conversionFactors[ret.unit];
   return ret;
 }

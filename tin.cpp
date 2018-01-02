@@ -309,7 +309,7 @@ void pointlist::splitBreaklines()
     {
       bl=type0Breaklines[i][j];
       if (points.count(bl[0])==0 || points.count(bl[1])==0)
-        throw badbreaklineend;
+        throw badBreaklineEnd;
       break0.push_back(segment(points[bl[0]],points[bl[1]]));
     }
 }
@@ -467,7 +467,7 @@ bool pointlist::shouldFlip(edge &e)
       ret=e.isFlippable();
       break;
     case 3: // edge is in one breakline and crosses another, error
-      throw breaklinescross;
+      throw breaklinesCross;
       break;
   }
   return ret;
@@ -647,7 +647,7 @@ bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
     // Now delete old convex hull points that are now in the interior.
     for (m=1;m<visible.size()-1;m++)
       if (convexhull.erase(dir(startpnt,*visible[m]))>1)
-        throw(samepnts);
+        throw(samePoints);
     //dumppoints();
     //dumpedges();
     for (n=0;n<val;n++)
@@ -711,9 +711,9 @@ int pointlist::flipPass(PostScript &ps,bool colorfibaster)
 }
 
 void pointlist::maketin(string filename,bool colorfibaster)
-/* Makes a triangulated irregular network. If <3 points, throws notri without altering
+/* Makes a triangulated irregular network. If <3 points, throws noTriangle without altering
  * the existing TIN. If two points are equal, or close enough to likely cause problems,
- * throws samepnts; the TIN is partially constructed and will have to be destroyed.
+ * throws samePoints; the TIN is partially constructed and will have to be destroyed.
  */
 {
   ptlist::iterator i;
@@ -721,7 +721,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
   bool fail;
   PostScript ps;
   if (points.size()<3)
-    throw notri;
+    throw noTriangle;
   startpnt=xy(0,0);
   for (i=points.begin();i!=points.end();i++)
     startpnt+=i->second;
@@ -744,7 +744,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
     fail=tryStartPoint(ps,startpnt);
   if (fail)
   {
-    throw flattri;
+    throw flatTriangle;
     /* Failing to make a proper TIN, after trying a hundred start points,
      * normally means that all triangles are flat.
      */

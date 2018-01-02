@@ -59,7 +59,7 @@ Breakline0::Breakline0(vector<string> numbers)
     i=-1;
   }
   if (i<2)
-    throw badbreaklineformat;
+    throw badBreaklineFormat;
 }
 
 /* The breakline () is empty and open, and thus can be joined with any

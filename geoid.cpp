@@ -761,7 +761,7 @@ void geoquad::readBinary(istream &ifile,int nesting)
     //cout<<"Read nesting "<<nesting<<endl;
   }
   if (nesting<0 || nesting>56)
-    throw baddata;
+    throw badData;
   if (nesting>0)
   {
     subdivide();
@@ -1098,7 +1098,7 @@ void geoheader::readBinary(std::istream &ifile)
   char magic[8]="ABCDEFG";
   ifile.read(magic,8);
   if (memcmp(magic,"boldatni",8))
-    throw badheader;
+    throw badHeader;
   hash[0]=readbeint(ifile);
   hash[1]=readbeint(ifile);
   origHash[0]=readbeint(ifile);

@@ -763,9 +763,9 @@ void testmaketin123()
   {
     doc.pl[1].maketin();
   }
-  catch(int e)
+  catch(BeziExcept e)
   {
-    i=e;
+    i=e.getNumber();
   }
   tassert(i==notri);
   doc.pl[1].clear();
@@ -775,9 +775,9 @@ void testmaketin123()
   {
     doc.pl[1].maketin();
   }
-  catch(int e)
+  catch(BeziExcept e)
   {
-    i=e;
+    i=e.getNumber();
   }
   tassert(i==notri);
   doc.pl[1].clear();
@@ -787,9 +787,9 @@ void testmaketin123()
   {
     doc.pl[1].maketin();
   }
-  catch(int e)
+  catch(BeziExcept e)
   {
-    i=e;
+    i=e.getNumber();
   }
   tassert(i==0);
 }
@@ -809,9 +809,9 @@ void testmaketindouble()
   {
     doc.pl[1].maketin(psoutput?"double.ps":"",false);
   }
-  catch(int e)
+  catch(BeziExcept e)
   {
-    i=e;
+    i=e.getNumber();
   }
   cout<<"maketin threw "<<i<<endl;
 }
@@ -876,9 +876,9 @@ void testmaketinstraightrow()
   {
     doc.pl[1].maketin();
   }
-  catch(int e)
+  catch(BeziExcept e)
   {
-    i=e;
+    i=e.getNumber();
   }
   tassert(i==flattri);
 }

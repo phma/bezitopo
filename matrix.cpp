@@ -91,7 +91,7 @@ void matrix::setidentity()
 {
   int i;
   if (rows!=columns)
-    throw matrixmismatch;
+    throw matrixMismatch;
   setzero();
   for (i=0;i<rows;i++)
     (*this)[i][i]=1;
@@ -129,7 +129,7 @@ double *matrix::operator[](unsigned row)
 matrix matrix::operator+(matrix& b)
 {
   if (rows!=b.rows || columns!=b.columns)
-    throw matrixmismatch;
+    throw matrixMismatch;
   matrix ret(*this);
   int i;
   for (i=0;i<rows*columns;i++)
@@ -140,7 +140,7 @@ matrix matrix::operator+(matrix& b)
 matrix matrix::operator-(matrix& b)
 {
   if (rows!=b.rows || columns!=b.columns)
-    throw matrixmismatch;
+    throw matrixMismatch;
   matrix ret(*this);
   int i;
   for (i=0;i<rows*columns;i++)
@@ -151,7 +151,7 @@ matrix matrix::operator-(matrix& b)
 matrix matrix::operator*(matrix &b)
 {
   if (columns!=b.rows)
-    throw matrixmismatch;
+    throw matrixMismatch;
   matrix ret(rows,b.columns);
   int h,i,j,k;
   double *sum;
@@ -170,7 +170,7 @@ matrix matrix::operator*(matrix &b)
 double matrix::trace()
 {
   if (columns!=rows)
-    throw matrixmismatch;
+    throw matrixMismatch;
   manysum ret;
   int i;
   for (i=0;i<rows;i++)
@@ -413,7 +413,7 @@ matrix invert(matrix m)
 double matrix::determinant()
 {
   if (rows!=columns)
-    throw matrixmismatch;
+    throw matrixMismatch;
   matrix b(*this);
   return b._determinant();
 }

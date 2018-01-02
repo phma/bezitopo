@@ -440,7 +440,7 @@ void pointlist::stringToBreakline(string line)
  * Comments begin with '#'. Blank lines are ignored.
  * Type-0 breaklines look like "5-6-7-8-9-5".
  * Type-1 breaklines look like "1,0;-.5,.866;-.5,.866;1,0".
- * Can throw badbreaklineformat.
+ * Can throw badBreaklineFormat.
  */
 {
   size_t hashpos=line.find('#');

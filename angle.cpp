@@ -209,7 +209,7 @@ string radtoangle(double angle,int unitp)
   char digit[8];
   int i,base,sign,dig;
   if (!compatibleUnits(unitp,ANGLE))
-    throw badunits;
+    throw badUnits;
   base=unitp&0xf0;
   switch (base)
   {
@@ -238,7 +238,7 @@ string radtoangle(double angle,int unitp)
       angmult=angle;
       break;
     default:
-      throw badunits;
+      throw badUnits;
   }
   angmult=rint((prec=precision(unitp))*angmult);
   sign=1;
@@ -338,7 +338,7 @@ double parseangle(string angstr,int unitp)
       angle=angmult/prec;
       break;
     default:
-      throw badunits;
+      throw badUnits;
   }
   return angle;
 }
@@ -402,7 +402,7 @@ int parsebearing(string angstr,int unitp)
       angle=0x40000000-angle;
       break;
     case -1:
-      throw badunits;
+      throw badUnits;
   }
   return angle;
 }

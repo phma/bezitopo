@@ -350,7 +350,7 @@ void TinCanvas::importBreaklines()
           doc.pl[plnum].stringToBreakline(line);
         }
         if (!file.eof())
-          throw fileerror;
+          throw fileError;
         tinValid=surfaceValid=roughContoursValid=smoothContoursValid=false;
         doc.pl[plnum].whichBreak0Valid=1;
       }
