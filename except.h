@@ -82,3 +82,10 @@ private:
 
 const QString &translateException(int n);
 void initTranslateException();
+
+extern BeziExcept noTriangle,samePoints,flatTriangle;
+extern BeziExcept badHeader,badData,matrixMismatch;
+extern BeziExcept singularMatrix,unsetGeoid;
+extern BeziExcept unsetSource,badUnits,badNumber;
+extern BeziExcept badBreaklineEnd,breaklinesCross;
+extern BeziExcept badBreaklineFormat,fileError;

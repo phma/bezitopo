@@ -75,3 +75,10 @@ void initTranslateException()
   for (i=0;i<N_EXCEPTIONS;i++)
     translatedExceptions.push_back(BeziExcept::tr(exceptionNames[i]));
 }
+
+BeziExcept noTriangle(notri),samePoints(samepnts),flatTriangle(flattri);
+BeziExcept badHeader(badheader),badData(baddata),matrixMismatch(matrixmismatch);
+BeziExcept singularMatrix(singularmatrix),unsetGeoid(unsetgeoid);
+BeziExcept unsetSource(unsetsource),badUnits(badunits),badNumber(badnumber);
+BeziExcept badBreaklineEnd(badbreaklineend),breaklinesCross(breaklinescross);
+BeziExcept badBreaklineFormat(badbreaklineformat),fileError(fileerror);
