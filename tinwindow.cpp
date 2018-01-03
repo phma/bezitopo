@@ -493,14 +493,15 @@ void TinCanvas::flipPass()
   //cout<<"flipPass"<<endl;
   int nFlip,nGoodEdges,i;
   bool tooLong=false;
-  if (passCount*3>doc.pl[plnum].size())
+  if (passCount*3>doc.pl[plnum].size() && doc.pl[plnum].size()>0)
     tooLong=true; // tooLong is not an error. The TIN should be valid; it's just
   if (tinerror || tooLong) // repeatedly flipping edges in a circle.
   {
     disconnect(timer,SIGNAL(timeout()),this,SLOT(flipPass()));
     connect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
     tinValid=true;
-    errorMessage->showMessage(tr("Took too long to make TIN"));
+    if (tooLong)
+      errorMessage->showMessage(tr("Took too long to make TIN"));
   }
   else
   {
