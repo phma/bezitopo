@@ -306,13 +306,17 @@ triangle *triangle::nexttoward(xy pnt)
 
 triangle *triangle::findt(xy pnt,bool clip)
 {
-  triangle *here,*there;
+  triangle *here,*there,*loopdet=nullptr;
+  int i=0;
   here=there=this;
-  while (here && !here->in(pnt))
+  while (here && !here->in(pnt) && here!=loopdet)
   {
+    if ((i&(i-1))==0)
+      loopdet=here;
     here=here->nexttoward(pnt);
     if (here)
       there=here;
+    ++i;
   }
   return clip?there:here;
 }
