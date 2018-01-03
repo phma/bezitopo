@@ -315,6 +315,7 @@ void TinCanvas::importBreaklines()
   bool loadAnyway;
   int dialogResult;
   QStringList files;
+  QString errMsg;
   string fileName,line;
   fstream file;
   vector<Breakline0> saveBreaklines0;
@@ -354,13 +355,14 @@ void TinCanvas::importBreaklines()
         tinValid=surfaceValid=roughContoursValid=smoothContoursValid=false;
         doc.pl[plnum].whichBreak0Valid=1;
       }
-      catch (int e)
+      catch (BeziExcept e)
       {
-        err=e;
+        err=e.getNumber();
+        errMsg=e.message();
       }
       if (err)
-      { // TODO: translate the thrown error into something intelligible
-        QString msg=tr("Can't read breaklines. Error: ")+QString::fromStdString(to_string(err));
+      {
+        QString msg=tr("Can't read breaklines. Error: ")+errMsg;
         doc.pl[plnum].type0Breaklines=saveBreaklines0;
         errorMessage->showMessage(msg);
       }
@@ -478,9 +480,9 @@ void TinCanvas::tryStartPoint()
         progressDialog->setLabelText(tr("Flipping edges..."));
       }
     }
-    catch (int e)
+    catch (BeziExcept e)
     {
-      tinerror=e;
+      tinerror=e.getNumber();
     }
   }
   repaintSeldom();
@@ -515,9 +517,9 @@ void TinCanvas::flipPass()
         tinValid=true;
       }
     }
-    catch (int e)
+    catch (BeziExcept e)
     {
-      tinerror=e;
+      tinerror=e.getNumber();
     }
   }
   repaintSeldom();
@@ -569,9 +571,9 @@ void TinCanvas::findCriticalPoints()
         connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
       }
     }
-    catch (int e)
+    catch (BeziExcept e)
     {
-      tinerror=e;
+      tinerror=e.getNumber();
     }
   }
 }
@@ -581,7 +583,7 @@ void TinCanvas::makeTinFinish()
   //cout<<"makeTinFinish"<<endl;
   if (tinerror)
   { // TODO: translate the thrown error into something intelligible
-    QString msg=tr("Can't make TIN. Error: ")+QString::fromStdString(to_string(tinerror));
+    QString msg=tr("Can't make TIN. Error: ")+translateException(tinerror);
     doc.pl[plnum].clearTin();
     errorMessage->showMessage(msg);
   }

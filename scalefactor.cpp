@@ -34,6 +34,7 @@
 #include "ldecimal.h"
 #include "icommon.h"
 #include "bezitopo.h"
+#include "except.h"
 
 using namespace std;
 
@@ -70,7 +71,7 @@ void scalefactor_i(string args)
               elevfactor=radius/(radius+elevation+separation);
               cout<<"Elevation factor is "<<ldecimal(elevfactor)<<endl;
             }
-            catch (int e)
+            catch (BeziExcept e)
             {
               cerr<<"Elevation should be a length"<<endl;
             }

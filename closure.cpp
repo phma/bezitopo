@@ -3,7 +3,7 @@
 /* closure.cpp - closure and ratio of precision       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015-2017 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -30,6 +30,7 @@
 #include "cogo.h"
 #include "angle.h"
 #include "bezitopo.h"
+#include "except.h"
 using namespace std;
 vector<command> clcommands;
 xy startpoint,endpoint;
@@ -121,7 +122,7 @@ void closure_i(string args)
       {
 	bearing=parsebearing(bearingstr,DEGREE);
       }
-      catch(int e)
+      catch(BeziExcept e)
       {
 	validbearing=false;
       }

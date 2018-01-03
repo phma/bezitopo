@@ -214,9 +214,9 @@ void maketin_i(string args)
   {
     doc.pl[1].maketin("maketin.ps");
   }
-  catch(int e)
+  catch(BeziExcept e)
   {
-    error=e;
+    error=e.getNumber();
   }
   switch (error)
   {
@@ -301,12 +301,12 @@ void contourdraw_i(string args)
   {
     conterval=doc.ms.parseMeasurement(contervalstr,LENGTH).magnitude;
   }
-  catch (int e)
+  catch (BeziExcept e)
   {
     cerr<<"\""<<contervalstr<<"\": ";
-    if (e==badunits)
+    if (e.getNumber()==badunits)
       cerr<<"unit symbol is not a length unit";
-    else if (e==badnumber)
+    else if (e.getNumber()==badnumber)
       cerr<<"number is missing";
     else
       cerr<<"an error happened";
@@ -397,9 +397,9 @@ void readgeoid_i(string args)
       //ofstream geodump("readgeoid.dump");
       //cube.dump(geodump);
     }
-    catch (int e)
+    catch(BeziExcept e)
     {
-      cout<<"didn't read "<<geoidfilename<<" for reason "<<e<<endl;
+      cout<<"didn't read "<<geoidfilename<<" for reason "<<e.message().toStdString()<<endl;
     }
   }
   else
