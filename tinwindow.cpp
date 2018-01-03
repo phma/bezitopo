@@ -499,7 +499,6 @@ void TinCanvas::flipPass()
   {
     disconnect(timer,SIGNAL(timeout()),this,SLOT(flipPass()));
     connect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
-    tinValid=true;
     if (tooLong)
       errorMessage->showMessage(tr("Took too long to make TIN"));
   }
@@ -545,7 +544,7 @@ void TinCanvas::redoSurface()
   triCount=0;
   roughContoursValid=smoothContoursValid=false;
   disconnect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
-  if (tinValid)
+  if (tinValid || tinerror)
     connect(timer,SIGNAL(timeout()),this,SLOT(findCriticalPoints()));
   else
     connect(timer,SIGNAL(timeout()),this,SLOT(makeTin()));
