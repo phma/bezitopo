@@ -669,6 +669,8 @@ bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
     j->second->line=&edges[edgeoff];
     visible[val-1]->line=&edges[edgeoff+val-1];
   }
+  if (!goodcenter(startpnt,A,B,C))
+    fail=true;
   return fail;
 }
 
