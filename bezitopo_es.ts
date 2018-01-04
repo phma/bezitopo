@@ -21,7 +21,7 @@
     <message>
         <location filename="except.cpp" line="32"/>
         <source>flattri</source>
-        <translation>Todos los puntos son en línea recta.</translation>
+        <translation>Todos los puntos están en línea recta.</translation>
     </message>
     <message>
         <location filename="except.cpp" line="33"/>
