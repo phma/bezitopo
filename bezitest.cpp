@@ -881,6 +881,18 @@ void testmaketinstraightrow()
     i=e.getNumber();
   }
   tassert(i==flattri);
+  doc.pl[1].clear();
+  for (i=0;i<7;i++)
+    doc.pl[1].addpoint(i+1,point(i,2*i,sin((double)i),"test"),false);
+  try
+  {
+    doc.pl[1].maketin();
+  }
+  catch(BeziExcept e)
+  {
+    i=e.getNumber();
+  }
+  tassert(i==flattri);
 }
 
 void testmaketinlongandthin()

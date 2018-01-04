@@ -458,7 +458,7 @@ void TinCanvas::makeTin()
 
 void TinCanvas::tryStartPoint()
 {
-  //cout<<"tryStartPoint"<<endl;
+  cout<<"tryStartPoint"<<endl;
   if (startPointTries>=100)
     tinerror=flattri;
   if (tinerror)
