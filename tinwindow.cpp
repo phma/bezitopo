@@ -429,6 +429,9 @@ void TinCanvas::makeTin()
       doc.pl[1].crit.resize(1);
       doc.pl[1].crit[0].istopo=true;
     }
+    if (doc.pl[1].edges.size()==0 && doc.pl[1].type0Breaklines.size()==0
+        && doc.pl[0].type0Breaklines.size()>0)
+      doc.pl[1].type0Breaklines=doc.pl[0].type0Breaklines;
     doc.copytopopoints(1,0);
   }
   plnum=1;
