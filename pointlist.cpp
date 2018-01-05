@@ -226,7 +226,7 @@ int pointlist::readCriteria(string fname)
   int p,ncrit;
   criterion crit1;
   vector<string> words;
-  string line,minstr,maxstr,d,instr;
+  string line,minstr,maxstr,eminstr,emaxstr,d,instr;
   infile.open(fname);
   ncrit=-(!infile.is_open());
   if (infile.is_open())
@@ -238,16 +238,26 @@ int pointlist::readCriteria(string fname)
       while (line.back()=='\n' || line.back()=='\r')
 	line.pop_back();
       words=parsecsvline(line);
-      if (words.size()==4)
+      if (words.size()==6)
       {
 	minstr=words[0];
 	maxstr=words[1];
-	d=words[2];
-	instr=words[3];
+	eminstr=words[2];
+	emaxstr=words[3];
+	d=words[4];
+	instr=words[5];
 	if (true)
 	{
-	  crit1.lo=atoi(minstr.c_str());
-	  crit1.hi=atoi(maxstr.c_str());
+	  crit1.lo=stoi(minstr);
+	  crit1.hi=stoi(maxstr);
+          if (eminstr.length())
+            crit1.elo=stod(eminstr);
+          else
+            crit1.elo=NAN;
+          if (emaxstr.length())
+            crit1.ehi=stod(emaxstr);
+          else
+            crit1.ehi=NAN;
           crit1.str=d;
           crit1.istopo=atoi(instr.c_str())!=0;
           crit.push_back(crit1);
