@@ -41,6 +41,7 @@ class criterion
 {
 public:
   criterion();
+  void clear();
   bool match(point &pnt,int num);
   std::string str;
   int lo,hi; // point number range

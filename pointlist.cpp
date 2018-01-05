@@ -36,10 +36,17 @@ criterion::criterion()
   istopo=false;
 }
 
+void criterion::clear()
+{
+  lo=hi=0;
+  elo=ehi=NAN;
+  istopo=false;
+}
+
 bool criterion::match(point &pnt,int num)
 {
   return (str.length()==0 || pnt.note.find(str)!=string::npos) &&
-    ((lo==0 && hi==0) || (num>=lo && num<=hi));
+    ((lo==0 && hi==0) || (num>=lo && num<=hi)) && ((std::isnan(elo) || std::isnan(ehi)) || (pnt.elev()>=elo && pnt.elev()<=ehi));
 }
 
 void pointlist::clear()

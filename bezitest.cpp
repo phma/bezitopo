@@ -612,25 +612,31 @@ void testcopytopopoints()
   doc.pl[0].addpoint(1,point(25,0,0,"eip"));
   doc.pl[0].addpoint(1,point(25,40,0,"eip"));
   doc.pl[0].addpoint(1,point(0,40,0,"eip"));
-  doc.pl[0].addpoint(1,point(5,10,0,"house"));
-  doc.pl[0].addpoint(1,point(20,10,0,"house"));
-  doc.pl[0].addpoint(1,point(20,20,0,"house"));
-  doc.pl[0].addpoint(1,point(5,20,0,"house"));
-  doc.pl[0].addpoint(1,point(3,-5,0,"pipe"));
-  doc.pl[0].addpoint(1,point(3,41,0,"pipe"));
-  doc.pl[0].addpoint(1,point(2,22,0,"topo"));
-  doc.pl[0].addpoint(1,point(23,22,0,"topo"));
-  doc.pl[0].addpoint(1,point(12.5,38,0,"topo"));
+  doc.pl[0].addpoint(1,point(5,10,1,"house"));
+  doc.pl[0].addpoint(1,point(20,10,1,"house"));
+  doc.pl[0].addpoint(1,point(20,20,1,"house"));
+  doc.pl[0].addpoint(1,point(5,20,1,"house"));
+  doc.pl[0].addpoint(1,point(3,-5,-1.5,"pipe"));
+  doc.pl[0].addpoint(1,point(3,41,-2,"pipe"));
+  doc.pl[0].addpoint(1,point(2,22,0.3,"topo"));
+  doc.pl[0].addpoint(1,point(23,22,0.4,"topo"));
+  doc.pl[0].addpoint(1,point(12.5,38,0.5,"topo"));
   crit1.str="topo";
   crit1.istopo=true;
   doc.pl[1].crit.push_back(crit1);
   doc.copytopopoints(1,0);
   tassert(doc.pl[1].points.size()==3);
   doc.pl[1].crit[0].str="";
-  doc.pl[1].crit[0].lo=4;
-  doc.pl[1].crit[0].hi=7;
+  doc.pl[1].crit[0].lo=5;
+  doc.pl[1].crit[0].hi=8;
   doc.copytopopoints(1,0);
   tassert(doc.pl[1].points.size()==4);
+  doc.pl[1].crit[0].lo=0;
+  doc.pl[1].crit[0].hi=0;
+  doc.pl[1].crit[0].elo=0;
+  doc.pl[1].crit[0].ehi=5;
+  doc.copytopopoints(1,0);
+  tassert(doc.pl[1].points.size()==11);
 }
 
 void checkimpos(int itype,xy a,xy c,xy b,xy d)
