@@ -439,7 +439,14 @@ void TinCanvas::makeTin()
     startPoint=doc.pl[1].points.begin()->second;
   if (makeTinCheckEdited())
   {
-    doc.pl[plnum].splitBreaklines();
+    try
+    {
+      doc.pl[plnum].splitBreaklines();
+    }
+    catch (BeziExcept e)
+    {
+      tinerror=e.getNumber();
+    }
     progressDialog->setRange(0,100);
     progressDialog->setWindowModality(Qt::WindowModal);
     progressDialog->setWindowTitle(tr("Making TIN"));
