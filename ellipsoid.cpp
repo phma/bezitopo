@@ -193,3 +193,14 @@ ellipsoid ITRS(6378136.49,0,1/298.25645,xyz(0,0,0),"ITRS");
  * is about 2.24 m off from that used in the 2022 datum, but I haven't found
  * exact values.
  */
+ellipsoid *ellipsoids[]={&Sphere,&Clarke,&GRS80,&WGS84,&ITRS};
+
+int countEllipsoids()
+{
+  return sizeof(ellipsoids)/sizeof(ellipsoids[0]);
+}
+
+ellipsoid& getEllipsoid(int n)
+{
+  return *ellipsoids[n];
+}

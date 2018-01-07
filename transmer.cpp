@@ -20,6 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <string>
+#include <iostream>
 #include "polyline.h"
 #include "projection.h"
 #include "ellipsoid.h"
@@ -33,5 +34,7 @@ int main(int argc, char *argv[])
   int i;
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
+  for (i=0;i<countEllipsoids();i++)
+    cout<<getEllipsoid(i).getName()<<endl;
   return 0;
 }
