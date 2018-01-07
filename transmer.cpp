@@ -49,6 +49,7 @@ polyspiral psApprox(ellipsoid *ell,int n)
   polyspiral ret;
   xyz meridianPoint;
   vector<int> latSplit;
+  ret.smooth();
   for (i=0;i<=n;i++)
   {
     latSplit.push_back(rint((double)DEG90*i/n));
@@ -56,7 +57,11 @@ polyspiral psApprox(ellipsoid *ell,int n)
     ret.insert(xy(meridianPoint.getx(),meridianPoint.getz()));
   }
   ret.open();
-  ret.smooth();
+  ret.setlengths();
+  for (i=0;i<=n;i++)
+    ret.setbear(i,latSplit[i]+DEG90);
+  for (i=0;i<n;i++)
+    ret.setspiral(i);
   return ret;
 }
 
@@ -69,6 +74,7 @@ int main(int argc, char *argv[])
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
   ps.open("transmer.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
   for (i=0;i<countEllipsoids();i++)
   {
