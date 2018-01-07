@@ -21,6 +21,7 @@
  */
 #include "ellipsoid.h"
 #include "rootfind.h"
+using namespace std;
 
 /* Unlike most of the program, which represents angles as integers,
  * ellipsoid and projection require double precision for angles.
@@ -32,8 +33,10 @@
  * need double.
  */
 
-ellipsoid::ellipsoid(double equradius,double polradius,double flattening)
+ellipsoid::ellipsoid(double equradius,double polradius,double flattening,xyz center,string ename)
 {
+  cen=center;
+  name=ename;
   if (polradius==0)
     polradius=equradius*(1-flattening);
   else if (equradius==0)
@@ -43,7 +46,7 @@ ellipsoid::ellipsoid(double equradius,double polradius,double flattening)
   if (eqr==por || std::isnan(eqr))
     sphere=this;
   else
-    sphere=new ellipsoid(avgradius(),0,0);
+    sphere=new ellipsoid(avgradius(),0,0,center,"");
 }
 
 ellipsoid::~ellipsoid()
@@ -67,7 +70,7 @@ xyz ellipsoid::geoc(double lat,double lon,double elev)
   ret=xyz(cylr*cos(lon),cylr*sin(lon),z);
   ret=ret/ret.length();
   normal=xyz(ret.east()*por,ret.north()*por,ret.elev()*eqr);
-  ret=xyz(ret.east()*eqr,ret.north()*eqr,ret.elev()*por);
+  ret=xyz(ret.east()*eqr,ret.north()*eqr,ret.elev()*por)+cen;
   normal=normal/normal.length();
   ret=ret+normal*elev;
   return ret;
@@ -95,6 +98,7 @@ latlongelev ellipsoid::geod(xyz geocen)
   int i;
   xyz chk,normal,at0;
   double z,cylr,toler=avgradius()/1e15;
+  geocen-=cen;
   z=geocen.getz();
   cylr=hypot(geocen.gety(),geocen.getx());
   ret.lon=atan2(geocen.gety(),geocen.getx());
@@ -180,8 +184,12 @@ double ellipsoid::inverseConformalLatitude(double lat)
   return ret;
 }
 
-ellipsoid Sphere(6371000,0,0);
-ellipsoid Clarke(6378206.4,6356583.8,0);
-ellipsoid GRS80(6378137,0,1/298.257222101);
-ellipsoid WGS84(6378137,0,1/298.257223563);
-ellipsoid ITRS(6378136.49,0,1/298.25645);
+ellipsoid Sphere(6371000,0,0,xyz(0,0,0),"Sphere");
+ellipsoid Clarke(6378206.4,6356583.8,0,xyz(0,0,0),"Clarke");
+ellipsoid GRS80(6378137,0,1/298.257222101,xyz(0,0,0),"GRS80");
+ellipsoid WGS84(6378137,0,1/298.257223563,xyz(0,0,0),"WGS84");
+ellipsoid ITRS(6378136.49,0,1/298.25645,xyz(0,0,0),"ITRS");
+/* The center of Clarke is NOT (0,0,0), and the ellipsoid used for NAD 83
+ * is about 2.24 m off from that used in the 2022 datum, but I haven't found
+ * exact values.
+ */

@@ -3736,7 +3736,7 @@ void testellipsoid()
   xyz sealevel,kmhigh,noffset,soffset,diff,benin,bengal,howland,galapagos,npole,spole;
   latlongelev greenhill,greenhill2;
   xyz gh;
-  ellipsoid test1(8026957,0,0.5),test2(8026957,4013478.5,0);
+  ellipsoid test1(8026957,0,0.5,xyz(0,0,0),""),test2(8026957,4013478.5,0,xyz(0,0,0),"");
   tassert(test1.geteqr()==test2.geteqr());
   tassert(test1.getpor()==test2.getpor());
   sealevel=test1.geoc(degtobin(45),0,0);

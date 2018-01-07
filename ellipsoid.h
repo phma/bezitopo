@@ -21,17 +21,23 @@
  */
 #ifndef ELLIPSOID_H
 #define ELLIPSOID_H
+#include <string>
+#include <QString>
+#include <QCoreApplication>
 #include "point.h"
 #include "angle.h"
 #include "latlong.h"
 
 class ellipsoid
 {
+  Q_DECLARE_TR_FUNCTIONS(ellipsoid)
 private:
   double eqr,por;
+  xyz cen;
+  std::string name;
 public:
   ellipsoid *sphere;
-  ellipsoid(double equradius,double polradius,double flattening);
+  ellipsoid(double equradius,double polradius,double flattening,xyz center,std::string ename);
   ~ellipsoid();
   xyz geoc(double lat,double lon,double elev);
   xyz geoc(latlong ll,double elev);
@@ -47,6 +53,18 @@ public:
   {
     return por;
   };
+  xyz getCenter()
+  {
+    return cen;
+  }
+  std::string getName()
+  {
+    return name;
+  }
+  QString translateName()
+  {
+    return tr(name.c_str());
+  }
   double eccentricity();
   double radiusAtLatitude(latlong ll,int bearing); // bearing is 0 for east; use DEG45 for average radius
   double conformalLatitude(double lat);
