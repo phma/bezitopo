@@ -831,6 +831,14 @@ void polyspiral::setbear(int i)
   }
 }
 
+void polyspiral::setbear(int i,int bear)
+{
+  i%=endpoints.size();
+  if (i<0)
+    i+=endpoints.size();
+  bearings[i]=bear;
+}
+
 void polyspiral::setspiral(int i)
 {
   int j,d1,d2;

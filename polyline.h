@@ -122,6 +122,7 @@ public:
   virtual bezier3d approx3d(double precision);
   virtual void insert(xy newpoint,int pos=-1);
   void setbear(int i);
+  void setbear(int i,int bear);
   void setspiral(int i);
   void smooth();
   //void setdelta(int i,int delta);
