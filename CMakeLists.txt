@@ -78,11 +78,20 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp break
                tinwindow.cpp vball.cpp vcurve.cpp viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources} ${qm_files})
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
+add_executable(transmer angle.cpp arc.cpp bezier.cpp
+               bezier3d.cpp binio.cpp breakline.cpp cogo.cpp drawobj.cpp
+               ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
+               kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
+               measure.cpp point.cpp polyline.cpp
+               projection.cpp ps.cpp quaternion.cpp random.cpp relprime.cpp
+               rootfind.cpp segment.cpp spiral.cpp spolygon.cpp
+               tin.cpp transmer.cpp vball.cpp vcurve.cpp)
 target_link_libraries(bezitopo Qt5::Widgets Qt5::Core)
 target_link_libraries(bezitest Qt5::Widgets Qt5::Core)
 target_link_libraries(convertgeoid Qt5::Widgets Qt5::Core)
 target_link_libraries(viewtin Qt5::Widgets Qt5::Core)
 target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)
+target_link_libraries(transmer Qt5::Widgets Qt5::Core)
 target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID NUMSGEOID)
 target_compile_definitions(bezitest PUBLIC NUMSGEOID)
 #target_compile_definitions(pangeoid PUBLIC CONVERTGEOID NUMSGEOID)
