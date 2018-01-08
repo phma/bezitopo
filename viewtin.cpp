@@ -30,7 +30,10 @@ using namespace std;
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
-  QTranslator translator;
+  QTranslator translator,qtTranslator;
+  if (qtTranslator.load(QLocale(),QLatin1String("qt"),QLatin1String("_"),
+                        QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
+    app.installTranslator(&qtTranslator);
   if (translator.load(QLocale(),QLatin1String("bezitopo"),
                       QLatin1String("_"),QLatin1String(".")))
   {
