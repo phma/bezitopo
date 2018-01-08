@@ -761,6 +761,15 @@ void TinCanvas::smoothContoursFinish()
   update();
 }
 
+void TinCanvas::dump()
+/* For debugging.
+ * This method outputs any state of the program that may be useful for
+ * debugging whatever needs to be debugged at the moment.
+ */
+{
+  cout<<"dump"<<endl;
+}
+
 void TinCanvas::paintEvent(QPaintEvent *event)
 {
   int i,k,contourType,renderTime=0,pathTime=0,strokeTime=0;
@@ -1022,6 +1031,7 @@ void TinWindow::makeActions()
   viewMenu=menuBar()->addMenu(tr("&View"));
   unitsMenu=menuBar()->addMenu(tr("&Units"));
   contourMenu=menuBar()->addMenu(tr("&Contour"));
+  helpMenu=menuBar()->addMenu(tr("&Help"));
   zoomButtons.push_back(new ZoomButton(this,-10));
   zoomButtons.back()->setIcon(QIcon(":/tenth.png"));
   zoomButtons.back()->setText(tr("Zoom out 10"));
@@ -1100,10 +1110,25 @@ void TinWindow::makeActions()
   contourMenu->addAction(roughContoursAction);
   connect(roughContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(roughContours()));
   smoothContoursAction=new QAction(this);
-  //makeTinAction->setIcon(QIcon(":/smoothcon.png"));
+  //smoothContoursAction->setIcon(QIcon(":/smoothcon.png"));
   smoothContoursAction->setText(tr("Draw smooth contours"));
   contourMenu->addAction(smoothContoursAction);
   connect(smoothContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(smoothContours()));
+  aboutProgramAction=new QAction(this);
+  //aboutProgramAction->setIcon(QIcon(":/.png"));
+  aboutProgramAction->setText(tr("About Bezitopo"));
+  helpMenu->addAction(aboutProgramAction);
+  connect(aboutProgramAction,SIGNAL(triggered(bool)),this,SLOT(aboutProgram()));
+  aboutQtAction=new QAction(this);
+  //aboutQtAction->setIcon(QIcon(":/.png"));
+  aboutQtAction->setText(tr("About Qt"));
+  helpMenu->addAction(aboutQtAction);
+  connect(aboutQtAction,SIGNAL(triggered(bool)),this,SLOT(aboutQt()));
+  dumpAction=new QAction(this);
+  //dumpAction->setIcon(QIcon(":/.png"));
+  dumpAction->setText(tr("Dump")); // Dump is for debugging.
+  helpMenu->addAction(dumpAction); // In released versions, it is not connected.
+  connect(dumpAction,SIGNAL(triggered(bool)),canvas,SLOT(dump()));
   measureButtons.push_back(new MeasureButton(this,METER,0));
   measureButtons.back()->setIcon(QIcon(":/meter.png"));
   measureButtons.back()->setText(tr("Meter"));
@@ -1172,4 +1197,16 @@ void TinWindow::prepareZoomSteps(int steps)
 void TinWindow::zoomSteps(bool checked)
 {
   zoomCanvas(preZoomStep);
+}
+
+void TinWindow::aboutProgram()
+{
+  QString progName=tr("Bezitopo");
+  QString version=tr(" version ")+VERSION;
+  QMessageBox::about(this,tr("ViewTIN"),progName+version);
+}
+
+void TinWindow::aboutQt()
+{
+  QMessageBox::aboutQt(this,tr("ViewTIN"));
 }

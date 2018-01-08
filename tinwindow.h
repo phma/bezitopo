@@ -88,6 +88,7 @@ public slots:
   void smoothContours();
   void smooth1Contour();
   void smoothContoursFinish();
+  void dump();
 protected:
   void setSize();
   void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -148,10 +149,12 @@ signals:
 public slots:
   void prepareZoomSteps(int steps);
   void zoomSteps(bool checked);
+  void aboutProgram();
+  void aboutQt();
 private:
   TinCanvas *canvas;
   QToolBar *toolbar;
-  QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu,*contourMenu;
+  QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu,*contourMenu,*helpMenu;
   int preZoomStep;
   std::vector<ZoomButton *> zoomButtons;
   std::vector<MeasureButton *> measureButtons;
@@ -159,4 +162,5 @@ private:
   QAction *makeTinAction,*selectContourIntervalAction;
   QAction *roughContoursAction,*smoothContoursAction;
   QAction *importBreaklinesAction,*exportBreaklinesAction;
+  QAction *aboutProgramAction,*aboutQtAction,*dumpAction;
 };
