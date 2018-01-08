@@ -283,6 +283,7 @@ void TinCanvas::importPnezd()
     doc.readpnezd(fileName);
     plnum=0;
     sizeToFit();
+    pointsValid=false;
     tinValid=false;
     surfaceValid=false;
     roughContoursValid=false;
@@ -303,6 +304,7 @@ void TinCanvas::importCriteria()
     fileName=files[0].toStdString();
     doc.makepointlist(1);
     doc.pl[1].readCriteria(fileName);
+    pointsValid=false;
     tinValid=false;
     surfaceValid=false;
     roughContoursValid=smoothContoursValid=false;
@@ -422,7 +424,7 @@ void TinCanvas::makeTin()
 {
   //cout<<"makeTin"<<endl;
   doc.makepointlist(1);
-  if (doc.pl[1].size()==0 && doc.pl[0].size()>0)
+  if ((doc.pl[1].size()==0 && doc.pl[0].size()>0) || !pointsValid)
   {
     if (doc.pl[1].crit.size()==0)
     {
@@ -433,6 +435,7 @@ void TinCanvas::makeTin()
         && doc.pl[0].type0Breaklines.size()>0)
       doc.pl[1].type0Breaklines=doc.pl[0].type0Breaklines;
     doc.copytopopoints(1,0);
+    pointsValid=true;
   }
   plnum=1;
   tinerror=startPointTries=passCount=0;
