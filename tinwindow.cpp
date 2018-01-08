@@ -487,6 +487,7 @@ void TinCanvas::tryStartPoint()
         disconnect(timer,SIGNAL(timeout()),this,SLOT(tryStartPoint()));
         connect(timer,SIGNAL(timeout()),this,SLOT(flipPass()));
         progressDialog->setRange(0,doc.pl[plnum].edges.size());
+        progressDialog->setWindowTitle(tr("Making TIN"));
         progressDialog->setLabelText(tr("Flipping edges..."));
       }
     }
@@ -550,7 +551,8 @@ void TinCanvas::redoSurface()
     doc.pl[plnum].findedgecriticalpts();  // critical points of a triangle that's slow.
   }
   progressDialog->setRange(0,doc.pl[plnum].triangles.size());
-  progressDialog->setLabelText(tr("Finding critical points..."));
+  progressDialog->setWindowTitle(tr("Making surface"));
+    progressDialog->setLabelText(tr("Finding critical points..."));
   triCount=0;
   roughContoursValid=smoothContoursValid=false;
   disconnect(timer,SIGNAL(timeout()),this,SLOT(redoSurface()));
@@ -655,7 +657,8 @@ void TinCanvas::roughContours()
   progInx=elevLo;
   progressDialog->setRange(elevLo,elevHi);
   progressDialog->setValue(progInx);
-  progressDialog->setLabelText(tr("Drawing rough contours..."));
+  progressDialog->setWindowTitle(tr("Drawing contours"));
+    progressDialog->setLabelText(tr("Drawing rough contours..."));
   connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (surfaceValid)
@@ -718,7 +721,8 @@ void TinCanvas::smoothContours()
   progInx=0;
   progressDialog->setRange(0,doc.pl[plnum].contours.size());
   progressDialog->setValue(0);
-  progressDialog->setLabelText(tr("Drawing smooth contours..."));
+  progressDialog->setWindowTitle(tr("Drawing contours"));
+    progressDialog->setLabelText(tr("Drawing smooth contours..."));
   connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (roughContoursValid && conterval==doc.pl[plnum].contourInterval.fineInterval())

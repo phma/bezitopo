@@ -152,52 +152,64 @@
         <translation>Me pides hacer un TIN, pero has editado las líneas de rotura en el TIN después que las has leídas de un fichero. ¿Quieres hacer un nuevo TIN?</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="445"/>
+        <location filename="tinwindow.cpp" line="455"/>
+        <location filename="tinwindow.cpp" line="490"/>
         <source>Making TIN</source>
         <translation>Haciendo TIN</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="446"/>
+        <location filename="tinwindow.cpp" line="456"/>
         <source>Sweeping convex hull...</source>
         <translation>Barriendo cápsula convexa...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="480"/>
+        <location filename="tinwindow.cpp" line="491"/>
         <source>Flipping edges...</source>
         <translation>Girando aristas...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="504"/>
+        <location filename="tinwindow.cpp" line="514"/>
         <source>Took too long to make TIN</source>
         <translation>Hacer TIN duró demasiado tiempo</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="544"/>
+        <location filename="tinwindow.cpp" line="554"/>
+        <source>Making surface</source>
+        <translation>Haciendo superficie</translation>
+    </message>
+    <message>
+        <location filename="tinwindow.cpp" line="555"/>
         <source>Finding critical points...</source>
         <translation>Hallando puntos críticos...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="587"/>
+        <location filename="tinwindow.cpp" line="598"/>
         <source>Can&apos;t make TIN. Error: </source>
         <translation>No puedo hacer TIN. Error: </translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="649"/>
+        <location filename="tinwindow.cpp" line="660"/>
+        <location filename="tinwindow.cpp" line="724"/>
+        <source>Drawing contours</source>
+        <translation>Dibujando contornos</translation>
+    </message>
+    <message>
+        <location filename="tinwindow.cpp" line="661"/>
         <source>Drawing rough contours...</source>
         <translation>Dibujando contornos ásperos...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="712"/>
+        <location filename="tinwindow.cpp" line="725"/>
         <source>Drawing smooth contours...</source>
         <translation>Dibujando contornos lisos</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="875"/>
+        <location filename="tinwindow.cpp" line="888"/>
         <source>You have imported breaklines.</source>
         <translation>Has importado líneas de rotura.</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="876"/>
+        <location filename="tinwindow.cpp" line="889"/>
         <source>Do you want to edit?</source>
         <translation>Tientas editar una línea de rotura, pero las líneas de rotura leídas de fichero están más nuevas que las en el TIN. ¿Quieres editar líneas de rotura?</translation>
     </message>
@@ -205,137 +217,137 @@
 <context>
     <name>TinWindow</name>
     <message>
-        <location filename="tinwindow.cpp" line="1007"/>
+        <location filename="tinwindow.cpp" line="1020"/>
         <source>&amp;File</source>
         <translation>&amp;Fichero</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1008"/>
+        <location filename="tinwindow.cpp" line="1021"/>
         <source>&amp;Edit</source>
         <translation>&amp;Editar</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1009"/>
+        <location filename="tinwindow.cpp" line="1022"/>
         <source>&amp;View</source>
         <translation>&amp;Ver</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1010"/>
+        <location filename="tinwindow.cpp" line="1023"/>
         <source>&amp;Units</source>
         <translation>&amp;Unidades</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1011"/>
+        <location filename="tinwindow.cpp" line="1024"/>
         <source>&amp;Contour</source>
         <translation>&amp;Contorno</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1014"/>
+        <location filename="tinwindow.cpp" line="1027"/>
         <source>Zoom out 10</source>
         <translation>Reducir par 10</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1018"/>
+        <location filename="tinwindow.cpp" line="1031"/>
         <source>Zoom out 2</source>
         <translation>Reducir par 2</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1022"/>
+        <location filename="tinwindow.cpp" line="1035"/>
         <source>Zoom out</source>
         <translation>Reducir</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1026"/>
+        <location filename="tinwindow.cpp" line="1039"/>
         <source>Zoom in</source>
         <translation>Ampliar</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1030"/>
+        <location filename="tinwindow.cpp" line="1043"/>
         <source>Zoom in 2</source>
         <translation>Ampliar par 2</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1034"/>
+        <location filename="tinwindow.cpp" line="1047"/>
         <source>Zoom in 10</source>
         <translation>Ampliar par 10</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1038"/>
+        <location filename="tinwindow.cpp" line="1051"/>
         <source>Rotate right</source>
         <translation>Rotar al derecho</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1042"/>
+        <location filename="tinwindow.cpp" line="1055"/>
         <source>Rotate left</source>
         <translation>Rotar al izquierdo</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1051"/>
+        <location filename="tinwindow.cpp" line="1064"/>
         <source>Test pattern Aster</source>
         <translation>Patrón de prueba Aster</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1056"/>
+        <location filename="tinwindow.cpp" line="1069"/>
         <source>Import PNEZD file</source>
         <translation>Importar fichero PNEZD</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1061"/>
+        <location filename="tinwindow.cpp" line="1074"/>
         <source>Import Criteria file</source>
         <translation>Importar fichero de criterios</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1066"/>
+        <location filename="tinwindow.cpp" line="1079"/>
         <source>Import Breaklines file</source>
         <translation>Importar fichero de líneas de rotura</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1071"/>
+        <location filename="tinwindow.cpp" line="1084"/>
         <source>Export Breaklines file</source>
         <translation>Exportar fichero de líneas de rotura</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1076"/>
+        <location filename="tinwindow.cpp" line="1089"/>
         <source>Make TIN</source>
         <translation>Hacer TIN</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1081"/>
+        <location filename="tinwindow.cpp" line="1094"/>
         <source>Select contour interval</source>
         <translation>Escoger intervalo de contorno</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1086"/>
+        <location filename="tinwindow.cpp" line="1099"/>
         <source>Draw rough contours</source>
         <translation>Dibujar contornos ásperos...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1091"/>
+        <location filename="tinwindow.cpp" line="1104"/>
         <source>Draw smooth contours</source>
         <translation>Dibujar contornos lisos</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1096"/>
+        <location filename="tinwindow.cpp" line="1109"/>
         <source>Meter</source>
         <translation>Metro</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1102"/>
+        <location filename="tinwindow.cpp" line="1115"/>
         <source>Foot</source>
         <translation>Pie</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1108"/>
+        <location filename="tinwindow.cpp" line="1121"/>
         <source>International foot</source>
         <translation>Pie internacional</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1114"/>
+        <location filename="tinwindow.cpp" line="1127"/>
         <source>US survey foot</source>
         <translation>Pie agrimensural EE.UU.</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1120"/>
+        <location filename="tinwindow.cpp" line="1133"/>
         <source>Indian survey foot</source>
         <translation>Pie agrimensural indio</translation>
     </message>
@@ -343,7 +355,7 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="tinwindow.cpp" line="985"/>
+        <location filename="tinwindow.cpp" line="998"/>
         <source>ViewTIN</source>
         <translation>ViewTIN</translation>
     </message>
