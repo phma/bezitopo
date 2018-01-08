@@ -1141,7 +1141,7 @@ void TinWindow::makeActions()
   dumpAction=new QAction(this);
   //dumpAction->setIcon(QIcon(":/.png"));
   dumpAction->setText(tr("Dump")); // Dump is for debugging.
-  helpMenu->addAction(dumpAction); // In released versions, it is not connected.
+  //helpMenu->addAction(dumpAction); // In released versions, it is off the menu.
   connect(dumpAction,SIGNAL(triggered(bool)),canvas,SLOT(dump()));
   measureButtons.push_back(new MeasureButton(this,METER,0));
   measureButtons.back()->setIcon(QIcon(":/meter.png"));
