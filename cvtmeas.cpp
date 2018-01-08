@@ -76,7 +76,7 @@ void cvtmeas_i(string args)
     if (cmd>=0)
       cvcommands[cmd].fun(argstr);
     else
-      cout<<"Unrecognized command, type \"help\" for a list of commands"<<endl;
+      cout<<"Unrecognized command, type \"h\" for a list of commands"<<endl;
   }
   while (subcont);
 }
