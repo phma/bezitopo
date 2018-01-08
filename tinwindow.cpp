@@ -767,7 +767,18 @@ void TinCanvas::dump()
  * debugging whatever needs to be debugged at the moment.
  */
 {
-  cout<<"dump"<<endl;
+  int i,j;
+  cout<<doc.pl.size()<<" pointlists\n";
+  for (i=0;i<doc.pl.size();i++)
+  {
+    cout<<"Pointlist "<<i<<":\n";
+    cout<<doc.pl[i].points.size()<<" points\n";
+    cout<<doc.pl[i].edges.size()<<" edges\n";
+    cout<<doc.pl[i].triangles.size()<<" triangles\n";
+    cout<<doc.pl[i].contours.size()<<" contours\n";
+    cout<<doc.pl[i].crit.size()<<" criteria\n";
+    cout<<doc.pl[i].type0Breaklines.size()<<" breaklines"<<endl;
+  }
 }
 
 void TinCanvas::paintEvent(QPaintEvent *event)
