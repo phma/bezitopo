@@ -272,10 +272,24 @@ void TinCanvas::saveAs()
   {
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
+    docFileName=fileName;
     file.open(fileName,fstream::out);
     doc.writeXml(file);
     file.close();
   }
+}
+
+void TinCanvas::save()
+{
+  ofstream file;
+  if (docFileName.length())
+  {
+    file.open(docFileName,fstream::out);
+    doc.writeXml(file);
+    file.close();
+  }
+  else
+    saveAs();
 }
 
 void TinCanvas::testPatternAster()
@@ -1109,7 +1123,7 @@ void TinWindow::makeActions()
   saveAction->setIcon(QIcon::fromTheme("document-save"));
   saveAction->setText(tr("Save"));
   fileMenu->addAction(saveAction);
-  //connect(saveAction,SIGNAL(triggered(bool)),canvas,SLOT(save()));
+  connect(saveAction,SIGNAL(triggered(bool)),canvas,SLOT(save()));
   saveAsAction=new QAction(this);
   saveAsAction->setIcon(QIcon::fromTheme("document-save-as"));
   saveAsAction->setText(tr("Save As"));

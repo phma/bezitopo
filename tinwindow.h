@@ -69,6 +69,7 @@ public slots:
   void updateEdge(edge *e);
   void updateEdgeNeighbors(edge *e);
   void saveAs();
+  void save();
   void testPatternAster();
   void importPnezd();
   void importCriteria();
@@ -101,6 +102,7 @@ protected:
 private:
   document doc;
   int plnum;
+  std::string docFileName;
   QPen normalEdgePen,breakEdgePen,flipEdgePen;
   QPen circlePen[3],contourPen[3][20];
   unsigned short contourColor[20];
