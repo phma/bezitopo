@@ -3,7 +3,7 @@
 /* bezier3d.cpp - 3d Bézier splines                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2014-2017 Pierre Abbat.
+/* Copyright 2014-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify

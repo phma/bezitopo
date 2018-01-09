@@ -3,7 +3,7 @@
 /* circle.h - circles, including lines                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017 Pierre Abbat.
+/* Copyright 2017-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
