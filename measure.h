@@ -156,6 +156,7 @@ public:
   std::string formatMeasurement(double measurement,int unit,double unitMagnitude=0,double precisionMagnitude=0);
   std::string formatMeasurementUnit(double measurement,int unit,double unitMagnitude=0,double precisionMagnitude=0);
   Measurement parseMeasurement(std::string measStr,int quantity);
+  void writeXml(std::ostream &ofile);
 private:
   int whichFoot;
   bool localized;

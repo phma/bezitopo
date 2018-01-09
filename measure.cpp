@@ -40,6 +40,7 @@
 #include "measure.h"
 #include "angle.h"
 #include "except.h"
+#include "ldecimal.h"
 using namespace std;
 
 struct cf
@@ -523,4 +524,35 @@ Measurement Measure::parseMeasurement(string measStr,int quantity)
     throw badUnits;
   ret.magnitude=valueInUnit*conversionFactors[ret.unit];
   return ret;
+}
+
+void Measure::writeXml(ostream &ofile)
+{
+  int i;
+  map<int,double>::iterator j;
+  ofile<<"<Measure foot="<<whichFoot;
+  if (localized)
+    ofile<<" localized";
+  ofile<<"><availableUnits>"; // No need to output conversion factors; they're implied by foot.
+  for (i=0;i<availableUnits.size();i++)
+  {
+    if (i)
+      ofile<<' ';
+    ofile<<availableUnits[i];
+  }
+  ofile<<"</availableUnits><defaultUnit>";
+  for (i=0,j=defaultUnit.begin();j!=defaultUnit.end();++i,++j)
+  {
+    if (i)
+      ofile<<' ';
+    ofile<<j->first<<':'<<ldecimal(j->second);
+  }
+  ofile<<"</defaultUnit><defaultPrecision>";
+  for (i=0,j=defaultPrecision.begin();j!=defaultPrecision.end();++i,++j)
+  {
+    if (i)
+      ofile<<' ';
+    ofile<<j->first<<':'<<ldecimal(j->second);
+  }
+  ofile<<"</defaultPrecision></Measure>"<<endl;
 }

@@ -112,6 +112,7 @@ void document::writeXml(ofstream &ofile)
 {
   int i;
   ofile<<"<Bezitopo>";
+  ms.writeXml(ofile);
   for (i=0;i<pl.size();i++)
     pl[i].writeXml(ofile);
   ofile<<"</Bezitopo>"<<endl;
