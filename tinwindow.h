@@ -68,6 +68,7 @@ public slots:
   void setIndianFoot();
   void updateEdge(edge *e);
   void updateEdgeNeighbors(edge *e);
+  void saveAs();
   void testPatternAster();
   void importPnezd();
   void importCriteria();
@@ -159,6 +160,7 @@ private:
   int preZoomStep;
   std::vector<ZoomButton *> zoomButtons;
   std::vector<MeasureButton *> measureButtons;
+  QAction *loadAction,*saveAction,*saveAsAction;
   QAction *asterAction,*importPnezdAction,*importCriteriaAction;
   QAction *makeTinAction,*selectContourIntervalAction;
   QAction *roughContoursAction,*smoothContoursAction;

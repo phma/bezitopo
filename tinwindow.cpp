@@ -256,6 +256,28 @@ void TinCanvas::updateEdgeNeighbors(edge *e)
   update(rect.toAlignedRect());
 }
 
+void TinCanvas::saveAs()
+{
+  int i;
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ofstream file;
+  fileDialog->setWindowTitle(tr("Save Drawing"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->setDefaultSuffix(QString("bez"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    file.open(fileName,fstream::out);
+    doc.writeXml(file);
+    file.close();
+  }
+}
+
 void TinCanvas::testPatternAster()
 {
   doc.pl.clear();
@@ -1083,6 +1105,16 @@ void TinWindow::makeActions()
     toolbar->addAction(zoomButtons[i]);
     viewMenu->addAction(zoomButtons[i]);
   }
+  saveAction=new QAction(this);
+  saveAction->setIcon(QIcon::fromTheme("document-save"));
+  saveAction->setText(tr("Save"));
+  fileMenu->addAction(saveAction);
+  //connect(saveAction,SIGNAL(triggered(bool)),canvas,SLOT(save()));
+  saveAsAction=new QAction(this);
+  saveAsAction->setIcon(QIcon::fromTheme("document-save-as"));
+  saveAsAction->setText(tr("Save As"));
+  fileMenu->addAction(saveAsAction);
+  connect(saveAsAction,SIGNAL(triggered(bool)),canvas,SLOT(saveAs()));
   asterAction=new QAction(this);
   //asterAction->setIcon(QIcon(":/aster.png"));
   asterAction->setText(tr("Test pattern Aster"));
