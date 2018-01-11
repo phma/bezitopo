@@ -64,6 +64,7 @@ public:
   };
   std::string valueString(Measure meas,bool precise=false);
   int contourType(double elev);
+  void writeXml(std::ostream &ofile);
 private:
   double interval;
   int fineRatio,coarseRatio;

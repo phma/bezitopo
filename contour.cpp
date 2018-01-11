@@ -139,6 +139,14 @@ int ContourInterval::contourType(double elev)
   return ret;
 }
 
+void ContourInterval::writeXml(ostream &ofile)
+{
+  ofile<<"<ContourInterval interval=\""<<ldecimal(interval);
+  ofile<<"\" fineRatio=\""<<fineRatio;
+  ofile<<"\" coarseRatio=\""<<coarseRatio;
+  ofile<<"\"/>"<<endl;
+}
+
 float splitpoint(double leftclamp,double rightclamp,double tolerance)
 /* If the values at the clamp points indicate that the curve may be out of tolerance,
  * returns the point to split it at, as a fraction of the length. If not, returns 0.
