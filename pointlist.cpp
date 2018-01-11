@@ -53,7 +53,7 @@ bool criterion::match(point &pnt,int num)
 void criterion::writeXml(ostream &ofile)
 {
   ofile<<"<Criterion pointRange=\""<<lo<<':'<<hi;
-  ofile<<"\" string=\""<<str;
+  ofile<<"\" string=\""<<xmlEscape(str);
   ofile<<"\" elevRange=\""<<ldecimal(elo)<<':'<<ldecimal(ehi);
   ofile<<"\" topo=\""<<istopo;
   ofile<<"\"/>"<<endl;
