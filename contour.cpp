@@ -50,8 +50,8 @@ float splittab[65]=
 ContourInterval::ContourInterval()
 {
   interval=1;
-  fineRatio=5;
-  coarseRatio=4;
+  fineRatio=1;
+  coarseRatio=5;
 }
 
 ContourInterval::ContourInterval(double unit,int icode,bool fine)
