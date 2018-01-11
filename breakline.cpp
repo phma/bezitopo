@@ -225,7 +225,7 @@ void Breakline0::writeXml(ostream &ofile)
       ofile<<' ';
     ofile<<nodes[i];
   }
-  ofile<<"</break0>";
+  ofile<<"</break0>\n";
 }
 
 vector<string> parseBreakline(string line,char delim)

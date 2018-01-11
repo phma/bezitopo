@@ -542,6 +542,10 @@ void pointlist::writeXml(ofstream &ofile)
   for (i=0;i<contours.size();i++)
     contours[i].writeXml(ofile);
   ofile<<"</Contours>";
+  ofile<<"<Breaklines>";
+  for (i=0;i<type0Breaklines.size();i++)
+    type0Breaklines[i].writeXml(ofile);
+  ofile<<"</Breaklines>";
   contourInterval.writeXml(ofile);
   ofile<<"</Pointlist>"<<endl;
 }
