@@ -26,6 +26,7 @@
 #include "pointlist.h"
 #include "csv.h"
 #include "breakline.h"
+#include "ldecimal.h"
 
 using namespace std;
 
@@ -47,6 +48,15 @@ bool criterion::match(point &pnt,int num)
 {
   return (str.length()==0 || pnt.note.find(str)!=string::npos) &&
     ((lo==0 && hi==0) || (num>=lo && num<=hi)) && ((std::isnan(elo) || std::isnan(ehi)) || (pnt.elev()>=elo && pnt.elev()<=ehi));
+}
+
+void criterion::writeXml(ostream &ofile)
+{
+  ofile<<"<Criterion pointRange=\""<<lo<<':'<<hi;
+  ofile<<"\" string=\""<<str;
+  ofile<<"\" elevRange=\""<<ldecimal(elo)<<':'<<ldecimal(ehi);
+  ofile<<"\" topo=\""<<istopo;
+  ofile<<"\"/>"<<endl;
 }
 
 void pointlist::clear()
@@ -509,8 +519,10 @@ void pointlist::writeXml(ofstream &ofile)
   int i;
   ptlist::iterator p;
   map<int,triangle>::iterator t;
-  ofile<<"<Pointlist>";
-  ofile<<"<Points>";
+  ofile<<"<Pointlist><Criteria>";
+  for (i=0;i<crit.size();i++)
+    crit[i].writeXml(ofile);
+  ofile<<"</Criteria><Points>";
   for (p=points.begin(),i=0;p!=points.end();p++,i++)
   {
     if (i && (i%1)==0)

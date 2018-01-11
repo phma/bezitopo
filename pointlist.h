@@ -47,6 +47,7 @@ public:
   int lo,hi; // point number range
   double elo,ehi; // elevation range
   bool istopo;
+  void writeXml(std::ostream &ofile);
 };
 
 typedef std::vector<criterion> criteria;
