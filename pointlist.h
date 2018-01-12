@@ -98,6 +98,7 @@ public:
   void joinBreaklines();
   void edgesToBreaklines();
   void stringToBreakline(std::string line); // for import, with hyphens
+  void readBreaklines(std::string filename);
   std::string hitTestString(triangleHit hit);
   std::string hitTestPointString(xy pnt,double radius);
   virtual void writeXml(std::ofstream &ofile);

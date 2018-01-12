@@ -27,6 +27,7 @@
 #include "csv.h"
 #include "breakline.h"
 #include "ldecimal.h"
+#include "except.h"
 
 using namespace std;
 
@@ -482,6 +483,20 @@ void pointlist::stringToBreakline(string line)
     else
       type0Breaklines.push_back(Breakline0(parseBreakline(line,'-')));
   }
+}
+
+void pointlist::readBreaklines(string filename)
+{
+  fstream file(filename,fstream::in);
+  string line;
+  type0Breaklines.clear();
+  while (!file.eof() && !file.fail())
+  {
+    getline(file,line);
+    stringToBreakline(line);
+  }
+  if (!file.eof())
+    throw fileError;
 }
 
 string pointlist::hitTestString(triangleHit hit)

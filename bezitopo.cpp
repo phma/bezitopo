@@ -87,6 +87,29 @@ void indpark(string args)
     crit1.istopo=false; // The point labeled FH has a nonsensical elevation and must be removed.
     doc.pl[1].crit.push_back(crit1);
   }
+  try
+  {
+    i=0;
+    doc.pl[1].readBreaklines("topo0.brk");
+  }
+  catch (BeziExcept &e)
+  {
+    i=e.getNumber();
+  }
+  if (i)
+  {
+    try
+    {
+      i=0;
+      doc.pl[1].readBreaklines("../topo0.brk");
+    }
+    catch (BeziExcept &e)
+    {
+      i=e.getNumber();
+    }
+  }
+  if (i)
+    cerr<<"Can't read breaklines from topo0.brk"<<endl;
   doc.copytopopoints(1,0);
   //doc.changeOffset(xyz(443392,164096,208));
   doc.pl[1].maketin("bezitopo.ps");
