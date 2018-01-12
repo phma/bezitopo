@@ -53,29 +53,6 @@ string savefilename;
 geoheader ghead;
 
 void indpark(string args)
-/* Concrete rectangle with apparent overlap: elevation 203.7
- * Hooklike appendage a few meters west of concrete rectangle: 203.8
- * Outline that appears wrong, but isn't: 204.2
- * Spurious semicircle: 204.8
- * Apparent loop: 206.3
- * Spiralarc clear across the scene: 207.7
- * 
- * On 207.7: the contour beginning at (-7.574323437274727,242.760955397681) should
- * continue from (293.0923474548852,35.76812401806803) to (293.17543184146035,
- * 34.75709173391407), but instead jumps back to the starting point.
- * 
- * On 204.8: the contour beginning at (49.294836688628344,78.90549573888802) has
- * four points; one of the spiralarcs has delta 883276262 (148.07°) and delta2 -6.9°
- * and happens to touch another contour at the same elevation, so the program didn't
- * notice that it should break it. Tried to fix it by checking that the spiralarc
- * is entirely in the triangle containing the midpoint of the segment (it isn't,
- * of course) and if so, applying a tolerance of 0 to force it to split. The problem
- * is that the cross segment at the split point does not intercept 204.8. Setting
- * BENDLIMIT to DEG120 fixes it.
- * 
- * Triangle (956 1112 430) is undivided, but contours passing through it southeast
- * of point 1112 are bent enough that tracing results in backtracking.
- */
 {
   int i,j,itype,npoints;
   double w,e,s,n;
