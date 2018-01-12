@@ -74,12 +74,19 @@ void indpark(string args)
     cerr<<"Can't read topo0.asc"<<endl;
     return;
   }
-  crit1.str="";
-  crit1.istopo=true;
-  doc.pl[1].crit.push_back(crit1);
-  crit1.str="FH";
-  crit1.istopo=false; // The point labeled FH has a nonsensical elevation and must be removed.
-  doc.pl[1].crit.push_back(crit1);
+  doc.pl[1].readCriteria("topo0.crit");
+  if (doc.pl[1].crit.size()==0)
+    doc.pl[1].readCriteria("../topo0.crit");
+  if (doc.pl[1].crit.size()==0)
+  {
+    cerr<<"Can't read topo0.crit, ignoring just the fire hydrant"<<endl;
+    crit1.str="";
+    crit1.istopo=true;
+    doc.pl[1].crit.push_back(crit1);
+    crit1.str="FH";
+    crit1.istopo=false; // The point labeled FH has a nonsensical elevation and must be removed.
+    doc.pl[1].crit.push_back(crit1);
+  }
   doc.copytopopoints(1,0);
   //doc.changeOffset(xyz(443392,164096,208));
   doc.pl[1].maketin("bezitopo.ps");
