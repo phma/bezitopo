@@ -58,6 +58,16 @@ public:
 };
 
 class drawobj
+/* Derived classes:
+ * point
+ * segment
+ *   arc
+ *   spiralarc
+ * polyline
+ *   polyarc
+ *     polyspiral
+ * Circle
+ */
 {
 public:
   virtual bsph boundsphere();
