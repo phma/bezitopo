@@ -83,6 +83,7 @@ public:
    * and linetype set to SAMEfoo. The latter won't happen until I implement
    * layers.
    */
+  virtual bool hasProperty(int prop);
   virtual void writeXml(std::ofstream &ofile);
 };
 

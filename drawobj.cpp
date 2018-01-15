@@ -132,6 +132,26 @@ vector<drawingElement> drawobj::render3d(double precision,int layer,int color,in
   return vector<drawingElement>();
 }
 
+/* hasProperty, getDoubleProperty, getStringProperty, etc. will be used to make
+ * one object refer to another, such as a dimension label which displays
+ * the length of a line. hasProperty tells whether the object has the property.
+ * 
+ * An object can be of a class which has a property without having the property,
+ * e.g. an open polyline does not have the area property even though a closed
+ * polyline does. Getting a nonexistent double property returns NaN. Getting
+ * an existent property can return NaN, e.g. a spiralarc with clothance=0
+ * and curvature and length making it a full circle has tangent length NaN.
+ * 
+ * The property number determines whether it is a double or string property.
+ * Calling getDoubleProperty(prop) where prop is a string property returns NaN,
+ * even if the object has the property.
+ */
+
+bool drawobj::hasProperty(int prop)
+{
+  return false;
+}
+
 void drawobj::writeXml(ofstream &ofile)
 {
   ofile<<"<DrawingObject />";
