@@ -44,6 +44,7 @@
 #include "angle.h"
 #include "pointlist.h"
 #include "vcurve.h"
+#include "circle.h"
 #include "segment.h"
 #include "arc.h"
 #include "spiral.h"
@@ -1633,6 +1634,12 @@ void testvcurve()
   tassert(vcurve(1,2,2,1,5./8)==vcurve(d1a2,b2,c2,1,1./4));
   vsplit(0,1,2,0,3./8,b1,c1,d1a2,b2,c2);
   tassert(vcurve(0,1,2,0,15./64)==vcurve(0,b1,c1,d1a2,5./8));
+}
+
+void testcircle()
+{
+  Circle unit(xy(0,0),1.);
+  Circle xaxis(xy(0,0),0,0);
 }
 
 void testsegment()
@@ -6078,6 +6085,8 @@ int main(int argc, char *argv[])
     testintegertrig();
   if (shoulddo("minquad"))
     testminquad();
+  if (shoulddo("circle"))
+    testcircle();
   if (shoulddo("segment"))
     testsegment();
   if (shoulddo("arc"))

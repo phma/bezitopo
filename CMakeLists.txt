@@ -124,7 +124,7 @@ set(CPACK_SOURCE_IGNORE_FILES /\\\\.git;.*~)
 include(CPack)
 
 include(CTest)
-add_test(geom bezitest area3 in intersection invalidintersectionlozenge invalidintersectionaster)
+add_test(geom bezitest area3 in intersection invalidintersectionlozenge invalidintersectionaster circle)
 add_test(arith bezitest relprime manysum brent newton zoom)
 add_test(measure bezitest measure)
 add_test(calculus bezitest parabinter derivs)
