@@ -1262,8 +1262,9 @@ void TinWindow::zoomSteps(bool checked)
 void TinWindow::aboutProgram()
 {
   QString progName=tr("Bezitopo");
-  QString version=tr(" version ")+VERSION;
-  QMessageBox::about(this,tr("ViewTIN"),progName+version);
+  QMessageBox::about(this,tr("ViewTIN"),
+		     tr("%1\nVersion %2\nCopyright %3 Pierre Abbat\nLicense GPL 3 or later")
+		     .arg(progName).arg(QString(VERSION)).arg(COPY_YEAR));
 }
 
 void TinWindow::aboutQt()
