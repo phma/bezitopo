@@ -87,7 +87,7 @@ public:
   void clearmarks();
   void clearTin();
   bool checkTinConsistency();
-  int readCriteria(std::string fname);
+  int readCriteria(std::string fname,Measure ms);
   void setgradient(bool flat=false);
   void findedgecriticalpts();
   void findcriticalpts();

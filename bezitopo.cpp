@@ -74,9 +74,9 @@ void indpark(string args)
     cerr<<"Can't read topo0.asc"<<endl;
     return;
   }
-  doc.pl[1].readCriteria("topo0.crit");
+  doc.pl[1].readCriteria("topo0.crit",doc.ms);
   if (doc.pl[1].crit.size()==0)
-    doc.pl[1].readCriteria("../topo0.crit");
+    doc.pl[1].readCriteria("../topo0.crit",doc.ms);
   if (doc.pl[1].crit.size()==0)
   {
     cerr<<"Can't read topo0.crit, ignoring just the fire hydrant"<<endl;

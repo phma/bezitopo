@@ -339,7 +339,7 @@ void TinCanvas::importCriteria()
     files=fileDialog->selectedFiles();
     fileName=files[0].toStdString();
     doc.makepointlist(1);
-    doc.pl[1].readCriteria(fileName);
+    doc.pl[1].readCriteria(fileName,doc.ms);
     pointsValid=false;
     tinValid=false;
     surfaceValid=false;

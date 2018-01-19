@@ -229,7 +229,7 @@ bool pointlist::checkTinConsistency()
   return ret;
 }
 
-int pointlist::readCriteria(string fname)
+int pointlist::readCriteria(string fname,Measure ms)
 {
   ifstream infile;
   size_t size=0,pos1,pos2;
@@ -262,11 +262,11 @@ int pointlist::readCriteria(string fname)
 	  crit1.lo=stoi(minstr);
 	  crit1.hi=stoi(maxstr);
           if (eminstr.length())
-            crit1.elo=stod(eminstr);
+            crit1.elo=ms.parseMeasurement(eminstr,LENGTH).magnitude;
           else
             crit1.elo=NAN;
           if (emaxstr.length())
-            crit1.ehi=stod(emaxstr);
+            crit1.ehi=ms.parseMeasurement(emaxstr,LENGTH).magnitude;
           else
             crit1.ehi=NAN;
           crit1.str=d;
