@@ -22,6 +22,7 @@
 #cmakedefine HAVE_SYS_TIME_H
 #cmakedefine HAVE_SYS_RESOURCE_H
 #define VERSION "@BEZITOPO_VERSION@"
+#define COPY_YEAR @COPY_YEAR@
 #define SHARE_DIR "@SHARE_DIR@"
 #endif
 

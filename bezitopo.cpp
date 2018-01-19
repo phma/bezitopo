@@ -457,7 +457,7 @@ int main(int argc, char *argv[])
   doc.ms.setDefaultPrecision(LENGTH,1.746e-3); // g.m. of 1 mm and 0.01 ft
   doc.ms.setDefaultUnit(AREA,0.3048); // for acre/hectare, 6361.5
   doc.ms.setDefaultPrecision(AREA,0.1);
-  cout<<"Bezitopo version "<<VERSION<<" © 2018 Pierre Abbat\n"
+  cout<<"Bezitopo version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat\n"
   <<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
   while (cont)
   {
