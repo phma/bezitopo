@@ -21,11 +21,13 @@
  */
 #include <string>
 #include <iostream>
+#include <iomanip>
 #include "polyline.h"
 #include "projection.h"
 #include "ellipsoid.h"
 #include "ps.h"
 #include "vball.h"
+#include "manysum.h"
 
 using namespace std;
 
@@ -65,11 +67,44 @@ polyspiral psApprox(ellipsoid *ell,int n)
   return ret;
 }
 
+double compareLengths(polyspiral fewer,polyspiral more)
+{
+  int i,j,ratio;
+  vector<double> diff;
+  double sum;
+  ratio=more.size()/fewer.size();
+  for (i=0;i<fewer.size();i++)
+  {
+    for (sum=j=0;j<ratio;j++)
+      sum+=more.getspiralarc(i*ratio+j).length();
+    diff.push_back(sqr(sum-fewer.getspiralarc(i).length()));
+  }
+  return pairwisesum(diff);
+}
+
+void doEllipsoid(ellipsoid &ell,PostScript &ps)
+/* Compute approximations to the meridian of the ellipsoid. In the limit,
+ * each one, which has three times as many segments, is nine times as close
+ * to the correct length as the previous one.
+ */
+{
+  int i,nseg;
+  vector<polyspiral> apx;
+  ps.startpage();
+  ps.setscale(0,0,EARTHRAD,EARTHRAD,0);
+  for (i=0,nseg=1;i<9;i++,nseg*=3)
+    apx.push_back(psApprox(&ell,nseg));
+  cout<<ell.getName()<<endl;
+  for (i=0;i<apx.size()-1;i++)
+    cout<<setw(2)<<i<<setw(12)<<compareLengths(apx[i],apx[i+1])<<
+          setw(12)<<apx[i+1].length()-apx[i].length()<<endl;
+  ps.spline(apx.back().approx3d(1e3));
+  ps.endpage();
+}  
+
 int main(int argc, char *argv[])
 {
   int i;
-  ellipsoid *ell;
-  polyspiral apx;
   PostScript ps;
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
@@ -77,14 +112,7 @@ int main(int argc, char *argv[])
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
   for (i=0;i<countEllipsoids();i++)
-  {
-    ps.startpage();
-    ps.setscale(0,0,EARTHRAD,EARTHRAD,0);
-    ell=&getEllipsoid(i);
-    apx=psApprox(ell,3);
-    ps.spline(apx.approx3d(1e3));
-    ps.endpage();
-  }
+    doEllipsoid(getEllipsoid(i),ps);
   ps.trailer();
   ps.close();
   return 0;
