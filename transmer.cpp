@@ -64,6 +64,7 @@ polyspiral psApprox(ellipsoid *ell,int n)
     ret.setbear(i,latSplit[i]+DEG90);
   for (i=0;i<n;i++)
     ret.setspiral(i);
+  ret.setlengths();
   return ret;
 }
 
@@ -83,9 +84,7 @@ double compareLengths(polyspiral fewer,polyspiral more)
 }
 
 void doEllipsoid(ellipsoid &ell,PostScript &ps)
-/* Compute approximations to the meridian of the ellipsoid. In the limit,
- * each one, which has three times as many segments, is nine times as close
- * to the correct length as the previous one.
+/* Compute approximations to the meridian of the ellipsoid.
  */
 {
   int i,nseg;
