@@ -1132,7 +1132,7 @@ void TinWindow::makeActions()
   asterAction=new QAction(this);
   //asterAction->setIcon(QIcon(":/aster.png"));
   asterAction->setText(tr("Test pattern Aster"));
-  fileMenu->addAction(asterAction);
+  //fileMenu->addAction(asterAction);
   connect(asterAction,SIGNAL(triggered(bool)),canvas,SLOT(testPatternAster()));
   importPnezdAction=new QAction(this);
   //importPnezdAction->setIcon(QIcon(":/pnezd.png"));
