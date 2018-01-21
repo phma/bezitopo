@@ -162,6 +162,7 @@ private:
   int preZoomStep;
   std::vector<ZoomButton *> zoomButtons;
   std::vector<MeasureButton *> measureButtons;
+  QAction *sizeToFitAction;
   QAction *loadAction,*saveAction,*saveAsAction;
   QAction *asterAction,*importPnezdAction,*importCriteriaAction;
   QAction *makeTinAction,*selectContourIntervalAction;

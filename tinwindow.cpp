@@ -1119,6 +1119,11 @@ void TinWindow::makeActions()
     toolbar->addAction(zoomButtons[i]);
     viewMenu->addAction(zoomButtons[i]);
   }
+  sizeToFitAction=new QAction(this);
+  //sizeToFitAction->setIcon(QIcon(":/sizetofit.png"));
+  sizeToFitAction->setText(tr("Size to Fit"));
+  viewMenu->addAction(sizeToFitAction);
+  connect(sizeToFitAction,SIGNAL(triggered(bool)),canvas,SLOT(sizeToFit()));
   saveAction=new QAction(this);
   saveAction->setIcon(QIcon::fromTheme("document-save"));
   saveAction->setText(tr("Save"));
