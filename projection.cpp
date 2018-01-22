@@ -80,7 +80,7 @@ LambertConicSphere::LambertConicSphere(double Meridian,double Parallel0,double P
    * or both to ±(>90°), is an error. I'm not sure whether to throw an exception
    * or set the state to invalid. I'm now setting it to invalid.
    * If the parallels are 45° and 90°, different computers give wildly different
-   * results: 84.714395 on Linux/Intel, but 67.5° on Linux/ARM and DFBSD.
+   * results: 84.714395° on Linux/Intel, but 67.5° on Linux/ARM and DFBSD.
    * This is because M_PIl!=M_PI, resulting in M_PIl/2-ll.lat being tiny but
    * positive when ll.lat is M_PIl rounded to double.
    * If the parallels are 45° and DEG90-1 (89.999999832°), the three computers
@@ -211,7 +211,7 @@ const Quaternion unrotateStereographic(-1/14.,5/14.,7/14.,11/14.);
  * (-3120489.796,-5330836.735,-1560244.898) in ECEF coordinates,
  * (5,-0.292682926829,0.585365853659) in volleyball coordinates,
  * 14.1758035159S 120.343248884W in lat-long degrees,
- * 14°10'32.9"S 120.20°35.7'W in lat-long DMS,
+ * 14°10'32.9"S 120°20'35.7"W in lat-long DMS,
  * 84561961.799S 717875442.017W in lat-long integer coordinates.
  * This point is in the Pacific Ocean over a megameter from land. It is highly
  * unlikely to be near any geoid file boundary, and neither a boldatni boundary
