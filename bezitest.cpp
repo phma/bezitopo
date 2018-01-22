@@ -3767,6 +3767,7 @@ void testellipsoid()
     cout<<setw(2)<<i<<setw(15)<<cenlat<<setw(15)<<radtodeg(test1.conformalLatitude(degtorad(i)))
         <<setw(15)<<test1.apxConLatDeriv(degtorad(i))<<endl;
   }
+  cout<<"test1 eccentricity "<<test1.eccentricity()<<endl;
   for (i=0;i<=90;i++)
   {
     conlat=test1.conformalLatitude(degtorad(i));
@@ -3775,6 +3776,14 @@ void testellipsoid()
     cout<<setw(2)<<i<<setw(15)<<radtodeg(conlat)<<setw(15)<<radtodeg(invconlat)
         <<setw(20)<<ldecimal(conscale)<<endl;
     tassert(fabs(invconlat-degtorad(i))<1e-10);
+  }
+  for (i=DEG90-1024;i<=DEG90;i+=32)
+  {
+    conlat=test1.conformalLatitude(bintorad(i));
+    invconlat=test1.inverseConformalLatitude(conlat);
+    conscale=test1.scaleFactor(invconlat,conlat);
+    cout<<setw(2)<<i<<setw(15)<<radtobin(conlat)<<setw(15)<<radtobin(invconlat)
+        <<setw(20)<<ldecimal(conscale)<<endl;
   }
   benin=Sphere.geoc(0,0,0);
   bengal=Sphere.geoc(0,DEG90,0);
