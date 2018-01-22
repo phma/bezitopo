@@ -72,6 +72,7 @@ public:
   double apxConLatDeriv(double lat);
   double inverseConformalLatitude(double lat);
   latlong inverseConformalLatitude(latlong ll);
+  double scaleFactor(double ellipsoidLatitude,double sphereLatitude);
 };
 
 extern ellipsoid Sphere,Clarke,GRS80,WGS84,ITRS;

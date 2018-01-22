@@ -194,6 +194,17 @@ latlong ellipsoid::inverseConformalLatitude(latlong ll)
   return latlong(inverseConformalLatitude(ll.lat),ll.lon);
 }
 
+double ellipsoid::scaleFactor(double ellipsoidLatitude,double sphereLatitude)
+{
+  double ellipsoidRadius,sphereRadius; // radius of circle of latitude
+  ellipsoidRadius=geoc(ellipsoidLatitude,0.,0.).getx();
+  sphereRadius=sphere->geoc(sphereLatitude,0.,0.).getx();
+  if (ellipsoidRadius==0 || sphereRadius==0)
+    return 1; // FIXME needs testing on Linux/Intel
+  else
+    return ellipsoidRadius/sphereRadius;
+}
+
 ellipsoid Sphere(6371000,0,0,xyz(0,0,0),"Sphere");
 ellipsoid Clarke(6378206.4,6356583.8,0,xyz(0,0,0),"Clarke");
 ellipsoid GRS80(6378137,0,1/298.257222101,xyz(0,0,0),"GRS80");

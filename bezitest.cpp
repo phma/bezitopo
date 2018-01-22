@@ -3738,7 +3738,7 @@ void testldecimal()
 
 void testellipsoid()
 {
-  double rad,cenlat,conlat,invconlat;
+  double rad,cenlat,conlat,invconlat,conscale;
   int i;
   xyz sealevel,kmhigh,noffset,soffset,diff,benin,bengal,howland,galapagos,npole,spole;
   latlongelev greenhill,greenhill2;
@@ -3771,7 +3771,9 @@ void testellipsoid()
   {
     conlat=test1.conformalLatitude(degtorad(i));
     invconlat=test1.inverseConformalLatitude(conlat);
-    cout<<setw(2)<<i<<setw(15)<<radtodeg(conlat)<<setw(15)<<radtodeg(invconlat)<<endl;
+    conscale=test1.scaleFactor(invconlat,conlat);
+    cout<<setw(2)<<i<<setw(15)<<radtodeg(conlat)<<setw(15)<<radtodeg(invconlat)
+        <<setw(20)<<ldecimal(conscale)<<endl;
     tassert(fabs(invconlat-degtorad(i))<1e-10);
   }
   benin=Sphere.geoc(0,0,0);
