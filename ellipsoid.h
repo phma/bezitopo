@@ -68,8 +68,10 @@ public:
   double eccentricity();
   double radiusAtLatitude(latlong ll,int bearing); // bearing is 0 for east; use DEG45 for average radius
   double conformalLatitude(double lat);
+  latlong conformalLatitude(latlong ll);
   double apxConLatDeriv(double lat);
   double inverseConformalLatitude(double lat);
+  latlong inverseConformalLatitude(latlong ll);
 };
 
 extern ellipsoid Sphere,Clarke,GRS80,WGS84,ITRS;

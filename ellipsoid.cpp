@@ -154,10 +154,15 @@ double ellipsoid::conformalLatitude(double lat)
   return asin(tanh(atanh(sin(lat))-ecc*atanh(ecc*sin(lat))));
 }
 
+latlong ellipsoid::conformalLatitude(latlong ll)
+{
+  return latlong(conformalLatitude(ll.lat),ll.lon);
+}
+
 double ellipsoid::apxConLatDeriv(double lat)
 /* This is actually the geocentric latitude's derivative,
  * which is close enough for root finding purposes.
- * FIXME: this isn't really the geoc lad's deriv.
+ * FIXME: this isn't really the geoc lat's deriv.
  */
 {
   double x,z,x1,z1,x2,z2,rtsumsq,rtsumsq1,rtsumsq2;
@@ -182,6 +187,11 @@ double ellipsoid::inverseConformalLatitude(double lat)
     ret=ne.step(conformalLatitude(ret)-lat,apxConLatDeriv(ret));
   }
   return ret;
+}
+
+latlong ellipsoid::inverseConformalLatitude(latlong ll)
+{
+  return latlong(inverseConformalLatitude(ll.lat),ll.lon);
 }
 
 ellipsoid Sphere(6371000,0,0,xyz(0,0,0),"Sphere");
