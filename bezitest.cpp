@@ -5993,7 +5993,7 @@ void testhlattice()
 bool shoulddo(string testname)
 {
   int i;
-  bool ret;
+  bool ret,listTests=false;
   if (testfail)
   {
     cout<<"failed before "<<testname<<endl;
@@ -6001,8 +6001,14 @@ bool shoulddo(string testname)
   }
   ret=args.size()==0;
   for (i=0;i<args.size();i++)
+  {
     if (testname==args[i])
       ret=true;
+    if (args[i]=="-l")
+      listTests=true;
+  }
+  if (listTests)
+    cout<<testname<<endl;
   return ret;
 }
 
