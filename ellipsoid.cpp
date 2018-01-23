@@ -145,13 +145,26 @@ double ellipsoid::radiusAtLatitude(latlong ll,int bearing)
   return 1/(bearfactor/rmerid+(1-bearfactor)/rprime);
 }
 
+double guder(double x)
+{
+  return atan(sinh(x));
+}
+
+double invGuder(double x)
+{
+  return asinh(tan(x));
+}
+
 double ellipsoid::conformalLatitude(double lat)
 /* Returns the latitude on a sphere that a latitude on this ellipsoid
  * would conformally project to.
+ * 
+ * The formula using asin(tanh()) for the Gudermannian loses precision
+ * when the latitude is near 90°.
  */
 {
   double ecc=eccentricity();
-  return asin(tanh(atanh(sin(lat))-ecc*atanh(ecc*sin(lat))));
+  return guder(invGuder(lat)-ecc*atanh(ecc*sin(lat)));
 }
 
 latlong ellipsoid::conformalLatitude(latlong ll)
