@@ -212,8 +212,8 @@ double ellipsoid::scaleFactor(double ellipsoidLatitude,double sphereLatitude)
   double ellipsoidRadius,sphereRadius; // radius of circle of latitude
   ellipsoidRadius=geoc(ellipsoidLatitude,0.,0.).getx();
   sphereRadius=sphere->geoc(sphereLatitude,0.,0.).getx();
-  if (ellipsoidRadius==0 || sphereRadius==0)
-    return 1; // FIXME needs testing on Linux/Intel
+  if (ellipsoidLatitude>bintorad(DEG90-256) || sphereLatitude>bintorad(DEG90-256))
+    return pow(eqr/por,4/3.)/exp(eccentricity()*atanh(eccentricity()));
   else
     return ellipsoidRadius/sphereRadius;
 }
