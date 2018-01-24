@@ -266,6 +266,7 @@ void TinCanvas::saveAs()
   fileDialog->setWindowTitle(tr("Save Drawing"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->setNameFilter(tr("(*.bez);;(*)"));
   fileDialog->setDefaultSuffix(QString("bez"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
@@ -308,6 +309,7 @@ void TinCanvas::importPnezd()
   string fileName;
   fileDialog->setWindowTitle(tr("Open PNEZD File"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setNameFilter(tr("(*.asc);;(*)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
@@ -333,6 +335,7 @@ void TinCanvas::importCriteria()
   string fileName;
   fileDialog->setWindowTitle(tr("Open Criteria File"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setNameFilter(tr("(*.crit);;(*)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
@@ -359,6 +362,7 @@ void TinCanvas::importBreaklines()
   vector<Breakline0> saveBreaklines0;
   fileDialog->setWindowTitle(tr("Open Breakline File"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setNameFilter(tr("(*.brk);;(*)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
@@ -418,6 +422,7 @@ void TinCanvas::exportBreaklines()
   fileDialog->setWindowTitle(tr("Save Breakline File"));
   fileDialog->setFileMode(QFileDialog::AnyFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->setNameFilter(tr("(*.brk);;(*)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
