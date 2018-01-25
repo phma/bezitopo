@@ -208,6 +208,7 @@ latlong ellipsoid::inverseConformalLatitude(latlong ll)
 }
 
 double ellipsoid::scaleFactor(double ellipsoidLatitude,double sphereLatitude)
+// Distance between points on the ellipsoid, divided by distance on the sphere.
 {
   double ellipsoidRadius,sphereRadius; // radius of circle of latitude
   ellipsoidRadius=geoc(ellipsoidLatitude,0.,0.).getx();

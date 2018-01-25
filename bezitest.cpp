@@ -3736,6 +3736,72 @@ void testldecimal()
   tassert(ldecimal(-64664./65536,1./131072)=="-.9867");
 }
 
+array<latlong,2> randomPointPair()
+/* Pick a point on the sphere according to the spherical asteraceous pattern.
+ * Then pick two points about a meter apart. The distance between them is
+ * 1±3e-9 m on the sphere.
+ */
+{
+  int r1,r2;
+  latlong midpoint;
+  double latoff,lonoff;
+  array<latlong,2> ret;
+  r1=rng.usrandom();
+  r2=rng.usrandom();
+  r1=(r1<<8)+(r2>>8);
+  r2&=255;
+  midpoint.lat=asin((2*r1+1)/16777216.-1);
+  midpoint.lon=M_1PHI*(2*r1+1)/2.;
+  midpoint.lon-=rint(midpoint.lon);
+  midpoint.lon*=2*M_PI;
+  latoff=sin(M_PI*r2/256)/12742e3;
+  lonoff=cos(M_PI*r2/256)/12742e3/cos(midpoint.lat);
+  ret[0].lat=midpoint.lat-latoff;
+  ret[0].lon=midpoint.lon-lonoff;
+  ret[1].lat=midpoint.lat+latoff;
+  ret[1].lon=midpoint.lon+lonoff;
+  return ret;
+}
+
+void testellipsoidscale(ellipsoid *ellip)
+/* Tests the accuracy of an ellipsoid's conformal latitude projection's scale.
+ * See testprojscale below.
+ */
+{
+  array<latlong,2> pointpair,projectedpair;
+  latlong midpoint,midpointSphere;
+  array<xyz,2> xyzpairEllip,xyzpairSphere;
+  int i,nbad;
+  double scale;
+  for (i=nbad=0;i<16777216 && nbad>=trunc(sqrt(i)/16);i++)
+  {
+    pointpair=randomPointPair();
+    midpoint.lat=(pointpair[0].lat+pointpair[1].lat)/2;
+    midpoint.lon=(pointpair[0].lon+pointpair[1].lon)/2;
+    xyzpairEllip[0]=ellip->geoc(pointpair[0],0);
+    xyzpairEllip[1]=ellip->geoc(pointpair[1],0);
+    projectedpair[0]=ellip->conformalLatitude(pointpair[0]);
+    projectedpair[1]=ellip->conformalLatitude(pointpair[1]);
+    midpointSphere=ellip->conformalLatitude(midpoint);
+    scale=ellip->scaleFactor(midpoint.lat,midpointSphere.lat);
+    xyzpairSphere[0]=ellip->sphere->geoc(projectedpair[0],0);
+    xyzpairSphere[1]=ellip->sphere->geoc(projectedpair[1],0);
+    if (fabs(dist(xyzpairEllip[0],xyzpairEllip[1])/scale/dist(xyzpairSphere[0],xyzpairSphere[1])-1)>1e-6)
+    {
+      nbad++;
+      if (nbad<256)
+	cout<<radtodeg(midpoint.lat)<<"° "<<radtodeg(midpoint.lon)<<"° computed scale "<<
+	scale<<" actual scale "<<dist(xyzpairEllip[0],xyzpairEllip[1])/dist(xyzpairSphere[0],xyzpairSphere[1])<<endl;
+      }
+  }
+  cout<<ellip->getName()<<" scale is ";
+  if (nbad>=trunc(sqrt(i)/16))
+    cout<<"bad"<<endl;
+  else
+    cout<<"good"<<endl;
+  tassert(nbad<trunc(sqrt(i)/16));
+}
+
 void testellipsoid()
 {
   double rad,cenlat,conlat,invconlat,conscale;
@@ -3743,7 +3809,8 @@ void testellipsoid()
   xyz sealevel,kmhigh,noffset,soffset,diff,benin,bengal,howland,galapagos,npole,spole;
   latlongelev greenhill,greenhill2;
   xyz gh;
-  ellipsoid test1(8026957,0,0.5,xyz(0,0,0),""),test2(8026957,4013478.5,0,xyz(0,0,0),"");
+  ellipsoid test1(8026957,0,0.5,xyz(0,0,0),"test1"),
+            test2(8026957,4013478.5,0,xyz(0,0,0),"test2");
   tassert(test1.geteqr()==test2.geteqr());
   tassert(test1.getpor()==test2.getpor());
   sealevel=test1.geoc(degtobin(45),0,0);
@@ -3785,6 +3852,7 @@ void testellipsoid()
     cout<<setw(2)<<i<<setw(15)<<radtobin(conlat)<<setw(15)<<radtobin(invconlat)
         <<setw(20)<<ldecimal(conscale)<<endl;
   }
+  testellipsoidscale(&test1);
   benin=Sphere.geoc(0,0,0);
   bengal=Sphere.geoc(0,DEG90,0);
   howland=Sphere.geoc(0,DEG180,0);
@@ -3877,33 +3945,6 @@ void test1projection(string projName,Projection &proj,latlong ll,xy grid)
   " Northing "<<grid1.north()<<" Easting "<<grid1.east()<<endl;
   tassert(dist(grid,grid1)<1.5);
   tassert(dist(gridGeoc,llGeoc)<1.75);
-}
-
-array<latlong,2> randomPointPair()
-/* Pick a point on the sphere according to the spherical asteraceous pattern.
- * Then pick two points about a meter apart. The distance between them is
- * 1±3e-9 m on the sphere.
- */
-{
-  int r1,r2;
-  latlong midpoint;
-  double latoff,lonoff;
-  array<latlong,2> ret;
-  r1=rng.usrandom();
-  r2=rng.usrandom();
-  r1=(r1<<8)+(r2>>8);
-  r2&=255;
-  midpoint.lat=asin((2*r1+1)/16777216.-1);
-  midpoint.lon=M_1PHI*(2*r1+1)/2.;
-  midpoint.lon-=rint(midpoint.lon);
-  midpoint.lon*=2*M_PI;
-  latoff=sin(M_PI*r2/256)/12742e3;
-  lonoff=cos(M_PI*r2/256)/12742e3/cos(midpoint.lat);
-  ret[0].lat=midpoint.lat-latoff;
-  ret[0].lon=midpoint.lon-lonoff;
-  ret[1].lat=midpoint.lat+latoff;
-  ret[1].lon=midpoint.lon+lonoff;
-  return ret;
 }
 
 void testprojscale(string projName,Projection &proj)
