@@ -30,6 +30,7 @@
 #include "point.h"
 #include "pointlist.h"
 #include "ldecimal.h"
+#include "manysum.h"
 #include "random.h"
 #include "relprime.h"
 
@@ -919,6 +920,15 @@ void pointlist::maketriangles()
   }
   for (i=0;i<edges.size();i++)
     edges[i].setNeighbors();
+}
+
+double pointlist::totalEdgeLength()
+{
+  vector<double> edgeLengths;
+  map<int,edge>::iterator i;
+  for (i=edges.begin();i!=edges.end();i++)
+    edgeLengths.push_back(i->second.length());
+  return pairwisesum(edgeLengths);
 }
 
 array<double,2> pointlist::lohi()

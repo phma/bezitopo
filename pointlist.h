@@ -118,6 +118,7 @@ public:
   void maketriangles();
   void makeqindex();
   void updateqindex();
+  double totalEdgeLength();
   double elevation(xy location);
   double dirbound(int angle);
   std::array<double,2> lohi();
