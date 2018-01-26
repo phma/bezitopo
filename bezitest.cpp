@@ -1168,6 +1168,9 @@ void testbreak0()
   {
     ps.line(doc.pl[1].edges[i],i,false);
   }
+  totallength=doc.pl[1].totalEdgeLength();
+  cout<<"Total length without breaklines "<<totallength<<endl;
+  tassert(fabs(totallength-1221.8)<0.1);
   ps.endpage();
   ps.startpage();
   cout<<'\n';
@@ -1203,6 +1206,9 @@ void testbreak0()
   {
     ps.line(doc.pl[1].edges[i],i,false);
   }
+  totallength=doc.pl[1].totalEdgeLength();
+  cout<<"Total length with breaklines "<<totallength<<endl;
+  tassert(fabs(totallength-1231.9)<0.1);
   ps.endpage();
   ps.trailer();
   ps.close();
