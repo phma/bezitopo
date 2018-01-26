@@ -832,8 +832,7 @@ void testmaketinaster()
   aster(doc,100);
   doc.pl[1].maketin(psoutput?"aster.ps":"",false);
   tassert(doc.pl[1].edges.size()==284);
-  for (totallength=i=0;i<doc.pl[1].edges.size();i++)
-    totallength+=doc.pl[1].edges[i].length();
+  totallength=doc.pl[1].totalEdgeLength();
   tassert(fabs(totallength-600.689)<0.001);
   doc.pl[1].maketriangles();
   tassert(doc.pl[1].checkTinConsistency());
@@ -856,8 +855,7 @@ void testmaketinbigaster()
   aster(doc,5972);
   doc.pl[1].maketin(psoutput?"bigaster.ps":"",true);
   //tassert(doc.pl[1].edges.size()==284);
-  for (totallength=i=0;i<doc.pl[1].edges.size();i++)
-    totallength+=doc.pl[1].edges[i].length();
+  totallength=doc.pl[1].totalEdgeLength();
   //dumppointsvalence();
   //tassert(fabs(totallength-600.689)<0.001);
   /* Flip zones:
@@ -912,8 +910,7 @@ void testmaketinlongandthin()
   rotate(doc,30);
   doc.pl[1].maketin(psoutput?"longandthin.ps":"");
   tassert(doc.pl[1].edges.size()==197);
-  for (totallength=i=0;i<doc.pl[1].edges.size();i++)
-    totallength+=doc.pl[1].edges[i].length();
+  totallength=doc.pl[1].totalEdgeLength();
   printf("longandthin %ld edges total length %f\n",doc.pl[1].edges.size(),totallength);
   tassert(fabs(totallength-123.499)<0.001);
 }
@@ -928,8 +925,7 @@ void testmaketinlozenge()
   rotate(doc,30);
   doc.pl[1].maketin(psoutput?"lozenge.ps":"");
   tassert(doc.pl[1].edges.size()==299);
-  for (totallength=i=0;i<doc.pl[1].edges.size();i++)
-    totallength+=doc.pl[1].edges[i].length();
+  totallength=doc.pl[1].totalEdgeLength();
   printf("lozenge %ld edges total length %f\n",doc.pl[1].edges.size(),totallength);
   tassert(fabs(totallength-2111.8775)<0.001);
 }
@@ -944,8 +940,7 @@ void testmaketinring()
   rotate(doc,30);
   doc.pl[1].maketin(psoutput?"ring.ps":"");
   tassert(doc.pl[1].edges.size()==197);
-  for (totallength=i=0;i<doc.pl[1].edges.size();i++)
-    totallength+=doc.pl[1].edges[i].length();
+  totallength=doc.pl[1].totalEdgeLength();
   printf("ring edges total length %f\n",totallength);
   //Don't tassert the total length. There are over 10^56 (2^189) right answers to that.
 }
@@ -960,8 +955,7 @@ void testmaketinwheel()
   rotate(doc,30);
   doc.pl[1].maketin(psoutput?"wheel.ps":"");
   tassert(doc.pl[1].edges.size()==500);
-  for (totallength=i=0;i<doc.pl[1].edges.size();i++)
-    totallength+=doc.pl[1].edges[i].length();
+  totallength=doc.pl[1].totalEdgeLength();
   printf("wheel edges total length %f\n",totallength);
   tassert(fabs(totallength-1217.2716)<0.001);
 }
@@ -975,8 +969,7 @@ void testmaketinellipse()
   ellipse(doc,100);
   doc.pl[1].maketin(psoutput?"ellipse.ps":"");
   tassert(doc.pl[1].edges.size()==197);
-  for (totallength=i=0;i<doc.pl[1].edges.size();i++)
-    totallength+=doc.pl[1].edges[i].length();
+  totallength=doc.pl[1].totalEdgeLength();
   printf("ellipse edges total length %f\n",totallength);
   tassert(fabs(totallength-1329.4675)<0.001);
 }
@@ -1020,7 +1013,7 @@ void test1break0graph(pointlist &pl,string plname)
 
 void testbreak0()
 {
-  double leftedge,bottomedge,rightedge,topedge,conterval;
+  double leftedge,bottomedge,rightedge,topedge,conterval,totallength;
   pointlist bull,octahedron,frucht,cycle17,chain17;
   int rotation=DEG90,i,j,sum,nopen;
   criterion crit1;
