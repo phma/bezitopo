@@ -101,6 +101,31 @@ vector<string> args;
 
 using namespace std;
 
+void outsizeof(string typeName,int size)
+{
+  cout<<"size of "<<typeName<<" is "<<size<<endl;
+}
+
+void testsizeof()
+// This is not run as part of "make test".
+{
+  outsizeof("bezier3d",sizeof(bezier3d));
+  outsizeof("drawobj",sizeof(drawobj));
+  outsizeof("Circle",sizeof(Circle));
+  outsizeof("segment",sizeof(segment));
+  outsizeof("arc",sizeof(arc));
+  outsizeof("spiralarc",sizeof(spiralarc));
+  outsizeof("xy",sizeof(xy));
+  outsizeof("xyz",sizeof(xyz));
+  outsizeof("point",sizeof(point));
+  outsizeof("edge",sizeof(edge));
+  outsizeof("triangle",sizeof(triangle));
+  outsizeof("polyline",sizeof(polyline));
+  outsizeof("polyarc",sizeof(polyarc));
+  outsizeof("polyspiral",sizeof(polyspiral));
+  outsizeof("geoquad",sizeof(geoquad));
+}
+
 void testintegertrig()
 {
   double sinerror,coserror,ciserror,totsinerror,totcoserror,totciserror;
@@ -6082,6 +6107,8 @@ int main(int argc, char *argv[])
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
   doc.pl.resize(2);
+  if (shoulddo("sizeof"))
+    testsizeof();
   if (shoulddo("area3"))
     testarea3();
   if (shoulddo("relprime"))
