@@ -711,7 +711,9 @@ void TinCanvas::roughContours()
   progressDialog->setRange(elevLo,elevHi);
   progressDialog->setValue(progInx);
   progressDialog->setWindowTitle(tr("Drawing contours"));
-    progressDialog->setLabelText(tr("Drawing rough contours..."));
+  progressDialog->setLabelText(tr("Drawing rough contours..."));
+  if (trianglesAreCurvy!=trianglesShouldBeCurvy)
+    surfaceValid=false;
   connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (surfaceValid)
@@ -775,7 +777,12 @@ void TinCanvas::smoothContours()
   progressDialog->setRange(0,doc.pl[plnum].contours.size());
   progressDialog->setValue(0);
   progressDialog->setWindowTitle(tr("Drawing contours"));
-    progressDialog->setLabelText(tr("Drawing smooth contours..."));
+  progressDialog->setLabelText(tr("Drawing smooth contours..."));
+  if (contoursAreCurvy!=contoursShouldBeCurvy || trianglesAreCurvy!=trianglesShouldBeCurvy)
+  {
+    roughContoursValid=false;
+    contoursAreCurvy=contoursShouldBeCurvy;
+  }
   connect(progressDialog,SIGNAL(canceled()),this,SLOT(contoursCancel()));
   disconnect(timer,SIGNAL(timeout()),0,0);
   if (roughContoursValid && conterval==doc.pl[plnum].contourInterval.fineInterval())
