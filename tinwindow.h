@@ -61,6 +61,7 @@ public slots:
   void zoomp10();
   void rotatecw();
   void rotateccw();
+  void setButtonBits(int bits);
   void setMeter();
   void setFoot();
   void setInternationalFoot();
@@ -152,9 +153,11 @@ public:
   void unmakeActions();
 signals:
   void zoomCanvas(int steps);
+  void buttonBitsChanged(int bits);
 public slots:
   void prepareZoomSteps(int steps);
   void zoomSteps(bool checked);
+  void changeButtonBits();
   void aboutProgram();
   void aboutQt();
 private:
@@ -171,4 +174,5 @@ private:
   QAction *roughContoursAction,*smoothContoursAction;
   QAction *importBreaklinesAction,*exportBreaklinesAction;
   QAction *aboutProgramAction,*aboutQtAction,*dumpAction;
+  QAction *curvyTriangleAction,*curvyContourAction;
 };

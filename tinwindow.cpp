@@ -198,6 +198,12 @@ void TinCanvas::rotateccw()
   update();
 }
 
+void TinCanvas::setButtonBits(int bits)
+{
+  trianglesShouldBeCurvy=(bits>>0)&1;
+  contoursShouldBeCurvy=(bits>>1)&1;
+}
+
 void TinCanvas::setMeter()
 {
   doc.ms.setMetric();
@@ -1188,6 +1194,21 @@ void TinWindow::makeActions()
   smoothContoursAction->setText(tr("Draw smooth contours"));
   contourMenu->addAction(smoothContoursAction);
   connect(smoothContoursAction,SIGNAL(triggered(bool)),canvas,SLOT(smoothContours()));
+  curvyContourAction=new QAction(this);
+  //curvyContourAction->setIcon(QIcon(":/curvycon.png"));
+  curvyContourAction->setText(tr("Draw smooth contours with curves"));
+  curvyContourAction->setCheckable(true);
+  contourMenu->addAction(curvyContourAction);
+  connect(curvyContourAction,SIGNAL(triggered(bool)),this,SLOT(changeButtonBits()));
+  curvyContourAction->setChecked(true);
+  curvyTriangleAction=new QAction(this);
+  //curvyTriangleAction->setIcon(QIcon(":/curvytri.png"));
+  curvyTriangleAction->setText(tr("Use curved triangular surfaces"));
+  curvyTriangleAction->setCheckable(true);
+  contourMenu->addAction(curvyTriangleAction);
+  connect(curvyTriangleAction,SIGNAL(triggered(bool)),this,SLOT(changeButtonBits()));
+  curvyTriangleAction->setChecked(true);
+  connect(this,SIGNAL(buttonBitsChanged(int)),canvas,SLOT(setButtonBits(int)));
   aboutProgramAction=new QAction(this);
   //aboutProgramAction->setIcon(QIcon(":/.png"));
   aboutProgramAction->setText(tr("About Bezitopo"));
@@ -1271,6 +1292,12 @@ void TinWindow::prepareZoomSteps(int steps)
 void TinWindow::zoomSteps(bool checked)
 {
   zoomCanvas(preZoomStep);
+}
+
+void TinWindow::changeButtonBits()
+{
+  buttonBitsChanged((curvyTriangleAction->isChecked()<<0)|
+                    (curvyContourAction->isChecked()<<1));
 }
 
 void TinWindow::aboutProgram()
