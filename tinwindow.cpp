@@ -78,6 +78,8 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
     //doc.pl[1].edges[i].dump(&doc.pl[1]);
   show();
   sizeToFit();
+  trianglesShouldBeCurvy=true;
+  contoursShouldBeCurvy=true;
 }
 
 QPointF TinCanvas::worldToWindow(xy pnt)
@@ -590,9 +592,10 @@ void TinCanvas::redoSurface()
   {
     doc.pl[plnum].makegrad(0.15);
     doc.pl[plnum].maketriangles();
-    doc.pl[plnum].setgradient();
+    doc.pl[plnum].setgradient(!trianglesShouldBeCurvy);
     doc.pl[plnum].makeqindex();           // These five are all fast. It's finding the
     doc.pl[plnum].findedgecriticalpts();  // critical points of a triangle that's slow.
+    trianglesAreCurvy=trianglesShouldBeCurvy;
   }
   progressDialog->setRange(0,doc.pl[plnum].triangles.size());
   progressDialog->setWindowTitle(tr("Making surface"));
@@ -779,7 +782,7 @@ void TinCanvas::smooth1Contour()
 {
   if (progInx<doc.pl[plnum].contours.size())
   {
-    smooth1contour(doc.pl[plnum],conterval,progInx,true,dummyPs,0,0,0,0);
+    smooth1contour(doc.pl[plnum],conterval,progInx,contoursShouldBeCurvy,dummyPs,0,0,0,0);
     progressDialog->setValue(++progInx);
   }
   else
@@ -796,6 +799,7 @@ void TinCanvas::smoothContoursFinish()
   {
     case SMOOTH_CONTOURS:
       goal=DONE;
+      contoursAreCurvy=contoursShouldBeCurvy;
       progressDialog->reset();
       timer->stop();
       break;

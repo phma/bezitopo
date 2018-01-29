@@ -136,6 +136,8 @@ private:
   bool surfaceValid; // If false, to do rough contours, must first set gradient.
   bool roughContoursValid; // If false, to do smooth contours, must first do rough contours.
   bool smoothContoursValid;
+  bool trianglesAreCurvy,trianglesShouldBeCurvy;
+  bool contoursAreCurvy,contoursShouldBeCurvy;
   QTime lastPaintTime;
   int lastPaintDuration;
 };
