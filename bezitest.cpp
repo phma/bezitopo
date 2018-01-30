@@ -2908,7 +2908,7 @@ void trianglecontours()
   fname="tri";
   for (j=0;j<9;j++)
   {
-    //bytes[j]=rng.ucrandom();
+    bytes[j]=rng.ucrandom();
     fname+=hexdig[bytes[j]>>4];
     fname+=hexdig[bytes[j]&15];
   }
