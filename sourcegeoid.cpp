@@ -956,6 +956,8 @@ void writeboldatni(geoid &geo,string filename)
   if (geo.ghdr && geo.cmap)
   {
     geo.ghdr->hash=geo.cmap->hash();
+    if (!geo.ghdr->excerpted)
+      geo.ghdr->origHash=geo.ghdr->hash;
     geo.ghdr->writeBinary(file);
     geo.cmap->writeBinary(file);
   }

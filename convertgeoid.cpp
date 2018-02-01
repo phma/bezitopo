@@ -3,7 +3,7 @@
 /* convertgeoid.cpp - convert geoidal undulation data */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2017 Pierre Abbat.
+/* Copyright 2015-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -619,6 +619,14 @@ void argpass2()
  * and outputs the boundary to file Macksville.gsf.kml .
  */
 
+bool oneBoldatni()
+{
+  if (nInputFiles==1)
+    return geo[0].ghdr!=nullptr;
+  else
+    return false;
+}
+
 int main(int argc, char *argv[])
 {
   ofstream ofile;
@@ -712,6 +720,13 @@ int main(int argc, char *argv[])
         outputgeoid.ghdr->tolerance=bolTolerance;
         outputgeoid.ghdr->sublimit=bolSubdivision;
         outputgeoid.ghdr->spacing=bolSpacing;
+	if (oneBoldatni())
+	{
+	  outputgeoid.ghdr->excerpted=true;
+	  outputgeoid.ghdr->origHash=geo[0].ghdr->origHash;
+	}
+	else
+	  outputgeoid.ghdr->excerpted=false;
         for (i=0;i<6;i++)
         {
           //cout<<"Face "<<i+1;
