@@ -5357,9 +5357,9 @@ void testkml()
   smallcircle avl150,tvu150,cham150,athwi150;
   cylinterval lune,nearpole,empty,emptym,emptyp,band30,band40,band50,antarctic,full;
   g1boundary gPode,gAntipode;
-  gboundary gPodes,gRingFive,gOneFace,bigBdy,smallBdy;
+  gboundary gPodes,gRingFive,gVballGeoid,gOneFace,bigBdy,smallBdy;
   double bigperim,smallperim;
-  geoid ringFive,oneFace;
+  geoid ringFive,vballGeoid,oneFace;
   KmlRegionList kmlReg;
   unsigned bigReg,smallReg;
   polyarc pPode,pAntipode;
@@ -5409,7 +5409,8 @@ void testkml()
   plotbdy(ps,gPodes);
   ps.endpage();
   // Start test with file previously written by testgeoidboundary
-  if (readboldatni(ringFive,"geoidboundary.bol")<2)
+  if (readboldatni(ringFive,"geoidboundary.bol")<2 ||
+      readboldatni(vballGeoid,"vball.bol")<2)
     cerr<<"Please run \"bezitest geoidboundary\" first."<<endl;
   else
     cout<<"Read geoidboundary.bol written by geoidboundary test"<<endl;
@@ -5437,6 +5438,8 @@ void testkml()
   ps.trailer();
   ps.close();
   outKml(gRingFive,"geoidboundary.kml");
+  gVballGeoid=vballGeoid.cmap->gbounds();
+  outKml(gVballGeoid,"vball.kml");
   /* Test a single face. This is to check whether the polygons in KML consist
    * of geodesics or loxodromes.
    */
