@@ -5047,11 +5047,69 @@ void plotbdy(PostScript &ps,gboundary &gb)
     plot1bdy(ps,gb[i]);
 }
 
+char displayDigits[6][7]=
+{
+  {
+    0x04, //  *  
+    0x0c, // **  
+    0x14, //* *  
+    0x04, //  *  
+    0x04, //  *  
+    0x04, //  *  
+    0x1f  //*****
+  },
+  {
+    0x0e, // *** 
+    0x11, //*   *
+    0x01, //    *
+    0x02, //   * 
+    0x04, //  *  
+    0x08, // *   
+    0x1f  //*****
+  },
+  {
+    0x0e, // *** 
+    0x11, //*   *
+    0x01, //    *
+    0x06, //  ** 
+    0x01, //    *
+    0x11, //*   *
+    0x0e  // *** 
+  },
+  {
+    0x02, //   * 
+    0x06, //  ** 
+    0x0a, // * * 
+    0x1f, //*****
+    0x02, //   * 
+    0x02, //   * 
+    0x02  //   * 
+  },
+  {
+    0x1f, //*****
+    0x10, //*    
+    0x10, //*    
+    0x1e, //**** 
+    0x01, //    *
+    0x01, //    *
+    0x1e  //**** 
+  },
+  {
+    0x07, //  ***
+    0x08, // *   
+    0x10, //*    
+    0x1e, //**** 
+    0x11, //*   *
+    0x11, //*   *
+    0x0e  // *** 
+  }
+};
+
 void testgeoidboundary()
 {
-  int i,r,gbarea;
+  int i,j,r,gbarea;
   int nCircles=11;
-  int circleSize=rint(DEG30/nCircles);
+  int circleSize=rint(DEG45/nCircles);
   double x,peri;
   g1boundary g1,g2;
   gboundary gb;
@@ -5279,6 +5337,7 @@ void testgeoidboundary()
    */
   excerptcircles.clear();
   for (v.face=1;v.face<7;v.face++)
+  {
     for (i=0;i<nCircles;i++)
     { // Draw the borders of the faces.
       v.y=-1;
@@ -5302,6 +5361,17 @@ void testgeoidboundary()
       c.setradius(circleSize);
       excerptcircles.push_back(c);
     }
+    for (i=0;i<7;i++)
+      for (j=0;j<5;j++)
+	if ((displayDigits[v.face-1][i]>>j)&1)
+	{
+	  v.x=(2.-j)/nCircles;
+	  v.y=(3.-i)/nCircles;
+	  c.center=decodedir(v);
+	  c.setradius(circleSize);
+	  excerptcircles.push_back(c);
+	}
+  }
   outgd.cmap->clear();
   totalArea.clear();
   dataArea.clear();
