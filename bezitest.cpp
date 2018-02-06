@@ -5050,6 +5050,8 @@ void plotbdy(PostScript &ps,gboundary &gb)
 void testgeoidboundary()
 {
   int i,r,gbarea;
+  int nCircles=11;
+  int circleSize=rint(DEG30/nCircles);
   double x,peri;
   g1boundary g1,g2;
   gboundary gb;
@@ -5272,6 +5274,54 @@ void testgeoidboundary()
   cout<<"area "<<gbarea<<' '<<bintodeg(gbarea)<<endl;
   tassert(gbarea>2038756371 && gbarea<2060000000);
   // The area is a little bigger so that it covers all the circles completely.
+  /* Make a geoid file showing the numerals 1-6 on their faces. The KML file
+   * will be for developers to see how volleyball coordinates work.
+   */
+  excerptcircles.clear();
+  for (v.face=1;v.face<7;v.face++)
+    for (i=0;i<nCircles;i++)
+    { // Draw the borders of the faces.
+      v.y=-1;
+      v.x=(2*i+0.5-nCircles)/nCircles;
+      c.center=decodedir(v);
+      c.setradius(circleSize);
+      excerptcircles.push_back(c);
+      v.x=1;
+      v.y=(2*i+0.5-nCircles)/nCircles;
+      c.center=decodedir(v);
+      c.setradius(circleSize);
+      excerptcircles.push_back(c);
+      v.y=1;
+      v.x=(nCircles-2*i-0.5)/nCircles;
+      c.center=decodedir(v);
+      c.setradius(circleSize);
+      excerptcircles.push_back(c);
+      v.x=-1;
+      v.y=(nCircles-2*i-0.5)/nCircles;
+      c.center=decodedir(v);
+      c.setradius(circleSize);
+      excerptcircles.push_back(c);
+    }
+  outgd.cmap->clear();
+  totalArea.clear();
+  dataArea.clear();
+  for (i=0;i<6;i++)
+  {
+    interroquad(outgd.cmap->faces[i],3e5);
+    refine(outgd.cmap->faces[i],outgd.cmap->scale,outgd.ghdr->tolerance,outgd.ghdr->sublimit,outgd.ghdr->spacing,4);
+  }
+  outProgress();
+  cout<<endl;
+  drawglobecube(1024,62,-7,&outgd,0,"vball.ppm");
+  gb=outgd.cmap->gbounds();
+  ps.open("vball.ps");
+  ps.prolog();
+  ps.startpage();
+  plotbdy(ps,gb);
+  ps.endpage();
+  ps.trailer();
+  ps.close();
+  writeboldatni(outgd,"vball.bol");
 }
 
 void drawproj1bdy(PostScript &ps,polyarc proj1bdy)
