@@ -222,6 +222,16 @@ polyarc flatten(g1boundary g1)
   return ret;
 }
 
+int bitcount(int n)
+{
+  n=((n&0xaaaaaaaa)>>1)+(n&0x55555555);
+  n=((n&0xcccccccc)>>2)+(n&0x33333333);
+  n=((n&0xf0f0f0f0)>>4)+(n&0x0f0f0f0f);
+  n=((n&0xff00ff00)>>8)+(n&0x00ff00ff);
+  n=((n&0xffff0000)>>16)+(n&0x0000ffff);
+  return n;
+}
+
 KmlRegionList kmlRegions(gboundary &gb)
 /* Given a gboundary (which has its flatBdy computed, if it didn't already),
  * computes the regions that it divides the earth into. There are normally
@@ -243,8 +253,8 @@ KmlRegionList kmlRegions(gboundary &gb)
   }
   ret.blankBitCount=INT_MAX;
   for (j=ret.regionMap.begin();j!=ret.regionMap.end();j++)
-    if (j->first<ret.blankBitCount)
-      ret.blankBitCount=j->first;
+    if (bitcount(j->first)<ret.blankBitCount)
+      ret.blankBitCount=bitcount(j->first);
   return ret;
 }
 
@@ -261,16 +271,6 @@ gboundary gbounds(geoid &geo)
     return gbounds(n);
 }
 #endif
-
-int bitcount(int n)
-{
-  n=((n&0xaaaaaaaa)>>1)+(n&0x55555555);
-  n=((n&0xcccccccc)>>2)+(n&0x33333333);
-  n=((n&0xf0f0f0f0)>>4)+(n&0x0f0f0f0f);
-  n=((n&0xff00ff00)>>8)+(n&0x00ff00ff);
-  n=((n&0xffff0000)>>16)+(n&0x0000ffff);
-  return n;
-}
 
 gboundary regionBoundary(KmlRegionList& regionList,gboundary& allBdy,unsigned reg)
 {
