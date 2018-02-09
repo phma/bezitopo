@@ -187,15 +187,18 @@ double LambertConicSphere::scaleFactor(xy grid)
 double LambertConicSphere::scaleFactor(latlong ll)
 {
   double coneradius,cenconeradius,parradius,cenparradius;
-  coneradius=tan((M_PIl/2-ll.lat)/2);
+  latlong sphll=ellip->conformalLatitude(ll);
+  coneradius=tan((M_PIl/2-sphll.lat)/2);
   cenconeradius=tan((M_PIl/2-centralParallel)/2);
-  parradius=(ellip->geoc(ll.lat,0.,0.)).getx()/ellip->geteqr();
-  cenparradius=(ellip->geoc(centralParallel,0.,0.)).getx()/ellip->geteqr();
-  return pow(coneradius/cenconeradius,exponent)*cenparradius/parradius*scale;
+  parradius=(ellip->sphere->geoc(ll.lat,0.,0.)).getx()/ellip->sphere->geteqr();
+  cenparradius=(ellip->sphere->geoc(centralParallel,0.,0.)).getx()/ellip->sphere->geteqr();
+  return pow(coneradius/cenconeradius,exponent)*
+         cenparradius/parradius*scale/ellip->scaleFactor(ll.lat,sphll.lat);
 }
 
 void LambertConicEllipsoid::setParallel(double Parallel)
 {
+  Parallel=ellip->conformalLatitude(Parallel);
   centralParallel=Parallel;
   exponent=sin(Parallel);
   if (exponent==0)
