@@ -187,13 +187,11 @@ double LambertConicSphere::scaleFactor(xy grid)
 double LambertConicSphere::scaleFactor(latlong ll)
 {
   double coneradius,cenconeradius,parradius,cenparradius;
-  latlong sphll=ellip->conformalLatitude(ll);
-  coneradius=tan((M_PIl/2-sphll.lat)/2);
+  coneradius=tan((M_PIl/2-ll.lat)/2);
   cenconeradius=tan((M_PIl/2-centralParallel)/2);
-  parradius=(ellip->sphere->geoc(ll.lat,0.,0.)).getx()/ellip->sphere->geteqr();
-  cenparradius=(ellip->sphere->geoc(centralParallel,0.,0.)).getx()/ellip->sphere->geteqr();
-  return pow(coneradius/cenconeradius,exponent)*
-         cenparradius/parradius*scale/ellip->scaleFactor(ll.lat,sphll.lat);
+  parradius=(ellip->geoc(ll.lat,0.,0.)).getx()/ellip->geteqr();
+  cenparradius=(ellip->geoc(centralParallel,0.,0.)).getx()/ellip->geteqr();
+  return pow(coneradius/cenconeradius,exponent)*cenparradius/parradius*scale;
 }
 
 void LambertConicEllipsoid::setParallel(double Parallel)
@@ -301,6 +299,7 @@ latlong LambertConicEllipsoid::gridToLatlong(xy grid)
   }
   ret.lat=M_PIl/2-2*atan(radius);
   ret.lon=angle+centralMeridian;
+  ret=ellip->inverseConformalLatitude(ret);
   return ret;
 }
 
@@ -320,6 +319,7 @@ xy LambertConicEllipsoid::latlongToGrid(latlong ll)
 {
   double radius,angle,northing,easting;
   radius=tan((M_PIl/2-ll.lat)/2);
+  ll=ellip->conformalLatitude(ll);
   angle=ll.lon-centralMeridian;
   while(angle>M_PIl*2)
     angle-=M_PIl*2;
@@ -351,11 +351,13 @@ double LambertConicEllipsoid::scaleFactor(xy grid)
 double LambertConicEllipsoid::scaleFactor(latlong ll)
 {
   double coneradius,cenconeradius,parradius,cenparradius;
-  coneradius=tan((M_PIl/2-ll.lat)/2);
+  latlong sphll=ellip->conformalLatitude(ll);
+  coneradius=tan((M_PIl/2-sphll.lat)/2);
   cenconeradius=tan((M_PIl/2-centralParallel)/2);
-  parradius=(ellip->geoc(ll.lat,0.,0.)).getx()/ellip->geteqr();
-  cenparradius=(ellip->geoc(centralParallel,0.,0.)).getx()/ellip->geteqr();
-  return pow(coneradius/cenconeradius,exponent)*cenparradius/parradius*scale;
+  parradius=(ellip->sphere->geoc(ll.lat,0.,0.)).getx()/ellip->sphere->geteqr();
+  cenparradius=(ellip->sphere->geoc(centralParallel,0.,0.)).getx()/ellip->sphere->geteqr();
+  return pow(coneradius/cenconeradius,exponent)*
+         cenparradius/parradius*scale/ellip->scaleFactor(ll.lat,sphll.lat);
 }
 
 /* North Carolina state plane, original:
