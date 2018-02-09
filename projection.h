@@ -3,7 +3,7 @@
 /* projection.h - map projections                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2016,2017 Pierre Abbat.
+/* Copyright 2012,2016-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -51,7 +51,6 @@ public:
   virtual latlong gridToLatlong(xy grid)=0;
   virtual xyz gridToGeocentric(xy grid)=0;
   virtual xy geocentricToGrid(xyz geoc)=0;
-  //geocentricToGrid is commented out until there's a method in ellipsoid to support it.
   virtual xy latlongToGrid(latlong ll)=0;
   /* The grid scale factor is the distance on the grid divided by the distance
    * on the ellipsoid. It is smallest at the center of the grid (central parallel
