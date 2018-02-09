@@ -194,6 +194,165 @@ double LambertConicSphere::scaleFactor(latlong ll)
   return pow(coneradius/cenconeradius,exponent)*cenparradius/parradius*scale;
 }
 
+void LambertConicEllipsoid::setParallel(double Parallel)
+{
+  centralParallel=Parallel;
+  exponent=sin(Parallel);
+  if (exponent==0)
+    coneScale=1;
+  else if (fabs(exponent)==1)
+    coneScale=2;
+  else
+    coneScale=cos(Parallel)/pow(tan((M_PIl/2-Parallel)/2),exponent);
+  //cout<<"Parallel "<<radtodeg(Parallel)<<" coneScale "<<coneScale<<endl;
+}
+
+LambertConicEllipsoid::LambertConicEllipsoid():Projection()
+{
+  centralMeridian=0;
+  setParallel(0);
+  poleY=INFINITY;
+}
+
+LambertConicEllipsoid::LambertConicEllipsoid(double Meridian,double Parallel):Projection()
+{
+  latlong maporigin;
+  centralMeridian=Meridian;
+  setParallel(Parallel);
+  poleY=0;
+  maporigin=latlong(Meridian,Parallel);
+  poleY=-latlongToGrid(maporigin).gety();
+}
+
+LambertConicEllipsoid::LambertConicEllipsoid(double Meridian,double Parallel0,double Parallel1):Projection()
+{
+  latlong maporigin;
+  brent br;
+  latlong ll;
+  double ratiolog0,ratiolog1,Parallel;
+  centralMeridian=Meridian;
+  setParallel(Parallel0);
+  ratiolog0=scaleRatioLog(Parallel0,Parallel1);
+  setParallel(Parallel1);
+  ratiolog1=scaleRatioLog(Parallel0,Parallel1);
+  /* Setting one parallel to ±90° and the other to something else, or either
+   * or both to ±(>90°), is an error. I'm not sure whether to throw an exception
+   * or set the state to invalid. I'm now setting it to invalid.
+   * If the parallels are 45° and 90°, different computers give wildly different
+   * results: 84.714395° on Linux/Intel, but 67.5° on Linux/ARM and DFBSD.
+   * This is because M_PIl!=M_PI, resulting in M_PIl/2-ll.lat being tiny but
+   * positive when ll.lat is M_PIl rounded to double.
+   * If the parallels are 45° and DEG90-1 (89.999999832°), the three computers
+   * agree that Parallel is 82.686083 (but no more precisely), so that is not
+   * an error.
+   */
+  if ((Parallel0!=Parallel1 && (radtobin(fabs(Parallel0))==DEG90 || radtobin(fabs(Parallel1))==DEG90))
+      || fabs(Parallel0)>M_PIl/2
+      || fabs(Parallel1)>M_PIl/2)
+  {
+    centralParallel=poleY=exponent=coneScale=NAN;
+    cerr<<"Invalid parallels in LambertConicEllipsoid"<<endl;
+  }
+  else
+  {
+    Parallel=br.init(Parallel0,ratiolog0,Parallel1,ratiolog1,false);
+    while (!br.finished())
+    {
+      cout<<"Parallel "<<ldecimal(radtodeg(Parallel))<<endl;
+      setParallel(Parallel);
+      Parallel=br.step(scaleRatioLog(Parallel0,Parallel1));
+    }
+    setParallel(Parallel);
+    ll.lon=centralMeridian;
+    ll.lat=Parallel0;
+    scale=1/scaleFactor(ll);
+    poleY=0;
+    maporigin=latlong(Meridian,Parallel);
+    poleY=-latlongToGrid(maporigin).gety();
+  }
+}
+
+double LambertConicEllipsoid::scaleRatioLog(double Parallel0,double Parallel1)
+{
+  latlong ll;
+  double ret;
+  ll.lon=centralMeridian;
+  ll.lat=Parallel0;
+  ret=log(scaleFactor(ll));
+  ll.lat=Parallel1;
+  ret-=log(scaleFactor(ll));
+  return ret;
+}
+
+latlong LambertConicEllipsoid::gridToLatlong(xy grid)
+{
+  double angle,radius;
+  latlong ret;
+  grid=(grid-offset)/scale;
+  if (exponent==0)
+  {
+    angle=grid.east()/ellip->geteqr();
+    radius=exp(-grid.north()/ellip->getpor());
+  }
+  ret.lat=M_PIl/2-2*atan(radius);
+  ret.lon=angle+centralMeridian;
+  return ret;
+}
+
+xyz LambertConicEllipsoid::gridToGeocentric(xy grid)
+{
+  return ellip->geoc(gridToLatlong(grid),0);
+}
+
+xy LambertConicEllipsoid::geocentricToGrid(xyz geoc)
+{
+  latlongelev lle=ellip->geod(geoc);
+  latlong ll(lle);
+  return latlongToGrid(ll);
+}
+
+xy LambertConicEllipsoid::latlongToGrid(latlong ll)
+{
+  double radius,angle,northing,easting;
+  radius=tan((M_PIl/2-ll.lat)/2);
+  angle=ll.lon-centralMeridian;
+  while(angle>M_PIl*2)
+    angle-=M_PIl*2;
+  while(angle<-M_PIl*2)
+    angle+=M_PIl*2;
+  /* TODO: if exponent is small, say less than 1/64, then use a complex
+   * function similar to expm1 on the Mercator coordinates.
+   */
+  if (exponent==0)
+  {
+    easting=angle*ellip->geteqr();
+    northing=-log(radius)*ellip->getpor();
+  }
+  else
+  {
+    radius=pow(radius,exponent)*ellip->getpor()/exponent*coneScale;
+    angle*=exponent;
+    easting=radius*sin(angle);
+    northing=poleY-radius*cos(angle);
+  }
+  return xy(easting,northing)*scale+offset;
+}
+
+double LambertConicEllipsoid::scaleFactor(xy grid)
+{
+  return scaleFactor(gridToLatlong(grid));
+}
+
+double LambertConicEllipsoid::scaleFactor(latlong ll)
+{
+  double coneradius,cenconeradius,parradius,cenparradius;
+  coneradius=tan((M_PIl/2-ll.lat)/2);
+  cenconeradius=tan((M_PIl/2-centralParallel)/2);
+  parradius=(ellip->geoc(ll.lat,0.,0.)).getx()/ellip->geteqr();
+  cenparradius=(ellip->geoc(centralParallel,0.,0.)).getx()/ellip->geteqr();
+  return pow(coneradius/cenconeradius,exponent)*cenparradius/parradius*scale;
+}
+
 /* North Carolina state plane, original:
  * ellipsoid Clarke
  * central meridian -79°
