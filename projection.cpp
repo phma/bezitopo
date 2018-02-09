@@ -214,23 +214,25 @@ LambertConicEllipsoid::LambertConicEllipsoid():Projection()
   poleY=INFINITY;
 }
 
-LambertConicEllipsoid::LambertConicEllipsoid(double Meridian,double Parallel):Projection()
+LambertConicEllipsoid::LambertConicEllipsoid(ellipsoid *e,double Meridian,double Parallel):Projection()
 {
   latlong maporigin;
   centralMeridian=Meridian;
+  ellip=e;
   setParallel(Parallel);
   poleY=0;
   maporigin=latlong(Meridian,Parallel);
   poleY=-latlongToGrid(maporigin).gety();
 }
 
-LambertConicEllipsoid::LambertConicEllipsoid(double Meridian,double Parallel0,double Parallel1):Projection()
+LambertConicEllipsoid::LambertConicEllipsoid(ellipsoid *e,double Meridian,double Parallel0,double Parallel1):Projection()
 {
   latlong maporigin;
   brent br;
   latlong ll;
   double ratiolog0,ratiolog1,Parallel;
   centralMeridian=Meridian;
+  ellip=e;
   setParallel(Parallel0);
   ratiolog0=scaleRatioLog(Parallel0,Parallel1);
   setParallel(Parallel1);
