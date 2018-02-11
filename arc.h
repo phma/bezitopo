@@ -70,6 +70,8 @@ public:
   virtual xyz station(double along) const;
   virtual int bearing(double along);
   xy center();
+  virtual bool isCurly();
+  virtual bool isTooCurly();
   void split(double along,arc &a,arc &b);
   //xyz midpoint();
   };

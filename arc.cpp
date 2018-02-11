@@ -144,6 +144,16 @@ int arc::bearing(double along)
   return chordbearing()+angalong;
 }
 
+bool arc::isCurly()
+{
+  return delta>=DEG180 || delta==DEG360;
+}
+
+bool arc::isTooCurly()
+{
+  return delta==DEG360;
+}
+
 void arc::split(double along,arc &a,arc &b)
 {
   double dummy;
