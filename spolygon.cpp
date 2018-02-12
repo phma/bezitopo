@@ -3,7 +3,7 @@
 /* spolygon.cpp - spherical polygons                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017 Pierre Abbat.
+/* Copyright 2017-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -77,7 +77,9 @@ int iSurfaceArea(std::vector<xyz> polygon)
   int i;
   dangle.resize(polygon.size());
   for (i=0;i<polygon.size();i++)
-    dangle[i]=deflectionAngle(polygon[(i+polygon.size()-1)%polygon.size()],polygon[i],polygon[(i+1)%polygon.size()]);
+    dangle[i]=deflectionAngle(polygon[(i+polygon.size()-1)%polygon.size()],
+			      polygon[i],
+			      polygon[(i+1)%polygon.size()]);
   return (polygon.size()?DEG360:0)-radtobin(pairwisesum(dangle));
   // The area of an empty polygon is 0. Without the ?;, it would be 2π.
 }
