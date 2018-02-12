@@ -4058,7 +4058,7 @@ void testprojection()
   testprojscale("sphereStereoNorthPole",sphereStereoNorthPole);
   drawproj("sphereStereoNorthPole",sphereStereoNorthPole);
   drawproj("ellipsoidMercator",ellipsoidMercator);
-  //testprojscale("ellipsoidMercator",ellipsoidMercator);
+  testprojscale("ellipsoidMercator",ellipsoidMercator);
   testprojscale("sphereStereoArabianSea",sphereStereoArabianSea);
   drawproj("sphereStereoArabianSea",sphereStereoArabianSea);
 }

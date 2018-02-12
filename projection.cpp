@@ -318,8 +318,8 @@ xy LambertConicEllipsoid::geocentricToGrid(xyz geoc)
 xy LambertConicEllipsoid::latlongToGrid(latlong ll)
 {
   double radius,angle,northing,easting;
-  radius=tan((M_PIl/2-ll.lat)/2);
   ll=ellip->conformalLatitude(ll);
+  radius=tan((M_PIl/2-ll.lat)/2);
   angle=ll.lon-centralMeridian;
   while(angle>M_PIl*2)
     angle-=M_PIl*2;
@@ -330,12 +330,12 @@ xy LambertConicEllipsoid::latlongToGrid(latlong ll)
    */
   if (exponent==0)
   {
-    easting=angle*ellip->geteqr();
-    northing=-log(radius)*ellip->getpor();
+    easting=angle*ellip->sphere->geteqr();
+    northing=-log(radius)*ellip->sphere->getpor();
   }
   else
   {
-    radius=pow(radius,exponent)*ellip->getpor()/exponent*coneScale;
+    radius=pow(radius,exponent)*ellip->sphere->getpor()/exponent*coneScale;
     angle*=exponent;
     easting=radius*sin(angle);
     northing=poleY-radius*cos(angle);
@@ -354,7 +354,7 @@ double LambertConicEllipsoid::scaleFactor(latlong ll)
   latlong sphll=ellip->conformalLatitude(ll);
   coneradius=tan((M_PIl/2-sphll.lat)/2);
   cenconeradius=tan((M_PIl/2-centralParallel)/2);
-  parradius=(ellip->sphere->geoc(ll.lat,0.,0.)).getx()/ellip->sphere->geteqr();
+  parradius=(ellip->sphere->geoc(sphll.lat,0.,0.)).getx()/ellip->sphere->geteqr();
   cenparradius=(ellip->sphere->geoc(centralParallel,0.,0.)).getx()/ellip->sphere->geteqr();
   return pow(coneradius/cenconeradius,exponent)*
          cenparradius/parradius*scale/ellip->scaleFactor(ll.lat,sphll.lat);
