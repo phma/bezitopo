@@ -4024,7 +4024,7 @@ void testprojection()
   LambertConicSphere sphereConic4590m(0,degtorad(45),bintorad(DEG90-1));
   // One parallel 90° and the other not is an invalid condition.
   // This is a test to see what the object does with it.
-  LambertConicEllipsoid ellipsoidMercator(&WGS84,0,0);
+  LambertConicEllipsoid ellipsoidMercator(&WGS84,0,0),ellipsoidConic10(&WGS84,0,degtorad(10));
   StereographicSphere sphereStereoNorthPole;
   latlong ll;
   xy grid;
@@ -4057,8 +4057,10 @@ void testprojection()
   drawproj("sphereConicBenin",sphereConicBenin);
   testprojscale("sphereStereoNorthPole",sphereStereoNorthPole);
   drawproj("sphereStereoNorthPole",sphereStereoNorthPole);
-  drawproj("ellipsoidMercator",ellipsoidMercator);
   testprojscale("ellipsoidMercator",ellipsoidMercator);
+  drawproj("ellipsoidMercator",ellipsoidMercator);
+  testprojscale("ellipsoidConic10",ellipsoidConic10);
+  drawproj("ellipsoidConic10",ellipsoidConic10);
   testprojscale("sphereStereoArabianSea",sphereStereoArabianSea);
   drawproj("sphereStereoArabianSea",sphereStereoArabianSea);
 }
