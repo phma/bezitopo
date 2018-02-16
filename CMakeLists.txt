@@ -26,10 +26,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/bezitopo)
 
-find_package(Qt5Core)
-find_package(Qt5Widgets)
-find_package(Qt5Gui)
-find_package(Qt5LinguistTools)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Gui REQUIRED)
+find_package(Qt5LinguistTools REQUIRED)
+find_package(FFTW)
 qt5_add_resources(lib_resources viewtin.qrc)
 qt5_add_translation(qm_files bezitopo_en.ts bezitopo_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
@@ -78,6 +80,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp break
                tinwindow.cpp vball.cpp vcurve.cpp viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources} ${qm_files})
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
+if (${FFTW_FOUND})
 add_executable(transmer angle.cpp arc.cpp bezier.cpp
                bezier3d.cpp binio.cpp breakline.cpp cogo.cpp drawobj.cpp
                ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
@@ -86,12 +89,15 @@ add_executable(transmer angle.cpp arc.cpp bezier.cpp
                projection.cpp ps.cpp quaternion.cpp random.cpp relprime.cpp
                rootfind.cpp segment.cpp spiral.cpp spolygon.cpp
                tin.cpp transmer.cpp vball.cpp vcurve.cpp)
+endif (${FFTW_FOUND})
 target_link_libraries(bezitopo Qt5::Widgets Qt5::Core)
 target_link_libraries(bezitest Qt5::Widgets Qt5::Core)
 target_link_libraries(convertgeoid Qt5::Widgets Qt5::Core)
 target_link_libraries(viewtin Qt5::Widgets Qt5::Core)
 target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)
+if (${FFTW_FOUND})
 target_link_libraries(transmer Qt5::Widgets Qt5::Core)
+endif (${FFTW_FOUND})
 target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID NUMSGEOID)
 target_compile_definitions(bezitest PUBLIC NUMSGEOID)
 #target_compile_definitions(pangeoid PUBLIC CONVERTGEOID NUMSGEOID)
