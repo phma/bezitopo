@@ -45,7 +45,7 @@ Before 0.3.0:
 •Find the volume of a surface in a boundary, using a quadtree of Halton generators. The test surface is a hemisphere; its boundary is a circle.
 •Clip contours to a boundary. This requires intersecting a spiral with a line or arc.
 •Copy contours to two or three layers. If three, the contours in the finest layer are drawn only on very flat ground.
-•Implement at least one map projection (Lambert conic).
+•Implement at least one map projection (Lambert conic). ✓
 
 For later:
 •Approximate a spiral arc by at least two circular arcs.
