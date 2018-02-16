@@ -3949,6 +3949,7 @@ void drawproj(string projName,Projection &proj)
   maxx=-outline.dirbound(-ori+DEG180);
   maxy=-outline.dirbound(-ori-DEG90);
   ps.open(projName+".ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
   ps.startpage();
   ps.setscale(minx,miny,maxx,maxy,ori);
