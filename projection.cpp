@@ -226,7 +226,7 @@ LambertConicEllipsoid::LambertConicEllipsoid(ellipsoid *e,double Meridian,double
   poleY=-latlongToGrid(maporigin).gety();
 }
 
-LambertConicEllipsoid::LambertConicEllipsoid(ellipsoid *e,double Meridian,double Parallel0,double Parallel1):Projection()
+LambertConicEllipsoid::LambertConicEllipsoid(ellipsoid *e,double Meridian,double Parallel0,double Parallel1,latlong zll,xy zxy):Projection()
 {
   latlong maporigin;
   brent br;
@@ -273,6 +273,7 @@ LambertConicEllipsoid::LambertConicEllipsoid(ellipsoid *e,double Meridian,double
     maporigin=latlong(Meridian,Parallel);
     poleY=-latlongToGrid(maporigin).gety();
   }
+  offset=zxy-latlongToGrid(zll);
 }
 
 double LambertConicEllipsoid::scaleRatioLog(double Parallel0,double Parallel1)

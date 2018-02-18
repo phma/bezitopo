@@ -96,7 +96,7 @@ class LambertConicEllipsoid: public Projection
 public:
   LambertConicEllipsoid();
   LambertConicEllipsoid(ellipsoid *e,double Meridian,double Parallel);
-  LambertConicEllipsoid(ellipsoid *e,double Meridian,double Parallel0,double Parallel1);
+  LambertConicEllipsoid(ellipsoid *e,double Meridian,double Parallel0,double Parallel1,latlong zll,xy zxy);
   virtual latlong gridToLatlong(xy grid);
   virtual xyz gridToGeocentric(xy grid);
   virtual xy geocentricToGrid(xyz geoc);

@@ -4017,6 +4017,8 @@ void testprojscale(string projName,Projection &proj)
  */
 void testprojection()
 {
+  latlong zll(0,0);
+  xy zxy(0,0);
   LambertConicSphere sphereMercator,sphereConic10(0,degtorad(10)),
     sphereConic20(0,degtorad(20)),sphereConic80(0,degtorad(80)),
     sphereConicm80(0,degtorad(-80));
@@ -4028,8 +4030,14 @@ void testprojection()
   LambertConicEllipsoid ellipsoidMercator(&WGS84,0,0),ellipsoidConic10(&WGS84,0,degtorad(10)),
     ellipsoidConic20(&WGS84,0,degtorad(20)),ellipsoidConic80(&WGS84,0,degtorad(80)),
     ellipsoidConicm80(&WGS84,0,degtorad(-80));
-  LambertConicEllipsoid ellipsoidConicBenin(&WGS84,degtorad(8/3.),degtorad(7.5),degtorad(11.5));
+  LambertConicEllipsoid ellipsoidConicBenin(&WGS84,degtorad(8/3.),degtorad(7.5),degtorad(11.5),zll,zxy);
   StereographicSphere sphereStereoNorthPole;
+  latlong ncll(degtorad(33.75),degtorad(-79.));
+  xy ncxy(609601.219202438405,0);
+  LambertConicEllipsoid NorthCarolina(&GRS80,degtorad(-79),degtorad(103/3.),degtorad(217/6.),ncll,ncxy);
+  latlong llOakland(degtorad(35.3415108),degtorad(-81.9198178028));
+  xy xyOakland(344240.332,180449.168);
+  // Benchmark on Oakland Road overpass over 74A, Spindale, North Carolina.
   latlong ll;
   xy grid;
   cout<<"projection"<<endl;
@@ -4075,6 +4083,13 @@ void testprojection()
   drawproj("ellipsoidConicBenin",ellipsoidConicBenin);
   testprojscale("sphereStereoArabianSea",sphereStereoArabianSea);
   drawproj("sphereStereoArabianSea",sphereStereoArabianSea);
+  grid=NorthCarolina.latlongToGrid(latlong(degtorad(33.75),degtorad(-79.)));
+  cout<<grid.east()<<' '<<grid.north()<<endl;
+  grid=NorthCarolina.latlongToGrid(latlong(degtorad(34.75),degtorad(-79.)));
+  cout<<grid.east()<<' '<<grid.north()<<endl;
+  grid=NorthCarolina.latlongToGrid(llOakland);
+  cout<<grid.east()<<' '<<grid.north()<<' '<<dist(grid,xyOakland)<<endl;
+  tassert(dist(grid,xyOakland)<0.001);
 }
 
 void spotcheckcolor(int col0,int col1)
