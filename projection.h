@@ -143,3 +143,26 @@ extern StereographicSphere sphereStereoArabianSea;
  * the function to correct the length as a Fourier series. It is automatically
  * analytic, hence conformal, and the scale can be computed by differentiating it.
  */
+
+class ProjectionLabel
+/* If subProvince is numeric and, within a province, they do not all have the
+ * same number of digits, they must be padded to the same length. For example,
+ * Alaska has ten zones, numbered from 1 to 10. Zone 6 must be encoded as " 6"
+ * so that it will be less than "10".
+ */
+{
+public:
+  std::string country; // or UTM
+  std::string province; // or state, krai, or UTM zone
+  std::string subProvince;
+  std::string version;
+  friend bool operator<(const ProjectionLabel a,const ProjectionLabel b);
+};
+
+class ProjectionList
+{
+private:
+  std::map<ProjectionLabel,Projection *> projList;
+public:
+  ~ProjectionList();
+};

@@ -429,3 +429,23 @@ double StereographicSphere::scaleFactor(latlong ll)
 }
 
 StereographicSphere sphereStereoArabianSea(rotateStereographic);
+
+bool operator<(const ProjectionLabel a,const ProjectionLabel b)
+{
+  if (a.country!=b.country)
+    return a.country<b.country;
+  else if (a.province!=b.province)
+    return a.province<b.province;
+  else if (a.subProvince!=b.subProvince)
+    return a.subProvince<b.subProvince;
+  else
+    return a.version<b.version;
+}
+
+ProjectionList::~ProjectionList()
+{
+  map<ProjectionLabel,Projection *>::iterator i;
+  for (i=projList.begin();i!=projList.end();i++)
+    if (i->second)
+      delete i->second;
+}
