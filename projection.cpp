@@ -295,8 +295,8 @@ latlong LambertConicEllipsoid::gridToLatlong(xy grid)
   grid=(grid-offset)/scale;
   if (exponent==0)
   {
-    angle=grid.east()/ellip->geteqr();
-    radius=exp(-grid.north()/ellip->getpor());
+    angle=grid.east()/ellip->sphere->geteqr();
+    radius=exp(-grid.north()/ellip->sphere->getpor());
   }
   ret.lat=M_PIl/2-2*atan(radius);
   ret.lon=angle+centralMeridian;
