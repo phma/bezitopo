@@ -42,6 +42,7 @@
  * Mercator produces one centered on the prime meridian.
  */
 #include <array>
+#include <memory>
 #include "ellipsoid.h"
 
 class Projection
@@ -162,7 +163,6 @@ public:
 class ProjectionList
 {
 private:
-  std::map<ProjectionLabel,Projection *> projList;
+  std::map<ProjectionLabel,std::shared_ptr<Projection> > projList;
 public:
-  ~ProjectionList();
 };

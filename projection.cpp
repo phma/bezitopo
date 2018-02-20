@@ -441,11 +441,3 @@ bool operator<(const ProjectionLabel a,const ProjectionLabel b)
   else
     return a.version<b.version;
 }
-
-ProjectionList::~ProjectionList()
-{
-  map<ProjectionLabel,Projection *>::iterator i;
-  for (i=projList.begin();i!=projList.end();i++)
-    if (i->second)
-      delete i->second;
-}
