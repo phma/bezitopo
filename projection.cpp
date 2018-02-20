@@ -442,6 +442,22 @@ double StereographicSphere::scaleFactor(latlong ll)
 
 StereographicSphere sphereStereoArabianSea(rotateStereographic);
 
+bool ProjectionLabel::match(const ProjectionLabel &b,bool prefix)
+/* Returns true if b matches this pattern, e.g.
+ * ("U","N","","NAD").match(("US","NC","","NAD83"),true)=true
+ */
+{
+  int maxpos;
+  if (prefix)
+    maxpos=0;
+  else
+    maxpos=b.country.length()+b.province.length()+b.subProvince.length()+b.version.length();
+  return b.country.find(country)<=maxpos &&
+         b.province.find(province)<=maxpos &&
+         b.subProvince.find(subProvince)<=maxpos &&
+         b.version.find(version)<=maxpos;
+}
+
 bool operator<(const ProjectionLabel a,const ProjectionLabel b)
 {
   if (a.country!=b.country)
@@ -452,4 +468,22 @@ bool operator<(const ProjectionLabel a,const ProjectionLabel b)
     return a.subProvince<b.subProvince;
   else
     return a.version<b.version;
+}
+
+void ProjectionList::insert(ProjectionLabel label,Projection *proj)
+/* Takes ownership of proj. Do not delete proj; the ProjectionList will delete
+ * it when the last ProjectionList containing it is destroyed.
+ */
+{
+  projList[label]=shared_ptr<Projection>(proj);
+}
+
+ProjectionList ProjectionList::matches(ProjectionLabel pattern)
+{
+  ProjectionList ret;
+  map<ProjectionLabel,shared_ptr<Projection> >::iterator i;
+  for (i=projList.begin();i!=projList.end();i++)
+    if (pattern.match(i->first))
+      ret.projList[i->first]=i->second;
+  return ret;
 }

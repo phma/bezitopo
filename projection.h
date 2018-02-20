@@ -157,6 +157,7 @@ public:
   std::string province; // or state, krai, or UTM zone
   std::string subProvince;
   std::string version;
+  bool match(const ProjectionLabel &b,bool prefix=true);
   friend bool operator<(const ProjectionLabel a,const ProjectionLabel b);
 };
 
@@ -165,4 +166,6 @@ class ProjectionList
 private:
   std::map<ProjectionLabel,std::shared_ptr<Projection> > projList;
 public:
+  void insert(ProjectionLabel label,Projection *proj);
+  ProjectionList matches(ProjectionLabel pattern);
 };
