@@ -3980,35 +3980,53 @@ void testprojscale(string projName,Projection &proj)
  */
 {
   array<latlong,2> pointpair;
-  latlong midpoint;
+  latlong midpoint,inv;
   array<xyz,2> xyzpair;
   array<xy,2> xypair;
-  int i,nbad;
+  xyz midxyz,invxyz;
+  int i,nbadscale,nbadinv;
   double scale;
-  for (i=nbad=0;i<16777216 && nbad>=trunc(sqrt(i)/16);i++)
+  for (i=nbadscale=nbadinv=0;
+       i<16777216 && nbadscale>=trunc(sqrt(i)/16) && nbadinv>=trunc(sqrt(i)/16);i++)
   {
     pointpair=randomPointPair();
     midpoint.lat=(pointpair[0].lat+pointpair[1].lat)/2;
     midpoint.lon=(pointpair[0].lon+pointpair[1].lon)/2;
     xyzpair[0]=proj.ellip->geoc(pointpair[0],0);
     xyzpair[1]=proj.ellip->geoc(pointpair[1],0);
+    midxyz=proj.ellip->geoc(midpoint,0);
+    inv=proj.gridToLatlong(proj.latlongToGrid(midpoint));
+    invxyz=proj.ellip->geoc(inv,0);
     scale=proj.scaleFactor(midpoint);
     xypair[0]=proj.latlongToGrid(pointpair[0]);
     xypair[1]=proj.latlongToGrid(pointpair[1]);
     if (fabs(dist(xypair[0],xypair[1])/scale/dist(xyzpair[0],xyzpair[1])-1)>1e-6)
     {
-      nbad++;
-      if (nbad<256)
+      nbadscale++;
+      if (nbadscale<256)
 	cout<<radtodeg(midpoint.lat)<<"° "<<radtodeg(midpoint.lon)<<"° computed scale "<<
 	scale<<" actual scale "<<dist(xypair[0],xypair[1])/dist(xyzpair[0],xyzpair[1])<<endl;
-      }
+    }
+    if (dist(midxyz,invxyz)>1e-6)
+    {
+      nbadinv++;
+      if (nbadinv<256)
+	cout<<radtodeg(midpoint.lat)<<"° "<<radtodeg(midpoint.lon)<<"° inverse projection "<<
+	radtodeg(inv.lat)<<"° "<<radtodeg(inv.lon)<<endl;
+    }
   }
   cout<<projName<<" scale is ";
-  if (nbad>=trunc(sqrt(i)/16))
+  if (nbadscale>=trunc(sqrt(i)/16))
     cout<<"bad"<<endl;
   else
     cout<<"good"<<endl;
-  tassert(nbad<trunc(sqrt(i)/16));
+  tassert(nbadscale<trunc(sqrt(i)/16));
+  cout<<projName<<" inverse is ";
+  if (nbadinv>=trunc(sqrt(i)/16))
+    cout<<"bad"<<endl;
+  else
+    cout<<"good"<<endl;
+  tassert(nbadinv<trunc(sqrt(i)/16));
 }
 
 /* 80° 1.9126888
