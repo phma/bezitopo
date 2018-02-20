@@ -135,6 +135,12 @@ latlong LambertConicSphere::gridToLatlong(xy grid)
     angle=grid.east()/ellip->geteqr();
     radius=exp(-grid.north()/ellip->getpor());
   }
+  else
+  {
+    angle=atan2(grid.east(),poleY-grid.north())/exponent;
+    radius=hypot(grid.east(),poleY-grid.north());
+    radius=pow(radius/ellip->getpor()*exponent/coneScale,1/exponent);
+  }
   ret.lat=M_PIl/2-2*atan(radius);
   ret.lon=angle+centralMeridian;
   return ret;
