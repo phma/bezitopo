@@ -1,0 +1,42 @@
+#This file is in the public domain.
+
+#This is a list of projections used in surveying. The format is:
+#Country: a two-letter code (four-letter for obsolete countries) or UTM
+#State: code depends on the country. Also Province, Okrug, or Krai.
+#Zone: subdivision of some states, or UTM zone (list north and south separately)
+#Version: e.g. NAD27 or NAD83. N.C. kept one conic zone, but some states split or merged zones.
+#Projection: CC (conformal conic), TM (transverse Mercator), or OM (oblique Mercator)
+#Ellipsoid: any of those defined in ellipsoid.cpp
+#Other data depend on the projection
+#Boundary: sequence of lat-long pairs, counterclockwise
+
+#The boundary should be slightly larger than the actual zone boundary, in case a tract
+#being surveyed straddles a zone boundary. Lines in the boundary are spherical geodesics,
+#not loxodromes. Be careful with the southern boundary of states like Utah, or the
+#northern boundary of provinces like Chubut.
+
+Country:US
+State:NC
+Zone:
+Version:NAD27
+Projection:CC
+Ellipsoid:Clarke
+Meridian:79W
+Parallel:34°20'N
+Parallel:36°10'N
+OriginLL:33°45'N 79°W
+OriginXY:609601.219202438405,0
+Boundary:81.8W 36.7N 82.2W 36.4N 84.05W 35.6N 84.63W 34.86N 82.94W 34.86N 82.35W 35.05N 81.14W 35.05N 80.89W 34.74N 79.73W 34.67N 78.22W 33.39N 75.22W 35.12N 75.55W 36.7N
+
+Country:US
+State:NC
+Zone:
+Version:NAD83
+Projection:CC
+Ellipsoid:GRS80
+Meridian:79W
+Parallel:34°20'N
+Parallel:36°10'N
+OriginLL:33°45'N 79°W
+OriginXY:609601.22,0
+Boundary:81.8W 36.7N 82.2W 36.4N 84.05W 35.6N 84.63W 34.86N 82.94W 34.86N 82.35W 35.05N 81.14W 35.05N 80.89W 34.74N 79.73W 34.67N 78.22W 33.39N 75.22W 35.12N 75.55W 36.7N
