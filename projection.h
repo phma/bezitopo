@@ -44,6 +44,7 @@
 #include <array>
 #include <memory>
 #include "ellipsoid.h"
+#include "geoidboundary.h"
 
 class Projection
 {
@@ -65,9 +66,12 @@ public:
   virtual double scaleFactor(xy grid)=0;
   virtual double scaleFactor(latlong ll)=0;
   ellipsoid *ellip;
+  void setBoundary(g1boundary boundary);
 protected:
   xy offset;
   double scale;
+  polyarc flatBdy;
+  int areaSign;
 };
 
 class LambertConicSphere: public Projection

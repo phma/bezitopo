@@ -25,6 +25,7 @@
 #include "projection.h"
 #include "rootfind.h"
 #include "ldecimal.h"
+#include "kml.h"
 
 using namespace std;
 
@@ -33,6 +34,12 @@ Projection::Projection()
   ellip=&Sphere;
   offset=xy(0,0);
   scale=1;
+}
+
+void Projection::setBoundary(g1boundary boundary)
+{
+  flatBdy=flatten(boundary);
+  areaSign=signbit(flatBdy.area());
 }
 
 void LambertConicSphere::setParallel(double Parallel)
