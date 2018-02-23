@@ -477,6 +477,57 @@ bool operator<(const ProjectionLabel a,const ProjectionLabel b)
     return a.version<b.version;
 }
 
+ProjectionLabel readProjectionLabel(istream &file)
+{
+  int fieldsSeen=0;
+  size_t hashpos,colonpos;
+  string line,tag,value;
+  ProjectionLabel ret;
+  while (fieldsSeen!=0x55 && (fieldsSeen&0x1aa)==0)
+  {
+    getline(file,line);
+    hashpos=line.find('#');
+    if (hashpos==0)
+      line="";
+    if (line=="")
+      fieldsSeen*=2; // blank line when some but not all fields are seen is invalid
+    else
+    {
+      colonpos=line.find(':');
+      if (colonpos>line.length())
+	fieldsSeen=-1;
+      else
+      {
+	tag=line.substr(0,colonpos);
+	value=line.substr(colonpos+1);
+	if (tag=="Country")
+	{
+	  ret.country=value;
+	  fieldsSeen+=1;
+	}
+	else if (tag=="State" || tag=="Province" || tag=="Krai" || tag=="Okrug")
+	{
+	  ret.province=value;
+	  fieldsSeen+=4;
+	}
+	else if (tag=="Zone")
+	{
+	  ret.zone=value;
+	  fieldsSeen+=16;
+	}
+	else if (tag=="Version")
+	{
+	  ret.version=value;
+	  fieldsSeen+=64;
+	}
+	else
+	  fieldsSeen+=256;
+      }
+    }
+  }
+  return ret;
+}
+
 void ProjectionList::insert(ProjectionLabel label,Projection *proj)
 /* Takes ownership of proj. Do not delete proj; the ProjectionList will delete
  * it when the last ProjectionList containing it is destroyed.

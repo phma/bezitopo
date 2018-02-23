@@ -43,6 +43,7 @@
  */
 #include <array>
 #include <memory>
+#include <fstream>
 #include "ellipsoid.h"
 #include "geoidboundary.h"
 
@@ -164,6 +165,8 @@ public:
   bool match(const ProjectionLabel &b,bool prefix=true);
   friend bool operator<(const ProjectionLabel a,const ProjectionLabel b);
 };
+
+ProjectionLabel readProjectionLabel(std::istream &file);
 
 class ProjectionList
 {
