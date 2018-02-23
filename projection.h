@@ -150,7 +150,7 @@ extern StereographicSphere sphereStereoArabianSea;
  */
 
 class ProjectionLabel
-/* If subProvince is numeric and, within a province, they do not all have the
+/* If zone is numeric and, within a province, they do not all have the
  * same number of digits, they must be padded to the same length. For example,
  * Alaska has ten zones, numbered from 1 to 10. Zone 6 must be encoded as " 6"
  * so that it will be less than "10".
@@ -158,8 +158,8 @@ class ProjectionLabel
 {
 public:
   std::string country; // or UTM
-  std::string province; // or state, krai, or UTM zone
-  std::string subProvince;
+  std::string province; // or state, krai, or okrug
+  std::string zone;
   std::string version;
   bool match(const ProjectionLabel &b,bool prefix=true);
   friend bool operator<(const ProjectionLabel a,const ProjectionLabel b);

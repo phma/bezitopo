@@ -458,10 +458,10 @@ bool ProjectionLabel::match(const ProjectionLabel &b,bool prefix)
   if (prefix)
     maxpos=0;
   else
-    maxpos=b.country.length()+b.province.length()+b.subProvince.length()+b.version.length();
+    maxpos=b.country.length()+b.province.length()+b.zone.length()+b.version.length();
   return b.country.find(country)<=maxpos &&
          b.province.find(province)<=maxpos &&
-         b.subProvince.find(subProvince)<=maxpos &&
+         b.zone.find(zone)<=maxpos &&
          b.version.find(version)<=maxpos;
 }
 
@@ -471,8 +471,8 @@ bool operator<(const ProjectionLabel a,const ProjectionLabel b)
     return a.country<b.country;
   else if (a.province!=b.province)
     return a.province<b.province;
-  else if (a.subProvince!=b.subProvince)
-    return a.subProvince<b.subProvince;
+  else if (a.zone!=b.zone)
+    return a.zone<b.zone;
   else
     return a.version<b.version;
 }
