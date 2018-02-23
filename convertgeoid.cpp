@@ -390,7 +390,7 @@ void argpass2()
 	break;
       case 1:
 	helporversion=true;
-	cout<<"Convertgeoid, part of Bezitopo version "<<VERSION<<" © 2017 Pierre Abbat\n"
+	cout<<"Convertgeoid, part of Bezitopo version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat\n"
 	<<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
 	break;
       case 2:
