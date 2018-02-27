@@ -84,6 +84,7 @@ public:
   void clearmarks();
   void mark(int n);
   bool ismarked(int n);
+  void stlSplit(double maxError);
 };
 
 typedef std::pair<double,point*> ipoint;

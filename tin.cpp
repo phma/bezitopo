@@ -391,6 +391,18 @@ bool edge::ismarked(int n)
   return (contour>>n)&1;
 }
 
+void edge::stlSplit(double maxError)
+{
+  segment thisSeg=getsegment();
+  double maxAccel,error;
+  maxAccel=thisSeg.accel(0);
+  if (thisSeg.accel(length())>maxAccel)
+    maxAccel=thisSeg.accel(length());
+  error=sqr(length())*maxAccel/4;
+  for (stlsplit=0;error>maxError;stlsplit++)
+    error/=4;
+}
+
 bool goodcenter(xy a,xy b,xy c,xy d)
 /* a is the proposed starting point; b, c, and d are the three closest
    points to a. a has to be on the same side of at least two sides as the
