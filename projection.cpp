@@ -27,6 +27,10 @@
 #include "ldecimal.h"
 #include "kml.h"
 
+#define PROJ_CC 1
+#define PROJ_TM 2
+#define PROJ_OM 3
+
 using namespace std;
 
 Projection::Projection()
@@ -525,6 +529,60 @@ ProjectionLabel readProjectionLabel(istream &file)
       }
     }
   }
+  return ret;
+}
+
+Projection *readProjection(istream &file)
+{
+  int fieldsSeen=0,projectionType=0;
+  size_t hashpos,colonpos;
+  string line,tag,value;
+  Projection *ret=nullptr;
+  while ((fieldsSeen&0x11)==0)
+  {
+    getline(file,line);
+    hashpos=line.find('#');
+    if (hashpos==0)
+      line="";
+    if (line=="")
+      fieldsSeen|=16; // blank line when some but not all fields are seen is invalid
+    else
+    {
+      colonpos=line.find(':');
+      if (colonpos>line.length())
+	fieldsSeen=-1;
+      else
+      {
+	tag=line.substr(0,colonpos);
+	value=line.substr(colonpos+1);
+	if (tag=="Projection")
+	{
+	  fieldsSeen|=1;
+	  if (value=="CC")
+	    projectionType=PROJ_CC;
+	  else if (value=="TM")
+	    projectionType=PROJ_TM;
+	  else if (value=="OM")
+	    projectionType=PROJ_OM;
+	  else
+	    fieldsSeen|=16;
+	}
+      }
+    }
+  }
+  switch (projectionType)
+  {
+    case PROJ_CC:
+      //ret=readConformalConic(file);
+      break;
+    case PROJ_TM:
+      //ret=readTransverseMercator(file);
+      break;
+    case PROJ_OM:
+      //ret=readObliqueMercator(file);
+      break;
+  }
+  // TODO read the boundary
   return ret;
 }
 

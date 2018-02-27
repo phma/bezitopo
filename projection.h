@@ -167,6 +167,7 @@ public:
 };
 
 ProjectionLabel readProjectionLabel(std::istream &file);
+Projection *readProjection(std::istream &file);
 
 class ProjectionList
 {
