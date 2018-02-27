@@ -394,6 +394,87 @@ double LambertConicEllipsoid::scaleFactor(latlong ll)
  * everything else the same
  */
 
+LambertConicEllipsoid *readConformalConic(istream &file)
+/* Reads data such as the following from a file and returns a pointer to a
+ * new projection.
+ * 
+ * Ellipsoid:Clarke
+ * Meridian:79W
+ * Parallel:34°20'N
+ * Parallel:36°10'N
+ * OriginLL:33°45'N 79°W
+ * OriginXY:609601.219202438405,0
+ * 
+ * If there are two parallels, there must be at least one line after the parallels,
+ * else it will return without reading the second parallel. The order of parallels
+ * does not matter.
+ * 
+ * If the parallels are equal except that one is north and the other south, or there
+ * is only one parallel which is the equator, the result is a Mercator projection.
+ * If the parallel is 90°, the result is a stereographic projection. If one is
+ * 90° and the other is anything else, including the other 90°, it's an error.
+ */
+{
+  int fieldsSeen=0;
+  size_t hashpos,colonpos;
+  string line,tag,value,ellipsoidStr;
+  vector<double> parallels;
+  double meridian;
+  latlong ll,origll;
+  LambertConicEllipsoid *ret=nullptr;
+  while (fieldsSeen!=0x295 && fieldsSeen!=0x2a5 && (fieldsSeen&0xd4a)==0)
+  {
+    getline(file,line);
+    hashpos=line.find('#');
+    if (hashpos==0)
+      line="";
+    if (line=="")
+      fieldsSeen|=800; // blank line is invalid
+    else
+    {
+      colonpos=line.find(':');
+      if (colonpos>line.length())
+	fieldsSeen=-1;
+      else
+      {
+	tag=line.substr(0,colonpos);
+	value=line.substr(colonpos+1);
+	if (tag=="Ellipsoid")
+	{
+	  ellipsoidStr=value;
+	  fieldsSeen+=1;
+	}
+	else if (tag=="Meridian")
+	{
+	  ll=parselatlong(value,DEGREE);
+	  meridian=ll.lon;
+	  fieldsSeen+=4;
+	}
+	else if (tag=="Parallel")
+	{
+	  ll=parselatlong(value,DEGREE);
+	  parallels.push_back(ll.lat);
+	  fieldsSeen+=16;
+	}
+	else if (tag=="OriginLL")
+	{
+	  origll=parselatlong(value,DEGREE);
+	  fieldsSeen+=128;
+	}
+	else if (tag=="OriginXY")
+	{
+	  // needs parsexy to be somewhere other than icommon
+	  fieldsSeen+=512;
+	}
+	else
+	  fieldsSeen+=2048;
+      }
+    }
+  }
+  return ret;
+}
+
+
 const Quaternion rotateStereographic(1/14.,5/14.,7/14.,11/14.);
 const Quaternion unrotateStereographic(-1/14.,5/14.,7/14.,11/14.);
 /* This rotates (-96/196,-164/196,-48/196) to the South Pole, which is then
