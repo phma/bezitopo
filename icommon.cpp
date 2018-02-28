@@ -130,23 +130,7 @@ arangle parsearangle(string angstr,int unitp)
 
 xy parsexy(string xystr)
 {
-  size_t pos;
-  string xstr,ystr;
-  xy ret;
-  Measurement xmeas,ymeas;
-  int dummy;
-  pos=xystr.find(',');
-  if (pos==string::npos)
-    ret=xy(NAN,NAN);
-  else
-  {
-    xstr=xystr.substr(0,pos);
-    ystr=xystr.substr(pos+1);
-    xmeas=doc.ms.parseMeasurement(xstr,LENGTH);
-    ymeas=doc.ms.parseMeasurement(ystr,LENGTH);
-    ret=xy(xmeas.magnitude,ymeas.magnitude);
-  }
-  return ret;
+  return doc.ms.parseXy(xystr);
 }
 
 void subexit(string args)
