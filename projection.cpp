@@ -416,6 +416,7 @@ LambertConicEllipsoid *readConformalConic(istream &file)
  */
 {
   int fieldsSeen=0;
+  ellipsoid *ellip=nullptr;
   size_t hashpos,colonpos;
   string line,tag,value,ellipsoidStr;
   vector<double> parallels;
@@ -475,6 +476,8 @@ LambertConicEllipsoid *readConformalConic(istream &file)
       }
     }
   }
+  if (fieldsSeen==0x295 || fieldsSeen==0x2a5)
+    ret=new LambertConicEllipsoid(ellip,meridian,parallels[0],parallels.back(),origll,origxy);
   return ret;
 }
 
