@@ -27,6 +27,7 @@
 #include <map>
 #include <vector>
 #include "zoom.h"
+#include "xyz.h"
 
 /* These are unit codes. Codes pertaining to angles are defined in angle.h.
  * This file has two codes for the foot: one for the international foot, and
@@ -156,6 +157,7 @@ public:
   std::string formatMeasurement(double measurement,int unit,double unitMagnitude=0,double precisionMagnitude=0);
   std::string formatMeasurementUnit(double measurement,int unit,double unitMagnitude=0,double precisionMagnitude=0);
   Measurement parseMeasurement(std::string measStr,int quantity);
+  xy parseXy(std::string xystr);
   void writeXml(std::ostream &ofile);
 private:
   int whichFoot;

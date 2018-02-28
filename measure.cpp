@@ -526,6 +526,26 @@ Measurement Measure::parseMeasurement(string measStr,int quantity)
   return ret;
 }
 
+xy Measure::parseXy(string xystr)
+{
+  size_t pos;
+  string xstr,ystr;
+  xy ret;
+  Measurement xmeas,ymeas;
+  pos=xystr.find(',');
+  if (pos==string::npos)
+    ret=xy(NAN,NAN);
+  else
+  {
+    xstr=xystr.substr(0,pos);
+    ystr=xystr.substr(pos+1);
+    xmeas=parseMeasurement(xstr,LENGTH);
+    ymeas=parseMeasurement(ystr,LENGTH);
+    ret=xy(xmeas.magnitude,ymeas.magnitude);
+  }
+  return ret;
+}
+
 void Measure::writeXml(ostream &ofile)
 {
   int i;
