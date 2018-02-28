@@ -421,7 +421,11 @@ LambertConicEllipsoid *readConformalConic(istream &file)
   vector<double> parallels;
   double meridian;
   latlong ll,origll;
+  xy origxy;
+  Measure metric;
   LambertConicEllipsoid *ret=nullptr;
+  metric.setMetric();
+  metric.setDefaultUnit(LENGTH,1);
   while (fieldsSeen!=0x295 && fieldsSeen!=0x2a5 && (fieldsSeen&0xd4a)==0)
   {
     getline(file,line);
@@ -463,7 +467,7 @@ LambertConicEllipsoid *readConformalConic(istream &file)
 	}
 	else if (tag=="OriginXY")
 	{
-	  // needs parsexy to be somewhere other than icommon
+	  origxy=metric.parseXy(value);
 	  fieldsSeen+=512;
 	}
 	else
