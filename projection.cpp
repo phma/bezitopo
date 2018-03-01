@@ -447,6 +447,7 @@ LambertConicEllipsoid *readConformalConic(istream &file)
 	if (tag=="Ellipsoid")
 	{
 	  ellipsoidStr=value;
+	  ellip=getEllipsoid(ellipsoidStr);
 	  fieldsSeen+=1;
 	}
 	else if (tag=="Meridian")
@@ -476,11 +477,10 @@ LambertConicEllipsoid *readConformalConic(istream &file)
       }
     }
   }
-  if (fieldsSeen==0x295 || fieldsSeen==0x2a5)
+  if ((fieldsSeen==0x295 || fieldsSeen==0x2a5) && ellip)
     ret=new LambertConicEllipsoid(ellip,meridian,parallels[0],parallels.back(),origll,origxy);
   return ret;
 }
-
 
 const Quaternion rotateStereographic(1/14.,5/14.,7/14.,11/14.);
 const Quaternion unrotateStereographic(-1/14.,5/14.,7/14.,11/14.);
