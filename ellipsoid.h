@@ -78,4 +78,5 @@ public:
 extern ellipsoid Sphere,Clarke,GRS80,WGS84,ITRS;
 int countEllipsoids();
 ellipsoid& getEllipsoid(int n);
+ellipsoid *getEllipsoid(std::string name);
 #endif

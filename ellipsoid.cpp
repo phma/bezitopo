@@ -239,3 +239,13 @@ ellipsoid& getEllipsoid(int n)
 {
   return *ellipsoids[n];
 }
+
+ellipsoid *getEllipsoid(string name)
+{
+  int i;
+  ellipsoid *ret=nullptr;
+  for (i=0;i<countEllipsoids();i++)
+    if (name==ellipsoids[i]->getName())
+      ret=ellipsoids[i];
+  return ret;
+}
