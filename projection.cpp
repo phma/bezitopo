@@ -3,7 +3,7 @@
 /* projection.cpp - map projections                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016,2017 Pierre Abbat.
+/* Copyright 2016-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -620,6 +620,35 @@ ProjectionLabel readProjectionLabel(istream &file)
   return ret;
 }
 
+g1boundary parseBoundary(string bdy)
+{
+  string llStr;
+  latlong ll;
+  size_t spacepos;
+  g1boundary ret;
+  while (bdy.length())
+  {
+    spacepos=bdy.find(' ');
+    if (spacepos<bdy.length())
+      llStr+=bdy.substr(0,spacepos+1);
+    else
+      llStr+=bdy;
+    bdy.erase(0,spacepos);
+    ll=parselatlong(llStr,DEGREE);
+    if (ll.valid()==0)
+    {
+      cerr<<"Unparsable latlong: "<<llStr<<endl;
+      llStr="";
+    }
+    if (ll.valid()==2)
+    {
+      ret.push_back(encodedir(Sphere.geoc(ll,0)));
+      llStr="";
+    }
+  }
+  return ret;
+}
+
 Projection *readProjection(istream &file)
 {
   int fieldsSeen=0,projectionType=0;
@@ -661,7 +690,7 @@ Projection *readProjection(istream &file)
   switch (projectionType)
   {
     case PROJ_CC:
-      //ret=readConformalConic(file);
+      ret=readConformalConic(file);
       break;
     case PROJ_TM:
       //ret=readTransverseMercator(file);
@@ -670,7 +699,12 @@ Projection *readProjection(istream &file)
       //ret=readObliqueMercator(file);
       break;
   }
-  // TODO read the boundary
+  getline(file,line);
+  colonpos=line.find(':');
+  tag=line.substr(0,colonpos);
+  value=line.substr(colonpos+1);
+  if (ret && tag=="Boundary")
+    ret->setBoundary(parseBoundary(value));
   return ret;
 }
 
