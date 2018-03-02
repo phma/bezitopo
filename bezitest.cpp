@@ -4056,6 +4056,7 @@ void testprojection()
   latlong llOakland(degtorad(35.3415108),degtorad(-81.9198178028));
   xy xyOakland(344240.332,180449.168);
   // Benchmark on Oakland Road overpass over 74A, Spindale, North Carolina.
+  double distOldNewOakland;
   latlong EWN(degtorad(35.07),degtorad(-77.04));
   // New Bern is far enough from the borders that it should not be in an adjacent stat's grid.
   latlong ll196(degtorad(-14.1758035159),degtorad(-120.343248884));
@@ -4124,6 +4125,12 @@ void testprojection()
     tassert(ncplist.size()==2);
     cout<<"Point 196 is in "<<pacplist.size()<<" projections\n";
     tassert(pacplist.size()==0);
+    if (ncplist.size()>=2)
+    {
+      distOldNewOakland=dist(ncplist[0]->latlongToGrid(llOakland),ncplist[1]->latlongToGrid(llOakland));
+      cout<<"Distance from Oakland NAD27 to NAD83 is "<<distOldNewOakland<<endl;
+      tassert(fabs(distOldNewOakland-7.868)<0.001);
+    }
   }
   else
     cout<<"Projection list is uninstalled. Skipping projection list test.\n";

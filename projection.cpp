@@ -732,6 +732,17 @@ void ProjectionList::insert(ProjectionLabel label,Projection *proj)
   projList[label]=shared_ptr<Projection>(proj);
 }
 
+Projection *ProjectionList::operator[](int n)
+{
+  Projection *ret=nullptr;
+  map<ProjectionLabel,shared_ptr<Projection> >::iterator i;
+  int j;
+  for (i=projList.begin(),j=0;i!=projList.end();i++,j++)
+    if (j==n)
+      ret=i->second.get();
+  return ret;
+}
+
 ProjectionList ProjectionList::matches(ProjectionLabel pattern)
 {
   ProjectionList ret;
