@@ -68,6 +68,9 @@ public:
   virtual double scaleFactor(latlong ll)=0;
   ellipsoid *ellip;
   void setBoundary(g1boundary boundary);
+  bool in(xyz geoc); // geoc is on the sphere
+  bool in(latlong ll);
+  bool in(vball v);
 protected:
   xy offset;
   double scale;
@@ -175,6 +178,12 @@ private:
   std::map<ProjectionLabel,std::shared_ptr<Projection> > projList;
 public:
   void insert(ProjectionLabel label,Projection *proj);
+  int size()
+  {
+    return projList.size();
+  }
   ProjectionList matches(ProjectionLabel pattern);
+  ProjectionList cover(latlong ll);
+  ProjectionList cover(vball v);
   void readFile(std::istream &file);
 };

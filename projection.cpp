@@ -46,6 +46,22 @@ void Projection::setBoundary(g1boundary boundary)
   areaSign=signbit(flatBdy.area());
 }
 
+bool Projection::in(xyz geoc)
+{
+  xy pntproj=sphereStereoArabianSea.geocentricToGrid(geoc);
+  return flatBdy.in(pntproj)+areaSign>0.5;
+}
+
+bool Projection::in(latlong ll)
+{
+  return in(Sphere.geoc(ll,0));
+}
+
+bool Projection::in(vball v)
+{
+  return in(decodedir(v));
+}
+
 void LambertConicSphere::setParallel(double Parallel)
 {
   centralParallel=Parallel;
@@ -722,6 +738,27 @@ ProjectionList ProjectionList::matches(ProjectionLabel pattern)
   map<ProjectionLabel,shared_ptr<Projection> >::iterator i;
   for (i=projList.begin();i!=projList.end();i++)
     if (pattern.match(i->first))
+      ret.projList[i->first]=i->second;
+  return ret;
+}
+
+ProjectionList ProjectionList::cover(latlong ll)
+// Returns a list of projections whose boundaries contain the given point.
+{
+  ProjectionList ret;
+  map<ProjectionLabel,shared_ptr<Projection> >::iterator i;
+  for (i=projList.begin();i!=projList.end();i++)
+    if (i->second->in(ll))
+      ret.projList[i->first]=i->second;
+  return ret;
+}
+
+ProjectionList ProjectionList::cover(vball v)
+{
+  ProjectionList ret;
+  map<ProjectionLabel,shared_ptr<Projection> >::iterator i;
+  for (i=projList.begin();i!=projList.end();i++)
+    if (i->second->in(v))
       ret.projList[i->first]=i->second;
   return ret;
 }
