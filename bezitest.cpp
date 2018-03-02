@@ -4058,6 +4058,8 @@ void testprojection()
   // Benchmark on Oakland Road overpass over 74A, Spindale, North Carolina.
   latlong ll;
   xy grid;
+  ProjectionList plist;
+  ifstream pfile(string(SHARE_DIR)+"/projections.txt");
   cout<<"projection"<<endl;
   ll.lat=0;
   ll.lon=0;
@@ -4108,6 +4110,8 @@ void testprojection()
   grid=NorthCarolina.latlongToGrid(llOakland);
   cout<<grid.east()<<' '<<grid.north()<<' '<<dist(grid,xyOakland)<<endl;
   tassert(dist(grid,xyOakland)<0.001);
+  if (pfile)
+    plist.readFile(pfile);
 }
 
 void spotcheckcolor(int col0,int col1)

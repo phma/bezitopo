@@ -575,7 +575,7 @@ ProjectionLabel readProjectionLabel(istream &file)
   size_t hashpos,colonpos;
   string line,tag,value;
   ProjectionLabel ret;
-  while (fieldsSeen!=0x55 && (fieldsSeen&0x1aa)==0)
+  while (fieldsSeen!=0x55 && (fieldsSeen&0x1aa)==0 && file.good())
   {
     getline(file,line);
     hashpos=line.find('#');
@@ -630,7 +630,7 @@ g1boundary parseBoundary(string bdy)
   {
     spacepos=bdy.find(' ');
     if (spacepos<bdy.length())
-      llStr+=bdy.substr(0,spacepos+1);
+      llStr+=bdy.substr(0,++spacepos);
     else
       llStr+=bdy;
     bdy.erase(0,spacepos);
@@ -724,4 +724,17 @@ ProjectionList ProjectionList::matches(ProjectionLabel pattern)
     if (pattern.match(i->first))
       ret.projList[i->first]=i->second;
   return ret;
+}
+
+void ProjectionList::readFile(istream &file)
+{
+  ProjectionLabel label;
+  Projection *proj;
+  while (file.good())
+  {
+    label=readProjectionLabel(file);
+    proj=readProjection(file);
+    if (proj)
+      insert(label,proj);
+  }
 }

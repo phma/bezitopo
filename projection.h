@@ -176,4 +176,5 @@ private:
 public:
   void insert(ProjectionLabel label,Projection *proj);
   ProjectionList matches(ProjectionLabel pattern);
+  void readFile(std::istream &file);
 };
