@@ -83,12 +83,41 @@ double compareLengths(polyspiral fewer,polyspiral more)
   return pairwisesum(diff);
 }
 
+vector<array<double,2> > projectForward(ellipsoid *ell,polyspiral apx,int n)
+/* Projects n points (n is a power of 2) from the sphere to the ellipsoid,
+ * returning a vector of lengths along the meridian. The vector has size n+1;
+ * the last member is the North Pole, i.e. the total length of the meridian.
+ * Sphere to ellipsoid is forward because that is used when projecting
+ * from the ellipsoid to the plane.
+ */
+{
+  int i;
+  latlong llSphere,llEllipsoid;
+  xyz meridianPoint;
+  vector<array<double,2> > ret;
+  array<double,2> totalLength,projPair;
+  totalLength[0]=ell->sphere->geteqr()*M_PI/2;
+  totalLength[1]=apx.length();
+  for (i=0;i<n;i++)
+  {
+    llSphere=latlong(i*(DEG90/n)+DEG45/n,0);
+    llEllipsoid=ell->inverseConformalLatitude(llSphere);
+    meridianPoint=ell->geoc(llEllipsoid,0);
+    projPair[0]=llSphere.lat*ell->sphere->geteqr();
+    projPair[1]=apx.closest(xy(meridianPoint.getx(),meridianPoint.getz()));
+    ret.push_back(projPair);
+  }
+  ret.push_back(totalLength);
+  return ret;
+}
+
 void doEllipsoid(ellipsoid &ell,PostScript &ps)
 /* Compute approximations to the meridian of the ellipsoid.
  */
 {
   int i,nseg;
   vector<polyspiral> apx;
+  vector<array<double,2> > forwardLengths,reverseLengths;
   ps.startpage();
   ps.setscale(0,0,EARTHRAD,EARTHRAD,0);
   for (i=0,nseg=1;i<9;i++,nseg*=3)
@@ -98,6 +127,10 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
     cout<<setw(2)<<i<<setw(12)<<compareLengths(apx[i],apx[i+1])<<
           setw(12)<<apx[i+1].length()-apx[i].length()<<endl;
   ps.spline(apx.back().approx3d(1e3));
+  forwardLengths=projectForward(&ell,apx[5],8);
+  for (i=0;i<forwardLengths.size();i++)
+    cout<<setw(2)<<i<<setw(12)<<forwardLengths[i][0]<<
+          setw(12)<<forwardLengths[i][1]<<endl;
   ps.endpage();
 }  
 
