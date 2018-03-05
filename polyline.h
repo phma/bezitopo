@@ -74,6 +74,7 @@ public:
   virtual double in(xy point);
   double length();
   virtual xyz station(double along);
+  virtual double closest(xy topoint,bool offends=false);
   virtual double area();
   virtual double dirbound(int angle);
   virtual void writeXml(std::ofstream &ofile);
@@ -99,6 +100,7 @@ public:
   virtual void close();
   virtual double in(xy point);
   virtual xyz station(double along);
+  virtual double closest(xy topoint,bool offends=false);
   virtual double area();
   virtual double dirbound(int angle);
   virtual void writeXml(std::ofstream &ofile);
@@ -131,6 +133,7 @@ public:
   virtual void close();
   virtual double in(xy point);
   virtual xyz station(double along);
+  virtual double closest(xy topoint,bool offends=false);
   virtual double area();
   virtual double dirbound(int angle);
   virtual void writeXml(std::ofstream &ofile);

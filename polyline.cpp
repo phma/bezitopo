@@ -555,6 +555,48 @@ xyz polyspiral::station(double along)
     return getspiralarc(seg).station(along-(cumLengths[seg]-lengths[seg]));
 }
 
+double polyline::closest(xy topoint,bool offends)
+/* offends is currently ignored. It has to be true when calling segment::closest
+ * because of angle points.
+ */
+{
+  int i;
+  double segclose,closesofar=INFINITY;
+  for (i=0;i<lengths.size();i++)
+  {
+    segclose=getsegment(i).closest(topoint,closesofar,true);
+    if (segclose<closesofar)
+      closesofar=segclose;
+  }
+  return closesofar;
+}
+
+double polyarc::closest(xy topoint,bool offends)
+{
+  int i;
+  double segclose,closesofar=INFINITY;
+  for (i=0;i<lengths.size();i++)
+  {
+    segclose=getarc(i).closest(topoint,closesofar,true);
+    if (segclose<closesofar)
+      closesofar=segclose;
+  }
+  return closesofar;
+}
+
+double polyspiral::closest(xy topoint,bool offends)
+{
+  int i;
+  double segclose,closesofar=INFINITY;
+  for (i=0;i<lengths.size();i++)
+  {
+    segclose=getspiralarc(i).closest(topoint,closesofar,true);
+    if (segclose<closesofar)
+      closesofar=segclose;
+  }
+  return closesofar;
+}
+
 double polyline::area()
 {
   int i;
