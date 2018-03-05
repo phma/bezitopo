@@ -562,39 +562,66 @@ double polyline::closest(xy topoint,bool offends)
 {
   int i;
   double segclose,closesofar=INFINITY;
+  segment si;
+  xy sta;
+  double alo,ret;
   for (i=0;i<lengths.size();i++)
   {
-    segclose=getsegment(i).closest(topoint,closesofar,true);
+    si=getsegment(i);
+    alo=si.closest(topoint,closesofar,true);
+    sta=si.station(alo);
+    segclose=dist(sta,topoint);
     if (segclose<closesofar)
+    {
       closesofar=segclose;
+      ret=alo+(cumLengths[i]-lengths[i]);
+    }
   }
-  return closesofar;
+  return ret;
 }
 
 double polyarc::closest(xy topoint,bool offends)
 {
   int i;
   double segclose,closesofar=INFINITY;
+  arc si;
+  xy sta;
+  double alo,ret;
   for (i=0;i<lengths.size();i++)
   {
-    segclose=getarc(i).closest(topoint,closesofar,true);
+    si=getarc(i);
+    alo=si.closest(topoint,closesofar,true);
+    sta=si.station(alo);
+    segclose=dist(sta,topoint);
     if (segclose<closesofar)
+    {
       closesofar=segclose;
+      ret=alo+(cumLengths[i]-lengths[i]);
+    }
   }
-  return closesofar;
+  return ret;
 }
 
 double polyspiral::closest(xy topoint,bool offends)
 {
   int i;
   double segclose,closesofar=INFINITY;
+  spiralarc si;
+  xy sta;
+  double alo,ret;
   for (i=0;i<lengths.size();i++)
   {
-    segclose=getspiralarc(i).closest(topoint,closesofar,true);
+    si=getspiralarc(i);
+    alo=si.closest(topoint,closesofar,true);
+    sta=si.station(alo);
+    segclose=dist(sta,topoint);
     if (segclose<closesofar)
+    {
       closesofar=segclose;
+      ret=alo+(cumLengths[i]-lengths[i]);
+    }
   }
-  return closesofar;
+  return ret;
 }
 
 double polyline::area()
