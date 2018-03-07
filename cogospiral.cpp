@@ -50,6 +50,14 @@ alosta::alosta(double a,xy s,int b,double c)
   curvature=c;
 }
 
+void alosta::setStation(segment *seg,double alo)
+{
+  along=alo;
+  station=seg->station(alo);
+  bearing=seg->bearing(alo);
+  curvature=seg->curvature(alo);
+}
+
 bool sortpts(alosta a[],alosta b[])
 // Returns true if any swaps took place.
 {
