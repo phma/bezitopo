@@ -1994,7 +1994,7 @@ void spiralmicroscope(segment *a,double aalong,segment *b,double balong,string f
   ps.close();
 }
 
-void testcogospiral1(segment *a,double a0,double a1,segment *b,double b0,double b1,bool extend,xy inter,string fname)
+void testcogospiral1(segment *a,double a0,double a1,segment *b,double b0,double b1,bool extend,xy inter,PostScript &ps,string fname)
 {
   int i,n=0;
   xy intpoint; // (7,11)
@@ -2052,32 +2052,32 @@ void testcogospiral()
   segment a(beg0,end0),b(beg1,end1);
   spiralarc aspi,bspi;
   spiralarc c(beg2,end2),d(beg3,end3),e(beg4,end4),f(beg5,end5),g(beg6,end6),h(beg7,end7);
-  /*PostScript ps;
+  PostScript ps;
   ps.open("cogospiral.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
-  ps.setDoc(doc);*/
+  ps.setDoc(doc);
   c.setdelta(0,DEG30);
   d.setdelta(0,-DEG30);
   e.setdelta(-DEG60,0);
   f.setdelta(DEG90,0); // e and f are 0.0034 away from touching
   g.setdelta(DEG90,0);
   h.setdelta(-DEG90,0); // g and h are tangent at (3,4)
-  testcogospiral1(&a,0,a.length(),&b,0,b.length(),false,xy(7,11),"straightmicro");
+  testcogospiral1(&a,0,a.length(),&b,0,b.length(),false,xy(7,11),ps,"straightmicro");
   /* The distance along both lines to the intersection point is exactly an integer,
    * so the two points are exactly equal to (7,11).
    */
   aspi=a;
   bspi=b;
-  testcogospiral1(&aspi,0,a.length(),&bspi,0,b.length(),false,xy(7,11),"straightmicro");
+  testcogospiral1(&aspi,0,a.length(),&bspi,0,b.length(),false,xy(7,11),ps,"straightmicro");
   /* The distances along the curves are in the hundreds, but the midpoints
    * are closer to the origin, so the two intersection points do not exactly
    * coincide. They aren't exactly (7,11) either, because the bearings have
    * been rounded to the nearest 1657th of a second.
    */
-  testcogospiral1(&c,50,c.length()-50,&d,50,c.length()-50,false,xy(7.65883,-0.129029),"spiralmicro");
-  testcogospiral1(&e,0,1,&f,0,1,false,xy(NAN,NAN),"");
-  testcogospiral1(&g,0,0.1,&h,0,0.1,false,xy(NAN,NAN),"");
+  testcogospiral1(&c,50,c.length()-50,&d,50,c.length()-50,false,xy(7.65883,-0.129029),ps,"spiralmicro");
+  testcogospiral1(&e,0,1,&f,0,1,false,xy(NAN,NAN),ps,"");
+  testcogospiral1(&g,0,0.1,&h,0,0.1,false,xy(NAN,NAN),ps,"");
   /* These are tangent, so it can't find the intersection. As represented in the
    * computer, they are about 2e-9 apart.
    */
