@@ -2022,6 +2022,23 @@ void testcogospiral1(segment *a,double a0,double a1,segment *b,double b0,double 
     spiralmicroscope(a,intlistSecant[0].along,b,intlistSecant[1].along,"spiralmicro");
 }
 
+spiralarc snip20(spiralarc a)
+/* Snips up to 20% off each end. Computing all intersections is done by
+ * picking equally-spaced points along the two curves and computing one
+ * intersection for each pair. This makes sure that the equally-spaced
+ * points are positioned randomly with respect to each other.
+ */
+{
+  double len,begcut,endcut;
+  spiralarc b,c,d,e;
+  len=a.length();
+  endcut=(0.8+rng.usrandom()/327680.)*len;
+  begcut=(0.2-rng.usrandom()/327680.)*len;
+  a.split(endcut,b,c);
+  b.split(begcut,d,e);
+  return e;
+}
+
 void testcogospiral()
 {
   int i;
