@@ -1996,22 +1996,30 @@ void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong,string
 
 void testcogospiral1(spiralarc a,double a0,double a1,spiralarc b,double b0,double b1,bool extend,xy inter,string fname)
 {
-  int i;
+  int i,n=0;
   xy intpoint; // (7,11)
-  vector<alosta> intlist;
-  intlist=intersection1(&a,a0,a1,&b,b0,b1,extend);
-  cout<<"testcogospiral: "<<intlist.size()<<" alostas"<<endl;
+  vector<alosta> intlistSecant,intlistTangent;
+  intlistSecant=intersection1(&a,a0,a1,&b,b0,b1,extend);
+  intlistTangent=intersection1(&a,a0,&b,b0,extend);
+  // It is valid for one method, but not the other, to find an intersection.
+  cout<<"testcogospiral: "<<intlistSecant.size()<<" alostas by secant method, ";
+  cout<<intlistTangent.size()<<" alostas by tangent method"<<endl;
   intpoint=xy(0,0);
-  for (i=0;i<intlist.size();i++)
+  for (i=0;i<intlistSecant.size();i++,n++)
   {
-    cout<<((i&1)?"b: ":"a: ")<<intlist[i].along<<' '<<ldecimal(intlist[i].station.east())<<' '<<ldecimal(intlist[i].station.north())<<endl;
-    intpoint+=intlist[i].station;
+    cout<<((i&1)?"b: ":"a: ")<<intlistSecant[i].along<<' '<<ldecimal(intlistSecant[i].station.east())<<' '<<ldecimal(intlistSecant[i].station.north())<<endl;
+    intpoint+=intlistSecant[i].station;
   }
-  intpoint/=i;
+  for (i=0;i<intlistTangent.size();i++,n++)
+  {
+    cout<<((i&1)?"b: ":"a: ")<<intlistTangent[i].along<<' '<<ldecimal(intlistTangent[i].station.east())<<' '<<ldecimal(intlistTangent[i].station.north())<<endl;
+    intpoint+=intlistTangent[i].station;
+  }
+  intpoint/=n;
   if (inter.isfinite())
     tassert(dist(intpoint,inter)<1e-5);
-  if (fname.length() && intlist.size())
-    spiralmicroscope(a,intlist[0].along,b,intlist[1].along,"spiralmicro");
+  if (fname.length() && intlistSecant.size())
+    spiralmicroscope(a,intlistSecant[0].along,b,intlistSecant[1].along,"spiralmicro");
 }
 
 void testcogospiral()
