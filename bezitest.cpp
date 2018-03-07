@@ -2019,7 +2019,7 @@ void testcogospiral1(segment *a,double a0,double a1,segment *b,double b0,double 
   if (inter.isfinite())
     tassert(dist(intpoint,inter)<1e-5);
   if (fname.length() && intlistSecant.size())
-    spiralmicroscope(a,intlistSecant[0].along,b,intlistSecant[1].along,"spiralmicro");
+    spiralmicroscope(a,intlistSecant[0].along,b,intlistSecant[1].along,fname);
 }
 
 spiralarc snip20(spiralarc a)
@@ -2052,6 +2052,11 @@ void testcogospiral()
   segment a(beg0,end0),b(beg1,end1);
   spiralarc aspi,bspi;
   spiralarc c(beg2,end2),d(beg3,end3),e(beg4,end4),f(beg5,end5),g(beg6,end6),h(beg7,end7);
+  /*PostScript ps;
+  ps.open("cogospiral.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  ps.setDoc(doc);*/
   c.setdelta(0,DEG30);
   d.setdelta(0,-DEG30);
   e.setdelta(-DEG60,0);
