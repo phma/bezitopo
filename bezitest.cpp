@@ -1904,7 +1904,7 @@ void testspiralarc()
   ps.close();
 }
 
-void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong,string fname,int scale=1)
+void spiralmicroscope(segment *a,double aalong,segment *b,double balong,string fname,int scale=1)
 {
   int i,alim,blim;
   xy point;
@@ -1931,7 +1931,7 @@ void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong,string
   binc=bpow2*DBL_EPSILON;
   for (i=-alim;i<=alim;i++)
   {
-    point=(a.station(aalong+ainc*i*scale));
+    point=(a->station(aalong+ainc*i*scale));
     apoints.push_back(point);
     if (point.getx()<minx)
       minx=point.getx();
@@ -1944,7 +1944,7 @@ void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong,string
   }
   for (i=-blim;i<=blim;i++)
   {
-    point=(b.station(balong+binc*i*scale));
+    point=(b->station(balong+binc*i*scale));
     bpoints.push_back(point);
     if (point.getx()<minx)
       minx=point.getx();
@@ -1994,13 +1994,13 @@ void spiralmicroscope(spiralarc a,double aalong,spiralarc b,double balong,string
   ps.close();
 }
 
-void testcogospiral1(spiralarc a,double a0,double a1,spiralarc b,double b0,double b1,bool extend,xy inter,string fname)
+void testcogospiral1(segment *a,double a0,double a1,segment *b,double b0,double b1,bool extend,xy inter,string fname)
 {
   int i,n=0;
   xy intpoint; // (7,11)
   vector<alosta> intlistSecant,intlistTangent;
-  intlistSecant=intersection1(&a,a0,a1,&b,b0,b1,extend);
-  intlistTangent=intersection1(&a,a0,&b,b0,extend);
+  intlistSecant=intersection1(a,a0,a1,b,b0,b1,extend);
+  intlistTangent=intersection1(a,a0,b,b0,extend);
   // It is valid for one method, but not the other, to find an intersection.
   cout<<"testcogospiral: "<<intlistSecant.size()<<" alostas by secant method, ";
   cout<<intlistTangent.size()<<" alostas by tangent method"<<endl;
@@ -2033,6 +2033,7 @@ void testcogospiral()
       beg4(-5,0,0),end4(5,0,0),beg5(-4,3,0),end5(4,3,0),
       beg6(5,0,0),end6(0,5,0),beg7(5,2,0),end7(4,9,0);
   segment a(beg0,end0),b(beg1,end1);
+  spiralarc aspi,bspi;
   spiralarc c(beg2,end2),d(beg3,end3),e(beg4,end4),f(beg5,end5),g(beg6,end6),h(beg7,end7);
   c.setdelta(0,DEG30);
   d.setdelta(0,-DEG30);
@@ -2040,33 +2041,26 @@ void testcogospiral()
   f.setdelta(DEG90,0); // e and f are 0.0034 away from touching
   g.setdelta(DEG90,0);
   h.setdelta(-DEG90,0); // g and h are tangent at (3,4)
-  intlist=intersection1(&a,0,a.length(),&b,0,b.length(),false);
+  testcogospiral1(&a,0,a.length(),&b,0,b.length(),false,xy(7,11),"straightmicro");
   /* The distance along both lines to the intersection point is exactly an integer,
    * so the two points are exactly equal to (7,11).
    */
-  cout<<"testcogospiral: "<<intlist.size()<<" alostas"<<endl;
-  intpoint=xy(0,0);
-  for (i=0;i<intlist.size();i++)
-  {
-    cout<<((i&1)?"b: ":"a: ")<<intlist[i].along<<' '<<ldecimal(intlist[i].station.east())<<' '<<ldecimal(intlist[i].station.north())<<endl;
-    intpoint+=intlist[i].station;
-  }
-  intpoint/=i;
-  tassert(dist(intpoint,xy(7,11))<1e-5);
-  testcogospiral1(spiralarc(a),0,a.length(),spiralarc(b),0,b.length(),false,xy(7,11),"straightmicro");
+  aspi=a;
+  bspi=b;
+  testcogospiral1(&aspi,0,a.length(),&bspi,0,b.length(),false,xy(7,11),"straightmicro");
   /* The distances along the curves are in the hundreds, but the midpoints
    * are closer to the origin, so the two intersection points do not exactly
    * coincide. They aren't exactly (7,11) either, because the bearings have
    * been rounded to the nearest 1657th of a second.
    */
-  testcogospiral1(c,50,c.length()-50,d,50,c.length()-50,false,xy(7.65883,-0.129029),"spiralmicro");
-  testcogospiral1(e,0,1,f,0,1,false,xy(NAN,NAN),"");
-  testcogospiral1(g,0,0.1,h,0,0.1,false,xy(NAN,NAN),"");
+  testcogospiral1(&c,50,c.length()-50,&d,50,c.length()-50,false,xy(7.65883,-0.129029),"spiralmicro");
+  testcogospiral1(&e,0,1,&f,0,1,false,xy(NAN,NAN),"");
+  testcogospiral1(&g,0,0.1,&h,0,0.1,false,xy(NAN,NAN),"");
   /* These are tangent, so it can't find the intersection. As represented in the
    * computer, they are about 2e-9 apart.
    */
   //spiralmicroscope(g,3.2175055439642193,h,1.4189705460416392281,"tangentmicro",0x669);
-  spiralmicroscope(g,3.2175384147219286,h,1.419003418926355,"tangentmicro",0x669);
+  spiralmicroscope(&g,3.2175384147219286,&h,1.419003418926355,"tangentmicro",0x669);
 }
 
 void testmanyarc()
