@@ -152,9 +152,9 @@ bool sortpts2(alosta a[],alosta b[])
   return ret;
 }
 
-vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double b1,double b2,bool extend)
+vector<alosta> intersection1(segment *a,double a1,double a2,segment *b,double b1,double b2,bool extend)
 /* Returns two alostas, one for a and one for b, or nothing.
- * If extend is true, the spiralarcs are extended to twice their length;
+ * If extend is true, the segments/arcs/spiralarcs are extended to twice their length;
  * e.g. one of length 5 extends from station -2.5 to station 7.5.
  * 
  * It can exit in three ways:
@@ -172,10 +172,10 @@ vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double 
   int closecount=0;
   alosta aalosta[3],balosta[3];
   vector<alosta> ret;
-  aalosta[0]=alosta(a1,a.station(a1));
-  aalosta[1]=alosta(a2,a.station(a2));
-  balosta[0]=alosta(b1,b.station(b1));
-  balosta[1]=alosta(b2,b.station(b2));
+  aalosta[0].setStation(a,a1);
+  aalosta[1].setStation(a,a2);
+  balosta[0].setStation(b,b1);
+  balosta[1].setStation(b,b2);
   do
   {
     insect=intersection(aalosta[0].station,aalosta[1].station,balosta[0].station,balosta[1].station);
@@ -187,13 +187,13 @@ vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double 
     if (di0>d01 && di0>di1)
       di1=-di1;
     aalosta[2].along=(aalosta[0].along*di1+aalosta[1].along*di0)/d01;
-    if (aalosta[2].along<-a.length()/2 || aalosta[2].along>3*a.length()/2)
+    if (aalosta[2].along<-a->length()/2 || aalosta[2].along>3*a->length()/2)
       aalosta[2].along=NAN;
     if (extend && aalosta[2].along<0)
       aalosta[2].along=-aalosta[2].along;
-    if (extend && aalosta[2].along>a.length())
-      aalosta[2].along=2*a.length()-aalosta[2].along;
-    aalosta[2].station=a.station(aalosta[2].along);
+    if (extend && aalosta[2].along>a->length())
+      aalosta[2].along=2*a->length()-aalosta[2].along;
+    aalosta[2].setStation(a,aalosta[2].along);
     di0=dist(insect,balosta[0].station);
     di1=dist(insect,balosta[1].station);
     d01=dist(balosta[0].station,balosta[1].station);
@@ -202,16 +202,16 @@ vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double 
     if (di0>d01 && di0>di1)
       di1=-di1;
     balosta[2].along=(balosta[0].along*di1+balosta[1].along*di0)/d01;
-    if (balosta[2].along<-b.length()/2 || balosta[2].along>3*b.length()/2)
+    if (balosta[2].along<-b->length()/2 || balosta[2].along>3*b->length()/2)
       balosta[2].along=NAN;
     if (extend && balosta[2].along<0)
       balosta[2].along=-balosta[2].along;
-    if (extend && balosta[2].along>b.length())
-      balosta[2].along=2*b.length()-balosta[2].along;
-    balosta[2].station=b.station(balosta[2].along);
+    if (extend && balosta[2].along>b->length())
+      balosta[2].along=2*b->length()-balosta[2].along;
+    balosta[2].setStation(b,balosta[2].along);
     isnewcloser=sortpts(aalosta,balosta);
     //cout<<"isnewcloser "<<isnewcloser<<' '<<ldecimal(dist(aalosta[0].station,balosta[0].station))<<' '<<(a.length()+b.length()+dist(aalosta[0].station,-balosta[0].station))*DBL_EPSILON*4096<<endl;
-    if (dist(aalosta[0].station,balosta[0].station)<(a.length()+b.length()+dist(aalosta[0].station,-balosta[0].station))*DBL_EPSILON*4096)
+    if (dist(aalosta[0].station,balosta[0].station)<(a->length()+b->length()+dist(aalosta[0].station,-balosta[0].station))*DBL_EPSILON*4096)
     {
       closecount++;
       if (aalosta[0].station==balosta[0].station)
@@ -229,77 +229,9 @@ vector<alosta> intersection1(spiralarc a,double a1,double a2,spiralarc b,double 
   return ret;
 }
 
-vector<alosta> intersection1(segment a,double a1,double a2,segment b,double b1,double b2,bool extend)
-/* Same as above, but for two segments, for speed and accuracy.
- * Converting a segment to spiralarc sets the midbearing, which for a 4 km
- * segment results is an error up to 1 µm at the ends.
- * 
- * It can exit in two ways:
- * • The point in aalosta and the point in balosta which are closest are close
- *   enough to be the same point. They are returned.
- * • The new point is out of range of either or both of the curves.
- *   Returns an empty vector.
- */
-{
-  bool isnewcloser,arecloseenough;
-  xy insect;
-  double di0,di1,d01;
-  alosta aalosta[3],balosta[3];
-  vector<alosta> ret;
-  aalosta[0]=alosta(a1,a.station(a1));
-  aalosta[1]=alosta(a2,a.station(a2));
-  balosta[0]=alosta(b1,b.station(b1));
-  balosta[1]=alosta(b2,b.station(b2));
-  do
-  {
-    insect=intersection(aalosta[0].station,aalosta[1].station,balosta[0].station,balosta[1].station);
-    di0=dist(insect,aalosta[0].station);
-    di1=dist(insect,aalosta[1].station);
-    d01=dist(aalosta[0].station,aalosta[1].station);
-    if (di1>d01 && di1>di0)
-      di0=-di0;
-    if (di0>d01 && di0>di1)
-      di1=-di1;
-    aalosta[2].along=(aalosta[0].along*di1+aalosta[1].along*di0)/d01;
-    if (aalosta[2].along<-a.length()/2 || aalosta[2].along>3*a.length()/2)
-      aalosta[2].along=NAN;
-    if (extend && aalosta[2].along<0)
-      aalosta[2].along=-aalosta[2].along;
-    if (extend && aalosta[2].along>a.length())
-      aalosta[2].along=2*a.length()-aalosta[2].along;
-    aalosta[2].station=a.station(aalosta[2].along);
-    di0=dist(insect,balosta[0].station);
-    di1=dist(insect,balosta[1].station);
-    d01=dist(balosta[0].station,balosta[1].station);
-    if (di1>d01 && di1>di0)
-      di0=-di0;
-    if (di0>d01 && di0>di1)
-      di1=-di1;
-    balosta[2].along=(balosta[0].along*di1+balosta[1].along*di0)/d01;
-    if (balosta[2].along<-b.length()/2 || balosta[2].along>3*b.length()/2)
-      balosta[2].along=NAN;
-    if (extend && balosta[2].along<0)
-      balosta[2].along=-balosta[2].along;
-    if (extend && balosta[2].along>b.length())
-      balosta[2].along=2*b.length()-balosta[2].along;
-    balosta[2].station=b.station(balosta[2].along);
-    isnewcloser=sortpts(aalosta,balosta);
-    //cout<<"isnewcloser "<<isnewcloser<<ldecimal(dist(aalosta[0].station,balosta[0].station))<<' '<<a.length()+b.length()+dist(aalosta[0].station,-balosta[0].station)<<endl;
-    arecloseenough=dist(aalosta[0].station,balosta[0].station)<
-        (a.length()+b.length()+dist(aalosta[0].station,-balosta[0].station))*DBL_EPSILON*4096;
-  }
-  while (isnewcloser && !arecloseenough);
-  if (arecloseenough)
-  {
-    ret.push_back(aalosta[0]);
-    ret.push_back(balosta[0]);
-  }
-  return ret;
-}
-
-vector<alosta> intersection1(spiralarc a,double a1,spiralarc b,double b1,bool extend)
+vector<alosta> intersection1(segment *a,double a1,segment *b,double b1,bool extend)
 /* Returns two alostas, one for a and one for b, or nothing.
- * If extend is true, the spiralarcs are extended to twice their length;
+ * If extend is true, the segments/arcs/spiralarcs are extended to twice their length;
  * e.g. one of length 5 extends from station -2.5 to station 7.5.
  * 
  * It can exit in three ways:
@@ -317,36 +249,32 @@ vector<alosta> intersection1(spiralarc a,double a1,spiralarc b,double b1,bool ex
   int closecount=0;
   alosta aalosta[2],balosta[2];
   vector<alosta> ret;
-  aalosta[0]=alosta(a1,a.station(a1),a.bearing(a1),a.curvature(a1));
-  balosta[0]=alosta(b1,b.station(b1),b.bearing(b1),b.curvature(b1));
+  aalosta[0].setStation(a,a1);
+  balosta[0].setStation(b,b1);
   do
   {
     insect=intersection(aalosta[0].station,aalosta[0].bearing,balosta[0].station,balosta[0].bearing);
     di0=distanceInDirection(aalosta[0].station,insect,aalosta[0].bearing);
     aalosta[1].along=aalosta[0].along+di0;
-    if (aalosta[1].along<-a.length()/2 || aalosta[1].along>3*a.length()/2)
+    if (aalosta[1].along<-a->length()/2 || aalosta[1].along>3*a->length()/2)
       aalosta[1].along=NAN;
     if (extend && aalosta[1].along<0)
       aalosta[1].along=-aalosta[1].along;
-    if (extend && aalosta[1].along>a.length())
-      aalosta[1].along=2*a.length()-aalosta[1].along;
-    aalosta[1].station=a.station(aalosta[1].along);
-    aalosta[1].bearing=a.bearing(aalosta[1].along);
-    aalosta[1].curvature=a.curvature(aalosta[1].along);
+    if (extend && aalosta[1].along>a->length())
+      aalosta[1].along=2*a->length()-aalosta[1].along;
+    aalosta[1].setStation(a,aalosta[1].along);
     di0=distanceInDirection(balosta[0].station,insect,balosta[0].bearing);
     balosta[1].along=balosta[0].along+di0;
-    if (balosta[1].along<-b.length()/2 || balosta[1].along>3*b.length()/2)
+    if (balosta[1].along<-b->length()/2 || balosta[1].along>3*b->length()/2)
       balosta[1].along=NAN;
     if (extend && balosta[1].along<0)
       balosta[1].along=-balosta[1].along;
-    if (extend && balosta[1].along>b.length())
-      balosta[1].along=2*b.length()-balosta[1].along;
-    balosta[1].station=b.station(balosta[1].along);
-    balosta[1].bearing=b.bearing(balosta[1].along);
-    balosta[1].curvature=b.curvature(balosta[1].along);
+    if (extend && balosta[1].along>b->length())
+      balosta[1].along=2*b->length()-balosta[1].along;
+    balosta[1].setStation(b,balosta[1].along);
     isnewcloser=sortpts2(aalosta,balosta);
     //cout<<"isnewcloser "<<isnewcloser<<' '<<ldecimal(dist(aalosta[0].station,balosta[0].station))<<' '<<(a.length()+b.length()+dist(aalosta[0].station,-balosta[0].station))*DBL_EPSILON*4096<<endl;
-    if (dist(aalosta[0].station,balosta[0].station)<(a.length()+b.length()+dist(aalosta[0].station,-balosta[0].station))*DBL_EPSILON*4096)
+    if (dist(aalosta[0].station,balosta[0].station)<(a->length()+b->length()+dist(aalosta[0].station,-balosta[0].station))*DBL_EPSILON*4096)
     {
       closecount++;
       if (aalosta[0].station==balosta[0].station)

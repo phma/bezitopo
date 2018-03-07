@@ -1999,7 +1999,7 @@ void testcogospiral1(spiralarc a,double a0,double a1,spiralarc b,double b0,doubl
   int i;
   xy intpoint; // (7,11)
   vector<alosta> intlist;
-  intlist=intersection1(a,a0,a1,b,b0,b1,extend);
+  intlist=intersection1(&a,a0,a1,&b,b0,b1,extend);
   cout<<"testcogospiral: "<<intlist.size()<<" alostas"<<endl;
   intpoint=xy(0,0);
   for (i=0;i<intlist.size();i++)
@@ -2032,7 +2032,7 @@ void testcogospiral()
   f.setdelta(DEG90,0); // e and f are 0.0034 away from touching
   g.setdelta(DEG90,0);
   h.setdelta(-DEG90,0); // g and h are tangent at (3,4)
-  intlist=intersection1(a,0,a.length(),b,0,b.length(),false);
+  intlist=intersection1(&a,0,a.length(),&b,0,b.length(),false);
   /* The distance along both lines to the intersection point is exactly an integer,
    * so the two points are exactly equal to (7,11).
    */
