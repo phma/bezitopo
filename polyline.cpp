@@ -677,10 +677,10 @@ double polyspiral::area()
   return a.total();
 }
 
-double polyline::dirbound(int angle)
+double polyline::dirbound(int angle,double boundsofar)
 {
   int i;
-  double boundsofar=INFINITY,bound;
+  double bound;
   for (i=0;i<lengths.size();i++)
   {
     bound=getsegment(i).dirbound(angle,boundsofar);
@@ -690,10 +690,10 @@ double polyline::dirbound(int angle)
   return boundsofar;
 }
 
-double polyarc::dirbound(int angle)
+double polyarc::dirbound(int angle,double boundsofar)
 {
   int i;
-  double boundsofar=INFINITY,bound;
+  double bound;
   for (i=0;i<lengths.size();i++)
   {
     bound=getarc(i).dirbound(angle,boundsofar);
@@ -703,10 +703,10 @@ double polyarc::dirbound(int angle)
   return boundsofar;
 }
 
-double polyspiral::dirbound(int angle)
+double polyspiral::dirbound(int angle,double boundsofar)
 {
   int i;
-  double boundsofar=INFINITY,bound;
+  double bound;
   for (i=0;i<lengths.size();i++)
   {
     bound=getspiralarc(i).dirbound(angle,boundsofar);

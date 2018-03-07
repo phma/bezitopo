@@ -3,7 +3,7 @@
 /* drawobj.cpp - drawing object base class            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2017 Pierre Abbat.
+/* Copyright 2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -125,6 +125,11 @@ void drawobj::roscat(xy tfrom,int ro,double sca,xy tto)
 unsigned drawobj::hash()
 {
   return 0;
+}
+
+double drawobj::dirbound(int angle,double boundsofar)
+{
+  return INFINITY;
 }
 
 vector<drawingElement> drawobj::render3d(double precision,int layer,int color,int width,int linetype)

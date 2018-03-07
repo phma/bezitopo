@@ -76,7 +76,7 @@ public:
   virtual xyz station(double along);
   virtual double closest(xy topoint,bool offends=false);
   virtual double area();
-  virtual double dirbound(int angle);
+  virtual double dirbound(int angle,double boundsofar=INFINITY);
   virtual void writeXml(std::ofstream &ofile);
   virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
 };
@@ -102,7 +102,7 @@ public:
   virtual xyz station(double along);
   virtual double closest(xy topoint,bool offends=false);
   virtual double area();
-  virtual double dirbound(int angle);
+  virtual double dirbound(int angle,double boundsofar=INFINITY);
   virtual void writeXml(std::ofstream &ofile);
 };
 
@@ -135,7 +135,7 @@ public:
   virtual xyz station(double along);
   virtual double closest(xy topoint,bool offends=false);
   virtual double area();
-  virtual double dirbound(int angle);
+  virtual double dirbound(int angle,double boundsofar=INFINITY);
   virtual void writeXml(std::ofstream &ofile);
   virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
 };
