@@ -3,7 +3,7 @@
 /* cogospiral.cpp - intersections of spirals          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2017 Pierre Abbat.
+/* Copyright 2015,2017-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -291,3 +291,9 @@ vector<alosta> intersection1(segment *a,double a1,segment *b,double b1,bool exte
   }
   return ret;
 }
+
+/* If two spiralarcs intersect twice near the end of both, the secant method
+ * may miss one, but the tangent method will find both. Conversely, if they
+ * osculate, the tangent method will fail to converge because of roundoff,
+ * but the secant method will find the intersection. So both methods are needed.
+ */
