@@ -189,9 +189,9 @@ vector<alosta> intersection1(segment *a,double a1,double a2,segment *b,double b1
     aalosta[2].along=(aalosta[0].along*di1+aalosta[1].along*di0)/d01;
     if (aalosta[2].along<-a->length()/2 || aalosta[2].along>3*a->length()/2)
       aalosta[2].along=NAN;
-    if (extend && aalosta[2].along<0)
+    if (!extend && aalosta[2].along<0)
       aalosta[2].along=-aalosta[2].along;
-    if (extend && aalosta[2].along>a->length())
+    if (!extend && aalosta[2].along>a->length())
       aalosta[2].along=2*a->length()-aalosta[2].along;
     aalosta[2].setStation(a,aalosta[2].along);
     di0=dist(insect,balosta[0].station);
@@ -204,9 +204,9 @@ vector<alosta> intersection1(segment *a,double a1,double a2,segment *b,double b1
     balosta[2].along=(balosta[0].along*di1+balosta[1].along*di0)/d01;
     if (balosta[2].along<-b->length()/2 || balosta[2].along>3*b->length()/2)
       balosta[2].along=NAN;
-    if (extend && balosta[2].along<0)
+    if (!extend && balosta[2].along<0)
       balosta[2].along=-balosta[2].along;
-    if (extend && balosta[2].along>b->length())
+    if (!extend && balosta[2].along>b->length())
       balosta[2].along=2*b->length()-balosta[2].along;
     balosta[2].setStation(b,balosta[2].along);
     isnewcloser=sortpts(aalosta,balosta);
@@ -258,18 +258,18 @@ vector<alosta> intersection1(segment *a,double a1,segment *b,double b1,bool exte
     aalosta[1].along=aalosta[0].along+di0;
     if (aalosta[1].along<-a->length()/2 || aalosta[1].along>3*a->length()/2)
       aalosta[1].along=NAN;
-    if (extend && aalosta[1].along<0)
+    if (!extend && aalosta[1].along<0)
       aalosta[1].along=-aalosta[1].along;
-    if (extend && aalosta[1].along>a->length())
+    if (!extend && aalosta[1].along>a->length())
       aalosta[1].along=2*a->length()-aalosta[1].along;
     aalosta[1].setStation(a,aalosta[1].along);
     di0=distanceInDirection(balosta[0].station,insect,balosta[0].bearing);
     balosta[1].along=balosta[0].along+di0;
     if (balosta[1].along<-b->length()/2 || balosta[1].along>3*b->length()/2)
       balosta[1].along=NAN;
-    if (extend && balosta[1].along<0)
+    if (!extend && balosta[1].along<0)
       balosta[1].along=-balosta[1].along;
-    if (extend && balosta[1].along>b->length())
+    if (!extend && balosta[1].along>b->length())
       balosta[1].along=2*b->length()-balosta[1].along;
     balosta[1].setStation(b,balosta[1].along);
     isnewcloser=sortpts2(aalosta,balosta);
