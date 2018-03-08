@@ -26,10 +26,29 @@ class BoundRect
 private:
   int orientation;
   std::array<double,4> bounds;
+  // The four numbers are left, bottom, -right, and -top.
 public:
   BoundRect();
   BoundRect(int ori);
   void clear();
   void setOrientation(int ori);
   int getOrientation();
+  void include(drawobj *obj); // Expands the rectangle to include the object.
+  void include(pointlist *obj);
+  double left()
+  {
+    return bounds[0];
+  }
+  double bottom()
+  {
+    return bounds[1];
+  }
+  double right()
+  {
+    return -bounds[2];
+  }
+  double top()
+  {
+    return -bounds[3];
+  }
 };
