@@ -1999,6 +1999,16 @@ void testcogospiral1(segment *a,double a0,double a1,segment *b,double b0,double 
   int i,n=0;
   xy intpoint; // (7,11)
   vector<alosta> intlistSecant,intlistTangent;
+  BoundRect br;
+  br.include(a);
+  br.include(b);
+  ps.startpage();
+  ps.setscale(br);
+  ps.setcolor(1,0,0);
+  ps.spline(a->approx3d(0.001/ps.getscale()));
+  ps.setcolor(0,0,1);
+  ps.spline(b->approx3d(0.001/ps.getscale()));
+  ps.endpage();
   intlistSecant=intersection1(a,a0,a1,b,b0,b1,extend);
   intlistTangent=intersection1(a,a0,b,b0,extend);
   // It is valid for one method, but not the other, to find an intersection.
