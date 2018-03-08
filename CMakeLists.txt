@@ -37,7 +37,7 @@ qt5_add_translation(qm_files bezitopo_en.ts bezitopo_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
 
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitopo.cpp binio.cpp breakline.cpp circle.cpp closure.cpp cogo.cpp
+               bezitopo.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp closure.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp cvtmeas.cpp document.cpp
                drawobj.cpp ellipsoid.cpp except.cpp
                geoid.cpp geoidboundary.cpp halton.cpp
@@ -59,7 +59,7 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                sourcegeoid.cpp spiral.cpp spolygon.cpp
                stl.cpp test.cpp segment.cpp tin.cpp vball.cpp vcurve.cpp zoom.cpp)
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
-               binio.cpp breakline.cpp cogo.cpp contour.cpp
+               binio.cpp boundrect.cpp breakline.cpp cogo.cpp contour.cpp
                convertgeoid.cpp csv.cpp document.cpp drawobj.cpp
                ellipsoid.cpp except.cpp
                geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp
@@ -68,8 +68,8 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp sourcegeoid.cpp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
-add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp breakline.cpp
-               cidialog.cpp circle.cpp cogo.cpp color.cpp
+add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp boundrect.cpp
+               breakline.cpp cidialog.cpp circle.cpp cogo.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp ellipsoid.cpp
                except.cpp geoid.cpp geoidboundary.cpp halton.cpp kml.cpp
                latlong.cpp ldecimal.cpp linetype.cpp
@@ -82,7 +82,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp break
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
 if (${FFTW_FOUND})
 add_executable(transmer angle.cpp arc.cpp bezier.cpp
-               bezier3d.cpp binio.cpp breakline.cpp cogo.cpp drawobj.cpp
+               bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp cogo.cpp drawobj.cpp
                ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
                kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
                measure.cpp point.cpp polyline.cpp
@@ -99,7 +99,9 @@ if (${FFTW_FOUND})
 target_link_libraries(transmer Qt5::Widgets Qt5::Core)
 endif (${FFTW_FOUND})
 target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID NUMSGEOID)
-target_compile_definitions(bezitest PUBLIC NUMSGEOID)
+target_compile_definitions(bezitest PUBLIC NUMSGEOID POINTLIST)
+target_compile_definitions(bezitopo PUBLIC POINTLIST)
+target_compile_definitions(viewtin PUBLIC POINTLIST)
 #target_compile_definitions(pangeoid PUBLIC CONVERTGEOID NUMSGEOID)
 
 include(CheckIncludeFiles)

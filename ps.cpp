@@ -3,7 +3,7 @@
 /* ps.cpp - PostScript output                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -266,6 +266,11 @@ void PostScript::setscale(double minx,double miny,double maxx,double maxy,int or
   for (i=0;i<9 && (scale*xsize/rscales[i]>papx*0.9 || scale*ysize/rscales[i]>papy*0.9);i++);
   scale/=rscales[i];
   *psfile<<"% minx="<<minx<<" miny="<<miny<<" maxx="<<maxx<<" maxy="<<maxy<<" scale="<<scale<<endl;
+}
+
+void PostScript::setscale(BoundRect br)
+{
+  setscale(br.left(),br.bottom(),br.right(),br.top(),br.getOrientation());
 }
 
 double PostScript::getscale()

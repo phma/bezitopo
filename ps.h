@@ -3,7 +3,7 @@
 /* ps.h - PostScript output                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -27,6 +27,7 @@
 #include "bezier3d.h"
 #include "document.h"
 #include "tin.h"
+#include "boundrect.h"
 class pointlist;
 
 struct papersize
@@ -66,6 +67,7 @@ public:
   std::string escape(std::string text);
   void setcolor(double r,double g,double b);
   void setscale(double minx,double miny,double maxx,double maxy,int ori=0);
+  void setscale(BoundRect br);
   double getscale();
   void dot(xy pnt,std::string comment="");
   void circle(xy pnt,double radius);

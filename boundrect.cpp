@@ -66,6 +66,7 @@ void BoundRect::include(drawobj *obj)
   }
 }
 
+#ifdef POINTLIST
 void BoundRect::include(pointlist *obj)
 {
   int i;
@@ -77,4 +78,5 @@ void BoundRect::include(pointlist *obj)
       bounds[i]=newbound;
   }
 }
+#endif
 

@@ -19,6 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef BOUNDRECT_H
+#define BOUNDRECT_H
+class BoundRect;
 #include "pointlist.h"
 
 class BoundRect
@@ -34,7 +37,9 @@ public:
   void setOrientation(int ori);
   int getOrientation();
   void include(drawobj *obj); // Expands the rectangle to include the object.
+#ifdef POINTLIST
   void include(pointlist *obj);
+#endif
   double left()
   {
     return bounds[0];
@@ -52,3 +57,4 @@ public:
     return -bounds[3];
   }
 };
+#endif
