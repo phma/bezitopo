@@ -63,6 +63,17 @@ void destroyPlans()
   outmem.clear();
 }
 
+vector<double> fft(vector<double> input)
+{
+  vector<double> output(input);
+  int sz=input.size();
+  fftw_plan plan=makePlan(sz);
+  memcpy(inmem[sz],&input[0],sz*sizeof(double));
+  fftw_execute(plan);
+  memcpy(&output[0],outmem[sz],sz*sizeof(double));
+  return output;
+}
+
 polyspiral psApprox(ellipsoid *ell,int n)
 /* Computes an n-piece approximation to a quadrant of meridian of the ellipsoid.
  * The ellipse is a quadratic algebraic curve, but its length is not in closed form.
@@ -141,6 +152,19 @@ vector<array<double,2> > projectForward(ellipsoid *ell,polyspiral apx,int n)
   return ret;
 }
 
+vector<double> exeutheicity(vector<array<double,2> > proj)
+/* The amount by which something deviates from a straight line, from Greek
+ * εξ + ευθεια, by analogy with "eccentricity".
+ * proj[i][0] should be equally spaced, except the last, which gives the range.
+ */
+{
+  vector<double> ret;
+  int i;
+  for (i=0;i<proj.size()-1;i++)
+    ret.push_back(proj[i][1]/proj.back()[1]-proj[i][0]/proj.back()[0]);
+  return ret;
+}
+
 void doEllipsoid(ellipsoid &ell,PostScript &ps)
 /* Compute approximations to the meridian of the ellipsoid.
  */
@@ -148,6 +172,7 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
   int i,nseg;
   vector<polyspiral> apx;
   vector<array<double,2> > forwardLengths,reverseLengths;
+  vector<double> forwardTransform,reverseTransform;
   ps.startpage();
   ps.setscale(0,0,EARTHRAD,EARTHRAD,0);
   for (i=0,nseg=1;i<9;i++,nseg*=3)
@@ -161,6 +186,9 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
   for (i=0;i<forwardLengths.size();i++)
     cout<<setw(2)<<i<<setw(12)<<forwardLengths[i][0]<<
           setw(12)<<forwardLengths[i][1]<<endl;
+  forwardTransform=fft(exeutheicity(forwardLengths));
+  for (i=0;i<forwardTransform.size();i++)
+    cout<<setw(2)<<i+1<<setw(12)<<forwardTransform[i]<<endl;
   ps.endpage();
 }  
 
