@@ -41,9 +41,26 @@ fftw_plan makePlan(int n)
 {
   if (!plans[n])
   {
-    plans[n]=fftw_plan_r2r_1d(n,inmem[n],outmem[n],FFTW_RODFT10,0);
+    inmem[n]=fftw_alloc_real(n);
+    outmem[n]=fftw_alloc_real(n);
+    plans[n]=fftw_plan_r2r_1d(n,inmem[n],outmem[n],FFTW_RODFT10,FFTW_ESTIMATE);
   }
   return plans[n];
+}
+
+void destroyPlans()
+{
+  map<int,fftw_plan>::iterator i;
+  map<int,double *>::iterator j;
+  for (i=plans.begin();i!=plans.end();i++)
+    fftw_destroy_plan(i->second);
+  for (j=inmem.begin();j!=inmem.end();j++)
+    fftw_free(j->second);
+  for (j=outmem.begin();j!=outmem.end();j++)
+    fftw_free(j->second);
+  plans.clear();
+  inmem.clear();
+  outmem.clear();
 }
 
 polyspiral psApprox(ellipsoid *ell,int n)
@@ -160,5 +177,6 @@ int main(int argc, char *argv[])
     doEllipsoid(getEllipsoid(i),ps);
   ps.trailer();
   ps.close();
+  destroyPlans();
   return 0;
 }
