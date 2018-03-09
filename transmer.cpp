@@ -22,6 +22,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <fftw3.h>
 #include "polyline.h"
 #include "projection.h"
 #include "ellipsoid.h"
@@ -32,6 +33,18 @@
 using namespace std;
 
 vector<string> args;
+map<int,fftw_plan> plans;
+map<int,double *> inmem,outmem;
+
+fftw_plan makePlan(int n)
+// fftw_plan is a pointer to plan_s, so it can be checked as bool
+{
+  if (!plans[n])
+  {
+    plans[n]=fftw_plan_r2r_1d(n,inmem[n],outmem[n],FFTW_RODFT10,0);
+  }
+  return plans[n];
+}
 
 polyspiral psApprox(ellipsoid *ell,int n)
 /* Computes an n-piece approximation to a quadrant of meridian of the ellipsoid.

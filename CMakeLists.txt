@@ -96,7 +96,7 @@ target_link_libraries(convertgeoid Qt5::Widgets Qt5::Core)
 target_link_libraries(viewtin Qt5::Widgets Qt5::Core)
 target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)
 if (${FFTW_FOUND})
-target_link_libraries(transmer Qt5::Widgets Qt5::Core)
+target_link_libraries(transmer Qt5::Widgets Qt5::Core ${FFTW_LIBRARIES})
 endif (${FFTW_FOUND})
 target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID NUMSGEOID)
 target_compile_definitions(bezitest PUBLIC NUMSGEOID POINTLIST)
@@ -124,6 +124,9 @@ set(BEZITOPO_VERSION ${BEZITOPO_MAJOR_VERSION}.${BEZITOPO_MINOR_VERSION}.${BEZIT
 set(COPY_YEAR 2018)
 
 include_directories(${PROJECT_BINARY_DIR})
+if (${FFTW_FOUND})
+include_directories(${FFTW_INCLUDES})
+endif (${FFTW_FOUND})
 configure_file (config.h.in config.h)
 
 set(CPACK_PACKAGE_VERSION_MAJOR ${BEZITOPO_MAJOR_VERSION})
