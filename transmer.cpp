@@ -64,13 +64,17 @@ void destroyPlans()
 }
 
 vector<double> fft(vector<double> input)
+/* The output is calibrated so that the frequency-domain terms are independent
+ * of the size of the input.
+ */
 {
   vector<double> output(input);
-  int sz=input.size();
+  int i,sz=input.size();
   fftw_plan plan=makePlan(sz);
   memcpy(inmem[sz],&input[0],sz*sizeof(double));
   fftw_execute(plan);
-  memcpy(&output[0],outmem[sz],sz*sizeof(double));
+  for (i=0;i<sz;i++)
+    output[i]=outmem[sz][i]/sz;
   return output;
 }
 
@@ -190,7 +194,17 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
   for (i=0;i<forwardTransform.size();i++)
     cout<<setw(2)<<i+1<<setw(12)<<forwardTransform[i]<<endl;
   ps.endpage();
-}  
+}
+
+void calibrate()
+{
+  int i,sz=32;
+  vector<double> input,output;
+  for (i=0;i<sz;i++)
+    input.push_back(sin(DEG180/(2*sz)*(2*i+1)));
+  output=fft(input);
+  cout<<output[0]<<endl;
+}
 
 int main(int argc, char *argv[])
 {
@@ -205,6 +219,7 @@ int main(int argc, char *argv[])
     doEllipsoid(getEllipsoid(i),ps);
   ps.trailer();
   ps.close();
+  calibrate();
   destroyPlans();
   return 0;
 }
