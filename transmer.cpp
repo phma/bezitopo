@@ -179,7 +179,7 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
   vector<double> forwardTransform,reverseTransform;
   ps.startpage();
   ps.setscale(0,0,EARTHRAD,EARTHRAD,0);
-  for (i=0,nseg=1;i<9;i++,nseg*=3)
+  for (i=0,nseg=1;i<7;i++,nseg*=3)
     apx.push_back(psApprox(&ell,nseg));
   cout<<ell.getName()<<endl;
   for (i=0;i<apx.size()-1;i++)
