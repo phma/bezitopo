@@ -22,6 +22,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <cassert>
 #include <fftw3.h>
 #include "polyline.h"
 #include "projection.h"
@@ -156,6 +157,38 @@ vector<array<double,2> > projectForward(ellipsoid *ell,polyspiral apx,int n)
   return ret;
 }
 
+vector<array<double,2> > projectBackward(ellipsoid *ell,polyspiral apx,int n)
+/* Projects n points (n is a power of 2) from the ellipsoid to the sphere,
+ * returning a vector of lengths along the meridian. The vector has size n+1;
+ * the last member is the North Pole, i.e. the total length of the meridian.
+ */
+{
+  int i;
+  latlong llSphere,llEllipsoid;
+  latlongelev lleEllipsoid;
+  xyz meridianPoint;
+  vector<array<double,2> > ret;
+  array<double,2> totalLength,projPair;
+  totalLength[1]=ell->sphere->geteqr()*M_PI/2;
+  totalLength[0]=apx.length();
+  for (i=0;i<n;i++)
+  {
+    projPair[0]=((i+0.5)/n)*totalLength[0];
+    meridianPoint=apx.station(projPair[0]);
+    lleEllipsoid=ell->geod(xyz(meridianPoint.getx(),0,meridianPoint.gety()));
+    assert(fabs(lleEllipsoid.elev)<0.01/243);
+    /* 9 mm is 1/2 angle ulp; 243 is the number of spiralarcs.
+     * There is an elevation -37.657 µm, which is just a bit less than -37.037... µm.
+     */
+    llEllipsoid=lleEllipsoid;
+    llSphere=ell->conformalLatitude(llEllipsoid);
+    projPair[1]=llSphere.lat*ell->sphere->geteqr();
+    ret.push_back(projPair);
+  }
+  ret.push_back(totalLength);
+  return ret;
+}
+
 vector<double> exeutheicity(vector<array<double,2> > proj)
 /* The amount by which something deviates from a straight line, from Greek
  * εξ + ευθεια, by analogy with "eccentricity".
@@ -187,12 +220,16 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
           setw(12)<<apx[i+1].length()-apx[i].length()<<endl;
   ps.spline(apx.back().approx3d(1e3));
   forwardLengths=projectForward(&ell,apx[5],8);
+  reverseLengths=projectBackward(&ell,apx[5],8);
   for (i=0;i<forwardLengths.size();i++)
     cout<<setw(2)<<i<<setw(12)<<forwardLengths[i][0]<<
-          setw(12)<<forwardLengths[i][1]<<endl;
+          setw(12)<<forwardLengths[i][1]<<setw(12)<<
+          reverseLengths[i][0]<<
+          setw(12)<<reverseLengths[i][1]<<endl;
   forwardTransform=fft(exeutheicity(forwardLengths));
+  reverseTransform=fft(exeutheicity(reverseLengths));
   for (i=0;i<forwardTransform.size();i++)
-    cout<<setw(2)<<i+1<<setw(12)<<forwardTransform[i]<<endl;
+    cout<<setw(2)<<i+1<<setw(12)<<forwardTransform[i]<<setw(12)<<reverseTransform[i]<<endl;
   ps.endpage();
 }
 
