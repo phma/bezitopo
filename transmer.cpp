@@ -129,6 +129,31 @@ double compareLengths(polyspiral fewer,polyspiral more)
   return pairwisesum(diff);
 }
 
+array<double,3> compareTransforms(vector<double> fewer,vector<double> more)
+/* ret[0] is the total square difference between fewer and the first half of more.
+ * ret[1] is the total square of the last half of more.
+ * ret[2] is the largest absolute value of the last half of more.
+ * ret[1] and ret[2] are estimates of the noise floor.
+ */
+{
+  vector<double> squares;
+  array<double,3> ret;
+  ret[2]=0;
+  int i;
+  for (i=0;i<fewer.size();i++)
+    squares.push_back(sqr(fewer[i]-more[i]));
+  ret[0]=pairwisesum(squares);
+  squares.clear();
+  for (;i<more.size();i++)
+  {
+    squares.push_back(sqr(more[i]));
+    if (fabs(more[i])>ret[2])
+      ret[2]=fabs(more[i]);
+  }
+  ret[1]=pairwisesum(squares);
+  return ret;
+}
+
 vector<array<double,2> > projectForward(ellipsoid *ell,polyspiral apx,int n)
 /* Projects n points (n is a power of 2) from the sphere to the ellipsoid,
  * returning a vector of lengths along the meridian. The vector has size n+1;
@@ -176,9 +201,8 @@ vector<array<double,2> > projectBackward(ellipsoid *ell,polyspiral apx,int n)
     projPair[0]=((i+0.5)/n)*totalLength[0];
     meridianPoint=apx.station(projPair[0]);
     lleEllipsoid=ell->geod(xyz(meridianPoint.getx(),0,meridianPoint.gety()));
-    assert(fabs(lleEllipsoid.elev)<0.01/243);
-    /* 9 mm is 1/2 angle ulp; 243 is the number of spiralarcs.
-     * There is an elevation -37.657 µm, which is just a bit less than -37.037... µm.
+    assert(fabs(lleEllipsoid.elev)<0.018/243);
+    /* 18 mm is 1/2 angle ulp; 243 is the number of spiralarcs.
      */
     llEllipsoid=lleEllipsoid;
     llSphere=ell->conformalLatitude(llEllipsoid);
@@ -206,10 +230,13 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
 /* Compute approximations to the meridian of the ellipsoid.
  */
 {
-  int i,nseg;
+  int i,j,nseg;
+  bool done=false;
+  int goodForwardTerms,goodReverseTerms,forwardNoiseFloor,reverseNoiseFloor;
   vector<polyspiral> apx;
   vector<array<double,2> > forwardLengths,reverseLengths;
-  vector<double> forwardTransform,reverseTransform;
+  vector<double> forwardTransform,reverseTransform,lastForwardTransform,lastReverseTransform;
+  array<double,3> forwardDifference,reverseDifference;
   ps.startpage();
   ps.setscale(0,0,EARTHRAD,EARTHRAD,0);
   for (i=0,nseg=1;i<7;i++,nseg*=3)
@@ -219,16 +246,43 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
     cout<<setw(2)<<i<<setw(12)<<compareLengths(apx[i],apx[i+1])<<
           setw(12)<<apx[i+1].length()-apx[i].length()<<endl;
   ps.spline(apx.back().approx3d(1e3));
-  forwardLengths=projectForward(&ell,apx[5],8);
-  reverseLengths=projectBackward(&ell,apx[5],8);
-  for (i=0;i<forwardLengths.size();i++)
-    cout<<setw(2)<<i<<setw(12)<<forwardLengths[i][0]<<
-          setw(12)<<forwardLengths[i][1]<<setw(12)<<
-          reverseLengths[i][0]<<
-          setw(12)<<reverseLengths[i][1]<<endl;
-  forwardTransform=fft(exeutheicity(forwardLengths));
-  reverseTransform=fft(exeutheicity(reverseLengths));
-  for (i=0;i<forwardTransform.size();i++)
+  for (i=0,nseg=1;i<12 && !done;i++,nseg*=2)
+  {
+    forwardLengths=projectForward(&ell,apx[5],nseg);
+    reverseLengths=projectBackward(&ell,apx[5],nseg);
+    forwardTransform=fft(exeutheicity(forwardLengths));
+    reverseTransform=fft(exeutheicity(reverseLengths));
+    if (lastForwardTransform.size())
+    {
+      forwardDifference=compareTransforms(lastForwardTransform,forwardTransform);
+      reverseDifference=compareTransforms(lastReverseTransform,reverseTransform);
+      cout<<setw(2)<<i<<setw(14)<<forwardDifference[0]<<setw(12)<<forwardDifference[1]<<setw(12)<<forwardDifference[2];
+      cout<<setw(14)<<reverseDifference[0]<<setw(12)<<reverseDifference[1]<<setw(12)<<reverseDifference[2]<<endl;
+      done=forwardDifference[0]<2*forwardDifference[1] && reverseDifference[0]<2*reverseDifference[1];
+      goodForwardTerms=goodReverseTerms=0;
+      forwardNoiseFloor=reverseNoiseFloor=0;
+      for (j=0;j<lastForwardTransform.size();j++)
+      {
+	if (fabs(forwardTransform[j]-lastForwardTransform[j])<
+	    fabs(forwardTransform[j]+lastForwardTransform[j])/256 && goodForwardTerms>=j)
+	  goodForwardTerms++;
+	if (fabs(reverseTransform[j]-lastReverseTransform[j])<
+	    fabs(reverseTransform[j]+lastReverseTransform[j])/256 && goodReverseTerms>=j)
+	  goodReverseTerms++;
+	if (fabs(forwardTransform[j])>2*forwardDifference[2])
+	  forwardNoiseFloor=j+1;
+	if (fabs(reverseTransform[j])>2*reverseDifference[2])
+	  reverseNoiseFloor=j+1;
+      }
+      cout<<"Forward "<<goodForwardTerms<<" good, noise "<<forwardNoiseFloor<<"   ";
+      cout<<"Reverse "<<goodReverseTerms<<" good, noise "<<reverseNoiseFloor<<endl;
+      if (goodForwardTerms<forwardNoiseFloor-1 || goodReverseTerms<reverseNoiseFloor-1)
+	done=false;
+    }
+    lastForwardTransform=forwardTransform;
+    lastReverseTransform=reverseTransform;
+  }
+  for (i=0;i<0;i++)
     cout<<setw(2)<<i+1<<setw(12)<<forwardTransform[i]<<setw(12)<<reverseTransform[i]<<endl;
   ps.endpage();
 }
