@@ -232,6 +232,8 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
 {
   int i,j,nseg;
   bool done=false;
+  polyline forwardSpectrum,reverseSpectrum;
+  double minNonzero,minLog,maxLog;
   int goodForwardTerms,goodReverseTerms,forwardNoiseFloor,reverseNoiseFloor;
   vector<polyspiral> apx;
   vector<array<double,2> > forwardLengths,reverseLengths;
@@ -285,6 +287,40 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
   for (i=0;i<0;i++)
     cout<<setw(2)<<i+1<<setw(12)<<forwardTransform[i]<<setw(12)<<reverseTransform[i]<<endl;
   ps.endpage();
+  ps.startpage();
+  ps.setscale(0,0,3,2,0);
+  minNonzero=INFINITY;
+  for (i=0;i<forwardTransform.size();i++)
+  {
+    if (fabs(forwardTransform[i])<minNonzero && forwardTransform[i]!=0)
+      minNonzero=fabs(forwardTransform[i]);
+    if (fabs(reverseTransform[i])<minNonzero && reverseTransform[i]!=0)
+      minNonzero=fabs(reverseTransform[i]);
+  }
+  minLog=INFINITY;
+  maxLog=-INFINITY;
+  minNonzero/=65536;
+  for (i=0;i<forwardTransform.size();i++)
+  {
+    if (log(fabs(forwardTransform[i])+minNonzero)<minLog)
+      minLog=log(fabs(forwardTransform[i])+minNonzero);
+    if (log(fabs(forwardTransform[i])+minNonzero)>maxLog)
+      maxLog=log(fabs(forwardTransform[i])+minNonzero);
+    if (log(fabs(reverseTransform[i])+minNonzero)<minLog)
+      minLog=log(fabs(reverseTransform[i])+minNonzero);
+    if (log(fabs(reverseTransform[i])+minNonzero)>maxLog)
+      maxLog=log(fabs(reverseTransform[i])+minNonzero);
+  }
+  for (i=0;i<forwardTransform.size();i++)
+  {
+    forwardSpectrum.insert(xy(3.*i/forwardTransform.size(),2*(log(fabs(forwardTransform[i])+minNonzero)-minLog)/(maxLog-minLog)));
+    reverseSpectrum.insert(xy(3.*i/reverseTransform.size(),2*(log(fabs(reverseTransform[i])+minNonzero)-minLog)/(maxLog-minLog)));
+  }
+  forwardSpectrum.open();
+  reverseSpectrum.open();
+  ps.spline(forwardSpectrum.approx3d(1e-2));
+  ps.spline(reverseSpectrum.approx3d(1e-2));
+  ps.endpage();
 }
 
 void calibrate()
@@ -304,7 +340,7 @@ int main(int argc, char *argv[])
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
   ps.open("transmer.ps");
-  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
   for (i=0;i<countEllipsoids();i++)
     doEllipsoid(getEllipsoid(i),ps);
