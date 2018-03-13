@@ -30,6 +30,7 @@
 #include "ps.h"
 #include "vball.h"
 #include "manysum.h"
+#include "binio.h"
 
 using namespace std;
 
@@ -237,8 +238,28 @@ double median(double a,double b,double c)
   return b;
 }
 
-void doEllipsoid(ellipsoid &ell,PostScript &ps)
-/* Compute approximations to the meridian of the ellipsoid.
+void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc)
+/* Computes approximations to the meridian of the ellipsoid. Projects
+ * equidistant points along the meridian of the ellipsoid to the sphere,
+ * and vice versa. Then takes the Fourier transform of the difference between
+ * the projected points and the equidistant points. Finally writes the first
+ * few terms of the Fourier transform to a file, for the transverse Mercator
+ * projection to use.
+ *
+ * A record in the file looks like this:
+ * 57 47 53 38 34 00       WGS84                   Name of ellipsoid
+ * 00 05                   5                       Number of following numbers
+ * 41 63 13 C5 B7 56 87 A8 10001965.729312733 m    Half-meridian of ellipsoid
+ * 3F 41 79 C8 C4 00 05 FD 5.3331664094019538e-4   First harmonic of forward transform
+ * 3E A0 40 BD 84 C3 4F 42 4.8437392188370177e-7   Second harmonic
+ * 3E 0A 32 88 2A 9A 3F 9C 7.6244440379731101e-10  Third harmonic
+ * 3D 7B 35 48 47 CD A3 5B 1.5466033666269329e-12  Fourth harmonic
+ * 00 05                   5                       Number of following numbers
+ * 41 63 16 7F 14 72 4F 2E 10007544.638953771 m    Half-meridian of sphere
+ * BF 41 79 C9 3C 32 63 EC -5.333168595768023e-4   First harmonic of reverse transform
+ * BE 64 2F 6B CF 26 8F 9B -3.7597937113734575e-8  Second harmonic
+ * BD DD 48 D4 E3 AC 49 2E -1.0653638467792568e-10 Third harmonic
+ * BD 43 66 F9 D6 AA BF A6 -1.3786127605631334e-13 Fourth harmonic
  */
 {
   int i,j,nseg,sz1;
@@ -247,7 +268,6 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
   double minNonzero,minLog,maxLog;
   int goodForwardTerms,goodReverseTerms,forwardNoiseFloor,reverseNoiseFloor;
   vector<polyspiral> apx3,apx7,apxK;
-  vector<array<double,2> > forwardLengths,reverseLengths;
   vector<array<double,2> > forwardLengths3,reverseLengths3;
   vector<array<double,2> > forwardLengths7,reverseLengths7;
   vector<array<double,2> > forwardLengthsK,reverseLengthsK;
@@ -305,10 +325,10 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
       for (j=0;j<lastForwardTransform.size();j++)
       {
 	if (fabs(forwardTransform[j]-lastForwardTransform[j])<
-	    fabs(forwardTransform[j]+lastForwardTransform[j])/256 && goodForwardTerms>=j)
+	    fabs(forwardTransform[j]+lastForwardTransform[j])/65536 && goodForwardTerms>=j)
 	  goodForwardTerms++;
 	if (fabs(reverseTransform[j]-lastReverseTransform[j])<
-	    fabs(reverseTransform[j]+lastReverseTransform[j])/256 && goodReverseTerms>=j)
+	    fabs(reverseTransform[j]+lastReverseTransform[j])/65536 && goodReverseTerms>=j)
 	  goodReverseTerms++;
 	// There's a spike at 486, which is 243*2. Ignore spikes in noise floor past 243.
 	if (fabs(forwardTransform[j])>sz1/(i+1)*forwardDifference[2])
@@ -361,6 +381,15 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
   ps.spline(forwardSpectrum.approx3d(1e-2));
   ps.spline(reverseSpectrum.approx3d(1e-2));
   ps.endpage();
+  writeustring(merc,ell.getName());
+  writebeshort(merc,forwardNoiseFloor+1);
+  writebedouble(merc,forwardLengths3.back()[1]);
+  for (i=0;i<forwardNoiseFloor;i++)
+    writebedouble(merc,forwardTransform[i]);
+  writebeshort(merc,reverseNoiseFloor+1);
+  writebedouble(merc,reverseLengths3.back()[1]);
+  for (i=0;i<reverseNoiseFloor;i++)
+    writebedouble(merc,reverseTransform[i]);
 }
 
 void calibrate()
@@ -377,13 +406,14 @@ int main(int argc, char *argv[])
 {
   int i;
   PostScript ps;
+  ofstream merc("mercator.dat",ios::binary);
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
   ps.open("transmer.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
   for (i=0;i<countEllipsoids();i++)
-    doEllipsoid(getEllipsoid(i),ps);
+    doEllipsoid(getEllipsoid(i),ps,merc);
   ps.trailer();
   ps.close();
   calibrate();
