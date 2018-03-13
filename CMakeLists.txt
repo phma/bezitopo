@@ -111,7 +111,7 @@ check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_files(windows.h HAVE_WINDOWS_H)
 
 install(TARGETS bezitopo convertgeoid viewtin DESTINATION bin)
-install(FILES ${qm_files} projections.txt DESTINATION share/bezitopo)
+install(FILES ${qm_files} projections.txt transmer.dat DESTINATION share/bezitopo)
 
 test_big_endian(BIGENDIAN)
 check_type_size("int" INT)
