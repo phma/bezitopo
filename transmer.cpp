@@ -226,6 +226,17 @@ vector<double> exeutheicity(vector<array<double,2> > proj)
   return ret;
 }
 
+double median(double a,double b,double c)
+{
+  if (a>b)
+    swap(a,b);
+  if (b>c)
+    swap(b,c);
+  if (a>b)
+    swap(a,b);
+  return b;
+}
+
 void doEllipsoid(ellipsoid &ell,PostScript &ps)
 /* Compute approximations to the meridian of the ellipsoid.
  */
@@ -235,25 +246,52 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
   polyline forwardSpectrum,reverseSpectrum;
   double minNonzero,minLog,maxLog;
   int goodForwardTerms,goodReverseTerms,forwardNoiseFloor,reverseNoiseFloor;
-  vector<polyspiral> apx;
+  vector<polyspiral> apx3,apx7,apxK;
   vector<array<double,2> > forwardLengths,reverseLengths;
+  vector<array<double,2> > forwardLengths3,reverseLengths3;
+  vector<array<double,2> > forwardLengths7,reverseLengths7;
+  vector<array<double,2> > forwardLengthsK,reverseLengthsK;
+  vector<double> forwardTransform3,reverseTransform3;
+  vector<double> forwardTransform7,reverseTransform7;
+  vector<double> forwardTransformK,reverseTransformK;
   vector<double> forwardTransform,reverseTransform,lastForwardTransform,lastReverseTransform;
   array<double,3> forwardDifference,reverseDifference;
   ps.startpage();
   ps.setscale(0,0,EARTHRAD,EARTHRAD,0);
+  for (i=0,nseg=1;i<5;i++,nseg*=7)
+    apx7.push_back(psApprox(&ell,nseg));
   for (i=0,nseg=1;i<7;i++,nseg*=3)
-    apx.push_back(psApprox(&ell,nseg));
+    apx3.push_back(psApprox(&ell,nseg));
+  apxK.push_back(psApprox(&ell,273));
   cout<<ell.getName()<<endl;
-  for (i=0;i<apx.size()-1;i++)
-    cout<<setw(2)<<i<<setw(12)<<compareLengths(apx[i],apx[i+1])<<
-          setw(12)<<apx[i+1].length()-apx[i].length()<<endl;
-  ps.spline(apx.back().approx3d(1e3));
+  for (i=0;i<apx3.size()-1;i++)
+    cout<<setw(2)<<i<<setw(12)<<compareLengths(apx3[i],apx3[i+1])<<
+          setw(12)<<apx3[i+1].length()-apx3[i].length()<<endl;
+  for (i=0;i<apx7.size()-1;i++)
+    cout<<setw(2)<<i<<setw(12)<<compareLengths(apx7[i],apx7[i+1])<<
+          setw(12)<<apx7[i+1].length()-apx7[i].length()<<endl;
+  ps.spline(apx3.back().approx3d(1e3));
   for (i=0,nseg=1;i<12 && !done;i++,nseg*=2)
   {
-    forwardLengths=projectForward(&ell,apx[5],nseg);
-    reverseLengths=projectBackward(&ell,apx[5],nseg);
-    forwardTransform=fft(exeutheicity(forwardLengths));
-    reverseTransform=fft(exeutheicity(reverseLengths));
+    forwardLengths3=projectForward(&ell,apx3[5],nseg);
+    reverseLengths3=projectBackward(&ell,apx3[5],nseg);
+    forwardTransform3=fft(exeutheicity(forwardLengths3));
+    reverseTransform3=fft(exeutheicity(reverseLengths3));
+    forwardLengths7=projectForward(&ell,apx7[3],nseg);
+    reverseLengths7=projectBackward(&ell,apx7[3],nseg);
+    forwardTransform7=fft(exeutheicity(forwardLengths7));
+    reverseTransform7=fft(exeutheicity(reverseLengths7));
+    forwardLengthsK=projectForward(&ell,apxK[0],nseg);
+    reverseLengthsK=projectBackward(&ell,apxK[0],nseg);
+    forwardTransformK=fft(exeutheicity(forwardLengthsK));
+    reverseTransformK=fft(exeutheicity(reverseLengthsK));
+    forwardTransform.clear();
+    reverseTransform.clear();
+    for (j=0;j<forwardTransform3.size();j++)
+    {
+      forwardTransform.push_back(median(forwardTransform3[j],forwardTransform7[j],forwardTransformK[j]));
+      reverseTransform.push_back(median(reverseTransform3[j],reverseTransform7[j],reverseTransformK[j]));
+    }
     if (lastForwardTransform.size())
     {
       forwardDifference=compareTransforms(lastForwardTransform,forwardTransform);
