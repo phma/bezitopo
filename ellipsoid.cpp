@@ -219,6 +219,12 @@ double ellipsoid::scaleFactor(double ellipsoidLatitude,double sphereLatitude)
     return ellipsoidRadius/sphereRadius;
 }
 
+void ellipsoid::setTmCoefficients(vector<double> forward,vector<double> reverse)
+{
+  tmForward=forward;
+  tmReverse=reverse;
+}
+
 ellipsoid Sphere(6371000,0,0,xyz(0,0,0),"Sphere");
 ellipsoid Clarke(6378206.4,6356583.8,0,xyz(0,0,0),"Clarke");
 ellipsoid GRS80(6378137,0,1/298.257222101,xyz(0,0,0),"GRS80");

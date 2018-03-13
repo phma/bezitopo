@@ -35,6 +35,7 @@ private:
   double eqr,por;
   xyz cen;
   std::string name;
+  std::vector<double> tmForward,tmReverse; // for Gauss-Krüger tranverse Mercator
 public:
   ellipsoid *sphere;
   ellipsoid(double equradius,double polradius,double flattening,xyz center,std::string ename);
@@ -73,6 +74,7 @@ public:
   double inverseConformalLatitude(double lat);
   latlong inverseConformalLatitude(latlong ll);
   double scaleFactor(double ellipsoidLatitude,double sphereLatitude);
+  void setTmCoefficients(std::vector<double> forward,std::vector<double> reverse);
 };
 
 extern ellipsoid Sphere,Clarke,GRS80,WGS84,ITRS;
