@@ -271,9 +271,10 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
 	if (fabs(reverseTransform[j]-lastReverseTransform[j])<
 	    fabs(reverseTransform[j]+lastReverseTransform[j])/256 && goodReverseTerms>=j)
 	  goodReverseTerms++;
-	if (fabs(forwardTransform[j])>2*forwardDifference[2])
+	// There's a spike at 486, which is 243*2. Ignore spikes in noise floor past 243.
+	if (fabs(forwardTransform[j])>2*forwardDifference[2] && (j<243 || fabs(forwardTransform[j-5])>2*forwardDifference[2]))
 	  forwardNoiseFloor=j+1;
-	if (fabs(reverseTransform[j])>2*reverseDifference[2])
+	if (fabs(reverseTransform[j])>2*reverseDifference[2] && (j<243 || fabs(reverseTransform[j-5])>2*reverseDifference[2]))
 	  reverseNoiseFloor=j+1;
       }
       cout<<"Forward "<<goodForwardTerms<<" good, noise "<<forwardNoiseFloor<<"   ";
