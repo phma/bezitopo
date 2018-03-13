@@ -248,13 +248,13 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc)
  *
  * A record in the file looks like this:
  * 57 47 53 38 34 00       WGS84                   Name of ellipsoid
- * 00 05                   5                       Number of following numbers
+ * 05                      5                       Number of following numbers
  * 41 63 13 C5 B7 56 87 A8 10001965.729312733 m    Half-meridian of ellipsoid
  * 3F 41 79 C8 C4 00 05 FD 5.3331664094019538e-4   First harmonic of forward transform
  * 3E A0 40 BD 84 C3 4F 42 4.8437392188370177e-7   Second harmonic
  * 3E 0A 32 88 2A 9A 3F 9C 7.6244440379731101e-10  Third harmonic
  * 3D 7B 35 48 47 CD A3 5B 1.5466033666269329e-12  Fourth harmonic
- * 00 05                   5                       Number of following numbers
+ * 05                      5                       Number of following numbers
  * 41 63 16 7F 14 72 4F 2E 10007544.638953771 m    Half-meridian of sphere
  * BF 41 79 C9 3C 32 63 EC -5.333168595768023e-4   First harmonic of reverse transform
  * BE 64 2F 6B CF 26 8F 9B -3.7597937113734575e-8  Second harmonic
@@ -382,11 +382,11 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc)
   ps.spline(reverseSpectrum.approx3d(1e-2));
   ps.endpage();
   writeustring(merc,ell.getName());
-  writebeshort(merc,forwardNoiseFloor+1);
+  writegeint(merc,forwardNoiseFloor+1);
   writebedouble(merc,forwardLengths3.back()[1]);
   for (i=0;i<forwardNoiseFloor;i++)
     writebedouble(merc,forwardTransform[i]);
-  writebeshort(merc,reverseNoiseFloor+1);
+  writegeint(merc,reverseNoiseFloor+1);
   writebedouble(merc,reverseLengths3.back()[1]);
   for (i=0;i<reverseNoiseFloor;i++)
     writebedouble(merc,reverseTransform[i]);
@@ -406,7 +406,7 @@ int main(int argc, char *argv[])
 {
   int i;
   PostScript ps;
-  ofstream merc("mercator.dat",ios::binary);
+  ofstream merc("transmer.dat",ios::binary);
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
   ps.open("transmer.ps");
