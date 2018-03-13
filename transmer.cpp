@@ -241,7 +241,7 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
 /* Compute approximations to the meridian of the ellipsoid.
  */
 {
-  int i,j,nseg;
+  int i,j,nseg,sz1;
   bool done=false;
   polyline forwardSpectrum,reverseSpectrum;
   double minNonzero,minLog,maxLog;
@@ -271,7 +271,7 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
     cout<<setw(2)<<i<<setw(12)<<compareLengths(apx7[i],apx7[i+1])<<
           setw(12)<<apx7[i+1].length()-apx7[i].length()<<endl;
   ps.spline(apx3.back().approx3d(1e3));
-  for (i=0,nseg=1;i<12 && !done;i++,nseg*=2)
+  for (i=0,nseg=1;i<24 && !done;i++,nseg*=2)
   {
     forwardLengths3=projectForward(&ell,apx3[5],nseg);
     reverseLengths3=projectBackward(&ell,apx3[5],nseg);
@@ -298,9 +298,10 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
       reverseDifference=compareTransforms(lastReverseTransform,reverseTransform);
       cout<<setw(2)<<i<<setw(14)<<forwardDifference[0]<<setw(12)<<forwardDifference[1]<<setw(12)<<forwardDifference[2];
       cout<<setw(14)<<reverseDifference[0]<<setw(12)<<reverseDifference[1]<<setw(12)<<reverseDifference[2]<<endl;
-      done=forwardDifference[0]<2*forwardDifference[1] && reverseDifference[0]<2*reverseDifference[1];
+      done=forwardDifference[0]<3*forwardDifference[1] && reverseDifference[0]<3*reverseDifference[1];
       goodForwardTerms=goodReverseTerms=0;
       forwardNoiseFloor=reverseNoiseFloor=0;
+      sz1=lastForwardTransform.size()+1;
       for (j=0;j<lastForwardTransform.size();j++)
       {
 	if (fabs(forwardTransform[j]-lastForwardTransform[j])<
@@ -310,9 +311,9 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps)
 	    fabs(reverseTransform[j]+lastReverseTransform[j])/256 && goodReverseTerms>=j)
 	  goodReverseTerms++;
 	// There's a spike at 486, which is 243*2. Ignore spikes in noise floor past 243.
-	if (fabs(forwardTransform[j])>2*forwardDifference[2] && (j<243 || fabs(forwardTransform[j-5])>2*forwardDifference[2]))
+	if (fabs(forwardTransform[j])>sz1/(i+1)*forwardDifference[2])
 	  forwardNoiseFloor=j+1;
-	if (fabs(reverseTransform[j])>2*reverseDifference[2] && (j<243 || fabs(reverseTransform[j-5])>2*reverseDifference[2]))
+	if (fabs(reverseTransform[j])>sz1/(i+1)*reverseDifference[2])
 	  reverseNoiseFloor=j+1;
       }
       cout<<"Forward "<<goodForwardTerms<<" good, noise "<<forwardNoiseFloor<<"   ";
