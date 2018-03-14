@@ -75,6 +75,8 @@ public:
   latlong inverseConformalLatitude(latlong ll);
   double scaleFactor(double ellipsoidLatitude,double sphereLatitude);
   void setTmCoefficients(std::vector<double> forward,std::vector<double> reverse);
+  xy krugerize(xy mapPoint);
+  xy dekrugerize(xy mapPoint);
 };
 
 struct TmNameCoeff

@@ -19,11 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <complex>
 #include "config.h"
 #include "ellipsoid.h"
 #include "rootfind.h"
 #include "binio.h"
 #include "except.h"
+#include "manysum.h"
 using namespace std;
 
 /* Unlike most of the program, which represents angles as integers,
@@ -226,6 +228,46 @@ void ellipsoid::setTmCoefficients(vector<double> forward,vector<double> reverse)
 {
   tmForward=forward;
   tmReverse=reverse;
+}
+
+xy ellipsoid::krugerize(xy mapPoint)
+/* Converts a Lambert transverse Mercator projection of a sphere (the sphere
+ * having been conformally projected from the ellipsoid) into a Gauss-Krüger
+ * transverse Mercator projection of the ellipsoid.
+ */
+{
+  int i;
+  complex<double> z(mapPoint.gety()/tmReverse[0],-mapPoint.getx()/tmReverse[0]);
+  complex<double> term;
+  vector<double> rTerms,iTerms;
+  for (i=0;i<tmForward.size();i++)
+  {
+    if (i)
+      term=sin((double)i*z)*tmForward[i];
+    else
+      term=z;
+    rTerms.push_back(term.real());
+    iTerms.push_back(term.imag());
+  }
+  return xy(-pairwisesum(iTerms)*tmForward[0],pairwisesum(rTerms)*tmForward[0]);
+}
+
+xy ellipsoid::dekrugerize(xy mapPoint)
+{
+  int i;
+  complex<double> z(mapPoint.gety()/tmForward[0],-mapPoint.getx()/tmForward[0]);
+  complex<double> term;
+  vector<double> rTerms,iTerms;
+  for (i=0;i<tmReverse.size();i++)
+  {
+    if (i)
+      term=sin((double)i*z)*tmReverse[i];
+    else
+      term=z;
+    rTerms.push_back(term.real());
+    iTerms.push_back(term.imag());
+  }
+  return xy(-pairwisesum(iTerms)*tmReverse[0],pairwisesum(rTerms)*tmReverse[0]);
 }
 
 ellipsoid Sphere(6371000,0,0,xyz(0,0,0),"Sphere");
