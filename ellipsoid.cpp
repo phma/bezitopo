@@ -19,8 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "config.h"
 #include "ellipsoid.h"
 #include "rootfind.h"
+#include "binio.h"
+#include "except.h"
 using namespace std;
 
 /* Unlike most of the program, which represents angles as integers,
@@ -254,4 +257,37 @@ ellipsoid *getEllipsoid(string name)
     if (name==ellipsoids[i]->getName())
       ret=ellipsoids[i];
   return ret;
+}
+
+TmNameCoeff readTmCoefficients1(istream &tmfile)
+{
+  int i,n;
+  TmNameCoeff ret;
+  ret.name=readustring(tmfile);
+  n=readgeint(tmfile);
+  if (n<0 || n>255)
+    throw fileError;
+  for (i=0;i<n;i++)
+    ret.tmForward.push_back(readbedouble(tmfile));
+  n=readgeint(tmfile);
+  if (n<0 || n>255)
+    throw fileError;
+  for (i=0;i<n;i++)
+    ret.tmReverse.push_back(readbedouble(tmfile));
+  return ret;
+}
+
+void readTmCoefficients()
+{
+  ifstream tmfile(string(SHARE_DIR)+"/transmer.dat",ios::binary);
+  TmNameCoeff tmNameCoeff;
+  ellipsoid *ell;
+  while (tmfile.good())
+  {
+    tmNameCoeff=readTmCoefficients1(tmfile);
+    ell=getEllipsoid(tmNameCoeff.name);
+    if (ell)
+      ell->setTmCoefficients(tmNameCoeff.tmForward,tmNameCoeff.tmReverse);
+    tmfile.peek(); // set tmfile.eof if at end of file
+  }
 }

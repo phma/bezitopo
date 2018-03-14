@@ -77,8 +77,15 @@ public:
   void setTmCoefficients(std::vector<double> forward,std::vector<double> reverse);
 };
 
+struct TmNameCoeff
+{
+  std::string name;
+  std::vector<double> tmForward,tmReverse;
+};
+
 extern ellipsoid Sphere,Clarke,GRS80,WGS84,ITRS;
 int countEllipsoids();
 ellipsoid& getEllipsoid(int n);
 ellipsoid *getEllipsoid(std::string name);
+void readTmCoefficients();
 #endif
