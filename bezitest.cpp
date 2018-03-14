@@ -3863,10 +3863,11 @@ void testellipsoidscale(ellipsoid *ellip)
 void testellipsoid()
 {
   double rad,cenlat,conlat,invconlat,conscale;
-  int i;
+  int i,j;
   xyz sealevel,kmhigh,noffset,soffset,diff,benin,bengal,howland,galapagos,npole,spole;
   latlongelev greenhill,greenhill2;
   xyz gh;
+  xy pnt0,pnt1,pnt2;
   ellipsoid test1(8026957,0,0.5,xyz(0,0,0),"test1"),
             test2(8026957,4013478.5,0,xyz(0,0,0),"test2");
   readTmCoefficients();
@@ -3950,6 +3951,13 @@ void testellipsoid()
   // Elementary Surveying, 11th ed., example 19.2, page 548
   cout<<"Radius in azimuth 142°14'36\" at 41°18'15\": "<<ldecimal(rad)<<endl;
   tassert(fabs(rad-6372309.4)<0.5);
+  pnt0=xy(0e3,9e6);
+  pnt1=WGS84.krugerize(pnt0);
+  pnt2=WGS84.dekrugerize(pnt1);
+  cout<<"Krügerize "<<pnt0.east()<<','<<pnt0.north()
+      <<"->"<<pnt1.east()<<','<<pnt1.north()
+      <<"->"<<pnt2.east()<<','<<pnt2.north()
+      <<" dist "<<dist(pnt0,pnt2)<<endl;
 }
 
 float BeninBoundary[][2]=
