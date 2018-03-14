@@ -237,7 +237,7 @@ xy ellipsoid::krugerize(xy mapPoint)
  */
 {
   int i;
-  complex<double> z(mapPoint.gety()/tmReverse[0],-mapPoint.getx()/tmReverse[0]);
+  complex<double> z(mapPoint.gety()*M_PI/tmReverse[0],-mapPoint.getx()*M_PI/tmReverse[0]);
   complex<double> term;
   vector<double> rTerms,iTerms;
   for (i=0;i<tmForward.size();i++)
@@ -249,13 +249,13 @@ xy ellipsoid::krugerize(xy mapPoint)
     rTerms.push_back(term.real());
     iTerms.push_back(term.imag());
   }
-  return xy(-pairwisesum(iTerms)*tmForward[0],pairwisesum(rTerms)*tmForward[0]);
+  return xy(-pairwisesum(iTerms)*tmForward[0]/M_PI,pairwisesum(rTerms)*tmForward[0]/M_PI);
 }
 
 xy ellipsoid::dekrugerize(xy mapPoint)
 {
   int i;
-  complex<double> z(mapPoint.gety()/tmForward[0],-mapPoint.getx()/tmForward[0]);
+  complex<double> z(mapPoint.gety()*M_PI/tmForward[0],-mapPoint.getx()*M_PI/tmForward[0]);
   complex<double> term;
   vector<double> rTerms,iTerms;
   for (i=0;i<tmReverse.size();i++)
@@ -267,7 +267,7 @@ xy ellipsoid::dekrugerize(xy mapPoint)
     rTerms.push_back(term.real());
     iTerms.push_back(term.imag());
   }
-  return xy(-pairwisesum(iTerms)*tmReverse[0],pairwisesum(rTerms)*tmReverse[0]);
+  return xy(-pairwisesum(iTerms)*tmReverse[0]/M_PI,pairwisesum(rTerms)*tmReverse[0]/M_PI);
 }
 
 ellipsoid Sphere(6371000,0,0,xyz(0,0,0),"Sphere");

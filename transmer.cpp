@@ -223,7 +223,7 @@ vector<double> exeutheicity(vector<array<double,2> > proj)
   vector<double> ret;
   int i;
   for (i=0;i<proj.size()-1;i++)
-    ret.push_back(proj[i][1]/proj.back()[1]-proj[i][0]/proj.back()[0]);
+    ret.push_back((proj[i][1]/proj.back()[1]-proj[i][0]/proj.back()[0])*M_PI);
   return ret;
 }
 
