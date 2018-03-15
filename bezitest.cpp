@@ -3951,7 +3951,7 @@ void testellipsoid()
   // Elementary Surveying, 11th ed., example 19.2, page 548
   cout<<"Radius in azimuth 142°14'36\" at 41°18'15\": "<<ldecimal(rad)<<endl;
   tassert(fabs(rad-6372309.4)<0.5);
-  pnt0=xy(0e3,9e6);
+  pnt0=xy(6e6,5e6);
   pnt1=WGS84.krugerize(pnt0);
   pnt2=WGS84.dekrugerize(pnt1);
   cout<<"Krügerize "<<pnt0.east()<<','<<pnt0.north()

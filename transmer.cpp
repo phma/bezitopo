@@ -202,6 +202,8 @@ vector<array<double,2> > projectBackward(ellipsoid *ell,polyspiral apx,int n)
     projPair[0]=((i+0.5)/n)*totalLength[0];
     meridianPoint=apx.station(projPair[0]);
     lleEllipsoid=ell->geod(xyz(meridianPoint.getx(),0,meridianPoint.gety()));
+    if (n<10)
+      cout<<lleEllipsoid.elev<<' ';
     assert(fabs(lleEllipsoid.elev)<0.018/243);
     /* 18 mm is 1/2 angle ulp; 243 is the number of spiralarcs.
      */
@@ -210,6 +212,8 @@ vector<array<double,2> > projectBackward(ellipsoid *ell,polyspiral apx,int n)
     projPair[1]=llSphere.lat*ell->sphere->geteqr();
     ret.push_back(projPair);
   }
+  if (n<10)
+    cout<<endl;
   ret.push_back(totalLength);
   return ret;
 }
