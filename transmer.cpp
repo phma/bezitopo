@@ -332,17 +332,17 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc)
       reverseDifference=compareTransforms(lastReverseTransform,reverseTransform);
       cout<<setw(2)<<i<<setw(14)<<forwardDifference[0]<<setw(12)<<forwardDifference[1]<<setw(12)<<forwardDifference[2];
       cout<<setw(14)<<reverseDifference[0]<<setw(12)<<reverseDifference[1]<<setw(12)<<reverseDifference[2]<<endl;
-      done=forwardDifference[0]<3*forwardDifference[1] && reverseDifference[0]<3*reverseDifference[1];
+      done=forwardDifference[0]<3.4*forwardDifference[1] && reverseDifference[0]<3.4*reverseDifference[1];
       goodForwardTerms=goodReverseTerms=0;
       forwardNoiseFloor=reverseNoiseFloor=0;
       sz1=lastForwardTransform.size()+1;
       for (j=0;j<lastForwardTransform.size();j++)
       {
 	if (fabs(forwardTransform[j]-lastForwardTransform[j])<
-	    fabs(forwardTransform[j]+lastForwardTransform[j])/65536 && goodForwardTerms>=j)
+	    fabs(forwardTransform[j]+lastForwardTransform[j])/49152 && goodForwardTerms>=j)
 	  goodForwardTerms++;
 	if (fabs(reverseTransform[j]-lastReverseTransform[j])<
-	    fabs(reverseTransform[j]+lastReverseTransform[j])/65536 && goodReverseTerms>=j)
+	    fabs(reverseTransform[j]+lastReverseTransform[j])/49152 && goodReverseTerms>=j)
 	  goodReverseTerms++;
 	// There's a spike at 486, which is 243*2. Ignore spikes in noise floor past 243.
 	if (fabs(forwardTransform[j])>sz1/(i+1)*forwardDifference[2])

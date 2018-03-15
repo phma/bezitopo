@@ -273,10 +273,6 @@ xy ellipsoid::dekrugerize(xy mapPoint)
 ellipsoid Sphere(6371000,0,0,xyz(0,0,0),"Sphere");
 #ifndef NDEBUG
 // In a release build, transverse Mercator data for test ellipsoids are ignored.
-ellipsoid TestEll5(8026957.009,0,0.5,xyz(0,0,0),"TestEll5");
-ellipsoid TestEll6(7553655.748,0,0.4,xyz(0,0,0),"TestEll6");
-ellipsoid TestEll7(7175325.246,0,0.3,xyz(0,0,0),"TestEll7");
-ellipsoid TestEll8(6862951.705,0,0.2,xyz(0,0,0),"TestEll8");
 ellipsoid TestEll9(6598726.098,0,0.1,xyz(0,0,0),"TestEll9");
 #endif
 ellipsoid Clarke(6378206.4,6356583.8,0,xyz(0,0,0),"Clarke");
@@ -289,7 +285,7 @@ ellipsoid ITRS(6378136.49,0,1/298.25645,xyz(0,0,0),"ITRS");
  */
 ellipsoid *ellipsoids[]={&Sphere,
 #ifndef NDEBUG
-&TestEll9,&TestEll8,&TestEll7,&TestEll6,&TestEll5,
+&TestEll9,
 #endif
 &Clarke,&GRS80,&WGS84,&ITRS};
 
