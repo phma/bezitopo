@@ -32,6 +32,7 @@
 #include <iostream>
 #include "polyline.h"
 #include "manysum.h"
+#include "relprime.h"
 #include "ldecimal.h"
 using namespace std;
 int bendlimit=DEG180;
@@ -560,21 +561,23 @@ double polyline::closest(xy topoint,bool offends)
  * because of angle points.
  */
 {
-  int i;
+  int i,n,step,sz;
   double segclose,closesofar=INFINITY;
   segment si;
   xy sta;
   double alo,ret;
-  for (i=0;i<lengths.size();i++)
+  sz=lengths.size();
+  step=relprime(sz);
+  for (i=n=0;i<sz;i++,n=(n+step)%sz)
   {
-    si=getsegment(i);
+    si=getsegment(n);
     alo=si.closest(topoint,closesofar,true);
     sta=si.station(alo);
     segclose=dist(sta,topoint);
     if (segclose<closesofar)
     {
       closesofar=segclose;
-      ret=alo+(cumLengths[i]-lengths[i]);
+      ret=alo+(cumLengths[n]-lengths[n]);
     }
   }
   return ret;
@@ -582,21 +585,23 @@ double polyline::closest(xy topoint,bool offends)
 
 double polyarc::closest(xy topoint,bool offends)
 {
-  int i;
+  int i,n,step,sz;
   double segclose,closesofar=INFINITY;
   arc si;
   xy sta;
   double alo,ret;
-  for (i=0;i<lengths.size();i++)
+  sz=lengths.size();
+  step=relprime(sz);
+  for (i=n=0;i<sz;i++,n=(n+step)%sz)
   {
-    si=getarc(i);
+    si=getarc(n);
     alo=si.closest(topoint,closesofar,true);
     sta=si.station(alo);
     segclose=dist(sta,topoint);
     if (segclose<closesofar)
     {
       closesofar=segclose;
-      ret=alo+(cumLengths[i]-lengths[i]);
+      ret=alo+(cumLengths[n]-lengths[n]);
     }
   }
   return ret;
@@ -604,21 +609,23 @@ double polyarc::closest(xy topoint,bool offends)
 
 double polyspiral::closest(xy topoint,bool offends)
 {
-  int i;
+  int i,n,step,sz;
   double segclose,closesofar=INFINITY;
   spiralarc si;
   xy sta;
   double alo,ret;
-  for (i=0;i<lengths.size();i++)
+  sz=lengths.size();
+  step=relprime(sz);
+  for (i=n=0;i<sz;i++,n=(n+step)%sz)
   {
-    si=getspiralarc(i);
+    si=getspiralarc(n);
     alo=si.closest(topoint,closesofar,true);
     sta=si.station(alo);
     segclose=dist(sta,topoint);
     if (segclose<closesofar)
     {
       closesofar=segclose;
-      ret=alo+(cumLengths[i]-lengths[i]);
+      ret=alo+(cumLengths[n]-lengths[n]);
     }
   }
   return ret;
