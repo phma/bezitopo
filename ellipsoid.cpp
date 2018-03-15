@@ -111,7 +111,7 @@ latlongelev ellipsoid::geod(xyz geocen)
   ret.elev=0;
   for (i=0;i<100;i++)
   {
-    chk=geoc(ret);
+    chk=geoc(ret)-cen;
     if (dist(chk,geocen)<toler)
       break;
     normal=sphere->geoc(ret);
@@ -277,8 +277,10 @@ ellipsoid TestEll9(6598726.098,0,0.1,xyz(0,0,0),"TestEll9");
 #endif
 ellipsoid Clarke(6378206.4,6356583.8,0,xyz(0,0,0),"Clarke");
 ellipsoid GRS80(6378137,0,1/298.257222101,xyz(0,0,0),"GRS80");
+ellipsoid HGRS87(6378137,0,1/298.257222101,xyz(-199.87,74.79,246.62),"HGRS87");
 ellipsoid WGS84(6378137,0,1/298.257223563,xyz(0,0,0),"WGS84");
 ellipsoid ITRS(6378136.49,0,1/298.25645,xyz(0,0,0),"ITRS");
+ellipsoid Hayford(6378388,0,1/297.,xyz(0,0,0),"Hayford");
 /* The center of Clarke is NOT (0,0,0), and the ellipsoid used for NAD 83
  * is about 2.24 m off from that used in the 2022 datum, but I haven't found
  * exact values.
@@ -287,7 +289,7 @@ ellipsoid *ellipsoids[]={&Sphere,
 #ifndef NDEBUG
 &TestEll9,
 #endif
-&Clarke,&GRS80,&WGS84,&ITRS};
+&Clarke,&GRS80,&HGRS87,&WGS84,&ITRS,&Hayford};
 
 int countEllipsoids()
 {

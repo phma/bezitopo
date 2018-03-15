@@ -102,7 +102,7 @@ polyspiral psApprox(ellipsoid *ell,int n)
   for (i=0;i<=n;i++)
   {
     latSplit.push_back(rint((double)DEG90*i/n));
-    meridianPoint=ell->geoc(latSplit[i],0,0);
+    meridianPoint=ell->geoc(latSplit[i],0,0)-ell->getCenter();
     ret.insert(xy(meridianPoint.getx(),meridianPoint.getz()));
   }
   ret.open();
@@ -174,7 +174,7 @@ vector<array<double,2> > projectForward(ellipsoid *ell,polyspiral apx,int n)
   {
     llSphere=latlong(i*(DEG90/n)+DEG45/n,0);
     llEllipsoid=ell->inverseConformalLatitude(llSphere);
-    meridianPoint=ell->geoc(llEllipsoid,0);
+    meridianPoint=ell->geoc(llEllipsoid,0)-ell->getCenter();
     projPair[0]=llSphere.lat*ell->sphere->geteqr();
     projPair[1]=apx.closest(xy(meridianPoint.getx(),meridianPoint.getz()));
     ret.push_back(projPair);
@@ -206,7 +206,7 @@ vector<array<double,2> > projectBackward(ellipsoid *ell,polyspiral apx,int n)
   {
     projPair[0]=((i+0.5)/n)*totalLength[0];
     meridianPoint=apx.station(projPair[0]);
-    lleEllipsoid=ell->geod(xyz(meridianPoint.getx(),0,meridianPoint.gety()));
+    lleEllipsoid=ell->geod(xyz(meridianPoint.getx(),0,meridianPoint.gety())+ell->getCenter());
     if (n<10)
       cout<<lleEllipsoid.elev<<' ';
     assert(fabs(lleEllipsoid.elev)<0.018/243);
