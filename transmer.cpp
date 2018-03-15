@@ -178,6 +178,11 @@ vector<array<double,2> > projectForward(ellipsoid *ell,polyspiral apx,int n)
     projPair[0]=llSphere.lat*ell->sphere->geteqr();
     projPair[1]=apx.closest(xy(meridianPoint.getx(),meridianPoint.getz()));
     ret.push_back(projPair);
+    if (frac(i*64./n)==0.5)
+    {
+      cout<<'*';
+      cout.flush();
+    }
   }
   ret.push_back(totalLength);
   return ret;
@@ -211,6 +216,11 @@ vector<array<double,2> > projectBackward(ellipsoid *ell,polyspiral apx,int n)
     llSphere=ell->conformalLatitude(llEllipsoid);
     projPair[1]=llSphere.lat*ell->sphere->geteqr();
     ret.push_back(projPair);
+    if (frac(i*64./n)==0.5)
+    {
+      cout<<"\b \b";
+      cout.flush();
+    }
   }
   if (n<10)
     cout<<endl;
