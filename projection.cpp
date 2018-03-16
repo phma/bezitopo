@@ -557,6 +557,30 @@ double StereographicSphere::scaleFactor(latlong ll)
 
 StereographicSphere sphereStereoArabianSea(rotateStereographic);
 
+xy transMerc(xyz pnt)
+/* Transverse Mercator projection of an arbitrarily large sphere,
+ * centered in the Bight of Benin.
+ */
+{
+  double r=pnt.length();
+  return xy(r*asinh(pnt.gety()/hypot(pnt.getx(),pnt.getz())),
+	    r*atan2(pnt.getz(),pnt.getx()));
+}
+
+double transMercScale(xyz pnt)
+{
+  double r=pnt.length();
+  return r/hypot(pnt.getx(),pnt.getz());
+}
+
+xyz invTransMerc(xy pnt,double r)
+{
+  double tany=sinh(pnt.getx()/r);
+  xyz ret(r*cos(pnt.gety()/r),tany,r*sin(pnt.gety()/r));
+  ret/=r/ret.length();
+  return ret;
+}
+
 TransverseMercatorSphere::TransverseMercatorSphere():Projection()
 {
   centralMeridian=0;
