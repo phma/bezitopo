@@ -557,6 +557,17 @@ double StereographicSphere::scaleFactor(latlong ll)
 
 StereographicSphere sphereStereoArabianSea(rotateStereographic);
 
+TransverseMercatorSphere::TransverseMercatorSphere():Projection()
+{
+  centralMeridian=0;
+}
+
+TransverseMercatorSphere::TransverseMercatorSphere(double Meridian,double Scale):Projection()
+{
+  centralMeridian=Meridian;
+  scale=Scale;
+}
+
 bool ProjectionLabel::match(const ProjectionLabel &b,bool prefix)
 /* Returns true if b matches this pattern, e.g.
  * ("U","N","","NAD").match(("US","NC","","NAD83"),true)=true

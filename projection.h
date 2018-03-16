@@ -152,6 +152,14 @@ extern StereographicSphere sphereStereoArabianSea;
  * the function to correct the length as a Fourier series. It is automatically
  * analytic, hence conformal, and the scale can be computed by differentiating it.
  */
+class TransverseMercatorSphere: public Projection
+{
+public:
+  TransverseMercatorSphere();
+  TransverseMercatorSphere(double Meridian,double Scale=1);
+protected:
+  double centralMeridian;
+};
 
 class ProjectionLabel
 /* If zone is numeric and, within a province, they do not all have the
