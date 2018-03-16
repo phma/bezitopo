@@ -159,6 +159,7 @@ public:
   TransverseMercatorSphere(double Meridian,double Scale=1);
 protected:
   double centralMeridian;
+  Quaternion rotation;
 };
 
 class ProjectionLabel

@@ -565,6 +565,7 @@ TransverseMercatorSphere::TransverseMercatorSphere():Projection()
 TransverseMercatorSphere::TransverseMercatorSphere(double Meridian,double Scale):Projection()
 {
   centralMeridian=Meridian;
+  rotation=versor(xyz(0,0,1),-Meridian);
   scale=Scale;
 }
 

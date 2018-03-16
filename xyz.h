@@ -3,7 +3,7 @@
 /* xyz.h - classes for points and gradients           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015,2016,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -122,9 +122,9 @@ public:
   friend xyz operator-(const xyz &r);
   friend Quaternion versor(xyz vec);
   friend Quaternion versor(xyz vec,int angle);
+  friend Quaternion versor(xyz vec,double angle);
 protected:
   double x,y,z;
 };
 
 #endif
- 

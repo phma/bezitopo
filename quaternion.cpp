@@ -3,7 +3,7 @@
 /* quaternion.cpp - quaternions                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016 Pierre Abbat.
+/* Copyright 2016,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -254,6 +254,23 @@ Quaternion versor(xyz vec,int angle)
     imag=Quaternion(0);
   }
   return real*coshalf(angle)+imag*sinhalf(angle);
+}
+
+Quaternion versor(xyz vec,double angle)
+{
+  Quaternion real(1),imag(0);
+  imag.x=vec.x;
+  imag.y=vec.y;
+  imag.z=vec.z;
+  imag.normalize();
+  if (imag.normsq()==0)
+    angle=0;
+  if (std::isinf(imag.normsq()))
+  {
+    angle=DEG360;
+    imag=Quaternion(0);
+  }
+  return real*cos(angle/2)+imag*sin(angle/2);
 }
 
 Quaternion randomacc=1;
