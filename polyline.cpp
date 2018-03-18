@@ -590,7 +590,7 @@ double polyline::closest(xy topoint,bool offends)
   step=relprime(sz);
   for (i=n=0;i<sz;i++,n=(n+step)%sz)
   {
-    if (dist(boundCircles[i].center,topoint)-boundCircles[i].radius<closesofar)
+    if (dist(boundCircles[n].center,topoint)-boundCircles[n].radius<closesofar)
     {
       si=getsegment(n);
       alo=si.closest(topoint,closesofar,true);
@@ -617,7 +617,7 @@ double polyarc::closest(xy topoint,bool offends)
   step=relprime(sz);
   for (i=n=0;i<sz;i++,n=(n+step)%sz)
   {
-    if (dist(boundCircles[i].center,topoint)-boundCircles[i].radius<closesofar)
+    if (dist(boundCircles[n].center,topoint)-boundCircles[n].radius<closesofar)
     {
       si=getarc(n);
       alo=si.closest(topoint,closesofar,true);
@@ -644,7 +644,7 @@ double polyspiral::closest(xy topoint,bool offends)
   step=relprime(sz);
   for (i=n=0;i<sz;i++,n=(n+step)%sz)
   {
-    if (dist(boundCircles[i].center,topoint)-boundCircles[i].radius<closesofar)
+    if (dist(boundCircles[n].center,topoint)-boundCircles[n].radius<closesofar)
     {
       si=getspiralarc(n);
       alo=si.closest(topoint,closesofar,true);
