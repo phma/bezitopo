@@ -214,6 +214,19 @@ xyz segment::midpoint() const
   return station(length()/2);
 }
 
+bcir segment::boundCircle() const
+/* TODO: compute the smallest circle containing the segment. This is correct
+ * for a segment, but for a spiralarc it needs to start with the two ends,
+ * construct the circle, and keep adding the farthest point from the center
+ * until the circle stops changing.
+ */
+{
+  bcir ret;
+  ret.center=midpoint();
+  ret.radius=length()/2;
+  return ret;
+}
+
 xy segment::center()
 {
   return xy(nan(""),nan(""));

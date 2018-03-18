@@ -122,6 +122,7 @@ public:
   }
   xy center();
   xyz midpoint() const;
+  bcir boundCircle() const;
   virtual xy pointOfIntersection();
   virtual double tangentLength(int which);
   virtual int diffinside(xy pnt)

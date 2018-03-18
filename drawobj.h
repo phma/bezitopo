@@ -39,6 +39,13 @@ public:
   double radius;
 };
 
+class bcir
+{
+public:
+  xy center;
+  double radius;
+};
+
 class hline
 {
 public:
