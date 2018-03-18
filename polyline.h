@@ -50,6 +50,7 @@ protected:
   double elevation;
   std::vector<xy> endpoints;
   std::vector<double> lengths,cumLengths;
+  std::vector<bcir> boundCircles;
   int stationSegment(double along);
 public:
   friend class polyarc;

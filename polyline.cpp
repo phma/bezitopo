@@ -78,6 +78,7 @@ polyarc::polyarc(polyline &p)
   elevation=p.elevation;
   endpoints=p.endpoints;
   lengths=p.lengths;
+  boundCircles=p.boundCircles;
   cumLengths=p.cumLengths;
   deltas.resize(lengths.size());
 }
@@ -88,6 +89,7 @@ polyspiral::polyspiral(polyline &p)
   elevation=p.elevation;
   endpoints=p.endpoints;
   lengths=p.lengths;
+  boundCircles=p.boundCircles;
   cumLengths=p.cumLengths;
   deltas.resize(lengths.size());
   delta2s.resize(lengths.size());
@@ -226,6 +228,7 @@ void polyline::dedup()
   int h,i,j,k;
   vector<xy>::iterator ptit;
   vector<double>::iterator lenit;
+  vector<bcir>::iterator bcit;
   xy avg;
   //if (dist(endpoints[0],xy(999992.534,1499993.823))<0.001)
   //  cout<<"Debug contour\r";
@@ -258,6 +261,8 @@ void polyline::dedup()
       lengths.erase(lenit);
       lenit=cumLengths.begin()+i;
       cumLengths.erase(lenit);
+      bcit=boundCircles.begin()+i;
+      boundCircles.erase(bcit);
       if (h>i)
 	h--;
       if (k>i)
@@ -292,6 +297,7 @@ void polyline::insert(xy newpoint,int pos)
   int i;
   vector<xy>::iterator ptit;
   vector<double>::iterator lenit;
+  vector<bcir>::iterator bcit;
   if (newpoint.isnan())
     cerr<<"Inserting NaN"<<endl;
   wasopen=isopen();
@@ -336,6 +342,7 @@ void polyarc::insert(xy newpoint,int pos)
   vector<xy>::iterator ptit;
   vector<int>::iterator arcit;
   vector<double>::iterator lenit;
+  vector<bcir>::iterator bcit;
   wasopen=isopen();
   if (pos<0 || pos>endpoints.size())
     pos=endpoints.size();
@@ -345,6 +352,8 @@ void polyarc::insert(xy newpoint,int pos)
   endpoints.insert(ptit,newpoint);
   deltas.insert(arcit,0);
   lengths.insert(lenit,0);
+  bcit=boundCircles.begin()+pos;
+  boundCircles.insert(bcit,{xy(0,0),0});
   lenit=cumLengths.begin()+pos;
   if (pos<cumLengths.size())
     cumLengths.insert(lenit,cumLengths[pos]);
@@ -407,10 +416,13 @@ void polyline::setlengths()
 {
   int i;
   manysum m;
+  segment seg;
   assert(lengths.size()==cumLengths.size());
   for (i=0;i<lengths.size();i++)
   {
-    lengths[i]=getsegment(i).length();
+    seg=getsegment(i);
+    lengths[i]=seg.length();
+    boundCircles[i]=seg.boundCircle();
     m+=lengths[i];
     cumLengths[i]=m.total();
   }
@@ -420,11 +432,14 @@ void polyarc::setlengths()
 {
   int i;
   manysum m;
+  arc seg;
   assert(lengths.size()==cumLengths.size());
   assert(lengths.size()==deltas.size());
   for (i=0;i<deltas.size();i++)
   {
-    lengths[i]=getarc(i).length();
+    seg=getarc(i);
+    lengths[i]=seg.length();
+    boundCircles[i]=seg.boundCircle();
     m+=lengths[i];
     cumLengths[i]=m.total();
   }
@@ -434,11 +449,14 @@ void polyspiral::setlengths()
 {
   int i;
   manysum m;
+  spiralarc seg;
   assert(lengths.size()==cumLengths.size());
   assert(lengths.size()==deltas.size());
   for (i=0;i<deltas.size();i++)
   {
-    lengths[i]=getspiralarc(i).length();
+    seg=getspiralarc(i);
+    lengths[i]=seg.length();
+    boundCircles[i]=seg.boundCircle();
     m+=lengths[i];
     cumLengths[i]=m.total();
   }
@@ -570,14 +588,17 @@ double polyline::closest(xy topoint,bool offends)
   step=relprime(sz);
   for (i=n=0;i<sz;i++,n=(n+step)%sz)
   {
-    si=getsegment(n);
-    alo=si.closest(topoint,closesofar,true);
-    sta=si.station(alo);
-    segclose=dist(sta,topoint);
-    if (segclose<closesofar)
+    if (dist(boundCircles[i].center,topoint)-boundCircles[i].radius<closesofar)
     {
-      closesofar=segclose;
-      ret=alo+(cumLengths[n]-lengths[n]);
+      si=getsegment(n);
+      alo=si.closest(topoint,closesofar,true);
+      sta=si.station(alo);
+      segclose=dist(sta,topoint);
+      if (segclose<closesofar)
+      {
+	closesofar=segclose;
+	ret=alo+(cumLengths[n]-lengths[n]);
+      }
     }
   }
   return ret;
@@ -594,14 +615,17 @@ double polyarc::closest(xy topoint,bool offends)
   step=relprime(sz);
   for (i=n=0;i<sz;i++,n=(n+step)%sz)
   {
-    si=getarc(n);
-    alo=si.closest(topoint,closesofar,true);
-    sta=si.station(alo);
-    segclose=dist(sta,topoint);
-    if (segclose<closesofar)
+    if (dist(boundCircles[i].center,topoint)-boundCircles[i].radius<closesofar)
     {
-      closesofar=segclose;
-      ret=alo+(cumLengths[n]-lengths[n]);
+      si=getarc(n);
+      alo=si.closest(topoint,closesofar,true);
+      sta=si.station(alo);
+      segclose=dist(sta,topoint);
+      if (segclose<closesofar)
+      {
+	closesofar=segclose;
+	ret=alo+(cumLengths[n]-lengths[n]);
+      }
     }
   }
   return ret;
@@ -618,14 +642,17 @@ double polyspiral::closest(xy topoint,bool offends)
   step=relprime(sz);
   for (i=n=0;i<sz;i++,n=(n+step)%sz)
   {
-    si=getspiralarc(n);
-    alo=si.closest(topoint,closesofar,true);
-    sta=si.station(alo);
-    segclose=dist(sta,topoint);
-    if (segclose<closesofar)
+    if (dist(boundCircles[i].center,topoint)-boundCircles[i].radius<closesofar)
     {
-      closesofar=segclose;
-      ret=alo+(cumLengths[n]-lengths[n]);
+      si=getspiralarc(n);
+      alo=si.closest(topoint,closesofar,true);
+      sta=si.station(alo);
+      segclose=dist(sta,topoint);
+      if (segclose<closesofar)
+      {
+	closesofar=segclose;
+	ret=alo+(cumLengths[n]-lengths[n]);
+      }
     }
   }
   return ret;
@@ -727,6 +754,7 @@ void polyline::open()
 {
   lengths.resize(endpoints.size()-1);
   cumLengths.resize(endpoints.size()-1);
+  boundCircles.resize(endpoints.size()-1);
 }
 
 void polyarc::open()
@@ -734,6 +762,7 @@ void polyarc::open()
   deltas.resize(endpoints.size()-1);
   lengths.resize(endpoints.size()-1);
   cumLengths.resize(endpoints.size()-1);
+  boundCircles.resize(endpoints.size()-1);
 }
 
 void polyspiral::open()
@@ -746,12 +775,14 @@ void polyspiral::open()
   deltas.resize(endpoints.size()-1);
   lengths.resize(endpoints.size()-1);
   cumLengths.resize(endpoints.size()-1);
+  boundCircles.resize(endpoints.size()-1);
 }
 
 void polyline::close()
 {
   lengths.resize(endpoints.size());
   cumLengths.resize(endpoints.size());
+  boundCircles.resize(endpoints.size());
   if (lengths.size())
     if (lengths.size()>1)
       cumLengths[lengths.size()-1]=cumLengths[lengths.size()-2]+lengths[lengths.size()-1];
@@ -764,6 +795,7 @@ void polyarc::close()
   deltas.resize(endpoints.size());
   lengths.resize(endpoints.size());
   cumLengths.resize(endpoints.size());
+  boundCircles.resize(endpoints.size());
   if (lengths.size())
     if (lengths.size()>1)
       cumLengths[lengths.size()-1]=cumLengths[lengths.size()-2]+lengths[lengths.size()-1];
@@ -781,6 +813,7 @@ void polyspiral::close()
   deltas.resize(endpoints.size());
   lengths.resize(endpoints.size());
   cumLengths.resize(endpoints.size());
+  boundCircles.resize(endpoints.size());
   if (lengths.size())
     if (lengths.size()>1)
       cumLengths[lengths.size()-1]=cumLengths[lengths.size()-2]+lengths[lengths.size()-1];
@@ -808,6 +841,7 @@ void polyspiral::insert(xy newpoint,int pos)
   vector<xy>::iterator ptit,midit;
   vector<int>::iterator arcit,brgit,d2it,mbrit;
   vector<double>::iterator lenit,cloit,crvit;
+  vector<bcir>::iterator bcit;
   wasopen=isopen();
   if (pos<0 || pos>endpoints.size())
     pos=endpoints.size();
@@ -831,6 +865,8 @@ void polyspiral::insert(xy newpoint,int pos)
   clothances.insert(cloit,0);
   lenit=cumLengths.begin()+pos;
   cumLengths.insert(lenit,0);
+  bcit=boundCircles.begin()+pos;
+  boundCircles.insert(bcit,{xy(0,0),0});
   for (i=-1;i<2;i++)
     setbear((pos+i+endpoints.size())%endpoints.size());
   for (i=-1;i<3;i++)
