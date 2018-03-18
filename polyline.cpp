@@ -307,6 +307,8 @@ void polyline::insert(xy newpoint,int pos)
   lenit=lengths.begin()+pos;
   endpoints.insert(ptit,newpoint);
   lengths.insert(lenit,0);
+  bcit=boundCircles.begin()+pos;
+  boundCircles.insert(bcit,{xy(0,0),0});
   lenit=cumLengths.begin()+pos;
   if (pos<cumLengths.size())
     cumLengths.insert(lenit,cumLengths[pos]);
