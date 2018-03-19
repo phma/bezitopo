@@ -573,6 +573,12 @@ double transMercScale(xyz pnt)
   return r/hypot(pnt.getx(),pnt.getz());
 }
 
+double transMercScale(xy pnt,double r)
+{
+  double xp=exp(pnt.getx()/r);
+  return (xp+1/xp)/2;
+}
+
 xyz invTransMerc(xy pnt,double r)
 {
   double tany=sinh(pnt.getx()/r);
