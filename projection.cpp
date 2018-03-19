@@ -607,12 +607,12 @@ latlong TransverseMercatorSphere::gridToLatlong(xy grid)
 
 xyz TransverseMercatorSphere::gridToGeocentric(xy grid)
 {
-  return rotation.conj().rotate(invTransMerc(grid-offset,ellip->getpor()));
+  return rotation.conj().rotate(invTransMerc((grid-offset)/scale,ellip->getpor()));
 }
 
 xy TransverseMercatorSphere::geocentricToGrid(xyz geoc)
 {
-  return transMerc(rotation.rotate(geoc))+offset;
+  return transMerc(rotation.rotate(geoc))*scale+offset;
 }
 
 xy TransverseMercatorSphere::latlongToGrid(latlong ll)
@@ -622,12 +622,13 @@ xy TransverseMercatorSphere::latlongToGrid(latlong ll)
 
 double TransverseMercatorSphere::scaleFactor(xy grid)
 {
-  return transMercScale(grid,ellip->getpor());
+  return transMercScale(grid,ellip->getpor())*scale;
 }
 
 double TransverseMercatorSphere::scaleFactor(latlong ll)
 {
-  return transMercScale(ellip->geoc(ll,0));
+  ll.lon-=centralMeridian;
+  return transMercScale(ellip->geoc(ll,0))*scale;
 }
 
 bool ProjectionLabel::match(const ProjectionLabel &b,bool prefix)
