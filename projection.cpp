@@ -582,8 +582,8 @@ double transMercScale(xy pnt,double r)
 xyz invTransMerc(xy pnt,double r)
 {
   double tany=sinh(pnt.getx()/r);
-  xyz ret(r*cos(pnt.gety()/r),tany,r*sin(pnt.gety()/r));
-  ret/=r/ret.length();
+  xyz ret(r*cos(pnt.gety()/r),r*tany,r*sin(pnt.gety()/r));
+  ret*=r/ret.length();
   return ret;
 }
 
