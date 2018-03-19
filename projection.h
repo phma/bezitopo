@@ -157,6 +157,12 @@ class TransverseMercatorSphere: public Projection
 public:
   TransverseMercatorSphere();
   TransverseMercatorSphere(double Meridian,double Scale=1);
+  virtual latlong gridToLatlong(xy grid);
+  virtual xyz gridToGeocentric(xy grid);
+  virtual xy geocentricToGrid(xyz geoc);
+  virtual xy latlongToGrid(latlong ll);
+  virtual double scaleFactor(xy grid);
+  virtual double scaleFactor(latlong ll);
 protected:
   double centralMeridian;
   Quaternion rotation;

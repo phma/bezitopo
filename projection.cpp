@@ -590,6 +590,7 @@ xyz invTransMerc(xy pnt,double r)
 TransverseMercatorSphere::TransverseMercatorSphere():Projection()
 {
   centralMeridian=0;
+  rotation=Quaternion(1,0,0,0);
 }
 
 TransverseMercatorSphere::TransverseMercatorSphere(double Meridian,double Scale):Projection()
@@ -597,6 +598,36 @@ TransverseMercatorSphere::TransverseMercatorSphere(double Meridian,double Scale)
   centralMeridian=Meridian;
   rotation=versor(xyz(0,0,1),-Meridian);
   scale=Scale;
+}
+
+latlong TransverseMercatorSphere::gridToLatlong(xy grid)
+{
+  return gridToGeocentric(grid).latlon();
+}
+
+xyz TransverseMercatorSphere::gridToGeocentric(xy grid)
+{
+  return rotation.conj().rotate(invTransMerc(grid-offset,ellip->getpor()));
+}
+
+xy TransverseMercatorSphere::geocentricToGrid(xyz geoc)
+{
+  return transMerc(rotation.rotate(geoc))+offset;
+}
+
+xy TransverseMercatorSphere::latlongToGrid(latlong ll)
+{
+  return geocentricToGrid(ellip->geoc(ll,0));
+}
+
+double TransverseMercatorSphere::scaleFactor(xy grid)
+{
+  return transMercScale(grid,ellip->getpor());
+}
+
+double TransverseMercatorSphere::scaleFactor(latlong ll)
+{
+  return transMercScale(ellip->geoc(ll,0));
 }
 
 bool ProjectionLabel::match(const ProjectionLabel &b,bool prefix)
