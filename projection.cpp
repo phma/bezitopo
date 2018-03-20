@@ -631,6 +631,67 @@ double TransverseMercatorSphere::scaleFactor(latlong ll)
   return transMercScale(ellip->geoc(ll,0))*scale;
 }
 
+TransverseMercatorEllipsoid::TransverseMercatorEllipsoid():Projection()
+{
+  centralMeridian=0;
+  rotation=Quaternion(1,0,0,0);
+}
+
+TransverseMercatorEllipsoid::TransverseMercatorEllipsoid(ellipsoid *e,double Meridian,double Scale,latlong zll,xy zxy):Projection()
+{
+  ellip=e;
+  centralMeridian=Meridian;
+  rotation=versor(xyz(0,0,1),-Meridian);
+  scale=Scale;
+  offset=zxy-latlongToGrid(zll);
+}
+
+latlong TransverseMercatorEllipsoid::gridToLatlong(xy grid)
+{
+  grid=ellip->dekrugerize((grid-offset)/scale);
+  xyz sphpnt=rotation.conj().rotate(invTransMerc(grid,ellip->sphere->getpor()));
+  latlong ll=ellip->sphere->geod(sphpnt);
+  return ellip->inverseConformalLatitude(ll);
+}
+
+xyz TransverseMercatorEllipsoid::gridToGeocentric(xy grid)
+{
+  return ellip->geoc(gridToLatlong(grid),0);
+}
+
+xy TransverseMercatorEllipsoid::geocentricToGrid(xyz geoc)
+{
+  latlongelev lle=ellip->geod(geoc);
+  latlong ll(lle);
+  return latlongToGrid(ll);
+}
+
+xy TransverseMercatorEllipsoid::latlongToGrid(latlong ll)
+{
+  ll=ellip->conformalLatitude(ll);
+  xyz sphpnt=ellip->sphere->geoc(ll,0);
+  xy grid=transMerc(rotation.rotate(sphpnt));
+  return ellip->krugerize(grid)*scale+offset;
+}
+
+double TransverseMercatorEllipsoid::scaleFactor(xy grid)
+{
+  grid=(grid-offset)/scale;
+  double dekrugerScale;//=ellip->dekrugerScale(grid);
+  grid=ellip->dekrugerize(grid);
+  double tmScale=transMercScale(grid,ellip->sphere->getpor());
+  xyz sphpnt=rotation.conj().rotate(invTransMerc(grid,ellip->sphere->getpor()));
+  latlong ll=ellip->sphere->geod(sphpnt);
+  double confScale=ellip->scaleFactor(ellip->inverseConformalLatitude(ll.lat),ll.lat);
+  return scale*confScale*tmScale/dekrugerScale;
+}
+
+double TransverseMercatorEllipsoid::scaleFactor(latlong ll)
+{
+  ll.lon-=centralMeridian;
+  return transMercScale(ellip->geoc(ll,0))*scale;
+}
+
 bool ProjectionLabel::match(const ProjectionLabel &b,bool prefix)
 /* Returns true if b matches this pattern, e.g.
  * ("U","N","","NAD").match(("US","NC","","NAD83"),true)=true

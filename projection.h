@@ -152,11 +152,28 @@ extern StereographicSphere sphereStereoArabianSea;
  * the function to correct the length as a Fourier series. It is automatically
  * analytic, hence conformal, and the scale can be computed by differentiating it.
  */
+
 class TransverseMercatorSphere: public Projection
 {
 public:
   TransverseMercatorSphere();
   TransverseMercatorSphere(double Meridian,double Scale=1);
+  virtual latlong gridToLatlong(xy grid);
+  virtual xyz gridToGeocentric(xy grid);
+  virtual xy geocentricToGrid(xyz geoc);
+  virtual xy latlongToGrid(latlong ll);
+  virtual double scaleFactor(xy grid);
+  virtual double scaleFactor(latlong ll);
+protected:
+  double centralMeridian;
+  Quaternion rotation;
+};
+
+class TransverseMercatorEllipsoid: public Projection
+{
+public:
+  TransverseMercatorEllipsoid();
+  TransverseMercatorEllipsoid(ellipsoid *e,double Meridian,double Scale,latlong zll,xy zxy);
   virtual latlong gridToLatlong(xy grid);
   virtual xyz gridToGeocentric(xy grid);
   virtual xy geocentricToGrid(xyz geoc);
