@@ -4050,23 +4050,23 @@ void testprojscale(string projName,Projection &proj)
 	cout<<radtodeg(midpoint.lat)<<"° "<<radtodeg(midpoint.lon)<<"° computed scale "<<
 	scale<<" actual scale "<<dist(xypair[0],xypair[1])/dist(xyzpair[0],xyzpair[1])<<endl;
     }
-    if (dist(midxyz,invxyz)>1e-6)
+    if (dist(midxyz,invxyz)>1e-3)
     {
       nbadinv++;
       if (nbadinv<256)
 	cout<<radtodeg(midpoint.lat)<<"° "<<radtodeg(midpoint.lon)<<"° inverse projection "<<
-	radtodeg(inv.lat)<<"° "<<radtodeg(inv.lon)<<endl;
+	radtodeg(inv.lat)<<"° "<<radtodeg(inv.lon)<<"°\n";
     }
   }
   cout<<projName<<" scale is ";
   if (nbadscale>=trunc(sqrt(i)/16))
-    cout<<"bad"<<endl;
+    cout<<"bad "<<ldecimal((double)nbadscale/i,0.001)<<endl;
   else
     cout<<"good"<<endl;
   tassert(nbadscale<trunc(sqrt(i)/16));
   cout<<projName<<" inverse is ";
   if (nbadinv>=trunc(sqrt(i)/16))
-    cout<<"bad"<<endl;
+    cout<<"bad "<<ldecimal((double)nbadinv/i,0.001)<<endl;
   else
     cout<<"good"<<endl;
   tassert(nbadinv<trunc(sqrt(i)/16));

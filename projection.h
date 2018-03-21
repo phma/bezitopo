@@ -151,6 +151,11 @@ extern StereographicSphere sphereStereoArabianSea;
  * which can be approximated with many sufficiently small pieces. Then compute
  * the function to correct the length as a Fourier series. It is automatically
  * analytic, hence conformal, and the scale can be computed by differentiating it.
+ *
+ * There's an area near the points on the equator 90° from the central meridian
+ * where the Fourier series diverges. It is at least 3.25° in radius, as shown
+ * by the line:
+ * 3.249089634° 90.3339082° inverse projection 0° 0°
  */
 
 class TransverseMercatorSphere: public Projection
