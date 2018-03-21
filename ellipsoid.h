@@ -77,6 +77,10 @@ public:
   void setTmCoefficients(std::vector<double> forward,std::vector<double> reverse);
   xy krugerize(xy mapPoint);
   xy dekrugerize(xy mapPoint);
+  xy krugerizeDeriv(xy mapPoint);
+  xy dekrugerizeDeriv(xy mapPoint);
+  double krugerizeScale(xy mapPoint);
+  double dekrugerizeScale(xy mapPoint);
 };
 
 struct TmNameCoeff

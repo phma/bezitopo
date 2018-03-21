@@ -270,6 +270,52 @@ xy ellipsoid::dekrugerize(xy mapPoint)
   return xy(-pairwisesum(iTerms)*tmReverse[0]/M_PI,pairwisesum(rTerms)*tmReverse[0]/M_PI);
 }
 
+xy ellipsoid::krugerizeDeriv(xy mapPoint)
+{
+  int i;
+  complex<double> z(mapPoint.gety()*M_PI/tmReverse[0],-mapPoint.getx()*M_PI/tmReverse[0]);
+  complex<double> term;
+  vector<double> rTerms,iTerms;
+  for (i=0;i<tmForward.size();i++)
+  {
+    if (i)
+      term=(double)i*cos((double)i*z)*tmForward[i];
+    else
+      term=1;
+    rTerms.push_back(term.real());
+    iTerms.push_back(term.imag());
+  }
+  return xy(-pairwisesum(iTerms)*tmForward[0]/M_PI,pairwisesum(rTerms)*tmForward[0]/M_PI);
+}
+
+xy ellipsoid::dekrugerizeDeriv(xy mapPoint)
+{
+  int i;
+  complex<double> z(mapPoint.gety()*M_PI/tmForward[0],-mapPoint.getx()*M_PI/tmForward[0]);
+  complex<double> term;
+  vector<double> rTerms,iTerms;
+  for (i=0;i<tmReverse.size();i++)
+  {
+    if (i)
+      term=(double)i*cos((double)i*z)*tmReverse[i];
+    else
+      term=1;
+    rTerms.push_back(term.real());
+    iTerms.push_back(term.imag());
+  }
+  return xy(-pairwisesum(iTerms)*tmReverse[0]/M_PI,pairwisesum(rTerms)*tmReverse[0]/M_PI);
+}
+
+double ellipsoid::krugerizeScale(xy mapPoint)
+{
+  return krugerizeDeriv(mapPoint).length();
+}
+
+double ellipsoid::dekrugerizeScale(xy mapPoint)
+{
+  return dekrugerizeDeriv(mapPoint).length();
+}
+
 ellipsoid Sphere(6371000,0,0,xyz(0,0,0),"Sphere");
 #ifndef NDEBUG
 // In a release build, transverse Mercator data for test ellipsoids are ignored.
