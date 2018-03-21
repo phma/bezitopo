@@ -20,6 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <complex>
+#include <cassert>
 #include "config.h"
 #include "ellipsoid.h"
 #include "rootfind.h"
@@ -237,6 +238,7 @@ xy ellipsoid::krugerize(xy mapPoint)
  */
 {
   int i;
+  assert(tmForward.size() && tmReverse.size()); // If this fails, readTmCoefficients
   complex<double> z(mapPoint.gety()*M_PI/tmReverse[0],-mapPoint.getx()*M_PI/tmReverse[0]);
   complex<double> term;
   vector<double> rTerms,iTerms;
@@ -255,6 +257,7 @@ xy ellipsoid::krugerize(xy mapPoint)
 xy ellipsoid::dekrugerize(xy mapPoint)
 {
   int i;
+  assert(tmForward.size() && tmReverse.size()); // If this fails, readTmCoefficients
   complex<double> z(mapPoint.gety()*M_PI/tmForward[0],-mapPoint.getx()*M_PI/tmForward[0]);
   complex<double> term;
   vector<double> rTerms,iTerms;
@@ -273,6 +276,7 @@ xy ellipsoid::dekrugerize(xy mapPoint)
 xy ellipsoid::krugerizeDeriv(xy mapPoint)
 {
   int i;
+  assert(tmForward.size() && tmReverse.size()); // If this fails, readTmCoefficients
   complex<double> z(mapPoint.gety()*M_PI/tmReverse[0],-mapPoint.getx()*M_PI/tmReverse[0]);
   complex<double> term;
   vector<double> rTerms,iTerms;
@@ -291,6 +295,7 @@ xy ellipsoid::krugerizeDeriv(xy mapPoint)
 xy ellipsoid::dekrugerizeDeriv(xy mapPoint)
 {
   int i;
+  assert(tmForward.size() && tmReverse.size()); // If this fails, readTmCoefficients
   complex<double> z(mapPoint.gety()*M_PI/tmForward[0],-mapPoint.getx()*M_PI/tmForward[0]);
   complex<double> term;
   vector<double> rTerms,iTerms;
