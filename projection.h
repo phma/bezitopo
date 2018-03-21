@@ -173,6 +173,7 @@ class TransverseMercatorEllipsoid: public Projection
 {
 public:
   TransverseMercatorEllipsoid();
+  TransverseMercatorEllipsoid(ellipsoid *e,double Meridian);
   TransverseMercatorEllipsoid(ellipsoid *e,double Meridian,double Scale,latlong zll,xy zxy);
   virtual latlong gridToLatlong(xy grid);
   virtual xyz gridToGeocentric(xy grid);

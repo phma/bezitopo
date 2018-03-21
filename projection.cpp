@@ -637,6 +637,13 @@ TransverseMercatorEllipsoid::TransverseMercatorEllipsoid():Projection()
   rotation=Quaternion(1,0,0,0);
 }
 
+TransverseMercatorEllipsoid::TransverseMercatorEllipsoid(ellipsoid *e,double Meridian):Projection()
+{
+  ellip=e;
+  centralMeridian=Meridian;
+  rotation=versor(xyz(0,0,1),-Meridian);
+}
+
 TransverseMercatorEllipsoid::TransverseMercatorEllipsoid(ellipsoid *e,double Meridian,double Scale,latlong zll,xy zxy):Projection()
 {
   ellip=e;
@@ -677,7 +684,7 @@ xy TransverseMercatorEllipsoid::latlongToGrid(latlong ll)
 double TransverseMercatorEllipsoid::scaleFactor(xy grid)
 {
   grid=(grid-offset)/scale;
-  double dekrugerScale;//=ellip->dekrugerScale(grid);
+  double dekrugerScale=ellip->dekrugerizeScale(grid);
   grid=ellip->dekrugerize(grid);
   double tmScale=transMercScale(grid,ellip->sphere->getpor());
   xyz sphpnt=rotation.conj().rotate(invTransMerc(grid,ellip->sphere->getpor()));
@@ -688,8 +695,13 @@ double TransverseMercatorEllipsoid::scaleFactor(xy grid)
 
 double TransverseMercatorEllipsoid::scaleFactor(latlong ll)
 {
-  ll.lon-=centralMeridian;
-  return transMercScale(ellip->geoc(ll,0))*scale;
+  latlong llSph=ellip->conformalLatitude(ll);
+  double confScale=ellip->scaleFactor(ll.lat,llSph.lat);
+  xyz sphpnt=ellip->sphere->geoc(ll,0);
+  double tmScale=transMercScale(sphpnt);
+  xy grid=transMerc(rotation.rotate(sphpnt));
+  double krugerScale=ellip->krugerizeScale(grid);
+  return scale*confScale*tmScale*krugerScale;
 }
 
 bool ProjectionLabel::match(const ProjectionLabel &b,bool prefix)
