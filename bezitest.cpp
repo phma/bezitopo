@@ -3860,6 +3860,34 @@ void testellipsoidscale(ellipsoid *ellip)
   tassert(nbad<trunc(sqrt(i)/16));
 }
 
+void testkrugerscale(ellipsoid *ellip)
+{
+  halton hal;
+  xy pnt[2],krugerPnt[2],dekrugerPnt[2],krugerDeriv,dekrugerDeriv;
+  int i,j;
+  bool good;
+  for (i=0;i<1024;i++)
+  {
+    pnt[0]=pnt[1]=(hal.pnt()-xy(1,1))*1e6;
+    krugerDeriv=ellip->krugerizeDeriv(pnt[0]);
+    dekrugerDeriv=ellip->dekrugerizeDeriv(pnt[0]);
+    pnt[0]+=cossin(i*2097152)/2;
+    pnt[1]-=cossin(i*2097152)/2;
+    for (j=0;j<2;j++)
+    {
+      krugerPnt[j]=ellip->krugerize(pnt[j]);
+      dekrugerPnt[j]=ellip->dekrugerize(pnt[j]);
+    }
+    good=dist(krugerPnt[0]-krugerPnt[1],turn(krugerDeriv,i*2097152))<0.001;
+    good&=dist(dekrugerPnt[0]-dekrugerPnt[1],turn(dekrugerDeriv,i*2097152))<0.001;
+    if (!good)
+    {
+      cout<<"Krüger distance is "<<dist(krugerPnt[0],krugerPnt[1])<<" should be "<<krugerDeriv.length()<<endl;
+      cout<<"Dekrüger distance is "<<dist(dekrugerPnt[0],dekrugerPnt[1])<<" should be "<<dekrugerDeriv.length()<<endl;
+    }
+  }
+}
+
 void testellipsoid()
 {
   double rad,cenlat,conlat,invconlat,conscale;
@@ -3958,6 +3986,7 @@ void testellipsoid()
       <<"->"<<pnt1.east()<<','<<pnt1.north()
       <<"->"<<pnt2.east()<<','<<pnt2.north()
       <<" dist "<<dist(pnt0,pnt2)<<endl;
+  testkrugerscale(&WGS84);
 }
 
 float BeninBoundary[][2]=
