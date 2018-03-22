@@ -308,7 +308,7 @@ xy ellipsoid::dekrugerizeDeriv(xy mapPoint)
     rTerms.push_back(term.real());
     iTerms.push_back(term.imag());
   }
-  return xy(pairwisesum(rTerms)*tmReverse[0]/tmReverse[0],pairwisesum(iTerms)*tmReverse[0]/tmReverse[0]);
+  return xy(pairwisesum(rTerms)*tmReverse[0]/tmForward[0],pairwisesum(iTerms)*tmReverse[0]/tmForward[0]);
 }
 
 double ellipsoid::krugerizeScale(xy mapPoint)
