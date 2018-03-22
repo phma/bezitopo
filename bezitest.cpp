@@ -3878,8 +3878,8 @@ void testkrugerscale(ellipsoid *ellip)
       krugerPnt[j]=ellip->krugerize(pnt[j]);
       dekrugerPnt[j]=ellip->dekrugerize(pnt[j]);
     }
-    good=dist(krugerPnt[0]-krugerPnt[1],turn(krugerDeriv,i*2097152))<0.001;
-    good&=dist(dekrugerPnt[0]-dekrugerPnt[1],turn(dekrugerDeriv,i*2097152))<0.001;
+    good=dist(krugerPnt[0]-krugerPnt[1],turn(krugerDeriv,i*2097152))<1e-6;
+    good&=dist(dekrugerPnt[0]-dekrugerPnt[1],turn(dekrugerDeriv,i*2097152))<1e-6;
     if (!good)
     {
       cout<<"Krüger distance is "<<dist(krugerPnt[0],krugerPnt[1])<<" should be "<<krugerDeriv.length()<<endl;
