@@ -4015,6 +4015,37 @@ void test1projection(string projName,Projection &proj,latlong ll,xy grid)
   tassert(dist(gridGeoc,llGeoc)<1.75);
 }
 
+void testEquidistance(string projName,Projection &proj,latlong begin,latlong end)
+/* Draws a clélie from begin to end and checks that the scale of the projection
+ * is constant along the clélie.
+ */
+{
+  vector<latlong> globePoints=splitPoints(begin,end);
+  int i;
+  vector<xy> mapPoints;
+  vector<xyz> spacePoints;
+  vector<double> scales;
+  double minScale=INFINITY,maxScale=0,scale;
+  globePoints.push_back(end);
+  for (i=0;i<globePoints.size();i++)
+  {
+    spacePoints.push_back(proj.ellip->geoc(globePoints[i],0));
+    mapPoints.push_back(proj.latlongToGrid(globePoints[i]));
+  }
+  for (i=0;i<mapPoints.size()-1;i++)
+  {
+    scale=dist(mapPoints[i],mapPoints[i+1])/dist(spacePoints[i],spacePoints[i+1]);
+    if (scale>maxScale)
+      maxScale=scale;
+    if (scale<minScale)
+      minScale=scale;
+    scales.push_back(scale);
+  }
+  scale=sqrt(minScale*maxScale);
+  cout<<projName<<" scale varies by ±"<<maxScale/scale-1<<endl;
+  tassert(maxScale/minScale<1.000001);
+}
+
 void testprojscale(string projName,Projection &proj)
 /* Tests the accuracy of a projection's scale. Implicitly tests conformality.
  * Picks random pairs of points 1 meter apart and checks that the distance
@@ -4128,6 +4159,8 @@ void testprojection()
   ll.lon=degtorad(-45);
   grid=xy(-5003772,30207133);
   test1projection("sphereMercator",sphereMercator,ll,grid);
+  testEquidistance("ellipsoidConic20",ellipsoidConic20,latlong(degtobin(20),DEG60),latlong(degtobin(20),-DEG60));
+  testEquidistance("ellipsoidTransverse0",ellipsoidTransverse0,latlong(-DEG30,0),latlong(DEG90,0));
   testprojscale("sphereMercator",sphereMercator);
   drawproj("sphereMercator",sphereMercator);
   testprojscale("sphereConic10",sphereConic10);
