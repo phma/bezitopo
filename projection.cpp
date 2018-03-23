@@ -699,9 +699,9 @@ double TransverseMercatorEllipsoid::scaleFactor(latlong ll)
 {
   latlong llSph=ellip->conformalLatitude(ll);
   double confScale=ellip->scaleFactor(ll.lat,llSph.lat);
-  xyz sphpnt=ellip->sphere->geoc(llSph,0);
+  xyz sphpnt=rotation.rotate(ellip->sphere->geoc(llSph,0));
   double tmScale=transMercScale(sphpnt);
-  xy grid=transMerc(rotation.rotate(sphpnt));
+  xy grid=transMerc(sphpnt);
   double krugerScale=ellip->krugerizeScale(grid);
   return scale/confScale*tmScale*krugerScale;
 }
