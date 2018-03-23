@@ -690,18 +690,18 @@ double TransverseMercatorEllipsoid::scaleFactor(xy grid)
   xyz sphpnt=rotation.conj().rotate(invTransMerc(grid,ellip->sphere->getpor()));
   latlong ll=ellip->sphere->geod(sphpnt);
   double confScale=ellip->scaleFactor(ellip->inverseConformalLatitude(ll.lat),ll.lat);
-  return scale*confScale*tmScale/dekrugerScale;
+  return scale/confScale*tmScale/dekrugerScale;
 }
 
 double TransverseMercatorEllipsoid::scaleFactor(latlong ll)
 {
   latlong llSph=ellip->conformalLatitude(ll);
   double confScale=ellip->scaleFactor(ll.lat,llSph.lat);
-  xyz sphpnt=ellip->sphere->geoc(ll,0);
+  xyz sphpnt=ellip->sphere->geoc(llSph,0);
   double tmScale=transMercScale(sphpnt);
   xy grid=transMerc(rotation.rotate(sphpnt));
   double krugerScale=ellip->krugerizeScale(grid);
-  return scale*confScale*tmScale*krugerScale;
+  return scale/confScale*tmScale*krugerScale;
 }
 
 bool ProjectionLabel::match(const ProjectionLabel &b,bool prefix)
