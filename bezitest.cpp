@@ -4075,11 +4075,16 @@ void testEquidistance(string projName,Projection &proj,latlong begin,latlong end
   tassert(maxScale/minScale<1.000001);
 }
 
+int badLimit(int i)
+{
+  return trunc(sqrt(i)/16)+i/5; // 1/5 is about how much of the earth transverse Mercator fails on
+}
+
 void testprojscale(string projName,Projection &proj)
 /* Tests the accuracy of a projection's scale. Implicitly tests conformality.
  * Picks random pairs of points 1 meter apart and checks that the distance
- * between the two points on the map is close to the map scale. Allows a few
- * bad pairs, as the two points may straddle a cut in the map.
+ * between the two points on the map is close to the map scale. Allows up to 1/5
+ * bad pairs, since transverse Mercator loses accuracy far from its meridian.
  */
 {
   array<latlong,2> pointpair;
@@ -4090,7 +4095,7 @@ void testprojscale(string projName,Projection &proj)
   int i,nbadscale,nbadinv;
   double scale;
   for (i=nbadscale=nbadinv=0;
-       i<16777216 && nbadscale>=trunc(sqrt(i)/16) && nbadinv>=trunc(sqrt(i)/16);i++)
+       i<16777216 && (nbadscale>=badLimit(i) || nbadinv>=badLimit(i));i++)
   {
     pointpair=randomPointPair();
     midpoint.lat=(pointpair[0].lat+pointpair[1].lat)/2;
@@ -4119,17 +4124,17 @@ void testprojscale(string projName,Projection &proj)
     }
   }
   cout<<projName<<" scale is ";
-  if (nbadscale>=trunc(sqrt(i)/16))
+  if (nbadscale>=badLimit(i))
     cout<<"bad "<<ldecimal((double)nbadscale/i,0.001)<<endl;
   else
     cout<<"good"<<endl;
-  tassert(nbadscale<trunc(sqrt(i)/16));
+  tassert(nbadscale<badLimit(i));
   cout<<projName<<" inverse is ";
-  if (nbadinv>=trunc(sqrt(i)/16))
+  if (nbadinv>=badLimit(i))
     cout<<"bad "<<ldecimal((double)nbadinv/i,0.001)<<endl;
   else
     cout<<"good"<<endl;
-  tassert(nbadinv<trunc(sqrt(i)/16));
+  tassert(nbadinv<badLimit(i));
 }
 
 /* 80° 1.9126888
