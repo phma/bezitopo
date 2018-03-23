@@ -4091,8 +4091,9 @@ void testprojscale(string projName,Projection &proj)
   array<xyz,2> xyzpair;
   array<xy,2> xypair;
   xyz midxyz,invxyz;
+  xy midxy;
   int i,nbadscale,nbadinv;
-  double scale;
+  double scale,backScale;
   for (i=nbadscale=nbadinv=0;
        i<16777216 && (nbadscale>=badLimit(i) || nbadinv>=badLimit(i));i++)
   {
@@ -4105,9 +4106,17 @@ void testprojscale(string projName,Projection &proj)
     inv=proj.gridToLatlong(proj.latlongToGrid(midpoint));
     invxyz=proj.ellip->geoc(inv,0);
     scale=proj.scaleFactor(midpoint);
+    midxy=proj.latlongToGrid(midpoint);
+    backScale=proj.scaleFactor(midxy);
+    /* For other projections, one of the scaleFactor methods calls the other,
+     * but for ellipsoidal transverse Mercator, they are computed separately.
+     */
     xypair[0]=proj.latlongToGrid(pointpair[0]);
     xypair[1]=proj.latlongToGrid(pointpair[1]);
-    if (fabs(dist(xypair[0],xypair[1])/scale/dist(xyzpair[0],xyzpair[1])-1)>1e-6)
+    if (fabs(log(scale/backScale))>9e-5)
+      cout<<"scale "<<scale<<" backScale "<<backScale<<endl;
+    if (fabs(dist(xypair[0],xypair[1])/scale/dist(xyzpair[0],xyzpair[1])-1)>1e-6
+        || fabs(log(scale/backScale))>9e-5)
     {
       nbadscale++;
       if (nbadscale<256)
