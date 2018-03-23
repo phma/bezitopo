@@ -648,6 +648,8 @@ TransverseMercatorEllipsoid::TransverseMercatorEllipsoid(ellipsoid *e,double Mer
 {
   ellip=e;
   centralMeridian=Meridian;
+  if (zll.valid()<2)
+    zll=latlong(0.,Meridian);
   rotation=versor(xyz(0,0,1),-Meridian);
   scale=Scale;
   offset=zxy-latlongToGrid(zll);

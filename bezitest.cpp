@@ -3898,7 +3898,6 @@ void testellipsoid()
   xy pnt0,pnt1,pnt2;
   ellipsoid test1(8026957,0,0.5,xyz(0,0,0),"test1"),
             test2(8026957,4013478.5,0,xyz(0,0,0),"test2");
-  readTmCoefficients();
   tassert(test1.geteqr()==test2.geteqr());
   tassert(test1.getpor()==test2.getpor());
   sealevel=test1.geoc(degtobin(45),0,0);
@@ -4159,7 +4158,7 @@ void testprojection()
     ellipsoidConic20(&WGS84,0,degtorad(20)),ellipsoidConic80(&WGS84,0,degtorad(80)),
     ellipsoidConicm80(&WGS84,0,degtorad(-80));
   LambertConicEllipsoid ellipsoidConicBenin(&WGS84,degtorad(8/3.),degtorad(7.5),degtorad(11.5),zll,zxy);
-  TransverseMercatorEllipsoid ellipsoidTransverse0(&WGS84,0);
+  TransverseMercatorEllipsoid ellipsoidTransverse0(&WGS84,0),ellipsoidTransverse90W(&WGS84,degtorad(-90),0.9999);
   StereographicSphere sphereStereoNorthPole;
   latlong ncll(degtorad(33.75),degtorad(-79.));
   xy ncxy(609601.219202438405,0);
@@ -4178,7 +4177,6 @@ void testprojection()
   ProjectionList plist,ncplist,pacplist;
   ifstream pfile(string(SHARE_DIR)+"/projections.txt");
   cout<<"projection"<<endl;
-  readTmCoefficients();
   ll.lat=0;
   ll.lon=0;
   grid=xy(0,0);
@@ -4229,6 +4227,8 @@ void testprojection()
   drawproj("ellipsoidConicBenin",ellipsoidConicBenin);
   testprojscale("ellipsoidTransverse0",ellipsoidTransverse0);
   drawproj("ellipsoidTransverse0",ellipsoidTransverse0);
+  testprojscale("ellipsoidTransverse90W",ellipsoidTransverse90W);
+  drawproj("ellipsoidTransverse90W",ellipsoidTransverse90W);
   testprojscale("sphereStereoArabianSea",sphereStereoArabianSea);
   drawproj("sphereStereoArabianSea",sphereStereoArabianSea);
   grid=NorthCarolina.latlongToGrid(latlong(degtorad(33.75),degtorad(-79.)));
@@ -6428,6 +6428,7 @@ int main(int argc, char *argv[])
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
   doc.pl.resize(2);
+  readTmCoefficients();
   if (shoulddo("sizeof"))
     testsizeof();
   if (shoulddo("area3"))
