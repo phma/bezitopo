@@ -158,6 +158,11 @@ extern StereographicSphere sphereStereoArabianSea;
  * 3.249089634° 90.3339082° inverse projection 0° 0°
  */
 
+xy transMerc(xyz pnt);
+double transMercScale(xyz pnt);
+double transMercScale(xy pnt,double r);
+xyz invTransMerc(xy pnt,double r);
+
 class TransverseMercatorSphere: public Projection
 {
 public:
