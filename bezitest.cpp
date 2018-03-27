@@ -4149,6 +4149,22 @@ void testprojscale(string projName,Projection &proj)
   tassert(nbadinv<badLimit(i));
 }
 
+void testTransMerc()
+{
+  int i,j;
+  xyz pt3,pt3n,pt3e;
+  xy pt2,pt2n,pt2e;
+  double inverr,scaleerr;
+  for (i=-89;i<90;i++)
+  {
+    pt3=xyz(cos(degtorad(i)),sin(degtorad(i)),0);
+    pt2=transMerc(pt3);
+    inverr=dist(pt3,invTransMerc(pt2,1));
+    scaleerr=log(transMercScale(pt2,1)/transMercScale(pt3));
+    cout<<i<<"° inverse error "<<inverr<<" scale error "<<scaleerr<<endl;
+  }
+}
+
 /* 80° 1.9126888
  * 60° 1.56419578
  * 30° 1.13975353
@@ -4190,6 +4206,7 @@ void testprojection()
   ProjectionList plist,ncplist,pacplist;
   ifstream pfile(string(SHARE_DIR)+"/projections.txt");
   cout<<"projection"<<endl;
+  testTransMerc();
   ll.lat=0;
   ll.lon=0;
   grid=xy(0,0);
