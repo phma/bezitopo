@@ -4155,9 +4155,10 @@ void testTransMerc()
   xyz pt3,pt3n,pt3e;
   xy pt2,pt2n,pt2e;
   double inverr,scaleerr;
+  Quaternion ro=versor(xyz(0,1,0),DEG45);
   for (i=-89;i<90;i++)
   {
-    pt3=xyz(cos(degtorad(i)),sin(degtorad(i)),0);
+    pt3=ro.rotate(xyz(cos(degtorad(i)),sin(degtorad(i)),0));
     pt2=transMerc(pt3);
     inverr=dist(pt3,invTransMerc(pt2,1));
     scaleerr=log(transMercScale(pt2,1)/transMercScale(pt3));
