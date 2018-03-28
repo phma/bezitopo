@@ -4151,18 +4151,22 @@ void testprojscale(string projName,Projection &proj)
 
 void testTransMerc()
 {
-  int i,j;
+  int i,angle;
   xyz pt3,pt3n,pt3e;
   xy pt2,pt2n,pt2e;
   double inverr,scaleerr;
-  Quaternion ro=versor(xyz(0,1,0),DEG45);
+  angle=rng.uirandom();
+  Quaternion ro=versor(xyz(0,1,0),angle);
+  cout<<"TransMerc rotating by "<<angle<<endl;
   for (i=-89;i<90;i++)
   {
     pt3=ro.rotate(xyz(cos(degtorad(i)),sin(degtorad(i)),0));
     pt2=transMerc(pt3);
     inverr=dist(pt3,invTransMerc(pt2,1));
     scaleerr=log(transMercScale(pt2,1)/transMercScale(pt3));
-    cout<<i<<"° inverse error "<<inverr<<" scale error "<<scaleerr<<endl;
+    tassert(fabs(inverr)<1e-12 && fabs(scaleerr)<1e-12);
+    if (fabs(inverr)>1e-12 || fabs(scaleerr)>1e-12)
+      cout<<i<<"° inverse error "<<inverr<<" scale error "<<scaleerr<<endl;
   }
 }
 
