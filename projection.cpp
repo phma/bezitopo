@@ -126,7 +126,7 @@ LambertConicSphere::LambertConicSphere(double Meridian,double Parallel0,double P
     Parallel=br.init(Parallel0,ratiolog0,Parallel1,ratiolog1,false);
     while (!br.finished())
     {
-      cout<<"Parallel "<<ldecimal(radtodeg(Parallel))<<endl;
+      //cout<<"Parallel "<<ldecimal(radtodeg(Parallel))<<endl;
       setParallel(Parallel);
       Parallel=br.step(scaleRatioLog(Parallel0,Parallel1));
     }
@@ -294,7 +294,7 @@ LambertConicEllipsoid::LambertConicEllipsoid(ellipsoid *e,double Meridian,double
     Parallel=br.init(Parallel0,ratiolog0,Parallel1,ratiolog1,false);
     while (!br.finished())
     {
-      cout<<"Parallel "<<ldecimal(radtodeg(Parallel))<<endl;
+      //cout<<"Parallel "<<ldecimal(radtodeg(Parallel))<<endl;
       setParallel(Parallel);
       Parallel=br.step(scaleRatioLog(Parallel0,Parallel1));
     }
