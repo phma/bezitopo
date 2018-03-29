@@ -4201,8 +4201,11 @@ void testprojection()
   xy xyOakland(344240.332,180449.168);
   // Benchmark on Oakland Road overpass over 74A, Spindale, North Carolina.
   double distOldNewOakland;
+  latlong gawll(degtorad(30),degtorad(-505/6.));
+  xy gawxy(7e5,0);
+  TransverseMercatorEllipsoid GeorgiaWest(&GRS80,gawll.lon,0.9999,gawll,gawxy);
   latlong EWN(degtorad(35.07),degtorad(-77.04));
-  // New Bern is far enough from the borders that it should not be in an adjacent stat's grid.
+  // New Bern is far enough from the borders that it should not be in an adjacent state's grid.
   latlong ll196(degtorad(-14.1758035159),degtorad(-120.343248884));
   // See projection.cpp. This point shouldn't be in any state's or country's grid.
   // It will be in a UTM zone, once transverse Mercator is implemented.
@@ -4264,6 +4267,8 @@ void testprojection()
   drawproj("ellipsoidTransverse0",ellipsoidTransverse0);
   testprojscale("ellipsoidTransverse90W",ellipsoidTransverse90W);
   drawproj("ellipsoidTransverse90W",ellipsoidTransverse90W);
+  testprojscale("GeorgiaWest",GeorgiaWest);
+  drawproj("GeorgiaWest",GeorgiaWest);
   testprojscale("sphereStereoArabianSea",sphereStereoArabianSea);
   drawproj("sphereStereoArabianSea",sphereStereoArabianSea);
   grid=NorthCarolina.latlongToGrid(latlong(degtorad(33.75),degtorad(-79.)));
