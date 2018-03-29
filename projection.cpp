@@ -622,7 +622,7 @@ xy TransverseMercatorSphere::latlongToGrid(latlong ll)
 
 double TransverseMercatorSphere::scaleFactor(xy grid)
 {
-  return transMercScale(grid,ellip->getpor())*scale;
+  return transMercScale((grid-offset)/scale,ellip->getpor())*scale;
 }
 
 double TransverseMercatorSphere::scaleFactor(latlong ll)

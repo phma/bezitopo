@@ -4113,14 +4113,14 @@ void testprojscale(string projName,Projection &proj)
      */
     xypair[0]=proj.latlongToGrid(pointpair[0]);
     xypair[1]=proj.latlongToGrid(pointpair[1]);
-    if (fabs(log(scale/backScale))>1e-5)
+    if (fabs(log(scale/backScale))>1e-6)
     {
       cout<<"scale "<<scale<<" backScale "<<backScale<<endl;
       scale=proj.scaleFactor(midpoint);
       backScale=proj.scaleFactor(midxy);
     }
     if (fabs(dist(xypair[0],xypair[1])/scale/dist(xyzpair[0],xyzpair[1])-1)>1e-6
-        || fabs(log(scale/backScale))>9e-5)
+        || fabs(log(scale/backScale))>1e-6)
     {
       nbadscale++;
       if (nbadscale<256)
