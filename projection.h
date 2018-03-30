@@ -143,14 +143,15 @@ protected:
 
 extern StereographicSphere sphereStereoArabianSea;
 
-/* This is how I'll do transverse Mercator:
+/* This is how I do transverse Mercator:
  * Transverse Mercator on a sphere is easy. Transverse Mercator on an ellipsoid
- * can be computed as the convolution of two conformal maps: transverse Mercator
- * on a sphere and a map that corrects the length along the central meridian.
- * The length along the central meridian of an ellipsoid is an elliptic integral,
- * which can be approximated with many sufficiently small pieces. Then compute
- * the function to correct the length as a Fourier series. It is automatically
- * analytic, hence conformal, and the scale can be computed by differentiating it.
+ * can be computed as the composition of three conformal maps: ellipsoid to sphere,
+ * transverse Mercator on a sphere, and a map that corrects the length along the
+ * central meridian. The length along the central meridian of an ellipsoid is an
+ * elliptic integral, which can be approximated with many sufficiently small pieces.
+ * Then compute the function to correct the length as a Fourier series. It is
+ * automatically analytic, hence conformal, and the scale can be computed by
+ * differentiating it.
  *
  * There's an area near the points on the equator 90° from the central meridian
  * where the Fourier series diverges. It is at least 3.25° in radius, as shown
