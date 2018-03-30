@@ -631,6 +631,27 @@ double TransverseMercatorSphere::scaleFactor(latlong ll)
   return transMercScale(ellip->geoc(ll,0))*scale;
 }
 
+/* Counties of Georgia on the boundary between the zones:
+ * Rabun	|
+ * Habersham	| Stephens
+ * Banks	| Franklin
+ * Jackson	| Madison
+ * Clarke	| Oglethorpe
+ * Oconee	|
+ * Morgan	| Greene
+ * Putnam	| Hancock
+ * Jones	| Baldwin
+ * Twiggs	| Wilkinson
+ * Bleckley	| Laurens
+ * Pulaski	| Dodge
+ * Wilcox	| Telfair
+ * Ben Hill	|
+ * Irwin	| Coffee
+ * Berrien	| Atkinson
+ * Lanier	| Clinch
+ * Lowndes	| Echols
+ */
+
 TransverseMercatorEllipsoid::TransverseMercatorEllipsoid():Projection()
 {
   centralMeridian=0;
