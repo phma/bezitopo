@@ -410,6 +410,22 @@ double LambertConicEllipsoid::scaleFactor(latlong ll)
  * everything else the same
  */
 
+string getLineBackslash(istream &file)
+// Backslash linefeed is deleted, not replaced with a space.
+{
+  string ret,line;
+  bool bs;
+  do
+  {
+    getline(file,line);
+    bs=line.length() && line.back()=='\\';
+    if (bs)
+      line.pop_back();
+    ret+=line;
+  } while (bs);
+  return ret;
+}
+
 LambertConicEllipsoid *readConformalConic(istream &file)
 /* Reads data such as the following from a file and returns a pointer to a
  * new projection.
@@ -445,7 +461,7 @@ LambertConicEllipsoid *readConformalConic(istream &file)
   metric.setDefaultUnit(LENGTH,1);
   while (fieldsSeen!=0x295 && fieldsSeen!=0x2a5 && (fieldsSeen&0xd4a)==0)
   {
-    getline(file,line);
+    line=getLineBackslash(file);
     hashpos=line.find('#');
     if (hashpos==0)
       line="";
@@ -763,7 +779,7 @@ ProjectionLabel readProjectionLabel(istream &file)
   ProjectionLabel ret;
   while (fieldsSeen!=0x55 && (fieldsSeen&0x1aa)==0 && file.good())
   {
-    getline(file,line);
+    line=getLineBackslash(file);
     hashpos=line.find('#');
     if (hashpos==0)
       line="";
@@ -843,7 +859,7 @@ Projection *readProjection(istream &file)
   Projection *ret=nullptr;
   while ((fieldsSeen&0x11)==0)
   {
-    getline(file,line);
+    line=getLineBackslash(file);
     hashpos=line.find('#');
     if (hashpos==0)
       line="";
@@ -885,7 +901,7 @@ Projection *readProjection(istream &file)
       //ret=readObliqueMercator(file);
       break;
   }
-  getline(file,line);
+  line=getLineBackslash(file);
   colonpos=line.find(':');
   tag=line.substr(0,colonpos);
   value=line.substr(colonpos+1);
