@@ -466,7 +466,7 @@ LambertConicEllipsoid *readConformalConic(istream &file)
     if (hashpos==0)
       line="";
     if (line=="")
-      fieldsSeen|=800; // blank line is invalid
+      fieldsSeen|=0x800; // blank line is invalid
     else
     {
       colonpos=line.find(':');
@@ -743,6 +743,82 @@ double TransverseMercatorEllipsoid::scaleFactor(latlong ll)
   return scale/confScale*tmScale*krugerScale;
 }
 
+TransverseMercatorEllipsoid *readTransverseMercator(istream &file)
+/* Reads data such as the following from a file and returns a pointer to a
+ * new projection.
+ *
+ * Ellipsoid:Clarke
+ * Meridian:84°10'W
+ * Scale:0.9999
+ * OriginLL:30N 84°10'W
+ * OriginXY:500000,0
+ */
+{
+  int fieldsSeen=0;
+  ellipsoid *ellip=nullptr;
+  size_t hashpos,colonpos;
+  string line,tag,value,ellipsoidStr;
+  double scale,meridian;
+  latlong ll,origll;
+  xy origxy;
+  Measure metric;
+  TransverseMercatorEllipsoid *ret=nullptr;
+  metric.setMetric();
+  metric.setDefaultUnit(LENGTH,1);
+  while (fieldsSeen!=0x155 && (fieldsSeen&0x6aa)==0)
+  {
+    line=getLineBackslash(file);
+    hashpos=line.find('#');
+    if (hashpos==0)
+      line="";
+    if (line=="")
+      fieldsSeen|=0x400; // blank line is invalid
+    else
+    {
+      colonpos=line.find(':');
+      if (colonpos>line.length())
+	fieldsSeen=-1;
+      else
+      {
+	tag=line.substr(0,colonpos);
+	value=line.substr(colonpos+1);
+	if (tag=="Ellipsoid")
+	{
+	  ellipsoidStr=value;
+	  ellip=getEllipsoid(ellipsoidStr);
+	  fieldsSeen+=1;
+	}
+	else if (tag=="Meridian")
+	{
+	  ll=parselatlong(value,DEGREE);
+	  meridian=ll.lon;
+	  fieldsSeen+=4;
+	}
+	else if (tag=="Scale")
+	{
+	  scale=stod(value);
+	  fieldsSeen+=16;
+	}
+	else if (tag=="OriginLL")
+	{
+	  origll=parselatlong(value,DEGREE);
+	  fieldsSeen+=64;
+	}
+	else if (tag=="OriginXY")
+	{
+	  origxy=metric.parseXy(value);
+	  fieldsSeen+=256;
+	}
+	else
+	  fieldsSeen+=1024;
+      }
+    }
+  }
+  if ((fieldsSeen==0x155) && ellip)
+    ret=new TransverseMercatorEllipsoid(ellip,meridian,scale,origll,origxy);
+  return ret;
+}
+
 bool ProjectionLabel::match(const ProjectionLabel &b,bool prefix)
 /* Returns true if b matches this pattern, e.g.
  * ("U","N","","NAD").match(("US","NC","","NAD83"),true)=true
@@ -895,7 +971,7 @@ Projection *readProjection(istream &file)
       ret=readConformalConic(file);
       break;
     case PROJ_TM:
-      //ret=readTransverseMercator(file);
+      ret=readTransverseMercator(file);
       break;
     case PROJ_OM:
       //ret=readObliqueMercator(file);
