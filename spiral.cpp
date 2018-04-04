@@ -3,7 +3,7 @@
 /* spiral.cpp - Cornu or Euler spirals                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -271,6 +271,20 @@ spiralarc::spiralarc(xyz kra,xyz mij,xyz fam,int mbear,double curvature,double c
   len=length;
   control1=(2*start.elev()+end.elev())/3;
   control2=(start.elev()+2*end.elev())/3;
+}
+
+spiralarc::spiralarc(xyz pnt,double curvature,double clothance,int bear,double startLength,double endLength)
+// For the spiralarc intersection test.
+{
+  double midLength=(startLength+endLength)/2;
+  start=xyz(turn(cornu(startLength,curvature,clothance),bear),0)+pnt;
+  mid=turn(cornu(midLength,curvature,clothance),bear)+xy(pnt);
+  end=xyz(turn(cornu(endLength,curvature,clothance),bear),0)+pnt;
+  midbear=bear+ispiralbearing(midLength,curvature,clothance);
+  cur=spiralcurvature(midLength,curvature,clothance);
+  clo=clothance;
+  len=endLength-startLength;
+  control1=control2=pnt.elev();
 }
 
 double spiralarc::in(xy pnt)

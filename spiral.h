@@ -3,7 +3,7 @@
 /* spiral.h - Cornu or Euler spirals                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012,2014-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -62,6 +62,7 @@ public:
   spiralarc(xyz kra,double c1,double c2,xyz fam);
   spiralarc(xyz kra,int sbear,double c1,double c2,double length,double famElev);
   spiralarc(xyz kra,xyz mij,xyz fam,int mbear,double curvature,double clothance,double length);
+  spiralarc(xyz pnt,double curvature,double clothance,int bear,double startLength,double endLength);
   virtual double in(xy pnt);
   virtual xy pointOfIntersection();
   virtual double tangentLength(int which);
