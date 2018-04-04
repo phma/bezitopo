@@ -2032,7 +2032,7 @@ void testcogospiral1(segment *a,double a0,double a1,segment *b,double b0,double 
     spiralmicroscope(a,intlistSecant[0].along,b,intlistSecant[1].along,fname);
 }
 
-spiralarc snip20(spiralarc a)
+spiralarc snip20(spiralarc a,spiralarc &d,spiralarc &c)
 /* Snips up to 20% off each end. Computing all intersections is done by
  * picking equally-spaced points along the two curves and computing one
  * intersection for each pair. This makes sure that the equally-spaced
@@ -2040,13 +2040,35 @@ spiralarc snip20(spiralarc a)
  */
 {
   double len,begcut,endcut;
-  spiralarc b,c,d,e;
+  spiralarc b,e;
   len=a.length();
   endcut=(0.8+rng.usrandom()/327680.)*len;
   begcut=(0.2-rng.usrandom()/327680.)*len;
   a.split(endcut,b,c);
   b.split(begcut,d,e);
   return e;
+}
+
+void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps)
+{
+  spiralarc aSnip,aStart,aEnd,bSnip,bStart,bEnd;
+  BoundRect br;
+  aSnip=snip20(a,aStart,aEnd);
+  bSnip=snip20(b,bStart,bEnd);
+  br.include(&a);
+  br.include(&b);
+  ps.startpage();
+  ps.setscale(br);
+  ps.setcolor(1,0,0);
+  ps.spline(aStart.approx3d(0.001/ps.getscale()));
+  ps.spline(bStart.approx3d(0.001/ps.getscale()));
+  ps.setcolor(0,0,0);
+  ps.spline(aSnip.approx3d(0.001/ps.getscale()));
+  ps.spline(bSnip.approx3d(0.001/ps.getscale()));
+  ps.setcolor(0,0,1);
+  ps.spline(aEnd.approx3d(0.001/ps.getscale()));
+  ps.spline(bEnd.approx3d(0.001/ps.getscale()));
+  ps.endpage();
 }
 
 void testcogospiral()
@@ -2093,6 +2115,7 @@ void testcogospiral()
    */
   //spiralmicroscope(g,3.2175055439642193,h,1.4189705460416392281,"tangentmicro",0x669);
   spiralmicroscope(&g,3.2175384147219286,&h,1.419003418926355,"tangentmicro",0x669);
+  testcogospiral2(c,d,ps);
 }
 
 void testmanyarc()
