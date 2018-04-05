@@ -23,6 +23,7 @@
 #include <iostream>
 #include "ldecimal.h"
 #include "cogospiral.h"
+#include "relprime.h"
 
 using namespace std;
 
@@ -302,7 +303,7 @@ vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
   vector<array<alosta,2> > ret;
   array<alosta,2> int1;
   vector<alosta> int0;
-  int i,j,adiv,bdiv;
+  int h,i,j,adiv,bdiv;
   double maxcur,endcur,alen,blen;
   alen=a->length();
   blen=b->length();
@@ -338,5 +339,9 @@ vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
 	ret.push_back(int1);
       }
     }
+  for (h=relprime(ret.size());h;h=(h>1)?relprime(h):0) // Shell sort
+    for (i=h;i<ret.size();i++)
+      for (j=i-h;j>=0 && (ret[j][0].along>ret[j+h][0].along || (ret[j][0].along==ret[j+h][0].along && ret[j][1].along>ret[j+h][1].along));j-=h)
+	swap(ret[j],ret[j+h]);
   return ret;
 }
