@@ -2049,6 +2049,14 @@ spiralarc snip20(spiralarc a,spiralarc &d,spiralarc &c)
   return e;
 }
 
+/* BUG Freak occurrence when snip 65084 from aStart, 18368 from aEnd,
+ * 39139 from bStart, and 59805 from bEnd: intersection1 enters an infinite
+ * loop in which the two points on aSnip are an ulp apart, the two points
+ * on bSnip are 0.183237 apart, the intersection is halfway between the two
+ * points on aSnip, and the new point on bSnip is computed to be the negative
+ * of its previous position along bSnip, which is then negated.
+ */
+
 void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps)
 {
   spiralarc aSnip,aStart,aEnd,bSnip,bStart,bEnd;
