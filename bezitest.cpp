@@ -2073,7 +2073,8 @@ void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps)
   inters=intersections(&aSnip,&bSnip);
   cout<<"--------\n";
   for (i=0;i<inters.size();i++)
-    cout<<ldecimal(inters[i][0].along)<<' '<<ldecimal(inters[i][1].along)<<'\n';
+    cout<<ldecimal(inters[i][0].along)<<' '<<ldecimal(inters[i][1].along)
+        <<' '<<inters[i][1].bearing-inters[i][0].bearing<<'\n';
   ps.endpage();
 }
 
