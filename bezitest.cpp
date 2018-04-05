@@ -2084,6 +2084,8 @@ void testcogospiral()
   segment a(beg0,end0),b(beg1,end1);
   spiralarc aspi,bspi;
   spiralarc c(beg2,end2),d(beg3,end3),e(beg4,end4),f(beg5,end5),g(beg6,end6),h(beg7,end7);
+  spiralarc o(xyz(0,0,0),3.5,3.,0,-2,0.7);
+  spiralarc p(xyz(0,0,0),3.5,-3.,0,-0.7,2);
   PostScript ps;
   ps.open("cogospiral.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
@@ -2115,7 +2117,7 @@ void testcogospiral()
    */
   //spiralmicroscope(g,3.2175055439642193,h,1.4189705460416392281,"tangentmicro",0x669);
   spiralmicroscope(&g,3.2175384147219286,&h,1.419003418926355,"tangentmicro",0x669);
-  testcogospiral2(c,d,ps);
+  testcogospiral2(o,p,ps);
 }
 
 void testmanyarc()
