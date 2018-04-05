@@ -2041,9 +2041,13 @@ spiralarc snip20(spiralarc a,spiralarc &d,spiralarc &c)
 {
   double len,begcut,endcut;
   spiralarc b,e;
+  int bcut,ecut;
+  bcut=rng.usrandom();
+  ecut=rng.usrandom();
+  cout<<bcut<<' '<<ecut<<" snip20\n";
   len=a.length();
-  endcut=(0.8+rng.usrandom()/327680.)*len;
-  begcut=(0.2-rng.usrandom()/327680.)*len;
+  endcut=(0.8+ecut/327680.)*len;
+  begcut=(0.2-bcut/327680.)*len;
   a.split(endcut,b,c);
   b.split(begcut,d,e);
   return e;
