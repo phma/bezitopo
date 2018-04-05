@@ -300,9 +300,10 @@ vector<alosta> intersection1(segment *a,double a1,segment *b,double b1,bool exte
  */
 vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
 {
-  vector<array<alosta,2> > ret;
+  vector<array<alosta,2> > inters,ret;
   array<alosta,2> int1;
   vector<alosta> int0;
+  vector<int> bounds;
   int h,i,j,adiv,bdiv;
   double maxcur,endcur,alen,blen;
   alen=a->length();
@@ -325,7 +326,7 @@ vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
       {
 	int1[0]=int0[0];
 	int1[1]=int0[1];
-	ret.push_back(int1);
+	inters.push_back(int1);
       }
     }
   for (i=0;i<=adiv;i++)
@@ -336,12 +337,20 @@ vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
       {
 	int1[0]=int0[0];
 	int1[1]=int0[1];
-	ret.push_back(int1);
+	inters.push_back(int1);
       }
     }
-  for (h=relprime(ret.size());h;h=(h>1)?relprime(h):0) // Shell sort
-    for (i=h;i<ret.size();i++)
-      for (j=i-h;j>=0 && (ret[j][0].along>ret[j+h][0].along || (ret[j][0].along==ret[j+h][0].along && ret[j][1].along>ret[j+h][1].along));j-=h)
-	swap(ret[j],ret[j+h]);
+  for (h=relprime(inters.size());h;h=(h>1)?relprime(h):0) // Shell sort
+    for (i=h;i<inters.size();i++)
+      for (j=i-h;j>=0 && (inters[j][0].along>inters[j+h][0].along || (inters[j][0].along==inters[j+h][0].along && inters[j][1].along>inters[j+h][1].along));j-=h)
+	swap(inters[j],inters[j+h]);
+  for (i=0;i<=inters.size();i++)
+    if (i==0 || i==inters.size() || -abs(inters[i][0].bearing-inters[i][1].bearing-inters[i-1][0].bearing+inters[i-1][1].bearing)<-255)
+    {
+      bounds.push_back(i);
+      cout<<i<<' ';
+    }
+  cout<<endl;
+  ret=inters;
   return ret;
 }
