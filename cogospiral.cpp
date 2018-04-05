@@ -297,3 +297,46 @@ vector<alosta> intersection1(segment *a,double a1,segment *b,double b1,bool exte
  * osculate, the tangent method will fail to converge because of roundoff,
  * but the secant method will find the intersection. So both methods are needed.
  */
+vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
+{
+  vector<array<alosta,2> > ret;
+  array<alosta,2> int1;
+  vector<alosta> int0;
+  int i,j,adiv,bdiv;
+  double maxcur,endcur,alen,blen;
+  alen=a->length();
+  blen=b->length();
+  maxcur=fabs(a->curvature(0));
+  endcur=fabs(a->curvature(alen));
+  if (endcur>maxcur)
+    maxcur=endcur;
+  adiv=nearbyint(maxcur*alen)+1;
+  maxcur=fabs(b->curvature(0));
+  endcur=fabs(b->curvature(blen));
+  if (endcur>maxcur)
+    maxcur=endcur;
+  bdiv=nearbyint(maxcur*blen)+1;
+  for (i=0;i<adiv;i++)
+    for (j=0;j<bdiv;j++)
+    {
+      int0=intersection1(a,i*alen/adiv,(i+1)*alen/adiv,b,j*blen/bdiv,(j+1)*blen/bdiv,extend);
+      if (int0.size())
+      {
+	int1[0]=int0[0];
+	int1[1]=int0[1];
+	ret.push_back(int1);
+      }
+    }
+  for (i=0;i<=adiv;i++)
+    for (j=0;j<=bdiv;j++)
+    {
+      int0=intersection1(a,i*alen/adiv,b,j*blen/bdiv,extend);
+      if (int0.size())
+      {
+	int1[0]=int0[0];
+	int1[1]=int0[1];
+	ret.push_back(int1);
+      }
+    }
+  return ret;
+}

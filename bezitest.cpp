@@ -2053,6 +2053,8 @@ void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps)
 {
   spiralarc aSnip,aStart,aEnd,bSnip,bStart,bEnd;
   BoundRect br;
+  vector<array<alosta,2> > inters;
+  int i;
   aSnip=snip20(a,aStart,aEnd);
   bSnip=snip20(b,bStart,bEnd);
   br.include(&a);
@@ -2068,6 +2070,10 @@ void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps)
   ps.setcolor(0,0,1);
   ps.spline(aEnd.approx3d(0.001/ps.getscale()));
   ps.spline(bEnd.approx3d(0.001/ps.getscale()));
+  inters=intersections(&aSnip,&bSnip);
+  cout<<"--------\n";
+  for (i=0;i<inters.size();i++)
+    cout<<ldecimal(inters[i][0].along)<<' '<<ldecimal(inters[i][1].along)<<'\n';
   ps.endpage();
 }
 
