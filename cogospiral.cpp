@@ -170,7 +170,7 @@ vector<alosta> intersection1(segment *a,double a1,double a2,segment *b,double b1
   bool isnewcloser;
   xy insect;
   double di0,di1,d01;
-  int closecount=0;
+  int closecount=0,mirrorcount=0;
   alosta aalosta[3],balosta[3];
   vector<alosta> ret;
   aalosta[0].setStation(a,a1);
@@ -191,9 +191,15 @@ vector<alosta> intersection1(segment *a,double a1,double a2,segment *b,double b1
     if (aalosta[2].along<-a->length()/2 || aalosta[2].along>3*a->length()/2)
       aalosta[2].along=NAN;
     if (!extend && aalosta[2].along<0)
+    {
       aalosta[2].along=-aalosta[2].along;
+      mirrorcount++;
+    }
     if (!extend && aalosta[2].along>a->length())
+    {
       aalosta[2].along=2*a->length()-aalosta[2].along;
+      mirrorcount++;
+    }
     aalosta[2].setStation(a,aalosta[2].along);
     di0=dist(insect,balosta[0].station);
     di1=dist(insect,balosta[1].station);
@@ -206,9 +212,15 @@ vector<alosta> intersection1(segment *a,double a1,double a2,segment *b,double b1
     if (balosta[2].along<-b->length()/2 || balosta[2].along>3*b->length()/2)
       balosta[2].along=NAN;
     if (!extend && balosta[2].along<0)
+    {
       balosta[2].along=-balosta[2].along;
+      mirrorcount++;
+    }
     if (!extend && balosta[2].along>b->length())
+    {
       balosta[2].along=2*b->length()-balosta[2].along;
+      mirrorcount++;
+    }
     balosta[2].setStation(b,balosta[2].along);
     isnewcloser=sortpts(aalosta,balosta);
     //cout<<"isnewcloser "<<isnewcloser<<' '<<ldecimal(dist(aalosta[0].station,balosta[0].station))<<' '<<(a.length()+b.length()+dist(aalosta[0].station,-balosta[0].station))*DBL_EPSILON*4096<<endl;
@@ -221,7 +233,7 @@ vector<alosta> intersection1(segment *a,double a1,double a2,segment *b,double b1
     else
       closecount=0;
   }
-  while (isnewcloser && closecount<2);
+  while (isnewcloser && closecount<2 && mirrorcount<256);
   if (closecount>1)
   {
     ret.push_back(aalosta[0]);
@@ -247,7 +259,7 @@ vector<alosta> intersection1(segment *a,double a1,segment *b,double b1,bool exte
   bool isnewcloser;
   xy insect;
   double di0,di1,d01;
-  int closecount=0;
+  int closecount=0,mirrorcount=0;
   alosta aalosta[2],balosta[2];
   vector<alosta> ret;
   aalosta[0].setStation(a,a1);
@@ -260,18 +272,30 @@ vector<alosta> intersection1(segment *a,double a1,segment *b,double b1,bool exte
     if (aalosta[1].along<-a->length()/2 || aalosta[1].along>3*a->length()/2)
       aalosta[1].along=NAN;
     if (!extend && aalosta[1].along<0)
+    {
       aalosta[1].along=-aalosta[1].along;
+      mirrorcount++;
+    }
     if (!extend && aalosta[1].along>a->length())
+    {
       aalosta[1].along=2*a->length()-aalosta[1].along;
+      mirrorcount++;
+    }
     aalosta[1].setStation(a,aalosta[1].along);
     di0=distanceInDirection(balosta[0].station,insect,balosta[0].bearing);
     balosta[1].along=balosta[0].along+di0;
     if (balosta[1].along<-b->length()/2 || balosta[1].along>3*b->length()/2)
       balosta[1].along=NAN;
     if (!extend && balosta[1].along<0)
+    {
       balosta[1].along=-balosta[1].along;
+      mirrorcount++;
+    }
     if (!extend && balosta[1].along>b->length())
+    {
       balosta[1].along=2*b->length()-balosta[1].along;
+      mirrorcount++;
+    }
     balosta[1].setStation(b,balosta[1].along);
     isnewcloser=sortpts2(aalosta,balosta);
     //cout<<"isnewcloser "<<isnewcloser<<' '<<ldecimal(dist(aalosta[0].station,balosta[0].station))<<' '<<(a.length()+b.length()+dist(aalosta[0].station,-balosta[0].station))*DBL_EPSILON*4096<<endl;
@@ -284,7 +308,7 @@ vector<alosta> intersection1(segment *a,double a1,segment *b,double b1,bool exte
     else
       closecount=0;
   }
-  while (isnewcloser && closecount<2);
+  while (isnewcloser && closecount<2 && mirrorcount<256);
   if (closecount>1)
   {
     ret.push_back(aalosta[0]);

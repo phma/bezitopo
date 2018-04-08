@@ -2044,6 +2044,16 @@ spiralarc snip20(spiralarc a,spiralarc &d,spiralarc &c)
   int bcut,ecut;
   bcut=rng.usrandom();
   ecut=rng.usrandom();
+  if (a.clothance()>0)
+  {
+    bcut=452;
+    ecut=47168;
+  }
+  if (a.clothance()<0)
+  {
+    bcut=26397;
+    ecut=5731;
+  }
   cout<<bcut<<' '<<ecut<<" snip20\n";
   len=a.length();
   endcut=(0.8+ecut/327680.)*len;
@@ -2059,6 +2069,9 @@ spiralarc snip20(spiralarc a,spiralarc &d,spiralarc &c)
  * on bSnip are 0.183237 apart, the intersection is halfway between the two
  * points on aSnip, and the new point on bSnip is computed to be the negative
  * of its previous position along bSnip, which is then negated.
+ * Another:
+ * 33678 28718 snip20
+ * 43025 8527 snip20
  */
 
 void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps)
@@ -2085,8 +2098,12 @@ void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps)
   inters=intersections(&aSnip,&bSnip);
   cout<<"--------\n";
   for (i=0;i<inters.size();i++)
+  {
     cout<<ldecimal(inters[i][0].along)<<' '<<ldecimal(inters[i][1].along)
         <<' '<<inters[i][1].bearing-inters[i][0].bearing<<'\n';
+    cout<<ldecimal(inters[i][0].station.getx())<<','<<ldecimal(inters[i][0].station.gety())<<' '
+        <<ldecimal(inters[i][1].station.getx())<<','<<ldecimal(inters[i][1].station.gety())<<'\n';
+  }
   ps.endpage();
 }
 
