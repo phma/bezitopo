@@ -304,7 +304,7 @@ vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
   array<alosta,2> int1;
   vector<alosta> int0;
   vector<int> bounds;
-  int h,i,j,adiv,bdiv;
+  int h,i,j,adiv,bdiv,range,rangeSize;
   double maxcur,endcur,alen,blen;
   alen=a->length();
   blen=b->length();
@@ -351,6 +351,36 @@ vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
       cout<<i<<' ';
     }
   cout<<endl;
-  ret=inters;
+  for (range=0;range<bounds.size()-1;range++)
+  {
+    rangeSize=bounds[range+1]-bounds[range];
+    for (h=relprime(rangeSize);h;h=(h>1)?relprime(h):0)
+      for (i=h;i<rangeSize;i++) // Sort just the alostas of b within the range.
+	for (j=i-h;j>=0 && (inters[j+bounds[range]][1].along>inters[j+bounds[range]+h][1].along);j-=h)
+	  swap(inters[j+bounds[range]][1],inters[j+bounds[range]+h][1]);
+    if (rangeSize&1)
+      int1=inters[bounds[range]+rangeSize/2];
+    else // Take the median, not the mean. There are usually a few
+    {    // outliers which would make the mean inaccurate.
+      int1[0].along=(inters[bounds[range]+rangeSize/2  ][0].along+
+                     inters[bounds[range]+rangeSize/2-1][0].along)/2;
+      if (int1[0].along==inters[bounds[range]+rangeSize/2][0].along)
+	int1[0]=inters[bounds[range]+rangeSize/2][0];
+      else if (int1[0].along==inters[bounds[range]+rangeSize/2-1][0].along)
+	int1[0]=inters[bounds[range]+rangeSize/2-1][0];
+      else
+	int1[0].setStation(a,int1[0].along);
+      int1[1].along=(inters[bounds[range]+rangeSize/2  ][1].along+
+                     inters[bounds[range]+rangeSize/2-1][1].along)/2;
+      if (int1[1].along==inters[bounds[range]+rangeSize/2][1].along)
+	int1[1]=inters[bounds[range]+rangeSize/2][1];
+      else if (int1[1].along==inters[bounds[range]+rangeSize/2-1][1].along)
+	int1[1]=inters[bounds[range]+rangeSize/2-1][1];
+      else
+	int1[1].setStation(b,int1[1].along);
+    }
+    ret.push_back(int1);
+  }
+  //ret=inters;
   return ret;
 }
