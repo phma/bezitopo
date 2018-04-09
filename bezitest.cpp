@@ -2044,16 +2044,6 @@ spiralarc snip20(spiralarc a,spiralarc &d,spiralarc &c)
   int bcut,ecut;
   bcut=rng.usrandom();
   ecut=rng.usrandom();
-  if (a.clothance()>0)
-  {
-    bcut=452;
-    ecut=47168;
-  }
-  if (a.clothance()<0)
-  {
-    bcut=26397;
-    ecut=5731;
-  }
   cout<<bcut<<' '<<ecut<<" snip20\n";
   len=a.length();
   endcut=(0.8+ecut/327680.)*len;
@@ -2063,18 +2053,11 @@ spiralarc snip20(spiralarc a,spiralarc &d,spiralarc &c)
   return e;
 }
 
-/* BUG Freak occurrence when snip 65084 from aStart, 18368 from aEnd,
- * 39139 from bStart, and 59805 from bEnd: intersection1 enters an infinite
- * loop in which the two points on aSnip are an ulp apart, the two points
- * on bSnip are 0.183237 apart, the intersection is halfway between the two
- * points on aSnip, and the new point on bSnip is computed to be the negative
- * of its previous position along bSnip, which is then negated.
- * Another:
- * 33678 28718 snip20
- * 43025 8527 snip20
+void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps,vector<xy> expected,double toler,unsigned nint)
+/* Tests all intersections of a and b. They should be within toler of some
+ * subsequence of expected, and the number should be a bit set in nint.
+ * nint is a bitmask; 5 means that the number of intersections should be 0 or 2.
  */
-
-void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps)
 {
   spiralarc aSnip,aStart,aEnd,bSnip,bStart,bEnd;
   BoundRect br;
@@ -2112,6 +2095,7 @@ void testcogospiral()
   int i;
   xy intpoint; // (7,11)
   vector<alosta> intlist;
+  vector<xy> expected;
   xyz beg0(-1193,-489,0),end0(0xc07,0x50b,0), // slope 5/12
       beg1(-722,983,0),end1(382,-489,0), // slope -4/3
       beg2(-101,1,0),end2(99,1,0),beg3(-99,-1,0),end3(101,-1,0),
@@ -2157,9 +2141,21 @@ void testcogospiral()
    */
   //spiralmicroscope(g,3.2175055439642193,h,1.4189705460416392281,"tangentmicro",0x669);
   spiralmicroscope(&g,3.2175384147219286,&h,1.419003418926355,"tangentmicro",0x669);
-  testcogospiral2(o,p,ps);
-  testcogospiral2(q,r,ps);
-  testcogospiral2(s,t,ps);
+  expected.clear();
+  expected.push_back(xy(0,0));
+  testcogospiral2(o,p,ps,expected,0.0015,1);
+  expected.clear();
+  expected.push_back(xy(0,1.193622997));
+  expected.push_back(xy(-0.248290956,0.145341333));
+  expected.push_back(xy(0,0));
+  expected.push_back(xy(0.248290956,0.145341333));
+  expected.push_back(xy(0,0.414137715));
+  testcogospiral2(q,r,ps,expected,1e-9,28);
+  expected.clear();
+  expected.push_back(xy(0,0));
+  expected.push_back(xy(0,0));
+  // When tested without snipping, this produces 3 intersections, which is wrong.
+  testcogospiral2(s,t,ps,expected,1e-6,5);
 }
 
 void testmanyarc()
