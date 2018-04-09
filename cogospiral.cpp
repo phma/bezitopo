@@ -323,6 +323,12 @@ vector<alosta> intersection1(segment *a,double a1,segment *b,double b1,bool exte
  * but the secant method will find the intersection. So both methods are needed.
  */
 vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
+/* Returns the intersections of a and b in order along a. In cases of multiple
+ * intersection (tangency or osculation), it may return the wrong number of
+ * intersections, occasionally even the wrong parity of number of intersections
+ * (1 or 3 for tangent circles, where it should return 2). You must check whether
+ * the resulting pieces of a are on opposite sides of b.
+ */
 {
   vector<array<alosta,2> > inters,ret;
   array<alosta,2> int1;

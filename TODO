@@ -23,7 +23,7 @@ Before 0.1.1:
 
 Before 0.2.0:
 •Implement type-0 breaklines. ✓
-•Compute all intersections of two spirals.
+•Compute all intersections of two spirals. ✓
 •Decide whether a point is inside a polyline/arc/spiral. ✓
 •Compute the area of a polyline/arc/spiral. ✓
 •Tell whether a spiralarc is too curly, i.e. there is a line that intersects it three times out of order; or curly, i.e. there is a line perpendicular to it that intersects it somewhere else.

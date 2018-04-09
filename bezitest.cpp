@@ -2062,7 +2062,7 @@ void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps,vector<xy> expected,
   spiralarc aSnip,aStart,aEnd,bSnip,bStart,bEnd;
   BoundRect br;
   vector<array<alosta,2> > inters;
-  int i;
+  int i,j;
   aSnip=snip20(a,aStart,aEnd);
   bSnip=snip20(b,bStart,bEnd);
   br.include(&a);
@@ -2079,9 +2079,27 @@ void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps,vector<xy> expected,
   ps.spline(aEnd.approx3d(0.001/ps.getscale()));
   ps.spline(bEnd.approx3d(0.001/ps.getscale()));
   inters=intersections(&aSnip,&bSnip);
-  cout<<"--------\n";
-  for (i=0;i<inters.size();i++)
+  tassert((nint>>inters.size())&1);
+  if (((nint>>inters.size())&1)==0)
   {
+    cout<<inters.size()<<" intersections found, should be ";
+    for (i=j=0;i<32;i++)
+      if ((nint>>i)&1)
+      {
+	if (j)
+	  cout<<" or ";
+	cout<<i;
+	j++;
+      }
+    cout<<endl;
+  }
+  for (i=j=0;i<inters.size();i++)
+  {
+    for (;j<expected.size() && (dist(expected[j],inters[i][0].station)>toler || dist(expected[j],inters[i][1].station)>toler);j++);
+    if (j==expected.size())
+      cout<<"Unexpected intersection:\n";
+    tassert(j<expected.size());
+    j++;
     cout<<ldecimal(inters[i][0].along)<<' '<<ldecimal(inters[i][1].along)
         <<' '<<inters[i][1].bearing-inters[i][0].bearing<<'\n';
     cout<<ldecimal(inters[i][0].station.getx())<<','<<ldecimal(inters[i][0].station.gety())<<' '
@@ -2143,19 +2161,24 @@ void testcogospiral()
   spiralmicroscope(&g,3.2175384147219286,&h,1.419003418926355,"tangentmicro",0x669);
   expected.clear();
   expected.push_back(xy(0,0));
-  testcogospiral2(o,p,ps,expected,0.0015,1);
+  testcogospiral2(o,p,ps,expected,0.0015,2);
   expected.clear();
   expected.push_back(xy(0,1.193622997));
   expected.push_back(xy(-0.248290956,0.145341333));
   expected.push_back(xy(0,0));
   expected.push_back(xy(0.248290956,0.145341333));
   expected.push_back(xy(0,0.414137715));
-  testcogospiral2(q,r,ps,expected,1e-9,28);
+  testcogospiral2(q,r,ps,expected,1.4e-8,52);
   expected.clear();
   expected.push_back(xy(0,0));
   expected.push_back(xy(0,0));
-  // When tested without snipping, this produces 3 intersections, which is wrong.
-  testcogospiral2(s,t,ps,expected,1e-6,5);
+  /* When tested without snipping, this produces 3 intersections, which is wrong.
+   * Also, the following snip numbers produce two intersections with bearing
+   * difference only 108 units (0.652"), which looks like a single intersection:
+   * 59807 63087
+   * 53498 39253
+   */
+  testcogospiral2(s,t,ps,expected,5e-5,7);
 }
 
 void testmanyarc()
