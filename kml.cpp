@@ -3,7 +3,7 @@
 /* kml.cpp - Keyhole Markup Language                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017 Pierre Abbat.
+/* Copyright 2017-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -156,10 +156,19 @@ void kmlBoundary(ofstream &file,g1boundary g)
   bool inner=g.isInner();
   int i;
   latlong ll;
+  double lastlon=0;
   file<<(inner?"<innerBoundaryIs>":"<outerBoundaryIs>")<<"<LinearRing><coordinates>\n";
   for (i=0;i<=g.size();i++)
   {
     ll=decodedir(g[inner?(g.size()-i):i]).latlon();
+    /* Mitigate Google Earth's Taveuni bug. If a g1boundary crosses the antimeridian
+     * both ways, it will display correctly, but if it surrounds a pole, it won't.
+     */
+    while (ll.lon<lastlon-M_PI)
+      ll.lon+=2*M_PI;
+    while (ll.lon>lastlon+M_PI)
+      ll.lon-=2*M_PI;
+    lastlon=ll.lon;
     file<<ldecimal(radtodeg(ll.lon),1/(EARTHRAD*cos(ll.lat)+1))<<','<<ldecimal(radtodeg(ll.lat),1/EARTHRAD)<<'\n';
   }
   file<<"</coordinates></LinearRing>"<<(inner?"</innerBoundaryIs>":"</outerBoundaryIs>")<<endl;
