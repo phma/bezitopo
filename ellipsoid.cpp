@@ -328,7 +328,8 @@ ellipsoid TestEll9(6598726.098,0,0.1,xyz(0,0,0),"TestEll9");
 #endif
 ellipsoid Clarke(6378206.4,6356583.8,0,xyz(0,0,0),"Clarke");
 ellipsoid GRS80(6378137,0,1/298.257222101,xyz(0,0,0),"GRS80");
-ellipsoid HGRS87(6378137,0,1/298.257222101,xyz(-199.87,74.79,246.62),"HGRS87");
+ellipsoid HGRS87(6378137,0,1/298.257222101,xyz(-199.87,74.79,246.62),
+		 QT_TRANSLATE_NOOP("ellipsoid","HGRS87"));
 ellipsoid WGS84(6378137,0,1/298.257223563,xyz(0,0,0),"WGS84");
 ellipsoid ITRS(6378136.49,0,1/298.25645,xyz(0,0,0),"ITRS");
 ellipsoid Hayford(6378388,0,1/297.,xyz(0,0,0),"Hayford");

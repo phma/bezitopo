@@ -450,6 +450,14 @@ Licencia GPL 3 o posterior</translation>
     </message>
 </context>
 <context>
+    <name>ellipsoid</name>
+    <message>
+        <location filename="ellipsoid.cpp" line="332"/>
+        <source>HGRS87</source>
+        <translation>HGRS87</translation>
+    </message>
+</context>
+<context>
     <name>main</name>
     <message>
         <location filename="tinwindow.cpp" line="1079"/>
