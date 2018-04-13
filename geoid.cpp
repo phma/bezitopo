@@ -331,6 +331,12 @@ cylinterval combine(vector<cylinterval> cyls)
   return cyls[0];
 }
 
+geoquadMatch::geoquadMatch()
+{
+  sameQuad=nullptr;
+  numMatches=flags=0;
+}
+
 bool geoquad::subdivided() const
 /* Unlike qindex, this is architecture-dependent.
  * On 64-bit Intel/AMD architecture, pointer is 8 bytes and int is 4.
@@ -505,7 +511,7 @@ geoquadMatch geoquad::match(double x,double y)
  */
 {
   int xbit,ybit;
-  geoquadMatch ret={nullptr,0,0};
+  geoquadMatch ret;
   if (x==0 && y==0)
   {
     ret.flags=GQ_SUBDIVIDED;

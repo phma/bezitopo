@@ -996,7 +996,7 @@ bool allBoldatni()
 geoquadMatch bolMatch(geoquad &quad)
 {
   int i;
-  geoquadMatch ret={nullptr,0,0},oneMatch;
+  geoquadMatch ret,oneMatch;
   for (i=0;i<geo.size();i++)
     if (geo[i].cmap)
     {

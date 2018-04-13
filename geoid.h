@@ -61,6 +61,7 @@ struct cylinterval
 
 struct geoquadMatch
 {
+  geoquadMatch();
   geoquad *sameQuad;
   int numMatches;
   int flags;
