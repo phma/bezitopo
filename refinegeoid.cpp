@@ -137,7 +137,7 @@ void interroquad(geoquad &quad,double spacing)
   }
 }
 
-void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double spacing,int qsz)
+void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double spacing,int qsz,bool allbol)
 {
   int i,j=0,numnums,ncorr;
   bool biginterior,ovlp;
@@ -240,7 +240,7 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
     {
       quad.subdivide();
       for (i=0;i<4;i++)
-        refine(*quad.sub[i],vscale,tolerance,sublimit,spacing,qsz);
+        refine(*quad.sub[i],vscale,tolerance,sublimit,spacing,qsz,allbol);
     }
   }
   progress(quad);

@@ -736,7 +736,7 @@ int main(int argc, char *argv[])
             cout<<" has data"<<endl;
           else
             cout<<" is empty"<<endl;*/
-          refine(outputgeoid.cmap->faces[i],outputgeoid.cmap->scale,outputgeoid.ghdr->tolerance,outputgeoid.ghdr->sublimit,outputgeoid.ghdr->spacing,qsz);
+          refine(outputgeoid.cmap->faces[i],outputgeoid.cmap->scale,outputgeoid.ghdr->tolerance,outputgeoid.ghdr->sublimit,outputgeoid.ghdr->spacing,qsz,allBoldatni());
         }
         outProgress();
         cout<<endl;

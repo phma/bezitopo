@@ -5631,7 +5631,7 @@ void testgeoidboundary()
   for (i=0;i<6;i++)
   {
     interroquad(outgd.cmap->faces[i],3e5);
-    refine(outgd.cmap->faces[i],outgd.cmap->scale,outgd.ghdr->tolerance,outgd.ghdr->sublimit,outgd.ghdr->spacing,4);
+    refine(outgd.cmap->faces[i],outgd.cmap->scale,outgd.ghdr->tolerance,outgd.ghdr->sublimit,outgd.ghdr->spacing,4,false);
   }
   outProgress();
   cout<<endl;
@@ -5702,7 +5702,7 @@ void testgeoidboundary()
   for (i=0;i<6;i++)
   {
     interroquad(outgd.cmap->faces[i],3e5);
-    refine(outgd.cmap->faces[i],outgd.cmap->scale,outgd.ghdr->tolerance,outgd.ghdr->sublimit,outgd.ghdr->spacing,4);
+    refine(outgd.cmap->faces[i],outgd.cmap->scale,outgd.ghdr->tolerance,outgd.ghdr->sublimit,outgd.ghdr->spacing,4,false);
   }
   outProgress();
   cout<<endl;
@@ -6020,7 +6020,7 @@ void testgeoid()
   for (i=0;i<6;i++)
   {
     interroquad(cube.faces[i],3e5);
-    refine(cube.faces[i],cube.scale,hdr.tolerance,hdr.sublimit,hdr.spacing,qsz);
+    refine(cube.faces[i],cube.scale,hdr.tolerance,hdr.sublimit,hdr.spacing,qsz,false);
   }
   outProgress();
   cout<<endl;
