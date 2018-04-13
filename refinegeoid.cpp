@@ -143,6 +143,7 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
   bool biginterior,ovlp;
   double area,qpoints[16][16],sqerror,lastsqerror,maxerr;
   array<double,6> corr;
+  geoquadMatch gqMatch;
   xyz pt;
   vball v;
   xy qpt;
@@ -153,6 +154,8 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
     cout<<"face "<<quad.face<<" ctr "<<quad.center.getx()<<','<<quad.center.gety()<<endl;
     cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums before"<<endl;
   }
+  if (allbol)
+    gqMatch=bolMatch(quad);
   if (quad.nans.size()+quad.nums.size()==0 || (quad.isfull() && area/(quad.nans.size()+quad.nums.size())>sqr(spacing)))
     interroquad(quad,spacing);
   //biginterior=area>=sqr(sublimit) && quad.isfull()>0;
