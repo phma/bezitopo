@@ -981,6 +981,36 @@ double avgelev(xyz dir)
   return sum/n;
 }
 
+bool allBoldatni()
+{
+  int i;
+  bool ret=true;
+  for (i=0;i<geo.size();i++)
+  {
+    if (geo[i].cmap==nullptr)
+      ret=false;
+  }
+  return ret;
+}
+
+geoquadMatch bolMatch(geoquad &quad)
+{
+  int i;
+  geoquadMatch ret={nullptr,0,0},oneMatch;
+  for (i=0;i<geo.size();i++)
+    if (geo[i].cmap)
+    {
+      oneMatch=geo[i].cmap->match(quad);
+      ret.flags|=oneMatch.flags;
+      ret.numMatches+=oneMatch.numMatches;
+      if (ret.numMatches>1)
+	ret.sameQuad=nullptr;
+      else if (ret.numMatches==oneMatch.numMatches)
+	ret.sameQuad=oneMatch.sameQuad;
+    }
+  return ret;
+}
+
 void smallcircle::setradius(int r)
 {
   radius=r;

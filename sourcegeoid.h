@@ -154,6 +154,8 @@ extern std::vector<geoid> geo;
 extern std::vector<smallcircle> excerptcircles;
 extern cylinterval excerptinterval;
 double avgelev(xyz dir);
+bool allBoldatni();
+geoquadMatch bolMatch(geoquad &quad);
 double qscale(int i,int qsz);
 std::array<double,6> correction(geoquad &quad,double qpoints[][16],int qsz);
 double maxerror(geoquad &quad,double qpoints[][16],int qsz);
