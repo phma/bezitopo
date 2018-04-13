@@ -36,8 +36,13 @@
 #define BOL_EARTH 0
 #define BOL_UNDULATION 0
 #define BOL_VARLENGTH 1
+#define GQ_EMPTY 1
+#define GQ_SUBDIVIDED 2
+#define GQ_MATCH 4
+#define GQ_PART 8
 
 class gboundary;
+class geoquad;
 
 unsigned byteswap(unsigned n);
 
@@ -52,6 +57,13 @@ struct cylinterval
   void setempty();
   void round(int latfineness,int lonfineness);
   latlong corner(int n);
+};
+
+struct geoquadMatch
+{
+  geoquad *sameQuad;
+  int numMatches;
+  int flags;
 };
 
 class geoquad
@@ -81,6 +93,7 @@ public:
   void filldepth(int depth);
   bool in(xy pnt) const; // does not check whether it's on the right face
   bool in(vball pnt) const; // does check
+  geoquadMatch match(double x,double y);
   double undulation(double x,double y);
   xyz centeronearth();
   double length(); // length, width, and apxarea are accurate only for small squares
@@ -115,6 +128,7 @@ public:
   double undulation(int lat,int lon);
   double undulation(latlong ll);
   double undulation(xyz dir);
+  geoquadMatch match(geoquad &quad);
   std::vector<cylinterval> boundrects();
   std::vector<double> areas();
   cylinterval boundrect();

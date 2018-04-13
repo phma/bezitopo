@@ -495,6 +495,56 @@ bool geoquad::in(vball pnt) const
   return face==pnt.face && in(xy(pnt.x,pnt.y));
 }
 
+geoquadMatch geoquad::match(double x,double y)
+/* Given the center of a geoquad, returns:
+ * this and GQ_EMPTY if this is empty and (x,y) is in this;
+ * this and GQ_SUBDIVIDED if this is subdivided and (x,y) is this's center;
+ * this and GQ_MATCH if this is not empty and not subdivided and (x,y) is this's center;
+ * this and GQ_PART if this is not empty and not subdivided and (x,y) is in this, but not the center.
+ * This method is used for excerpting boldatni files.
+ */
+{
+  int xbit,ybit;
+  geoquadMatch ret={nullptr,0,0};
+  if (x==0 && y==0)
+  {
+    ret.flags=GQ_SUBDIVIDED;
+    if (subdivided())
+    {
+      ret.numMatches=1;
+      ret.sameQuad=this;
+    }
+    else if (isnan())
+      ret.flags=GQ_EMPTY;
+    else
+    {
+      ret.flags=GQ_MATCH;
+      ret.numMatches=1;
+    }
+  }
+  else if (fabs(x)<1 && fabs(y)<1)
+    if (subdivided())
+    {
+      xbit=x>=0;
+      ybit=y>=0;
+      x=2*(x-(xbit-0.5));
+      y=2*(y-(ybit-0.5));
+      ret=sub[(ybit<<1)|xbit]->match(x,y);
+    }
+    else if (isnan())
+    {
+      ret.sameQuad=this;
+      ret.flags=GQ_EMPTY;
+    }
+    else
+    {
+      ret.sameQuad=this;
+      ret.flags=GQ_PART;
+      ret.numMatches=1;
+    }
+  return ret;
+}
+
 double geoquad::undulation(double x,double y)
 {
   int xbit,ybit;
@@ -943,6 +993,11 @@ double cubemap::undulation(xyz dir)
     return NAN;
   else
     return faces[v.face-1].undulation(v.x,v.y)*scale;
+}
+
+geoquadMatch cubemap::match(geoquad &quad)
+{
+  return faces[quad.face-1].match(quad.center.getx(),quad.center.gety());
 }
 
 array<unsigned,2> cubemap::hash()
