@@ -514,11 +514,11 @@ geoquadMatch geoquad::match(double x,double y)
   geoquadMatch ret;
   if (x==0 && y==0)
   {
-    ret.flags=GQ_SUBDIVIDED;
+    ret.sameQuad=this;
     if (subdivided())
     {
       ret.numMatches=1;
-      ret.sameQuad=this;
+      ret.flags=GQ_SUBDIVIDED;
     }
     else if (isnan())
       ret.flags=GQ_EMPTY;
