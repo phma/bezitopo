@@ -3,7 +3,7 @@
 /* histogram.cpp - streaming histogram                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016,2017 Pierre Abbat.
+/* Copyright 2016-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -95,6 +95,7 @@ void histogram::clear()
   most=bin[count.size()];
   bin.clear();
   count.clear();
+  intervals.clear();
   bin.push_back(least);
   bin.push_back(most);
   count.push_back(0);
@@ -110,6 +111,7 @@ void histogram::clear(double least,double most)
 {
   bin.clear();
   count.clear();
+  intervals.clear();
   bin.push_back(least);
   bin.push_back(most);
   count.push_back(0);
@@ -121,7 +123,18 @@ void histogram::clearcount()
   int i;
   for (i=0;i<count.size();i++)
     count[i]=0;
+  for (i=0;i<intervals.size();i++)
+    intervals[i].count=0;
   total=0;
+}
+
+void histogram::addinterval(double start,double end)
+{
+  histobar newhb;
+  newhb.start=start;
+  newhb.end=end;
+  newhb.count=0;
+  intervals.push_back(newhb);
 }
 
 void histogram::split(int n)
@@ -154,8 +167,11 @@ int histogram::find(double val)
 
 histogram& histogram::operator<<(double val)
 {
-  int theBin;
+  int i,theBin;
   double newlimit;
+  for (i=0;i<intervals.size();i++)
+    if (val>=intervals[i].start && val<=intervals[i].end)
+      intervals[i].count++;
   theBin=find(val);
   if (theBin>=count.size() && theBin>0) // count.size() is unsigned; comparing -1 to it results in error
   {
@@ -192,6 +208,20 @@ histobar histogram::getbar(unsigned n)
   ret.start=bin[n];
   ret.end=bin[n+1];
   ret.count=count[n];
+  return ret;
+}
+
+histobar histogram::getinterval(unsigned n)
+{
+  histobar ret;
+  if (n<intervals.size())
+    ret=intervals[n];
+  else
+  {
+    ret.start=0;
+    ret.end=0;
+    ret.count=0;
+  }
   return ret;
 }
 

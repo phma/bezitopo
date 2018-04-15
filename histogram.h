@@ -3,7 +3,7 @@
 /* histogram.h - streaming histogram                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016,2017 Pierre Abbat.
+/* Copyright 2016-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -39,6 +39,7 @@ private:
   std::vector<unsigned> count;
   double discrete;
   unsigned total;
+  std::vector<histobar> intervals;
   void split(int n);
 public:
   histogram();
@@ -47,10 +48,12 @@ public:
   void clear(); // leaves least and most intact, makes a single empty bin
   void clear(double least,double most);
   void clearcount(); // leaves bin widths intact, just clears all their counts
+  void addinterval(double start,double end);
   int find(double val);
   histogram& operator<<(double val);
   unsigned nbars();
   histobar getbar(unsigned n);
+  histobar getinterval(unsigned n);
   unsigned gettotal();
   void plot(PostScript &ps,int xtype);
   void dump();
