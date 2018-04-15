@@ -147,6 +147,7 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
   xyz pt;
   vball v;
   xy qpt;
+  memset (qpoints,0,sizeof(qpoints));
   area=quad.apxarea();
   //cout<<"Area: exact "<<quad.area()<<" approx "<<area<<" ratio "<<quad.area()/area<<endl;
   if (quad.scale>2)
