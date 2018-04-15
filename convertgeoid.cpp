@@ -31,6 +31,7 @@
 #include "relprime.h"
 #include "ps.h"
 #include "manysum.h"
+#include "ldecimal.h"
 #include "latlong.h"
 #include "halton.h"
 #include "kml.h"
@@ -291,7 +292,7 @@ void frontformat(string fmt)
   }
 }
 
-histogram errorspread()
+histogram errorspread(double tolerance)
 {
   histogram ret(-1/65536.,1/65536.);
   halton hal;
@@ -299,6 +300,9 @@ histogram errorspread()
   xyz loc;
   int i;
   double origelev,cvtelev;
+  ret.addinterval(-tolerance/1.25,tolerance/1.25);
+  ret.addinterval(-tolerance,tolerance);
+  ret.addinterval(-tolerance*1.25,tolerance*1.25);
   for (i=0;i*ret.nbars()<16777216;i++)
   {
     ll=hal.onearth();
@@ -635,6 +639,8 @@ int main(int argc, char *argv[])
   bool conversionError=false;
   PostScript ps;
   histogram errorHist,areaHist;
+  histobar intervalBar;
+  double percentage;
   vector<cylinterval> excerptintervals,inputbounds;
   array<int,6> undrange;
   array<int,5> undhisto;
@@ -793,7 +799,7 @@ int main(int argc, char *argv[])
     {
       cout<<"avgelev called "<<avgelev_interrocount<<" times from interroquad, "<<avgelev_refinecount<<" times from refine"<<endl;
       cout<<"Computing error histogram"<<endl;
-      errorHist=errorspread();
+      errorHist=errorspread(bolTolerance);
       areaHist=quadsizes();
     }
     if (outfilename.length() && !conversionError)
@@ -805,6 +811,12 @@ int main(int argc, char *argv[])
         ps.prolog();
         if (errorHist.gettotal())
         {
+	  for (i=0;i<3;i++)
+	  {
+	    intervalBar=errorHist.getinterval(i);
+	    percentage=intervalBar.count*1e2/errorHist.gettotal();
+	    cout<<ldecimal(percentage,percentage*(100-percentage)/2e3)<<"% of separations are within "<<intervalBar.end<<endl;
+	  }
           ps.startpage();
           errorHist.plot(ps,HISTO_LINEAR);
           ps.endpage();
