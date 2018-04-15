@@ -669,7 +669,8 @@ int main(int argc, char *argv[])
     excerptintervals.push_back(excerptcircles[i].boundrect());
   for (i=0;i<geo.size();i++)
   {
-    inputbounds.push_back(geo[i].boundrect());
+    if (formatlist[0].cmd!="bol")
+      inputbounds.push_back(geo[i].boundrect());
     if (latFineness==0)
       latFineness=geo[i].getLatFineness();
     if (lonFineness==0)
