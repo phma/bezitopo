@@ -156,30 +156,35 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
   }
   if (allbol)
     gqMatch=bolMatch(quad);
-  if (quad.nans.size()+quad.nums.size()==0 || (quad.isfull() && area/(quad.nans.size()+quad.nums.size())>sqr(spacing)))
-    interroquad(quad,spacing);
-  //biginterior=area>=sqr(sublimit) && quad.isfull()>0;
-  biginterior=false;
-  if (biginterior)
-    cout<<"big interior quad ";
-  for (i=0;i<qsz;i++)
-    for (j=0;j<qsz;j++)
-    {
-      qpt=quad.center+xy(quad.scale,0)*qscale(i,qsz)+xy(0,quad.scale)*qscale(j,qsz);
-      v=vball(quad.face,qpt);
-      pt=decodedir(v);
-      qpoints[i][j]=avgelev(pt)/vscale;
-      if (std::isfinite(qpoints[i][j]))
-        quad.nums.push_back(qpt);
-      else
-        quad.nans.push_back(qpt);
-    }
-  avgelev_refinecount+=sqr(qsz);
   for (ovlp=false,i=0;!ovlp && i<excerptcircles.size();i++)
     if (overlap(excerptcircles[i],quad))
       ovlp=true;
   if (!excerptcircles.size())
     ovlp=true;
+  //if ((gqMatch.flags&(GQ_MATCH)) && (gqMatch.flags&GQ_SUBDIVIDED)==0)
+    //qsz=4; // It's contained entirely in source quads, so it's guaranteed quadratic.
+  if (ovlp && (quad.nans.size()+quad.nums.size()==0 || (quad.isfull() && area/(quad.nans.size()+quad.nums.size())>sqr(spacing))))
+    interroquad(quad,spacing);
+  //biginterior=area>=sqr(sublimit) && quad.isfull()>0;
+  biginterior=false;
+  if (biginterior)
+    cout<<"big interior quad ";
+  if (ovlp)
+  {
+    for (i=0;i<qsz;i++)
+      for (j=0;j<qsz;j++)
+      {
+	qpt=quad.center+xy(quad.scale,0)*qscale(i,qsz)+xy(0,quad.scale)*qscale(j,qsz);
+	v=vball(quad.face,qpt);
+	pt=decodedir(v);
+	qpoints[i][j]=avgelev(pt)/vscale;
+	if (std::isfinite(qpoints[i][j]))
+	  quad.nums.push_back(qpt);
+	else
+	  quad.nans.push_back(qpt);
+      }
+    avgelev_refinecount+=sqr(qsz);
+  }
   if (quad.scale>2)
     cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums after"<<endl;
   j=0;
