@@ -162,16 +162,14 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
       ovlp=true;
   if (!excerptcircles.size())
     ovlp=true;
-  //if ((gqMatch.flags&(GQ_MATCH)) && (gqMatch.flags&GQ_SUBDIVIDED)==0)
-    //qsz=4; // It's contained entirely in source quads, so it's guaranteed quadratic.
   if (ovlp && (quad.nans.size()+quad.nums.size()==0 || (quad.isfull() && area/(quad.nans.size()+quad.nums.size())>sqr(spacing))))
     interroquad(quad,spacing);
   //biginterior=area>=sqr(sublimit) && quad.isfull()>0;
   biginterior=false;
   if (biginterior)
     cout<<"big interior quad ";
-  if (ovlp)
-  {
+  if (ovlp && !(gqMatch.flags==GQ_MATCH && gqMatch.numMatches && gqMatch.sameQuad))
+  { // If this matches an input geoquad, no need to compute qpoints, just copy the six numbers.
     for (i=0;i<qsz;i++)
       for (j=0;j<qsz;j++)
       {
@@ -190,68 +188,72 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
     cout<<quad.nans.size()<<" nans "<<quad.nums.size()<<" nums after"<<endl;
   j=0;
   if (ovlp)
-  {
-    for (numnums=i=0;i<qsz;i++)
-      for (j=0;j<qsz;j++)
-        if (std::isfinite(qpoints[i][j]))
-          numnums++;
-    j=0;
-    if (numnums*2>sqr(qsz))
+    if (gqMatch.flags==GQ_MATCH && gqMatch.numMatches && gqMatch.sameQuad)
+      for (i=0;i<6;i++)
+	quad.und[i]=gqMatch.sameQuad->und[i];
+    else
     {
-      if (quad.isnan())
-        quad.und[0]=0;
-      corr=correction(quad,qpoints,qsz);
-      for (sqerror=i=0;i<6;i++)
-        sqerror+=sqr(corr[i]);
-      //cout<<"numnums "<<numnums<<" sqerror "<<sqerror<<" before ";
-      /* The program can get into an infinite loop in which one of the corrections
-      * is 0.5 and another is -0.5, then on the next iteration one is -0.5 and
-      * another is 0.5, and so on forever. This happens with the USGS data
-      * at point (3,-0.58112335205078125,-0.69258880615234375), which is near
-      * the overlap of the Alaska and Lower 48 files, but not at the edge of
-      * either. It takes two iterations to arrive at the infinite loop. But if
-      * only half of the points have known undulation, it can take as many as
-      * 1498 iterations to converge, so stop the loop at 1536.
-      */
-      for (j=0,ncorr=6;ncorr && j<1536;j++)
+      for (numnums=i=0;i<qsz;i++)
+	for (j=0;j<qsz;j++)
+	  if (std::isfinite(qpoints[i][j]))
+	    numnums++;
+      j=0;
+      if (numnums*2>sqr(qsz))
       {
-        lastsqerror=sqerror;
-        for (i=ncorr=0;i<6;i++)
-        {
-          quad.und[i]+=rint(corr[i]);
-          ncorr+=rint(corr[i])!=0;
-        }
-        corr=correction(quad,qpoints,qsz);
-        for (sqerror=i=0;i<6;i++)
-          sqerror+=sqr(corr[i]);
+	if (quad.isnan())
+	  quad.und[0]=0;
+	corr=correction(quad,qpoints,qsz);
+	for (sqerror=i=0;i<6;i++)
+	  sqerror+=sqr(corr[i]);
+	//cout<<"numnums "<<numnums<<" sqerror "<<sqerror<<" before ";
+	/* The program can get into an infinite loop in which one of the corrections
+	* is 0.5 and another is -0.5, then on the next iteration one is -0.5 and
+	* another is 0.5, and so on forever. This happens with the USGS data
+	* at point (3,-0.58112335205078125,-0.69258880615234375), which is near
+	* the overlap of the Alaska and Lower 48 files, but not at the edge of
+	* either. It takes two iterations to arrive at the infinite loop. But if
+	* only half of the points have known undulation, it can take as many as
+	* 1498 iterations to converge, so stop the loop at 1536.
+	*/
+	for (j=0,ncorr=6;ncorr && j<1536;j++)
+	{
+	  lastsqerror=sqerror;
+	  for (i=ncorr=0;i<6;i++)
+	  {
+	    quad.und[i]+=rint(corr[i]);
+	    ncorr+=rint(corr[i])!=0;
+	  }
+	  corr=correction(quad,qpoints,qsz);
+	  for (sqerror=i=0;i<6;i++)
+	    sqerror+=sqr(corr[i]);
+	}
+      }
+      //else
+	//cout<<"numnums "<<numnums<<endl;
+      maxerr=maxerror(quad,qpoints,qsz);
+      if (biginterior)
+      {
+	switch (quad.isfull())
+	{
+	  case -1:
+	    cout<<"empty";
+	    break;
+	  case 0:
+	    cout<<"partly full";
+	    break;
+	  case 1:
+	    cout<<"full";
+	}
+	cout<<" maxerror "<<maxerr*vscale<<endl;
+      }
+      if (area>=sqr(sublimit) && ((quad.isfull()==0 && 2*numnums<=sqr(qsz)) ||
+	  maxerr>tolerance/vscale))
+      {
+	quad.subdivide();
+	for (i=0;i<4;i++)
+	  refine(*quad.sub[i],vscale,tolerance,sublimit,spacing,qsz,allbol);
       }
     }
-    //else
-      //cout<<"numnums "<<numnums<<endl;
-    maxerr=maxerror(quad,qpoints,qsz);
-    if (biginterior)
-    {
-      switch (quad.isfull())
-      {
-        case -1:
-          cout<<"empty";
-          break;
-        case 0:
-          cout<<"partly full";
-          break;
-        case 1:
-          cout<<"full";
-      }
-      cout<<" maxerror "<<maxerr*vscale<<endl;
-    }
-    if (area>=sqr(sublimit) && ((quad.isfull()==0 && 2*numnums<=sqr(qsz)) ||
-        maxerr>tolerance/vscale))
-    {
-      quad.subdivide();
-      for (i=0;i<4;i++)
-        refine(*quad.sub[i],vscale,tolerance,sublimit,spacing,qsz,allbol);
-    }
-  }
   progress(quad);
   vector<xy>().swap(quad.nums); // deallocate vectors
   vector<xy>().swap(quad.nans);
