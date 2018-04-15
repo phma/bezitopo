@@ -168,7 +168,8 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
   biginterior=false;
   if (biginterior)
     cout<<"big interior quad ";
-  if (ovlp && !(gqMatch.flags==GQ_MATCH && gqMatch.numMatches && gqMatch.sameQuad))
+  if (ovlp && !(gqMatch.flags==GQ_MATCH && gqMatch.numMatches && gqMatch.sameQuad)
+      && !(area>=sqr(sublimit) && gqMatch.flags==GQ_SUBDIVIDED))
   { // If this matches an input geoquad, no need to compute qpoints, just copy the six numbers.
     for (i=0;i<qsz;i++)
       for (j=0;j<qsz;j++)
@@ -247,7 +248,7 @@ void refine(geoquad &quad,double vscale,double tolerance,double sublimit,double 
 	cout<<" maxerror "<<maxerr*vscale<<endl;
       }
       if (area>=sqr(sublimit) && ((quad.isfull()==0 && 2*numnums<=sqr(qsz)) ||
-	  maxerr>tolerance/vscale))
+	  maxerr>tolerance/vscale || gqMatch.flags==GQ_SUBDIVIDED))
       {
 	quad.subdivide();
 	for (i=0;i<4;i++)
