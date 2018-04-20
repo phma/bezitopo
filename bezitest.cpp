@@ -5000,6 +5000,9 @@ void testabsorient()
   double ssd;
   vector<xy> a,b;
   xy big(1000,0),little(1,0),org(0,0);
+  doc.makepointlist(1);
+  for (i=0;i<2;i++)
+    doc.pl[i].clear();
   for (i=0;i<1000;i++)
   {
     big.roscat(org,AT0512,1,org);
@@ -5010,6 +5013,14 @@ void testabsorient()
   ssd=sumsqdist(a,b);
   cout<<"sumsqdist="<<ldecimal(ssd)<<endl;
   tassert(fabs(ssd-1000)<1e-9);
+  doc.pl[0].addpoint(1,point(0,0,0,"eip"));
+  doc.pl[0].addpoint(2,point(41,0,0,"eip"));
+  doc.pl[0].addpoint(3,point(41,99,0,"eip"));
+  doc.pl[0].addpoint(4,point(0,99,0,"eip"));
+  doc.pl[1].addpoint(1,point(0,0,0,"eip"));
+  doc.pl[1].addpoint(3,point(29,29,0,"eip"));
+  doc.pl[1].addpoint(4,point(-41,99,0,"eip"));
+  doc.pl[1].addpoint(2,point(-70,70,0,"eip"));
 }
 
 void test1bicubic(xy sw)
