@@ -55,7 +55,9 @@
 // any error reading or writing a file
 #define stationoutofrange 16
 // along is out of range in a station function
-#define N_EXCEPTIONS 17
+#define badabsorient 17
+// insufficient points to compute absolute orientation
+#define N_EXCEPTIONS 18
 
 class BeziExcept: public QException
 {
@@ -91,4 +93,4 @@ extern BeziExcept singularMatrix,unsetGeoid;
 extern BeziExcept unsetSource,badUnits,badNumber;
 extern BeziExcept badBreaklineEnd,breaklinesCross;
 extern BeziExcept badBreaklineFormat,fileError;
-extern BeziExcept stationOutOfRange;
+extern BeziExcept stationOutOfRange,badAbsOrient;

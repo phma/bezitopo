@@ -88,6 +88,11 @@
         <source>stationoutofrange</source>
         <translation>Station is out of range.</translation>
     </message>
+    <message>
+        <location filename="except.cpp" line="46"/>
+        <source>badabsorient</source>
+        <translation>Insufficient or indeterminate data for absolute orientation</translation>
+    </message>
 </context>
 <context>
     <name>ContourIntervalDialog</name>

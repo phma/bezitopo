@@ -42,7 +42,8 @@ char exceptionNames[N_EXCEPTIONS][24]=
   QT_TRANSLATE_NOOP("BeziExcept","breaklinescross"),
   QT_TRANSLATE_NOOP("BeziExcept","badbreaklineformat"),
   QT_TRANSLATE_NOOP("BeziExcept","fileerror"),
-  QT_TRANSLATE_NOOP("BeziExcept","stationoutofrange")
+  QT_TRANSLATE_NOOP("BeziExcept","stationoutofrange"),
+  QT_TRANSLATE_NOOP("BeziExcept","badabsorient")
 };
 vector<QString> translatedExceptions;
 
@@ -83,4 +84,4 @@ BeziExcept singularMatrix(singularmatrix),unsetGeoid(unsetgeoid);
 BeziExcept unsetSource(unsetsource),badUnits(badunits),badNumber(badnumber);
 BeziExcept badBreaklineEnd(badbreaklineend),breaklinesCross(breaklinescross);
 BeziExcept badBreaklineFormat(badbreaklineformat),fileError(fileerror);
-BeziExcept stationOutOfRange(stationoutofrange);
+BeziExcept stationOutOfRange(stationoutofrange),badAbsOrient(badabsorient);
