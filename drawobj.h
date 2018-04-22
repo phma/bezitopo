@@ -28,6 +28,7 @@
 #include <cmath>
 #include "xyz.h"
 #include "bezier3d.h"
+#include "roscat.h"
 
 std::string xmlEscape(std::string str);
 unsigned memHash(void *mem,unsigned len,unsigned previous=0);

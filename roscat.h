@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* absorient.h - 2D absolute orientation              */
+/* roscat.h - rotate, scale, translate                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2018 Pierre Abbat.
+/* Copyright 2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -19,7 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "pointlist.h"
-#include "roscat.h"
+#ifndef ROSCAT_H
+#define ROSCAT_H
+#include "xyz.h"
 
-double sumsqdist(std::vector<xy> a, std::vector<xy> b);
+struct RoscatStruct
+/* This does not roscat anything. It is only a struct, so that absorient
+ * can return it. To roscat, see the roscat methods of drawobj and other classes.
+ */
+{
+  xy tfrom;
+  int ro;
+  double sca;
+  xy tto;
+};
+#endif
