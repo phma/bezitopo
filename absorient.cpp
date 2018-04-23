@@ -33,9 +33,9 @@ using namespace std;
 double sumsqdist(vector<xy> a,vector<xy> b)
 {
   int i;
-  manysum acc;
+  vector<double> dists;
   assert(a.size()==b.size());
   for (i=0;i<a.size();i++)
-    acc+=sqr(dist(a[i],b[i]));
-  return acc.total();
+    dists.push_back(sqr(dist(a[i],b[i])));
+  return pairwisesum(dists);
 }
