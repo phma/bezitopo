@@ -5000,6 +5000,8 @@ void testabsorient()
   double ssd;
   vector<xy> a,b;
   xy big(1000,0),little(1,0),org(0,0);
+  RoscatStruct ros;
+  vector<int> ainx,binx;
   doc.makepointlist(1);
   for (i=0;i<2;i++)
     doc.pl[i].clear();
@@ -5021,6 +5023,16 @@ void testabsorient()
   doc.pl[1].addpoint(3,point(29,29,0,"eip"));
   doc.pl[1].addpoint(4,point(-41,99,0,"eip"));
   doc.pl[1].addpoint(2,point(-70,70,0,"eip"));
+  ainx.push_back(1);
+  ainx.push_back(2);
+  ainx.push_back(3);
+  ainx.push_back(4);
+  binx.push_back(1);
+  binx.push_back(3);
+  binx.push_back(4);
+  binx.push_back(2);
+  ros=absorient(doc.pl[0],ainx,doc.pl[1],binx);
+  cout<<"From "<<ros.tfrom.getx()<<','<<ros.tfrom.gety()<<" to "<<ros.tto.getx()<<','<<ros.tto.gety()<<endl;
 }
 
 void test1bicubic(xy sw)

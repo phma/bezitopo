@@ -39,3 +39,45 @@ double sumsqdist(vector<xy> a,vector<xy> b)
     dists.push_back(sqr(dist(a[i],b[i])));
   return pairwisesum(dists);
 }
+
+xy pointCentroid(vector<xy> a)
+{
+  int i;
+  vector<double> x,y;
+  for (i=0;i<a.size();i++)
+  {
+    x.push_back(a[i].getx());
+    y.push_back(a[i].gety());
+  }
+  return xy(pairwisesum(x)/i,pairwisesum(y)/i);
+}
+
+RoscatStruct absorient(vector<xy> a,vector<xy> b)
+// Returns the way to rotate, scale, and translate a to best match b.
+{
+  int i;
+  vector<xy> aslide,bslide,arot;
+  RoscatStruct ret;
+  if (a.size()<2 || b.size()<2)
+    throw(badAbsOrient);
+  ret.tfrom=pointCentroid(a);
+  ret.tto=pointCentroid(b);
+  for (i=0;i<a.size();i++)
+    aslide.push_back(a[i]-ret.tfrom);
+  for (i=0;i<b.size();i++)
+    bslide.push_back(b[i]-ret.tto);
+  ret.ro=0;
+  ret.sca=1;
+  return ret;
+}
+
+RoscatStruct absorient(pointlist &a,vector<int> ai,pointlist &b,vector<int> bi)
+{
+  vector<xy> axy,bxy;
+  int i;
+  for (i=0;i<ai.size();i++)
+    axy.push_back(a.points[ai[i]]);
+  for (i=0;i<bi.size();i++)
+    bxy.push_back(b.points[bi[i]]);
+  return absorient(axy,bxy);
+}

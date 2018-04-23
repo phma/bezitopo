@@ -23,3 +23,5 @@
 #include "roscat.h"
 
 double sumsqdist(std::vector<xy> a, std::vector<xy> b);
+RoscatStruct absorient(std::vector<xy> a,std::vector<xy> b);
+RoscatStruct absorient(pointlist &a,std::vector<int> ai,pointlist &b,std::vector<int> bi);
