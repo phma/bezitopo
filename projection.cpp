@@ -591,8 +591,7 @@ double transMercScale(xyz pnt)
 
 double transMercScale(xy pnt,double r)
 {
-  double xp=exp(pnt.getx()/r);
-  return (xp+1/xp)/2;
+  return cosh(pnt.getx()/r);
 }
 
 xyz invTransMerc(xy pnt,double r)
