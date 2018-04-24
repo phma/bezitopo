@@ -69,7 +69,7 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp sourcegeoid.cpp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
 add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp boundrect.cpp
-               breakline.cpp cidialog.cpp circle.cpp cogo.cpp color.cpp
+               breakline.cpp choosemap.cpp cidialog.cpp circle.cpp cogo.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp ellipsoid.cpp
                except.cpp geoid.cpp geoidboundary.cpp halton.cpp kml.cpp
                latlong.cpp ldecimal.cpp linetype.cpp
