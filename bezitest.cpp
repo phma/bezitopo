@@ -5033,7 +5033,8 @@ void testabsorient()
   binx.push_back(4);
   binx.push_back(2);
   ros=absorient(doc.pl[0],ainx,doc.pl[1],binx);
-  cout<<"From "<<ros.tfrom.getx()<<','<<ros.tfrom.gety()<<" to "<<ros.tto.getx()<<','<<ros.tto.gety()<<endl;
+  cout<<"From "<<ros.tfrom.getx()<<','<<ros.tfrom.gety()<<" rotate "<<ros.ro;
+  cout<<" to "<<ros.tto.getx()<<','<<ros.tto.gety()<<endl;
 }
 
 void test1bicubic(xy sw)

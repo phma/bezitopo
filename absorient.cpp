@@ -28,6 +28,7 @@
 #include "absorient.h"
 #include "except.h"
 #include "manysum.h"
+#include "minquad.h"
 using namespace std;
 
 double sumsqdist(vector<xy> a,vector<xy> b)
@@ -52,11 +53,27 @@ xy pointCentroid(vector<xy> a)
   return xy(pairwisesum(x)/i,pairwisesum(y)/i);
 }
 
+void sort4(int *ang,double *sqdist)
+{
+  int i,j;
+  for (i=1;i<4;i++)
+    for (j=i-1;j>=0;j--)
+      if (sqdist[j]>sqdist[j+1])
+      {
+	swap(sqdist[j],sqdist[j+1]);
+	swap(ang[j],ang[j+1]);
+      }
+  if (sqdist[2]==sqdist[3] && ((ang[1]-ang[0])^(ang[0]-ang[2]))<0)
+    swap(ang[2],ang[3]);
+}
+
 RoscatStruct absorient(vector<xy> a,vector<xy> b)
 // Returns the way to rotate, scale, and translate a to best match b.
 {
-  int i;
+  int i,j;
   vector<xy> aslide,bslide,arot;
+  int ang[4];
+  double sqdist[4],newang;
   RoscatStruct ret;
   if (a.size()<2 || b.size()<2)
     throw(badAbsOrient);
@@ -66,7 +83,71 @@ RoscatStruct absorient(vector<xy> a,vector<xy> b)
     aslide.push_back(a[i]-ret.tfrom);
   for (i=0;i<b.size();i++)
     bslide.push_back(b[i]-ret.tto);
-  ret.ro=0;
+  arot=aslide;
+  for (i=0;i<4;i++)
+  {
+    ang[i]=(i-2)*DEG90;
+    for (j=0;j<aslide.size();j++)
+      arot[j]=turn(aslide[j],ang[i]);
+    sqdist[i]=sumsqdist(arot,bslide);
+  }
+  sort4(ang,sqdist);
+  if ((ang[0]-ang[3])&DEG90)
+  {
+    swap(ang[2],ang[3]);
+    swap(sqdist[2],sqdist[3]);
+  }
+  for (i=1;i<4;i++)
+    ang[i]=ang[0]+foldangle(ang[i]-ang[0]);
+  while (abs(ang[1]-ang[2])>2)
+  {
+    newang=minquad(ang[1],sqdist[1],ang[0],sqdist[0],ang[2],sqdist[2]);
+    if (!isfinite(newang))
+      throw badAbsOrient;
+    ang[3]=rint(newang);
+    if (ang[3]==ang[0])
+      if (ang[1]+ang[2]-2*ang[0])
+	if (abs(ang[2]-ang[0])>abs(ang[1]-ang[0]))
+	  ang[3]=ang[0]+(ang[2]-ang[0])/2;
+	else
+	  ang[3]=ang[0]+(ang[1]-ang[0])/2;
+      else
+	if (ang[1]-ang[0]<0)
+	  ang[3]--;
+	else
+	  ang[3]++;
+    if (ang[3]==ang[1])
+      if (ang[0]-ang[1]<0)
+      {
+	ang[3]--;
+	if (ang[3]==ang[0])
+	  ang[3]--;
+      }
+      else
+      {
+	ang[3]++;
+	if (ang[3]==ang[0])
+	  ang[3]++;
+      }
+    if (ang[3]==ang[2])
+      if (ang[0]-ang[2]<0)
+      {
+	ang[3]--;
+	if (ang[3]==ang[0])
+	  ang[3]--;
+      }
+      else
+      {
+	ang[3]++;
+	if (ang[3]==ang[0])
+	  ang[3]++;
+      }
+    for (j=0;j<aslide.size();j++)
+      arot[j]=turn(aslide[j],ang[3]);
+    sqdist[3]=sumsqdist(arot,bslide);
+    sort4(ang,sqdist);
+  }
+  ret.ro=ang[0];
   ret.sca=1;
   return ret;
 }
