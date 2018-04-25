@@ -46,6 +46,7 @@
 #include "vcurve.h"
 #include "circle.h"
 #include "segment.h"
+#include "minquad.h"
 #include "arc.h"
 #include "spiral.h"
 #include "except.h"
