@@ -252,13 +252,17 @@ double median(double a,double b,double c)
   return b;
 }
 
-void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev)
+void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
 {
-  const double yHalfHeight=1e7,xHalfHeight=2e7,sq=1e6;
+  double yHalfHeight=1e7,xHalfHeight,sq=1e6;
   int x,y,maxx,maxy;
   vector<vector<xy> > nodes;
   xy node,node1;
   BoundRect br;
+  if (totalTerms<8)
+    xHalfHeight=2e7;
+  else
+    xHalfHeight=16e7/totalTerms;
   maxy=rint(yHalfHeight/sq);
   maxx=rint(xHalfHeight/sq);
   nodes.resize(maxy+1);
@@ -475,8 +479,8 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc)
     reverseTm.push_back(reverseTransform[i]);
   }
   ell.setTmCoefficients(forwardTm,reverseTm);
-  drawKrugerize(ell,ps,false);
-  drawKrugerize(ell,ps,true);
+  drawKrugerize(ell,ps,false,forwardNoiseFloor+reverseNoiseFloor);
+  drawKrugerize(ell,ps,true,forwardNoiseFloor+reverseNoiseFloor);
 }
 
 void calibrate()
