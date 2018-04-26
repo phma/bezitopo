@@ -36,6 +36,7 @@ public:
   void clear();
   void setOrientation(int ori);
   int getOrientation();
+  void include(xy obj);
   void include(drawobj *obj); // Expands the rectangle to include the object.
 #ifdef POINTLIST
   void include(pointlist *obj);

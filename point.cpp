@@ -81,6 +81,16 @@ bool xy::isnan() const
   return std::isnan(x) || std::isnan(y);
 }
 
+double xy::dirbound(int angle)
+/* angle=0x00000000: returns easting.
+ * angle=0x20000000: returns northing.
+ * angle=0x40000000: returns negative of easting.
+ */
+{
+  double s=sin(angle),c=cos(angle);
+  return x*c+y*s;
+}
+
 void xy::_roscat(xy tfrom,int ro,double sca,xy cis,xy tto)
 {
   double tx,ty;

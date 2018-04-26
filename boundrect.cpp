@@ -54,6 +54,18 @@ int BoundRect::getOrientation()
   return orientation;
 }
 
+void BoundRect::include(xy obj)
+{
+  int i;
+  double newbound;
+  for (i=0;i<4;i++)
+  {
+    newbound=obj.dirbound(i*DEG90-orientation);
+    if (newbound<bounds[i])
+      bounds[i]=newbound;
+  }
+}
+
 void BoundRect::include(drawobj *obj)
 {
   int i;
