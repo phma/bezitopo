@@ -289,6 +289,7 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc)
   vector<double> forwardTransform7,reverseTransform7;
   vector<double> forwardTransformK,reverseTransformK;
   vector<double> forwardTransform,reverseTransform,lastForwardTransform,lastReverseTransform;
+  vector<double> forwardTm,reverseTm;
   array<double,3> forwardDifference,reverseDifference;
   ps.startpage();
   ps.setscale(0,0,EARTHRAD,EARTHRAD,0);
@@ -398,12 +399,21 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc)
   writeustring(merc,ell.getName());
   writegeint(merc,forwardNoiseFloor+1);
   writebedouble(merc,forwardLengths3.back()[1]);
+  forwardTm.push_back(forwardLengths3.back()[1]);
   for (i=0;i<forwardNoiseFloor;i++)
+  {
     writebedouble(merc,forwardTransform[i]);
+    forwardTm.push_back(forwardTransform[i]);
+  }
   writegeint(merc,reverseNoiseFloor+1);
   writebedouble(merc,reverseLengths3.back()[1]);
+  reverseTm.push_back(reverseLengths3.back()[1]);
   for (i=0;i<reverseNoiseFloor;i++)
+  {
     writebedouble(merc,reverseTransform[i]);
+    reverseTm.push_back(reverseTransform[i]);
+  }
+  ell.setTmCoefficients(forwardTm,reverseTm);
 }
 
 void calibrate()
