@@ -252,6 +252,67 @@ double median(double a,double b,double c)
   return b;
 }
 
+void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev)
+{
+  const double yHalfHeight=1e7,xHalfHeight=2e7,sq=1e6;
+  int x,y,maxx,maxy;
+  vector<vector<xy> > nodes;
+  xy node,node1;
+  BoundRect br;
+  maxy=rint(yHalfHeight/sq);
+  maxx=rint(xHalfHeight/sq);
+  nodes.resize(maxy+1);
+  for (y=0;y<=maxy;y++)
+    for (x=0;x<=maxx;x++)
+      if (rev)
+	nodes[y].push_back(ell.dekrugerize(xy(x*sq,y*sq)));
+      else
+	nodes[y].push_back(ell.krugerize(xy(x*sq,y*sq)));
+  for (y=0;y<=maxy;y++)
+    for (x=0;x<=maxx;x++)
+    {
+      node=nodes[y][x];
+      br.include(node);
+      node=-node;
+      br.include(node);
+    }
+  ps.startpage();
+  ps.setscale(br);
+  for (y=-maxy;y<=maxy;y++)
+    for (x=-maxx;x<maxx;x++)
+    {
+      node=nodes[abs(y)][abs(x)];
+      node1=nodes[abs(y)][abs(x+1)];
+      if (y<0)
+      {
+	node=xy(node.getx(),-node.gety());
+	node1=xy(node1.getx(),-node1.gety());
+      }
+      if (x<0)
+	node=xy(-node.getx(),node.gety());
+      if (x+1<0)
+	node1=xy(-node1.getx(),node1.gety());
+      ps.line2p(node,node1);
+    }
+  for (x=-maxx;x<=maxx;x++)
+    for (y=-maxy;y<maxy;y++)
+    {
+      node=nodes[abs(y)][abs(x)];
+      node1=nodes[abs(y+1)][abs(x)];
+      if (x<0)
+      {
+	node=xy(-node.getx(),node.gety());
+	node1=xy(-node1.getx(),node1.gety());
+      }
+      if (y<0)
+	node=xy(node.getx(),-node.gety());
+      if (y+1<0)
+	node1=xy(node1.getx(),-node1.gety());
+      ps.line2p(node,node1);
+    }
+  ps.endpage();
+}
+
 void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc)
 /* Computes approximations to the meridian of the ellipsoid. Projects
  * equidistant points along the meridian of the ellipsoid to the sphere,
@@ -414,6 +475,8 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc)
     reverseTm.push_back(reverseTransform[i]);
   }
   ell.setTmCoefficients(forwardTm,reverseTm);
+  drawKrugerize(ell,ps,false);
+  drawKrugerize(ell,ps,true);
 }
 
 void calibrate()
