@@ -2182,6 +2182,51 @@ void testcogospiral()
   testcogospiral2(s,t,ps,expected,5e-5,7);
 }
 
+vector<segment> manyarcapx1(segment cubic,int narcs)
+/* Approximates cubic with narcs quadratics, where the first and last
+ * are half as long as the rest.
+ */
+{
+  int i;
+  double abscissa,lastabscissa,ordinate,lastordinate;
+  double startslope,endslope;
+  double x,length,accel;
+  vector<segment> ret;
+  /* x=0 always gives y=135
+  * narcs x
+  *   2  2/3
+  *   3  8/9
+  *   4 18/19
+  *   5 32/33
+  *   6 50/51
+  */
+  x=2*sqr(narcs-1)/(2*sqr(narcs-1)+1.);
+  for (i=0;i<narcs;i++)
+  {
+    if (i)
+      startslope=ret[i-1].endslope();
+    else
+      startslope=cubic.startslope();
+    accel=cubic.accel((2*i/(narcs-1.)-1)*x*30+30);
+    abscissa=((2*i+1)/(narcs-1.)-1)*30;
+    lastabscissa=((2*i-1)/(narcs-1.)-1)*30;
+    if (lastabscissa<-30)
+      lastabscissa=-30;
+    if (abscissa>30)
+      abscissa=30;
+    endslope=startslope+(abscissa-lastabscissa)*accel;
+    if (lastabscissa==-30)
+      lastordinate=-27;
+    else
+      lastordinate=ret.back().getend().elev();
+    ordinate=lastordinate+(abscissa-lastabscissa)*(startslope+endslope)/2;
+    ret.push_back(segment(xyz(lastabscissa,0,lastordinate),xyz(abscissa,0,ordinate)));
+    ret[i].setslope(START,startslope);
+    ret[i].setslope(END,endslope);
+  }
+  return ret;
+}
+
 void testmanyarc()
 /* Preliminary research for approximating a spiralarc by a sequence of arcs.
  * In the approximation where the difference in curvature times the square
@@ -2194,11 +2239,9 @@ void testmanyarc()
   double abscissa,lastabscissa,ordinate,lastordinate;
   double startslope,endslope;
   double x,length,accel;
-  bool brenting=false;
   int narcs,i,j;
   PostScript ps;
   bezier3d spl;
-  brent br;
   Quaternion flip=versor(xyz(1,0,0),-DEG90);
   ps.open("manyarc.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
@@ -2208,60 +2251,22 @@ void testmanyarc()
   {
     ps.startpage();
     ps.setscale(-30,-27,30,27);
-    if (brenting)
-      x=br.init(0,108,1,-2.16);
-    else
-      x=2*sqr(narcs-1)/(2*sqr(narcs-1)+1.);
-    /* x=0 always gives y=135
-    * narcs x
-    *   2  2/3
-    *   3  8/9
-    *   4 18/19
-    *   5 32/33
-    *   6 50/51
-    */
-    do
-    {
-      spl=cubic.approx3d(1);
-      spl.rotate(flip);
-      approx.clear();
-      ps.setcolor(0,0,1);
-      ps.spline(spl);
-      spl=bezier3d();
-      for (i=0;i<narcs;i++)
-      {
-        if (i)
-          startslope=approx[i-1].endslope();
-        else
-          startslope=cubic.startslope();
-        accel=cubic.accel((2*i/(narcs-1.)-1)*x*30+30);
-        cout<<"accel at "<<(2*i/(narcs-1.)-1)*x*30<<" is "<<accel<<endl;
-        abscissa=((2*i+1)/(narcs-1.)-1)*30;
-        lastabscissa=((2*i-1)/(narcs-1.)-1)*30;
-        if (lastabscissa<-30)
-          lastabscissa=-30;
-        if (abscissa>30)
-          abscissa=30;
-        cout<<lastabscissa<<" - "<<abscissa<<endl;
-        endslope=startslope+(abscissa-lastabscissa)*accel;
-        if (lastabscissa==-30)
-          lastordinate=-27;
-        else
-          lastordinate=approx.back().getend().elev();
-        ordinate=lastordinate+(abscissa-lastabscissa)*(startslope+endslope)/2;
-        approx.push_back(segment(xyz(lastabscissa,0,lastordinate),xyz(abscissa,0,ordinate)));
-        approx[i].setslope(START,startslope);
-        approx[i].setslope(END,endslope);
-        spl+=approx[i].approx3d(1);
-      }
-      spl.rotate(flip);
-      ps.setcolor(1,0,0);
-      ps.spline(spl);
-      cout<<"endslope is "<<endslope<<", should be "<<cubic.endslope()<<' '<<ldecimal(endslope-cubic.endslope())<<endl;
-      cout<<"ordinate is "<<ordinate<<", should be "<<27<<endl;
-      if (brenting)
-        x=br.step(ordinate-27);
-    } while (brenting && !br.finished());
+    spl=cubic.approx3d(1);
+    spl.rotate(flip);
+    approx.clear();
+    ps.setcolor(0,0,1);
+    ps.spline(spl);
+    spl=bezier3d();
+    approx=manyarcapx1(cubic,narcs);
+    for (i=0;i<narcs;i++)
+      spl+=approx[i].approx3d(1);
+    spl.rotate(flip);
+    ps.setcolor(1,0,0);
+    ps.spline(spl);
+    endslope=approx.back().endslope();
+    ordinate=approx.back().getend().elev();
+    cout<<"endslope is "<<endslope<<", should be "<<cubic.endslope()<<' '<<ldecimal(endslope-cubic.endslope())<<endl;
+    cout<<"ordinate is "<<ordinate<<", should be "<<27<<endl;
     cout<<"x="<<ldecimal(x)<<endl;
     ps.endpage();
   }
