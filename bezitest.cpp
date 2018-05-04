@@ -82,6 +82,7 @@
 #include "quaternion.h"
 #include "kml.h"
 #include "zoom.h"
+#include "manyarc.h"
 
 #define psoutput false
 // affects only maketin
@@ -2227,52 +2228,9 @@ vector<segment> manyarcapx1(segment cubic,int narcs)
   return ret;
 }
 
-double manyArcTrimFunc(double p,double n)
-{
-  manysum ret;
-  ret-=4*p*p*p/3;
-  ret+=n*p*p;
-  ret+=p*p;
-  ret-=n*p;
-  ret+=n/6;
-  return ret.total();
-}
-
-double manyArcTrimDeriv(double p,double n)
-{
-  manysum ret;
-  ret-=4*p*p;
-  ret+=n*p*2;
-  ret+=p*2;
-  ret-=n;
-  return ret.total();
-}
-
-double manyArcTrim(unsigned n)
-/* Computes the amount by which to trim [0,n] to get n segments to fit n arcs
- * to a spiralarc. Define f(x) as piecewise linear from (0,0) to (1,1) to (2,4)
- * to (3,9) and so on. Lower f(x) by about 1/6 so that there's as much area
- * above f(x) and below x² as below f(x) and above x². (It's exactly 1/6 when
- * n is infinite.) Then trim p off each end where f(x) intersects x².
- * 
- * ∫ [p,n-p] (f(x)-f(p)+p²-x²) dx = 0
- * -4p³/3+(n+1)p²-np+n/6=0
- * There are two solutions in [0,1]; we want the one in [0,1/2].
- */
-{
-  double p;
-  Newton ne;
-  p=ne.init(0,manyArcTrimFunc(0,n),manyArcTrimDeriv(0,n),0.5,manyArcTrimFunc(0.5,n),manyArcTrimDeriv(0.5,n));
-  while (!ne.finished())
-  {
-    p=ne.step(manyArcTrimFunc(p,n),manyArcTrimDeriv(p,n));
-  }
-  return p;
-}
-
 vector<segment> manyarcapx2(segment cubic,int narcs)
 /* Approximates cubic with narcs quadratics, where the first and last
- * are trimmed by the above function.
+ * are trimmed by the manyArcTrim function.
  */
 {
   int i;

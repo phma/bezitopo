@@ -3,7 +3,7 @@
 /* manysum.h - add many numbers                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015,2016,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #ifndef MANYSUM_H
 #define MANYSUM_H
 #include <map>
+#include <vector>
 #include <cmath>
 /* Adds together many numbers (like millions) accurately.
  * Each number is put in a bucket numbered by its exponent returned by frexp().
