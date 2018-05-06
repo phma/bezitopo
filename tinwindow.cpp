@@ -1103,7 +1103,9 @@ void TinWindow::makeActions()
   viewMenu=menuBar()->addMenu(tr("&View"));
   unitsMenu=menuBar()->addMenu(tr("&Units"));
   contourMenu=menuBar()->addMenu(tr("&Contour"));
+  coordMenu=menuBar()->addMenu(tr("&Coordinates"));
   helpMenu=menuBar()->addMenu(tr("&Help"));
+  // View menu
   zoomButtons.push_back(new ZoomButton(this,-10));
   zoomButtons.back()->setIcon(QIcon(":/tenth.png"));
   zoomButtons.back()->setText(tr("Zoom out 10"));
@@ -1146,6 +1148,7 @@ void TinWindow::makeActions()
   sizeToFitAction->setText(tr("Size to Fit"));
   viewMenu->addAction(sizeToFitAction);
   connect(sizeToFitAction,SIGNAL(triggered(bool)),canvas,SLOT(sizeToFit()));
+  // File menu
   saveAction=new QAction(this);
   saveAction->setIcon(QIcon::fromTheme("document-save"));
   saveAction->setText(tr("Save"));
@@ -1181,6 +1184,7 @@ void TinWindow::makeActions()
   exportBreaklinesAction->setText(tr("Export Breaklines file"));
   fileMenu->addAction(exportBreaklinesAction);
   connect(exportBreaklinesAction,SIGNAL(triggered(bool)),canvas,SLOT(exportBreaklines()));
+  // Contour menu
   makeTinAction=new QAction(this);
   //makeTinAction->setIcon(QIcon(":/maketin.png"));
   makeTinAction->setText(tr("Make TIN"));
@@ -1216,6 +1220,23 @@ void TinWindow::makeActions()
   connect(curvyTriangleAction,SIGNAL(triggered(bool)),this,SLOT(changeButtonBits()));
   curvyTriangleAction->setChecked(true);
   connect(this,SIGNAL(buttonBitsChanged(int)),canvas,SLOT(setButtonBits(int)));
+  // Coordinate menu
+  loadGeoidAction=new QAction(this);
+  //loadGeoidAction->setIcon(QIcon(":/loadgeoid.png"));
+  loadGeoidAction->setText(tr("Load geoid file"));
+  coordMenu->addAction(loadGeoidAction);
+  //connect(loadGeoidAction,SIGNAL(triggered(bool)),this,SLOT(loadGeoid()));
+  gridToLatlongAction=new QAction(this);
+  //gridToLatlongAction->setIcon(QIcon(":/gridtoll.png"));
+  gridToLatlongAction->setText(tr("Grid to lat/long"));
+  coordMenu->addAction(gridToLatlongAction);
+  //connect(gridToLatLongAction,SIGNAL(triggered(bool)),this,SLOT(gridToLatlong()));
+  latlongToGridAction=new QAction(this);
+  //latlongToGridAction->setIcon(QIcon(":/lltogrid.png"));
+  latlongToGridAction->setText(tr("Lat/long to grid"));
+  coordMenu->addAction(latlongToGridAction);
+  //connect(latLongToGridAction,SIGNAL(triggered(bool)),this,SLOT(latlongToGrid()));
+  // Help menu
   aboutProgramAction=new QAction(this);
   //aboutProgramAction->setIcon(QIcon(":/.png"));
   aboutProgramAction->setText(tr("About Bezitopo"));

@@ -163,7 +163,7 @@ public slots:
 private:
   TinCanvas *canvas;
   QToolBar *toolbar;
-  QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu,*contourMenu,*helpMenu;
+  QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu,*contourMenu,*coordMenu,*helpMenu;
   int preZoomStep;
   std::vector<ZoomButton *> zoomButtons;
   std::vector<MeasureButton *> measureButtons;
@@ -175,4 +175,5 @@ private:
   QAction *importBreaklinesAction,*exportBreaklinesAction;
   QAction *aboutProgramAction,*aboutQtAction,*dumpAction;
   QAction *curvyTriangleAction,*curvyContourAction;
+  QAction *loadGeoidAction,*gridToLatlongAction,*latlongToGridAction;
 };
