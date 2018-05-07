@@ -20,10 +20,6 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* This handles just elevation factors so far. For the grid factor, I'll have
- * to write the map projection.
- */
-
 #include <cstring>
 #include <iostream>
 #include <cstdlib>
@@ -32,6 +28,7 @@
 #include "geoid.h"
 #include "angle.h"
 #include "ldecimal.h"
+#include "projection.h"
 #include "icommon.h"
 #include "bezitopo.h"
 #include "except.h"
