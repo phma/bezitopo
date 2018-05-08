@@ -100,7 +100,7 @@ void scalefactor_i(string args)
       ll=parselatlong(llstr,DEGREE);
       if (std::isfinite(ll.lat) && std::isfinite(ll.lon))
       {
-	//chosenProjection=
+	chosenProjection=oneProj(allProjections.cover(ll));
 	separation=cube.undulation(ll);
 	if (std::isfinite(separation))
 	{

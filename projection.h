@@ -41,6 +41,8 @@
  * centered in the Bight of Benin. The default constructor for a transverse
  * Mercator produces one centered on the prime meridian.
  */
+#ifndef PROJECTION_H
+#define PROJECTION_H
 #include <array>
 #include <memory>
 #include <fstream>
@@ -233,3 +235,4 @@ public:
   void readFile(std::istream &file);
   std::vector<std::string> listCountries(),listProvinces(),listZones(),listVersions();
 };
+#endif

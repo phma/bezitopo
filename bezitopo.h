@@ -3,7 +3,7 @@
 /* bezitopo.h - header file for main program          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015 Pierre Abbat.
+/* Copyright 2012,2015,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -29,8 +29,10 @@
 #include <cstdio>
 #include "point.h"
 #include "document.h"
+#include "projection.h"
 
 void dumppoints();
 extern document doc;
+extern ProjectionList allProjections;
 
 #endif

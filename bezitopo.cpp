@@ -51,6 +51,13 @@ bool cont=true;
 document doc;
 string savefilename;
 geoheader ghead;
+ProjectionList allProjections;
+
+void readAllProjections()
+{
+  ifstream pfile(string(SHARE_DIR)+"/projections.txt");
+  allProjections.readFile(pfile);
+}
 
 void indpark(string args)
 {
@@ -457,6 +464,8 @@ int main(int argc, char *argv[])
   doc.ms.setDefaultPrecision(LENGTH,1.746e-3); // g.m. of 1 mm and 0.01 ft
   doc.ms.setDefaultUnit(AREA,0.3048); // for acre/hectare, 6361.5
   doc.ms.setDefaultPrecision(AREA,0.1);
+  readTmCoefficients();
+  readAllProjections();
   cout<<"Bezitopo version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat\n"
   <<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
   while (cont)
