@@ -35,11 +35,60 @@
 
 using namespace std;
 
+string oneString_i(vector<string> strList)
+// May make this use unbuffered input later.
+{
+  int i,chosen=0;
+  string line;
+  if (strList.size()>1)
+    do
+    {
+      for (i=0;i<strList.size();i++)
+	cout<<i<<". "<<strList[i]<<'\n';
+      cout<<"? ";
+      cout.flush();
+      getline(cin,line);
+      chosen=stod(line);
+    } while (chosen<0 || chosen>=strList.size());
+  if (strList.size())
+    return strList[chosen];
+  else
+    return "";
+}
+
+Projection *oneProj(ProjectionList projList)
+{
+  ProjectionList subList;
+  ProjectionLabel label;
+  vector<string> strList;
+  strList=projList.listCountries();
+  label.country=oneString_i(strList);
+  subList=projList.matches(label);
+  strList=subList.listProvinces();
+  if (strList.size()>1)
+    cout<<label.country<<"-\n";
+  label.province=oneString_i(strList);
+  subList=projList.matches(label);
+  strList=subList.listZones();
+  if (strList.size()>1)
+    cout<<label.country<<'-'<<label.province<<"-\n";
+  label.zone=oneString_i(strList);
+  subList=projList.matches(label);
+  strList=subList.listVersions();
+  if (strList.size()>1)
+    cout<<label.country<<'-'<<label.province<<'-'<<label.zone<<"-\n";
+  label.version=oneString_i(strList);
+  subList=projList.matches(label);
+  return subList[0];
+}
+
 void scalefactor_i(string args)
 {
   string llstr,elevstr;
   latlong ll;
   double separation,elevation,radius,elevfactor,gridfactor;
+  ProjectionList possibleProjections;
+  Projection *chosenProjection;
   subcont=true;
   do
   {
@@ -51,6 +100,7 @@ void scalefactor_i(string args)
       ll=parselatlong(llstr,DEGREE);
       if (std::isfinite(ll.lat) && std::isfinite(ll.lon))
       {
+	//chosenProjection=
 	separation=cube.undulation(ll);
 	if (std::isfinite(separation))
 	{
