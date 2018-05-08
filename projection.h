@@ -231,4 +231,5 @@ public:
   ProjectionList cover(latlong ll);
   ProjectionList cover(vball v);
   void readFile(std::istream &file);
+  std::vector<std::string> listCountries(),listProvinces(),listZones(),listVersions();
 };

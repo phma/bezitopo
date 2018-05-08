@@ -22,6 +22,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <iostream>
+#include <set>
 #include "projection.h"
 #include "rootfind.h"
 #include "ldecimal.h"
@@ -1046,4 +1047,49 @@ void ProjectionList::readFile(istream &file)
     if (proj)
       insert(label,proj);
   }
+}
+
+vector<string> setToVector(set<string> s)
+{
+  set<string>::iterator i;
+  vector<string> ret;
+  for (i=s.begin();i!=s.end();i++)
+    ret.push_back(*i);
+  return ret;
+}
+
+vector<string> ProjectionList::listCountries()
+{
+  map<ProjectionLabel,shared_ptr<Projection> >::iterator i;
+  set<string> ret;
+  for (i=projList.begin();i!=projList.end();i++)
+    ret.insert(i->first.country);
+  return setToVector(ret);
+}
+
+vector<string> ProjectionList::listProvinces()
+{
+  map<ProjectionLabel,shared_ptr<Projection> >::iterator i;
+  set<string> ret;
+  for (i=projList.begin();i!=projList.end();i++)
+    ret.insert(i->first.province);
+  return setToVector(ret);
+}
+
+vector<string> ProjectionList::listZones()
+{
+  map<ProjectionLabel,shared_ptr<Projection> >::iterator i;
+  set<string> ret;
+  for (i=projList.begin();i!=projList.end();i++)
+    ret.insert(i->first.zone);
+  return setToVector(ret);
+}
+
+vector<string> ProjectionList::listVersions()
+{
+  map<ProjectionLabel,shared_ptr<Projection> >::iterator i;
+  set<string> ret;
+  for (i=projList.begin();i!=projList.end();i++)
+    ret.insert(i->first.version);
+  return setToVector(ret);
 }
