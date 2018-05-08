@@ -89,6 +89,7 @@ void scalefactor_i(string args)
   double separation,elevation,radius,elevfactor,gridfactor;
   ProjectionList possibleProjections;
   Projection *chosenProjection;
+  xy gridCoords;
   subcont=true;
   do
   {
@@ -101,6 +102,7 @@ void scalefactor_i(string args)
       if (std::isfinite(ll.lat) && std::isfinite(ll.lon))
       {
 	chosenProjection=oneProj(allProjections.cover(ll));
+	elevfactor=gridfactor=NAN;
 	separation=cube.undulation(ll);
 	if (std::isfinite(separation))
 	{
@@ -128,6 +130,16 @@ void scalefactor_i(string args)
 	}
 	else
 	  cout<<"I don't know the geoid separation there."<<endl;
+	if (chosenProjection)
+	{
+	  gridCoords=chosenProjection->latlongToGrid(ll);
+	  gridfactor=chosenProjection->scaleFactor(ll);
+	  cout<<"Grid coordinates are "<<doc.ms.formatMeasurement(gridCoords.east(),LENGTH)
+	      <<','<<doc.ms.formatMeasurementUnit(gridCoords.north(),LENGTH)<<endl;
+	  cout<<"Grid factor is "<<ldecimal(gridfactor)<<endl;
+	}
+	if (std::isfinite(gridfactor*elevfactor))
+	  cout<<"Combined factor is "<<ldecimal(gridfactor*elevfactor)<<endl;
       }
       else
 	cout<<"Malformatted latitude or longitude"<<endl;
