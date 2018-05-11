@@ -2183,6 +2183,81 @@ void testcogospiral()
   testcogospiral2(s,t,ps,expected,5e-5,7);
 }
 
+void testcurvefit()
+/* Test fitting a 3D curve to a sequence of points, which are somewhat evenly
+ * spaced along the centerline of a rural road.
+ */
+{
+  criterion crit1;
+  doc.makepointlist(2);
+  doc.pl[0].clear();
+  doc.pl[1].crit.clear();
+  doc.pl[2].crit.clear();
+  crit1.str="CL";
+  crit1.istopo=true;
+  doc.pl[1].crit.push_back(crit1);
+  crit1.str="DR";
+  doc.pl[2].crit.push_back(crit1);
+  /* These coordinates are N.C. grid coordinates. The COW DRs are two places,
+   * one across the street from the other, where cows can cross the street
+   * when the gates are open. The NEW CLs (except one where I forgot to erase
+   * NEW) are places where the latest painted centerlines (all of which are
+   * double yellow lines) don't match the lines painted in a previous year.
+   */
+  doc.pl[0].addpoint(1,point(330043.02478,193167.25356,335.4551,"DR"));
+  doc.pl[0].addpoint(2,point(330046.26158,193160.47584,335.18331,"DR"));
+  doc.pl[0].addpoint(3,point(330085.99731,193085.00785,332.08863,"DR"));
+  doc.pl[0].addpoint(4,point(330083.44072,193093.02286,332.50786,"DR"));
+  doc.pl[0].addpoint(5,point(329958.49496,192871.18366,313.52201,"COW DR"));
+  doc.pl[0].addpoint(6,point(329955.95815,192863.64198,312.76765,"COW DR"));
+  doc.pl[0].addpoint(7,point(329951.91737,192869.4372,313.48706,"COW DR"));
+  doc.pl[0].addpoint(8,point(329954.17955,192875.17545,313.96278,"COW DR"));
+  doc.pl[0].addpoint(9,point(329951.10681,192827.73858,309.90544,"EP"));
+  doc.pl[0].addpoint(10,point(329956.38912,192829.53094,309.69212,"EP"));
+  doc.pl[0].addpoint(11,point(329953.59211,192829.01894,309.94432,"CL"));
+  doc.pl[0].addpoint(12,point(329951.03268,192844.28448,311.29915,"CL"));
+  doc.pl[0].addpoint(13,point(329952.46425,192861.25285,312.80239,"CL"));
+  doc.pl[0].addpoint(14,point(329958.36131,192877.62687,314.31337,"CL"));
+  doc.pl[0].addpoint(15,point(329967.36296,192892.08981,315.71217,"CL"));
+  doc.pl[0].addpoint(16,point(329978.32641,192905.81388,317.02939,"CL"));
+  doc.pl[0].addpoint(17,point(329989.83452,192918.27588,318.27136,"CL"));
+  doc.pl[0].addpoint(18,point(330002.09472,192930.76048,319.51392,"CL"));
+  doc.pl[0].addpoint(19,point(330014.3626,192943.17238,320.73134,"CL"));
+  doc.pl[0].addpoint(20,point(330026.68172,192955.41608,321.84994,"CL"));
+  doc.pl[0].addpoint(21,point(330039.14558,192967.82724,323.12446,"CL"));
+  doc.pl[0].addpoint(22,point(330051.34198,192980.57416,324.22264,"CL"));
+  doc.pl[0].addpoint(23,point(330062.0244,192993.29161,325.26457,"NEW CL"));
+  doc.pl[0].addpoint(24,point(330071.32296,193007.75264,326.42237,"CL"));
+  doc.pl[0].addpoint(25,point(330078.32532,193023.53127,327.71374,"CL"));
+  doc.pl[0].addpoint(26,point(330083.31259,193040.11129,328.98621,"NEW CL"));
+  doc.pl[0].addpoint(27,point(330085.71121,193056.82687,330.29308,"CL"));
+  doc.pl[0].addpoint(28,point(330085.17708,193074.5715,331.34593,"CL"));
+  doc.pl[0].addpoint(29,point(330080.97383,193091.95369,332.35184,"NEW CL"));
+  doc.pl[0].addpoint(30,point(330075.06052,193106.86078,333.01328,"NEW CL"));
+  doc.pl[0].addpoint(31,point(330068.10206,193121.73217,333.6529,"CL"));
+  doc.pl[0].addpoint(32,point(330062.36704,193133.57594,334.23896,"CL"));
+  doc.pl[0].addpoint(33,point(330054.89422,193148.78755,334.92296,"CL"));
+  doc.pl[0].addpoint(34,point(330047.04195,193165.06163,335.48276,"CL"));
+  doc.pl[0].addpoint(35,point(330039.426,193181.18002,335.90564,"CL"));
+  doc.pl[0].addpoint(36,point(330032.10575,193196.9071,336.4109,"CL"));
+  doc.pl[0].addpoint(37,point(330024.80078,193212.69583,336.70285,"CL"));
+  doc.pl[0].addpoint(38,point(330017.47856,193228.51048,337.0227,"CL"));
+  doc.pl[0].addpoint(39,point(330010.3409,193244.3484,337.29339,"CL"));
+  doc.pl[0].addpoint(40,point(330003.6787,193260.15507,337.62253,"CL"));
+  doc.pl[0].addpoint(41,point(329997.55018,193276.0551,337.84381,"CL"));
+  doc.pl[0].addpoint(42,point(329992.41288,193291.8858,338.03719,"CL"));
+  doc.pl[0].addpoint(43,point(329988.44315,193308.6462,338.30774,"CL"));
+  doc.pl[0].addpoint(44,point(329986.04724,193325.33593,338.65454,"CL"));
+  doc.pl[0].addpoint(45,point(329984.88476,193312.2714,338.455,"DR"));
+  doc.pl[0].addpoint(46,point(329990.39617,193289.15558,338.10359,"DR"));
+  doc.pl[0].addpoint(47,point(329997.99308,193267.57183,337.78719,"DR"));
+  doc.pl[0].addpoint(48,point(329999.62166,193263.35751,337.73799,"DR"));
+  doc.pl[0].addpoint(49,point(330039.35264,193188.00773,336.01316,"DR"));
+  doc.pl[0].addpoint(50,point(330041.18982,193184.11305,335.90922,"DR"));
+  doc.copytopopoints(1,0); // centerline
+  doc.copytopopoints(2,0); // driveways
+}
+
 vector<segment> manyarcapx1(segment cubic,int narcs)
 /* Approximates cubic with narcs quadratics, where the first and last
  * are half as long as the rest.
@@ -6714,6 +6789,8 @@ int main(int argc, char *argv[])
     testspiralarc();
   if (shoulddo("cogospiral"))
     testcogospiral();
+  if (shoulddo("curvefit"))
+    testcurvefit();
   if (shoulddo("manyarc"))
     testmanyarc();
   if (shoulddo("closest"))
