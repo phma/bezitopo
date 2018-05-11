@@ -154,7 +154,7 @@ class alignment
  * cross-sections along the path and designs the vertical curves.
  */
 {
-public:
+protected:
   std::vector<xy> endpoints;
   std::vector<int> deltas,delta2s;
   std::vector<int> bearings; // correspond to endpoints
@@ -162,10 +162,14 @@ public:
   std::vector<xy> midpoints;
   std::vector<double> clothances,curvatures;
   std::vector<double> lengths,cumLengths;
+  std::vector<bcir> boundCircles;
   std::vector<double> vLengths,vCumLengths;
   std::vector<double> controlPoints;
-  std::vector<bcir> boundCircles;
+  void setVLength();
+public:
   alignment();
+  void clear();
+  void appendPoint(xy pnt);
   spiralarc getHorizontalCurve(int i);
   void setStartStation(double along);
   void setlengths();

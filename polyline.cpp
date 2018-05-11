@@ -1071,10 +1071,75 @@ void polyspiral::writeXml(ofstream &ofile)
   ofile<<"</delta2s></polyspiral>"<<endl;
 }
 
+void alignment::setVLength()
+/* Sets the horizontal length of vertical curves equal to the length of
+ * horizontal curves. If any vertical curves are beyond the total horizontal
+ * length, they are clobbered.
+ */
+{
+  int i;
+  int origsize=vCumLengths.size();
+  int newlast;
+  if (cumLengths.size() && !vCumLengths.size()) // should never happen
+    vCumLengths.push_back(cumLengths[0]);
+  if (cumLengths.size()>1 && vCumLengths.size()==1)
+    vCumLengths.push_back(cumLengths.back());
+  for (i=0;i<vCumLengths.size() && vCumLengths[i]<cumLengths.back();i++);
+  newlast=i;
+  if (newlast>=origsize)
+    vCumLengths.push_back(cumLengths.back());
+  vLengths.resize(newlast);
+  for (i=origsize;i<newlast;i++)
+    vLengths[i]=vCumLengths[i+1]-vCumLengths[i];
+  controlPoints.resize(3*newlast+1);
+}
+
 alignment::alignment()
 {
   cumLengths.push_back(0);
   vCumLengths.push_back(0);
+}
+
+void alignment::clear()
+{
+  endpoints.clear();
+  deltas.clear();
+  delta2s.clear();
+  bearings.clear();
+  midbearings.clear();
+  midpoints.clear();
+  clothances.clear();
+  curvatures.clear();
+  lengths.clear();
+  cumLengths.clear();
+  vLengths.clear();
+  vCumLengths.clear();
+  controlPoints.clear();
+  boundCircles.clear();
+  cumLengths.push_back(0);
+  vCumLengths.push_back(0);
+}
+
+void alignment::appendPoint(xy pnt)
+{
+  xy last;
+  bcir boundCircle;
+  if (endpoints.size())
+    last=endpoints.back();
+  endpoints.push_back(pnt);
+  bearings.push_back(0);
+  if (endpoints.size()>1)
+  {
+    deltas.push_back(0);
+    delta2s.push_back(0);
+    midbearings.push_back(dir(last,pnt));
+    lengths.push_back(dist(last,pnt));
+    cumLengths.push_back(cumLengths.back()+lengths.back());
+    boundCircle.center=(last+pnt)/2;
+    boundCircle.radius=lengths.back()/2;
+    boundCircles.push_back(boundCircle);
+  }
+  setVLength();
 }
 
 spiralarc alignment::getHorizontalCurve(int i)
@@ -1121,4 +1186,5 @@ void alignment::setlengths()
     m+=vLengths[i];
     vCumLengths[i+1]=m.total();
   }
+  setVLength();
 }
