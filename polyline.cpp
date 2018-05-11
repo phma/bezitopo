@@ -1070,3 +1070,55 @@ void polyspiral::writeXml(ofstream &ofile)
   }
   ofile<<"</delta2s></polyspiral>"<<endl;
 }
+
+alignment::alignment()
+{
+  cumLengths.push_back(0);
+  vCumLengths.push_back(0);
+}
+
+spiralarc alignment::getHorizontalCurve(int i)
+{
+  i%=deltas.size();
+  if (i<0)
+    i+=deltas.size();
+  return spiralarc(xyz(endpoints[i],0),xyz(midpoints[i],0),
+		   xyz(endpoints[(i+1)%endpoints.size()],0),midbearings[i],
+		   curvatures[i],clothances[i],lengths[i]);
+}
+
+void alignment::setStartStation(double along)
+{
+  int i;
+  for (i=1;i<cumLengths.size();i++)
+    cumLengths[i]+=along-cumLengths[0];
+  for (i=1;i<vCumLengths.size();i++)
+    vCumLengths[i]+=along-vCumLengths[0];
+  cumLengths[0]=vCumLengths[0]=along;
+}
+
+void alignment::setlengths()
+// Unlike polyline/arc/spiral, cumLengths has one more element than lengths.
+{
+  int i;
+  manysum m;
+  spiralarc seg;
+  assert(lengths.size()==cumLengths.size()-1);
+  assert(lengths.size()==deltas.size());
+  m+=cumLengths[0];
+  for (i=0;i<deltas.size();i++)
+  {
+    seg=getHorizontalCurve(i);
+    lengths[i]=seg.length();
+    boundCircles[i]=seg.boundCircle();
+    m+=lengths[i];
+    cumLengths[i+1]=m.total();
+  }
+  m.clear();
+  m+=vCumLengths[0];
+  for (i=0;i<vLengths.size();i++)
+  {
+    m+=vLengths[i];
+    vCumLengths[i+1]=m.total();
+  }
+}

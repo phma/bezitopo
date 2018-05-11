@@ -164,6 +164,11 @@ public:
   std::vector<double> lengths,cumLengths;
   std::vector<double> vLengths,vCumLengths;
   std::vector<double> controlPoints;
+  std::vector<bcir> boundCircles;
+  alignment();
+  spiralarc getHorizontalCurve(int i);
+  void setStartStation(double along);
+  void setlengths();
 };
 
 #endif
