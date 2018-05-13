@@ -1145,6 +1145,16 @@ void alignment::clear()
   cumLengths.push_back(0);
 }
 
+double alignment::startStation()
+{
+  return cumLengths[0];
+}
+
+double alignment::endStation()
+{
+  return cumLengths.back();
+}
+
 void alignment::appendPoint(xy pnt)
 {
   xy last;
@@ -1176,6 +1186,16 @@ spiralarc alignment::getHorizontalCurve(int i)
   return spiralarc(xyz(endpoints[i],0),xyz(midpoints[i],0),
 		   xyz(endpoints[(i+1)%endpoints.size()],0),midbearings[i],
 		   curvatures[i],clothances[i],hLengths[i]);
+}
+
+segment alignment::getVerticalCurve(int i)
+{
+  i%=vLengths.size();
+  if (i<0)
+    i+=vLengths.size();
+  return segment(xyz(vCumLengths[i],0,controlPoints[i*3]),
+		 controlPoints[i*3+1],controlPoints[i*3+2],
+		 xyz(vCumLengths[i+1],0,controlPoints[i*3+3]));
 }
 
 void alignment::setStartStation(double along)
@@ -1216,4 +1236,73 @@ void alignment::setHLengths()
   }
   setVLength();
   setlengths();
+}
+
+int alignment::xyStationSegment(double along)
+{
+  int before=-1,after=hCumLengths.size();
+  int middle,i;
+  double midalong;
+  while (before<after-1)
+  {
+    middle=(before+after+(i&1))/2;
+    if (middle>=hCumLengths.size())
+      midalong=endStation();
+    else if (middle<0)
+      midalong=startStation();
+    else
+      midalong=hCumLengths[middle];
+    if (midalong>along)
+      after=middle;
+    else
+      before=middle;
+    ++i;
+  }
+  return before; // Unlike polylines, hCumLengths and vCumLengths have an extra number at the beginning.
+}
+
+int alignment::zStationSegment(double along)
+{
+  int before=-1,after=vCumLengths.size();
+  int middle,i;
+  double midalong;
+  while (before<after-1)
+  {
+    middle=(before+after+(i&1))/2;
+    if (middle>=vCumLengths.size())
+      midalong=endStation();
+    else if (middle<0)
+      midalong=startStation();
+    else
+      midalong=vCumLengths[middle];
+    if (midalong>along)
+      after=middle;
+    else
+      before=middle;
+    ++i;
+  }
+  return before;
+}
+
+xy alignment::xyStation(double along)
+{
+  int seg=xyStationSegment(along);
+  if (seg<0 || seg>=hLengths.size())
+    return xy(NAN,NAN);
+  else
+    return getHorizontalCurve(seg).station(along-cumLengths[seg]);
+}
+
+double alignment::zStation(double along)
+{
+  int seg=zStationSegment(along);
+  if (seg<0 || seg>=hLengths.size())
+    return NAN;
+  else
+    return getVerticalCurve(seg).station(along-cumLengths[seg]).elev();
+}
+
+xyz alignment::station(double along)
+{
+  return xyz(xyStation(along),zStation(along));
 }

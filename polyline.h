@@ -168,13 +168,21 @@ protected:
   std::vector<double> lengths,cumLengths;
   void setVLength();
   void setlengths();
+  int xyStationSegment(double along);
+  int zStationSegment(double along);
 public:
   alignment();
   void clear();
+  double startStation();
+  double endStation();
   void appendPoint(xy pnt);
   spiralarc getHorizontalCurve(int i);
+  segment getVerticalCurve(int i);
   void setStartStation(double along);
   void setHLengths();
+  xy xyStation(double along);
+  double zStation(double along);
+  xyz station(double along);
 };
 
 #endif
