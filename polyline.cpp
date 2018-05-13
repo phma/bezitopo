@@ -1080,23 +1080,45 @@ void alignment::setVLength()
   int i;
   int origsize=vCumLengths.size();
   int newlast;
-  if (cumLengths.size() && !vCumLengths.size()) // should never happen
-    vCumLengths.push_back(cumLengths[0]);
-  if (cumLengths.size()>1 && vCumLengths.size()==1)
-    vCumLengths.push_back(cumLengths.back());
-  for (i=0;i<vCumLengths.size() && vCumLengths[i]<cumLengths.back();i++);
+  if (hCumLengths.size() && !vCumLengths.size()) // should never happen
+    vCumLengths.push_back(hCumLengths[0]);
+  if (hCumLengths.size()>1 && vCumLengths.size()==1)
+    vCumLengths.push_back(hCumLengths.back());
+  for (i=0;i<vCumLengths.size() && vCumLengths[i]<hCumLengths.back();i++);
   newlast=i;
   if (newlast>=origsize)
-    vCumLengths.push_back(cumLengths.back());
+    vCumLengths.push_back(hCumLengths.back());
   vLengths.resize(newlast);
   for (i=origsize;i<newlast;i++)
     vLengths[i]=vCumLengths[i+1]-vCumLengths[i];
   controlPoints.resize(3*newlast+1);
 }
 
+void alignment::setlengths()
+/* Sets cumLengths, which contains all elements of both vCumLengths and hCumLengths,
+ * and sets lengths to the differences between them.
+ */
+{
+  int i,j;
+  cumLengths.clear();
+  lengths.clear();
+  for (i=j=0;i<hCumLengths.size() && j<vCumLengths.size();)
+    if (hCumLengths[i]<vCumLengths[j])
+      cumLengths.push_back(hCumLengths[i++]);
+    else if (hCumLengths[i]==vCumLengths[j])
+    {
+      cumLengths.push_back(hCumLengths[i++]);
+      j++;
+    }
+    else
+      cumLengths.push_back(vCumLengths[j++]);
+  for (i=0;i<cumLengths.size()-1;i++)
+    lengths.push_back(cumLengths[i+1]-cumLengths[i]);
+}
+
 alignment::alignment()
 {
-  cumLengths.push_back(0);
+  hCumLengths.push_back(0);
   vCumLengths.push_back(0);
 }
 
@@ -1110,14 +1132,17 @@ void alignment::clear()
   midpoints.clear();
   clothances.clear();
   curvatures.clear();
-  lengths.clear();
-  cumLengths.clear();
+  hLengths.clear();
+  hCumLengths.clear();
   vLengths.clear();
   vCumLengths.clear();
+  lengths.clear();
+  cumLengths.clear();
   controlPoints.clear();
   boundCircles.clear();
-  cumLengths.push_back(0);
+  hCumLengths.push_back(0);
   vCumLengths.push_back(0);
+  cumLengths.push_back(0);
 }
 
 void alignment::appendPoint(xy pnt)
@@ -1133,13 +1158,14 @@ void alignment::appendPoint(xy pnt)
     deltas.push_back(0);
     delta2s.push_back(0);
     midbearings.push_back(dir(last,pnt));
-    lengths.push_back(dist(last,pnt));
-    cumLengths.push_back(cumLengths.back()+lengths.back());
+    hLengths.push_back(dist(last,pnt));
+    hCumLengths.push_back(hCumLengths.back()+hLengths.back());
     boundCircle.center=(last+pnt)/2;
-    boundCircle.radius=lengths.back()/2;
+    boundCircle.radius=hLengths.back()/2;
     boundCircles.push_back(boundCircle);
   }
   setVLength();
+  setlengths();
 }
 
 spiralarc alignment::getHorizontalCurve(int i)
@@ -1149,35 +1175,37 @@ spiralarc alignment::getHorizontalCurve(int i)
     i+=deltas.size();
   return spiralarc(xyz(endpoints[i],0),xyz(midpoints[i],0),
 		   xyz(endpoints[(i+1)%endpoints.size()],0),midbearings[i],
-		   curvatures[i],clothances[i],lengths[i]);
+		   curvatures[i],clothances[i],hLengths[i]);
 }
 
 void alignment::setStartStation(double along)
 {
   int i;
-  for (i=1;i<cumLengths.size();i++)
-    cumLengths[i]+=along-cumLengths[0];
+  for (i=1;i<hCumLengths.size();i++)
+    hCumLengths[i]+=along-hCumLengths[0];
   for (i=1;i<vCumLengths.size();i++)
     vCumLengths[i]+=along-vCumLengths[0];
-  cumLengths[0]=vCumLengths[0]=along;
+  for (i=1;i<cumLengths.size();i++)
+    cumLengths[i]+=along-cumLengths[0];
+  hCumLengths[0]=vCumLengths[0]=cumLengths[0]=along;
 }
 
-void alignment::setlengths()
-// Unlike polyline/arc/spiral, cumLengths has one more element than lengths.
+void alignment::setHLengths()
+// Unlike polyline/arc/spiral, hCumLengths has one more element than hLengths.
 {
   int i;
   manysum m;
   spiralarc seg;
-  assert(lengths.size()==cumLengths.size()-1);
-  assert(lengths.size()==deltas.size());
-  m+=cumLengths[0];
+  assert(hLengths.size()==hCumLengths.size()-1);
+  assert(hLengths.size()==deltas.size());
+  m+=hCumLengths[0];
   for (i=0;i<deltas.size();i++)
   {
     seg=getHorizontalCurve(i);
-    lengths[i]=seg.length();
+    hLengths[i]=seg.length();
     boundCircles[i]=seg.boundCircle();
-    m+=lengths[i];
-    cumLengths[i+1]=m.total();
+    m+=hLengths[i];
+    hCumLengths[i+1]=m.total();
   }
   m.clear();
   m+=vCumLengths[0];
@@ -1187,4 +1215,5 @@ void alignment::setlengths()
     vCumLengths[i+1]=m.total();
   }
   setVLength();
+  setlengths();
 }

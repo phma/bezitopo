@@ -161,18 +161,20 @@ protected:
   std::vector<int> midbearings;
   std::vector<xy> midpoints;
   std::vector<double> clothances,curvatures;
-  std::vector<double> lengths,cumLengths;
+  std::vector<double> hLengths,hCumLengths;
   std::vector<bcir> boundCircles;
   std::vector<double> vLengths,vCumLengths;
   std::vector<double> controlPoints;
+  std::vector<double> lengths,cumLengths;
   void setVLength();
+  void setlengths();
 public:
   alignment();
   void clear();
   void appendPoint(xy pnt);
   spiralarc getHorizontalCurve(int i);
   void setStartStation(double along);
-  void setlengths();
+  void setHLengths();
 };
 
 #endif
