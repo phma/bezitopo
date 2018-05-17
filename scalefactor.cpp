@@ -82,7 +82,7 @@ Projection *oneProj(ProjectionList projList)
   return subList[0];
 }
 
-void scalefactor_i(string args)
+void scalefactorll_i(string args)
 {
   string llstr,elevstr;
   latlong ll;
@@ -148,4 +148,8 @@ void scalefactor_i(string args)
       subcont=false;
   }
   while (subcont);
+}
+
+void scalefactorxy_i(string args)
+{
 }

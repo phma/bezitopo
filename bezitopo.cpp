@@ -453,7 +453,8 @@ int main(int argc, char *argv[])
   commands.push_back(command("drawtin",drawtin_i,"Draw TIN: filename.ps"));
   commands.push_back(command("raster",rasterdraw_i,"Draw raster topo: filename.ppm"));
   commands.push_back(command("contour",contourdraw_i,"Draw contour topo: interval filename.ps"));
-  commands.push_back(command("factor",scalefactor_i,"Compute map scale factor"));
+  commands.push_back(command("factorll",scalefactorll_i,"Compute map scale factor from latitude and longitude"));
+  commands.push_back(command("factorxy",scalefactorxy_i,"Compute map scale factor from grid coordinates"));
   commands.push_back(command("trin",trin_i,"Find what triangle a point is in: x,y"));
   commands.push_back(command("help",help,"List commands"));
   commands.push_back(command("exit",exit,"Exit the program"));

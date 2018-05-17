@@ -22,4 +22,5 @@
 
 #include <string>
 
-void scalefactor_i(std::string args);
+void scalefactorll_i(std::string args);
+void scalefactorxy_i(std::string args);
