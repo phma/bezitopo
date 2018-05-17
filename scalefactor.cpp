@@ -152,4 +152,35 @@ void scalefactorll_i(string args)
 
 void scalefactorxy_i(string args)
 {
+  string xystr,elevstr;
+  latlong ll;
+  double separation,elevation,radius,elevfactor,gridfactor;
+  ProjectionList possibleProjections;
+  Projection *chosenProjection;
+  xy gridCoords;
+  subcont=true;
+  chosenProjection=oneProj(allProjections);
+  do
+  {
+    cout<<"Grid> ";
+    cout.flush();
+    getline(cin,xystr);
+    if (xystr.length())
+    {
+      gridCoords=parsexy(xystr);
+      if (chosenProjection)
+      {
+	ll=chosenProjection->gridToLatlong(gridCoords);
+	cout<<formatlatlong(ll,DEGREE+SEXAG2P2)<<"  "<<formatlatlong(ll,DEGREE+6)<<endl;
+      }
+      else
+      {
+	cout<<"Projection file is missing\n";
+	subcont=false;
+      }
+    }
+    else
+      subcont=false;
+  }
+  while (subcont);
 }
