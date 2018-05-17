@@ -247,35 +247,40 @@ string radtoangle(double angle,int unitp)
     angmult=-angmult;
     sign=-1;
   }
-  for (;base>10 && (int)prec%59>1;prec/=10)
+  if (std::isfinite(angmult))
   {
-    dig=angmult-10*trunc(angmult/10);
-    angmult=trunc(angmult/10);
-    sprintf(digit,"%01d",dig);
-    ret=digit+ret;
-  }
-  if (ret.length())
-    ret="."+ret;
-  for (;prec>1;prec/=base)
-  {
-    dig=angmult-base*trunc(angmult/base);
-    angmult=trunc(angmult/base);
-    sprintf(digit,(base>10)?"%02d":"%01d",dig);
+    for (;base>10 && (int)prec%59>1;prec/=10)
+    {
+      dig=angmult-10*trunc(angmult/10);
+      angmult=trunc(angmult/10);
+      sprintf(digit,"%01d",dig);
+      ret=digit+ret;
+    }
+    if (ret.length())
+      ret="."+ret;
+    for (;prec>1;prec/=base)
+    {
+      dig=angmult-base*trunc(angmult/base);
+      angmult=trunc(angmult/base);
+      sprintf(digit,(base>10)?"%02d":"%01d",dig);
+      if (base>10)
+	if (ret.substr(0,1)==".")
+	  ret+=(prec>60)?"″":"′";
+	else
+	  strcat(digit,(prec>60)?"″":"′");
+      ret=digit+ret;
+    }
     if (base>10)
-      if (ret.substr(0,1)==".")
-	ret+=(prec>60)?"″":"′";
-      else
-	strcat(digit,(prec>60)?"″":"′");
+      ret=unitsign+ret;
+    else
+      ret="."+ret+unitsign;
+    sprintf(digit,"%.0f",angmult);
     ret=digit+ret;
+    if (sign<0)
+      ret="-"+ret;
   }
-  if (base>10)
-    ret=unitsign+ret;
   else
-    ret="."+ret+unitsign;
-  sprintf(digit,"%.0f",angmult);
-  ret=digit+ret;
-  if (sign<0)
-    ret="-"+ret;
+    ret=to_string(angmult);
   return ret;
 }
 
