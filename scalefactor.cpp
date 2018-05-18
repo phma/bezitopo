@@ -168,16 +168,19 @@ void scalefactorxy_i(string args)
     if (xystr.length())
     {
       gridCoords=parsexy(xystr);
-      if (chosenProjection)
-      {
-	ll=chosenProjection->gridToLatlong(gridCoords);
-	cout<<formatlatlong(ll,DEGREE+SEXAG2P2)<<"  "<<formatlatlong(ll,DEGREE+6)<<endl;
-      }
+      if (gridCoords.isnan())
+	cout<<"Malformatted grid coordinates\n";
       else
-      {
-	cout<<"Projection file is missing\n";
-	subcont=false;
-      }
+	if (chosenProjection)
+	{
+	  ll=chosenProjection->gridToLatlong(gridCoords);
+	  cout<<formatlatlong(ll,DEGREE+SEXAG2P2)<<"  "<<formatlatlong(ll,DEGREE+6)<<endl;
+	}
+	else
+	{
+	  cout<<"Projection file is missing\n";
+	  subcont=false;
+	}
     }
     else
       subcont=false;
