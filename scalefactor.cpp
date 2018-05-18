@@ -89,6 +89,7 @@ void scalefactorll_i(string args)
   double separation,elevation,radius,elevfactor,gridfactor;
   ProjectionList possibleProjections;
   Projection *chosenProjection;
+  ellipsoid *ellip=&WGS84;
   xy gridCoords;
   subcont=true;
   do
@@ -115,7 +116,9 @@ void scalefactorll_i(string args)
             {
               elevation=doc.ms.parseMeasurement(elevstr,LENGTH).magnitude;
               cout<<"Geoid is "<<doc.ms.formatMeasurementUnit(separation,LENGTH)<<" above ellipsoid"<<endl;
-              radius=GRS80.radiusAtLatitude(ll,DEG45);
+	      if (chosenProjection)
+		ellip=chosenProjection->ellip;
+              radius=ellip->radiusAtLatitude(ll,DEG45);
               cout<<"Average radius of curvature is "<<doc.ms.formatMeasurementUnit(radius,LENGTH)<<endl;
               elevfactor=radius/(radius+elevation+separation);
               cout<<"Elevation factor is "<<ldecimal(elevfactor)<<endl;
@@ -157,6 +160,7 @@ void scalefactorxy_i(string args)
   double separation,elevation,radius,elevfactor,gridfactor;
   ProjectionList possibleProjections;
   Projection *chosenProjection;
+  ellipsoid *ellip=&WGS84;
   xy gridCoords;
   subcont=true;
   chosenProjection=oneProj(allProjections);
