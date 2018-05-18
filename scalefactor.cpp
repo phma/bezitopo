@@ -171,16 +171,21 @@ void scalefactorxy_i(string args)
       if (gridCoords.isnan())
 	cout<<"Malformatted grid coordinates\n";
       else
+      {
+	elevfactor=gridfactor=NAN;
 	if (chosenProjection)
 	{
 	  ll=chosenProjection->gridToLatlong(gridCoords);
+	  gridfactor=chosenProjection->scaleFactor(gridCoords);
 	  cout<<formatlatlong(ll,DEGREE+SEXAG2P2)<<"  "<<formatlatlong(ll,DEGREE+6)<<endl;
+	  cout<<"Grid factor is "<<ldecimal(gridfactor)<<endl;
 	}
 	else
 	{
 	  cout<<"Projection file is missing\n";
 	  subcont=false;
 	}
+      }
     }
     else
       subcont=false;
