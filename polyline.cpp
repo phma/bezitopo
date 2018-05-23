@@ -1306,3 +1306,39 @@ xyz alignment::station(double along)
 {
   return xyz(xyStation(along),zStation(along));
 }
+
+int alignment::bearing(double along)
+{
+  int seg=xyStationSegment(along);
+  if (seg<0 || seg>=hLengths.size())
+    return 0;
+  else
+    return getHorizontalCurve(seg).bearing(along-cumLengths[seg]);
+}
+
+double alignment::slope(double along)
+{
+  int seg=zStationSegment(along);
+  if (seg<0 || seg>=hLengths.size())
+    return NAN;
+  else
+    return getVerticalCurve(seg).slope(along-cumLengths[seg]);
+}
+
+double alignment::curvature(double along)
+{
+  int seg=xyStationSegment(along);
+  if (seg<0 || seg>=hLengths.size())
+    return NAN;
+  else
+    return getHorizontalCurve(seg).curvature(along-cumLengths[seg]);
+}
+
+double alignment::accel(double along)
+{
+  int seg=zStationSegment(along);
+  if (seg<0 || seg>=hLengths.size())
+    return NAN;
+  else
+    return getVerticalCurve(seg).accel(along-cumLengths[seg]);
+}

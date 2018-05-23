@@ -183,6 +183,10 @@ public:
   xy xyStation(double along);
   double zStation(double along);
   xyz station(double along);
+  int bearing(double along);
+  double slope(double along);
+  double curvature(double along);
+  double accel(double along);
 };
 
 #endif
