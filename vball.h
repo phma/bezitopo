@@ -3,7 +3,7 @@
 /* vball.h - volleyball coordinates                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017 Pierre Abbat.
+/* Copyright 2017,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@
 #include "xyz.h"
 #define EARTHRAD 6371e3
 #define EARTHRADSQ 4.0589641e13
+#define VBALL_PACKLEN 10
 
 class vball // so called because a sphere so marked looks like a volleyball
 {
