@@ -183,12 +183,43 @@ void scalefactorxy_i(string args)
 	  gridfactor=chosenProjection->scaleFactor(gridCoords);
 	  cout<<formatlatlong(ll,DEGREE+SEXAG2P2)<<"  "<<formatlatlong(ll,DEGREE+6)<<endl;
 	  cout<<"Grid factor is "<<ldecimal(gridfactor)<<endl;
+	  if (!chosenProjection->in(ll))
+	    cout<<"Point is not in the projection's boundary\n";
 	}
 	else
 	{
 	  cout<<"Projection file is missing\n";
 	  subcont=false;
 	}
+	separation=cube.undulation(ll);
+	if (std::isfinite(separation))
+	{
+	  cout<<"Elev> ";
+	  cout.flush();
+	  getline(cin,elevstr);
+	  if (elevstr.length())
+	  {
+            try
+            {
+              elevation=doc.ms.parseMeasurement(elevstr,LENGTH).magnitude;
+              cout<<"Geoid is "<<doc.ms.formatMeasurementUnit(separation,LENGTH)<<" above ellipsoid"<<endl;
+	      if (chosenProjection)
+		ellip=chosenProjection->ellip;
+              radius=ellip->radiusAtLatitude(ll,DEG45);
+              cout<<"Average radius of curvature is "<<doc.ms.formatMeasurementUnit(radius,LENGTH)<<endl;
+              elevfactor=radius/(radius+elevation+separation);
+              cout<<"Elevation factor is "<<ldecimal(elevfactor)<<endl;
+            }
+            catch (BeziExcept e)
+            {
+              cerr<<"Elevation should be a length"<<endl;
+            }
+	  }
+	}
+	else
+	  cout<<"I don't know the geoid separation there."<<endl;
+	if (std::isfinite(gridfactor*elevfactor))
+	  cout<<"Combined factor is "<<ldecimal(gridfactor*elevfactor)<<endl;
       }
     }
     else
