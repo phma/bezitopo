@@ -28,6 +28,7 @@
 #include "zoombutton.h"
 #include "measurebutton.h"
 #include "cidialog.h"
+#include "factordialog.h"
 #include "rendercache.h"
 
 // goals
@@ -158,6 +159,7 @@ public slots:
   void prepareZoomSteps(int steps);
   void zoomSteps(bool checked);
   void changeButtonBits();
+  void latlongToGrid();
   void aboutProgram();
   void aboutQt();
 private:
@@ -167,6 +169,7 @@ private:
   int preZoomStep;
   std::vector<ZoomButton *> zoomButtons;
   std::vector<MeasureButton *> measureButtons;
+  LatlongFactorDialog *llDialog;
   QAction *sizeToFitAction;
   QAction *loadAction,*saveAction,*saveAsAction;
   QAction *asterAction,*importPnezdAction,*importCriteriaAction;

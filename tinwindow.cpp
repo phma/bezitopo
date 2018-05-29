@@ -1083,6 +1083,7 @@ TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
   //toolbar->setIconSize(QSize(40,40));
   canvas=new TinCanvas(this);
   setCentralWidget(canvas);
+  llDialog=new LatlongFactorDialog(this);
   canvas->show();
   makeActions();
   canvas->setMeter();
@@ -1235,7 +1236,7 @@ void TinWindow::makeActions()
   //latlongToGridAction->setIcon(QIcon(":/lltogrid.png"));
   latlongToGridAction->setText(tr("Lat/long to grid"));
   coordMenu->addAction(latlongToGridAction);
-  //connect(latLongToGridAction,SIGNAL(triggered(bool)),this,SLOT(latlongToGrid()));
+  connect(latlongToGridAction,SIGNAL(triggered(bool)),this,SLOT(latlongToGrid()));
   // Help menu
   aboutProgramAction=new QAction(this);
   //aboutProgramAction->setIcon(QIcon(":/.png"));
@@ -1326,6 +1327,13 @@ void TinWindow::changeButtonBits()
 {
   buttonBitsChanged((curvyTriangleAction->isChecked()<<0)|
                     (curvyContourAction->isChecked()<<1));
+}
+
+void TinWindow::latlongToGrid()
+{
+  llDialog->show();
+  llDialog->raise();
+  llDialog->activateWindow();
 }
 
 void TinWindow::aboutProgram()
