@@ -74,7 +74,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
                except.cpp factordialog.cpp geoid.cpp geoidboundary.cpp halton.cpp kml.cpp
                latlong.cpp ldecimal.cpp linetype.cpp
                manysum.cpp measure.cpp measurebutton.cpp minquad.cpp penwidth.cpp
-               pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
+               plwidget.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
                ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp rendercache.cpp
                rootfind.cpp segment.cpp spiral.cpp spolygon.cpp test.cpp tin.cpp
                tinwindow.cpp vball.cpp vcurve.cpp viewtin.cpp zoom.cpp zoombutton.cpp

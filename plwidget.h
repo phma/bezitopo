@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* factordialog.h - scale factor dialog               */
+/* plwidget.h - projection list widget                */
 /*                                                    */
 /******************************************************/
 /* Copyright 2018 Pierre Abbat.
@@ -19,35 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef FACTORDIALOG_H
-#define FACTORDIALOG_H
-#include <vector>
-#include <QDialog>
+#ifndef PLWIDGET_H
+#define PLWIDGET_H
+#include <QWidget>
 #include <QLabel>
-#include <QLineEdit>
 #include <QComboBox>
-#include <QPushButton>
 #include <QGridLayout>
 #include "projection.h"
-#include "plwidget.h"
 
-class LatlongFactorDialog: public QDialog
+class ProjListWidget: public QWidget
+/* Displays four comboboxes and allows selecting an instance of a map projection.
+ * Each combobox shows the list of all containing projections that match
+ * the selections of the other three. Only projections containing the point
+ * are shown, unless the point is in face 0 or 7, in which case all are shown.
+ */
 {
   Q_OBJECT
 public:
-  LatlongFactorDialog(QWidget *parent=0);
+  ProjListWidget(QWidget *parent=0);
 signals:
 public slots:
-  virtual void accept();
+  void setProjectionList(ProjectionList pl);
+  void setPoint(vball v);
 private:
-  QLabel *latlongLabel;
-  QLineEdit *latlongInput;
-  QLabel *elevationLabel;
-  QLineEdit *elevationInput;
-  ProjListWidget *plWidget;
-  QLabel *gridLabel;
-  QLineEdit *gridOutput; // "grid" means a conformal coordinate system
-  QPushButton *okButton,*cancelButton;
-  QGridLayout *gridLayout; // "grid" means a lattice arrangement of widgets
+  ProjectionList allProjections,containingProjections;
+  vball point,lastValidPoint;
+  QComboBox *countryBox,*provinceBox,*zoneBox,*versionBox;
+  QGridLayout *gridLayout;
 };
+
 #endif

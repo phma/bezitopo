@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* factordialog.cpp - scale factor dialog             */
+/* plwidget.cpp - projection list widget              */
 /*                                                    */
 /******************************************************/
 /* Copyright 2018 Pierre Abbat.
@@ -20,34 +20,29 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <iostream>
-#include "factordialog.h"
+#include "plwidget.h"
 using namespace std;
 
-LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
+ProjListWidget::ProjListWidget(QWidget *parent):QWidget(parent)
 {
-  latlongLabel=new QLabel(tr("Lat/Long"),this);
-  latlongInput=new QLineEdit(this);
-  elevationLabel=new QLabel(tr("Elevation"),this);
-  elevationInput=new QLineEdit(this);
-  plWidget=new ProjListWidget(this);
-  okButton=new QPushButton(tr("OK"),this);
-  cancelButton=new QPushButton(tr("Cancel"),this);
+  countryBox=new QComboBox(this);
+  provinceBox=new QComboBox(this);
+  zoneBox=new QComboBox(this);
+  versionBox=new QComboBox(this);
   gridLayout=new QGridLayout(this);
   setLayout(gridLayout);
-  gridLayout->addWidget(latlongLabel,0,0);
-  gridLayout->addWidget(latlongInput,0,1);
-  gridLayout->addWidget(elevationLabel,1,0);
-  gridLayout->addWidget(elevationInput,1,1);
-  gridLayout->addWidget(plWidget,2,0,1,2);
-  gridLayout->addWidget(okButton,3,0);
-  gridLayout->addWidget(cancelButton,3,1);
-  okButton->setEnabled(false);
-  okButton->setDefault(true);
-  connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
-  connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
+  gridLayout->addWidget(countryBox,0,0);
+  gridLayout->addWidget(provinceBox,0,1);
+  gridLayout->addWidget(zoneBox,0,2);
+  gridLayout->addWidget(versionBox,0,3);
 }
 
-void LatlongFactorDialog::accept()
+void ProjListWidget::setProjectionList(ProjectionList pl)
 {
-  QDialog::accept();
+  allProjections=pl;
+}
+
+void ProjListWidget::setPoint(vball v)
+{
+  point=v;
 }
