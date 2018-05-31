@@ -92,6 +92,7 @@ public slots:
   void smoothContours();
   void smooth1Contour();
   void smoothContoursFinish();
+  void loadGeoid();
   void dump();
 protected:
   void setSize();

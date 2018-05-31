@@ -33,6 +33,12 @@
 
 using namespace std;
 
+geoheader ghead;
+/* Only one geoid can be loaded at present. Possibly in the future, there will
+ * be an array of geoids, with each document holding a pointer to the geoid
+ * it is using. The geoid data are in cube.
+ */
+
 TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
 {
   int i,j,rgb;
@@ -822,6 +828,44 @@ void TinCanvas::smoothContoursFinish()
   update();
 }
 
+void TinCanvas::loadGeoid()
+{
+  int dialogResult,err=0;
+  QString errMsg;
+  QStringList files;
+  string fileName;
+  fileDialog->setWindowTitle(tr("Load Geoid File"));
+  fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setNameFilter(tr("(*.bol);;(*)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    if (fileName.length())
+    {
+      try
+      {
+	ifstream geofile(fileName,ios::binary);
+	ghead.readBinary(geofile);
+	cube.scale=pow(2,ghead.logScale);
+	cube.readBinary(geofile);
+	cout<<"read "<<fileName<<endl;
+      }
+      catch(BeziExcept e)
+      {
+        err=e.getNumber();
+        errMsg=e.message();
+      }
+      if (err)
+      {
+        QString msg=tr("Can't read geoid. Error: ")+errMsg;
+        errorMessage->showMessage(msg);
+      }
+    }
+  }
+}
+
 void TinCanvas::dump()
 /* For debugging.
  * This method outputs any state of the program that may be useful for
@@ -1226,7 +1270,7 @@ void TinWindow::makeActions()
   //loadGeoidAction->setIcon(QIcon(":/loadgeoid.png"));
   loadGeoidAction->setText(tr("Load geoid file"));
   coordMenu->addAction(loadGeoidAction);
-  //connect(loadGeoidAction,SIGNAL(triggered(bool)),this,SLOT(loadGeoid()));
+  connect(loadGeoidAction,SIGNAL(triggered(bool)),canvas,SLOT(loadGeoid()));
   gridToLatlongAction=new QAction(this);
   //gridToLatlongAction->setIcon(QIcon(":/gridtoll.png"));
   gridToLatlongAction->setText(tr("Grid to lat/long"));
