@@ -2365,9 +2365,11 @@ void testmanyarc()
 {
   segment cubic(xyz(-30,0,-27),27,-27,xyz(30,0,27));
   vector<segment> approx;
+  segment diff;
   double abscissa,lastabscissa,ordinate,lastordinate;
   double startslope,endslope;
-  double x,length,accel;
+  double x,length,accel,firstlength;
+  vector<double> vex;
   int narcs,i,j;
   PostScript ps;
   bezier3d spl;
@@ -2397,6 +2399,15 @@ void testmanyarc()
     cout<<"endslope is "<<endslope<<", should be "<<cubic.endslope()<<' '<<ldecimal(endslope-cubic.endslope())<<endl;
     cout<<"ordinate is "<<ordinate<<", should be "<<27<<endl;
     cout<<"p="<<ldecimal(manyArcTrim(narcs))<<endl;
+    firstlength=approx[0].length();
+    diff=segment(xyz(-30,0,0),xyz(firstlength-30,0,cubic.elev(firstlength)-approx[0].getend().elev()));
+    diff.setslope(START,0);
+    diff.setslope(END,cubic.slope(firstlength)-approx[0].endslope());
+    vex=diff.vextrema(false);
+    cout<<"Greatest separation at "<<ldecimal(vex[0])<<" is "<<ldecimal(-diff.station(vex[0]).elev())<<endl;
+    /* Approximate empirical formula for the largest separation:
+     * f(narcs)=sqrt(432)/(narcs-0.230201)**3.
+     */
     ps.endpage();
   }
   cout<<"limit p="<<ldecimal(manyArcTrim(2147483647))<<endl;
