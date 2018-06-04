@@ -2358,9 +2358,9 @@ vector<segment> manyarcapx2(segment cubic,int narcs)
 
 void testmanyarc()
 /* Preliminary research for approximating a spiralarc by a sequence of arcs.
- * In the approximation where the difference in curvature times the square
- * of the length is small, this approaches the problem of approximating a cubic
- * by a sequence of quadratics.
+ * In the approximation where the difference in curvature times the length is
+ * small, this approaches the problem of approximating a cubic by a sequence
+ * of quadratics.
  */
 {
   segment cubic(xyz(-30,0,-27),27,-27,xyz(30,0,27));
@@ -2407,6 +2407,11 @@ void testmanyarc()
     cout<<"Greatest separation at "<<ldecimal(vex[0])<<" is "<<ldecimal(-diff.station(vex[0]).elev())<<endl;
     /* Approximate empirical formula for the largest separation:
      * f(narcs)=sqrt(432)/(narcs-0.230201)**3.
+     * For a fixed narcs, the separation is proportional to the difference in
+     * second derivative (curvature of a spiral) times the square of length.
+     * The difference in curvature times the length is called the parametric
+     * length and is invariant when a spiralarc is scaled.
+     * For this cubic, the difference in 2nd deriv times square of length is 1296.
      */
     ps.endpage();
   }
