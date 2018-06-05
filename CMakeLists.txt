@@ -36,6 +36,22 @@ qt5_add_resources(lib_resources viewtin.qrc)
 qt5_add_translation(qm_files bezitopo_en.ts bezitopo_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
 
+add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
+            bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp cogo.cpp drawobj.cpp
+            ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
+            kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
+            measure.cpp minquad.cpp point.cpp polyline.cpp
+            projection.cpp ps.cpp quaternion.cpp random.cpp relprime.cpp
+            rootfind.cpp segment.cpp spiral.cpp spolygon.cpp
+            tin.cpp vball.cpp vcurve.cpp)
+add_library(bezilib1 SHARED angle.cpp arc.cpp bezier.cpp
+            bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp cogo.cpp drawobj.cpp
+            ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
+            kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
+            measure.cpp minquad.cpp point.cpp polyline.cpp
+            projection.cpp ps.cpp quaternion.cpp random.cpp relprime.cpp
+            rootfind.cpp segment.cpp spiral.cpp spolygon.cpp
+            tin.cpp vball.cpp vcurve.cpp)
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitopo.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp closure.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp cvtmeas.cpp document.cpp
@@ -90,6 +106,8 @@ add_executable(transmer angle.cpp arc.cpp bezier.cpp
                rootfind.cpp segment.cpp spiral.cpp spolygon.cpp
                tin.cpp transmer.cpp vball.cpp vcurve.cpp)
 endif (${FFTW_FOUND})
+target_link_libraries(bezilib0 Qt5::Widgets Qt5::Core)
+target_link_libraries(bezilib1 Qt5::Widgets Qt5::Core)
 target_link_libraries(bezitopo Qt5::Widgets Qt5::Core)
 target_link_libraries(bezitest Qt5::Widgets Qt5::Core)
 target_link_libraries(convertgeoid Qt5::Widgets Qt5::Core)
@@ -98,6 +116,8 @@ target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)
 if (${FFTW_FOUND})
 target_link_libraries(transmer Qt5::Widgets Qt5::Core ${FFTW_LIBRARIES})
 endif (${FFTW_FOUND})
+target_compile_definitions(bezilib0 PUBLIC POINTLIST)
+target_compile_definitions(bezilib1 PUBLIC POINTLIST)
 target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID NUMSGEOID)
 target_compile_definitions(bezitest PUBLIC NUMSGEOID POINTLIST)
 target_compile_definitions(bezitopo PUBLIC POINTLIST)
@@ -111,6 +131,7 @@ check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_files(windows.h HAVE_WINDOWS_H)
 
 install(TARGETS bezitopo convertgeoid viewtin DESTINATION bin)
+install(TARGETS bezilib0 bezilib1 DESTINATION lib)
 install(FILES ${qm_files} projections.txt transmer.dat DESTINATION share/bezitopo)
 
 test_big_endian(BIGENDIAN)
@@ -122,6 +143,9 @@ set(BEZITOPO_MINOR_VERSION 1)
 set(BEZITOPO_PATCH_VERSION 3)
 set(BEZITOPO_VERSION ${BEZITOPO_MAJOR_VERSION}.${BEZITOPO_MINOR_VERSION}.${BEZITOPO_PATCH_VERSION})
 set(COPY_YEAR 2018)
+
+set_target_properties(bezilib0 PROPERTIES OUTPUT_NAME "bezitopo" VERSION ${BEZITOPO_VERSION})
+set_target_properties(bezilib1 PROPERTIES OUTPUT_NAME "bezitopo" VERSION ${BEZITOPO_VERSION})
 
 include_directories(${PROJECT_BINARY_DIR})
 if (${FFTW_FOUND})
