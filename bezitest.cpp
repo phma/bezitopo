@@ -2409,8 +2409,8 @@ void testmanyarc()
      * f(narcs)=sqrt(432)/(narcs-0.230201)**3.
      * For a fixed narcs, the separation is proportional to the difference in
      * second derivative (curvature of a spiral) times the square of length.
-     * The difference in curvature times the length is called the parametric
-     * length and is invariant when a spiralarc is scaled.
+     * The difference in curvature times the length is invariant when a spiralarc
+     * is scaled.
      * For this cubic, the difference in 2nd deriv times square of length is 1296.
      */
     ps.endpage();
