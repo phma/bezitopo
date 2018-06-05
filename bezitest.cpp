@@ -2412,6 +2412,8 @@ void testmanyarc()
      * The difference in curvature times the length is invariant when a spiralarc
      * is scaled.
      * For this cubic, the difference in 2nd deriv times square of length is 1296.
+     * The difference in curvature times the square of the length divided by 24
+     * is the estimate of throw. This cubic's estimated (and exact) throw is 54.
      */
     ps.endpage();
   }
