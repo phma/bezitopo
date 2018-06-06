@@ -36,6 +36,15 @@ qt5_add_resources(lib_resources viewtin.qrc)
 qt5_add_translation(qm_files bezitopo_en.ts bezitopo_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
 
+set(header_files angle.h arc.h bezier.h
+    bezier3d.h binio.h boundrect.h breakline.h circle.h cogo.h drawobj.h
+    ellipsoid.h except.h geoid.h geoidboundary.h
+    kml.h latlong.h ldecimal.h manysum.h
+    measure.h minquad.h point.h polyline.h
+    projection.h ps.h quaternion.h random.h relprime.h
+    rootfind.h segment.h spiral.h spolygon.h
+    tin.h vball.h vcurve.h)
+
 add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
             bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp drawobj.cpp
             ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
@@ -133,6 +142,7 @@ check_include_files(windows.h HAVE_WINDOWS_H)
 install(TARGETS bezitopo convertgeoid viewtin DESTINATION bin)
 install(TARGETS bezilib0 bezilib1 DESTINATION lib)
 install(FILES ${qm_files} projections.txt transmer.dat DESTINATION share/bezitopo)
+install(FILES ${header_files} DESTINATION include/bezitopo)
 
 test_big_endian(BIGENDIAN)
 check_type_size("int" INT)
