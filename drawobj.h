@@ -75,6 +75,7 @@ class drawobj
  * polyline
  *   polyarc
  *     polyspiral
+ * alignment
  * Circle
  */
 {

@@ -141,7 +141,7 @@ public:
   virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
 };
 
-class alignment
+class alignment: public drawobj
 /* An alignment consists of a sequence of horizontal curves (all are spirals,
  * possibly with zero clothance or curvature) and a sequence of vertical
  * curves (all with degree 3 or less). The stations along the horizontal
