@@ -33,7 +33,7 @@
 #include "config.h"
 #include "point.h"
 #include "cogo.h"
-#include "bezitopo.h"
+#include "globals.h"
 #include "bezier.h"
 #include "rootfind.h"
 #include "test.h"

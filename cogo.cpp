@@ -3,7 +3,7 @@
 /* cogo.cpp - coordinate geometry                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2017 Pierre Abbat.
+/* Copyright 2012,2015-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@
 #include <cmath>
 #include <climits>
 #include "cogo.h"
-#include "bezitopo.h"
+#include "globals.h"
 #include "random.h"
 using namespace std;
 

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "bezitopo.h"
+#include "globals.h"
 #include "pnezd.h"
 #include "document.h"
 #include "except.h"

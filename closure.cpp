@@ -29,7 +29,7 @@
 #include "point.h"
 #include "cogo.h"
 #include "angle.h"
-#include "bezitopo.h"
+#include "globals.h"
 #include "except.h"
 using namespace std;
 vector<command> clcommands;

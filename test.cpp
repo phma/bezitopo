@@ -3,7 +3,7 @@
 /* test.cpp - test patterns and functions             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2017 Pierre Abbat.
+/* Copyright 2012,2013,2014,2015,2017,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 
 #define _USE_MATH_DEFINES
 #include <cmath>
-#include "bezitopo.h"
+#include "globals.h"
 #include "test.h"
 #include "angle.h"
 #include "pointlist.h"

@@ -22,7 +22,7 @@
 
 #include <cmath>
 #include "angle.h"
-#include "bezitopo.h"
+#include "globals.h"
 #include "pointlist.h"
 #include "csv.h"
 #include "breakline.h"

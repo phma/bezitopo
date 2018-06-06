@@ -30,7 +30,7 @@
 #include "ldecimal.h"
 #include "projection.h"
 #include "icommon.h"
-#include "bezitopo.h"
+#include "globals.h"
 #include "except.h"
 
 using namespace std;

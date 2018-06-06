@@ -23,7 +23,7 @@
 #include <map>
 #include <cmath>
 #include <iostream>
-#include "bezitopo.h"
+#include "globals.h"
 #include "tin.h"
 #include "ps.h"
 #include "except.h"

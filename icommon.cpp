@@ -3,7 +3,7 @@
 /* icommon.cpp - common interactive routines          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2017 Pierre Abbat.
+/* Copyright 2015-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <iostream>
 #include "icommon.h"
 #include "measure.h"
-#include "bezitopo.h"
+#include "globals.h"
 
 using namespace std;
 

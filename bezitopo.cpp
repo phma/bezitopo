@@ -25,7 +25,7 @@
 #include "config.h"
 #include "point.h"
 #include "cogo.h"
-#include "bezitopo.h"
+#include "globals.h"
 #include "except.h"
 #include "test.h"
 #include "tin.h"

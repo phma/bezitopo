@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* bezitopo.h - header file for main program          */
+/* globals.h - multi-file global variables            */
 /*                                                    */
 /******************************************************/
 /* Copyright 2012,2015,2018 Pierre Abbat.

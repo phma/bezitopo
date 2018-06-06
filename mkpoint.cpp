@@ -3,7 +3,7 @@
 /* mkpoint.cpp - make new points                      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2017 Pierre Abbat.
+/* Copyright 2015-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -45,7 +45,7 @@
 #include "angle.h"
 #include "icommon.h"
 #include "pointlist.h"
-#include "bezitopo.h"
+#include "globals.h"
 
 using namespace std;
 
