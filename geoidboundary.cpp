@@ -25,7 +25,6 @@
 #include "geoidboundary.h"
 #include "spolygon.h"
 #include "manysum.h"
-#include "kml.h"
 #include "projection.h"
 #include "random.h"
 #include "relprime.h"

@@ -48,7 +48,7 @@ set(header_files angle.h arc.h bezier.h
 add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
             bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp drawobj.cpp
             ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-            kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
+            latlong.cpp ldecimal.cpp manysum.cpp
             measure.cpp minquad.cpp point.cpp polyline.cpp
             projection.cpp ps.cpp quaternion.cpp random.cpp relprime.cpp
             rootfind.cpp segment.cpp spiral.cpp spolygon.cpp
@@ -56,7 +56,7 @@ add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
 add_library(bezilib1 SHARED angle.cpp arc.cpp bezier.cpp
             bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp drawobj.cpp
             ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-            kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
+            latlong.cpp ldecimal.cpp manysum.cpp
             measure.cpp minquad.cpp point.cpp polyline.cpp
             projection.cpp ps.cpp quaternion.cpp random.cpp relprime.cpp
             rootfind.cpp segment.cpp spiral.cpp spolygon.cpp
@@ -109,7 +109,7 @@ if (${FFTW_FOUND})
 add_executable(transmer angle.cpp arc.cpp bezier.cpp
                bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp cogo.cpp drawobj.cpp
                ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-               kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
+               latlong.cpp ldecimal.cpp manysum.cpp
                measure.cpp minquad.cpp point.cpp polyline.cpp
                projection.cpp ps.cpp quaternion.cpp random.cpp relprime.cpp
                rootfind.cpp segment.cpp spiral.cpp spolygon.cpp
