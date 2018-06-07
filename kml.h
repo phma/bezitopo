@@ -33,7 +33,6 @@ double middleOrdinate(latlong ll0,latlong ll1);
 std::vector<latlong> splitPoints(latlong ll0,latlong ll1);
 void openkml(std::ofstream &file,std::string filename);
 void closekml(std::ofstream &file);
-polyarc flatten(g1boundary g1);
 
 class KmlRegionList
 {

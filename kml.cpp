@@ -207,30 +207,6 @@ void closekml(ofstream &file)
   file.close();
 }
 
-polyarc flatten(g1boundary g1)
-{
-  int i;
-  polyarc ret;
-  arc tmp;
-  xy midpt;
-  for (i=0;i<g1.size();i++)
-    ret.insert(sphereStereoArabianSea.geocentricToGrid(decodedir(g1[i])));
-  for (i=0;i<g1.size();i++)
-  {
-    tmp=ret.getarc(i);
-    midpt=sphereStereoArabianSea.geocentricToGrid(decodedir(g1.seg(i).midpoint()));
-    tmp=arc(tmp.getstart(),xyz(midpt,0),tmp.getend());
-    if (tmp.chordlength()<EARTHRAD && -abs(tmp.getdelta())<-DEG180)
-    {
-      cerr<<"Took greater arc when it shouldn't"<<endl;
-      tmp=arc(tmp.getstart(),xyz(midpt,0),tmp.getend());
-    }
-    ret.setdelta(i,tmp.getdelta());
-  }
-  ret.setlengths();
-  return ret;
-}
-
 int bitcount(int n)
 {
   n=((n&0xaaaaaaaa)>>1)+(n&0x55555555);

@@ -26,13 +26,36 @@
 #include "projection.h"
 #include "rootfind.h"
 #include "ldecimal.h"
-#include "kml.h"
 
 #define PROJ_CC 1
 #define PROJ_TM 2
 #define PROJ_OM 3
 
 using namespace std;
+
+polyarc flatten(g1boundary g1)
+{
+  int i;
+  polyarc ret;
+  arc tmp;
+  xy midpt;
+  for (i=0;i<g1.size();i++)
+    ret.insert(sphereStereoArabianSea.geocentricToGrid(decodedir(g1[i])));
+  for (i=0;i<g1.size();i++)
+  {
+    tmp=ret.getarc(i);
+    midpt=sphereStereoArabianSea.geocentricToGrid(decodedir(g1.seg(i).midpoint()));
+    tmp=arc(tmp.getstart(),xyz(midpt,0),tmp.getend());
+    if (tmp.chordlength()<EARTHRAD && -abs(tmp.getdelta())<-DEG180)
+    {
+      cerr<<"Took greater arc when it shouldn't"<<endl;
+      tmp=arc(tmp.getstart(),xyz(midpt,0),tmp.getend());
+    }
+    ret.setdelta(i,tmp.getdelta());
+  }
+  ret.setlengths();
+  return ret;
+}
 
 Projection::Projection()
 {

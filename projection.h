@@ -49,6 +49,8 @@
 #include "ellipsoid.h"
 #include "geoidboundary.h"
 
+polyarc flatten(g1boundary g1);
+
 class Projection
 {
 public:
