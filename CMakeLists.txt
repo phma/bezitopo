@@ -143,6 +143,7 @@ install(TARGETS bezitopo convertgeoid viewtin DESTINATION bin)
 install(TARGETS bezilib0 bezilib1 DESTINATION lib)
 install(FILES ${qm_files} projections.txt transmer.dat DESTINATION share/bezitopo)
 install(FILES ${header_files} DESTINATION include/bezitopo)
+install(FILES bezitopo.h DESTINATION include)
 
 test_big_endian(BIGENDIAN)
 check_type_size("int" INT)

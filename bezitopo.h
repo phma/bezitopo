@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* globals.h - multi-file global variables            */
+/* bezitopo.h - include file for library              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015,2018 Pierre Abbat.
+/* Copyright 2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -20,19 +20,34 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GLOBALS_H
-#define GLOBALS_H
-// #define NDEBUG
-#define _WITH_GETLINE
-#include <cassert>
-#include <map>
-#include <cstdio>
-#include "point.h"
-#include "document.h"
-#include "projection.h"
-
-void dumppoints();
-extern document doc;
-extern ProjectionList allProjections;
-
+#ifndef BEZITOPO_H
+#define BEZITOPO_H
+#include <bezitopo/angle.h>
+#include <bezitopo/xyz.h>
+#include <bezitopo/quaternion.h>
+#include <bezitopo/bezier3d.h>
+#include <bezitopo/binio.h>
+#include <bezitopo/roscat.h>
+#include <bezitopo/breakline.h>
+#include <bezitopo/drawobj.h>
+#include <bezitopo/circle.h>
+#include <bezitopo/point.h>
+#include <bezitopo/cogo.h>
+#include <bezitopo/latlong.h>
+#include <bezitopo/ellipsoid.h>
+#include <bezitopo/except.h>
+#include <bezitopo/vball.h>
+#include <bezitopo/segment.h>
+#include <bezitopo/arc.h>
+#include <bezitopo/spiral.h>
+#include <bezitopo/geoid.h>
+#include <bezitopo/geoidboundary.h>
+#include <bezitopo/.h>
+#include <bezitopo/.h>
+#include <bezitopo/.h>
+#include <bezitopo/.h>
+#include <bezitopo/.h>
+#include <bezitopo/.h>
+#include <bezitopo/.h>
+#include <bezitopo/.h>
 #endif
