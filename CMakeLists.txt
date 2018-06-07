@@ -39,7 +39,7 @@ qt5_add_translation(qm_files bezitopo_en.ts bezitopo_es.ts)
 set(header_files angle.h arc.h bezier.h
     bezier3d.h binio.h boundrect.h breakline.h circle.h cogo.h drawobj.h
     ellipsoid.h except.h geoid.h geoidboundary.h
-    kml.h latlong.h ldecimal.h manysum.h
+    latlong.h ldecimal.h manysum.h
     measure.h minquad.h point.h polyline.h
     projection.h ps.h quaternion.h random.h relprime.h
     rootfind.h segment.h spiral.h spolygon.h
