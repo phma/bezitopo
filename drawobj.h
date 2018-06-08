@@ -33,6 +33,26 @@
 std::string xmlEscape(std::string str);
 unsigned memHash(void *mem,unsigned len,unsigned previous=0);
 
+/* Properties of drawing objects
+ * Integer properties start at 0x0000, double at 0x8000, xy at 0x4000,
+ * xyz at 0xc000, and string at 0x2000.
+ * If an integer property is an angle, asking for its value as a double should
+ * be valid and return the angle in radians.
+ */
+#define PROP_DELTA 0x0000
+#define PROP_DELTA2 0x0001
+#define PROP_LENGTH 0x8000
+#define PROP_RADIUS 0x8001
+#define PROP_CURVATURE 0x8002
+#define PROP_CLOTHANCE 0x8003
+#define PROP_START_TANGENT 0x8004
+#define PROP_END_TANGENT 0x8005
+#define PROP_THROW 0x8006
+#define PROP_CENTER 0x4000
+#define PROP_MIDPOINT_XY 0x4001
+#define PROP_POINT_INTERSECTION 0x4002
+#define PROP_MIDPOINT_XYZ 0xc000
+
 class bsph
 {
 public:
