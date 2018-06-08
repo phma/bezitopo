@@ -42,7 +42,15 @@
 #include <bezitopo/spiral.h>
 #include <bezitopo/geoid.h>
 #include <bezitopo/geoidboundary.h>
-#include <bezitopo/.h>
+#include <bezitopo/ldecimal.h>
+#include <bezitopo/manysum.h>
+#include <bezitopo/zoom.h>
+#include <bezitopo/measure.h>
+#include <bezitopo/minquad.h>
+#include <bezitopo/polyline.h>
+#include <bezitopo/projection.h>
+#include <bezitopo/bezier.h>
+#include <bezitopo/color.h>
 #include <bezitopo/.h>
 #include <bezitopo/.h>
 #include <bezitopo/.h>
