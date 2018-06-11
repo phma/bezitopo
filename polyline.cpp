@@ -546,6 +546,8 @@ int polyline::stationSegment(double along)
       before=middle;
     ++i;
   }
+  if (after==cumLengths.size() && after && along==cumLengths.back())
+    after--; // station(length()) should return the endpoint, not NaN
   return after;
 }
 
