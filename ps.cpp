@@ -293,9 +293,11 @@ void PostScript::dot(xy pnt,string comment)
 
 void PostScript::circle(xy pnt,double radius)
 {
+  assert(psfile);
   pnt=turn(pnt,orientation);
-  *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<ldecimal(yscale(pnt.north()),PAPERRES)
-  <<" newpath "<<ldecimal(scale*radius,PAPERRES)<<" 0 360 arc fill %"<<radius*radius<<endl;
+  if (isfinite(pnt.east()) && isfinite(pnt.north()))
+    *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)
+    <<" newpath "<<ldecimal(scale*radius,PAPERRES)<<" 0 360 arc fill %"<<radius*radius<<endl;
 }
 
 void PostScript::line(edge lin,int num,bool colorfibaster,bool directed)
