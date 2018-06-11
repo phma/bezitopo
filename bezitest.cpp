@@ -2356,6 +2356,30 @@ vector<segment> manyarcapx2(segment cubic,int narcs)
   return ret;
 }
 
+void test1manyarc(spiralarc s,PostScript &ps)
+{
+  int narcs;
+  polyarc approx;
+  xy enddiff;
+  BoundRect br;
+  for (narcs=2;narcs<9;narcs++)
+  {
+    approx=manyArcUnadjusted(s,narcs);
+    enddiff=approx.station(approx.length())-s.getend();
+    cout<<narcs<<" arcs, end is off by ("<<enddiff.getx()<<','<<enddiff.gety()<<")\n";
+    br.clear();
+    br.include(&s);
+    br.include(&approx);
+    ps.startpage();
+    ps.setscale(br);
+    ps.setcolor(0,0,1);
+    ps.spline(s.approx3d(1));
+    ps.setcolor(0,0,0);
+    ps.spline(approx.approx3d(1));
+    ps.endpage();
+  }
+}
+
 void testmanyarc()
 /* Preliminary research for approximating a spiralarc by a sequence of arcs.
  * In the approximation where the difference in curvature times the length is
@@ -2370,6 +2394,7 @@ void testmanyarc()
   double startslope,endslope;
   double x,length,accel,firstlength;
   vector<double> vex;
+  spiralarc trans(xyz(0,0,0),0,0.001,xyz(500,0,0));
   int narcs,i,j;
   PostScript ps;
   bezier3d spl;
@@ -2418,6 +2443,7 @@ void testmanyarc()
     ps.endpage();
   }
   cout<<"limit p="<<ldecimal(manyArcTrim(2147483647))<<endl;
+  test1manyarc(trans,ps);
   ps.close();
 }
 

@@ -121,5 +121,7 @@ polyarc manyArcUnadjusted(spiralarc a,int narcs)
     ret.insert(thispoint);
     ret.setdelta(i,radtobin(endbear-startbear));
   }
+  ret.open();
+  ret.setlengths();
   return ret;
 }
