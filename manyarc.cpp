@@ -75,6 +75,59 @@ double manyArcTrim(unsigned n)
   return p;
 }
 
+vector<segment> manyQuad(segment cubic,int narcs)
+/* Approximates cubic with narcs quadratics, where the first and last
+ * are trimmed by the manyArcTrim function.
+ */
+{
+  int i;
+  double piecelength,thispiecelength,abscissa[5],overhang;
+  double ordinate,lastordinate,startx;
+  double startslope,midslope,endslope;
+  double p,q,accel;
+  vector<segment> ret;
+  p=manyArcTrim(narcs);
+  q=p*p-p+0.25;
+  piecelength=cubic.length()/(narcs-2*p);
+  overhang=piecelength*p;
+  lastordinate=cubic.getstart().getz();
+  startx=cubic.getstart().getx();
+  for (i=0;i<narcs;i++)
+  {
+    abscissa[1]=i*piecelength+cubic.getstart().getx();
+    abscissa[0]=abscissa[1]-overhang;
+    abscissa[2]=abscissa[0]+piecelength/2;
+    abscissa[4]=abscissa[0]+piecelength;
+    abscissa[3]=abscissa[4]-overhang;
+    midslope=(cubic.slope(abscissa[3]-startx)+cubic.slope(abscissa[1]-startx))/2;
+    accel=(cubic.slope(abscissa[3]-startx)-cubic.slope(abscissa[1]-startx))/(abscissa[3]-abscissa[1]);
+    thispiecelength=piecelength;
+    if (i)
+      startslope=midslope-accel*piecelength/2;
+    else
+    {
+      startslope=midslope-accel*(abscissa[2]-abscissa[1]);
+      //cout<<"startslope="<<startslope<<", should be "<<cubic.startslope()<<endl;
+      thispiecelength-=overhang;
+    }
+    if (i<narcs-1)
+      endslope=midslope+accel*piecelength/2;
+    else
+    {
+      endslope=midslope+accel*(abscissa[3]-abscissa[2]);
+      //cout<<"endslope="<<endslope<<", should be "<<cubic.endslope()<<endl;
+      thispiecelength-=overhang;
+    }
+    ordinate=lastordinate+thispiecelength*(startslope+endslope)/2;
+    ret.push_back(segment(xyz(abscissa[i==0]          ,0,lastordinate),
+			  xyz(abscissa[4-(i==narcs-1)],0,    ordinate)));
+    ret[i].setslope(START,startslope);
+    ret[i].setslope(END,endslope);
+    lastordinate=ordinate;
+  }
+  return ret;
+}
+
 polyarc manyArcUnadjusted(spiralarc a,int narcs)
 {
   int sb=a.startbearing(),eb=a.endbearing();
