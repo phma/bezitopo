@@ -74,3 +74,52 @@ double manyArcTrim(unsigned n)
   }
   return p;
 }
+
+polyarc manyArcUnadjusted(spiralarc a,int narcs)
+{
+  int sb=a.startbearing(),eb=a.endbearing();
+  int i;
+  double piecelength,thispiecelength,chordlength,abscissa[5],overhang;
+  double startbear,midbear,endbear;
+  int midbeara,midbearb;
+  double p,q,cur;
+  polyarc ret;
+  xy thispoint=a.getstart();
+  ret.insert(thispoint);
+  p=manyArcTrim(narcs);
+  q=p*p-p+0.25;
+  piecelength=a.length()/(narcs-2*p);
+  overhang=piecelength*p;
+  for (i=0;i<narcs;i++)
+  {
+    abscissa[1]=i*piecelength;
+    abscissa[0]=abscissa[1]-overhang;
+    abscissa[2]=abscissa[0]+piecelength/2;
+    abscissa[4]=abscissa[0]+piecelength;
+    abscissa[3]=abscissa[4]-overhang;
+    midbeara=a.bearing(abscissa[3]);
+    midbearb=a.bearing(abscissa[1]);
+    midbear=bintorad(midbeara)+bintorad(midbearb-midbeara)/2;
+    cur=bintorad(midbeara-midbearb)/(abscissa[3]-abscissa[1]);
+    thispiecelength=piecelength;
+    if (i)
+      startbear=midbear-cur*piecelength/2;
+    else
+    {
+      startbear=midbear-cur*(abscissa[2]-abscissa[1]);
+      thispiecelength-=overhang;
+    }
+    if (i<narcs-1)
+      endbear=midbear+cur*piecelength/2;
+    else
+    {
+      endbear=midbear+cur*(abscissa[3]-abscissa[2]);
+      thispiecelength-=overhang;
+    }
+    chordlength=thispiecelength*cos((endbear-startbear)/2);
+    thispoint+=chordlength*cossin((endbear+startbear)/2);
+    ret.insert(thispoint);
+    ret.setdelta(i,radtobin(endbear-startbear));
+  }
+  return ret;
+}

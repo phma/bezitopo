@@ -20,6 +20,9 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "polyline.h"
+
 double manyArcTrimFunc(double p,double n);
 double manyArcTrimDeriv(double p,double n);
 double manyArcTrim(unsigned n);
+polyarc manyArcUnadjusted(spiralarc a,int narcs);
