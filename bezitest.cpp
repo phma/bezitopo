@@ -2394,7 +2394,7 @@ void testmanyarc()
   double startslope,endslope;
   double x,length,accel,firstlength;
   vector<double> vex;
-  spiralarc trans(xyz(0,0,0),0,0.001,xyz(500,0,0));
+  spiralarc trans(xyz(0,0,0),0,0.003,xyz(500,0,0));
   int narcs,i,j;
   PostScript ps;
   bezier3d spl;
