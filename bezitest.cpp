@@ -2305,7 +2305,7 @@ void testmanyarc()
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
   ps.setDoc(doc);
-  for (narcs=2;narcs<=20;narcs++)
+  for (narcs=2;narcs<2;narcs++)
   {
     ps.startpage();
     ps.setscale(-30,-27,30,27);
