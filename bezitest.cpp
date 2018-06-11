@@ -2260,15 +2260,33 @@ void testcurvefit()
 
 void test1manyarc(spiralarc s,PostScript &ps)
 {
-  int narcs;
+  int narcs,i,j;
   polyarc approx;
+  vector<xy> crossings;
+  arc arc1;
+  int crossingsPerArc[4];
+  vector<array<alosta,2> > crossings1;
   xy enddiff;
   BoundRect br;
+  for (i=0;i<4;i++)
+    crossingsPerArc[i]=0;
   for (narcs=2;narcs<9;narcs++)
   {
     approx=manyArcUnadjusted(s,narcs);
     enddiff=approx.station(approx.length())-s.getend();
     cout<<narcs<<" arcs, end is off by ("<<enddiff.getx()<<','<<enddiff.gety()<<")\n";
+    crossings.clear();
+    for (i=0;i<narcs;i++)
+    {
+      arc1=approx.getarc(i);
+      crossings1=intersections(&s,&arc1);
+      if (crossings1.size()<4)
+	crossingsPerArc[crossings1.size()]++;
+      for (j=0;j<crossings1.size();j++)
+	crossings.push_back(crossings1[j][0].station);
+    }
+    for (i=0;i<crossings.size();i++)
+      ps.circle(crossings[i],s.length()/100);
     br.clear();
     br.include(&s);
     br.include(&approx);
