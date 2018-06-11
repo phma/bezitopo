@@ -429,46 +429,49 @@ double segment::dirbound(int angle,double boundsofar)
   nstartpoints=nearbyint(fabs(closest*len))+2;
   closedist=INFINITY;
   fardist=-INFINITY;
-  for (i=0;i<=nstartpoints;i++)
-    inserenda.insert(((double)i/nstartpoints)*len);
-  do
+  if (std::isfinite(len))
   {
-    lastclosedist=closedist;
-    for (j=delenda.begin();j!=delenda.end();++j)
-      stdist.erase(*j);
-    for (j=inserenda.begin();j!=inserenda.end();++j)
+    for (i=0;i<=nstartpoints;i++)
+      inserenda.insert(((double)i/nstartpoints)*len);
+    do
     {
-      sta=station(*j);
-      len2=sta.east()*c+sta.north()*s;
-      if (len2<closedist)
+      lastclosedist=closedist;
+      for (j=delenda.begin();j!=delenda.end();++j)
+	stdist.erase(*j);
+      for (j=inserenda.begin();j!=inserenda.end();++j)
       {
-	closest=*j;
-	closedist=len2;
-	angerr=((bearing(*j)-angle)&(DEG180-1))-DEG90;
+	sta=station(*j);
+	len2=sta.east()*c+sta.north()*s;
+	if (len2<closedist)
+	{
+	  closest=*j;
+	  closedist=len2;
+	  angerr=((bearing(*j)-angle)&(DEG180-1))-DEG90;
+	}
+	if (len2>fardist)
+	  fardist=len2;
+	stdist[*j]=len2;
       }
-      if (len2>fardist)
-	fardist=len2;
-      stdist[*j]=len2;
-    }
-    inserenda.clear();
-    delenda.clear();
-    for (k0=k1=stdist.begin(),k2=++k1,++k2;stdist.size()>2 && k2!=stdist.end();++k0,++k1,++k2)
-    {
-      vertex=minquad(k0->first,k0->second,k1->first,k1->second,k2->first,k2->second);
-      if (vertex<0 && vertex>-len/2)
-	vertex=-vertex;
-      if (vertex>len && vertex<3*len/2)
-	vertex=2*len-vertex;
-      if (stdist.count(vertex) && vertex!=k1->first)
-	delenda.insert(k1->first);
-      if (!stdist.count(vertex) && vertex>=0 && vertex<=len)
-	inserenda.insert(vertex);
-    }
-    if (lastclosedist>closedist)
-      angtoler=1;
-    else
-      angtoler*=7;
-  } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<boundsofar && !((closest==0 && isinsector(angle-startbearing(),0xf00ff00f)) || (closest==len && isinsector(angle-endbearing(),0x0ff00ff0))));
+      inserenda.clear();
+      delenda.clear();
+      for (k0=k1=stdist.begin(),k2=++k1,++k2;stdist.size()>2 && k2!=stdist.end();++k0,++k1,++k2)
+      {
+	vertex=minquad(k0->first,k0->second,k1->first,k1->second,k2->first,k2->second);
+	if (vertex<0 && vertex>-len/2)
+	  vertex=-vertex;
+	if (vertex>len && vertex<3*len/2)
+	  vertex=2*len-vertex;
+	if (stdist.count(vertex) && vertex!=k1->first)
+	  delenda.insert(k1->first);
+	if (!stdist.count(vertex) && vertex>=0 && vertex<=len)
+	  inserenda.insert(vertex);
+      }
+      if (lastclosedist>closedist)
+	angtoler=1;
+      else
+	angtoler*=7;
+    } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<boundsofar && !((closest==0 && isinsector(angle-startbearing(),0xf00ff00f)) || (closest==len && isinsector(angle-endbearing(),0x0ff00ff0))));
+  }
   return closedist;
 }
 
