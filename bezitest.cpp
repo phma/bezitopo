@@ -2097,6 +2097,7 @@ void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps,vector<xy> expected,
   }
   for (i=j=0;i<inters.size();i++)
   {
+    ps.circle(inters[i][0].station,1/ps.getscale());
     for (;j<expected.size() && (dist(expected[j],inters[i][0].station)>toler || dist(expected[j],inters[i][1].station)>toler);j++);
     if (j==expected.size())
       cout<<"Unexpected intersection:\n";
