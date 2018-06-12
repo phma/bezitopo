@@ -2286,8 +2286,6 @@ void test1manyarc(spiralarc s,PostScript &ps)
       for (j=0;j<crossings1.size();j++)
 	crossings.push_back(crossings1[j][0].station);
     }
-    for (i=0;i<crossings.size();i++)
-      ps.circle(crossings[i],s.length()/100);
     br.clear();
     br.include(&s);
     br.include(&approx);
@@ -2297,6 +2295,8 @@ void test1manyarc(spiralarc s,PostScript &ps)
     ps.spline(s.approx3d(1));
     ps.setcolor(0,0,0);
     ps.spline(approx.approx3d(1));
+    for (i=0;i<crossings.size();i++)
+      ps.circle(crossings[i],s.length()/100);
     ps.endpage();
   }
 }
