@@ -378,9 +378,9 @@ vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
     if (i==0 || i==inters.size() || -abs(inters[i][0].bearing-inters[i][1].bearing-inters[i-1][0].bearing+inters[i-1][1].bearing)<-255)
     {
       bounds.push_back(i);
-      cout<<i<<' ';
+      //cout<<i<<' ';
     }
-  cout<<endl;
+  //cout<<endl;
   for (range=0;range<bounds.size()-1;range++)
   {
     rangeSize=bounds[range+1]-bounds[range];
