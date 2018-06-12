@@ -526,6 +526,15 @@ double polyline::length()
     return 0;
 }
 
+double polyline::getCumLength(int i)
+{
+  if (i<0)
+    i=0;
+  if (i>=cumLengths.size())
+    i=cumLengths.size()-1;
+  return cumLengths[i];
+}
+
 int polyline::stationSegment(double along)
 {
   int before=-1,after=cumLengths.size();

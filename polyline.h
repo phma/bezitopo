@@ -74,6 +74,7 @@ public:
   virtual void close();
   virtual double in(xy point);
   double length();
+  double getCumLength(int i);
   virtual xyz station(double along);
   virtual double closest(xy topoint,bool offends=false);
   virtual double area();
