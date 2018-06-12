@@ -2291,12 +2291,13 @@ void test1manyarc(spiralarc s,PostScript &ps)
     br.include(&approx);
     ps.startpage();
     ps.setscale(br);
-    ps.setcolor(0,0,1);
-    ps.spline(s.approx3d(1));
-    ps.setcolor(0,0,0);
-    ps.spline(approx.approx3d(1));
+    ps.setcolor(0.8,0.8,0);
     for (i=0;i<crossings.size();i++)
       ps.circle(crossings[i],s.length()/100);
+    ps.setcolor(0,0,1);
+    ps.spline(s.approx3d(0.01));
+    ps.setcolor(0,0,0);
+    ps.spline(approx.approx3d(0.01));
     ps.endpage();
   }
 }
