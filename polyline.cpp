@@ -527,12 +527,15 @@ double polyline::length()
 }
 
 double polyline::getCumLength(int i)
+// Returns the total of the first i segments/arcs/spiralarcs.
 {
-  if (i<0)
-    i=0;
-  if (i>=cumLengths.size())
+  i--;
+  if (i>=(signed)cumLengths.size())
     i=cumLengths.size()-1;
-  return cumLengths[i];
+  if (i<0)
+    return 0;
+  else
+    return cumLengths[i];
 }
 
 int polyline::stationSegment(double along)
