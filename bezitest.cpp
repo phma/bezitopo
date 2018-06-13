@@ -2277,8 +2277,16 @@ void test1manyarc(spiralarc s,PostScript &ps)
     enddiff=approx.station(approx.length())-s.getend();
     cout<<narcs<<" arcs, end is off by ("<<enddiff.getx()<<','<<enddiff.gety()<<")\n";
     crossings.clear();
-    for (i=0;i<narcs;i++)
+    for (i=1;i<narcs-1;i++)
     {
+      /* If the approximation is good, every arc except the first and last
+       * intersects the spiral. The first and last arcs are tangent to the
+       * spiral at their ends, so it takes a really long time (over 400 calls
+       * to spiralarc::station for every call to intersection1) to find
+       * the intersections, which fails half the time because of roundoff.
+       * Finding the intersections of the intermediate arcs takes only
+       * about 10 calls to spiralarc::station per intersection1.
+       */
       arc1=approx.getarc(i);
       crossings1=intersections(&s,&arc1);
       if (crossings1.size()<4)
