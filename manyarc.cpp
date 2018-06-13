@@ -201,8 +201,8 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
   for (i=0;i<narcs;i++)
   {
     cout<<"Piece "<<i<<" arc length "<<ldecimal(alongs[i+1]-alongs[i])<<'\n';
-    cout<<"Arc chord "<<ldecimal(dist(arcpoints[i+1],arcpoints[i]),0.001)<<' '<<ldecimal(bintodeg(dir(arcpoints[i+1],arcpoints[i])),0.0001)<<"°\n";
-    cout<<"Spiral chord "<<ldecimal(dist(spiralpoints[i+1],spiralpoints[i]),0.001)<<' '<<ldecimal(bintodeg(dir(spiralpoints[i+1],spiralpoints[i])),0.0001)<<"°\n";
+    cout<<"Arc chord "<<ldecimal(dist(arcpoints[i],arcpoints[i+1]),0.001)<<' '<<ldecimal(bintodeg(dir(arcpoints[i],arcpoints[i+1])),0.0001)<<"°\n";
+    cout<<"Spiral chord "<<ldecimal(dist(spiralpoints[i],spiralpoints[i+1]),0.001)<<' '<<ldecimal(bintodeg(dir(spiralpoints[i],spiralpoints[i+1])),0.0001)<<"°\n";
   }
   return apx;
 }
