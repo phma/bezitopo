@@ -171,7 +171,10 @@ polyarc manyArcUnadjusted(spiralarc a,int narcs)
       endbear=midbear+cur*(abscissa[3]-abscissa[2]);
       thispiecelength-=overhang;
     }
-    chordlength=thispiecelength*cos((endbear-startbear)/2);
+    if (endbear==startbear)
+      chordlength=thispiecelength;
+    else
+      chordlength=thispiecelength*sin((endbear-startbear)/2)/((endbear-startbear)/2);
     thispoint+=chordlength*cossin((endbear+startbear)/2);
     ret.insert(thispoint);
     ret.setdelta(i,radtobin(endbear-startbear));
