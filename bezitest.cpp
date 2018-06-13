@@ -2180,8 +2180,11 @@ void testcogospiral()
    * difference only 108 units (0.652"), which looks like a single intersection:
    * 59807 63087
    * 53498 39253
+   * These snip numbers produce intersections at x=±5.067e-1:
+   * 24581 17857
+   * 18613 4542
    */
-  testcogospiral2(s,t,ps,expected,5e-5,7);
+  testcogospiral2(s,t,ps,expected,5.1e-5,7);
 }
 
 void testcurvefit()
