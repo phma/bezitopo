@@ -19,9 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <iostream>
 #include "manyarc.h"
 #include "rootfind.h"
 #include "manysum.h"
+#include "ldecimal.h"
 using namespace std;
 
 /* Spiralarcs are used for centerlines of highways. A property line or easement
@@ -176,5 +178,36 @@ polyarc manyArcUnadjusted(spiralarc a,int narcs)
   }
   ret.open();
   ret.setlengths();
+  return ret;
+}
+
+polyarc adjustManyArc(polyarc apx,spiralarc a)
+{
+  int narcs=apx.size();
+  int i;
+  double along;
+  vector<double> alongs;
+  vector<xy> arcpoints,spiralpoints;
+  for (i=0;i<=narcs;i++)
+  {
+    along=apx.getCumLength(i);
+    arcpoints.push_back(apx.station(along));
+    spiralpoints.push_back(a.station(along)); // The lengths of the curves are equal.
+    alongs.push_back(along);
+  }
+  for (i=0;i<narcs;i++)
+  {
+    cout<<"Piece "<<i<<" arc length "<<ldecimal(alongs[i+1]-alongs[i])<<'\n';
+    cout<<"Arc chord "<<ldecimal(dist(arcpoints[i+1],arcpoints[i]),0.001)<<' '<<ldecimal(bintodeg(dir(arcpoints[i+1],arcpoints[i])),0.0001)<<"°\n";
+    cout<<"Spiral chord "<<ldecimal(dist(spiralpoints[i+1],spiralpoints[i]),0.001)<<' '<<ldecimal(bintodeg(dir(spiralpoints[i+1],spiralpoints[i])),0.0001)<<"°\n";
+  }
+  return apx;
+}
+
+polyarc manyArc(spiralarc a,int narcs)
+{
+  polyarc ret;
+  ret=manyArcUnadjusted(a,narcs);
+  ret=adjustManyArc(ret,a);
   return ret;
 }

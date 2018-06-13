@@ -2276,7 +2276,7 @@ void test1manyarc(spiralarc s,PostScript &ps)
     crossingsPerArc[i]=0;
   for (narcs=2;narcs<9;narcs++)
   {
-    approx=manyArcUnadjusted(s,narcs);
+    approx=manyArc(s,narcs);
     enddiff=approx.station(approx.length())-s.getend();
     cout<<narcs<<" arcs, end is off by ("<<enddiff.getx()<<','<<enddiff.gety()<<")\n";
     crossings.clear();

@@ -27,3 +27,4 @@ double manyArcTrimDeriv(double p,double n);
 double manyArcTrim(unsigned n);
 std::vector<segment> manyQuad(segment cubic,int narcs);
 polyarc manyArcUnadjusted(spiralarc a,int narcs);
+polyarc manyArc(spiralarc a,int narcs);
