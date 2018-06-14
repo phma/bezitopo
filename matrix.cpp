@@ -178,6 +178,16 @@ double matrix::trace()
   return ret.total();
 }
 
+matrix matrix::transpose()
+{
+  matrix ret(columns,rows);
+  int i,j;
+  for (i=0;i<rows;i++)
+    for (j=0;j<columns;j++)
+      ret.entry[j*rows+i]=entry[i*columns+j];
+  return ret;
+}
+
 void matrix::swaprows(unsigned r0,unsigned r1)
 {
   double *temp;
