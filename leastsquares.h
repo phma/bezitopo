@@ -3,7 +3,7 @@
 /* leastsquares.h - least-squares adjustment          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016 Pierre Abbat.
+/* Copyright 2016,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@
  */
 
 #include <vector>
+#include "matrix.h"
 #include "quaternion.h"
 #include "xyz.h"
 
@@ -43,3 +44,5 @@ public:
   Quaternion orientation;
   vector<Pole> pole;
 };
+
+std::vector<double> linearLeastSquares(matrix m,std::vector<double> v);

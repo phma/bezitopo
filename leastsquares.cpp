@@ -3,7 +3,7 @@
 /* leastsquares.cpp - least-squares adjustment        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016 Pierre Abbat.
+/* Copyright 2016,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -20,7 +20,6 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "matrix.h"
 #include "leastsquares.h"
 
 /* In a PuppetBar representing a total station setup, pole[0] is (0.0.0)
@@ -42,3 +41,8 @@
  * and its actual position, and between the point as backsighted and its actual
  * position. The actual position and all three setups are adjusted.
  */
+
+vector<double> linearLeastSquares(matrix m,vector<double> v)
+{
+  matrix mtm,mt,vmat=columnvector(v);
+}
