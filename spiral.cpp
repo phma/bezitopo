@@ -46,6 +46,9 @@
  * coherent metric unit, 1 rad/m² (aka square diopter). 1 °/(100 ft)² is 
  * 18.786568 mdpt² if the international foot is used and 18.786493 mdpt²
  * if the US survey foot is used.
+ * 
+ * http://cc4w.net/spiral/SpiralTraining.pdf contains a plat of a stretch of
+ * road in Arizona including some spirals connecting two arcs.
  */
 
 #include <vector>
