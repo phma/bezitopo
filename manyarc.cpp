@@ -24,6 +24,7 @@
 #include "rootfind.h"
 #include "manysum.h"
 #include "ldecimal.h"
+#include "leastsquares.h"
 using namespace std;
 
 /* Spiralarcs are used for centerlines of highways. A property line or easement
@@ -191,6 +192,9 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
   double along;
   vector<double> alongs;
   vector<xy> arcpoints,spiralpoints;
+  matrix arcdisp(2,narcs);
+  xy enddiff;
+  vector<double> adjustment,shortfall;
   for (i=0;i<=narcs;i++)
   {
     along=apx.getCumLength(i);
@@ -203,6 +207,16 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
     cout<<"Piece "<<i<<" arc length "<<ldecimal(alongs[i+1]-alongs[i])<<'\n';
     cout<<"Arc chord "<<ldecimal(dist(arcpoints[i],arcpoints[i+1]),0.001)<<' '<<ldecimal(bintodeg(dir(arcpoints[i],arcpoints[i+1])),0.0001)<<"°\n";
     cout<<"Spiral chord "<<ldecimal(dist(spiralpoints[i],spiralpoints[i+1]),0.001)<<' '<<ldecimal(bintodeg(dir(spiralpoints[i],spiralpoints[i+1])),0.0001)<<"°\n";
+    arcdisp[0][i]=spiralpoints[i+1].getx()-spiralpoints[i].getx();
+    arcdisp[1][i]=spiralpoints[i+1].gety()-spiralpoints[i].gety();
+  }
+  enddiff=a.getend()-apx.station(apx.length());
+  shortfall.push_back(enddiff.getx());
+  shortfall.push_back(enddiff.gety());
+  adjustment=linearLeastSquares(arcdisp,shortfall);
+  for (i=0;i<narcs;i++)
+  {
+    cout<<"Adjust arc "<<i<<" by "<<adjustment[i]<<endl;
   }
   return apx;
 }
