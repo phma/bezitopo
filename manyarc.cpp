@@ -208,8 +208,8 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
     cout<<"Piece "<<i<<" arc length "<<ldecimal(alongs[i+1]-alongs[i])<<'\n';
     cout<<"Arc chord "<<ldecimal(dist(arcpoints[i],arcpoints[i+1]),0.001)<<' '<<ldecimal(bintodeg(dir(arcpoints[i],arcpoints[i+1])),0.0001)<<"°\n";
     cout<<"Spiral chord "<<ldecimal(dist(spiralpoints[i],spiralpoints[i+1]),0.001)<<' '<<ldecimal(bintodeg(dir(spiralpoints[i],spiralpoints[i+1])),0.0001)<<"°\n";
-    arcdisp[0][i]=spiralpoints[i+1].getx()-spiralpoints[i].getx();
-    arcdisp[1][i]=spiralpoints[i+1].gety()-spiralpoints[i].gety();
+    arcdisp[0][i]=arcpoints[i+1].getx()-arcpoints[i].getx();
+    arcdisp[1][i]=arcpoints[i+1].gety()-arcpoints[i].gety();
   }
   enddiff=a.getend()-apx.station(apx.length());
   shortfall.push_back(enddiff.getx());
@@ -220,7 +220,12 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
   for (i=0;i<narcs;i++)
   {
     cout<<"Adjust arc "<<i<<" by "<<adjustment[i]<<endl;
-    thispoint+=(arcpoints[i+1]-arcpoints[i])*(1+adjustment[i]);
+    if (i==narcs-1 &&
+        abs(foldangle(dir(thispoint,a.getend())-dir(arcpoints[i],arcpoints[i+1])))<2 &&
+        dist(thispoint,a.getend())>2e9*dist(thispoint+(arcpoints[i+1]-arcpoints[i])*(1+adjustment[i]),a.getend()))
+      thispoint=a.getend();
+    else
+      thispoint+=(arcpoints[i+1]-arcpoints[i])*(1+adjustment[i]);
     ret.insert(thispoint);
     ret.setdelta(i,apx.getarc(i).getdelta());
   }
