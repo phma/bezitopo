@@ -41,8 +41,14 @@
  * and its actual position, and between the point as backsighted and its actual
  * position. The actual position and all three setups are adjusted.
  */
+using namespace std;
 
 vector<double> linearLeastSquares(matrix m,vector<double> v)
 {
-  matrix mtm,mt,vmat=columnvector(v);
+  matrix mtm,mt,vmat=columnvector(v),mtv;
+  mt=m.transpose();
+  mtm=mt*m;
+  mtv=mt*vmat;
+  mtm.gausselim(mtv);
+  return mtv;
 }

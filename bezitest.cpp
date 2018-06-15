@@ -83,6 +83,7 @@
 #include "kml.h"
 #include "zoom.h"
 #include "manyarc.h"
+#include "leastsquares.h"
 
 #define psoutput false
 // affects only maketin
@@ -4975,6 +4976,20 @@ void testzigzagcontour()
 
 void testleastsquares()
 {
+  matrix a(3,2);
+  vector<double> b,x;
+  b.push_back(4);
+  b.push_back(1);
+  b.push_back(3);
+  a[0][0]=1;
+  a[0][1]=3; // http://ltcconline.net/greenl/courses/203/MatrixOnVectors/leastSquares.htm
+  a[1][0]=2;
+  a[1][1]=4;
+  a[2][0]=1;
+  a[2][1]=6;
+  x=linearLeastSquares(a,b);
+  cout<<"Least squares ("<<ldecimal(x[0])<<','<<ldecimal(x[1])<<")\n";
+  tassert(dist(xy(x[0],x[1]),xy(-29/77.,51/77.))<1e-9);
 }
 
 void clampcubic()

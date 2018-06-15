@@ -29,7 +29,7 @@ struct Pole
 {
   xyz displacement;
   double height;
-}
+};
 
 class PuppetBar
 /* So called because the lines from a total station to targets shot, together
@@ -42,7 +42,7 @@ public:
   xyz unmeasuredBacksight; // Set to NaN if backsight was measured.
   int kind; // total station or GPS, possibly other kinds
   Quaternion orientation;
-  vector<Pole> pole;
+  std::vector<Pole> pole;
 };
 
 std::vector<double> linearLeastSquares(matrix m,std::vector<double> v);
