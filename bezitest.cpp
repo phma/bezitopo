@@ -1802,13 +1802,16 @@ void testspiralarc()
   int i,j,nfail;
   double bear[3],len,begcur,endcur,arcarea,spiralarea;
   vector<double> extrema;
-  xyz beg(0,0,3),end(300,400,7),sta;
+  xyz beg(0,0,3),end(300,400,7),sta,pi;
   xy ctr;
   spiralarc a(beg,end),b(beg,0.001,0.001,end),c,arch[10];
+  spiralarc az0(xyz(189794.012,496960.750,0),1531654601,0,1145.229168e-6,60.96,0); // From a road in Arizona
   arc aarc(beg,end);
   bezier3d a3d;
   PostScript ps;
+  BoundRect br;
   ps.open("spiralarc.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
   tassert(fabs(a.length()-500)<0.001);
   tassert(a.chordlength()==500);
@@ -1913,6 +1916,24 @@ void testspiralarc()
   }
   cout<<"Archimedes-like spiral ended on "<<arch[9].getend().getx()<<','<<arch[9].getend().gety()<<endl;
   tassert(dist(arch[9].getend(),xy(-0.752,-10.588))<0.001);
+  ps.endpage();
+  ps.startpage();
+  pi=xyz(az0.pointOfIntersection(),0);
+  br.clear();
+  br.include(&az0);
+  br.include(pi);
+  ps.setscale(br);
+  cout<<"Arizona spiral\nEndpoint: "<<az0.getend().getx()<<','<<az0.getend().gety()<<endl;
+  tassert(dist(az0.getend(),xy(189780.746,496901.254))<0.0007);
+  cout<<"Chord: "<<az0.chordlength()<<'<'<<bintodeg(az0.chordbearing())<<endl;
+  cout<<"Point of intersection: "<<ldecimal(pi.getx())<<','<<ldecimal(pi.gety())<<endl;
+  tassert(dist(pi,xy(189784.706,496921.187))<0.0007);
+  cout<<"Tangents: "<<az0.tangentLength(START)<<", "<<az0.tangentLength(END)<<endl;
+  tassert(fabs(az0.tangentLength(START)-40.643)<0.0007);
+  tassert(fabs(az0.tangentLength(END)-20.322)<0.0007);
+  ps.spline(az0.approx3d(0.001/ps.getscale()));
+  ps.line2p(az0.getstart(),pi);
+  ps.line2p(pi,az0.getend());
   ps.endpage();
   ps.trailer();
   ps.close();
