@@ -451,12 +451,13 @@ void testmatrix()
   int i,j,chk2,chk3,chk4;
   matrix m1(3,4),m2(4,3),m3(4,3),m4(4,3);
   matrix t1(37,41),t2(41,43),t3(43,37),p1,p2,p3;
+  matrix t1t,t2t,t3t,p1t,p2t,p3t;
   matrix hil(8,8),lih(8,8),hilprod;
   matrix kd(7,7);
   matrix r0,c0,p11;
   matrix rs1(3,4),rs2,rs3,rs4;
   vector<double> rv,cv;
-  double tr1,tr2,tr3,de1,de2,de3;
+  double tr1,tr2,tr3,de1,de2,de3,tr1t,tr2t,tr3t;
   double toler=1.2e-12;
   double kde;
   double lo,hi;
@@ -496,12 +497,21 @@ void testmatrix()
     t1.randomize_c();
     t2.randomize_c();
     t3.randomize_c();
+    t1t=t1.transpose();
+    t2t=t2.transpose();
+    t3t=t3.transpose();
     p1=t1*t2*t3;
     p2=t2*t3*t1;
     p3=t3*t1*t2;
+    p1t=t3t*t2t*t1t;
+    p2t=t1t*t3t*t2t;
+    p3t=t2t*t1t*t3t;
     tr1=p1.trace();
     tr2=p2.trace();
     tr3=p3.trace();
+    tr1t=p1t.trace();
+    tr2t=p2t.trace();
+    tr3t=p3t.trace();
     de1=p1.determinant();
     de2=p2.determinant();
     de3=p3.determinant();
@@ -509,6 +519,7 @@ void testmatrix()
 	<<" trace2 "<<ldecimal(tr2)
 	<<" trace3 "<<ldecimal(tr3)<<endl;
     tassert(fabs(tr1-tr2)<toler && fabs(tr2-tr3)<toler && fabs(tr3-tr1)<toler);
+    tassert(fabs(tr1-tr1t)<toler && fabs(tr2-tr2t)<toler && fabs(tr3-tr3t)<toler);
     tassert(tr1!=0);
     cout<<"det1 "<<de1
 	<<" det2 "<<de2
