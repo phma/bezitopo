@@ -193,8 +193,9 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
   vector<double> alongs;
   vector<xy> arcpoints,spiralpoints;
   matrix arcdisp(2,narcs);
-  xy enddiff;
+  xy enddiff,thispoint;
   vector<double> adjustment,shortfall;
+  polyarc ret;
   for (i=0;i<=narcs;i++)
   {
     along=apx.getCumLength(i);
@@ -214,11 +215,17 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
   shortfall.push_back(enddiff.getx());
   shortfall.push_back(enddiff.gety());
   adjustment=linearLeastSquares(arcdisp,shortfall);
+  thispoint=a.getstart();
+  ret.insert(thispoint);
   for (i=0;i<narcs;i++)
   {
     cout<<"Adjust arc "<<i<<" by "<<adjustment[i]<<endl;
+    thispoint+=(arcpoints[i+1]-arcpoints[i])*(1+adjustment[i]);
+    ret.insert(thispoint);
+    ret.setdelta(i,apx.getarc(i).getdelta());
   }
-  return apx;
+  ret.open();
+  return ret;
 }
 
 polyarc manyArc(spiralarc a,int narcs)
