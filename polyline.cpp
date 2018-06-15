@@ -178,6 +178,25 @@ spiralarc polyspiral::getspiralarc(int i)
 		   curvatures[i],clothances[i],lengths[i]);
 }
 
+xyz polyline::getEndpoint(int i)
+{
+  i%=endpoints.size();
+  if (i<0)
+    i+=endpoints.size();
+  return xyz(endpoints[i],elevation);
+}
+
+xyz polyline::getstart()
+{
+  return getEndpoint(0);
+}
+
+xyz polyline::getend()
+// If it's closed, this is equivalent to getstart.
+{
+  return getEndpoint(lengths.size());
+}
+
 bezier3d polyline::approx3d(double precision)
 {
   bezier3d ret;

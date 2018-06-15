@@ -65,6 +65,9 @@ public:
   bool isopen();
   int size();
   segment getsegment(int i);
+  xyz getEndpoint(int i);
+  xyz getstart();
+  xyz getend();
   void dedup();
   virtual bezier3d approx3d(double precision);
   virtual std::vector<drawingElement> render3d(double precision,int layer,int color,int width,int linetype);
