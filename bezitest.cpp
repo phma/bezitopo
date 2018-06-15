@@ -4973,6 +4973,10 @@ void testzigzagcontour()
   doc.writeXml(ofile);
 }
 
+void testleastsquares()
+{
+}
+
 void clampcubic()
 /* Determine values which will be used to check whether a spiralarc well
  * approximates a contour. The contour segment is a piece of an elliptic
@@ -6763,6 +6767,8 @@ int main(int argc, char *argv[])
     testvcurve();
   if (shoulddo("integertrig"))
     testintegertrig();
+  if (shoulddo("leastsquares"))
+    testleastsquares();
   if (shoulddo("minquad"))
     testminquad();
   if (shoulddo("circle"))
