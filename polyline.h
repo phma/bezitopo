@@ -180,6 +180,9 @@ public:
   double startStation();
   double endStation();
   void appendPoint(xy pnt);
+  void prependPoint(xy pnt);
+  void appendTangentCurve(double startCurvature,double length,double endCurvature);
+  void prependTangentCurve(double startCurvature,double length,double endCurvature);
   spiralarc getHorizontalCurve(int i);
   segment getVerticalCurve(int i);
   void setStartStation(double along);

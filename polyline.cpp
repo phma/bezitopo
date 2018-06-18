@@ -1201,12 +1201,79 @@ void alignment::appendPoint(xy pnt)
     deltas.push_back(0);
     delta2s.push_back(0);
     midbearings.push_back(dir(last,pnt));
+    midpoints.push_back((last+pnt)/2);
     hLengths.push_back(dist(last,pnt));
     hCumLengths.push_back(hCumLengths.back()+hLengths.back());
-    boundCircle.center=(last+pnt)/2;
+    boundCircle.center=midpoints.back();
     boundCircle.radius=hLengths.back()/2;
     boundCircles.push_back(boundCircle);
   }
+  setVLength();
+  setlengths();
+}
+
+void alignment::prependPoint(xy pnt)
+{
+  xy first;
+  bcir boundCircle;
+  if (endpoints.size())
+    first=endpoints[0];
+  endpoints.insert(endpoints.begin(),pnt);
+  bearings.insert(bearings.begin(),0);
+  if (endpoints.size()>1)
+  {
+    deltas.insert(deltas.begin(),0);
+    delta2s.insert(delta2s.begin(),0);
+    midbearings.insert(midbearings.begin(),dir(pnt,first));
+    midpoints.insert(midpoints.begin(),(pnt+first)/2);
+    hLengths.insert(hLengths.begin(),dist(pnt,first));
+    hCumLengths.insert(hCumLengths.begin(),hCumLengths[0]-hLengths[0]);
+    boundCircle.center=midpoints[0];
+    boundCircle.radius=hLengths[0]/2;
+    boundCircles.insert(boundCircles.begin(),boundCircle);
+  }
+  setVLength();
+  setlengths();
+}
+
+void alignment::appendTangentCurve(double startCurvature,double length,double endCurvature)
+{
+  double along=endStation();
+  xyz startPoint=station(along);
+  int startBearing=bearing(along);
+  spiralarc newSpiral(startPoint,startBearing,startCurvature,endCurvature,length,0);
+  bcir boundCircle;
+  appendPoint(newSpiral.getend());
+  deltas.back()=newSpiral.getdelta();
+  delta2s.back()=newSpiral.getdelta2();
+  midbearings.back()=newSpiral.bearing(length/2);
+  midpoints.back()=newSpiral.station(length/2);
+  hLengths.back()=length;
+  hCumLengths.back()+=length-newSpiral.chordlength();
+  boundCircle.center=midpoints.back();
+  boundCircle.radius=length/2;
+  boundCircles.back()=boundCircle;
+  setVLength();
+  setlengths();
+}
+
+void alignment::prependTangentCurve(double startCurvature,double length,double endCurvature)
+{
+  double along=startStation();
+  xyz endPoint=station(along);
+  int endBearing=bearing(along);
+  spiralarc newSpiral(endPoint,endBearing+DEG180,-endCurvature,-startCurvature,length,0);
+  bcir boundCircle;
+  prependPoint(newSpiral.getend());
+  deltas[0]=-newSpiral.getdelta();
+  delta2s[0]=newSpiral.getdelta2();
+  midbearings[0]=newSpiral.bearing(length/2)-DEG180;
+  midpoints[0]=newSpiral.station(length/2);
+  hLengths[0]=length;
+  hCumLengths[0]-=length-newSpiral.chordlength();
+  boundCircle.center=midpoints[0];
+  boundCircle.radius=length/2;
+  boundCircles[0]=boundCircle;
   setVLength();
   setlengths();
 }
