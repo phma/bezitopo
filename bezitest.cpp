@@ -2307,7 +2307,7 @@ void test1manyarc(spiralarc s,PostScript &ps)
   BoundRect br;
   for (i=0;i<4;i++)
     crossingsPerArc[i]=0;
-  for (narcs=2;narcs<9;narcs++)
+  for (narcs=5;narcs<6;narcs++)
   {
     approx=manyArc(s,narcs);
     enddiff=approx.getend()-s.getend();
@@ -2365,6 +2365,8 @@ void testmanyarc()
   double x,length,accel,firstlength;
   vector<double> vex;
   spiralarc trans(xyz(0,0,0),0,0.003,xyz(500,0,0));
+  spiralarc trans43(xyz(0,0,0),0,0.003,xyz(400,300,0));
+  spiralarc trans34(xyz(0,0,0),0,0.003,xyz(300,400,0));
   int narcs,i,j;
   PostScript ps;
   bezier3d spl;
@@ -2414,6 +2416,8 @@ void testmanyarc()
   }
   cout<<"limit p="<<ldecimal(manyArcTrim(2147483647))<<endl;
   test1manyarc(trans,ps);
+  test1manyarc(trans43,ps);
+  test1manyarc(trans34,ps);
   ps.close();
 }
 
