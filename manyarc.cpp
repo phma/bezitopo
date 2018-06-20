@@ -25,6 +25,7 @@
 #include "manysum.h"
 #include "ldecimal.h"
 #include "leastsquares.h"
+#include "cogospiral.h"
 using namespace std;
 
 /* Spiralarcs are used for centerlines of highways. A property line or easement
@@ -131,6 +132,19 @@ vector<segment> manyQuad(segment cubic,int narcs)
   return ret;
 }
 
+double meanSquareDistance(polyarc apx,spiralarc a)
+{
+  int i;
+  vector<double> acc;
+  arc oneArc;
+  for (i=0;i<apx.size();i++)
+  {
+    oneArc=apx.getarc(i);
+    acc.push_back(meanSquareDistance(&oneArc,&a)*oneArc.length());
+  }
+  return pairwisesum(acc)/apx.length();
+}
+
 polyarc manyArcUnadjusted(spiralarc a,int narcs)
 {
   int sb=a.startbearing(),eb=a.endbearing();
@@ -230,6 +244,7 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
     ret.setdelta(i,apx.getarc(i).getdelta());
   }
   ret.open();
+  ret.setlengths();
   return ret;
 }
 

@@ -2307,12 +2307,13 @@ void test1manyarc(spiralarc s,PostScript &ps)
   BoundRect br;
   for (i=0;i<4;i++)
     crossingsPerArc[i]=0;
-  for (narcs=5;narcs<6;narcs++)
+  for (narcs=2;narcs<9;narcs++)
   {
     approx=manyArc(s,narcs);
     enddiff=approx.getend()-s.getend();
     cout<<narcs<<" arcs, end is off by ("<<enddiff.getx()<<','<<enddiff.gety()<<")\n";
     tassert(enddiff.length()==0);
+    cout<<"Mean square error "<<meanSquareDistance(approx,s)<<endl;
     crossings.clear();
     for (i=1;i<narcs-1;i++)
     {
@@ -2416,8 +2417,8 @@ void testmanyarc()
   }
   cout<<"limit p="<<ldecimal(manyArcTrim(2147483647))<<endl;
   test1manyarc(trans,ps);
-  test1manyarc(trans43,ps);
-  test1manyarc(trans34,ps);
+  //test1manyarc(trans43,ps);
+  //test1manyarc(trans34,ps);
   ps.close();
 }
 

@@ -23,6 +23,7 @@
 #include <iostream>
 #include "ldecimal.h"
 #include "cogospiral.h"
+#include "manysum.h"
 #include "relprime.h"
 
 using namespace std;
@@ -413,4 +414,35 @@ vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
   }
   //ret=inters;
   return ret;
+}
+
+double meanSquareDistance(segment *a,segment *b)
+/* All points on a should have a closest point on b, without going off the ends
+ * of b. In other words, a should be part of the approximation to b.
+ */
+{
+  vector<double> c;
+  xy astation,bstation;
+  double aalong,balong,alen=a->length();
+  aalong=GAUSSQ4P0P*alen;
+  astation=a->station(aalong);
+  balong=b->closest(astation);
+  bstation=b->station(balong);
+  c.push_back(sqr(dist(astation,bstation))*GAUSSQ4P0W);
+  aalong=GAUSSQ4P1P*alen;
+  astation=a->station(aalong);
+  balong=b->closest(astation);
+  bstation=b->station(balong);
+  c.push_back(sqr(dist(astation,bstation))*GAUSSQ4P1W);
+  aalong=(1-GAUSSQ4P1P)*alen;
+  astation=a->station(aalong);
+  balong=b->closest(astation);
+  bstation=b->station(balong);
+  c.push_back(sqr(dist(astation,bstation))*GAUSSQ4P1W);
+  aalong=(1-GAUSSQ4P0P)*alen;
+  astation=a->station(aalong);
+  balong=b->closest(astation);
+  bstation=b->station(balong);
+  c.push_back(sqr(dist(astation,bstation))*GAUSSQ4P0W);
+  return pairwisesum(c);
 }
