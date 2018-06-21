@@ -248,6 +248,15 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
   return ret;
 }
 
+/* Next try at adjusting the arcs:
+ * Use the Gaussian quadrature, but instead of squaring the distances and adding
+ * them up, leave them unsquared and separate. They are the residuals for least
+ * squares. This will produce 4*narcs equations in narcs-2 unknowns, which can
+ * be solved by least squares. The two arcs whose chords are most nearly at
+ * right angles are used to make the total displacement match that of the
+ * spiralarc, while the rest of the arcs are the variables for least squares.
+ */
+
 polyarc manyArc(spiralarc a,int narcs)
 {
   polyarc ret;
