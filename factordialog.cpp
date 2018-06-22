@@ -30,6 +30,8 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   elevationLabel=new QLabel(tr("Elevation"),this);
   elevationInput=new QLineEdit(this);
   plWidget=new ProjListWidget(this);
+  gridLabel=new QLabel(tr("Grid"),this);
+  gridOutput=new QLineEdit(this);
   okButton=new QPushButton(tr("OK"),this);
   cancelButton=new QPushButton(tr("Cancel"),this);
   gridLayout=new QGridLayout(this);
@@ -39,8 +41,10 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   gridLayout->addWidget(elevationLabel,1,0);
   gridLayout->addWidget(elevationInput,1,1);
   gridLayout->addWidget(plWidget,2,0,1,2);
-  gridLayout->addWidget(okButton,3,0);
-  gridLayout->addWidget(cancelButton,3,1);
+  gridLayout->addWidget(gridLabel,3,0);
+  gridLayout->addWidget(gridOutput,3,1);
+  gridLayout->addWidget(okButton,4,0);
+  gridLayout->addWidget(cancelButton,4,1);
   okButton->setEnabled(false);
   okButton->setDefault(true);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
