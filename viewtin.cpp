@@ -55,9 +55,9 @@ int main(int argc, char *argv[])
     app.installTranslator(&translator);
   }
   initTranslateException();
-  TinWindow window;
   readTmCoefficients();
   readAllProjections();
+  TinWindow window;
   window.show();
   return app.exec();
 }

@@ -83,7 +83,10 @@ bool Projection::in(latlong ll)
 
 bool Projection::in(vball v)
 {
-  return in(decodedir(v));
+  if (v.face==0)
+    return true;
+  else
+    return in(decodedir(v));
 }
 
 void LambertConicSphere::setParallel(double Parallel)
