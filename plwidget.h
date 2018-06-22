@@ -41,6 +41,7 @@ signals:
 public slots:
   void setProjectionList(ProjectionList pl);
   void setPoint(vball v);
+  void updateComboBoxes();
 private:
   ProjectionList allProjections,containingProjections;
   vball point,lastValidPoint;

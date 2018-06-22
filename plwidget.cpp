@@ -20,7 +20,9 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <iostream>
+#include <QString>
 #include "plwidget.h"
+#include "projection.h"
 using namespace std;
 
 ProjListWidget::ProjListWidget(QWidget *parent):QWidget(parent)
@@ -45,4 +47,53 @@ void ProjListWidget::setProjectionList(ProjectionList pl)
 void ProjListWidget::setPoint(vball v)
 {
   point=v;
+  containingProjections=allProjections.cover(v);
+  updateComboBoxes();
+}
+
+void ProjListWidget::updateComboBoxes()
+{
+  ProjectionLabel allSet,anyCountry,anyProvince,anyZone,anyVersion;
+  vector<string> stringList;
+  int i;
+  allSet.country=countryBox->currentText().toStdString();
+  allSet.province=provinceBox->currentText().toStdString();
+  allSet.zone=zoneBox->currentText().toStdString();
+  allSet.version=versionBox->currentText().toStdString();
+  if (countryBox->currentIndex()<1)
+    allSet.country="";
+  if (provinceBox->currentIndex()<1)
+    allSet.province="";
+  if (zoneBox->currentIndex()<1)
+    allSet.zone="";
+  if (versionBox->currentIndex()<1)
+    allSet.version="";
+  anyProvince.country=anyZone.country=anyVersion.country=allSet.country;
+  anyZone.province=anyVersion.province=anyCountry.province=allSet.province;
+  anyVersion.zone=anyCountry.zone=anyProvince.zone=allSet.zone;
+  anyCountry.version=anyProvince.version=anyZone.version=allSet.version;
+  stringList=containingProjections.matches(anyCountry).listCountries();
+  countryBox->clear();
+  countryBox->addItem(QString("—"));
+  for (i=0;i<stringList.size();i++)
+    countryBox->addItem(QString::fromStdString(stringList[i]));
+  countryBox->setCurrentText(QString::fromStdString(allSet.country));
+  stringList=containingProjections.matches(anyProvince).listProvinces();
+  provinceBox->clear();
+  provinceBox->addItem(QString("—"));
+  for (i=0;i<stringList.size();i++)
+    provinceBox->addItem(QString::fromStdString(stringList[i]));
+  provinceBox->setCurrentText(QString::fromStdString(allSet.province));
+  stringList=containingProjections.matches(anyZone).listZones();
+  zoneBox->clear();
+  zoneBox->addItem(QString("—"));
+  for (i=0;i<stringList.size();i++)
+    zoneBox->addItem(QString::fromStdString(stringList[i]));
+  zoneBox->setCurrentText(QString::fromStdString(allSet.zone));
+  stringList=containingProjections.matches(anyVersion).listVersions();
+  versionBox->clear();
+  versionBox->addItem(QString("—"));
+  for (i=0;i<stringList.size();i++)
+    versionBox->addItem(QString::fromStdString(stringList[i]));
+  versionBox->setCurrentText(QString::fromStdString(allSet.version));
 }

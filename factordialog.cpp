@@ -21,6 +21,7 @@
  */
 #include <iostream>
 #include "factordialog.h"
+#include "globals.h"
 using namespace std;
 
 LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
@@ -47,6 +48,8 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   gridLayout->addWidget(cancelButton,4,1);
   okButton->setEnabled(false);
   okButton->setDefault(true);
+  plWidget->setProjectionList(allProjections);
+  plWidget->setPoint(vball(0,xy(0,0)));
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
 }
