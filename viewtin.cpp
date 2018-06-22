@@ -24,8 +24,16 @@
 #include <QTranslator>
 #include "tinwindow.h"
 #include "except.h"
+#include "globals.h"
 
 using namespace std;
+ProjectionList allProjections;
+
+void readAllProjections()
+{
+  ifstream pfile(string(SHARE_DIR)+"/projections.txt");
+  allProjections.readFile(pfile);
+}
 
 int main(int argc, char *argv[])
 {
@@ -48,6 +56,8 @@ int main(int argc, char *argv[])
   }
   initTranslateException();
   TinWindow window;
+  readTmCoefficients();
+  readAllProjections();
   window.show();
   return app.exec();
 }
