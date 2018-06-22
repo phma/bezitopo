@@ -199,6 +199,56 @@ polyarc manyArcUnadjusted(spiralarc a,int narcs)
   return ret;
 }
 
+polyarc adjustEnds(polyarc apx,spiralarc a,int n0,int n1)
+/* Adjusts the n0th and n1st arc of apx so that the ends match those of a.
+ * n0 and n1 should be the two closest to right angles to each other.
+ * For a spiralarc with small delta and not including its inflection point,
+ * they are the first and last arcs.
+ */
+{
+  int narcs=apx.size();
+  int i;
+  double along;
+  vector<double> alongs;
+  vector<xy> arcpoints;
+  matrix arcdisp(2,2);
+  xy enddiff,thispoint;
+  vector<double> adjustment01,adjustment(narcs,0),shortfall;
+  polyarc ret;
+  for (i=0;i<=narcs;i++)
+  {
+    along=apx.getCumLength(i);
+    arcpoints.push_back(apx.station(along));
+    alongs.push_back(along);
+  }
+  arcdisp[0][0]=arcpoints[n0+1].getx()-arcpoints[n0].getx();
+  arcdisp[1][0]=arcpoints[n0+1].gety()-arcpoints[n0].gety();
+  arcdisp[0][1]=arcpoints[n1+1].getx()-arcpoints[n1].getx();
+  arcdisp[1][1]=arcpoints[n1+1].gety()-arcpoints[n1].gety();
+  enddiff=a.getend()-apx.station(apx.length());
+  shortfall.push_back(enddiff.getx());
+  shortfall.push_back(enddiff.gety());
+  adjustment01=linearLeastSquares(arcdisp,shortfall);
+  adjustment[n0]=adjustment01[0];
+  adjustment[n1]=adjustment01[1];
+  thispoint=a.getstart();
+  ret.insert(thispoint);
+  for (i=0;i<narcs;i++)
+  {
+    if (i==narcs-1 &&
+        abs(foldangle(dir(thispoint,a.getend())-dir(arcpoints[i],arcpoints[i+1])))<2 &&
+        dist(thispoint,a.getend())>2e9*dist(thispoint+(arcpoints[i+1]-arcpoints[i])*(1+adjustment[i]),a.getend()))
+      thispoint=a.getend();
+    else
+      thispoint+=(arcpoints[i+1]-arcpoints[i])*(1+adjustment[i]);
+    ret.insert(thispoint);
+    ret.setdelta(i,apx.getarc(i).getdelta());
+  }
+  ret.open();
+  ret.setlengths();
+  return ret;
+}
+
 polyarc adjustManyArc(polyarc apx,spiralarc a)
 {
   int narcs=apx.size();
