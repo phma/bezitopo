@@ -49,4 +49,5 @@ private:
   int bear;
   double rbear; // chordbearing in radians
   double cur;
+  double visibleLength(double precision);
 };
