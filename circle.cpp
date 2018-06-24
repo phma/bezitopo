@@ -53,7 +53,7 @@ Circle::Circle(xy m,int b,double c)
 
 xyz Circle::station(double along) const
 {
-  double angalong=cur/along;
+  double angalong=cur*along;
   double rad;
   if (cur)
     rad=sin(angalong/2)*2/cur;
