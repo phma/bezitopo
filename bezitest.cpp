@@ -1689,11 +1689,15 @@ void testcircle()
   ps.setscale(-3,-3,3,3,degtobin(0));
   for (i=0;i<1080;i+=5)
     ps.line2p(unit.station(degtorad(i)),triple.station(degtorad(i)));
+  ps.spline(unit.approx3d(0.1/ps.getscale()));
+  ps.spline(triple.approx3d(0.1/ps.getscale()));
   ps.endpage();
   ps.startpage();
   ps.setscale(-1,-1,1,1,degtobin(0));
   for (i=8388608-DEG180;i<=DEG180;i+=16777216)
     ps.line2p(xaxis.station(tan(i)),yaxis.station(cot(i)));
+  ps.spline(xaxis.approx3d(0.1/ps.getscale()));
+  ps.spline(yaxis.approx3d(0.1/ps.getscale()));
   ps.endpage();
   ps.close();
 }
