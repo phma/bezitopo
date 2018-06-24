@@ -1686,8 +1686,8 @@ void testcircle()
   ps.prolog();
   ps.startpage();
   ps.setscale(-3,-3,3,3,degtobin(0));
-  for (i=0;i<355;i++)
-    ps.line2p(unit.station(i),triple.station(i));
+  for (i=0;i<1080;i+=5)
+    ps.line2p(unit.station(degtorad(i)),triple.station(degtorad(i)));
   ps.close();
 }
 
