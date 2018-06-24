@@ -62,6 +62,11 @@ xyz Circle::station(double along) const
   return xyz(mid+cossin(rbear+angalong/2)*rad,0);
 }
 
+int Circle::bearing(double along) const
+{
+  return bear+radtobin(cur*along);
+}
+
 double Circle::length() const
 {
   return 2*M_PI/cur;
@@ -86,15 +91,8 @@ unsigned Circle::hash()
          memHash(&cur,sizeof(double))));
 }
 
-void Circle::writeXml(ofstream &ofile)
-{
-  ofile<<"<circle bearing=\""<<bear<<"\" curvature=\""<<ldecimal(cur)<<"\">";
-  mid.writeXml(ofile);
-  ofile<<"</circle>\n";
-}
-
 double Circle::visibleLength(double precision)
-/* Returns either the negative of the whole length of the circle or 16384*precision,
+/* Returns either the negative of the whole length of the circle or 32768*precision,
  * which is less than half the length. This is enough to make sure that all
  * of the circle or line that is visible on an A0 sheet is printed if the midpoint
  * is in view and it's approximated to within 0.1 mm on the paper.
@@ -103,5 +101,49 @@ double Circle::visibleLength(double precision)
   if (cur*precision*16384>1)
     return -length();
   else
-    return precision*16384;
+    return precision*32768;
+}
+
+bezier3d Circle::approx3d(double precision)
+{
+  double visLength=visibleLength(precision);
+  double error=precision*2;
+  double piecestart,pieceend;
+  int npieces,i;
+  bezier3d ret;
+  npieces=floor(fabs(visLength*cur*2));
+  if (npieces<1)
+    npieces=1;
+  while (true)
+  {
+    error=bez3destimate(station(0),bearing(0),visLength/npieces,
+			bearing(visLength/npieces),station(visLength/npieces));
+    if (error<=precision)
+      break;
+    npieces=ceil(npieces*sqrt(sqrt(error/precision)));
+  }
+  for (i=0;i<npieces;i++)
+  {
+    piecestart=(i-npieces/2.)/npieces*fabs(visLength);
+    pieceend=(i+1-npieces/2.)/npieces*fabs(visLength);
+    ret+=bezier3d(station(piecestart),bearing(piecestart),0,0,
+		  bearing(pieceend),station(pieceend));
+  }
+  if (visLength<0)
+    ret.close();
+  return ret;
+}
+
+vector<drawingElement> Circle::render3d(double precision,int layer,int color,int width,int linetype)
+{
+  vector<drawingElement> ret;
+  ret.push_back(drawingElement(approx3d(precision),color,width,linetype));
+  return ret;
+}
+
+void Circle::writeXml(ofstream &ofile)
+{
+  ofile<<"<circle bearing=\""<<bear<<"\" curvature=\""<<ldecimal(cur)<<"\">";
+  mid.writeXml(ofile);
+  ofile<<"</circle>\n";
 }
