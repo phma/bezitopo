@@ -44,6 +44,8 @@ double frac(double x);
 
 double sin(int angle);
 double cos(int angle);
+double tan(int angle);
+double cot(int angle);
 double sinhalf(int angle);
 double coshalf(int angle);
 double tanhalf(int angle);

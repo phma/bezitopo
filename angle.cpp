@@ -43,32 +43,49 @@ double frac(double x)
 }
 
 double sin(int angle)
-{return sinl(angle*M_PIl/1073741824.);
- }
+{
+  return sinl(angle*M_PIl/1073741824.);
+}
 
 double cos(int angle)
-{return cosl(angle*M_PIl/1073741824.);
- }
+{
+  return cosl(angle*M_PIl/1073741824.);
+}
+
+double tan(int angle)
+{
+  return tanl(angle*M_PIl/1073741824.);
+}
+
+double cot(int angle)
+{
+  return 1/tanl(angle*M_PIl/1073741824.);
+}
 
 double sinhalf(int angle)
-{return sinl(angle*M_PIl/2147483648.);
- }
+{
+  return sinl(angle*M_PIl/2147483648.);
+}
 
 double coshalf(int angle)
-{return cosl(angle*M_PIl/2147483648.);
- }
+{
+  return cosl(angle*M_PIl/2147483648.);
+}
 
 double tanhalf(int angle)
-{return tanl(angle*M_PIl/2147483648.);
- }
+{
+  return tanl(angle*M_PIl/2147483648.);
+}
 
 double cosquarter(int angle)
-{return cosl(angle*M_PIl/4294967296.);
- }
+{
+  return cosl(angle*M_PIl/4294967296.);
+}
 
 double tanquarter(int angle)
-{return tanl(angle*M_PIl/4294967296.);
- }
+{
+  return tanl(angle*M_PIl/4294967296.);
+}
 
 int atan2i(double y,double x)
 {
