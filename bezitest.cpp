@@ -1679,6 +1679,7 @@ void testcircle()
   Circle unit(xy(0,0),1.);
   Circle triple(xy(0,0),3.);
   Circle xaxis(xy(0,0),0,0);
+  Circle yaxis(xy(0,0),DEG90,0);
   PostScript ps;
   int i;
   ps.open("circle.ps");
@@ -1688,6 +1689,12 @@ void testcircle()
   ps.setscale(-3,-3,3,3,degtobin(0));
   for (i=0;i<1080;i+=5)
     ps.line2p(unit.station(degtorad(i)),triple.station(degtorad(i)));
+  ps.endpage();
+  ps.startpage();
+  ps.setscale(-1,-1,1,1,degtobin(0));
+  for (i=8388608-DEG180;i<=DEG180;i+=16777216)
+    ps.line2p(xaxis.station(tan(i)),yaxis.station(cot(i)));
+  ps.endpage();
   ps.close();
 }
 
