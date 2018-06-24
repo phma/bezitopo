@@ -1681,14 +1681,24 @@ void testcircle()
   Circle xaxis(xy(0,0),0,0);
   Circle yaxis(xy(0,0),DEG90,0);
   PostScript ps;
-  int i;
+  int i,shortCount=0,longCount=0;
+  xy sta1,sta3;
   ps.open("circle.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
   ps.startpage();
   ps.setscale(-3,-3,3,3,degtobin(0));
   for (i=0;i<1080;i+=5)
-    ps.line2p(unit.station(degtorad(i)),triple.station(degtorad(i)));
+  {
+    sta1=unit.station(degtorad(i));
+    sta3=triple.station(degtorad(i));
+    ps.line2p(sta1,sta3);
+    if (dist(sta1,sta3)<3.16227733)
+      shortCount++;
+    if (dist(sta1,sta3)>3.162278) // The distance at 45°/135° is sqrt(10).
+      longCount++;
+  }
+  tassert(shortCount==longCount);
   ps.spline(unit.approx3d(0.1/ps.getscale()));
   ps.spline(triple.approx3d(0.1/ps.getscale()));
   ps.endpage();
