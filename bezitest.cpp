@@ -1677,7 +1677,18 @@ void testvcurve()
 void testcircle()
 {
   Circle unit(xy(0,0),1.);
+  Circle triple(xy(0,0),3.);
   Circle xaxis(xy(0,0),0,0);
+  PostScript ps;
+  int i;
+  ps.open("circle.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  ps.startpage();
+  ps.setscale(-3,-3,3,3,degtobin(0));
+  for (i=0;i<355;i++)
+    ps.line2p(unit.station(i),triple.station(i));
+  ps.close();
 }
 
 void testsegment()
