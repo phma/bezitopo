@@ -3,7 +3,7 @@
 /* halton.cpp - Halton subrandom point generator      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2014,2015,2016 Pierre Abbat.
+/* Copyright 2014,2015,2016,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -184,8 +184,8 @@ halton::halton()
 halton& halton::operator++()
 {
   ++n;
-  if (n>=14975624970497949696)
-    n-=14975624970497949696;
+  if (n>=14975624970497949696ull)
+    n-=14975624970497949696ull;
   return *this;
 }
 
