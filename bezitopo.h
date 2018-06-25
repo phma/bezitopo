@@ -22,6 +22,7 @@
 
 #ifndef BEZITOPO_H
 #define BEZITOPO_H
+#include <bezitopo/config.h>
 #include <bezitopo/angle.h>
 #include <bezitopo/xyz.h>
 #include <bezitopo/quaternion.h>
@@ -29,6 +30,7 @@
 #include <bezitopo/binio.h>
 #include <bezitopo/roscat.h>
 #include <bezitopo/breakline.h>
+#include <bezitopo/contour.h>
 #include <bezitopo/drawobj.h>
 #include <bezitopo/circle.h>
 #include <bezitopo/point.h>
@@ -51,11 +53,28 @@
 #include <bezitopo/projection.h>
 #include <bezitopo/bezier.h>
 #include <bezitopo/color.h>
-#include <bezitopo/.h>
-#include <bezitopo/.h>
-#include <bezitopo/.h>
-#include <bezitopo/.h>
-#include <bezitopo/.h>
-#include <bezitopo/.h>
-#include <bezitopo/.h>
+#include <bezitopo/vcurve.h>
+#include <bezitopo/tin.h>
+#include <bezitopo/spolygon.h>
+#include <bezitopo/rootfind.h>
+#include <bezitopo/relprime.h>
+#include <bezitopo/random.h>
+#include <bezitopo/qindex.h>
+#include <bezitopo/pointlist.h>
+#include <bezitopo/ps.h>
+#include <bezitopo/pnezd.h>
+#include <bezitopo/penwidth.h>
+#include <bezitopo/layer.h>
+#include <bezitopo/objlist.h>
+#include <bezitopo/matrix.h>
+#include <bezitopo/manyarc.h>
+#include <bezitopo/leastsquares.h>
+#include <bezitopo/linetype.h>
+#include <bezitopo/layer.h>
+#include <bezitopo/halton.h>
+#include <bezitopo/document.h>
+#include <bezitopo/globals.h>
+#include <bezitopo/csv.h>
+#include <bezitopo/cogospiral.h>
+#include <bezitopo/boundrect.h>
 #endif
