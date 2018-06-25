@@ -37,28 +37,33 @@ qt5_add_translation(qm_files bezitopo_en.ts bezitopo_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
 
 set(header_files angle.h arc.h bezier.h
-    bezier3d.h binio.h boundrect.h breakline.h circle.h cogo.h drawobj.h
+    bezier3d.h binio.h boundrect.h breakline.h circle.h cogo.h cogospiral.h 
+    color.h contour.h csv.h document.h drawobj.h
     ellipsoid.h except.h geoid.h geoidboundary.h
-    latlong.h ldecimal.h manysum.h
-    measure.h minquad.h point.h polyline.h
-    projection.h ps.h quaternion.h random.h relprime.h
-    rootfind.h segment.h spiral.h spolygon.h
-    tin.h vball.h vcurve.h)
+    globals.h halton.h latlong.h layer.h ldecimal.h leastsquares.h manyarc.h manysum.h
+    matrix.h measure.h minquad.h objlist.h penwidth.h pnezd.h point.h pointlist.h polyline.h
+    projection.h ps.h qindex.h quaternion.h random.h relprime.h
+    rootfind.h roscat.h segment.h spiral.h spolygon.h
+    tin.h vball.h vcurve.h xyz.h)
 
 add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
-            bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp drawobj.cpp
+            bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
+            cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
             ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-            latlong.cpp ldecimal.cpp manysum.cpp
-            measure.cpp minquad.cpp point.cpp polyline.cpp
-            projection.cpp ps.cpp quaternion.cpp random.cpp relprime.cpp
+            halton.cpp latlong.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp
+            matrix.cpp measure.cpp minquad.cpp objlist.cpp penwidth.cpp pnezd.cpp
+            point.cpp pointlist.cpp polyline.cpp
+            projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
             rootfind.cpp segment.cpp spiral.cpp spolygon.cpp
             tin.cpp vball.cpp vcurve.cpp)
 add_library(bezilib1 SHARED angle.cpp arc.cpp bezier.cpp
-            bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp drawobj.cpp
+            bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
+            cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
             ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-            latlong.cpp ldecimal.cpp manysum.cpp
-            measure.cpp minquad.cpp point.cpp polyline.cpp
-            projection.cpp ps.cpp quaternion.cpp random.cpp relprime.cpp
+            halton.cpp latlong.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp
+            matrix.cpp measure.cpp minquad.cpp objlist.cpp penwidth.cpp pnezd.cpp
+            point.cpp pointlist.cpp polyline.cpp
+            projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
             rootfind.cpp segment.cpp spiral.cpp spolygon.cpp
             tin.cpp vball.cpp vcurve.cpp)
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
