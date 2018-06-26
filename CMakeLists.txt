@@ -44,7 +44,7 @@ set(header_files angle.h arc.h bezier.h
     matrix.h measure.h minquad.h objlist.h penwidth.h pnezd.h point.h pointlist.h polyline.h
     projection.h ps.h qindex.h quaternion.h random.h relprime.h
     rootfind.h roscat.h segment.h spiral.h spolygon.h
-    tin.h vball.h vcurve.h xyz.h)
+    tin.h vball.h vcurve.h xyz.h zoom.h)
 
 add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
             bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
@@ -146,6 +146,7 @@ check_include_files(windows.h HAVE_WINDOWS_H)
 
 install(TARGETS bezitopo convertgeoid viewtin DESTINATION bin)
 install(TARGETS bezilib0 bezilib1 DESTINATION lib)
+install(FILES ${PROJECT_BINARY_DIR}/config.h DESTINATION include/bezitopo)
 install(FILES ${qm_files} projections.txt transmer.dat DESTINATION share/bezitopo)
 install(FILES ${header_files} DESTINATION include/bezitopo)
 install(FILES bezitopo.h DESTINATION include)
