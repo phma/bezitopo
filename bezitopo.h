@@ -30,7 +30,6 @@
 #include <bezitopo/binio.h>
 #include <bezitopo/roscat.h>
 #include <bezitopo/breakline.h>
-#include <bezitopo/contour.h>
 #include <bezitopo/drawobj.h>
 #include <bezitopo/circle.h>
 #include <bezitopo/point.h>
@@ -62,6 +61,7 @@
 #include <bezitopo/qindex.h>
 #include <bezitopo/pointlist.h>
 #include <bezitopo/ps.h>
+#include <bezitopo/contour.h>
 #include <bezitopo/pnezd.h>
 #include <bezitopo/penwidth.h>
 #include <bezitopo/layer.h>

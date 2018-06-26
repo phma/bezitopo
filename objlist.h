@@ -20,6 +20,8 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef OBJLIST_H
+#define OBJLIST_H
 #include <vector>
 #include "drawobj.h"
 #include "layer.h"
@@ -34,3 +36,4 @@ public:
   //unsigned short getcolor();
   //unsigned short getthickness();
 };
+#endif
