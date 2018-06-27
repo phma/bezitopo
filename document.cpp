@@ -23,6 +23,9 @@
 #include "pnezd.h"
 #include "document.h"
 #include "except.h"
+#include "penwidth.h"
+#include "color.h"
+#include "linetype.h"
 using namespace std;
 
 void document::makepointlist(int n)
@@ -103,7 +106,9 @@ void document::addobject(drawobj *obj)
     }
   }
   o.layr=curlayer;
-  o.ltype=o.colr=o.thik=SAMECOLOR;
+  o.ltype=SAMELINETYPE;
+  o.colr=SAMECOLOR;
+  o.thik=SAMEWIDTH;
   o.obj=obj;
   objlist.push_back(o);
 }
