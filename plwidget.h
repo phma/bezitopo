@@ -37,7 +37,9 @@ class ProjListWidget: public QWidget
   Q_OBJECT
 public:
   ProjListWidget(QWidget *parent=0);
+  Projection *getSelectedProjection();
 signals:
+  void selectedProjectionChanged(Projection *proj);
 public slots:
   void setProjectionList(ProjectionList pl);
   void setPoint(vball v);
@@ -45,6 +47,7 @@ public slots:
 private:
   ProjectionList allProjections,containingProjections;
   vball point,lastValidPoint;
+  Projection *selectedProjection;
   QComboBox *countryBox,*provinceBox,*zoneBox,*versionBox;
   QGridLayout *gridLayout;
 };

@@ -37,10 +37,16 @@ ProjListWidget::ProjListWidget(QWidget *parent):QWidget(parent)
   gridLayout->addWidget(provinceBox,0,1);
   gridLayout->addWidget(zoneBox,0,2);
   gridLayout->addWidget(versionBox,0,3);
+  selectedProjection=nullptr;
   connect(countryBox,SIGNAL(activated(int)),this,SLOT(updateComboBoxes()));
   connect(provinceBox,SIGNAL(activated(int)),this,SLOT(updateComboBoxes()));
   connect(zoneBox,SIGNAL(activated(int)),this,SLOT(updateComboBoxes()));
   connect(versionBox,SIGNAL(activated(int)),this,SLOT(updateComboBoxes()));
+}
+
+Projection *ProjListWidget::getSelectedProjection()
+{
+  return selectedProjection;
 }
 
 void ProjListWidget::setProjectionList(ProjectionList pl)
@@ -62,6 +68,8 @@ void ProjListWidget::updateComboBoxes()
   ProjectionLabel allSet,anyCountry,anyProvince,anyZone,anyVersion;
   vector<string> stringList;
   int i;
+  ProjectionList matchingProjections;
+  Projection *lastSelectedProjection=selectedProjection;
   allSet.country=countryBox->currentText().toStdString();
   allSet.province=provinceBox->currentText().toStdString();
   allSet.zone=zoneBox->currentText().toStdString();
@@ -102,4 +110,11 @@ void ProjListWidget::updateComboBoxes()
   for (i=0;i<stringList.size();i++)
     versionBox->addItem(QString::fromStdString(stringList[i]));
   versionBox->setCurrentText(QString::fromStdString(allSet.version));
+  matchingProjections=containingProjections.matches(allSet);
+  if (matchingProjections.size()==1)
+    selectedProjection=matchingProjections[0];
+  else
+    selectedProjection=nullptr;
+  if (selectedProjection!=lastSelectedProjection)
+    selectedProjectionChanged(selectedProjection);
 }
