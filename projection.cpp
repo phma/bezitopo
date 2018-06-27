@@ -845,20 +845,20 @@ TransverseMercatorEllipsoid *readTransverseMercator(istream &file)
   return ret;
 }
 
-bool ProjectionLabel::match(const ProjectionLabel &b,bool prefix)
+ProjectionLabel::ProjectionLabel()
+{
+  country=province=zone=version="\n";
+}
+
+bool ProjectionLabel::match(const ProjectionLabel &b)
 /* Returns true if b matches this pattern, e.g.
- * ("U","N","","NAD").match(("US","NC","","NAD83"),true)=true
+ * ("US","\n","\n","NAD83").match(("US","NC","","NAD83"))=true
  */
 {
-  int maxpos;
-  if (prefix)
-    maxpos=0;
-  else
-    maxpos=b.country.length()+b.province.length()+b.zone.length()+b.version.length();
-  return b.country.find(country)<=maxpos &&
-         b.province.find(province)<=maxpos &&
-         b.zone.find(zone)<=maxpos &&
-         b.version.find(version)<=maxpos;
+  return (b.country==country || country=="\n") &&
+         (b.province==province || province=="\n") &&
+         (b.zone==zone || zone=="\n") &&
+         (b.version==version || version=="\n");
 }
 
 bool operator<(const ProjectionLabel a,const ProjectionLabel b)

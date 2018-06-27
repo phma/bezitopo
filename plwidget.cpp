@@ -63,13 +63,13 @@ void ProjListWidget::updateComboBoxes()
   allSet.zone=zoneBox->currentText().toStdString();
   allSet.version=versionBox->currentText().toStdString();
   if (countryBox->currentIndex()<1)
-    allSet.country="";
+    allSet.country="\n";
   if (provinceBox->currentIndex()<1)
-    allSet.province="";
+    allSet.province="\n";
   if (zoneBox->currentIndex()<1)
-    allSet.zone="";
+    allSet.zone="\n";
   if (versionBox->currentIndex()<1)
-    allSet.version="";
+    allSet.version="\n";
   anyProvince.country=anyZone.country=anyVersion.country=allSet.country;
   anyZone.province=anyVersion.province=anyCountry.province=allSet.province;
   anyVersion.zone=anyCountry.zone=anyProvince.zone=allSet.zone;

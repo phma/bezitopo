@@ -213,7 +213,8 @@ public:
   std::string province; // or state, krai, or okrug
   std::string zone;
   std::string version;
-  bool match(const ProjectionLabel &b,bool prefix=true);
+  ProjectionLabel();
+  bool match(const ProjectionLabel &b);
   friend bool operator<(const ProjectionLabel a,const ProjectionLabel b);
 };
 
