@@ -94,6 +94,7 @@ double gontorad(double angle);
 #define SMOOTH5LIMIT 660
 // see sourcegeoid.cpp for explanation
 #define SEC1 1657
+#define FURMAN1 32768
 #define MIN1 99421
 #define DEG1 5965232
 #define AT0512 0x80ae90e
