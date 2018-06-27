@@ -46,7 +46,7 @@ unsigned short objrec::getcolor(document *doc)
 
 unsigned short objrec::getthickness(document *doc)
 {
-  if (ltype==SAMEWIDTH)
+  if (thik>200) // see penwidth.h
     return doc->layers[layr].thik;
   else
     return thik;
