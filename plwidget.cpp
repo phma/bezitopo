@@ -37,6 +37,10 @@ ProjListWidget::ProjListWidget(QWidget *parent):QWidget(parent)
   gridLayout->addWidget(provinceBox,0,1);
   gridLayout->addWidget(zoneBox,0,2);
   gridLayout->addWidget(versionBox,0,3);
+  connect(countryBox,SIGNAL(activated(int)),this,SLOT(updateComboBoxes()));
+  connect(provinceBox,SIGNAL(activated(int)),this,SLOT(updateComboBoxes()));
+  connect(zoneBox,SIGNAL(activated(int)),this,SLOT(updateComboBoxes()));
+  connect(versionBox,SIGNAL(activated(int)),this,SLOT(updateComboBoxes()));
 }
 
 void ProjListWidget::setProjectionList(ProjectionList pl)
