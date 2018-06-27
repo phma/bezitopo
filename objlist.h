@@ -24,16 +24,16 @@
 #define OBJLIST_H
 #include <vector>
 #include "drawobj.h"
-#include "layer.h"
-#include "color.h"
+
+class document;
 
 class objrec
 {
 public:
   drawobj *obj;
   unsigned short layr,ltype,colr,thik;
-  //unsigned short getlinetype();
-  //unsigned short getcolor();
-  //unsigned short getthickness();
+  unsigned short getlinetype(document *doc);
+  unsigned short getcolor(document *doc);
+  unsigned short getthickness(document *doc);
 };
 #endif

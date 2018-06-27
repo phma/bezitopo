@@ -21,6 +21,34 @@
  */
 
 #include "objlist.h"
+#include "document.h"
+#include "penwidth.h"
+#include "layer.h"
+#include "color.h"
 
 using namespace std;
+
+unsigned short objrec::getlinetype(document *doc)
+{
+  if (ltype==SAMELINETYPE)
+    return doc->layers[layr].ltype;
+  else
+    return ltype;
+}
+
+unsigned short objrec::getcolor(document *doc)
+{
+  if (colr==SAMECOLOR)
+    return doc->layers[layr].colr;
+  else
+    return colr;
+}
+
+unsigned short objrec::getthickness(document *doc)
+{
+  if (ltype==SAMEWIDTH)
+    return doc->layers[layr].thik;
+  else
+    return thik;
+}
 
