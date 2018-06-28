@@ -36,6 +36,7 @@ struct latlong
   int valid(); // 0, 1, or 2
 };
 
+void setnesw(std::string neswString);
 latlong parselatlong(std::string angstr,int unitp);
 std::string formatlatlong(latlong ll,int unitp);
 

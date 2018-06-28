@@ -20,10 +20,14 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <vector>
+#include <cassert>
 #include "angle.h"
 #include "latlong.h"
 
 using namespace std;
+
+vector<string> localNesw;
+char cNesw[8][2]={"N","E","S","W","n","e","s","w"};
 
 latlong::latlong()
 {
@@ -58,6 +62,25 @@ int latlong::valid()
   return ret;
 }
 
+void setnesw(std::string neswString)
+/* Expects the abbreviations for north, east, south, and west in that order,
+ * separated by spaces. There may be four or eight of them, depending on
+ * letter case. Each string should be a single Unicode character.
+ * This may run into trouble in Arabic, where شمال and شرق begin
+ * with the same letter.
+ */
+{
+  int i;
+  localNesw.clear();
+  localNesw.push_back("");
+  for (i=0;i<neswString.length();i++)
+    if (neswString[i]==' ')
+      localNesw.push_back("");
+    else
+      localNesw.back()+=neswString[i];
+  assert(localNesw.size() && !(localNesw.size()&3));
+}
+
 latlong parselatlong(string angstr,int unitp)
 /* Parses a latitude-longitude string. The following are equivalent:
  * 35°N80°W
@@ -71,14 +94,10 @@ latlong parselatlong(string angstr,int unitp)
  * which is parsed as 0N.
  */
 {
-  vector<string> nesw,angles;
+  vector<string> angles;
   string uchar;
   latlong ret(NAN,NAN);
   int inesw=0,i,j,ulen,ctype;
-  nesw.push_back("N"); // This may run into trouble in Arabic, where شمال
-  nesw.push_back("E"); // and شرق begin with the same letter.
-  nesw.push_back("S");
-  nesw.push_back("W");
   angles.push_back("");
   for (i=0;i<angstr.length();i++)
   {
@@ -100,12 +119,22 @@ latlong parselatlong(string angstr,int unitp)
     ctype=0;
     if (ulen==1 && isspace(uchar[0]))
       ctype=1;
-    for (j=0;j<nesw.size();j++)
-      if (uchar==nesw[j])
-      {
-	inesw=inesw*5+j%4+1;
-	ctype=2;
-      }
+    if (localNesw.size()) // TODO This should check the localized variable in a Measure object.
+      for (j=0;j<localNesw.size();j++)
+	if (uchar==localNesw[j])
+	{
+	  inesw=inesw*5+j%4+1;
+	  ctype=2;
+	}
+	else;
+    else
+      for (j=0;j<8;j++)
+	if (uchar==cNesw[j])
+	{
+	  inesw=inesw*5+j%4+1;
+	  ctype=2;
+	}
+	else;
     if (ctype)
       if (angles.back().length())
 	angles.push_back("");
