@@ -3,7 +3,7 @@
 /* latlong.h - latitude-longitude structure           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016 Pierre Abbat.
+/* Copyright 2016,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -39,6 +39,7 @@ struct latlong
 void setnesw(std::string neswString);
 latlong parselatlong(std::string angstr,int unitp);
 std::string formatlatlong(latlong ll,int unitp);
+bool partialLatlong(std::string angstr);
 
 struct latlongelev
 {

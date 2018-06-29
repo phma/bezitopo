@@ -3895,6 +3895,7 @@ void testangleconvcorner(string anglestr,xyz &totxyz)
   xyz corner;
   latlong ll;
   ll=parselatlong(anglestr,DEGREE);
+  tassert(partialLatlong(anglestr));
   corner=Sphere.geoc(ll,0);
   tassert(fabs(corner.getx())>3678296 && fabs(corner.gety())>3678296 && fabs(corner.getz())>3678296);
   totxyz+=corner;

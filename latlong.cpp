@@ -3,7 +3,7 @@
 /* latlong.cpp - latitude-longitude structure         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016 Pierre Abbat.
+/* Copyright 2016,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -81,6 +81,28 @@ void setnesw(std::string neswString)
   assert(localNesw.size() && !(localNesw.size()&3));
 }
 
+int neswinx(string ch)
+/* Returns 0, 1, 2, or 3 if ch is (the local equivalent of)
+ * N, E, S, or W, respectively, else returns -1.
+ * There is a potential problem if the letter for any direction is 'g'.
+ * 'g' is used in parseangle to indicate that the angle is in gons.
+ */
+{
+  int ret=-1;
+  int j;
+  if (localNesw.size()) // TODO This should check the localized variable in a Measure object.
+    for (j=0;j<localNesw.size();j++)
+      if (ch==localNesw[j])
+	ret=j&3;
+      else;
+  else
+    for (j=0;j<8;j++)
+      if (ch==cNesw[j])
+	ret=j&3;
+      else;
+  return ret;
+}
+
 latlong parselatlong(string angstr,int unitp)
 /* Parses a latitude-longitude string. The following are equivalent:
  * 35°N80°W
@@ -119,22 +141,12 @@ latlong parselatlong(string angstr,int unitp)
     ctype=0;
     if (ulen==1 && isspace(uchar[0]))
       ctype=1;
-    if (localNesw.size()) // TODO This should check the localized variable in a Measure object.
-      for (j=0;j<localNesw.size();j++)
-	if (uchar==localNesw[j])
-	{
-	  inesw=inesw*5+j%4+1;
-	  ctype=2;
-	}
-	else;
-    else
-      for (j=0;j<8;j++)
-	if (uchar==cNesw[j])
-	{
-	  inesw=inesw*5+j%4+1;
-	  ctype=2;
-	}
-	else;
+    j=neswinx(uchar);
+    if (j>=0)
+    {
+      inesw=inesw*5+j+1;
+      ctype=2;
+    }
     if (ctype)
       if (angles.back().length())
 	angles.push_back("");
@@ -233,4 +245,93 @@ string formatlatlong(latlong ll,int unitp)
   latstr=radtoangle(fabs(ll.lat),unitp)+nesw[signbit(ll.lat)?2:0];
   lonstr=radtoangle(fabs(ll.lon),unitp)+nesw[signbit(ll.lon)?3:1];
   return latstr+' '+lonstr;
+}
+
+bool partialLatlong(string angstr)
+/* Returns true if angstr is a partially or completely written latlong string.
+ * It's for a validator for latlongs being typed in.
+ */
+{
+  vector<string> angles;
+  string uchar;
+  int i,j,ulen,ctype,ncount=0,ecount=0,dmscount,dotcount,gcount;
+  bool ret=true;
+  angles.push_back("");
+  for (i=0;i<angstr.length();i++)
+  {
+    switch (angstr[i]&0xc0)
+    {
+      case 0:
+      case 0x40:
+	ulen=1;
+	break;
+      case 0x80:
+	ulen=0;
+	break;
+      case 0xc0: // first byte of UTF-8
+	ulen=angstr[i]&0xff;
+	ulen=(ulen>=0x80)+(ulen>=0xc0)+(ulen>=0xe0)+(ulen>=0xf0)+(ulen>=0xf8)+(ulen>=0xfc);
+	break;
+    }
+    uchar=angstr.substr(i,ulen);
+    ctype=0;
+    if (ulen==1 && isspace(uchar[0]))
+      ctype=1;
+    j=neswinx(uchar);
+    if (j>=0)
+    {
+      if (j&1)
+	ecount++;
+      else
+	ncount++;
+      ctype=2;
+    }
+    if (ctype)
+      if (angles.back().length())
+	angles.push_back("");
+      else;
+    else if (uchar=="°" || uchar=="′" || uchar=="″" || uchar=="'" || uchar=="\"" ||
+             (uchar=="-" && angles.back().length()))
+      // '-' at the start of an angle is a negative sign.
+      // '-' in the middle of an angle is equivalent to '°', '′', or '″'.
+      angles.back()+="'";
+    else if (uchar=="+")
+      angles.back()+="-";
+    else
+      angles.back()+=uchar;
+  }
+  if (angles.back().length()==0)
+    angles.resize(angles.size()-1);
+  if (angles.size()>2)
+    ret=false;
+  if (ecount>1 || ncount>1)
+    ret=false;
+  for (i=0;i<angles.size();i++)
+  {
+    dmscount=dotcount=gcount=0;
+    for (j=0;j<angles[i].length();j++)
+    {
+      if (angles[i][j]=='-' && j)
+	ret=false;	// Plus sign cannot be in middle of string
+      if (angles[i][j]=='\'' && (j==0 || !std::isdigit(angles[i][j-1])))
+	ret=false;	// DMS sign must be preceded by a digit
+      if (angles[i][j]=='\'')
+      {
+	++dmscount;	// There can be no more than 3 DMS signs
+	if (dotcount && dmscount>1)
+	  ret=false;	// No more than one DMS sign can come after the decimal point
+      }
+      if (angles[i][j]=='.')
+	++dotcount;	// There can be only one decimal point
+      if (angles[i][j]=='g')
+	++gcount;	// There can be only one gon sign
+      if (angles[i][j]=='g' && j<angles[i].length()-1)
+	ret=false;	// The gon sign may not have anything after it
+    }
+    if (dmscount>3 || dotcount>1 || gcount>1)
+      ret=false;
+    if (dmscount && gcount)
+      ret=false;	// An angle cannot be in both degrees and gons
+  }
+  return ret;
 }
