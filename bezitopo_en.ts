@@ -116,24 +116,37 @@
 <context>
     <name>LatlongFactorDialog</name>
     <message>
-        <location filename="factordialog.cpp" line="28"/>
+        <location filename="factordialog.cpp" line="29"/>
         <source>Lat/Long</source>
         <translation>Lat/Long</translation>
     </message>
     <message>
-        <location filename="factordialog.cpp" line="30"/>
+        <location filename="factordialog.cpp" line="31"/>
         <source>Elevation</source>
         <translation>Elevation</translation>
     </message>
     <message>
-        <location filename="factordialog.cpp" line="33"/>
+        <location filename="factordialog.cpp" line="34"/>
+        <source>Grid</source>
+        <translation>Grid</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="36"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="factordialog.cpp" line="34"/>
+        <location filename="factordialog.cpp" line="37"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
+    </message>
+</context>
+<context>
+    <name>LlValidator</name>
+    <message>
+        <location filename="llvalidator.cpp" line="36"/>
+        <source>N E S W</source>
+        <translation>N E S W n e s w</translation>
     </message>
 </context>
 <context>
