@@ -41,15 +41,15 @@ LlValidator::State LlValidator::validate(QString &input,int &pos) const
   State ret=Invalid;
   if (partialLatlong(input.toStdString()))
     ret=Intermediate;
-  if (parselatlong(input.toStdString(),DEGREE).valid()==2)
+  if (ret==Intermediate && parselatlong(input.toStdString(),DEGREE).valid()==2)
     ret=Acceptable;
-  if (ret==Invalid)
+  /*if (ret==Invalid)
     cout<<'x';
   if (ret==Intermediate)
     cout<<'i';
   if (ret==Acceptable)
     cout<<'a';
-  cout.flush();
+  cout.flush();*/
   return ret;
 }
 

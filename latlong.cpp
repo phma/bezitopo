@@ -311,6 +311,9 @@ bool partialLatlong(string angstr)
     dmscount=dotcount=gcount=0;
     for (j=0;j<angles[i].length();j++)
     {
+      if (!std::isdigit(angles[i][j]) && angles[i][j]!='g' && angles[i][j]!='-' &&
+	  angles[i][j]!='\'' && angles[i][j]!='.')
+	ret=false;
       if (angles[i][j]=='-' && j)
 	ret=false;	// Plus sign cannot be in middle of string
       if (angles[i][j]=='\'' && (j==0 || !std::isdigit(angles[i][j-1])))
