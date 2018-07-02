@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* factordialog.h - scale factor dialog               */
+/* llvalidator.h - validator for latlong              */
 /*                                                    */
 /******************************************************/
 /* Copyright 2018 Pierre Abbat.
@@ -19,37 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef FACTORDIALOG_H
-#define FACTORDIALOG_H
-#include <vector>
-#include <QDialog>
-#include <QLabel>
-#include <QLineEdit>
-#include <QComboBox>
-#include <QPushButton>
-#include <QGridLayout>
-#include "projection.h"
-#include "plwidget.h"
-#include "llvalidator.h"
+#ifndef LLVALIDATOR_H
+#define LLVALIDATOR_H
+#include <QValidator>
 
-class LatlongFactorDialog: public QDialog
+class LlValidator: public QValidator
 {
   Q_OBJECT
 public:
-  LatlongFactorDialog(QWidget *parent=0);
-signals:
-public slots:
-  virtual void accept();
-private:
-  QLabel *latlongLabel;
-  QLineEdit *latlongInput;
-  QLabel *elevationLabel;
-  QLineEdit *elevationInput;
-  ProjListWidget *plWidget;
-  QLabel *gridLabel;
-  QLineEdit *gridOutput; // "grid" means a conformal coordinate system
-  QPushButton *okButton,*cancelButton;
-  QGridLayout *gridLayout; // "grid" means a lattice arrangement of widgets
-  LlValidator *validator;
+  LlValidator(QObject *parent=nullptr);
+  virtual State validate(QString &input,int &pos) const;
 };
 #endif

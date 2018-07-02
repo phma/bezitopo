@@ -36,6 +36,7 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   okButton=new QPushButton(tr("OK"),this);
   cancelButton=new QPushButton(tr("Cancel"),this);
   gridLayout=new QGridLayout(this);
+  validator=new LlValidator(this);
   setLayout(gridLayout);
   gridLayout->addWidget(latlongLabel,0,0);
   gridLayout->addWidget(latlongInput,0,1);
@@ -50,6 +51,7 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   okButton->setDefault(true);
   plWidget->setProjectionList(allProjections);
   plWidget->setPoint(vball(0,xy(0,0)));
+  latlongInput->setValidator(validator);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
 }
