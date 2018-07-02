@@ -321,19 +321,23 @@ double parseangle(string angstr,int unitp)
 	  point=six=true;
 	  unitp=DEGREE;
 	}
-	if (angstr[i]=='.')
+	else if (angstr[i]=='.')
 	  point=true;
-	if (isdigit(angstr[i]))
+	else if (isdigit(angstr[i]))
 	{
 	  angmult=angmult*(six?6:10)+angstr[i]-'0';
 	  if (point)
 	    prec*=six?6:10;
 	  six=false;
 	}
+	else
+	  angmult=NAN;
 	break;
       case 0x40: // letters
 	if (tolower(angstr[i])=='g')
 	  unitp=GON;
+	else // invalid letter
+	  angmult=NAN;
 	break;
       case 0x80: // subsequent bytes of UTF-8: ignore
 	break;

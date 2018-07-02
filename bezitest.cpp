@@ -3937,6 +3937,9 @@ void testangleconv()
   cout<<hex<<angle<<dec<<endl;
   ll=parselatlong("126°W 55°N",DEGREE);
   cout<<formatlatlong(ll,DEGREE)<<endl;
+  tassert(ll.valid()==2);
+  ll=parselatlong("12z6°W 5*5°N",DEGREE);
+  tassert(ll.valid()==0);
   wrangell0=parselatlong("143°52'11.5\"W 61°56'51\"N",DEGREE);
   cout<<formatlatlong(wrangell0,DEGREE+DEC5)<<endl;
   wrangell1=parselatlong("143.86986°W 61.9475°N",DEGREE);
