@@ -40,8 +40,11 @@ public:
 signals:
 public slots:
   virtual void accept();
+  void setDoc(document *docu);
   void updateLocationStr(QString text);
   void updateLocation();
+  void updateProjection(Projection *proj);
+  void updateOutput();
 private:
   QLabel *latlongLabel;
   QLineEdit *latlongInput;
@@ -49,7 +52,10 @@ private:
   QLineEdit *elevationInput;
   ProjListWidget *plWidget;
   std::string locationStr;
+  document *doc;
   latlong location;
+  Projection *projection;
+  xy gridCoords;
   QLabel *gridLabel;
   QLineEdit *gridOutput; // "grid" means a conformal coordinate system
   QPushButton *okButton,*cancelButton;

@@ -49,6 +49,7 @@ public:
   void repaintSeldom();
   bool mouseCheckImported();
   bool makeTinCheckEdited();
+  document *getDoc();
 signals:
   void measureChanged(Measure newMeasure);
 public slots:

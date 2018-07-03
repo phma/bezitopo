@@ -690,6 +690,11 @@ void TinCanvas::tinCancel()
   update();
 }
 
+document *TinCanvas::getDoc()
+{
+  return &doc;
+}
+
 void TinCanvas::selectContourInterval()
 {
   if (plnum>=0 && plnum<doc.pl.size())
@@ -1375,6 +1380,7 @@ void TinWindow::changeButtonBits()
 
 void TinWindow::latlongToGrid()
 {
+  llDialog->setDoc(canvas->getDoc());
   llDialog->show();
   llDialog->raise();
   llDialog->activateWindow();

@@ -51,16 +51,23 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   okButton->setDefault(true);
   plWidget->setProjectionList(allProjections);
   plWidget->setPoint(vball(0,xy(0,0)));
+  projection=nullptr;
   latlongInput->setValidator(validator);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
   connect(latlongInput,SIGNAL(textChanged(const QString)),this,SLOT(updateLocationStr(QString)));
   connect(latlongInput,SIGNAL(editingFinished()),this,SLOT(updateLocation()));
+  connect(plWidget,SIGNAL(selectedProjectionChanged(Projection *)),this,SLOT(updateProjection(Projection *)));
 }
 
 void LatlongFactorDialog::accept()
 {
   QDialog::accept();
+}
+
+void LatlongFactorDialog::setDoc(document *docu)
+{
+  doc=docu;
 }
 
 void LatlongFactorDialog::updateLocationStr(QString text)
@@ -76,4 +83,29 @@ void LatlongFactorDialog::updateLocation()
     plWidget->setPoint(encodedir(Sphere.geoc(location,0)));
   else
     plWidget->setPoint(vball(0,xy(0,0)));
+  updateOutput();
 }
+
+void LatlongFactorDialog::updateProjection(Projection *proj)
+{
+  projection=proj;
+  updateOutput();
+}
+
+void LatlongFactorDialog::updateOutput()
+{
+  string gridStr;
+  if (projection && location.valid()==2)
+    gridCoords=projection->latlongToGrid(location);
+  else
+    gridCoords=xy(NAN,NAN);
+  if (gridCoords.isfinite() && doc)
+  {
+    gridStr=doc->ms.formatMeasurement(gridCoords.east(),LENGTH)+' '+
+	    doc->ms.formatMeasurementUnit(gridCoords.north(),LENGTH);
+    gridOutput->setText(QString::fromStdString(gridStr));
+  }
+  else
+    gridOutput->setText("");
+}
+
