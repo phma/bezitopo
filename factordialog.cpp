@@ -54,9 +54,26 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   latlongInput->setValidator(validator);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
+  connect(latlongInput,SIGNAL(textChanged(const QString)),this,SLOT(updateLocationStr(QString)));
+  connect(latlongInput,SIGNAL(editingFinished()),this,SLOT(updateLocation()));
 }
 
 void LatlongFactorDialog::accept()
 {
   QDialog::accept();
+}
+
+void LatlongFactorDialog::updateLocationStr(QString text)
+{
+  locationStr=text.toStdString();
+}
+
+void LatlongFactorDialog::updateLocation()
+{
+  location=parselatlong(locationStr,DEGREE);
+  cout<<formatlatlong(location,DEGREE)<<endl;
+  if (location.valid()==2)
+    plWidget->setPoint(encodedir(Sphere.geoc(location,0)));
+  else
+    plWidget->setPoint(vball(0,xy(0,0)));
 }

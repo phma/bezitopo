@@ -40,12 +40,16 @@ public:
 signals:
 public slots:
   virtual void accept();
+  void updateLocationStr(QString text);
+  void updateLocation();
 private:
   QLabel *latlongLabel;
   QLineEdit *latlongInput;
   QLabel *elevationLabel;
   QLineEdit *elevationInput;
   ProjListWidget *plWidget;
+  std::string locationStr;
+  latlong location;
   QLabel *gridLabel;
   QLineEdit *gridOutput; // "grid" means a conformal coordinate system
   QPushButton *okButton,*cancelButton;
