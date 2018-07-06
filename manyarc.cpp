@@ -145,6 +145,25 @@ double meanSquareDistance(polyarc apx,spiralarc a)
   return pairwisesum(acc)/apx.length();
 }
 
+vector<double> weightedDistance(polyarc apx,spiralarc a)
+/* The distances are weighted so that, if they are squared and totaled up,
+ * the result is meanSquareDistance times the total length of apx.
+ */
+{
+  int i,j;
+  vector<double> ret;
+  array<double,4> wd1;
+  arc oneArc;
+  for (i=0;i<apx.size();i++)
+  {
+    oneArc=apx.getarc(i);
+    wd1=weightedDistance(&oneArc,&a);
+    for (j=0;j<4;j++)
+      ret.push_back(wd1[j]);
+  }
+  return ret;
+}
+
 polyarc manyArcUnadjusted(spiralarc a,int narcs)
 {
   int sb=a.startbearing(),eb=a.endbearing();
