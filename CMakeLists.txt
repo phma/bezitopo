@@ -81,7 +81,7 @@ add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
 add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitest.cpp bicubic.cpp binio.cpp breakline.cpp boundrect.cpp circle.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
-               ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
+               dxf.cpp ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
                halton.cpp histogram.cpp hlattice.cpp hnum.cpp kml.cpp
                latlong.cpp layer.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp
                matrix.cpp measure.cpp minquad.cpp objlist.cpp plot.cpp pnezd.cpp point.cpp
@@ -101,7 +101,7 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
 add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp boundrect.cpp
                breakline.cpp cidialog.cpp circle.cpp cogo.cpp color.cpp
-               contour.cpp csv.cpp document.cpp drawobj.cpp ellipsoid.cpp
+               contour.cpp csv.cpp document.cpp drawobj.cpp dxf.cpp ellipsoid.cpp
                except.cpp factordialog.cpp geoid.cpp geoidboundary.cpp halton.cpp kml.cpp
                latlong.cpp ldecimal.cpp linetype.cpp llvalidator.cpp
                manysum.cpp measure.cpp measurebutton.cpp minquad.cpp penwidth.cpp
@@ -200,6 +200,7 @@ add_test(makegrad bezitest makegrad)
 add_test(raster bezitest rasterdraw)
 add_test(dirbound bezitest dirbound)
 add_test(stl bezitest stl)
+add_test(dxf bezitest tindxf)
 add_test(halton bezitest halton)
 add_test(polyline bezitest polyline)
 add_test(bezier3d bezitest bezier3d)
