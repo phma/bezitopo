@@ -65,3 +65,20 @@ TagRange tagTable[]=
   {999,128},
   {1010,0}
 };
+
+int tagFormat(int tag)
+{
+  int lo=0,hi=sizeof(tagTable)/sizeof(tagTable[0]),mid;
+  while (hi-lo>1)
+  {
+    mid=(lo+hi)/2;
+    if (tagTable[mid].tag>tag)
+      hi=mid;
+    else
+      lo=mid;
+  }
+  if (tagTable[lo].tag>tag)
+    return 0;
+  else
+    return tagTable[lo].format;
+}

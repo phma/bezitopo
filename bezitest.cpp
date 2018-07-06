@@ -38,6 +38,7 @@
 #include "rootfind.h"
 #include "test.h"
 #include "tin.h"
+#include "dxf.h"
 #include "measure.h"
 #include "pnezd.h"
 #include "csv.h"
@@ -1048,6 +1049,22 @@ void test1break0graph(pointlist &pl,string plname)
     pl.type0Breaklines[i].writeText(cout);
     cout<<endl;
   }
+}
+
+void testtindxf()
+{
+  int i,acc,fmt;
+  for (acc=i=0;i<=1001;i+=13)
+  {
+    /* The tags tested include 39, which is the end of a block of 88s,
+     * and 390, which is the first of a block of 132s.
+     */
+    fmt=tagFormat(i);
+    //cout<<i<<' '<<fmt<<endl;
+    acc=(acc*17+fmt)%8191;
+  }
+  cout<<"Hash of every 13th DXF tag format is "<<acc<<endl;
+  tassert(acc==2145);
 }
 
 void testbreak0()
@@ -6844,6 +6861,8 @@ int main(int argc, char *argv[])
     testmaketinwheel();
   if (shoulddo("maketinellipse"))
     testmaketinellipse();
+  if (shoulddo("tindxf"))
+    testtindxf();
   if (shoulddo("break0"))
     testbreak0();
   if (shoulddo("brent"))

@@ -51,3 +51,5 @@ struct TagRange
    * 132 84: hex string representing int
    */
 };
+
+int tagFormat(int tag);
