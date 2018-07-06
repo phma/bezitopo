@@ -82,3 +82,113 @@ int tagFormat(int tag)
   else
     return tagTable[lo].format;
 }
+
+GroupCode::GroupCode()
+{
+  tag=-1;
+}
+
+GroupCode::GroupCode(int tag0)
+{
+  tag=tag0;
+  switch (tagFormat(tag))
+  {
+    case 1:
+      flag=false;
+      break;
+    case 2:
+    case 4:
+    case 8:
+    case 132:
+      integer=0;
+      break;
+    case 72:
+      real=0;
+      break;
+    case 88:
+      new (&pnt) xyz();
+      break;
+    case 128:
+    case 129:
+      new (&str) string();
+      break;
+  }
+}
+
+GroupCode::GroupCode(const GroupCode &b)
+{
+  tag=b.tag;
+  switch (tagFormat(tag))
+  {
+    case 1:
+      flag=b.flag;
+      break;
+    case 2:
+    case 4:
+    case 8:
+    case 132:
+      integer=b.integer;
+      break;
+    case 72:
+      real=b.real;
+      break;
+    case 88:
+      new (&pnt) xyz(b.pnt);
+      break;
+    case 128:
+    case 129:
+      new (&str) string(b.str);
+      break;
+  }
+}
+
+GroupCode& GroupCode::operator=(const GroupCode &b)
+{
+  if (tagFormat(tag)==88 && tagFormat(b.tag)!=88)
+    pnt.~xyz();
+  if ((tagFormat(tag)&-2)==128 && (tagFormat(b.tag)&-2)!=128)
+    str.~string();
+  if (tagFormat(tag)!=88 && tagFormat(b.tag)==88)
+    new (&pnt) xyz();
+  if ((tagFormat(tag)&-2)!=128 && (tagFormat(b.tag)&-2)==128)
+    new (&str) string();
+  tag=b.tag;
+  switch (tagFormat(tag))
+  {
+    case 1:
+      flag=b.flag;
+      break;
+    case 2:
+    case 4:
+    case 8:
+    case 132:
+      integer=b.integer;
+      break;
+    case 72:
+      real=b.real;
+      break;
+    case 88:
+      pnt=b.pnt;
+      break;
+    case 128:
+    case 129:
+      str=b.str;
+      break;
+  }
+}
+
+GroupCode::~GroupCode()
+{
+  switch (tagFormat(tag))
+  {
+    case 88:
+      pnt.~xyz();
+      break;
+    case 128:
+    case 129:
+      str.~string();
+      break;
+  }
+}
+
+

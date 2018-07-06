@@ -22,19 +22,6 @@
 #include <string>
 #include "xyz.h"
 
-struct GroupCode
-{
-  int tag; // short in binary file
-  union
-  {
-    std::string str;
-    xyz pnt;
-    double real;
-    long long integer;
-    bool flag;
-  };
-};
-
 struct TagRange
 {
   int tag;
@@ -49,7 +36,30 @@ struct TagRange
    * 128 80: string
    * 129 81: hex string representing binary chunk
    * 132 84: hex string representing int
+   * Only 128 and 129 are stored as strings.
+   * 132 is read as string, but stored as integer.
    */
 };
 
 int tagFormat(int tag);
+
+class GroupCode
+{
+public:
+  GroupCode();
+  GroupCode(int tag0);
+  GroupCode(const GroupCode &b);
+  GroupCode& operator=(const GroupCode &b);
+  GroupCode(GroupCode&&)=default;
+  GroupCode& operator=(GroupCode&&)=default;
+  ~GroupCode();
+  int tag; // short in binary file
+  union
+  {
+    std::string str;
+    xyz pnt;
+    double real;
+    long long integer;
+    bool flag;
+  };
+};
