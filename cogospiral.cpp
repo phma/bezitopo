@@ -446,3 +446,40 @@ double meanSquareDistance(segment *a,segment *b)
   c.push_back(sqr(dist(astation,bstation))*GAUSSQ4P0W);
   return pairwisesum(c);
 }
+
+array<double,4> weightedDistance(segment *a,segment *b)
+/* As above, a should be part of an approximation to b.
+ * Returns the distances weighted so that, if all of them over an entire
+ * approximation are squared, summed, and divided by the length, the result
+ * is meanSquareDistance(apx,b). Used in least squares.
+ */
+{
+  array<double,4> ret;
+  xy astation,bstation;
+  double aalong,balong,alen=a->length(),sqrtlen=sqrt(alen);
+  int bbear;
+  astation=a->station(aalong);
+  balong=b->closest(astation);
+  bstation=b->station(balong);
+  bbear=b->bearing(balong);
+  ret[0]=distanceInDirection(astation,bstation,bbear+DEG90)*sqrt(GAUSSQ4P0W)*sqrtlen;
+  aalong=GAUSSQ4P1P*alen;
+  astation=a->station(aalong);
+  balong=b->closest(astation);
+  bstation=b->station(balong);
+  bbear=b->bearing(balong);
+  ret[1]=distanceInDirection(astation,bstation,bbear+DEG90)*sqrt(GAUSSQ4P1W)*sqrtlen;
+  aalong=(1-GAUSSQ4P1P)*alen;
+  astation=a->station(aalong);
+  balong=b->closest(astation);
+  bstation=b->station(balong);
+  bbear=b->bearing(balong);
+  ret[2]=distanceInDirection(astation,bstation,bbear+DEG90)*sqrt(GAUSSQ4P1W)*sqrtlen;
+  aalong=(1-GAUSSQ4P0P)*alen;
+  astation=a->station(aalong);
+  balong=b->closest(astation);
+  bstation=b->station(balong);
+  bbear=b->bearing(balong);
+  ret[3]=distanceInDirection(astation,bstation,bbear+DEG90)*sqrt(GAUSSQ4P0W)*sqrtlen;
+  return ret;
+}
