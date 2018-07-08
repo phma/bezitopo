@@ -124,6 +124,15 @@ void testsizeof()
   outsizeof("point",sizeof(point));
   outsizeof("edge",sizeof(edge));
   outsizeof("triangle",sizeof(triangle));
+  outsizeof("qindex",sizeof(qindex));
+  /* A large TIN has 3 edges per point, 2 triangles per point,
+   * and 4/9 to 4/3 qindex per point. On x86_64, this amounts to
+   * point	160	160	if descriptions are blank
+   * edge	72	216
+   * triangle	232	464
+   * qindex	56	25-75
+   * Total		865-915
+   */
   outsizeof("polyline",sizeof(polyline));
   outsizeof("polyarc",sizeof(polyarc));
   outsizeof("polyspiral",sizeof(polyspiral));
