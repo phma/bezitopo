@@ -131,7 +131,13 @@ void testsizeof()
    * edge	72	216
    * triangle	232	464
    * qindex	56	25-75
-   * Total		865-915
+   * Total		865-915 bytes.
+   * On the ARM7l (Raspberry Pi), it is
+   * point	120	120
+   * edge	48	144
+   * triangle	184	368
+   * qindex	40	18-53
+   * Total		650-685 bytes
    */
   outsizeof("polyline",sizeof(polyline));
   outsizeof("polyarc",sizeof(polyarc));
