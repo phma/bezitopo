@@ -2841,7 +2841,7 @@ void testmeasure()
 void testqindex()
 {
   qindex qinx;
-  int i,j,qs,ntri;
+  int i,j,qs,ntri,size;
   triangle *ptri;
   vector<xy> plist;
   double pathlength;
@@ -2874,7 +2874,9 @@ void testqindex()
   ps.setscale(1,-7,31,23);
   aster(doc,100);
   doc.pl[1].maketin();
-  enlarge(doc,pow(2,(rng.usrandom()-32767.5)/65536));
+  size=rng.usrandom();
+  cout<<"Size "<<size<<'\n';
+  enlarge(doc,pow(2,(size-32767.5)/65536));
   for (i=0;i<100;i++)
   {
     ps.dot(doc.pl[1].points[i+1]+offset);
@@ -2891,7 +2893,7 @@ void testqindex()
   qs=qs*3/4; // convert to number of leaves of the tree (undivided squares in the drawing)
   qs++;
   printf("%d leaves\n",qs);
-  tassert(qs>=79 && qs<=133);
+  tassert(qs>=54 && qs<=108);
   qinx.draw(ps);
   ps.endpage();
   ps.startpage();
@@ -2968,7 +2970,7 @@ void testqindex()
     pathlength+=dist(hilbertpath[i]->tri->centroid(),hilbertpath[i]->middle());
   }
   printf("settri: pathlength=%f\n",pathlength);
-  tassert(pathlength>50 && pathlength<250);
+  tassert(pathlength>27 && pathlength<210);
   ps.endpage();
   ptri=qinx.findt(bone1);
   tassert(ptri->in(bone1));

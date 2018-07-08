@@ -168,7 +168,7 @@ void qindex::split(vector<xy> pnts)
 	  pnts[j]=xy(NAN,NAN);
 	  nancnt++;
 	}
-  if (sz-nancnt>=3)
+  if (sz-nancnt>3)
   {
     h=relprime(sz);
     for (i=n=0;i<sz;i++,n=(n+h)%sz)
