@@ -3,7 +3,7 @@
 /* qindex.cpp - quad index to tin                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2017 Pierre Abbat.
+/* Copyright 2012,2013,2017,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@
 #include <cmath>
 #include "ps.h"
 #include "qindex.h"
+#include "relprime.h"
 
 /* The index enables quickly finding a triangle containing a given point.
    x and y are the bottom left corner. side is always a power of 2,
@@ -146,14 +147,16 @@ void qindex::split(vector<xy> pnts)
 // Splits qindex so that each leaf has at most three points.
 {
   vector<xy> subpnts[4];
-  int i,q;
-  if (pnts.size()>=3)
+  int h,i,j,n,q,sz;
+  sz=pnts.size();
+  if (sz>=3)
   {
-    for (i=0;i<pnts.size();i++)
+    h=relprime(sz);
+    for (i=n=0;i<sz;i++,n=(n+h)%sz)
     {
-      q=quarter(pnts[i]);
+      q=quarter(pnts[n]);
       if (q>=0)
-	subpnts[q].push_back(pnts[i]);
+	subpnts[q].push_back(pnts[n]);
     }
     for (i=0;i<4;i++)
     {
