@@ -151,18 +151,24 @@ void qindex::split(vector<xy> pnts)
  */
 {
   vector<xy> subpnts[4];
-  int h,i,j,n,q,sz=pnts.size();
+  int h,i,j,n,q,nancnt=0,sz=pnts.size();
   if (pnts.size()>18) // 3 points per leaf * 6 copies of each point
     for (i=1;i<sz;i++)
       if (pnts[i]==pnts[i-1])
+      {
 	pnts[i-1]=xy(NAN,NAN);
+	nancnt++;
+      }
       else;
   else
     for (i=1;i<sz;i++)
       for (j=0;j<i;j++)
 	if (pnts[i]==pnts[j])
+	{
 	  pnts[j]=xy(NAN,NAN);
-  if (sz>=3)
+	  nancnt++;
+	}
+  if (sz-nancnt>=3)
   {
     h=relprime(sz);
     for (i=n=0;i<sz;i++,n=(n+h)%sz)
@@ -171,6 +177,8 @@ void qindex::split(vector<xy> pnts)
       if (q>=0)
 	subpnts[q].push_back(pnts[n]);
     }
+    //if (nancnt)
+      //cout<<"Deleted "<<nancnt<<" duplicates out of "<<sz<<endl;
     for (i=0;i<4;i++)
     {
       sub[i]=new qindex;

@@ -2841,7 +2841,7 @@ void testmeasure()
 void testqindex()
 {
   qindex qinx;
-  int i,qs,ntri;
+  int i,j,qs,ntri;
   triangle *ptri;
   vector<xy> plist;
   double pathlength;
@@ -2880,6 +2880,10 @@ void testqindex()
     ps.dot(doc.pl[1].points[i+1]+offset);
     plist.push_back(doc.pl[1].points[i+1]+offset);
   }
+  for (j=0;j<10;j++)
+    for (i=0;i<100;i++)
+      if (rng.ucrandom()<128)
+	plist.push_back(doc.pl[1].points[i+1]+offset);
   qinx.sizefit(plist);
   qinx.split(plist);
   printf("%d nodes, ",qs=qinx.size());
@@ -2946,6 +2950,10 @@ void testqindex()
   plist.clear();
   for (i=0;i<100;i++)
     plist.push_back(doc.pl[1].points[i+1]);
+  for (j=0;j<10;j++)
+    for (i=0;i<100;i++)
+      if (rng.ucrandom()<128)
+	plist.push_back(doc.pl[1].points[i+1]);
   qinx.sizefit(plist);
   qinx.split(plist);
   qinx.draw(ps);
