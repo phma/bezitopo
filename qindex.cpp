@@ -86,10 +86,10 @@ int qindex::quarter(xy pnt,bool clip)
 {
   int xbit,ybit,i;
   xbit=pnt.x>=x+side/2;
-  if ((!clip) && (pnt.x>=x+side || pnt.x<x))
+  if (isnan(pnt.x) || ((!clip) && (pnt.x>=x+side || pnt.x<x)))
     xbit=-1;
   ybit=pnt.y>=y+side/2;
-  if ((!clip) && (pnt.y>=y+side || pnt.y<y))
+  if (isnan(pnt.y) || ((!clip) && (pnt.y>=y+side || pnt.y<y)))
     ybit=-1;
   i=(ybit<<1)|xbit;
   return i;
@@ -144,11 +144,24 @@ void qindex::sizefit(vector<xy> pnts)
 }
 
 void qindex::split(vector<xy> pnts)
-// Splits qindex so that each leaf has at most three points.
+/* Splits qindex so that each leaf has at most three points.
+ * When reading a file of unlabeled triangles, each point occurs as many
+ * times as triangles have it as corner, 6 on average. These dupes must
+ * be removed.
+ */
 {
   vector<xy> subpnts[4];
-  int h,i,j,n,q,sz;
-  sz=pnts.size();
+  int h,i,j,n,q,sz=pnts.size();
+  if (pnts.size()>18) // 3 points per leaf * 6 copies of each point
+    for (i=1;i<sz;i++)
+      if (pnts[i]==pnts[i-1])
+	pnts[i-1]=xy(NAN,NAN);
+      else;
+  else
+    for (i=1;i<sz;i++)
+      for (j=0;j<i;j++)
+	if (pnts[i]==pnts[j])
+	  pnts[j]=xy(NAN,NAN);
   if (sz>=3)
   {
     h=relprime(sz);
