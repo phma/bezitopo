@@ -86,10 +86,10 @@ int qindex::quarter(xy pnt,bool clip)
 {
   int xbit,ybit,i;
   xbit=pnt.x>=x+side/2;
-  if (isnan(pnt.x) || ((!clip) && (pnt.x>=x+side || pnt.x<x)))
+  if (std::isnan(pnt.x) || ((!clip) && (pnt.x>=x+side || pnt.x<x)))
     xbit=-1;
   ybit=pnt.y>=y+side/2;
-  if (isnan(pnt.y) || ((!clip) && (pnt.y>=y+side || pnt.y<y)))
+  if (std::isnan(pnt.y) || ((!clip) && (pnt.y>=y+side || pnt.y<y)))
     ybit=-1;
   i=(ybit<<1)|xbit;
   return i;
