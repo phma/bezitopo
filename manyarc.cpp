@@ -132,6 +132,33 @@ vector<segment> manyQuad(segment cubic,int narcs)
   return ret;
 }
 
+array<int,2> ends(polyarc apx)
+/* Returns the indices of the two arcs whose angle is closest to 90°.
+ * For most spiralarcs in actual use, they are the first and the last.
+ */
+{
+  int i,j,sz=apx.size(),angle,leastangle=DEG120;
+  array<int,2> ret;
+  vector<int> bearing;
+  for (i=0;i<sz;i++)
+    bearing.push_back(apx.getarc(i).chordbearing());
+  for (i=0;i<sz;i++)
+    for (j=0;j<i;j++)
+    {
+      angle=(bearing[i]-bearing[j]-DEG90)&(DEG180-1);
+      if (angle>DEG45)
+	angle-=DEG90;
+      angle=abs(angle);
+      if (angle<leastangle)
+      {
+	leastangle=angle;
+	ret[0]=i;
+	ret[1]=j;
+      }
+    }
+  return ret;
+}
+
 double meanSquareDistance(polyarc apx,spiralarc a)
 {
   int i;
