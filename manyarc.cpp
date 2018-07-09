@@ -353,6 +353,66 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
  * spiralarc, while the rest of the arcs are the variables for least squares.
  */
 
+polyarc adjust1step(polyarc apx,spiralarc a,int n0,int n1)
+{
+  int narcs=apx.size();
+  int i,i2,j;
+  double along;
+  vector<double> alongs;
+  arc oneArc;
+  xy thispluspoint,thisminuspoint;
+  vector<xy> pluspoints,minuspoints;
+  vector<double> plusdists,minusdists;
+  matrix sidedisp(4*narcs,narcs-2);
+  polyarc plusadj,minusadj;
+  for (i=i2=0;i<narcs;i++)
+    if (i!=n0 && i!=n1)
+    {
+      thispluspoint=thisminuspoint=a.getstart();
+      pluspoints.clear();
+      minuspoints.clear();
+      pluspoints.push_back(thispluspoint);
+      minuspoints.push_back(thisminuspoint);
+      for (j=0;j<narcs;j++)
+      {
+	oneArc=apx.getarc(j);
+	if (j==i)
+	{
+	  thispluspoint+=(oneArc.getend()-oneArc.getstart())*1.0005;
+	  thisminuspoint+=(oneArc.getend()-oneArc.getstart())*0.9995;
+	}
+	else
+	{
+	  thispluspoint+=(oneArc.getend()-oneArc.getstart());
+	  thisminuspoint+=(oneArc.getend()-oneArc.getstart());
+	}
+	pluspoints.push_back(thispluspoint);
+	minuspoints.push_back(thisminuspoint);
+      }
+      plusadj=minusadj=polyarc();
+      plusadj.insert(pluspoints[0]);
+      minusadj.insert(minuspoints[0]);
+      for (j=0;j<narcs;j++)
+      {
+	plusadj.insert(pluspoints[j+1]);
+	minusadj.insert(minuspoints[j+1]);
+	plusadj.setdelta(j,apx.getarc(j).getdelta());
+	minusadj.setdelta(j,apx.getarc(j).getdelta());
+      }
+      plusadj.open();
+      minusadj.open();
+      plusadj.setlengths();
+      minusadj.setlengths();
+      plusadj=adjustEnds(plusadj,a,n0,n1);
+      minusadj=adjustEnds(minusadj,a,n0,n1);
+      plusdists=weightedDistance(plusadj,a);
+      minusdists=weightedDistance(minusadj,a);
+      for (j=0;j<narcs;j++)
+	sidedisp[j][i2]=1000*(minusdists[j]-plusdists[j]);
+      i2++;
+    }
+}
+
 polyarc manyArc(spiralarc a,int narcs)
 {
   polyarc ret;
