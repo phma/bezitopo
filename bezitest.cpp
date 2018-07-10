@@ -2758,8 +2758,10 @@ void testtriangle()
   tri.b=&doc.pl[0].points[2];
   tri.c=&doc.pl[0].points[3];
   tri.flatten(); // sets area, needed for computing elevations
+#ifndef FLATTRIANGLE
   for (i=0;i<7;i++)
     tri.ctrl[i]=0;
+#endif
   elev=tri.elevation(o);
   printf("elevation=%f\n",elev);
   tassert(elev==0);
@@ -2767,8 +2769,10 @@ void testtriangle()
   doc.pl[0].points[1].setelev(1);
   doc.pl[0].points[2].setelev(1);
   doc.pl[0].points[3].setelev(1);
+#ifndef FLATTRIANGLE
   for (i=0;i<7;i++)
     tri.ctrl[i]=1;
+#endif
   elev=tri.elevation(o);
   printf("elevation=%f\n",elev);
   tassert(fabs(elev-1)<1e-15);
@@ -2776,25 +2780,33 @@ void testtriangle()
   doc.pl[0].points[1].setelev(1);
   doc.pl[0].points[2].setelev(0);
   doc.pl[0].points[3].setelev(0);
+#ifndef FLATTRIANGLE
   tri.ctrl[0]=tri.ctrl[1]=2/3.;
   tri.ctrl[2]=tri.ctrl[4]=1/3.;
   tri.ctrl[5]=tri.ctrl[6]=0;
   tri.setcentercp();
+#endif
   elev=tri.elevation(o);
+#ifndef FLATTRIANGLE
   printf("ctrl[3]=%f elevation=%f\n",tri.ctrl[3],elev);
+#endif
   tassert(abs(elev*3-1)<1e-7);
   // Now make a quadratic surface. It is a paraboloid z=r². Check that the cubic component is 0.
   doc.pl[0].points[1].setelev(1);
   doc.pl[0].points[2].setelev(1);
   doc.pl[0].points[3].setelev(1);
+#ifndef FLATTRIANGLE
   for (i=0;i<7;i++)
     tri.ctrl[i]=0;
   tri.setcentercp();
+#endif
   elev=tri.elevation(o);
   elevd=tri.elevation(d);
   elevg=tri.elevation(g);
   eleva=tri.elevation(a);
+#ifndef FLATTRIANGLE
   printf("ctrl[3]=%f elevation=%f %f %f %f\n",tri.ctrl[3],elevd,elev,elevg,eleva);
+#endif
   tassert(abs(elevd-elev*3+elevg*3-eleva)<1e-7);
   // Now turn the quadratic surface upside-down, using setgradient.
   doc.pl[0].points[1].setelev(0);
@@ -2808,7 +2820,9 @@ void testtriangle()
   elevd=tri.elevation(d);
   elevg=tri.elevation(g);
   eleva=tri.elevation(a);
+#ifndef FLATTRIANGLE
   printf("ctrl[3]=%f elevation=%f %f %f %f\n",tri.ctrl[3],elevd,elev,elevg,eleva);
+#endif
   tassert(abs(elevd-elev*3+elevg*3-eleva)<1e-7);
   tassert(abs(elev-1)<1e-7);
 }
@@ -3106,12 +3120,14 @@ void test1tri(string triname,int excrits)
   ps.setscale(-17,-17,17,17);
   for (j=0;j<doc.pl[1].edges.size();j++)
     ps.line(doc.pl[1].edges[j],j,false);
+#ifndef FLATTRIANGLE
   //cubedir0=doc.pl[1].triangles[0].findnocubedir0();
   cubedir=doc.pl[1].triangles[0].findnocubedir();
   //if (cubedir!=cubedir0)
   //  cout<<"Cubedirs don't match "<<cubedir0<<"!="<<cubedir<<endl;
   ofile<<"Zero cube dir "<<cubedir<<' '<<bintodeg(cubedir)<<"°"<<endl;
   ofile<<"Zero quad offset "<<doc.pl[1].triangles[0].flatoffset()<<endl;
+#endif
   for (j=30;j>=-30;j--)
   {
     offset=j/20.;
@@ -3122,6 +3138,7 @@ void test1tri(string triname,int excrits)
       ofile<<string(rint((vertex+1.5)*20),' ')<<'*';
     ofile<<endl;
   }
+#ifndef FLATTRIANGLE
   ps.line2p(doc.pl[1].triangles[0].spcoord(1.5,-1.5),doc.pl[1].triangles[0].spcoord(-1.5,-1.5));
   ps.line2p(doc.pl[1].triangles[0].spcoord(-1.5,-1.5),doc.pl[1].triangles[0].spcoord(-1.5,1.5));
   for (side=0;side<2;side++)
@@ -3150,6 +3167,7 @@ void test1tri(string triname,int excrits)
     }
   }
   crits=doc.pl[1].triangles[0].criticalpts_axis();
+#endif
   ofile<<endl;
   for (j=0;j<crits.size();j++)
   {
@@ -3157,7 +3175,9 @@ void test1tri(string triname,int excrits)
     ps.dot(crits[j]);
   }
   doc.pl[1].triangles[0].findcriticalpts();
+#ifndef FLATTRIANGLE
   crits=doc.pl[1].triangles[0].critpoints;
+#endif
   for (j=0;j<crits.size();j++)
   {
     ptype=doc.pl[1].triangles[0].pointtype(crits[j]);
@@ -4750,12 +4770,14 @@ void test1contour(string contourName,xyz offset,xy tripoint,double conterval,dou
   doc.pl[1].findcriticalpts();
   doc.pl[1].addperimeter();
   tri=doc.pl[1].qinx.findt(tripoint-xy(offset)); // the triangle where the spike occurs
+#ifndef FLATTRIANGLE
   for (i=0;tri && i<tri->critpoints.size();i++)
   {
     crit=tri->critpoints[i];
     cout<<"crit "<<i<<' '<<ldecimal(crit.getx(),prec)<<','<<ldecimal(crit.gety(),prec)<<'\n';
   }
-  for (i=0;tri && i<tri->subdiv.size();i++)
+#endif
+for (i=0;tri && i<tri->subdiv.size();i++)
   {
     seg=tri->subdiv[i];
     cout<<"seg "<<i<<' '<<ldecimal(seg.getstart().getx(),prec)<<','<<ldecimal(seg.getstart().gety(),prec);
