@@ -20,6 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <string>
+#include <fstream>
 #include "xyz.h"
 
 struct TagRange
@@ -61,3 +62,6 @@ public:
     bool flag;
   };
 };
+
+GroupCode readDxfText(std::istream &file);
+GroupCode readDxfBinary(std::istream &file);

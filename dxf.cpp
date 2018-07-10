@@ -175,4 +175,77 @@ GroupCode::~GroupCode()
   }
 }
 
+GroupCode readDxfText(istream &file)
+{
+  string tagstr,datastr;
+  GroupCode ret;
+  getline(file,tagstr);
+  getline(file,datastr);
+  if (file.good())
+  {
+    ret=GroupCode(stoi(tagstr));
+    switch (tagFormat(ret.tag))
+    {
+      case 1: // bools are stored in text as numbers
+	ret.flag=stoi(datastr)!=0;
+	break;
+      case 2:
+      case 4:
+      case 8:
+	ret.integer=stoll(datastr);
+	break;
+      case 72:
+	ret.real=stod(datastr);
+	break;
+      case 128:
+	ret.str=datastr;
+	break;
+      case 129:
+	// TODO
+	break;
+      case 132:
+	// TODO
+	break;
+    }
+  }
+  return ret;
+}
 
+GroupCode readDxfBinary(istream &file)
+{
+  GroupCode ret;
+  int tag;
+  tag=readleshort(file);
+  if (file.good())
+  {
+    ret=GroupCode(tag);
+    switch (tagFormat(ret.tag))
+    {
+      case 1: // bools are stored in text as numbers
+	ret.flag=file.get();
+	break;
+      case 2:
+	ret.integer=readleshort(file);
+	break;
+      case 4:
+	ret.integer=readleint(file);
+	break;
+      case 8:
+	ret.integer=readlelong(file);
+	break;
+      case 72:
+	ret.real=readledouble(file);
+	break;
+      case 128:
+	ret.str=readustring(file);
+	break;
+      case 129:
+	readustring(file); // TODO
+	break;
+      case 132:
+	readustring(file); // TODO
+	break;
+    }
+  }
+  return ret;
+}
