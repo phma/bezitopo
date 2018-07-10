@@ -131,6 +131,10 @@ target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)
 if (${FFTW_FOUND})
 target_link_libraries(transmer Qt5::Widgets Qt5::Core ${FFTW_LIBRARIES})
 endif (${FFTW_FOUND})
+# POINTLIST: the program uses pointlists. Affects BoundRect.
+# CONVERTGEOID: the program reads source geoid files. Allows raster output of source geoids.
+# NUMSGEOID: the geoquad class needs to count points that are in and out of source geoids.
+# FLATTRIANGLE: the program handles only flat triangles.
 target_compile_definitions(bezilib0 PUBLIC POINTLIST)
 target_compile_definitions(bezilib1 PUBLIC POINTLIST)
 target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID NUMSGEOID)

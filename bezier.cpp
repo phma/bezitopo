@@ -62,8 +62,10 @@ triangle::triangle()
 {
   a=b=c=NULL;
   aneigh=bneigh=cneigh=NULL;
+#ifndef FLATTRIANGLE
   memset(ctrl,0,sizeof(ctrl));
   nocubedir=INT_MAX;
+#endif
 }
 
 double triangle::area()
@@ -101,9 +103,13 @@ double triangle::elevation(xy pnt)
   p/=totarea;
   q/=totarea;
   r/=totarea;
+#ifdef FLATTRIANGLE
+  return q*b->z+p*a->z+r*c->z;
+#else
   return q*q*q*b->z+3*q*q*r*ctrl[5]+3*p*q*q*ctrl[2]+
          3*q*r*r*ctrl[6]+6*p*q*r*ctrl[3]+3*p*p*q*ctrl[0]+
          p*p*p*a->z+3*p*p*r*ctrl[1]+3*p*r*r*ctrl[4]+r*r*r*c->z;
+#endif
 }
 
 xyz triangle::gradient3(xy pnt)
@@ -113,9 +119,15 @@ xyz triangle::gradient3(xy pnt)
   p=area3(pnt,*b,*c)/s;
   q=area3(*a,pnt,*c)/s;
   r=area3(*a,*b,pnt)/s;
+#ifdef FLATTRIANGLE
+  gp=a->z;
+  gq=b->z;
+  gr=c->z;
+#else
   gp=3*q*q*ctrl[2]+6*q*r*ctrl[3]+6*p*q*ctrl[0]+3*p*p*a->z+6*p*r*ctrl[1]+3*r*r*ctrl[4];
   gq=3*q*q*b->z+6*q*r*ctrl[5]+6*p*q*ctrl[2]+3*r*r*ctrl[6]+6*p*r*ctrl[3]+3*p*p*ctrl[0];
   gr=3*q*q*ctrl[5]+6*q*r*ctrl[6]+6*p*q*ctrl[3]+3*p*p*ctrl[1]+6*p*r*ctrl[4]+3*r*r*c->z;
+#endif
   return xyz(gp,gq,gr);
 }
 
@@ -203,7 +215,9 @@ xy triangle::centroid()
 
 void triangle::setcentercp()
 {
+#ifndef FLATTRIANGLE
   ctrl[3]=((ctrl[0]+ctrl[1]+ctrl[2]+ctrl[4]+ctrl[5]+ctrl[6])*3-(a->z+b->z+c->z)*2)/12;
+#endif
 }
 
 bool triangle::iscorner(point *v)
@@ -213,6 +227,7 @@ bool triangle::iscorner(point *v)
 
 void triangle::flatten()
 {
+#ifndef FLATTRIANGLE
   ctrl[0]=(2*a->z+b->z)/3;
   ctrl[1]=(2*a->z+c->z)/3;
   ctrl[2]=(2*b->z+a->z)/3;
@@ -221,6 +236,7 @@ void triangle::flatten()
   ctrl[5]=(2*b->z+c->z)/3;
   ctrl[6]=(2*c->z+b->z)/3;
   nocubedir=INT_MAX;
+#endif
   sarea=area();
   setgradmat();
 }
@@ -233,6 +249,7 @@ void triangle::setgradient(xy pnt,xy grad)
   double crit;
   crit=1/(2.0*(1/dist(xy(*a),xy(*b))+1/dist(xy(*c),xy(*a))+1/dist(xy(*b),xy(*c))));
   grad/=3; // control points are 1/3 of the way along sides
+#ifndef FLATTRIANGLE
   if (dist(pnt,*a)<crit)
   {
     ctrl[0]=a->z+dot(grad,xy(*b)-xy(*a));
@@ -249,6 +266,7 @@ void triangle::setgradient(xy pnt,xy grad)
     ctrl[6]=c->z+dot(grad,xy(*b)-xy(*c));
   }
   nocubedir=INT_MAX;
+#endif
   sarea=area();
   setgradmat();
 }
@@ -263,7 +281,35 @@ double triangle::ctrlpt(xy pnt1,xy pnt2)
   crit=1/(2.0*(1/dist(xy(*a),xy(*b))+1/dist(xy(*c),xy(*a))+1/dist(xy(*b),xy(*c))));
   which=(dist(pnt1,*a)<crit)+2*(dist(pnt1,*b)<crit)+3*(dist(pnt1,*c)<crit)
        +4*(dist(pnt2,*a)<crit)+8*(dist(pnt2,*b)<crit)+12*(dist(pnt2,*c)<crit);
+#ifdef FLATTRIANGLE
+  switch (which&3)
+  {
+    case 1:
+      ret=2*a->z;
+      break;
+    case 2:
+      ret=2*b->z;
+      break;
+    case 3:
+      ret=2*c->z;
+      break;
+  }
+  switch (which&12)
+  {
+    case 4:
+      ret+=a->z;
+      break;
+    case 8:
+      ret+=b->z;
+      break;
+    case 12:
+      ret+=c->z;
+      break;
+  }
+  ret/=3;
+#else
   ret=ctrl[ctrlpttab[which]];
+#endif
   assert(which<16); // If this fails, there's a bug in ctrlpt. This bug has been fixed.
   assert(ctrlpttab[which]!=3); // If this fails, there's a bug in the caller.
   return ret;
@@ -321,6 +367,7 @@ triangle *triangle::findt(xy pnt,bool clip)
   return clip?there:here;
 }
 
+#ifndef FLATTRIANGLE
 xy triangle::spcoord(double x,double y)
 /* Given semiperimeter coordinates rotated to nocubedir,
  * returns coordinates in the global coordinate system.
@@ -334,6 +381,7 @@ xy triangle::spcoord(double x,double y)
   across=cossin(nocubedir+536870912)*s;
   return cen+across*y+along*x;
 }
+#endif
 
 vector<double> triangle::xsect(int angle,double offset)
 /* Where s is the semiperimeter, samples the surface at four points,
@@ -375,6 +423,7 @@ void triangle::writeXml(ofstream &ofile,pointlist &pl)
   ofile<<"<triangle corners=\"";
   ofile<<pl.revpoints[a]<<' '<<pl.revpoints[b]<<' '<<pl.revpoints[c];
   ofile<<"\" acicularity=\""<<acicularity();
+#ifndef FLATTRIANGLE
   ofile<<"\" control=\"";
   for (i=0;i<7;i++)
   {
@@ -382,6 +431,7 @@ void triangle::writeXml(ofstream &ofile,pointlist &pl)
       ofile<<' ';
     ofile<<ldecimal(ctrl[i]);
   }
+#endif
   ofile<<"\" />";
 }
 
@@ -429,6 +479,7 @@ double paravertex(vector<double> xsect)
   return -d1/d2;
 }
 
+#ifndef FLATTRIANGLE
 int triangle::findnocubedir()
 /* The range of atan2i is [-0x40000000,0x40000000] ([-180°,180°]).
  * nocubedir is found by adding 0x15555555 (60°) and 0x2aaaaaab (120°)
@@ -492,6 +543,7 @@ int triangle::findnocubedir()
   nocubedir+=beg;
   return nocubedir;
 }
+#endif
 
 double triangle::flatoffset()
 /* The offset at which the cross-section in the nocubedir direction has zero quadratic component.
@@ -500,6 +552,9 @@ double triangle::flatoffset()
 {
   double minusquad,plusquad,offset;
   //int cdir0,cdir1;
+#ifdef FLATTRIANGLE
+  offset=0;
+#else
   if (nocubedir==INT_MAX)
   {
     //cdir0=findnocubedir0();
@@ -512,9 +567,11 @@ double triangle::flatoffset()
   offset=1.5*(minusquad+plusquad)/(minusquad-plusquad);
   if (!isfinite(offset))
     offset=-1048576;
+#endif
   return offset;
 }
 
+#ifndef FLATTRIANGLE
 double triangle::vtxeloff(double off)
 {
   double vtx;
@@ -651,6 +708,7 @@ xy triangle::critical_point(double start,double startz,double end,double endz)
     return xy(vtx,vtx);
   }
 }
+#endif
 
 #ifndef NDEBUG
 
@@ -741,6 +799,7 @@ double parabinter(testfunc func,double start,double startz,double end,double end
 }
 
 #endif
+#ifndef FLATTRIANGLE
 
 vector<xy> triangle::criticalpts_side(bool side)
 {
@@ -811,6 +870,7 @@ vector<xy> triangle::criticalpts_axis()
     critpts.push_back(spcoord(along[i],flat));
   return critpts;
 }
+#endif
 
 void triangle::findcriticalpts()
 /* On the Raspberry Pi, this has in the past found critical points
@@ -818,6 +878,7 @@ void triangle::findcriticalpts()
  * See https://github.com/phma/bezitopo/issues/1 .
  */
 {
+#ifndef FLATTRIANGLE
   vector<xy> critpts,ret;
   int i;
   critpts=criticalpts_side(false);
@@ -833,6 +894,7 @@ void triangle::findcriticalpts()
     if (in(critpts[i]))
       ret.push_back(critpts[i]);
   critpoints=ret;
+#endif
 }
 
 int triangle::pointtype(xy pnt)
@@ -910,6 +972,7 @@ void triangle::setsubslopes(segment &s)
  * this method. So this method ignores secondary critical points.
  */
 {
+#ifndef FLATTRIANGLE
   int i;
   xy dir;
   dir=cossin(s.chordbearing());
@@ -927,6 +990,7 @@ void triangle::setsubslopes(segment &s)
     s.setslope(END,0);
   else
     s.setslope(END,dot(gradient(s.getend()),dir));
+#endif
 }
 
 /* To subdivide a triangle:
@@ -943,6 +1007,7 @@ void triangle::setsubslopes(segment &s)
 
 void triangle::subdivide()
 {
+#ifndef FLATTRIANGLE
   int h,i,j,n,newcrit,round,nExtraSegments;
   inttype itype;
   bool del;
@@ -1200,6 +1265,7 @@ void triangle::subdivide()
     }
     subdiv.resize(i);
   }
+#endif
 }
 
 /* 2015-07-12: There was a bug in addperimeter.
@@ -1252,8 +1318,13 @@ void triangle::addperimeter()
     swap(sidea[0],sidea[1]);
   if (sideb.size()>1 && dist(xy(*c),xy(sideb[0]))>dist(xy(*c),xy(sideb[1])))
     swap(sideb[0],sideb[1]);
+#ifdef FLATTRIANGLE
+  sizeWithPerimeter=2*(sidea.size()+sideb.size()+sidec.size())+3;
+  sizeWithoutPerimeter=(sidea.size()+sideb.size()+sidec.size());
+#else
   sizeWithPerimeter=2*(sidea.size()+sideb.size()+sidec.size())+3*totcritpointcount+3;
   sizeWithoutPerimeter=(sidea.size()+sideb.size()+sidec.size())+3*totcritpointcount;
+#endif
   oldnumber=subdiv.size();
   if (oldnumber<sizeWithPerimeter)
   {
@@ -1307,8 +1378,13 @@ void triangle::removeperimeter()
   for (i=0;i<2;i++)
     if (isfinite(sid->extrema[i]))
       sidea.push_back(sid->critpoint(i));
+#ifdef FLATTRIANGLE
+  sizeWithPerimeter=2*(sidea.size()+sideb.size()+sidec.size())+3;
+  sizeWithoutPerimeter=(sidea.size()+sideb.size()+sidec.size());
+#else
   sizeWithPerimeter=2*(sidea.size()+sideb.size()+sidec.size())+3*totcritpointcount+3;
   sizeWithoutPerimeter=(sidea.size()+sideb.size()+sidec.size())+3*totcritpointcount;
+#endif
   if (subdiv.size()>sizeWithoutPerimeter)
   {
     for (i=subdiv.size()-1,acnt=bcnt=ccnt=0;i>=0 && acnt<3 && bcnt<3 && ccnt<3 && acnt+bcnt+ccnt<6;i--)
@@ -1396,6 +1472,7 @@ array<double,4> triangle::lohi()
   }
   ret[0]=ret[1];
   ret[3]=ret[2];
+#ifndef FLATTRIANGLE
   for (i=0;i<critpoints.size();i++)
   {
     e=elevation(critpoints[i]);
@@ -1404,6 +1481,7 @@ array<double,4> triangle::lohi()
     if (e>ret[3])
       ret[3]=e;
   }
+#endif
   return ret;
 }
 

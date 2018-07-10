@@ -83,14 +83,16 @@ class triangle
 {
 public:
   point *a,*b,*c; //corners
+#ifndef FLATTRIANGLE
   double ctrl[7]; //There are 10 control points; the corners are three, and these are the elevations of the others.
-  double peri,sarea;
-  triangle *aneigh,*bneigh,*cneigh;
   int nocubedir; // set to MAXINT if critpoints have not been looked for
   int totcritpointcount; // includes the secondary critpoints
-  double gradmat[2][3]; // to compute gradient from three partial gradients
   std::vector<xy> critpoints; // does not include secondary critpoints
+#endif
   std::vector<segment> subdiv;
+  double peri,sarea;
+  triangle *aneigh,*bneigh,*cneigh;
+  double gradmat[2][3]; // to compute gradient from three partial gradients
   triangle();
   void setneighbor(triangle *neigh);
   double elevation(xy pnt);
@@ -112,13 +114,17 @@ public:
   void setgradmat();
   std::vector<double> xsect(int angle,double offset);
   double spelevation(int angle,double x,double y);
+#ifndef FLATTRIANGLE
   int findnocubedir();
-  double flatoffset();
   std::vector<xyz> slices(bool side);
+#endif
+  double flatoffset();
   //void setctrl(bool flat);
   xy critical_point(double start,double startz,double end,double endz);
   std::vector<xy> criticalpts_side(bool side);
+#ifndef FLATTRIANGLE
   xy spcoord(double x,double y);
+#endif
   std::vector<xy> criticalpts_axis();
   void findcriticalpts();
   int pointtype(xy pnt);
@@ -136,7 +142,9 @@ public:
   edge *checkBentContour();
   virtual void writeXml(std::ofstream &ofile,pointlist &pl);
 private:
+#ifndef FLATTRIANGLE
   double vtxeloff(double off);
+#endif
   void setsubslopes(segment &s);
 };
 
