@@ -3,7 +3,7 @@
 /* binio.cpp - binary input/output                    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2017 Pierre Abbat.
+/* Copyright 2015-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -118,6 +118,46 @@ int readleint(std::istream &file)
   return *(int *)buf;
 }
 
+void writebelong(std::ostream &file,long long i)
+{
+  char buf[8];
+  *(long long *)buf=i;
+#ifndef BIGENDIAN
+  endianflip(buf,8);
+#endif
+  file.write(buf,8);
+}
+
+void writelelong(std::ostream &file,long long i)
+{
+  char buf[8];
+  *(long long *)buf=i;
+#ifdef BIGENDIAN
+  endianflip(buf,8);
+#endif
+  file.write(buf,8);
+}
+
+long long readbelong(std::istream &file)
+{
+  char buf[8];
+  file.read(buf,8);
+#ifndef BIGENDIAN
+  endianflip(buf,8);
+#endif
+  return *(long long *)buf;
+}
+
+long long readlelong(std::istream &file)
+{
+  char buf[8];
+  file.read(buf,8);
+#ifdef BIGENDIAN
+  endianflip(buf,8);
+#endif
+  return *(long long *)buf;
+}
+
 float readbefloat(std::istream &file)
 {
   char buf[4];
@@ -138,40 +178,40 @@ float readlefloat(std::istream &file)
   return *(float *)buf;
 }
 
-void writebefloat(std::ostream &file,float i)
+void writebefloat(std::ostream &file,float f)
 {
   char buf[4];
-  *(float *)buf=i;
+  *(float *)buf=f;
 #ifndef BIGENDIAN
   endianflip(buf,4);
 #endif
   file.write(buf,4);
 }
 
-void writelefloat(std::ostream &file,float i)
+void writelefloat(std::ostream &file,float f)
 {
   char buf[4];
-  *(float *)buf=i;
+  *(float *)buf=f;
 #ifdef BIGENDIAN
   endianflip(buf,4);
 #endif
   file.write(buf,4);
 }
 
-void writebedouble(std::ostream &file,double i)
+void writebedouble(std::ostream &file,double f)
 {
   char buf[8];
-  *(double *)buf=i;
+  *(double *)buf=f;
 #ifndef BIGENDIAN
   endianflip(buf,8);
 #endif
   file.write(buf,8);
 }
 
-void writeledouble(std::ostream &file,double i)
+void writeledouble(std::ostream &file,double f)
 {
   char buf[8];
-  *(double *)buf=i;
+  *(double *)buf=f;
 #ifdef BIGENDIAN
   endianflip(buf,8);
 #endif

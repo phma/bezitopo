@@ -3,7 +3,7 @@
 /* binio.h - binary input/output                      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016 Pierre Abbat.
+/* Copyright 2015,2016,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -30,6 +30,10 @@ void writebeint(std::ostream &file,int i);
 void writeleint(std::ostream &file,int i);
 int readbeint(std::istream &file);
 int readleint(std::istream &file);
+void writebelong(std::ostream &file,long long i);
+void writelelong(std::ostream &file,long long i);
+long long readbelong(std::istream &file);
+long long readlelong(std::istream &file);
 void writebefloat(std::ostream &file,float f);
 void writelefloat(std::ostream &file,float f);
 float readbefloat(std::istream &file);
