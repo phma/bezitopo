@@ -378,7 +378,7 @@ xy triangle::spcoord(double x,double y)
   s=peri/2;
   cen=centroid();
   along=cossin(nocubedir)*s;
-  across=cossin(nocubedir+536870912)*s;
+  across=cossin(nocubedir+DEG90)*s;
   return cen+across*y+along*x;
 }
 #endif
@@ -396,7 +396,7 @@ vector<double> triangle::xsect(int angle,double offset)
   s=peri/2;
   cen=centroid();
   along=cossin(angle)*s;
-  across=cossin(angle+536870912)*s;
+  across=cossin(angle+DEG90)*s;
   for (i=-3;i<5;i+=2)
     ret.push_back(elevation(cen+across*offset+along*i*0.5));
   return ret;
@@ -413,7 +413,7 @@ double triangle::spelevation(int angle,double x,double y)
   s=peri/2;
   cen=centroid();
   along=cossin(angle)*s;
-  across=cossin(angle+536870912)*s;
+  across=cossin(angle+DEG90)*s;
   return elevation(cen+across*y+along*x);
 }
 
