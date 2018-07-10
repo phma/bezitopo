@@ -1072,7 +1072,7 @@ void testtindxf()
   GroupCode a,b(0),c(70),d(11),e(290);
   for (acc=i=0;i<=1001;i+=13)
   {
-    /* The tags tested include 39, which is the end of a block of 88s,
+    /* The tags tested include 169, which is the end of a block of 8s,
      * and 390, which is the first of a block of 132s.
      */
     fmt=tagFormat(i);
@@ -1080,10 +1080,9 @@ void testtindxf()
     acc=(acc*17+fmt)%8191;
   }
   cout<<"Hash of every 13th DXF tag format is "<<acc<<endl;
-  tassert(acc==2145);
+  tassert(acc==3424);
   b.str="SECTION";
   c.integer=105;
-  d.pnt=xyz(-0.5,0.866,0.1);
   e.flag=true;
   a=b;
   b=c;
@@ -1092,7 +1091,6 @@ void testtindxf()
   e=GroupCode();
   tassert(a.str=="SECTION");
   tassert(b.integer==105);
-  tassert(fabs(c.pnt.length()-1.005)<0.0001);
 }
 
 void testbreak0()

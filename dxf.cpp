@@ -27,7 +27,7 @@ using namespace std;
 TagRange tagTable[]=
 {
   {0,128}, // string
-  {10,88}, // xyz
+  {10,72}, // xyz. All xyz's are stored as three separate doubles.
   {40,72}, // double
   {60,2}, // 2-byte short
   {80,0}, // invalid
@@ -105,9 +105,6 @@ GroupCode::GroupCode(int tag0)
     case 72:
       real=0;
       break;
-    case 88:
-      new (&pnt) xyz();
-      break;
     case 128:
     case 129:
       new (&str) string();
@@ -132,9 +129,6 @@ GroupCode::GroupCode(const GroupCode &b)
     case 72:
       real=b.real;
       break;
-    case 88:
-      new (&pnt) xyz(b.pnt);
-      break;
     case 128:
     case 129:
       new (&str) string(b.str);
@@ -144,12 +138,8 @@ GroupCode::GroupCode(const GroupCode &b)
 
 GroupCode& GroupCode::operator=(const GroupCode &b)
 {
-  if (tagFormat(tag)==88 && tagFormat(b.tag)!=88)
-    pnt.~xyz();
   if ((tagFormat(tag)&-2)==128 && (tagFormat(b.tag)&-2)!=128)
     str.~string();
-  if (tagFormat(tag)!=88 && tagFormat(b.tag)==88)
-    new (&pnt) xyz();
   if ((tagFormat(tag)&-2)!=128 && (tagFormat(b.tag)&-2)==128)
     new (&str) string();
   tag=b.tag;
@@ -167,9 +157,6 @@ GroupCode& GroupCode::operator=(const GroupCode &b)
     case 72:
       real=b.real;
       break;
-    case 88:
-      pnt=b.pnt;
-      break;
     case 128:
     case 129:
       str=b.str;
@@ -181,9 +168,6 @@ GroupCode::~GroupCode()
 {
   switch (tagFormat(tag))
   {
-    case 88:
-      pnt.~xyz();
-      break;
     case 128:
     case 129:
       str.~string();

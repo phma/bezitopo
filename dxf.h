@@ -32,7 +32,6 @@ struct TagRange
    * 004 04: int
    * 008 08: long long
    * 072 48: double
-   * 088 58: xyz
    * 128 80: string
    * 129 81: hex string representing binary chunk
    * 132 84: hex string representing int
@@ -57,7 +56,6 @@ public:
   union
   {
     std::string str;
-    xyz pnt;
     double real;
     long long integer;
     bool flag;
