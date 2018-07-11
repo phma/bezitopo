@@ -21,6 +21,7 @@
  */
 #include <string>
 #include <fstream>
+#include <vector>
 #include "xyz.h"
 
 struct TagRange
@@ -65,3 +66,5 @@ public:
 
 GroupCode readDxfText(std::istream &file);
 GroupCode readDxfBinary(std::istream &file);
+std::vector<GroupCode> readDxfGroups(std::istream &file,bool mode);
+std::vector<GroupCode> readDxfGroups(std::string filename);

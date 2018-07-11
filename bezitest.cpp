@@ -1070,6 +1070,7 @@ void testtindxf()
 {
   int i,acc,fmt;
   GroupCode a,b(0),c(70),d(11),e(290);
+  vector<GroupCode> dxfTxt,dxfBin;
   for (acc=i=0;i<=1001;i+=13)
   {
     /* The tags tested include 169, which is the end of a block of 8s,
@@ -1091,6 +1092,14 @@ void testtindxf()
   e=GroupCode();
   tassert(a.str=="SECTION");
   tassert(b.integer==105);
+  dxfTxt=readDxfGroups("tinytin-txt.dxf");
+  if (dxfTxt.size()==0)
+    dxfTxt=readDxfGroups("../tinytin-txt.dxf");
+  dxfBin=readDxfGroups("tinytin-bin.dxf");
+  if (dxfBin.size()==0)
+    dxfBin=readDxfGroups("../tinytin-bin.dxf");
+  cout<<"Read "<<dxfTxt.size()<<" groups from tinytin-txt, "<<dxfBin.size()<<" from tinytin-bin\n";
+  tassert(dxfTxt.size()==dxfBin.size());
 }
 
 void testbreak0()

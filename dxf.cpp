@@ -20,6 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cstring>
 #include "dxf.h"
 #include "binio.h"
 using namespace std;
@@ -63,7 +64,10 @@ TagRange tagTable[]=
   {480,132},
   {482,0},
   {999,128},
-  {1010,0}
+  {1010,72},
+  {1060,2},
+  {1071,4},
+  {1072,0}
 };
 
 int tagFormat(int tag)
@@ -175,6 +179,41 @@ GroupCode::~GroupCode()
   }
 }
 
+long long hexDecodeInt(string str)
+{
+  int i,ch;
+  long long ret=0;
+  for (i=0;i<str.length();i++)
+  {
+    ch=str[i];
+    if (ch>'_')
+      ch&=0xdf;
+    if (ch>'9')
+      ch-='A'-('9'+1);
+    ret=(ret<<4)+(ch-'0');
+  }
+  return ret;
+}
+
+string hexDecodeString(string str)
+{
+  int i,ch;
+  char byte;
+  string ret;
+  for (i=0;i<str.length();i++)
+  {
+    ch=str[i];
+    if (ch>'_')
+      ch&=0xdf;
+    if (ch>'9')
+      ch-='A'-('9'+1);
+    byte=(byte<<4)+(ch-'0');
+    if (i&1)
+      ret+=byte;
+  }
+  return ret;
+}
+
 GroupCode readDxfText(istream &file)
 {
   string tagstr,datastr;
@@ -183,29 +222,36 @@ GroupCode readDxfText(istream &file)
   getline(file,datastr);
   if (file.good())
   {
-    ret=GroupCode(stoi(tagstr));
-    switch (tagFormat(ret.tag))
+    try
     {
-      case 1: // bools are stored in text as numbers
-	ret.flag=stoi(datastr)!=0;
-	break;
-      case 2:
-      case 4:
-      case 8:
-	ret.integer=stoll(datastr);
-	break;
-      case 72:
-	ret.real=stod(datastr);
-	break;
-      case 128:
-	ret.str=datastr;
-	break;
-      case 129:
-	// TODO
-	break;
-      case 132:
-	// TODO
-	break;
+      ret=GroupCode(stoi(tagstr));
+      switch (tagFormat(ret.tag))
+      {
+	case 1: // bools are stored in text as numbers
+	  ret.flag=stoi(datastr)!=0;
+	  break;
+	case 2:
+	case 4:
+	case 8:
+	  ret.integer=stoll(datastr);
+	  break;
+	case 72:
+	  ret.real=stod(datastr);
+	  break;
+	case 128:
+	  ret.str=datastr;
+	  break;
+	case 129:
+	  ret.str=hexDecodeString(datastr);
+	  break;
+	case 132:
+	  ret.integer=hexDecodeInt(datastr);
+	  break;
+      }
+    }
+    catch (...)
+    {
+      ret=GroupCode(-2);
     }
   }
   return ret;
@@ -240,12 +286,69 @@ GroupCode readDxfBinary(istream &file)
 	ret.str=readustring(file);
 	break;
       case 129:
-	readustring(file); // TODO
+	ret.str=hexDecodeString(readustring(file));
 	break;
       case 132:
-	readustring(file); // TODO
+	ret.integer=hexDecodeInt(readustring(file));
 	break;
     }
+  }
+  return ret;
+}
+
+bool readDxfMagic(istream &file)
+/* Looks for the seven bytes DXF^M^J^Z^@. If any control character appears before
+ * DXF, returns false.
+ */
+{
+  char buf[4]={"   "};
+  while (!(buf[0]=='D' && buf[1]=='X' && buf[2]=='F') && buf[2]>=' ' && buf[2]<128 && file.good())
+  {
+    buf[0]=buf[1];
+    buf[1]=buf[2];
+    buf[2]=file.get();
+  }
+  if (!strcmp(buf,"DXF"))
+    file.read(buf,4);
+  return (file.good() && !strcmp(buf,"\r\n\032"));
+}
+
+vector<GroupCode> readDxfGroups(istream &file,bool mode)
+// mode is true for text.
+{
+  GroupCode oneCode;
+  vector<GroupCode> ret;
+  bool cont=true;
+  if (!mode)
+    cont=readDxfMagic(file);
+  while (cont)
+  {
+    if (mode)
+      oneCode=readDxfText(file);
+    else
+      oneCode=readDxfBinary(file);
+    if (tagFormat(oneCode.tag))
+      ret.push_back(oneCode);
+    else
+    {
+      cont=false;
+      if (file.good() || oneCode.tag+1) // An unknown tag was read.
+	ret.clear();
+    }
+  }
+  return ret;
+}
+
+vector<GroupCode> readDxfGroups(string filename)
+{
+  int mode;
+  ifstream file;
+  vector<GroupCode> ret;
+  for (mode=0;mode<2 && ret.size()==0;mode++)
+  {
+    file.open(filename,mode?ios::in:ios::binary);
+    ret=readDxfGroups(file,mode);
+    file.close();
   }
   return ret;
 }
