@@ -1100,6 +1100,19 @@ void testtindxf()
     dxfBin=readDxfGroups("../tinytin-bin.dxf");
   cout<<"Read "<<dxfTxt.size()<<" groups from tinytin-txt, "<<dxfBin.size()<<" from tinytin-bin\n";
   tassert(dxfTxt.size()==dxfBin.size());
+  for (i=0;i<dxfBin.size();i++)
+  {
+    if (dxfBin[i].tag==0)
+      cout<<dxfBin[i].str<<'\n';
+    if (dxfBin[i].tag>=10 && dxfBin[i].tag<=39)
+    {
+      cout<<ldecimal(dxfBin[i].real);
+      if (dxfBin[i].tag<30)
+	cout<<' ';
+      else
+	cout<<'\n';
+    }
+  }
 }
 
 void testbreak0()
