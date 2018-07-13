@@ -2526,8 +2526,8 @@ void testmanyarc()
   }
   cout<<"limit p="<<ldecimal(manyArcTrim(2147483647))<<endl;
   test1manyarc(trans,ps);
-  //test1manyarc(trans43,ps);
-  //test1manyarc(trans34,ps);
+  test1manyarc(trans43,ps);
+  test1manyarc(trans34,ps);
   ps.close();
 }
 
