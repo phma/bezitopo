@@ -2461,7 +2461,7 @@ void test1manyarc(spiralarc s,PostScript &ps)
 }
 
 void testmanyarc()
-/* Preliminary research for approximating a spiralarc by a sequence of arcs.
+/* Approximating a spiralarc by a smooth sequence of arcs.
  * In the approximation where the difference in curvature times the length is
  * small, this approaches the problem of approximating a cubic by a sequence
  * of quadratics.
