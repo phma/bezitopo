@@ -295,7 +295,7 @@ polyarc adjustEnds(polyarc apx,spiralarc a,int n0,int n1)
   return ret;
 }
 
-polyarc adjustManyArc(polyarc apx,spiralarc a)
+polyarc adjustManyArcOld(polyarc apx,spiralarc a)
 {
   int narcs=apx.size();
   int i;
@@ -360,11 +360,11 @@ polyarc adjust1step(polyarc apx,spiralarc a,int n0,int n1)
   double along;
   vector<double> alongs;
   arc oneArc;
-  xy thispluspoint,thisminuspoint;
+  xy thispluspoint,thisminuspoint,thispoint;
   vector<xy> pluspoints,minuspoints;
-  vector<double> plusdists,minusdists;
+  vector<double> plusdists,minusdists,apxdists,adjustment;
   matrix sidedisp(4*narcs,narcs-2);
-  polyarc plusadj,minusadj;
+  polyarc plusadj,minusadj,ret;
   for (i=i2=0;i<narcs;i++)
     if (i!=n0 && i!=n1)
     {
@@ -411,6 +411,30 @@ polyarc adjust1step(polyarc apx,spiralarc a,int n0,int n1)
 	sidedisp[j][i2]=1000*(minusdists[j]-plusdists[j]);
       i2++;
     }
+  apxdists=weightedDistance(apx,a);
+  adjustment=linearLeastSquares(sidedisp,apxdists);
+  thispoint=a.getstart();
+  ret.insert(thispoint);
+  for (i=i2=0;i<narcs;i++)
+  {
+    oneArc=apx.getarc(i);
+    if (i!=n0 && i!=n1)
+      thispoint+=(oneArc.getend()-oneArc.getstart())*(1+adjustment[i2++]);
+    else
+      thispoint+=(oneArc.getend()-oneArc.getstart());
+    ret.insert(thispoint);
+    ret.setdelta(i,apx.getarc(i).getdelta());
+  }
+  ret.open();
+  ret.setlengths();
+  ret=adjustEnds(ret,a,n0,n1);
+  return ret;
+}
+
+polyarc adjustManyArc(polyarc apx,spiralarc a)
+{
+  array<int,2> theEnds=ends(apx);
+  return adjust1step(apx,a,theEnds[0],theEnds[1]);
 }
 
 polyarc manyArc(spiralarc a,int narcs)
