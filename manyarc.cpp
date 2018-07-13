@@ -146,8 +146,8 @@ array<int,2> ends(polyarc apx)
     for (j=0;j<i;j++)
     {
       angle=(bearing[i]-bearing[j]-DEG90)&(DEG180-1);
-      if (angle>DEG45)
-	angle-=DEG90;
+      if (angle>DEG90)
+	angle-=DEG180;
       angle=abs(angle);
       if (angle<leastangle)
       {
