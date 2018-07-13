@@ -1071,6 +1071,7 @@ void testtindxf()
   int i,acc,fmt;
   GroupCode a,b(0),c(70),d(11),e(290);
   vector<GroupCode> dxfTxt,dxfBin;
+  vector<array<xyz,3> > binFaces,txtFaces;
   for (acc=i=0;i<=1001;i+=13)
   {
     /* The tags tested include 169, which is the end of a block of 8s,
@@ -1113,6 +1114,9 @@ void testtindxf()
 	cout<<'\n';
     }
   }
+  binFaces=extractTriangles(dxfBin);
+  txtFaces=extractTriangles(dxfTxt);
+  cout<<binFaces.size()<<" triangles in binary file, "<<txtFaces.size()<<" in text file\n";
 }
 
 void testbreak0()

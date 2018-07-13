@@ -352,3 +352,45 @@ vector<GroupCode> readDxfGroups(string filename)
   }
   return ret;
 }
+
+vector<array<xyz,3> > extractTriangles(vector<GroupCode> dxfData)
+/* Scans dxfData looking for 3DFACE objects, extracting the first three
+ * corners of each. The fourth corner is ignored. It should be the same as
+ * one of the first three. If it isn't, the 3DFACE is a quadrilateral,
+ * which might should be turned into two triangles.
+ * 
+ * This function ignores sections; if there's a 3DFACE in the BLOCKS section,
+ * it will output it once, not every place the block is used.
+ */
+{
+  int i,ncorner,coord;
+  array<xyz,3> face;
+  vector<array<xyz,3> > ret;
+  int ncoords=16;
+  for (i=0;i<dxfData.size();i++)
+  {
+    if (dxfData[i].tag==0 && dxfData[i].str=="3DFACE")
+      ncoords=0;
+    if (ncoords<12 && dxfData[i].tag>=10 && dxfData[i].tag<40)
+    {
+      coord=dxfData[i].tag/10;
+      ncorner=dxfData[i].tag%10;
+      if (ncorner<3)
+	switch (coord)
+	{
+	  case 1:
+	    face[ncorner]=xyz(dxfData[i].real,face[ncorner].gety(),face[ncorner].getz());
+	    break;
+	  case 2:
+	    face[ncorner]=xyz(face[ncorner].getx(),dxfData[i].real,face[ncorner].getz());
+	    break;
+	  case 3:
+	    face[ncorner]=xyz(face[ncorner].getx(),face[ncorner].gety(),dxfData[i].real);
+	    break;
+	}
+      if (12==++ncoords)
+	ret.push_back(face);
+    }
+  }
+  return ret;
+}

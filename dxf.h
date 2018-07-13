@@ -22,6 +22,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <array>
 #include "xyz.h"
 
 struct TagRange
@@ -68,3 +69,4 @@ GroupCode readDxfText(std::istream &file);
 GroupCode readDxfBinary(std::istream &file);
 std::vector<GroupCode> readDxfGroups(std::istream &file,bool mode);
 std::vector<GroupCode> readDxfGroups(std::string filename);
+std::vector<std::array<xyz,3> > extractTriangles(std::vector<GroupCode> dxfData);
