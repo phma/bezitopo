@@ -23,6 +23,7 @@
 #include <cstring>
 #include "dxf.h"
 #include "binio.h"
+#include "textfile.h"
 using namespace std;
 
 TagRange tagTable[]=
@@ -214,12 +215,12 @@ string hexDecodeString(string str)
   return ret;
 }
 
-GroupCode readDxfText(istream &file)
+GroupCode readDxfText(TextFile &file)
 {
   string tagstr,datastr;
   GroupCode ret;
-  getline(file,tagstr);
-  getline(file,datastr);
+  tagstr=file.getline();
+  datastr=file.getline();
   if (file.good())
   {
     try
@@ -319,12 +320,13 @@ vector<GroupCode> readDxfGroups(istream &file,bool mode)
   GroupCode oneCode;
   vector<GroupCode> ret;
   bool cont=true;
+  TextFile tfile(file);
   if (!mode)
     cont=readDxfMagic(file);
   while (cont)
   {
     if (mode)
-      oneCode=readDxfText(file);
+      oneCode=readDxfText(tfile);
     else
       oneCode=readDxfBinary(file);
     if (tagFormat(oneCode.tag))
@@ -346,7 +348,7 @@ vector<GroupCode> readDxfGroups(string filename)
   vector<GroupCode> ret;
   for (mode=0;mode<2 && ret.size()==0;mode++)
   {
-    file.open(filename,mode?ios::in:ios::binary);
+    file.open(filename,ios::binary);
     ret=readDxfGroups(file,mode);
     file.close();
   }

@@ -87,8 +87,8 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                matrix.cpp measure.cpp minquad.cpp objlist.cpp plot.cpp pnezd.cpp point.cpp
                pointlist.cpp polyline.cpp projection.cpp ps.cpp qindex.cpp quaternion.cpp
                random.cpp raster.cpp refinegeoid.cpp relprime.cpp rootfind.cpp
-               sourcegeoid.cpp spiral.cpp spolygon.cpp
-               stl.cpp test.cpp segment.cpp tin.cpp vball.cpp vcurve.cpp zoom.cpp)
+               segment.cpp sourcegeoid.cpp spiral.cpp spolygon.cpp
+               stl.cpp test.cpp textfile.cpp tin.cpp vball.cpp vcurve.cpp zoom.cpp)
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
                binio.cpp boundrect.cpp breakline.cpp cogo.cpp contour.cpp
                convertgeoid.cpp csv.cpp document.cpp drawobj.cpp
@@ -107,7 +107,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
                manysum.cpp measure.cpp measurebutton.cpp minquad.cpp penwidth.cpp
                plwidget.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
                ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp rendercache.cpp
-               rootfind.cpp segment.cpp spiral.cpp spolygon.cpp test.cpp tin.cpp
+               rootfind.cpp segment.cpp spiral.cpp spolygon.cpp test.cpp textfile.cpp tin.cpp
                tinwindow.cpp vball.cpp vcurve.cpp viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources} ${qm_files})
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
