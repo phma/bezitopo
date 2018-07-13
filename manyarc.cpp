@@ -407,7 +407,7 @@ polyarc adjust1step(polyarc apx,spiralarc a,int n0,int n1)
       minusadj=adjustEnds(minusadj,a,n0,n1);
       plusdists=weightedDistance(plusadj,a);
       minusdists=weightedDistance(minusadj,a);
-      for (j=0;j<narcs;j++)
+      for (j=0;j<4*narcs;j++)
 	sidedisp[j][i2]=1000*(minusdists[j]-plusdists[j]);
       i2++;
     }
