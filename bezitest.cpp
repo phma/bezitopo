@@ -2439,7 +2439,8 @@ void test1manyarc(spiralarc s,PostScript &ps)
       if (crossings1.size()<4)
       {
 	crossingsPerArc[crossings1.size()]++;
-	tassert(crossings1.size());
+	if (s.clothance()) // If clothance=0, s and approx coincide, and it may find no intersections.
+	  tassert(crossings1.size());
       }
       for (j=0;j<crossings1.size();j++)
 	crossings.push_back(crossings1[j][0].station);
@@ -2477,6 +2478,7 @@ void testmanyarc()
   spiralarc trans(xyz(0,0,0),0,0.003,xyz(500,0,0));
   spiralarc trans43(xyz(0,0,0),0,0.003,xyz(400,300,0));
   spiralarc trans34(xyz(0,0,0),0,0.003,xyz(300,400,0));
+  spiralarc straight(xyz(0,0,0),0,0,xyz(500,0,0));
   int narcs,i,j;
   PostScript ps;
   bezier3d spl;
@@ -2528,6 +2530,7 @@ void testmanyarc()
   test1manyarc(trans,ps);
   test1manyarc(trans43,ps);
   test1manyarc(trans34,ps);
+  test1manyarc(straight,ps);
   ps.close();
 }
 

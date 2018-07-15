@@ -135,11 +135,13 @@ vector<segment> manyQuad(segment cubic,int narcs)
 array<int,2> ends(polyarc apx)
 /* Returns the indices of the two arcs whose angle is closest to 90°.
  * For most spiralarcs in actual use, they are the first and the last.
+ * If apx is straight, returns {-1,-1}.
  */
 {
-  int i,j,sz=apx.size(),angle,leastangle=DEG120;
+  int i,j,sz=apx.size(),angle,leastangle=DEG90-1;
   array<int,2> ret;
   vector<int> bearing;
+  ret[0]=ret[1]=-1;
   for (i=0;i<sz;i++)
     bearing.push_back(apx.getarc(i).chordbearing());
   for (i=0;i<sz;i++)
@@ -249,7 +251,8 @@ polyarc adjustEnds(polyarc apx,spiralarc a,int n0,int n1)
 /* Adjusts the n0th and n1st arc of apx so that the ends match those of a.
  * n0 and n1 should be the two closest to right angles to each other.
  * For a spiralarc with small delta and not including its inflection point,
- * they are the first and last arcs.
+ * they are the first and last arcs. If n0 and n1 are both -1, which means
+ * that apx is straight, it just adjusts the end.
  */
 {
   int narcs=apx.size();
@@ -267,22 +270,24 @@ polyarc adjustEnds(polyarc apx,spiralarc a,int n0,int n1)
     arcpoints.push_back(apx.station(along));
     alongs.push_back(along);
   }
-  arcdisp[0][0]=arcpoints[n0+1].getx()-arcpoints[n0].getx();
-  arcdisp[1][0]=arcpoints[n0+1].gety()-arcpoints[n0].gety();
-  arcdisp[0][1]=arcpoints[n1+1].getx()-arcpoints[n1].getx();
-  arcdisp[1][1]=arcpoints[n1+1].gety()-arcpoints[n1].gety();
-  enddiff=a.getend()-apx.station(apx.length());
-  shortfall.push_back(enddiff.getx());
-  shortfall.push_back(enddiff.gety());
-  adjustment01=linearLeastSquares(arcdisp,shortfall);
-  adjustment[n0]=adjustment01[0];
-  adjustment[n1]=adjustment01[1];
+  if (n0!=n1)
+  {
+    arcdisp[0][0]=arcpoints[n0+1].getx()-arcpoints[n0].getx();
+    arcdisp[1][0]=arcpoints[n0+1].gety()-arcpoints[n0].gety();
+    arcdisp[0][1]=arcpoints[n1+1].getx()-arcpoints[n1].getx();
+    arcdisp[1][1]=arcpoints[n1+1].gety()-arcpoints[n1].gety();
+    enddiff=a.getend()-apx.station(apx.length());
+    shortfall.push_back(enddiff.getx());
+    shortfall.push_back(enddiff.gety());
+    adjustment01=linearLeastSquares(arcdisp,shortfall);
+    adjustment[n0]=adjustment01[0];
+    adjustment[n1]=adjustment01[1];
+  }
   thispoint=a.getstart();
   ret.insert(thispoint);
   for (i=0;i<narcs;i++)
   {
     if (i==narcs-1 &&
-        abs(foldangle(dir(thispoint,a.getend())-dir(arcpoints[i],arcpoints[i+1])))<2 &&
         dist(thispoint,a.getend())>2e9*dist(thispoint+(arcpoints[i+1]-arcpoints[i])*(1+adjustment[i]),a.getend()))
       thispoint=a.getend();
     else
@@ -365,7 +370,7 @@ polyarc adjust1step(polyarc apx,spiralarc a,int n0,int n1,double &adjsq)
   vector<double> plusdists,minusdists,apxdists,adjustment;
   matrix sidedisp(4*narcs,narcs-2);
   polyarc plusadj,minusadj,ret;
-  for (i=i2=0;i<narcs;i++)
+  for (i=i2=0;i<narcs && n0+n1>0;i++)
     if (i!=n0 && i!=n1)
     {
       thispluspoint=thisminuspoint=a.getstart();
@@ -411,22 +416,27 @@ polyarc adjust1step(polyarc apx,spiralarc a,int n0,int n1,double &adjsq)
 	sidedisp[j][i2]=1000*(minusdists[j]-plusdists[j]);
       i2++;
     }
-  apxdists=weightedDistance(apx,a);
-  adjustment=linearLeastSquares(sidedisp,apxdists);
-  thispoint=a.getstart();
-  ret.insert(thispoint);
-  for (i=i2=0;i<narcs;i++)
+  if (n0!=n1)
   {
-    oneArc=apx.getarc(i);
-    if (i!=n0 && i!=n1)
-      thispoint+=(oneArc.getend()-oneArc.getstart())*(1+adjustment[i2++]);
-    else
-      thispoint+=(oneArc.getend()-oneArc.getstart());
+    apxdists=weightedDistance(apx,a);
+    adjustment=linearLeastSquares(sidedisp,apxdists);
+    thispoint=a.getstart();
     ret.insert(thispoint);
-    ret.setdelta(i,apx.getarc(i).getdelta());
+    for (i=i2=0;i<narcs;i++)
+    {
+      oneArc=apx.getarc(i);
+      if (i!=n0 && i!=n1)
+	thispoint+=(oneArc.getend()-oneArc.getstart())*(1+adjustment[i2++]);
+      else
+	thispoint+=(oneArc.getend()-oneArc.getstart());
+      ret.insert(thispoint);
+      ret.setdelta(i,apx.getarc(i).getdelta());
+    }
+    ret.open();
+    ret.setlengths();
   }
-  ret.open();
-  ret.setlengths();
+  else
+    ret=apx;
   ret=adjustEnds(ret,a,n0,n1);
   for (i=0;i<adjustment.size();i++)
     adjustment[i]*=adjustment[i];
@@ -443,7 +453,7 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
   {
     apx=adjust1step(apx,a,theEnds[0],theEnds[1],adjsq);
     i++;
-  } while (i<5 && adjsq<1e-7);
+  } while (i<5 && adjsq>1e-7);
   return apx;
 }
 
