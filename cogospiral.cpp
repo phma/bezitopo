@@ -343,12 +343,16 @@ vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
   endcur=fabs(a->curvature(alen));
   if (endcur>maxcur)
     maxcur=endcur;
-  adiv=nearbyint(maxcur*alen)+3;
+  adiv=nearbyint(maxcur*alen+alen/blen)+3;
+  if (adiv<3 || adiv>4096)
+    adiv=4096;
   maxcur=fabs(b->curvature(0));
   endcur=fabs(b->curvature(blen));
   if (endcur>maxcur)
     maxcur=endcur;
-  bdiv=nearbyint(maxcur*blen)+3;
+  bdiv=nearbyint(maxcur*blen+blen/alen)+3;
+  if (bdiv<3 || bdiv>4096)
+    bdiv=4096;
   for (i=0;i<adiv;i++)
     for (j=0;j<bdiv;j++)
     {
