@@ -24,28 +24,32 @@
 #include "ps.h"
 #include "qindex.h"
 #include "relprime.h"
+#include "except.h"
 
 /* The index enables quickly finding a triangle containing a given point.
-   x and y are the bottom left corner. side is always a power of 2,
-   and x and y are multiples of side/16.
-   The four subsquares are arranged as follows:
-   +-------+-------+
-   |       |       |
-   |   2   |   3   |
-   |       |       |
-   +-------+-------+
-   |       |       |
-   |   0   |   1   |
-   |       |       |
-   +-------+-------+
-   A square is subdivided if there are at least three points of the TIN
-   in it. A point is considered to be in a square if it is on its
-   bottom or left edge, but not if it is on its top or right edge.
-
-   After constructing the tree of squares, the program assigns to each
-   leaf square the triangle containing its center, proceeding in
-   Hilbert-curve order.
-   */
+ * x and y are the bottom left corner. side is always a power of 2,
+ * and x and y are multiples of side/16.
+ * The four subsquares are arranged as follows:
+ * +-------+-------+
+ * |       |       |
+ * |   2   |   3   |
+ * |       |       |
+ * +-------+-------+
+ * |       |       |
+ * |   0   |   1   |
+ * |       |       |
+ * +-------+-------+
+ * A square is subdivided if there are at least three points of the TIN
+ * in it. A point is considered to be in a square if it is on its
+ * bottom or left edge, but not if it is on its top or right edge.
+ *
+ * After constructing the tree of squares, the program assigns to each
+ * leaf square the triangle containing its center, proceeding in
+ * Hilbert-curve order.
+ *
+ * When constructing a TIN from bare triangles, the quad index is used to
+ * keep track of points as they are entered into the pointlist.
+ */
 using namespace std;
 
 #if defined(_WIN32) || defined(__CYGWIN__)
@@ -106,6 +110,52 @@ triangle *qindex::findt(xy pnt,bool clip)
     return tri->findt(pnt,clip); // square is undivided
   else 
     return sub[i]->findt(pnt,clip);
+}
+
+point *qindex::findp(xy pont,bool clip)
+{
+  int i;
+  xy inpnt=pont;
+  point *ret=nullptr;
+  i=quarter(pont,clip);
+  if (i<0)
+    ret=nullptr; // point is outside square
+  else if (!sub[3])
+    for (i=0;i<3;i++)
+    {
+      if (pnt[i] && pont==xy(*pnt[i]))
+	ret=pnt[i];
+    }
+  else 
+    ret=sub[i]->findp(pont,clip);
+  return ret;
+}
+
+void qindex::insertPoint(point *pont,bool clip)
+/* The qindex must have already been split, with a vector including the xy
+ * of this point. If not, there may already be three points in the leaf,
+ * in which case it does nothing.
+ */
+{
+  int i;
+  xy inpnt=*pont;
+  i=quarter(*pont,clip);
+  if (i<0)
+    ; // point is outside square
+  else if (!sub[3])
+    for (i=0;i<3;i++)
+    {
+      if (!pnt[i] || xy(*pont)==xy(*pnt[i]))
+      {
+	if (pnt[i] && pont->elev()!=pnt[i]->elev())
+	  throw samePoints;
+	else
+	  pnt[i]=pont;
+	break;
+      }
+    }
+  else 
+    sub[i]->insertPoint(pont,clip);
 }
 
 void qindex::sizefit(vector<xy> pnts)
@@ -199,6 +249,22 @@ void qindex::clear()
       delete(sub[i]);
       sub[i]=NULL;
     }
+}
+
+void qindex::clearLeaves()
+/* Leaves the tree structure intact, but clears the leaves (pointers to
+ * points or triangles). This is used when making a TIN of bare triangles,
+ * after inserting all the points into the pointlist and before making
+ * the index point to triangles.
+ */
+{
+  int i;
+  if (sub[3])
+    for (i=0;i<4;i++)
+      sub[i]->clearLeaves();
+  else
+    for (i=0;i<3;i++)
+      pnt[i]=nullptr;
 }
 
 void qindex::draw(PostScript &ps,bool root)

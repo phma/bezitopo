@@ -3,7 +3,7 @@
 /* qindex.h - quad index to tin                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2017 Pierre Abbat.
+/* Copyright 2012,2013,2017,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -37,14 +37,18 @@ public:
   union
   {
     qindex *sub[4]; // Either all four subs are set,
-    triangle *tri;  // or tri alone is set, or they're all NULL.
+    triangle *tri;  // or tri alone is set,
+    point *pnt[3];  // or up to three pnts are set, or they're all NULL.
   };
   triangle *findt(xy pnt,bool clip=false);
+  point *findp(xy pont,bool clip=false);
+  void insertPoint(point *pont,bool clip=false);
   int quarter(xy pnt,bool clip=false);
   xy middle();
   void sizefit(std::vector<xy> pnts);
   void split(std::vector<xy> pnts);
   void clear();
+  void clearLeaves();
   void draw(PostScript &ps,bool root=true);
   std::vector<qindex*> traverse(int dir=0);
   void settri(triangle *starttri);
