@@ -113,11 +113,12 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
 if (${FFTW_FOUND})
 add_executable(transmer angle.cpp arc.cpp bezier.cpp
-               bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp cogo.cpp drawobj.cpp
+               bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp cogo.cpp
+               contour.cpp csv.cpp drawobj.cpp
                ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
                latlong.cpp ldecimal.cpp manysum.cpp
-               measure.cpp minquad.cpp point.cpp polyline.cpp
-               projection.cpp ps.cpp quaternion.cpp random.cpp relprime.cpp
+               measure.cpp minquad.cpp point.cpp pointlist.cpp polyline.cpp
+               projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
                rootfind.cpp segment.cpp spiral.cpp spolygon.cpp
                tin.cpp transmer.cpp vball.cpp vcurve.cpp)
 endif (${FFTW_FOUND})

@@ -3,7 +3,7 @@
 /* point.h - classes for points and gradients         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012,2014-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -60,6 +60,7 @@ public:
   point();
   point(double e,double n,double h,std::string desc);
   point(xy pnt,double h,std::string desc);
+  point(xyz pnt,std::string desc);
   point(const point &rhs);
   //~point();
   const point& operator=(const point &rhs);

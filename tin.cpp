@@ -934,6 +934,42 @@ void pointlist::maketriangles()
     edges[i].setNeighbors();
 }
 
+void pointlist::makeBareTriangles(vector<array<xyz,3> > bareTriangles)
+/* Assigns point numbers to the corners of the triangles. Makes a qindex and
+ * a map of triangles, but no edges. Can throw samePoints.
+ */
+{
+  int i,j;
+  vector<xy> corners;
+  point *pont[3];
+  triangle newtri;
+  clear();
+  for (i=0;i<bareTriangles.size();i++)
+    for (j=0;j<3;j++)
+      corners.push_back(bareTriangles[i][j]);
+  qinx.split(corners);
+  for (i=0;i<bareTriangles.size();i++)
+  {
+    if (area3(bareTriangles[i][0],bareTriangles[i][1],bareTriangles[i][2])<0)
+      swap(bareTriangles[i][0],bareTriangles[i][2]);
+    for (j=0;j<3;j++)
+    {
+      pont[j]=qinx.findp(bareTriangles[i][j]);
+      if (!pont[j])
+      {
+	addpoint(1,point(bareTriangles[i][j],""));
+	pont[j]=&points[points.size()];
+	qinx.insertPoint(pont[j]);
+      }
+    }
+    newtri.a=pont[0];
+    newtri.b=pont[1];
+    newtri.c=pont[2];
+    newtri.flatten();
+    triangles[triangles.size()]=newtri;
+  }
+}
+
 double pointlist::totalEdgeLength()
 {
   vector<double> edgeLengths;

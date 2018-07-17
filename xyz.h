@@ -103,6 +103,7 @@ public:
     z=h;
   }
   friend class xy;
+  friend class point;
   friend class triangle;
   friend class Quaternion;
   friend double dist(xyz a,xyz b);

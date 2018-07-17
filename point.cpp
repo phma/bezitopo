@@ -3,7 +3,7 @@
 /* point.cpp - classes for points and gradients       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014,2015,2016 Pierre Abbat.
+/* Copyright 2012,2014-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -412,39 +412,53 @@ xyz operator-(const xyz &r)
 }
 
 double dist(xyz a,xyz b)
-{return hypot(hypot(a.x-b.x,a.y-b.y),a.z-b.z);
- }
+{
+  return hypot(hypot(a.x-b.x,a.y-b.y),a.z-b.z);
+}
 
 point::point()
-{x=y=z=0;
- line=NULL;
- flags=0;
- note="";
- }
+{
+  x=y=z=0;
+  line=NULL;
+  flags=0;
+  note="";
+}
 
 point::point(double e,double n,double h,string desc)
-{x=e;
- y=n;
- z=h;
- line=0;
- note=desc;
- }
+{
+  x=e;
+  y=n;
+  z=h;
+  line=0;
+  note=desc;
+}
 
 point::point(xy pnt,double h,string desc)
-{x=pnt.x;
- y=pnt.y;
- z=h;
- line=0;
- note=desc;
- }
+{
+  x=pnt.x;
+  y=pnt.y;
+  z=h;
+  line=0;
+  note=desc;
+}
+
+point::point(xyz pnt,string desc)
+{
+  x=pnt.x;
+  y=pnt.y;
+  z=pnt.z;
+  line=0;
+  note=desc;
+}
 
 point::point(const point &rhs)
-{x=rhs.x;
- y=rhs.y;
- z=rhs.z;
- line=rhs.line;
- note=rhs.note;
- }
+{
+  x=rhs.x;
+  y=rhs.y;
+  z=rhs.z;
+  line=rhs.line;
+  note=rhs.note;
+}
 
 const point& point::operator=(const point &rhs)
 {if (this!=&rhs)
