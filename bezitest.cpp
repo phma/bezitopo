@@ -2949,7 +2949,7 @@ void testqindex()
   qs=qs*3/4; // convert to number of leaves of the tree (undivided squares in the drawing)
   qs++;
   printf("%d leaves\n",qs);
-  tassert(qs>=54 && qs<=108);
+  tassert(qs>=52 && qs<=108);
   qinx.draw(ps);
   ps.endpage();
   ps.startpage();
