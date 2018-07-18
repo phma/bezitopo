@@ -184,7 +184,7 @@ void qindex::sizefit(vector<xy> pnts)
     side/=significand(side);
     x=minx-side;
     y=miny-side;
-    while (x+side<maxx || y+side<maxy)
+    while (x+side<=maxx || y+side<=maxy)
     {
       side*=2;
       x=(rint((minx+maxx)/side*8)-8)*side/16;

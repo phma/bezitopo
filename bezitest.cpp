@@ -1121,6 +1121,8 @@ void testtindxf()
   doc.makepointlist(1);
   doc.pl[1].makeBareTriangles(binFaces);
   cout<<doc.pl[1].points.size()<<" points "<<doc.pl[1].qinx.size()<<" qindex nodes\n";
+  tassert(doc.pl[1].points.size()==6);
+  tassert(doc.pl[1].qinx.size()==5);
   for (i=1;i<=doc.pl[1].points.size();i++)
   {
     pnt=doc.pl[1].points[i];
