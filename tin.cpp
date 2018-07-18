@@ -947,6 +947,7 @@ void pointlist::makeBareTriangles(vector<array<xyz,3> > bareTriangles)
   for (i=0;i<bareTriangles.size();i++)
     for (j=0;j<3;j++)
       corners.push_back(bareTriangles[i][j]);
+  qinx.sizefit(corners);
   qinx.split(corners);
   for (i=0;i<bareTriangles.size();i++)
   {
