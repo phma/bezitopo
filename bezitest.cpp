@@ -86,7 +86,7 @@
 #include "manyarc.h"
 #include "leastsquares.h"
 
-#define psoutput false
+#define psoutput true
 // affects only maketin
 
 #define CBRT2 1.2599210498948731647592197537
