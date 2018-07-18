@@ -489,9 +489,29 @@ int point::valence()
 {
   int i;
   edge *oldline;
-  for (i=0,oldline=line;(!i || oldline!=line);i++)
+  for (i=0,oldline=line;line && (!i || oldline!=line);i++)
     line=line->next(this);
   return i;
+}
+
+bool point::isNeighbor(point *pnt)
+/* Returns true if this and pnt are neighbors. If this is pnt, returns true
+ * if this has any neighbors, else false.
+ */
+{
+  int i;
+  bool ret=false;
+  edge *oldline;
+  for (i=0,oldline=line;line && (!i || oldline!=line);i++)
+  {
+    line=line->next(this);
+    if (line->a==pnt || line->b==pnt)
+    {
+      ret=true;
+      break;
+    }
+  }
+  return ret;
 }
 
 edge *point::edg(triangle *tri)
