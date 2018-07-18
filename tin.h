@@ -65,6 +65,7 @@ public:
   short flipcnt;
   edge();
   void flip(pointlist *topopoints);
+  void reverse();
   point* otherend(point* end);
   triangle* othertri(triangle* t);
   edge* next(point* end);

@@ -193,6 +193,17 @@ void edge::flip(pointlist *topopoints)
   flipcnt++;
 }
 
+void edge::reverse()
+/* Used when constructing a TIN from triangles read in, to find the boundary.
+ * Equivalent to flipping twice. extrema is unaffected, as when the TIN has
+ * just been read in, the extrema aren't calculated yet.
+ */
+{
+  swap(a,b);
+  swap(nexta,nextb);
+  swap(tria,trib);
+}
+
 bool edge::isinterior()
 // Returns true if this edge is in the interior; false if it's in the convex hull -
 // or if the pointers are messed up.
