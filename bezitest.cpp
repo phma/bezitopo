@@ -909,8 +909,17 @@ void testmaketinbigaster()
   doc.pl[1].clear();
   aster(doc,5972);
   doc.pl[1].maketin(psoutput?"bigaster.ps":"",true);
-  //tassert(doc.pl[1].edges.size()==284);
   totallength=doc.pl[1].totalEdgeLength();
+  tassert(fabs((totallength/doc.pl[1].points.size()-5.9)*sqrt(doc.pl[1].points.size()))<10);
+  cout<<"Total edge length "<<totallength<<endl;
+  // 2282 13772.1
+  // 5972 35683.1
+  // 7011 42028.2
+  // 8231 49318.1
+  // 9663 57767.4
+  // 11344 67181
+  // 13318 78859.7
+  // 100000 590335
   //dumppointsvalence();
   //tassert(fabs(totallength-600.689)<0.001);
   /* Flip zones:
