@@ -1038,19 +1038,48 @@ void testmaketinellipse()
   tassert(fabs(totallength-1329.4675)<0.001);
 }
 
-void testtripolygon()
+void test1tripolygon(int points,int petals,PostScript &ps)
 {
   int i;
-  const int points=89,petals=34;
   vector<point *> poly;
   doc.makepointlist(1);
   doc.pl[1].clear();
+  ps.startpage();
+  ps.setscale(-2,-2,2,2,0);
+  ps.setcolor(0,0,1);
+  ps.startline();
   for (i=0;i<points;i++)
   {
     doc.pl[1].addpoint(i+1,point(cossin(2*M_PI*i/points)*(1+cos(2*M_PI*i*petals/points)),0,""));
     poly.push_back(&doc.pl[1].points[i+1]);
+    ps.lineto(*poly.back());
   }
+  ps.endline(true);
   doc.pl[1].triangulatePolygon(poly);
+  ps.setcolor(0,0,0);
+  for (i=0;i<doc.pl[1].triangles.size();i++)
+  {
+    ps.line2p(*doc.pl[1].triangles[i].a,*doc.pl[1].triangles[i].b);
+    ps.line2p(*doc.pl[1].triangles[i].b,*doc.pl[1].triangles[i].c);
+    ps.line2p(*doc.pl[1].triangles[i].c,*doc.pl[1].triangles[i].a);
+  }
+  ps.endpage();
+}
+
+void testtripolygon()
+{
+  PostScript ps;
+  ps.open("tripolygon.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  test1tripolygon(89,1,ps);
+  test1tripolygon(89,2,ps);
+  test1tripolygon(89,3,ps);
+  test1tripolygon(89,5,ps);
+  test1tripolygon(89,8,ps);
+  test1tripolygon(89,13,ps);
+  test1tripolygon(89,21,ps);
+  test1tripolygon(89,34,ps);
 }
 
 void test1break0graph(pointlist &pl,string plname)
