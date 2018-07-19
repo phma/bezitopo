@@ -1038,6 +1038,10 @@ void testmaketinellipse()
   tassert(fabs(totallength-1329.4675)<0.001);
 }
 
+void testtripolygon()
+{
+}
+
 void test1break0graph(pointlist &pl,string plname)
 {
   int i,j,k,niter,off[4],sz;
@@ -6968,6 +6972,8 @@ int main(int argc, char *argv[])
     testmaketinwheel();
   if (shoulddo("maketinellipse"))
     testmaketinellipse();
+  if (shoulddo("tripolygon"))
+    testtripolygon();
   if (shoulddo("tindxf"))
     testtindxf();
   if (shoulddo("break0"))
