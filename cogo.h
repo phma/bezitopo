@@ -61,6 +61,10 @@ double in3(xy p,xy a,xy b,xy c);
  * If p is one of a, b, and c, and abc is not flat, returns the angle
  * as a fraction of a rotation.
  */
+bool crossTriangle(xy p,xy q,xy a,xy b,xy c);
+/* Returns true if the segment pq crosses the triangle abc.
+ * However, if pq passes through a and has one end on bc, returns false.
+ */
 double pldist(xy a,xy b,xy c);
 // Signed distance from a to the line bc.
 bool delaunay(xy a,xy c,xy b,xy d);

@@ -231,22 +231,31 @@ double in3(xy p,xy a,xy b,xy c)
   return ret;
 }
 
+bool crossTriangle(xy p,xy q,xy a,xy b,xy c)
+{
+  return intersection_type(p,q,a,b)==ACXBD
+      || intersection_type(p,q,b,c)==ACXBD
+      || intersection_type(p,q,c,a)==ACXBD;
+}
+
 double pldist(xy a,xy b,xy c)
 /* Signed distance from a to the line bc. */
-{return area3(a,b,c)/dist(b,c)*2;
- }
+{
+  return area3(a,b,c)/dist(b,c)*2;
+}
 
 xy rand2p(xy a,xy b)
 /* A random point in the circle with diameter ab. */
-{xy mid((a+b)/2);
- unsigned short n;
- xy pnt;
- double angle=(sqrt(5)-1)*M_PI;
- n=rng.usrandom();
- pnt=xy(cos(angle*n)*sqrt(n+0.5)/256,sin(angle*n)*sqrt(n+0.5)/256);
- pnt=pnt*dist(mid,a)+mid;
- return pnt;
- }
+{
+  xy mid((a+b)/2);
+  unsigned short n;
+  xy pnt;
+  double angle=(sqrt(5)-1)*M_PI;
+  n=rng.usrandom();
+  pnt=xy(cos(angle*n)*sqrt(n+0.5)/256,sin(angle*n)*sqrt(n+0.5)/256);
+  pnt=pnt*dist(mid,a)+mid;
+  return pnt;
+}
 
 bool delaunay(xy a,xy c,xy b,xy d)
 /* Returns true if ac satisfies the criterion in the quadrilateral abcd.
@@ -255,30 +264,32 @@ bool delaunay(xy a,xy c,xy b,xy d)
  * a quadrilateral inscribed in a circle cut each other into parts
  * whose products are equal. Element 3:35.
  */
-{xy ints;
- double dista,distc,distb,distd,distac,distbd;
- ints=intersection(a,c,b,d);
- distac=dist(a,c);
- distbd=dist(b,d);
- if (std::isnan(ints.north()))
-    {//printf("delaunay:No intersection, distac=%a, distbd=%a\n",distac,distbd);
-     return distac<=distbd;
-     }
- else
-    {dista=dist(a,ints);
-     distb=dist(b,ints);
-     distc=dist(c,ints);
-     distd=dist(d,ints);
-     if (dista>distac || distc>distac) dista=-dista;
-     if (distb>distbd || distd>distbd) distb=-distb;
-     if (debugdel && dista*distc>distb*distd)
-        printf("delaunay:dista*distc=%a, distb*distd=%a\n",dista*distc,distb*distd);
-     if (dista*distc == distb*distd)
-        return distac<=distbd;
-     else
-        return dista*distc<=distb*distd;
-     }
- }
+{
+  xy ints;
+  double dista,distc,distb,distd,distac,distbd;
+  ints=intersection(a,c,b,d);
+  distac=dist(a,c);
+  distbd=dist(b,d);
+  if (std::isnan(ints.north()))
+  {//printf("delaunay:No intersection, distac=%a, distbd=%a\n",distac,distbd);
+    return distac<=distbd;
+  }
+  else
+  {
+    dista=dist(a,ints);
+    distb=dist(b,ints);
+    distc=dist(c,ints);
+    distd=dist(d,ints);
+    if (dista>distac || distc>distac) dista=-dista;
+    if (distb>distbd || distd>distbd) distb=-distb;
+    if (debugdel && dista*distc>distb*distd)
+      printf("delaunay:dista*distc=%a, distb*distd=%a\n",dista*distc,distb*distd);
+    if (dista*distc == distb*distd)
+      return distac<=distbd;
+    else
+      return dista*distc<=distb*distd;
+  }
+}
 
 char inttstr[]="NOINT\0ACXBD\0BDTAC\0ACTBD\0ACVBD\0COINC\0COLIN\0IMPOS";
 
