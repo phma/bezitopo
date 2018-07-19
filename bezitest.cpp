@@ -1042,6 +1042,8 @@ void test1tripolygon(int points,int petals,PostScript &ps)
 {
   int i;
   vector<point *> poly;
+  manysum area;
+  polyline pl;
   doc.makepointlist(1);
   doc.pl[1].clear();
   ps.startpage();
@@ -1052,6 +1054,7 @@ void test1tripolygon(int points,int petals,PostScript &ps)
   {
     doc.pl[1].addpoint(i+1,point(cossin(2*M_PI*i/points)*(1+cos(2*M_PI*i*petals/points)),0,""));
     poly.push_back(&doc.pl[1].points[i+1]);
+    pl.insert(doc.pl[1].points[i+1]);
     ps.lineto(*poly.back());
   }
   ps.endline(true);
@@ -1062,8 +1065,11 @@ void test1tripolygon(int points,int petals,PostScript &ps)
     ps.line2p(*doc.pl[1].triangles[i].a,*doc.pl[1].triangles[i].b);
     ps.line2p(*doc.pl[1].triangles[i].b,*doc.pl[1].triangles[i].c);
     ps.line2p(*doc.pl[1].triangles[i].c,*doc.pl[1].triangles[i].a);
+    area+=doc.pl[1].triangles[i].sarea;
   }
   ps.endpage();
+  cout<<points<<" points, "<<petals<<" petals,"<<doc.pl[1].triangles.size()<<" triangles\n";
+  cout<<"Area "<<area.total()<<", should be "<<pl.area()<<endl;
 }
 
 void testtripolygon()
