@@ -1002,8 +1002,12 @@ void pointlist::triangulatePolygon(vector<point *> poly)
 	continue;
       found=true;
       for (i=0;found && i<sz;i++)
+      {
 	if (i!=a && i!=b && i!=c && in3(*poly[i],*poly[a],*poly[b],*poly[c]))
 	  found=false;
+	if (crossTriangle(*poly[i],*poly[(i+1)%sz],*poly[a],*poly[b],*poly[c]))
+	  found=false;
+      }
     }
   if (found)
   {
