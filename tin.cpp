@@ -982,6 +982,53 @@ void pointlist::makeBareTriangles(vector<array<xyz,3> > bareTriangles)
   }
 }
 
+void pointlist::triangulatePolygon(vector<point *> poly)
+/* Given a polygon, triangulates it, adding the triangles to pointlist::triangles.
+ * The polygon results from reading in a TIN as bare triangles. It is the space
+ * between the triangles and their convex hull, or enclosed by the triangles
+ * if not simply connected.
+ */
+{
+  int h,i,a,b,c,sz=poly.size();
+  vector<point *> subpoly;
+  bool found=false;
+  triangle newtri;
+  for (h=sz-relprime(sz);sz>2 && h && !found;h=(h>1)?relprime(h):0)
+    for (a=0;a<sz && !found;a+=!found)
+    {
+      b=(a+h)%sz;
+      c=(b+h)%sz;
+      if (area3(*poly[a],*poly[b],*poly[c])<=0)
+	continue;
+      found=true;
+      for (i=0;found && i<sz;i++)
+	if (i!=a && i!=b && i!=c && in3(*poly[i],*poly[a],*poly[b],*poly[c]))
+	  found=false;
+    }
+  if (found)
+  {
+    newtri.a=poly[a];
+    newtri.b=poly[b];
+    newtri.c=poly[c];
+    newtri.flatten();
+    triangles[triangles.size()]=newtri;
+    for (i=a;i!=b;i=(i+1)%sz)
+      subpoly.push_back(poly[i]);
+    subpoly.push_back(poly[b]);
+    triangulatePolygon(subpoly);
+    subpoly.clear();
+    for (i=b;i!=c;i=(i+1)%sz)
+      subpoly.push_back(poly[i]);
+    subpoly.push_back(poly[c]);
+    triangulatePolygon(subpoly);
+    subpoly.clear();
+    for (i=c;i!=a;i=(i+1)%sz)
+      subpoly.push_back(poly[i]);
+    subpoly.push_back(poly[a]);
+    triangulatePolygon(subpoly);
+  }
+}
+
 double pointlist::totalEdgeLength()
 {
   vector<double> edgeLengths;

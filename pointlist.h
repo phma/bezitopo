@@ -119,6 +119,7 @@ public:
   void makeqindex();
   void updateqindex();
   void makeBareTriangles(std::vector<std::array<xyz,3> > bareTriangles);
+  void triangulatePolygon(std::vector<point *> poly);
   double totalEdgeLength();
   double elevation(xy location);
   double dirbound(int angle);
