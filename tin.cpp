@@ -900,6 +900,9 @@ void pointlist::makegrad(double corr)
 }
 
 void pointlist::maketriangles()
+/* The TIN consisting of points and edges, but no triangles, has been made.
+ * Add the triangles.
+ */
 {
   int i,j;
   point *a,*b,*c,*d;
@@ -1041,6 +1044,62 @@ void pointlist::triangulatePolygon(vector<point *> poly)
       subpoly.push_back(poly[i]);
     subpoly.push_back(poly[a]);
     triangulatePolygon(subpoly);
+  }
+}
+
+void pointlist::makeEdges()
+/* The points and triangles are present, but the edges are not, or some
+ * triangles have been added to make the TIN convex, but their edges haven't.
+ * Add the edges.
+ */
+{
+  int i;
+  edge newedge;
+  edge *edg;
+  for (i=0;i<triangles.size();i++)
+  {
+    if (!triangles[i].a->isNeighbor(triangles[i].b))
+    {
+      newedge.a=triangles[i].a;
+      newedge.b=triangles[i].b;
+      edges[edges.size()]=newedge;
+      triangles[i].a->insertEdge(&edges[edges.size()-1]);
+      triangles[i].b->insertEdge(&edges[edges.size()-1]);
+    }
+    if (!triangles[i].b->isNeighbor(triangles[i].c))
+    {
+      newedge.a=triangles[i].b;
+      newedge.b=triangles[i].c;
+      edges[edges.size()]=newedge;
+      triangles[i].b->insertEdge(&edges[edges.size()-1]);
+      triangles[i].c->insertEdge(&edges[edges.size()-1]);
+    }
+    if (!triangles[i].c->isNeighbor(triangles[i].a))
+    {
+      newedge.a=triangles[i].c;
+      newedge.b=triangles[i].a;
+      edges[edges.size()]=newedge;
+      triangles[i].c->insertEdge(&edges[edges.size()-1]);
+      triangles[i].a->insertEdge(&edges[edges.size()-1]);
+    }
+    edg=triangles[i].a->isNeighbor(triangles[i].b);
+    if (edg->a==triangles[i].a)
+      edg->trib=&triangles[i];
+    else
+      edg->tria=&triangles[i];
+    edg->setNeighbors();
+    edg=triangles[i].b->isNeighbor(triangles[i].c);
+    if (edg->a==triangles[i].b)
+      edg->trib=&triangles[i];
+    else
+      edg->tria=&triangles[i];
+    edg->setNeighbors();
+    edg=triangles[i].c->isNeighbor(triangles[i].a);
+    if (edg->a==triangles[i].c)
+      edg->trib=&triangles[i];
+    else
+      edg->tria=&triangles[i];
+    edg->setNeighbors();
   }
 }
 

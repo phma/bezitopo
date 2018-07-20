@@ -495,20 +495,20 @@ int point::valence()
   return i;
 }
 
-bool point::isNeighbor(point *pnt)
-/* Returns true if this and pnt are neighbors. If this is pnt, returns true
- * if this has any neighbors, else false.
+edge *point::isNeighbor(point *pnt)
+/* Returns the edge if this and pnt are neighbors. If this is pnt, returns some
+ * edge if this has any neighbors, else nullptr.
  */
 {
   int i;
-  bool ret=false;
+  edge *ret=nullptr;
   edge *oldline;
   for (i=0,oldline=line;line && (!i || oldline!=line);i++)
   {
     line=line->next(this);
     if (line->a==pnt || line->b==pnt)
     {
-      ret=true;
+      ret=line;
       break;
     }
   }

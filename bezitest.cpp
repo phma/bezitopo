@@ -1079,6 +1079,8 @@ void test1tripolygon(int points,int petals,PostScript &ps)
   cout<<"Area "<<area.total()<<", should be "<<pl.area()<<endl;
   tassert(points==doc.pl[1].triangles.size()+2);
   tassert(fabs(area.total()-pl.area())<1e-12);
+  doc.pl[1].makeEdges();
+  tassert(doc.pl[1].checkTinConsistency());
 }
 
 void testtripolygon()
