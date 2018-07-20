@@ -68,11 +68,21 @@ triangle* edge::tri(point* end)
  }
 
 void edge::setnext(point* end,edge* enext)
-{if (end==a)
+{
+  if (end==a)
     nexta=enext;
- else
+  else
     nextb=enext;
- }
+}
+
+int edge::bearing(point *end)
+// Returns the bearing of the other end from this one.
+{
+  if (end==a)
+    return dir(xy(*a),xy(*b));
+  else
+    return dir(xy(*b),xy(*a));
+}
 
 void edge::setNeighbors()
 // Sets the triangles on the sides of the edge to point to each other.
@@ -763,6 +773,7 @@ void pointlist::maketin(string filename,bool colorfibaster)
   if (filename.length())
   {
     ps.open(filename);
+    ps.setpaper(papersizes["A4 portrait"],0);
     ps.prolog();
     ps.setPointlist(*this);
   }

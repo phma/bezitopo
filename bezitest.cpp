@@ -882,6 +882,7 @@ void testmaketinaster()
 {
   double totallength;
   int i,edgerand;
+  edge *line;
   doc.makepointlist(1);
   doc.pl[1].clear();
   aster(doc,100);
@@ -899,6 +900,12 @@ void testmaketinaster()
       doc.pl[1].edges[i].flip(&doc.pl[1]);
     }
   tassert(doc.pl[1].checkTinConsistency());
+  line=doc.pl[1].points[1].line;
+  for (i=0;i<5;i++)
+  {
+    cout<<"Edge bearing "<<bintodeg(line->bearing(&doc.pl[1].points[1]))<<'\n';
+    line=line->next(&doc.pl[1].points[1]);
+  }
 }
 
 void testmaketinbigaster()

@@ -72,6 +72,7 @@ public:
   triangle* tri(point* end);
   xy midpoint();
   void setnext(point* end,edge* enext);
+  int bearing(point *end);
   void setNeighbors();
   bool isinterior();
   bool isFlippable();
