@@ -23,7 +23,8 @@
 #include "point.h"
 #include <cstdlib>
 #include <cmath>
-#include <string.h>
+#include <cassert>
+#include <cstring>
 #include "tin.h"
 #include "pointlist.h"
 #include "ldecimal.h"
@@ -512,6 +513,47 @@ bool point::isNeighbor(point *pnt)
     }
   }
   return ret;
+}
+
+void point::insertEdge(edge *edg)
+/* Inserts edg into the circular linked list of edges around this point.
+ * One end of edg must be this point. If its bearing is exactly equal to
+ * an already linked edge's, which means there's a flat triangle, you can get
+ * a mistake.
+ */
+{
+  int newBearing=edg->bearing(this);
+  int i,minAnglePos,maxAnglePos,minAngle=DEG360-1,maxAngle=0;
+  edge *oldline;
+  vector<edge *> edges;
+  vector<int> angles;
+  for (i=0,oldline=line;line && (!i || oldline!=line);i++)
+  {
+    line=line->next(this);
+    edges.push_back(line);
+    angles.push_back((line->bearing(this)-newBearing)&(DEG360-1));
+    if (angles[i]>=maxAngle)
+    {
+      maxAngle=angles[i];
+      maxAnglePos=i;
+    }
+    if (angles[i]<=minAngle)
+    {
+      minAngle=angles[i];
+      minAnglePos=i;
+    }
+  }
+  if (angles.size())
+  {
+    assert(minAnglePos==(maxAnglePos+1)%angles.size());
+    edges[maxAnglePos]->setnext(this,edg);
+    edg->setnext(this,edges[minAnglePos]);
+  }
+  else
+  {
+    edg->setnext(this,edg);
+    line=edg;
+  }
 }
 
 edge *point::edg(triangle *tri)

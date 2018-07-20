@@ -87,5 +87,6 @@ public:
   xy newgradient,gradient,oldgradient; // may be redone later, but for now a point has one gradient, and type 0 breaklines merely force edges to be in the TIN.
   int valence();
   bool isNeighbor(point *pnt);
+  void insertEdge(edge *edg);
 };
 #endif
