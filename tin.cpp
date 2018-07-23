@@ -730,9 +730,32 @@ vector<point *> pointlist::convexHull()
     ysum.push_back(i->second.north());
   }
   startpnt=xy(pairwisesum(xsum)/xsum.size(),pairwisesum(ysum)/ysum.size());
-  outward.clear();
-  for (i=points.begin();i!=points.end();i++)
-    outward.insert(ipoint(dist(startpnt,i->second),&i->second));
+  for (m=0;m<100;m++)
+  {
+    outward.clear();
+    for (i=points.begin();i!=points.end();i++)
+      outward.insert(ipoint(dist(startpnt,i->second),&i->second));
+    for (j=outward.begin(),n=0;j!=outward.end();j++,n++)
+    {
+      if (n==0)
+        A=*(j->second);
+      if (n==1)
+        B=*(j->second);
+      if (n==2)
+        C=*(j->second);
+      farthest=*(j->second);
+    }
+    //printf("m=%d startpnt=(%f,%f)\n",m,startpnt.east(),startpnt.north());
+    if (m>0 && goodcenter(startpnt,A,B,C))
+    {
+      //printf("m=%d found good center\n",m);
+      break;
+    }
+    if (m&4)
+      startpnt=rand2p(startpnt,farthest);
+    else
+      startpnt=rand2p(startpnt,C);
+  }
   j=outward.begin();
   convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
   j++;
