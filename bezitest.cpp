@@ -1048,7 +1048,7 @@ void testmaketinellipse()
 void test1tripolygon(int points,int petals,PostScript &ps)
 {
   int i;
-  vector<point *> poly;
+  vector<point *> poly,hull;
   manysum area;
   polyline pl;
   doc.makepointlist(1);
@@ -1074,8 +1074,15 @@ void test1tripolygon(int points,int petals,PostScript &ps)
     ps.line2p(*doc.pl[1].triangles[i].c,*doc.pl[1].triangles[i].a);
     area+=doc.pl[1].triangles[i].sarea;
   }
+  hull=doc.pl[1].convexHull();
+  ps.setcolor(1,0,1);
+  ps.startline();
+  for (i=0;i<hull.size();i++)
+    ps.lineto(*hull[i]);
+  ps.endline(true);
   ps.endpage();
-  cout<<points<<" points, "<<petals<<" petals, "<<doc.pl[1].triangles.size()<<" triangles\n";
+  cout<<points<<" points, "<<petals<<" petals, "<<doc.pl[1].triangles.size()<<" triangles, ";
+  cout<<hull.size()<<" points in convex hull\n";
   cout<<"Area "<<area.total()<<", should be "<<pl.area()<<endl;
   tassert(points==doc.pl[1].triangles.size()+2);
   tassert(fabs(area.total()-pl.area())<1e-12);
