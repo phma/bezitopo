@@ -108,7 +108,7 @@ bool pointlist::checkTinConsistency()
     do
     {
       ed=ed->next(&p->second);
-      edgebearings.push_back(ed->getsegment().chordbearing()+DEG180*(ed->b==&p->second));
+      edgebearings.push_back(ed->bearing(&p->second));
     } while (ed!=p->second.line && edgebearings.size()<=edges.size());
     if (edgebearings.size()>=edges.size())
     {
