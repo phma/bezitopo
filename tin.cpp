@@ -708,6 +708,134 @@ bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
   return fail;
 }
 
+vector<point *> pointlist::convexHull()
+/* This is used when reading a bare TIN from a DXF file. The difference between
+ * the convex hull and the boundary is a region that must be filled in
+ * with triangles.
+ */
+{
+  int m,n,val,maxedges,edgeoff;
+  double maxdist,mindist,idist,minx,miny,maxx,maxy;
+  xy startpnt,A,B,C,farthest;
+  multimap<double,point*>::iterator j,k,inspos,left,right;
+  vector<point*> visible; // points of convex hull visible from new point
+  vector<point*> ret;
+  ptlist::iterator i;
+  vector<double> xsum,ysum;
+  maxedges=3*points.size()-6;
+  convexhull.clear();
+  for (i=points.begin();i!=points.end();i++)
+  {
+    xsum.push_back(i->second.east());
+    ysum.push_back(i->second.north());
+  }
+  startpnt=xy(pairwisesum(xsum)/xsum.size(),pairwisesum(ysum)/ysum.size());
+  outward.clear();
+  for (i=points.begin();i!=points.end();i++)
+    outward.insert(ipoint(dist(startpnt,i->second),&i->second));
+  j=outward.begin();
+  convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
+  j++;
+  convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
+  //printf("edges %d\n",edges.size());
+  /* Before:
+   * A-----B
+   * |    /|
+   * |   / |
+   * |  /  |
+   * | /   |
+   * |/    |
+   * C-----D
+   *
+   *          E
+   * outward=(D,C,B,A,E)
+   * edges=(DC,BD,BC,AB,AC)
+   * After:
+   * edges=(DC,BD,BC,AB,AC,EC,ED,EB)
+   */
+  for (j++;j!=outward.end();j++)
+  {
+    convexhull.insert(ipoint(dir(startpnt,*(j->second)),j->second));
+    inspos=convexhull.find(dir(startpnt,*(j->second)));
+    /* First find how much the convex hull subtends as seen from the new point,
+     * expressed as distance from the startpnt to the line between an old point
+     * and the new point.
+     */
+    mindist=dist(startpnt,*(j->second));
+    maxdist=-mindist;
+    for (left=inspos,idist=n=0;/*idist>=maxdist && */n<convexhull.size();left--,n++)
+    {
+      if (left->second==j->second)
+        idist=0;
+      else
+      { // i points to a list of points, j to a map of pointers to points
+        idist=pldist(startpnt,*(left->second),*(j->second));
+        if (idist>maxdist)
+          maxdist=idist;
+      }
+      if (left==convexhull.begin())
+        left=convexhull.end();
+    }
+    for (right=inspos,idist=n=0;/*idist<=mindist && */n<convexhull.size();right++,n++)
+    {
+      if (right==convexhull.end())
+        right=convexhull.begin();
+      if (right->second==j->second)
+        idist=0;
+      else
+      {
+        idist=pldist(startpnt,*(right->second),*(j->second));
+        if (idist<mindist)
+          mindist=idist;
+      }
+    }
+    //printf("maxdist=%f mindist=%f\n",maxdist,mindist);
+    /* Then find which convex hull points are the rightmost and leftmost
+     * that can be seen from the new point.
+     */
+    for (left=inspos,idist=n=0;n<2||idist<maxdist;left--,n++)
+    {
+      if (left->second==j->second)
+        idist=0;
+      else
+        idist=pldist(startpnt,*(left->second),*(j->second));
+      if (left==convexhull.begin())
+        left=convexhull.end();
+    }
+    left++;
+    for (right=inspos,idist=n=0;n<2||idist>mindist;right++,n++)
+    {
+      if (right==convexhull.end())
+        right=convexhull.begin();
+      if (right->second==j->second)
+        idist=0;
+      else
+        idist=pldist(startpnt,*(right->second),*(j->second));
+    }
+    right--;
+    //putchar('\n');
+    // Now make a list of the visible points. There are 3 on average.
+    visible.clear();
+    edgeoff=edges.size();
+    for (k=left,n=0,m=1;m;k++,n++,m++)
+    {
+      if (k==convexhull.end())
+        k=convexhull.begin();
+      if (k!=inspos) // skip the point just added
+        visible.push_back(k->second);
+      if (k==right || n==maxedges)
+        m=-1;
+    }
+    val=--n; // subtract one for the point itself
+    // Now delete old convex hull points that are now in the interior.
+    for (m=1;m<visible.size()-1;m++)
+      convexhull.erase(dir(startpnt,*visible[m]));
+  }
+  for (j=convexhull.begin();j!=convexhull.end();j++)
+    ret.push_back(j->second);
+  return ret;
+}
+
 int pointlist::flipPass(PostScript &ps,bool colorfibaster)
 {
   int m,n,e,step;
