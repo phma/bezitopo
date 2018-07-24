@@ -229,6 +229,24 @@ bool pointlist::checkTinConsistency()
   return ret;
 }
 
+int1loop pointlist::toInt1loop(vector<point *> ptrLoop)
+{
+  int i;
+  int1loop ret;
+  for (i=0;i<ptrLoop.size();i++)
+    ret.push_back(revpoints[ptrLoop[i]]);
+  return ret;
+}
+
+vector<point *> pointlist::fromInt1loop(int1loop intLoop)
+{
+  int i;
+  vector<point *> ret;
+  for (i=0;i<intLoop.size();i++)
+    ret.push_back(&points[intLoop[i]]);
+  return ret;
+}
+
 int pointlist::readCriteria(string fname,Measure ms)
 {
   ifstream infile;

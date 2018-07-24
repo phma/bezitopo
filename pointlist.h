@@ -33,6 +33,7 @@
 #include "polyline.h"
 #include "contour.h"
 #include "breakline.h"
+#include "intloop.h"
 
 typedef std::map<int,point> ptlist;
 typedef std::map<point*,int> revptlist;
@@ -87,6 +88,8 @@ public:
   void clearmarks();
   void clearTin();
   bool checkTinConsistency();
+  int1loop toInt1loop(std::vector<point *> ptrLoop);
+  std::vector<point *> fromInt1loop(int1loop intLoop);
   int readCriteria(std::string fname,Measure ms);
   void setgradient(bool flat=false);
   void findedgecriticalpts();

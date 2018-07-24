@@ -51,7 +51,8 @@ add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
             bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
             cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
             ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-            halton.cpp latlong.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp
+            halton.cpp intloop.cpp latlong.cpp ldecimal.cpp
+            leastsquares.cpp manyarc.cpp manysum.cpp
             matrix.cpp measure.cpp minquad.cpp objlist.cpp penwidth.cpp pnezd.cpp
             point.cpp pointlist.cpp polyline.cpp
             projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
@@ -61,7 +62,8 @@ add_library(bezilib1 SHARED angle.cpp arc.cpp bezier.cpp
             bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
             cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
             ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-            halton.cpp latlong.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp
+            halton.cpp intloop.cpp latlong.cpp ldecimal.cpp
+            leastsquares.cpp manyarc.cpp manysum.cpp
             matrix.cpp measure.cpp minquad.cpp objlist.cpp penwidth.cpp pnezd.cpp
             point.cpp pointlist.cpp polyline.cpp
             projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
@@ -72,7 +74,7 @@ add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp cvtmeas.cpp document.cpp
                drawobj.cpp ellipsoid.cpp except.cpp
                geoid.cpp geoidboundary.cpp halton.cpp
-               icommon.cpp kml.cpp latlong.cpp layer.cpp ldecimal.cpp
+               icommon.cpp intloop.cpp kml.cpp latlong.cpp layer.cpp ldecimal.cpp
                manysum.cpp measure.cpp minquad.cpp mkpoint.cpp objlist.cpp plot.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp projection.cpp ps.cpp qindex.cpp
                quaternion.cpp random.cpp raster.cpp relprime.cpp rootfind.cpp
@@ -94,7 +96,7 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                convertgeoid.cpp csv.cpp document.cpp drawobj.cpp
                ellipsoid.cpp except.cpp
                geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp
-               hlattice.cpp kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
+               hlattice.cpp intloop.cpp kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
                matrix.cpp measure.cpp minquad.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp sourcegeoid.cpp
@@ -102,7 +104,8 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
 add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp boundrect.cpp
                breakline.cpp cidialog.cpp circle.cpp cogo.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp dxf.cpp ellipsoid.cpp
-               except.cpp factordialog.cpp geoid.cpp geoidboundary.cpp halton.cpp kml.cpp
+               except.cpp factordialog.cpp geoid.cpp geoidboundary.cpp
+               halton.cpp intloop.cpp kml.cpp
                latlong.cpp ldecimal.cpp linetype.cpp llvalidator.cpp
                manysum.cpp measure.cpp measurebutton.cpp minquad.cpp penwidth.cpp
                plwidget.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
@@ -116,7 +119,7 @@ add_executable(transmer angle.cpp arc.cpp bezier.cpp
                bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp cogo.cpp
                contour.cpp csv.cpp drawobj.cpp
                ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-               latlong.cpp ldecimal.cpp manysum.cpp
+               intloop.cpp latlong.cpp ldecimal.cpp manysum.cpp
                measure.cpp minquad.cpp point.cpp pointlist.cpp polyline.cpp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
                rootfind.cpp segment.cpp spiral.cpp spolygon.cpp
