@@ -82,7 +82,7 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitest.cpp bicubic.cpp binio.cpp breakline.cpp boundrect.cpp circle.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
                dxf.cpp ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-               halton.cpp histogram.cpp hlattice.cpp hnum.cpp kml.cpp
+               halton.cpp histogram.cpp hlattice.cpp hnum.cpp intloop.cpp kml.cpp
                latlong.cpp layer.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp
                matrix.cpp measure.cpp minquad.cpp objlist.cpp plot.cpp pnezd.cpp point.cpp
                pointlist.cpp polyline.cpp projection.cpp ps.cpp qindex.cpp quaternion.cpp
