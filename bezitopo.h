@@ -59,6 +59,7 @@
 #include <bezitopo/relprime.h>
 #include <bezitopo/random.h>
 #include <bezitopo/qindex.h>
+#include <bezitopo/intloop.h>
 #include <bezitopo/pointlist.h>
 #include <bezitopo/ps.h>
 #include <bezitopo/contour.h>

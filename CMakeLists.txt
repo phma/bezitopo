@@ -40,7 +40,7 @@ set(header_files angle.h arc.h bezier.h
     bezier3d.h binio.h boundrect.h breakline.h circle.h cogo.h cogospiral.h 
     color.h contour.h csv.h document.h drawobj.h
     ellipsoid.h except.h geoid.h geoidboundary.h
-    globals.h halton.h latlong.h layer.h ldecimal.h leastsquares.h
+    globals.h halton.h intloop.h latlong.h layer.h ldecimal.h leastsquares.h
     linetype.h manyarc.h manysum.h
     matrix.h measure.h minquad.h objlist.h penwidth.h pnezd.h point.h pointlist.h polyline.h
     projection.h ps.h qindex.h quaternion.h random.h relprime.h
