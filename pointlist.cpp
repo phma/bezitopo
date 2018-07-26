@@ -247,6 +247,38 @@ vector<point *> pointlist::fromInt1loop(int1loop intLoop)
   return ret;
 }
 
+intloop pointlist::boundary()
+/* The boundary is traced *clockwise*, with the triangles on the right,
+ * so that, after combining with the convex hull, it will consist of
+ * counterclockwise loops, which can then be triangulated.
+ */
+{
+  int i;
+  edge *e;
+  intloop ret;
+  int1loop bdy1;
+  for (i=0;i<edges.size();i++)
+  {
+    if (!edges[i].tria)
+      edges[i].reverse();
+    edges[i].contour=0;
+  }
+  for (i=0;i<edges.size();i++)
+    if (!edges[i].contour && !edges[i].trib)
+    {
+      bdy1.clear();
+      e=&edges[i];
+      while (!e->contour)
+      {
+	bdy1.push_back(revpoints[e->a]);
+	e->contour++;
+	e=e->nextb;
+      }
+      ret.push_back(bdy1);
+    }
+  return ret;
+}
+
 int pointlist::readCriteria(string fname,Measure ms)
 {
   ifstream infile;
