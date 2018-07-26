@@ -708,7 +708,7 @@ bool pointlist::tryStartPoint(PostScript &ps,xy &startpnt)
   return fail;
 }
 
-vector<point *> pointlist::convexHull()
+int1loop pointlist::convexHull()
 /* This is used when reading a bare TIN from a DXF file. The difference between
  * the convex hull and the boundary is a region that must be filled in
  * with triangles.
@@ -719,7 +719,7 @@ vector<point *> pointlist::convexHull()
   xy startpnt,A,B,C,farthest;
   multimap<double,point*>::iterator j,k,inspos,left,right;
   vector<point*> visible; // points of convex hull visible from new point
-  vector<point*> ret;
+  int1loop ret;
   ptlist::iterator i;
   vector<double> xsum,ysum;
   maxedges=3*points.size()-6;
@@ -855,7 +855,7 @@ vector<point *> pointlist::convexHull()
       convexhull.erase(dir(startpnt,*visible[m]));
   }
   for (j=convexhull.begin();j!=convexhull.end();j++)
-    ret.push_back(j->second);
+    ret.push_back(revpoints[j->second]);
   return ret;
 }
 

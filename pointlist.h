@@ -115,7 +115,7 @@ public:
   int checkBreak0(edge &e);
   bool shouldFlip(edge &e);
   bool tryStartPoint(PostScript &ps,xy &startpnt);
-  std::vector<point *> convexHull();
+  int1loop convexHull();
   int flipPass(PostScript &ps,bool colorfibaster);
   void maketin(std::string filename="",bool colorfibaster=false);
   void makegrad(double corr);

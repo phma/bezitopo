@@ -1074,7 +1074,7 @@ void test1tripolygon(int points,int petals,PostScript &ps)
     ps.line2p(*doc.pl[1].triangles[i].c,*doc.pl[1].triangles[i].a);
     area+=doc.pl[1].triangles[i].sarea;
   }
-  hull=doc.pl[1].convexHull();
+  hull=doc.pl[1].fromInt1loop(doc.pl[1].convexHull());
   ps.setcolor(1,0,1);
   ps.startline();
   for (i=0;i<hull.size();i++)
