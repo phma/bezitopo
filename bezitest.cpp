@@ -1090,6 +1090,46 @@ void test1tripolygon(int points,int petals,PostScript &ps)
   tassert(doc.pl[1].checkTinConsistency());
 }
 
+void testehcycloid(PostScript &ps)
+/* Makes a TIN out of 178 triangles between an epicycloid and a hypocycloid
+ * (deltoid) of three cusps.
+ */
+{
+  int i;
+  array<xyz,89> outer,inner;
+  vector<array<xyz,3> > faces;
+  array<xyz,3> face;
+  for (i=0;i<89;i++)
+  {
+    outer[i]=xyz(4*cossin(2*M_PI*i/89)-cossin(8*M_PI*i/89),sin(10*M_PI*i/89)/10);
+    inner[i]=xyz(-2*cossin(2*M_PI*i/89)-cossin(-4*M_PI*i/89),sin(10*M_PI*i/89)/10);
+  }
+  for (i=0;i<89;i++)
+  {
+    face[0]=outer[i];
+    face[1]=inner[(i+45)%89];
+    face[2]=inner[(i+44)%89];
+    faces.push_back(face);
+    face[0]=inner[i];
+    face[1]=outer[(i+44)%89];
+    face[2]=outer[(i+45)%89];
+    faces.push_back(face);
+  }
+  doc.makepointlist(1);
+  doc.pl[1].makeBareTriangles(faces);
+  cout<<doc.pl[1].points.size()<<" points "<<doc.pl[1].qinx.size()<<" qindex nodes\n";
+  tassert(doc.pl[1].points.size()==178);
+  tassert(doc.pl[1].qinx.size()==289);
+  doc.pl[1].makeEdges();
+  ps.startpage();
+  ps.setscale(-5,-5,5,5,0);
+  ps.setcolor(0,0,1);
+  ps.setPointlist(doc.pl[1]);
+  for (i=0;i<doc.pl[1].edges.size();i++)
+    ps.line(doc.pl[1].edges[i],i,false);
+  ps.endpage();
+}
+
 void testtripolygon()
 {
   PostScript ps;
@@ -1104,6 +1144,7 @@ void testtripolygon()
   test1tripolygon(89,13,ps);
   test1tripolygon(89,21,ps);
   test1tripolygon(89,34,ps);
+  testehcycloid(ps);
 }
 
 void test1break0graph(pointlist &pl,string plname)
