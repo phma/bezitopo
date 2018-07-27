@@ -40,6 +40,29 @@ using namespace std;
  * with integers, there's no way to compute area or perimeter.
  */
 
+int inv2adic(int n)
+/* Used for hashing.
+ * If n is odd, returns the multiplicative inverse.
+ * If n is even, returns 2*(inv2adic(n/2));
+ * If n is 0, returns 0.
+ */
+{
+  int ret,exp=0,prod;
+  while (n && (n&1)==0)
+  {
+    exp++;
+    n>>=1;
+  }
+  prod=n*n;
+  for (ret=n;prod&~1;)
+  {
+    prod=ret*n;
+    ret+=(1-prod)*ret;
+  }
+  ret<<=exp;
+  return ret;
+}
+
 bool int1loop::isempty()
 {
   return !bdy.size();
@@ -214,20 +237,27 @@ int intloop::totalSegments()
   return total;
 }
 
-array<int,2> intloop::seg(int n)
+array<int,4> intloop::seg(int n)
 {
-  array<int,2> ret;
+  array<int,4> ret;
+  array<int,2> seg1;
   int i;
   for (i=0;i<bdy.size() && n>=0;i++)
   {
     if (n>=0 && n<bdy[i].size())
-      ret=bdy[i].seg(n);
+    {
+      seg1=bdy[i].seg(n);
+      ret[0]=seg1[0];
+      ret[1]=seg1[1];
+      ret[2]=i;
+      ret[3]=n;
+    }
     n-=bdy[i].size();
   }
   return ret;
 }
 
-array<int,2> intloop::someSeg()
+array<int,4> intloop::someSeg()
 // Returns a different segment each time; eventually returns all segments.
 {
   int t=totalSegments();
@@ -238,6 +268,42 @@ array<int,2> intloop::someSeg()
       segNum+=t;
   }
   return seg(segNum);
+}
+
+array<int,4> intloop::dupSeg()
+/* Returns the loop and segment numbers of two segments which are equal and
+ * opposite, or {-1,-1,-1,-1} if there are none. Used by consolidate.
+ * If both found and exhausted are set, there is a loop consisting of
+ * only one point, which will be removed by deleteNullSegments and deleteEmpty.
+ */
+{
+  map<int,vector<array<int,4> > > hashTable;
+  int i,j,hash;
+  array<int,4> aseg,ret;
+  bool found=false,exhausted=false;
+  while (!found && !exhausted)
+  {
+    aseg=someSeg();
+    hash=inv2adic(aseg[0])^inv2adic(aseg[1]);
+    for (i=0;i<hashTable[hash].size();i++)
+    {
+      if (hashTable[hash][i][0]==aseg[0])
+      {
+	ret[0]=ret[1]=ret[2]=ret[3]=-1;
+	exhausted=true;
+      }
+      if (hashTable[hash][i][0]==aseg[1])
+      {
+	ret[0]=hashTable[hash][i][2];
+	ret[1]=hashTable[hash][i][3];
+	ret[2]=aseg[2];
+	ret[3]=aseg[3];
+	found=true;
+      }
+    }
+    hashTable[hash].push_back(aseg);
+  }
+  return ret;
 }
 
 void intloop::clear()

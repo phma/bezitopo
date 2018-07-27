@@ -1114,6 +1114,7 @@ void testehcycloid(PostScript &ps)
     face[1]=outer[(i+44)%89];
     face[2]=outer[(i+45)%89];
     faces.push_back(face);
+    //cout<<setw(9)<<hex<<i<<' '<<setw(9)<<inv2adic(i)<<dec<<'\n';
   }
   doc.makepointlist(1);
   doc.pl[1].makeBareTriangles(faces);

@@ -24,6 +24,8 @@
 #include <vector>
 #include <array>
 
+int inv2adic(int n);
+
 class int1loop
 {
 private:
@@ -55,8 +57,9 @@ public:
   int1loop operator[](int n);
   int size() const;
   int totalSegments();
-  std::array<int,2> seg(int n);
-  std::array<int,2> someSeg();
+  std::array<int,4> seg(int n);
+  std::array<int,4> someSeg();
+  std::array<int,4> dupSeg();
   void clear();
   void deleteRetrace();
   void deleteNullSegments();
