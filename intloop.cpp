@@ -351,6 +351,30 @@ void intloop::deleteEmpty()
   bdy.resize(i);
 }
 
+void intloop::consolidate()
+{
+  array<int,4> matchingSegs;
+  while (true)
+  {
+    matchingSegs=dupSeg();
+    if (matchingSegs[0]==matchingSegs[2] && matchingSegs[1]==matchingSegs[3])
+      break;
+    if (matchingSegs[0]==matchingSegs[2])
+    {
+      bdy.resize(bdy.size()+1);
+      bdy[matchingSegs[0]].split(matchingSegs[1],matchingSegs[3],bdy.back());
+    }
+    else
+    {
+      bdy[matchingSegs[0]].splice(matchingSegs[1],bdy[matchingSegs[2]],matchingSegs[3]);
+      bdy[matchingSegs[0]].deleteRetrace();
+      bdy[matchingSegs[2]].deleteRetrace();
+    }
+  }
+  deleteNullSegments();
+  deleteEmpty();
+}
+
 void intloop::erase(int n)
 // When erasing many int1loops, erase them in reverse order.
 {

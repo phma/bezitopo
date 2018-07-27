@@ -64,6 +64,7 @@ public:
   void deleteRetrace();
   void deleteNullSegments();
   void deleteEmpty();
+  void consolidate();
   void erase(int n);
   friend intloop operator+(const intloop &l,const intloop &r);
 };
