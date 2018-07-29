@@ -1145,6 +1145,7 @@ void pointlist::makeBareTriangles(vector<array<xyz,3> > bareTriangles)
     newtri.flatten();
     triangles[triangles.size()]=newtri;
   }
+  qinx.clearLeaves();
 }
 
 void pointlist::triangulatePolygon(vector<point *> poly)
@@ -1252,6 +1253,26 @@ void pointlist::makeEdges()
       edg->tria=&triangles[i];
     edg->setNeighbors();
   }
+}
+
+void pointlist::fillInBareTin()
+/* Call this after makeBareTriangles or reading in a TIN from a .bez file.
+ * It makes edges, fills in any gaps with arbitrary triangles, makes edges
+ * again, and makes the quadtree index. The result is a convex TIN with
+ * a quad index, just as if it were made with maketin (but the filled-in areas
+ * are unlikely to be Delaunay).
+ */
+{
+  intloop holes;
+  int i;
+  makeEdges();
+  holes=boundary();
+  holes.push_back(convexHull());
+  holes.consolidate();
+  for (i=0;i<holes.size();i++)
+    triangulatePolygon(fromInt1loop(holes[i]));
+  makeEdges();
+  updateqindex();
 }
 
 double pointlist::totalEdgeLength()

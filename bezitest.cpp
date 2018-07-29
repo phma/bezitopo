@@ -1144,6 +1144,7 @@ void testehcycloid(PostScript &ps)
       ps.lineto(doc.pl[1].points[loop1[j]]);
     ps.endline(true);
   }
+  tassert(doc.pl[1].checkTinConsistency());
   ps.endpage();
 }
 
