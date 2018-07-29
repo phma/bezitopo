@@ -1125,13 +1125,17 @@ void testehcycloid(PostScript &ps)
   tassert(doc.pl[1].qinx.size()==289);
   doc.pl[1].makeEdges();
   holes=doc.pl[1].boundary();
-  //holes.push_back(doc.pl[1].convexHull());
+  holes.push_back(doc.pl[1].convexHull());
+  holes.consolidate();
+  for (i=0;i<holes.size();i++)
+    doc.pl[1].triangulatePolygon(doc.pl[1].fromInt1loop(holes[i]));
+  doc.pl[1].makeEdges();
   ps.startpage();
   ps.setscale(-5,-5,5,5,0);
   ps.setcolor(0,0,1);
   ps.setPointlist(doc.pl[1]);
-  /*for (i=0;i<doc.pl[1].edges.size();i++)
-    ps.line(doc.pl[1].edges[i],i,false);*/
+  for (i=0;i<doc.pl[1].edges.size();i++)
+    ps.line(doc.pl[1].edges[i],i,false);
   for (i=0;i<holes.size();i++)
   {
     loop1=holes[i];
