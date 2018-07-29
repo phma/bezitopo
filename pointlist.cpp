@@ -272,8 +272,9 @@ intloop pointlist::boundary()
       {
 	bdy1.push_back(revpoints[e->a]);
 	e->contour++;
-	e=e->nextb;
+	e=e->nexta;
       }
+      bdy1.reverse();
       ret.push_back(bdy1);
     }
   return ret;

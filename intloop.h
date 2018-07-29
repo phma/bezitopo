@@ -39,6 +39,7 @@ public:
   std::array<int,2> seg(int n);
   std::vector<int> nullSegments();
   void positionSegment(int n);
+  void reverse();
   void splice(int1loop &b);
   void split(int n,int1loop &b);
   void splice(int m,int1loop &b,int n);

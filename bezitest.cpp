@@ -1095,10 +1095,12 @@ void testehcycloid(PostScript &ps)
  * (deltoid) of three cusps.
  */
 {
-  int i;
+  int i,j;
   array<xyz,89> outer,inner;
   vector<array<xyz,3> > faces;
   array<xyz,3> face;
+  intloop holes;
+  int1loop loop1;
   for (i=0;i<89;i++)
   {
     outer[i]=xyz(4*cossin(2*M_PI*i/89)-cossin(8*M_PI*i/89),sin(10*M_PI*i/89)/10);
@@ -1122,12 +1124,22 @@ void testehcycloid(PostScript &ps)
   tassert(doc.pl[1].points.size()==178);
   tassert(doc.pl[1].qinx.size()==289);
   doc.pl[1].makeEdges();
+  holes=doc.pl[1].boundary();
+  //holes.push_back(doc.pl[1].convexHull());
   ps.startpage();
   ps.setscale(-5,-5,5,5,0);
   ps.setcolor(0,0,1);
   ps.setPointlist(doc.pl[1]);
-  for (i=0;i<doc.pl[1].edges.size();i++)
-    ps.line(doc.pl[1].edges[i],i,false);
+  /*for (i=0;i<doc.pl[1].edges.size();i++)
+    ps.line(doc.pl[1].edges[i],i,false);*/
+  for (i=0;i<holes.size();i++)
+  {
+    loop1=holes[i];
+    ps.startline();
+    for (j=0;j<loop1.size();j++)
+      ps.lineto(doc.pl[1].points[loop1[j]]);
+    ps.endline(true);
+  }
   ps.endpage();
 }
 

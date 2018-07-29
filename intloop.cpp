@@ -142,6 +142,13 @@ void int1loop::positionSegment(int n)
   }
 }
 
+void int1loop::reverse()
+{
+  int i,j;
+  for (i=0,j=bdy.size()-1;i<j;i++,j--)
+    swap(bdy[i],bdy[j]);
+}
+
 void int1loop::splice(int1loop &b)
 {
   int oldsize=bdy.size();
