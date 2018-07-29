@@ -4,7 +4,7 @@
 /* For Bézier functions of one variable, see vcurve.cpp.*/
 /*                                                      */
 /********************************************************/
-/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -236,6 +236,8 @@ void triangle::flatten()
   ctrl[5]=(2*b->z+c->z)/3;
   ctrl[6]=(2*c->z+b->z)/3;
   nocubedir=INT_MAX;
+  totcritpointcount=0;
+  critpoints.clear();
 #endif
   sarea=area();
   setgradmat();
@@ -1358,6 +1360,7 @@ void triangle::addperimeter()
     for (i=oldnumber;i<subdiv.size();i++)
       setsubslopes(subdiv[i]);
   }
+  assert(subdiv.size()>=3);
 }
 
 void triangle::removeperimeter()

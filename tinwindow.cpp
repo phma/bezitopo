@@ -292,7 +292,10 @@ void TinCanvas::open()
     doc.pl.clear();
     doc.makepointlist(1);
     doc.pl[1].makeBareTriangles(extractTriangles(readDxfGroups(fileName)));
+    cout<<"Read "<<doc.pl[1].triangles.size()<<" triangles\n";
     doc.pl[1].fillInBareTin();
+    cout<<doc.pl[1].triangles.size()<<" triangles after filling in\n";
+    doc.pl[1].addperimeter();
     plnum=1;
     sizeToFit();
     pointsValid=true;

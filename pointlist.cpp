@@ -448,6 +448,7 @@ void pointlist::findcriticalpts()
 void pointlist::addperimeter()
 {
   map<int,triangle>::iterator t;
+  cout<<"Adding perimeter to "<<triangles.size()<<" triangles\n";
   for (t=triangles.begin();t!=triangles.end();t++)
     t->second.addperimeter();
 }
