@@ -1155,7 +1155,7 @@ void pointlist::triangulatePolygon(vector<point *> poly)
  * if not simply connected.
  */
 {
-  int h,i,a,b,c,sz=poly.size();
+  int h,i,a,b,c,sz=poly.size(),ba,bb,bc;
   vector<point *> subpoly;
   bool found=false;
   triangle newtri;
@@ -1164,13 +1164,29 @@ void pointlist::triangulatePolygon(vector<point *> poly)
     {
       b=(a+h)%sz;
       c=(b+h)%sz;
-      if (area3(*poly[a],*poly[b],*poly[c])<=0)
+      ba=dir(xy(*poly[b]),xy(*poly[c]));
+      bb=dir(xy(*poly[c]),xy(*poly[a]));
+      bc=dir(xy(*poly[a]),xy(*poly[b]));
+      if (area3(*poly[a],*poly[b],*poly[c])<=0 ||
+	  abs(foldangle(ba-bb+DEG180))<2 ||
+	  abs(foldangle(bb-bc+DEG180))<2 ||
+	  abs(foldangle(bc-ba+DEG180))<2)
 	continue;
       found=true;
       for (i=0;found && i<sz;i++)
       {
-	if (i!=a && i!=b && i!=c && in3(*poly[i],*poly[a],*poly[b],*poly[c]))
-	  found=false;
+	if (i!=a && i!=b && i!=c)
+	{
+	  if (in3(*poly[i],*poly[a],*poly[b],*poly[c]))
+	    found=false;
+	  ba=dir(xy(*poly[i]),xy(*poly[a]));
+	  bb=dir(xy(*poly[i]),xy(*poly[b]));
+	  bc=dir(xy(*poly[i]),xy(*poly[c]));
+	  if (abs(foldangle(ba-bb+DEG180))<2 ||
+	      abs(foldangle(bb-bc+DEG180))<2 ||
+	      abs(foldangle(bc-ba+DEG180))<2)
+	    found=false;
+	}
 	if (crossTriangle(*poly[i],*poly[(i+1)%sz],*poly[a],*poly[b],*poly[c]))
 	  found=false;
       }
@@ -1210,6 +1226,8 @@ void pointlist::makeEdges()
   edge *edg;
   for (i=0;i<triangles.size();i++)
   {
+    if (triangles[i].sarea<1e-6)
+      cerr<<"tiny triangle "<<triangles[i].a<<' '<<triangles[i].b<<' '<<triangles[i].c<<'\n';
     if (!triangles[i].a->isNeighbor(triangles[i].b))
     {
       newedge.a=triangles[i].a;
