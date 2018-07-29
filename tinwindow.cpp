@@ -28,6 +28,7 @@
 #include "ldecimal.h"
 #include "color.h"
 #include "penwidth.h"
+#include "dxf.h"
 
 #define CACHEDRAW
 
@@ -268,6 +269,37 @@ void TinCanvas::updateEdgeNeighbors(edge *e)
   QRectF rect=rect1.united(rect2);
   rect+=marge;
   update(rect.toAlignedRect());
+}
+
+void TinCanvas::open()
+/* For now, this reads a bare TIN from a DXF file.
+ * When I implement reading Bezitopo files, I'll duplicate it.
+ */
+{
+  int i;
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  ifstream file;
+  fileDialog->setWindowTitle(tr("Load TIN"));
+  fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setNameFilter(tr("(*.dxf);;(*)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    doc.pl.clear();
+    doc.makepointlist(1);
+    doc.pl[1].makeBareTriangles(extractTriangles(readDxfGroups(fileName)));
+    doc.pl[1].fillInBareTin();
+    plnum=1;
+    sizeToFit();
+    pointsValid=true;
+    tinValid=true;
+    surfaceValid=true;
+    roughContoursValid=false;
+  }
 }
 
 void TinCanvas::saveAs()
@@ -1199,6 +1231,11 @@ void TinWindow::makeActions()
   viewMenu->addAction(sizeToFitAction);
   connect(sizeToFitAction,SIGNAL(triggered(bool)),canvas,SLOT(sizeToFit()));
   // File menu
+  openAction=new QAction(this);
+  openAction->setIcon(QIcon::fromTheme("document-open"));
+  openAction->setText(tr("Open"));
+  fileMenu->addAction(openAction);
+  connect(openAction,SIGNAL(triggered(bool)),canvas,SLOT(open()));
   saveAction=new QAction(this);
   saveAction->setIcon(QIcon::fromTheme("document-save"));
   saveAction->setText(tr("Save"));

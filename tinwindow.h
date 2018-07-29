@@ -71,6 +71,7 @@ public slots:
   void setIndianFoot();
   void updateEdge(edge *e);
   void updateEdgeNeighbors(edge *e);
+  void open();
   void saveAs();
   void save();
   void testPatternAster();
@@ -173,7 +174,7 @@ private:
   std::vector<MeasureButton *> measureButtons;
   LatlongFactorDialog *llDialog;
   QAction *sizeToFitAction;
-  QAction *loadAction,*saveAction,*saveAsAction;
+  QAction *openAction,*saveAction,*saveAsAction;
   QAction *asterAction,*importPnezdAction,*importCriteriaAction;
   QAction *makeTinAction,*selectContourIntervalAction;
   QAction *roughContoursAction,*smoothContoursAction;

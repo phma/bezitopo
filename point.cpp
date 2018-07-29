@@ -545,6 +545,11 @@ void point::insertEdge(edge *edg)
   }
   if (angles.size())
   {
+    if (!minAngle)
+      cerr<<"Point at ("<<ldecimal(x)<<','<<ldecimal(y)<<','<<ldecimal(z)
+          <<") is trying to insert edge with bearing "<<newBearing<<" ("
+	  <<ldecimal(bintodeg(newBearing),bintodeg(1))<<"), but one already exists.\n";
+    assert(minAngle);
     assert(minAnglePos==(maxAnglePos+1)%angles.size());
     edges[maxAnglePos]->setnext(this,edg);
     edg->setnext(this,edges[minAnglePos]);
