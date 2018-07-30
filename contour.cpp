@@ -3,7 +3,7 @@
 /* contour.cpp - generates contours                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2017 Pierre Abbat.
+/* Copyright 2012,2015-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -480,7 +480,7 @@ void smooth1contour(pointlist &pl,double conterval,int i,bool spiral,PostScript 
         {
           //cout<<"segment "<<n<<" of "<<sz<<" of contour "<<i<<" needs splitting at "<<sp<<endl;
           spt=sarc.getstart()+sp*(sarc.getend()-sarc.getstart());
-          splitseg=pl.qinx.findt(spt)->dirclip(spt,dir(xy(sarc.getend()),xy(sarc.getstart()))+DEG90);
+          splitseg=pl.qinx.findt(spt,true)->dirclip(spt,dir(xy(sarc.getend()),xy(sarc.getstart()))+DEG90);
           if (splitseg.getstart().elev()<splitseg.getend().elev()
               || splitseg.startslope()>0 || splitseg.endslope()>0)
           {
