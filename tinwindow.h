@@ -46,6 +46,7 @@ public:
   QPointF worldToWindow(xy pnt);
   xy windowToWorld(QPointF pnt);
   double pixelScale();
+  double viewableRadius();
   void repaintSeldom();
   bool mouseCheckImported();
   bool makeTinCheckEdited();
@@ -128,6 +129,7 @@ private:
    */
   int rotation; // rotation is stepped by compass points (DEG45/4)
   double windowSize; // length of a perpendicular from corner to diagonal
+  double windowDiag;
   bool mouseClicked,mouseDoubleClicked;
   int tinerror,startPointTries,passCount,triCount;
   PostScript dummyPs;

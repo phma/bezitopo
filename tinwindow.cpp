@@ -108,6 +108,11 @@ double TinCanvas::pixelScale()
   return zoomratio(-scale)/windowSize;
 }
 
+double TinCanvas::viewableRadius()
+{
+  return zoomratio(-scale)/windowSize*(1+windowDiag/2);
+}
+
 void TinCanvas::setBrush(const QBrush &qbrush)
 {
   brush=qbrush;
@@ -948,14 +953,17 @@ void TinCanvas::paintEvent(QPaintEvent *event)
       for (i=0;plnum>=0 && i<doc.pl[plnum].edges.size();i++)
       {
         seg=doc.pl[plnum].edges[i].getsegment();
-        if (doc.pl[plnum].edges[i].delaunay())
-          if (doc.pl[plnum].edges[i].broken&1)
-            painter.setPen(breakEdgePen);
-          else
-            painter.setPen(normalEdgePen);
-        else
-          painter.setPen(flipEdgePen);
-        painter.drawLine(worldToWindow(seg.getstart()),worldToWindow(seg.getend()));
+	if (seg.length()>pixelScale() && fabs(pldist(worldCenter,seg.getstart(),seg.getend()))<viewableRadius())
+	{
+	  if (doc.pl[plnum].edges[i].delaunay())
+	    if (doc.pl[plnum].edges[i].broken&1)
+	      painter.setPen(breakEdgePen);
+	    else
+	      painter.setPen(normalEdgePen);
+	  else
+	    painter.setPen(flipEdgePen);
+	  painter.drawLine(worldToWindow(seg.getstart()),worldToWindow(seg.getend()));
+	}
       }
     else
       for (j=doc.pl[plnum].points.begin();j!=doc.pl[plnum].points.end();++j)
@@ -1032,6 +1040,7 @@ void TinCanvas::setSize()
 {
   windowCenter=xy(width(),height())/2.;
   windowSize=1/sqrt(1/sqr(width())+1/sqr(height()));
+  windowDiag=sqrt(sqr(width())+sqr(height()));
 }
 
 void TinCanvas::resizeEvent(QResizeEvent *event)
