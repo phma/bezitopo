@@ -117,3 +117,15 @@ int ObjectList::findHandle(drawobj *obj)
   else
     return -1;
 }
+
+vector<int> ObjectList::referrers(int handle)
+{
+  map<int,objrec>::iterator i;
+  int j;
+  vector<int> ret;
+  for (i=forward.begin();i!=forward.end();++i)
+    for (j=0;j<i->second.references.size();j++)
+      if (i->second.references[j]==handle)
+	ret.push_back(i->first);
+  return ret;
+}

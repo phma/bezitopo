@@ -57,6 +57,7 @@ public:
   int insert(drawobj *obj);
   objrec operator[](int handle);
   int findHandle(drawobj *obj);
+  std::vector<int> referrers(int handle);
 };
 
 #endif
