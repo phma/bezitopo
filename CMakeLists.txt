@@ -97,7 +97,8 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                ellipsoid.cpp except.cpp
                geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp
                hlattice.cpp intloop.cpp kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
-               matrix.cpp measure.cpp minquad.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp
+               matrix.cpp measure.cpp minquad.cpp objlist.cpp
+               pnezd.cpp point.cpp pointlist.cpp polyline.cpp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp sourcegeoid.cpp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
@@ -107,7 +108,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
                except.cpp factordialog.cpp geoid.cpp geoidboundary.cpp
                halton.cpp intloop.cpp kml.cpp
                latlong.cpp ldecimal.cpp linetype.cpp llvalidator.cpp
-               manysum.cpp measure.cpp measurebutton.cpp minquad.cpp penwidth.cpp
+               manysum.cpp measure.cpp measurebutton.cpp minquad.cpp objlist.cpp penwidth.cpp
                plwidget.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
                ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp rendercache.cpp
                rootfind.cpp segment.cpp spiral.cpp spolygon.cpp test.cpp textfile.cpp tin.cpp

@@ -20,6 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cassert>
 #include "objlist.h"
 #include "document.h"
 #include "penwidth.h"
@@ -52,3 +53,67 @@ unsigned short objrec::getthickness(document *doc)
     return thik;
 }
 
+void ObjectList::setCurrentLayer(int layer)
+{
+  curlayer=layer;
+}
+
+int ObjectList::getCurrentLayer()
+{
+  return curlayer;
+}
+
+int ObjectList::size()
+{
+  assert(forward.size()==reverse.size());
+  return forward.size();
+}
+
+int ObjectList::insert(drawobj *obj)
+/* The drawobj must be created as some subclass of drawobj with new.
+ * The ObjectList takes responsibility for destroying the drawobj.
+ * Returns the object handle. If the drawobj is already in the ObjectList,
+ * returns the existing handle.
+ */
+{
+  if (reverse.count(obj))
+    return reverse[obj];
+  else
+  {
+    objrec newobjrec;
+    int newhandle;
+    newobjrec.obj=obj;
+    newobjrec.layr=curlayer;
+    newobjrec.ltype=SAMELINETYPE;
+    newobjrec.colr=SAMECOLOR;
+    newobjrec.thik=SAMEWIDTH;
+    if (reverse.size())
+      newhandle=forward.rbegin()->first+1;
+    else
+      newhandle=0;
+    forward[newhandle]=newobjrec;
+    reverse[obj]=newhandle;
+    return newhandle;
+  }
+}
+
+objrec ObjectList::operator[](int handle)
+/* forward[handle] would insert a new objrec into forward.
+ * This returns an empty objrec, but does not insert it.
+ */
+{
+  objrec ret;
+  if (forward.count(handle))
+    ret=forward[handle];
+  else
+    ret.obj=nullptr;
+  return ret;
+}
+
+int ObjectList::findHandle(drawobj *obj)
+{
+  if (reverse.count(obj))
+    return reverse[obj];
+  else
+    return -1;
+}

@@ -22,18 +22,41 @@
 
 #ifndef OBJLIST_H
 #define OBJLIST_H
+#include <map>
 #include <vector>
 #include "drawobj.h"
 
 class document;
 
 class objrec
+/* If this object is a dimension, it refers to some other object, such as a
+ * segment or arc. references contains the handle of the segment or arc.
+ * When the segment or arc is changed, the program finds the dimension and
+ * tells it to update.
+ */
 {
 public:
   drawobj *obj;
   unsigned short layr,ltype,colr,thik;
+  std::vector<int> references; // handles of objects that this object refers to
   unsigned short getlinetype(document *doc);
   unsigned short getcolor(document *doc);
   unsigned short getthickness(document *doc);
 };
+
+class ObjectList
+{
+private:
+  std::map<int,objrec> forward;
+  std::map<drawobj *,int> reverse;
+  int curlayer;
+public:
+  void setCurrentLayer(int layer);
+  int getCurrentLayer();
+  int size();
+  int insert(drawobj *obj);
+  objrec operator[](int handle);
+  int findHandle(drawobj *obj);
+};
+
 #endif

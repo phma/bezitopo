@@ -43,9 +43,9 @@
 class document
 {
 public:
-  int curlayer;
+  //int curlayer;
   xyz offset;
-  std::vector<objrec> objlist;
+  ObjectList objlist;
   std::vector<layer> layers;
   std::vector<pointlist> pl;
   /* pointlists[0] is the points downloaded from the total station.

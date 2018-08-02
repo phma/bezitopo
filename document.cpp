@@ -92,10 +92,9 @@ int document::writepenzd(string fname)
 void document::addobject(drawobj *obj)
 // The drawobj must be created with new; it will be destroyed with delete.
 {
-  objrec o;
-  if (curlayer<0 || curlayer>=layers.size())
+  if (objlist.getCurrentLayer()<0 || objlist.getCurrentLayer()>=layers.size())
   {
-    curlayer=0;
+    objlist.setCurrentLayer(0);
     if (layers.size()==0)
     {
       layer l;
@@ -105,12 +104,7 @@ void document::addobject(drawobj *obj)
       layers.push_back(l);
     }
   }
-  o.layr=curlayer;
-  o.ltype=SAMELINETYPE;
-  o.colr=SAMECOLOR;
-  o.thik=SAMEWIDTH;
-  o.obj=obj;
-  objlist.push_back(o);
+  objlist.insert(obj);
 }
 
 void document::writeXml(ofstream &ofile)
