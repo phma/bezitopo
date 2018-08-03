@@ -2620,7 +2620,7 @@ void testmanyarc()
   segment diff;
   double abscissa,lastabscissa,ordinate,lastordinate;
   double startslope,endslope;
-  double x,length,accel,firstlength;
+  double x,length,accel,firstlength,maxerror;
   vector<double> vex;
   spiralarc trans(xyz(0,0,0),0,0.003,xyz(500,0,0));
   spiralarc trans43(xyz(0,0,0),0,0.003,xyz(400,300,0));
@@ -2662,7 +2662,7 @@ void testmanyarc()
     vex=diff.vextrema(false);
     cout<<"Greatest separation at "<<ldecimal(vex[0])<<" is "<<ldecimal(-diff.station(vex[0]).elev())<<endl;
     /* Approximate empirical formula for the largest separation:
-     * f(narcs)=sqrt(432)/(narcs-0.230201)**3.
+     * f(narcs)=sqrt(432)/((narcs-0.230201)**3-narcs*sqrt(3/16)).
      * For a fixed narcs, the separation is proportional to the difference in
      * second derivative (curvature of a spiral) times the square of length.
      * The difference in curvature times the length is invariant when a spiralarc
@@ -2672,6 +2672,12 @@ void testmanyarc()
      * is the estimate of throw. This cubic's estimated (and exact) throw is 54.
      */
     ps.endpage();
+  }
+  for (narcs=2;narcs<21;narcs++)
+  {
+    maxerror=maxErrorCubic(narcs);
+    cout<<narcs<<" arcs, max error is "<<maxerror<<endl;
+    tassert(fabs(1/maxerror-(sqrt(6.75)*cub(narcs-0.230201)-narcs*M_SQRT_3_4/2))<0.04);
   }
   cout<<"limit p="<<ldecimal(manyArcTrim(2147483647))<<endl;
   test1manyarc(trans,ps);

@@ -132,6 +132,26 @@ vector<segment> manyQuad(segment cubic,int narcs)
   return ret;
 }
 
+double maxErrorCubic(int narcs)
+/* Returns the maximum error of a piecewise quadratic approximation to a cubic
+ * whose throw is 1. This should be close to the maximum error of a piecewise
+ * circular approximation to a spiralarc with the same throw.
+ */
+{
+  segment cubic(xyz(0,0,0),0,0,xyz(1,0,4));
+  vector<segment> approx;
+  segment diff;
+  double firstlength;
+  vector<double> vex;
+  approx=manyQuad(cubic,narcs);
+  firstlength=approx[0].length();
+  diff=segment(xyz(0,0,0),xyz(firstlength,0,cubic.elev(firstlength)-approx[0].getend().elev()));
+  diff.setslope(START,0);
+  diff.setslope(END,cubic.slope(firstlength)-approx[0].endslope());
+  vex=diff.vextrema(false);
+  return -diff.station(vex[0]).elev();
+}
+
 array<int,2> ends(polyarc apx)
 /* Returns the indices of the two arcs whose angle is closest to 90°.
  * For most spiralarcs in actual use, they are the first and the last.
