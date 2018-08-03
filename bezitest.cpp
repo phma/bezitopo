@@ -2676,7 +2676,7 @@ void testmanyarc()
   for (narcs=2;narcs<21;narcs++)
   {
     maxerror=maxErrorCubic(narcs);
-    cout<<narcs<<" arcs, max error is "<<maxerror<<endl;
+    cout<<narcs<<" arcs, p="<<manyArcTrim(narcs)<<", max error is "<<maxerror<<endl;
     tassert(fabs(1/maxerror-(sqrt(6.75)*cub(narcs-0.230201)-narcs*M_SQRT_3_4/2))<0.04);
   }
   cout<<"limit p="<<ldecimal(manyArcTrim(2147483647))<<endl;
