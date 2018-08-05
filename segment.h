@@ -32,6 +32,9 @@
 #include "drawobj.h"
 #define START 1
 #define END 2
+#ifndef NDEBUG
+extern int closetime; // Holds the time spent in segment::closest.
+#endif
 
 class segment: public drawobj
 {

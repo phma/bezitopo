@@ -36,6 +36,9 @@
 #include "minquad.h"
 
 using namespace std;
+#ifndef NDEBUG
+int closetime; // Holds the time spent in segment::closest.
+#endif
 
 segment::segment()
 {
@@ -334,10 +337,15 @@ double segment::closest(xy topoint,double closesofar,bool offends)
  * This method finds the exact closest point on a segment in one step;
  * the function takes one more step to verify the solution and maybe another
  * because of roundoff error. On arcs and spiralarcs, takes more steps.
- * 
+ *
  * If the distance to the closest point is obviously greater than closesofar,
  * it stops early and returns an inaccurate result. This is used when finding
  * the closest point on an alignment consisting of many segments and arcs.
+ *
+ * This usually takes few iterations (most often 18 in testmanyarc), but
+ * occasionally hundreds of thousands of iterations. This usually happens when
+ * the distance is small (<100 µm out of 500 m), but at least once it took
+ * the longest time on the point that was farthest from the spiralarc.
  */
 {
   int nstartpoints,i,angerr,angtoler,endangle;
@@ -346,6 +354,9 @@ double segment::closest(xy topoint,double closesofar,bool offends)
   set<double> inserenda,delenda;
   set<double>::iterator j;
   map<double,double>::iterator k0,k1,k2;
+#ifndef NDEBUG
+  closetime=0;
+#endif
   closesofar*=closesofar;
   len=length();
   closest=curvature(0);
@@ -388,6 +399,9 @@ double segment::closest(xy topoint,double closesofar,bool offends)
 	delenda.insert(k1->first);
       if (!stdist.count(vertex) && vertex>=0 && vertex<=len)
 	inserenda.insert(vertex);
+#ifndef DEBUG
+      closetime++;
+#endif
     }
     if (lastclosedist>closedist)
       angtoler=1;

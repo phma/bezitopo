@@ -459,6 +459,7 @@ array<double,4> weightedDistance(segment *a,segment *b)
  */
 {
   array<double,4> ret;
+  array<int,4> times;
   xy astation,bstation;
   double aalong,balong,alen=a->length(),sqrtlen=sqrt(alen);
   int bbear;
@@ -466,24 +467,36 @@ array<double,4> weightedDistance(segment *a,segment *b)
   balong=b->closest(astation);
   bstation=b->station(balong);
   bbear=b->bearing(balong);
+#ifndef NDEBUG
+  times[0]=closetime;
+#endif
   ret[0]=distanceInDirection(astation,bstation,bbear+DEG90)*sqrt(GAUSSQ4P0W)*sqrtlen;
   aalong=GAUSSQ4P1P*alen;
   astation=a->station(aalong);
   balong=b->closest(astation);
   bstation=b->station(balong);
   bbear=b->bearing(balong);
+#ifndef NDEBUG
+  times[1]=closetime;
+#endif
   ret[1]=distanceInDirection(astation,bstation,bbear+DEG90)*sqrt(GAUSSQ4P1W)*sqrtlen;
   aalong=(1-GAUSSQ4P1P)*alen;
   astation=a->station(aalong);
   balong=b->closest(astation);
   bstation=b->station(balong);
   bbear=b->bearing(balong);
+#ifndef NDEBUG
+  times[2]=closetime;
+#endif
   ret[2]=distanceInDirection(astation,bstation,bbear+DEG90)*sqrt(GAUSSQ4P1W)*sqrtlen;
   aalong=(1-GAUSSQ4P0P)*alen;
   astation=a->station(aalong);
   balong=b->closest(astation);
   bstation=b->station(balong);
   bbear=b->bearing(balong);
+#ifndef NDEBUG
+  times[3]=closetime;
+#endif
   ret[3]=distanceInDirection(astation,bstation,bbear+DEG90)*sqrt(GAUSSQ4P0W)*sqrtlen;
   return ret;
 }
