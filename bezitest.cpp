@@ -2556,6 +2556,7 @@ void test1manyarc(spiralarc s,PostScript &ps)
   int narcs,i,j;
   polyarc approx;
   vector<xy> crossings;
+  vector<segment> tickmarks;
   arc arc1;
   int crossingsPerArc[4];
   vector<array<alosta,2> > crossings1;
@@ -2571,7 +2572,8 @@ void test1manyarc(spiralarc s,PostScript &ps)
     tassert(enddiff.length()==0);
     cout<<"mean square error "<<meanSquareDistance(approx,s)<<endl;
     crossings.clear();
-    for (i=1;i<narcs-1;i++)
+    tickmarks.clear();
+    for (i=0;i<narcs-1;i++)
     {
       /* If the approximation is good, every arc except the first and last
        * intersects the spiral. The first and last arcs are tangent to the
@@ -2582,15 +2584,20 @@ void test1manyarc(spiralarc s,PostScript &ps)
        * about 10 calls to spiralarc::station per intersection1.
        */
       arc1=approx.getarc(i);
-      crossings1=intersections(&s,&arc1);
+      if (i)
+	crossings1=intersections(&s,&arc1);
+      else
+	crossings1.clear();
       if (crossings1.size()<4)
       {
 	crossingsPerArc[crossings1.size()]++;
-	if (s.clothance()) // If clothance=0, s and approx coincide, and it may find no intersections.
+	if (i && s.clothance()) // If clothance=0, s and approx coincide, and it may find no intersections.
 	  tassert(crossings1.size());
       }
       for (j=0;j<crossings1.size();j++)
 	crossings.push_back(crossings1[j][0].station);
+      tickmarks.push_back(segment(arc1.getend()+xyz(5*cossin(arc1.endbearing()+DEG90),0),
+				  arc1.getend()+xyz(5*cossin(arc1.endbearing()-DEG90),0)));
     }
     br.clear();
     br.include(&s);
@@ -2604,6 +2611,8 @@ void test1manyarc(spiralarc s,PostScript &ps)
     ps.spline(s.approx3d(0.01));
     ps.setcolor(0,0,0);
     ps.spline(approx.approx3d(0.01));
+    for (i=0;i<tickmarks.size();i++)
+      ps.spline(tickmarks[i].approx3d(0.01));
     ps.endpage();
   }
 }
