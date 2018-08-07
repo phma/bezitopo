@@ -3064,6 +3064,7 @@ void testqindex()
   vector<xy> plist;
   double pathlength;
   vector<qindex*> hilbertpath;
+  set<triangle *> intri;
   xy offset(16,8),bone1(3,4),bone2(-3,-4),bone3(49,-64);
   PostScript ps;
   doc.makepointlist(1);
@@ -3198,6 +3199,9 @@ void testqindex()
   tassert(!ptri->in(bone1));
   tassert(qinx.findt(bone3,true));
   tassert(!qinx.findt(bone3,false));
+  printf("%d nodes\n",qinx.size());
+  intri=qinx.localTriangles(xy(0,0),pow(2,(size-32767.5)/65536)*100,185);
+  cout<<intri.size()<<" local triangles\n";
   ps.trailer();
   ps.close();
 }

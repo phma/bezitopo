@@ -335,11 +335,19 @@ set<triangle *> qindex::localTriangles(xy center,double radius,int max)
  * are within radius of center. If there are more than max in the circle, returns
  * a single nullptr. Used when drawing the TIN, to avoid looping through the
  * entire map of edges when drawing a small part of the TIN.
+ *
+ * This will not return all triangles that are within the circle. The set of all
+ * corners of these triangles can still miss a point. But the set of all edges
+ * incident on these points should include all the edges in the circle, except
+ * maybe some near the boundary of the circle.
  */
 {
   int i;
   set<triangle *> list,sublist;
   set<triangle *>::iterator j;
+  for (i=0;i<rint(log2(32/side));i++)
+    cout<<"  ";
+  cout<<"max="<<max<<'\n';
   if (max<0)
     list.insert(nullptr);
   else if (sub[3])
@@ -363,5 +371,11 @@ set<triangle *> qindex::localTriangles(xy center,double radius,int max)
     else; // the square is outside the circle, do nothing
   else if (tri && dist(middle(),center)<=radius)
     list.insert(tri);
+  for (i=0;i<rint(log2(32/side));i++)
+    cout<<"  ";
+  if (list.count(nullptr))
+    cout<<"too many\n";
+  else
+    cout<<"returning "<<list.size()<<" triangles\n";
   return list;
 }
