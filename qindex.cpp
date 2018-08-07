@@ -329,3 +329,39 @@ void qindex::settri(triangle *starttri)
     chain[i]->tri=thistri;
   }
 }
+
+set<triangle *> qindex::localTriangles(xy center,double radius,int max)
+/* Returns up to max pointers to triangles, the leaves of the tree whose centers
+ * are within radius of center. If there are more than max in the circle, returns
+ * a single nullptr. Used when drawing the TIN, to avoid looping through the
+ * entire map of edges when drawing a small part of the TIN.
+ */
+{
+  int i;
+  set<triangle *> list,sublist;
+  set<triangle *>::iterator j;
+  if (max<0)
+    list.insert(nullptr);
+  else if (sub[3])
+    if (dist(middle(),center)<=radius+side/M_SQRT2)
+      for (i=0;i<3;i++)
+      {
+	sublist=sub[i]->localTriangles(center,radius,max);
+	if (sublist.count(nullptr))
+	{
+	  max=-1;
+	  list=sublist;
+	}
+	else
+	{
+	  max+=list.size();
+	  for (j=sublist.begin();j!=sublist.end();j++)
+	    list.insert(*j);
+	  max-=list.size();
+	}
+      }
+    else; // the square is outside the circle, do nothing
+  else if (tri && dist(middle(),center)<=radius)
+    list.insert(tri);
+  return list;
+}

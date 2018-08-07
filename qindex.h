@@ -23,6 +23,7 @@
 #ifndef QINDEX_H
 #define QINDEX_H
 #include <vector>
+#include <set>
 #include "pointlist.h"
 #include "bezier.h"
 #include "ps.h"
@@ -52,6 +53,7 @@ public:
   void draw(PostScript &ps,bool root=true);
   std::vector<qindex*> traverse(int dir=0);
   void settri(triangle *starttri);
+  std::set<triangle *> localTriangles(xy center,double radius,int max);
   qindex();
   ~qindex();
   int size(); // This returns the total number of nodes, which is 4n+1. The number of leaves is 3n+1.
