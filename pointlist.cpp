@@ -605,7 +605,7 @@ void pointlist::setLocalSets(xy pnt,double radius)
   {
     localEdges.insert(nullptr);
     localPoints.insert(nullptr);
-    cout<<"No triangles or view is too big\n";
+    //cout<<"No triangles or view is too big\n";
   }
   else
   {
@@ -633,7 +633,7 @@ void pointlist::setLocalSets(xy pnt,double radius)
     assert(!localPoints.count(nullptr));
     assert(!localEdges.count(nullptr));
     assert(!localTriangles.count(nullptr));
-    cout<<localPoints.size()<<" points "<<localEdges.size()<<" edges "<<localTriangles.size()<<" triangles\n";
+    //cout<<localPoints.size()<<" points "<<localEdges.size()<<" edges "<<localTriangles.size()<<" triangles\n";
   }
 }
 

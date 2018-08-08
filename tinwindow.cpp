@@ -937,6 +937,7 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   double r;
   bezier3d b3d;
   ptlist::iterator j;
+  set<edge *>::iterator e;
   RenderItem ri;
   QTime paintTime,subTime;
   QPen itemPen;
@@ -949,22 +950,40 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   painter.setRenderHint(QPainter::Antialiasing,true);
   if (plnum<doc.pl.size() && plnum>=0)
   {
+    doc.pl[plnum].setLocalSets(worldCenter,viewableRadius());
     if (doc.pl[plnum].triangles.size())
-      for (i=0;plnum>=0 && i<doc.pl[plnum].edges.size();i++)
-      {
-        seg=doc.pl[plnum].edges[i].getsegment();
-	if (seg.length()>pixelScale() && fabs(pldist(worldCenter,seg.getstart(),seg.getend()))<viewableRadius())
+      if (doc.pl[plnum].localEdges.count(nullptr))
+	for (i=0;plnum>=0 && i<doc.pl[plnum].edges.size();i++)
 	{
-	  if (doc.pl[plnum].edges[i].delaunay())
-	    if (doc.pl[plnum].edges[i].broken&1)
-	      painter.setPen(breakEdgePen);
+	  seg=doc.pl[plnum].edges[i].getsegment();
+	  if (seg.length()>pixelScale() && fabs(pldist(worldCenter,seg.getstart(),seg.getend()))<viewableRadius())
+	  {
+	    if (doc.pl[plnum].edges[i].delaunay())
+	      if (doc.pl[plnum].edges[i].broken&1)
+		painter.setPen(breakEdgePen);
+	      else
+		painter.setPen(normalEdgePen);
 	    else
-	      painter.setPen(normalEdgePen);
-	  else
-	    painter.setPen(flipEdgePen);
-	  painter.drawLine(worldToWindow(seg.getstart()),worldToWindow(seg.getend()));
+	      painter.setPen(flipEdgePen);
+	    painter.drawLine(worldToWindow(seg.getstart()),worldToWindow(seg.getend()));
+	  }
 	}
-      }
+      else
+	for (e=doc.pl[plnum].localEdges.begin();e!=doc.pl[plnum].localEdges.end();++e)
+	{
+	  seg=(*e)->getsegment();
+	  if (seg.length()>pixelScale() && fabs(pldist(worldCenter,seg.getstart(),seg.getend()))<viewableRadius())
+	  {
+	    if ((*e)->delaunay())
+	      if ((*e)->broken&1)
+		painter.setPen(breakEdgePen);
+	      else
+		painter.setPen(normalEdgePen);
+	    else
+	      painter.setPen(flipEdgePen);
+	    painter.drawLine(worldToWindow(seg.getstart()),worldToWindow(seg.getend()));
+	  }
+	}
     else
       for (j=doc.pl[plnum].points.begin();j!=doc.pl[plnum].points.end();++j)
         for (i=0;i<3;i++)
@@ -1041,8 +1060,6 @@ void TinCanvas::setSize()
   windowCenter=xy(width(),height())/2.;
   windowSize=1/sqrt(1/sqr(width())+1/sqr(height()));
   windowDiag=sqrt(sqr(width())+sqr(height()));
-  if (plnum<doc.pl.size() && plnum>=0)
-    doc.pl[plnum].setLocalSets(worldCenter,viewableRadius());
 }
 
 void TinCanvas::resizeEvent(QResizeEvent *event)
