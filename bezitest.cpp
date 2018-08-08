@@ -3200,8 +3200,11 @@ void testqindex()
   tassert(qinx.findt(bone3,true));
   tassert(!qinx.findt(bone3,false));
   printf("%d nodes\n",qinx.size());
-  intri=qinx.localTriangles(xy(0,0),pow(2,(size-32767.5)/65536)*100,185);
+  intri=qinx.localTriangles(xy(0,0),pow(2,(size-32767.5)/65536)*10,185);
   cout<<intri.size()<<" local triangles\n";
+  tassert(intri.size()>40 && intri.size()<=185);
+  intri=qinx.localTriangles(xy(0,0),pow(2,(size-32767.5)/65536)*10,40);
+  tassert(intri.size()==1 && intri.count(nullptr));
   ps.trailer();
   ps.close();
 }
