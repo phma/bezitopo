@@ -345,14 +345,11 @@ set<triangle *> qindex::localTriangles(xy center,double radius,int max)
   int i;
   set<triangle *> list,sublist;
   set<triangle *>::iterator j;
-  for (i=0;i<rint(log2(32/side));i++)
-    cout<<"  ";
-  cout<<"max="<<max<<'\n';
   if (max<0)
     list.insert(nullptr);
   else if (sub[3])
     if (dist(middle(),center)<=radius+side/M_SQRT2)
-      for (i=0;i<3;i++)
+      for (i=0;i<4;i++)
       {
 	sublist=sub[i]->localTriangles(center,radius,max);
 	if (sublist.count(nullptr))
@@ -371,11 +368,5 @@ set<triangle *> qindex::localTriangles(xy center,double radius,int max)
     else; // the square is outside the circle, do nothing
   else if (tri && dist(middle(),center)<=radius)
     list.insert(tri);
-  for (i=0;i<rint(log2(32/side));i++)
-    cout<<"  ";
-  if (list.count(nullptr))
-    cout<<"too many\n";
-  else
-    cout<<"returning "<<list.size()<<" triangles\n";
   return list;
 }
