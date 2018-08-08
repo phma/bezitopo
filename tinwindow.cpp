@@ -1041,6 +1041,8 @@ void TinCanvas::setSize()
   windowCenter=xy(width(),height())/2.;
   windowSize=1/sqrt(1/sqr(width())+1/sqr(height()));
   windowDiag=sqrt(sqr(width())+sqr(height()));
+  if (plnum<doc.pl.size() && plnum>=0)
+    doc.pl[plnum].setLocalSets(worldCenter,viewableRadius());
 }
 
 void TinCanvas::resizeEvent(QResizeEvent *event)

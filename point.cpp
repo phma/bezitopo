@@ -495,6 +495,19 @@ int point::valence()
   return i;
 }
 
+vector<edge *> point::incidentEdges()
+{
+  int i;
+  vector<edge *> ret;
+  edge *oldline;
+  for (i=0,oldline=line;line && (!i || oldline!=line);i++)
+  {
+    line=line->next(this);
+    ret.push_back(line);
+  }
+  return ret;
+}
+
 edge *point::isNeighbor(point *pnt)
 /* Returns the edge if this and pnt are neighbors. If this is pnt, returns some
  * edge if this has any neighbors, else nullptr.

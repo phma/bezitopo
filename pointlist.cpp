@@ -581,6 +581,62 @@ string pointlist::hitTestPointString(xy pnt,double radius)
   return ret;
 }
 
+void pointlist::setLocalSets(xy pnt,double radius)
+/* If the sets are set to {nullptr}, this means one of two things:
+ * • The area in the window is too large; it would be faster to loop through
+ *   all the edges.
+ * • There are no triangles. A qindex is an index of triangles.
+ * An empty qindex would produce {}, so this condition has to be checked.
+ */
+{
+  set<point *>::iterator i;
+  set<edge *>::iterator j;
+  set<triangle *>::iterator k;
+  int n;
+  vector<edge *> pointEdges;
+  localTriangles.clear();
+  localEdges.clear();
+  localPoints.clear();
+  if (triangles.size())
+    localTriangles=qinx.localTriangles(pnt,radius,triangles.size()/64+100);
+  else
+    localTriangles.insert(nullptr);
+  if (localTriangles.count(nullptr))
+  {
+    localEdges.insert(nullptr);
+    localPoints.insert(nullptr);
+    cout<<"No triangles or view is too big\n";
+  }
+  else
+  {
+    for (k=localTriangles.begin();k!=localTriangles.end();++k)
+    {
+      localPoints.insert((*k)->a);
+      localPoints.insert((*k)->b);
+      localPoints.insert((*k)->c);
+    }
+    for (i=localPoints.begin();i!=localPoints.end();++i)
+    {
+      pointEdges=(*i)->incidentEdges();
+      for (n=0;n<pointEdges.size();n++)
+	localEdges.insert(pointEdges[n]);
+    }
+    for (j=localEdges.begin();j!=localEdges.end();++j)
+    { // localTriangles() usually doesn't find all triangles, and may even miss a point.
+      if ((*j)->tria)
+	localTriangles.insert((*j)->tria);
+      if ((*j)->trib)
+	localTriangles.insert((*j)->trib);
+      localPoints.insert((*j)->a);
+      localPoints.insert((*j)->b);
+    }
+    assert(!localPoints.count(nullptr));
+    assert(!localEdges.count(nullptr));
+    assert(!localTriangles.count(nullptr));
+    cout<<localPoints.size()<<" points "<<localEdges.size()<<" edges "<<localTriangles.size()<<" triangles\n";
+  }
+}
+
 void pointlist::writeXml(ofstream &ofile)
 {
   int i;

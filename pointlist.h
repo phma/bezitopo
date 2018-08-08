@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <set>
 #include "point.h"
 #include "tin.h"
 #include "bezier.h"
@@ -71,6 +72,12 @@ public:
    * when a vector is resized.
    */
   std::vector<polyspiral> contours;
+  std::set<point *> localPoints;
+  std::set<edge *> localEdges;
+  std::set<triangle *> localTriangles;
+  /* localPoints, localEdges, and localTriangles are used to speed up repainting
+   * when the view is of a small fraction of a huge TIN.
+   */
   criteria crit;
   ContourInterval contourInterval;
   std::vector<Breakline0> type0Breaklines;
@@ -105,6 +112,7 @@ public:
   void readBreaklines(std::string filename);
   std::string hitTestString(triangleHit hit);
   std::string hitTestPointString(xy pnt,double radius);
+  void setLocalSets(xy pnt,double radius);
   virtual void writeXml(std::ofstream &ofile);
   // the following methods are in tin.cpp
 private:
