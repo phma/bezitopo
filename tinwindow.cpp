@@ -286,6 +286,7 @@ void TinCanvas::open()
   QStringList files;
   string fileName;
   ifstream file;
+  vector<array<xyz,3> > bareTriangles;
   fileDialog->setWindowTitle(tr("Load TIN"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
   fileDialog->setNameFilter(tr("(*.dxf);;(*)"));
@@ -296,7 +297,9 @@ void TinCanvas::open()
     fileName=files[0].toStdString();
     doc.pl.clear();
     doc.makepointlist(1);
-    doc.pl[1].makeBareTriangles(extractTriangles(readDxfGroups(fileName)));
+    bareTriangles=extractTriangles(readDxfGroups(fileName));
+    doc.pl[1].makeBareTriangles(bareTriangles);
+    bareTriangles.clear();
     cout<<"Read "<<doc.pl[1].triangles.size()<<" triangles\n";
     doc.pl[1].fillInBareTin();
     cout<<doc.pl[1].triangles.size()<<" triangles after filling in\n";
