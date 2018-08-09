@@ -1155,12 +1155,12 @@ void pointlist::triangulatePolygon(vector<point *> poly)
  * if not simply connected.
  */
 {
-  int h,i,a,b,c,sz=poly.size(),ba,bb,bc;
+  int h,i,j,a,b,c,sz=poly.size(),ba,bb,bc;
   vector<point *> subpoly;
   bool found=false;
   triangle newtri;
   for (h=sz-relprime(sz);sz>2 && h && !found;h=(h>1)?relprime(h):0)
-    for (a=0;a<sz && !found;a+=!found)
+    for (a=j=0;j<sz && !found;j++,a=(a+(found?0:relprime(sz)))%sz)
     {
       b=(a+h)%sz;
       c=(b+h)%sz;
