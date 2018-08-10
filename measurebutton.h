@@ -3,7 +3,7 @@
 /* measurebutton.h - buttons for measuring            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017 Pierre Abbat.
+/* Copyright 2017,2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -28,7 +28,7 @@ class MeasureButton: public QAction
 {
   Q_OBJECT
 public:
-  MeasureButton(QObject *parent=nullptr,int lunit=0,int whichFoot=INTERNATIONAL);
+  MeasureButton(QObject *parent=nullptr,int64_t lunit=0,int whichFoot=INTERNATIONAL);
   void activate(ActionEvent event);
 public slots:
   void setMeasure(Measure newMeasure);

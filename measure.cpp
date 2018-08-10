@@ -45,7 +45,7 @@ using namespace std;
 
 struct cf
 {
-  int unitp;
+  int64_t unitp;
   double factor;
 };
 
@@ -66,34 +66,12 @@ cf cfactors[]=
   GRAM,		0.001,			// g
   KILOGRAM,	1.0,			// kg
   POUND,	0.45359237,		// lb
-  MILLIPOUND,	0.00045359237,		// pound per thousand
   HOUR,		3600,			// hour
-  KGPERL,	1000.0,			// kg/l
-  LBPERIN3,	27679.90471020312,	// lb/in3
-  PERKG,	1.0,			// $/kg
-  PERPOUND,	2.2046226218487759,	// $/lb
-  PERMETER,	1.0,			// $/m
-  PERFOOT,	3.2808398950131233,	// $/ft
-  PERLITER,	1000,			// /L
-  EACH,		1,			// $/piece
-  PERHUNDRED,	0.01,			// $/hundred pieces
-  PERTHOUSAND,	0.001,			// $/thousand pieces
-  PERLOT,	1,			// $/lot
-  PERSET,	1,			// $/set
-  ITEM,		1,
-  THOUSAND,	1000,
-  LOT,		1,
-  SET,		1,
-  PERMONTH,	0.38026486208173715e-6,
-  PERYEAR,	31.688738506811427e-9,
-  PERHOUR,	0.00027777777777777777,	// $/hour
-  MILLILITER,	0.000001,
-  IN3,		0.000016387064,
 };
 #define nunits (sizeof(cfactors)/sizeof(struct cf))
 struct symbol
 {
-  int unitp;
+  int64_t unitp;
   char symb[12];
 };
 
@@ -116,17 +94,10 @@ symbol symbols[]=
   GRAM,		"g",
   KILOGRAM,	"kg",
   POUND,	"lb",
-  KGPERL,	"kg/l",
-  KGPERL,	"kg/L",
-  KGPERL,	"g/ml",
-  KGPERL,	"g/mL",
-  LBPERIN3,     "lb/in³",
-  MILLILITER,	"ml",
-  IN3,		"in³",
 };
 #define nsymbols (sizeof(symbols)/sizeof(struct symbol))
 
-int length_unit=METER;
+int64_t length_unit=METER;
 double length_factor=1;
 
 int fequal(double a, double b)
@@ -135,25 +106,28 @@ int fequal(double a, double b)
  }
 
 int is_int(double a)
-{return fequal(a,rint(a));
- }
+{
+  return fequal(a,rint(a));
+}
 
-double cfactor(int unitp)
-{int i;
- for (i=0;i<nunits;i++)
-     if (sameUnit(unitp,cfactors[i].unitp))
-        return cfactors[i].factor;
- //fprintf(stdout,"Conversion factor for %x missing!\n",unitp);
- return NAN;
- }
+double cfactor(int64_t unitp)
+{
+  int i;
+  for (i=0;i<nunits;i++)
+    if (sameUnit(unitp,cfactors[i].unitp))
+      return cfactors[i].factor;
+  //fprintf(stdout,"Conversion factor for %x missing!\n",unitp);
+  return NAN;
+}
 
-char *symbol(int unitp)
-{int i;
- for (i=0;i<nsymbols;i++)
-     if (sameUnit(unitp,symbols[i].unitp))
-        return symbols[i].symb;
- return "unk";
- }
+const char *symbol(int64_t unitp)
+{
+  int i;
+  for (i=0;i<nsymbols;i++)
+    if (sameUnit(unitp,symbols[i].unitp))
+      return symbols[i].symb;
+  return "unk";
+}
 
 char *trim(char *str)
 /* Removes spaces from both ends of a string in place. */
@@ -177,64 +151,53 @@ char *collapse(char *str)
  return(str);
  }
 
-double precision(int unitp)
-/* Returns the precision (>=1) of unitp. Base codes 3-f are returned as 0
-   and must be handled specially by the formatter.
-   00 1
-   01 10
-   02 100
+unsigned short basecodes[][2]=
+{
+  { 2,0x000},
+  { 6,0x100},
+  { 8,0x140},
+  {10,0x180},
+  {12,0x1c0},
+  {16,0x200},
+  {20,0x240},
+  {60,0x260},
+  { 0,0x280}
+};
+#define nbasecodes (sizeof(basecodes)/sizeof(basecodes[0]))
+
+double precision(int64_t unitp)
+/* Returns the precision (>=1) of unitp.
+   180 1
+   181 10
+   182 100
    ...
-   0f 1000000000000000
-   10 1
-   11 2
-   12 4
+   18f 1000000000000000
+   000 1
+   001 2
+   002 4
    ...
-   1f 32768
-   20 1
-   21 60
-   22 3600
-   22 216000
-   23 10
-   24 600   e.g. 63°26.1′
-   25 36000
-   ...
-   2f 216000000
-   30-3f Used for mixed units.
-   40-ff Undefined.
+   00f 32768
+   260 1
+   261 60
+   262 3600
+   262 216000
    */
 {
   double base,p;
   int exp,basecode,i;
-  exp=unitp&0xf;
-  basecode=unitp&0xf0;
-  switch (basecode)
-  {
-    case 0:
-      base=10;
-      break;
-    case 16:
-      base=2;
-      break;
-    case 32:
-      base=60;
-      break;
-    default:
-      base=0;
-  }
-  if (base==60)
-  {
-    for (p=1,i=0;i<(exp&3);i++)
-      p*=base;
-    for (i=0;i<(exp&12);i+=4)
-      p*=10;
-  }
-  else
-    for (p=1,i=0;i<exp;i++)
-      p*=base;
+  basecode=unitp&0xffff;
+  for (i=0;i<nbasecodes;i++)
+    if (basecodes[i][1]<=basecode)
+    {
+      base=basecodes[i][0];
+      exp=basecode-basecodes[i][1];
+    }
+  for (p=1,i=0;i<exp;i++)
+    p*=base;
   return p;
 }
 
-int moreprecise(int unitp1,int unitp2)
+int64_t moreprecise(int64_t unitp1,int64_t unitp2)
 /* Given two unitp codes, returns the more precise. If one of them has no
    conversion factor, or they are of different quantities, it still returns
    one of them, but which one may not make sense. */
@@ -258,7 +221,7 @@ void trim(string &str)
     str.erase(pos+1);
 }
 
-int parseSymbol(string unitStr)
+int64_t parseSymbol(string unitStr)
 {
   int i,ret=0;
   for (i=0;i<nsymbols;i++)
@@ -301,7 +264,7 @@ int Measure::getFoot()
   return whichFoot;
 }
 
-void Measure::addUnit(int unit)
+void Measure::addUnit(int64_t unit)
 {
   int i;
   bool found=false;
@@ -315,7 +278,7 @@ void Measure::addUnit(int unit)
     availableUnits.push_back(unit);
 }
 
-void Measure::removeUnit(int unit)
+void Measure::removeUnit(int64_t unit)
 {
   int i;
   int found=-1;
@@ -368,17 +331,17 @@ void Measure::setCustomary()
   addUnit(POUND);
 }
 
-void Measure::setDefaultUnit(int quantity,double magnitude)
+void Measure::setDefaultUnit(int64_t quantity,double magnitude)
 {
-  defaultUnit[quantity&0xffff0000]=magnitude;
+  defaultUnit[quantity&0xffff00000000]=magnitude;
 }
 
-void Measure::setDefaultPrecision(int quantity,double magnitude)
+void Measure::setDefaultPrecision(int64_t quantity,double magnitude)
 {
-  defaultPrecision[quantity&0xffff0000]=magnitude;
+  defaultPrecision[quantity&0xffff00000000]=magnitude;
 }
 
-int Measure::findUnit(int quantity,double magnitude)
+int64_t Measure::findUnit(int64_t quantity,double magnitude)
 /* Finds the available unit of quantity closest to magnitude.
  * E.g. if magnitude is 0.552, quantity is LENGTH, and available units
  * are the meter with all prefixes, returns METER.
@@ -388,14 +351,15 @@ int Measure::findUnit(int quantity,double magnitude)
  * Ignores units of mass, time, and anything other than length.
  */
 {
-  int i,closeUnit=0;
+  int i;
+  int64_t closeUnit=0;
   double unitRatio,maxUnitRatio=-1;
   if (magnitude<=0)
-    magnitude=defaultUnit[quantity&0xffff0000];
+    magnitude=defaultUnit[quantity&0xffff00000000];
   for (i=0;i<availableUnits.size();i++)
     if (compatibleUnits(availableUnits[i],quantity))
     {
-      unitRatio=magnitude/conversionFactors[availableUnits[i]&0xffffff00];
+      unitRatio=magnitude/conversionFactors[availableUnits[i]&0xffffffff0000];
       if (unitRatio>1)
         unitRatio=1/unitRatio;
       if (unitRatio>maxUnitRatio)
@@ -407,17 +371,17 @@ int Measure::findUnit(int quantity,double magnitude)
   return closeUnit;
 }
 
-int Measure::findPrecision(int unit,double magnitude)
+int Measure::findPrecision(int64_t unit,double magnitude)
 /* This returns a number of decimal places. If sexagesimal or binary places
  * are needed, I'll do them later.
  */
 {
   double factor;
   int ret;
-  if ((unit&0xff00)==0)
+  if ((unit&0xffff0000)==0)
     unit=findUnit(unit);
   if (magnitude<=0)
-    magnitude=defaultPrecision[unit&0xffff0000];
+    magnitude=defaultPrecision[physicalQuantity(unit)];
   factor=conversionFactors[unit];
   if (factor<=0 || std::isnan(factor) || std::isinf(factor))
     factor=1;
@@ -427,21 +391,21 @@ int Measure::findPrecision(int unit,double magnitude)
   return ret;
 }
 
-double Measure::toCoherent(double measurement,int unit,double unitMagnitude)
+double Measure::toCoherent(double measurement,int64_t unit,double unitMagnitude)
 {
   if ((unit&0xffff)==0)
     unit=findUnit(unit,unitMagnitude);
   return measurement*conversionFactors[unit];
 }
 
-double Measure::fromCoherent(double measurement,int unit,double unitMagnitude)
+double Measure::fromCoherent(double measurement,int64_t unit,double unitMagnitude)
 {
   if ((unit&0xffff)==0)
     unit=findUnit(unit,unitMagnitude);
   return measurement/conversionFactors[unit];
 }
 
-string Measure::formatMeasurement(double measurement,int unit,double unitMagnitude,double precisionMagnitude)
+string Measure::formatMeasurement(double measurement,int64_t unit,double unitMagnitude,double precisionMagnitude)
 {
   int prec,len;
   double m;
@@ -477,14 +441,14 @@ string Measure::formatMeasurement(double measurement,int unit,double unitMagnitu
   return string(&output[0]);
 }
 
-string Measure::formatMeasurementUnit(double measurement,int unit,double unitMagnitude,double precisionMagnitude)
+string Measure::formatMeasurementUnit(double measurement,int64_t unit,double unitMagnitude,double precisionMagnitude)
 {
   if ((unit&0xffff)==0)
     unit=findUnit(unit,unitMagnitude);
   return formatMeasurement(measurement,unit,unitMagnitude,precisionMagnitude)+' '+symbol(unit);
 }
 
-Measurement Measure::parseMeasurement(string measStr,int quantity)
+Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
 /* quantity is a code for physical quantity (e.g. LENGTH) or 0, which means
  * accept any unit. If quantity is nonzero and no unit symbol is supplied,
  * it assumes whatever available unit of that quantity is closest to that
@@ -549,7 +513,7 @@ xy Measure::parseXy(string xystr)
 void Measure::writeXml(ostream &ofile)
 {
   int i;
-  map<int,double>::iterator j;
+  map<int64_t,double>::iterator j;
   ofile<<"<Measure foot="<<whichFoot;
   if (localized)
     ofile<<" localized";

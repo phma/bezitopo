@@ -3,7 +3,7 @@
 /* measure.h - measuring units                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2017 Pierre Abbat.
+/* Copyright 2012,2015-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <cstdint>
 #include "zoom.h"
 #include "xyz.h"
 
@@ -36,104 +37,77 @@
  * This module follows http://bezitopo.org/~phma/Metric/unit-codes.html, except
  * for having some units with variable conversion factors. All such units
  * are non-metric units based on the foot and have codes of the form
- * 0x****f***. They may or may not be equal to other unit codes' conversion
+ * 0x****f8**0000. They may or may not be equal to other unit codes' conversion
  * factors.
  */
-#define METER 0x00011000
-#define MILLIMETER 0x00010d00
-#define MICROMETER 0x00010c00
-#define KILOMETER 0x00011300
-#define MEGAMETER 0x00011400
-#define FOOT 0x0001ea00
-#define INTCHAIN 0x0001f100
-#define CHAIN 0x0001f200
-#define MILE 0x0001f300
-#define SQUAREMETER 0x00271000
-#define SQUAREFOOT 0x0027ea00
-#define HECTARE 0x00273200
-#define ACRE 0x0027e500
-#define GRAM 0x00021000
-#define KILOGRAM 0x00021300
-#define POUND 0x0002ed00
-#define MILLIPOUND 0x0002f000
-#define HOUR 0x0003ee00
-#define KGPERL 0x00801400
-#define LBPERIN3 0x0080ef00
-#define PERKG 0x00291300
-#define PERPOUND 0x0029ed00
-#define PERMETER 0x002a1000
-#define PERFOOT 0x002aeb00
-#define PERLOT 0x40000000
-#define ITEM 0x04001000
-#define THOUSAND 0x04001300
-#define EACH 0x04011000
-#define PERHUNDRED 0x04011200
-#define PERTHOUSAND 0x04011300
-#define PERSET 0x40010000
-#define LOT 0x40020000
-#define PERLITER 0x00353000
-#define SET 0x40030000
-#define PERMONTH 0x0036eb00
-#define PERYEAR 0x0036ea00
-#define PERHOUR 0x0036ee00
-#define MILLILITER 0x00282d00
-#define IN3 0x0028ec00
+#define METER 0x000100400000
+#define MILLIMETER 0x0001003d0000
+#define MICROMETER 0x0001003c0000
+#define KILOMETER 0x000100430000
+#define MEGAMETER 0x000100440000
+#define FOOT 0x0001f8000000
+#define INTFOOT 0x0001effa0000
+#define CHAIN 0x0001f8010000
+#define MILE 0x0001f8020000
+#define SQUAREMETER 0x002700400000
+#define SQUAREFOOT 0x0027f8000000
+#define HECTARE 0x002700c20000
+#define ACRE 0x0027f8010000
+#define GRAM 0x000200400000
+#define KILOGRAM 0x000200430000
+#define POUND 0x0002effd0000
+#define HOUR 0x0003effe0000
 // These are physical quantity codes.
-#define LENGTH 0x00010000
-#define MASS 0x00020000
-#define AREA 0x00270000
-#define VOLUME 0x00280000
-/* These convert as different units depending on the selected measuring system. */
-#define MASS1 0x0002fe00
-#define MASS2 0x0002fd00
-#define LENGTH1 0x0001fe00
-#define LENGTH2 0x0001fd00
+#define LENGTH 0x000100000000
+#define MASS 0x000200000000
+#define AREA 0x002700000000
+#define VOLUME 0x002800000000
 #define ANGLE 0x00380000
 /* These are precision codes. DEC3 = 3 digits after the decimal point. */
-#define DEC0 0x00
-#define DEC1 0x01
-#define DEC2 0x02
-#define DEC3 0x03
-#define DEC4 0x04
-#define DEC5 0x05
-#define DEC6 0x06
-#define HALF 0x11
-#define QUARTER 0x12
-#define EIGHTH 0x13
-#define SIXTEENTH 0x14
-#define THIRTYSECOND 0x15
+#define DEC0 0x0180
+#define DEC1 0x0181
+#define DEC2 0x0182
+#define DEC3 0x0183
+#define DEC4 0x0184
+#define DEC5 0x0185
+#define DEC6 0x0186
+#define HALF 0x1181
+#define QUARTER 0x0002
+#define EIGHTH 0x0003
+#define SIXTEENTH 0x0004
+#define THIRTYSECOND 0x0005
 
 #define INTERNATIONAL 0
 #define USSURVEY 1
 #define INSURVEY 2
 
 
-inline int physicalQuantity(int unitp)
+inline int64_t physicalQuantity(int64_t unitp)
 {
-  return unitp&0xffff0000;
+  return unitp&0xffff00000000;
 }
 
-inline int physicalUnit(int unitp)
+inline int64_t physicalUnit(int64_t unitp)
 {
-  return unitp&0xffffff00;
+  return unitp&0xffffffff0000;
 }
 
-inline bool compatibleUnits(int unitp1,int unitp2)
+inline bool compatibleUnits(int64_t unitp1,int64_t unitp2)
 {
   return physicalQuantity(unitp1)==physicalQuantity(unitp2);
 }
 
-inline bool sameUnit(int unitp1,int unitp2)
+inline bool sameUnit(int64_t unitp1,int64_t unitp2)
 {
   return physicalUnit(unitp1)==physicalUnit(unitp2);
 }
 
-double precision(int unitp);
+double precision(int64_t unitp);
 
 struct Measurement
 {
   double magnitude; // always in a coherent SI unit regardless of what unit is
-  int unit;
+  int64_t unit;
 };
 
 class Measure
@@ -142,28 +116,28 @@ public:
   Measure();
   void setFoot(int which);
   int getFoot();
-  void addUnit(int unit);
-  void removeUnit(int unit);
+  void addUnit(int64_t unit);
+  void removeUnit(int64_t unit);
   void clearUnits();
   void localize(bool loc);
   void setMetric();
   void setCustomary();
-  void setDefaultUnit(int quantity,double magnitude);
-  void setDefaultPrecision(int quantity,double magnitude);
-  int findUnit(int quantity,double magnitude=0);
-  int findPrecision(int unit,double magnitude=0);
-  double toCoherent(double measurement,int unit,double unitMagnitude=0);
-  double fromCoherent(double measurement,int unit,double unitMagnitude=0);
-  std::string formatMeasurement(double measurement,int unit,double unitMagnitude=0,double precisionMagnitude=0);
-  std::string formatMeasurementUnit(double measurement,int unit,double unitMagnitude=0,double precisionMagnitude=0);
-  Measurement parseMeasurement(std::string measStr,int quantity);
+  void setDefaultUnit(int64_t quantity,double magnitude);
+  void setDefaultPrecision(int64_t quantity,double magnitude);
+  int64_t findUnit(int64_t quantity,double magnitude=0);
+  int findPrecision(int64_t unit,double magnitude=0);
+  double toCoherent(double measurement,int64_t unit,double unitMagnitude=0);
+  double fromCoherent(double measurement,int64_t unit,double unitMagnitude=0);
+  std::string formatMeasurement(double measurement,int64_t unit,double unitMagnitude=0,double precisionMagnitude=0);
+  std::string formatMeasurementUnit(double measurement,int64_t unit,double unitMagnitude=0,double precisionMagnitude=0);
+  Measurement parseMeasurement(std::string measStr,int64_t quantity);
   xy parseXy(std::string xystr);
   void writeXml(std::ostream &ofile);
 private:
   int whichFoot;
   bool localized;
-  std::map<int,double> conversionFactors;
-  std::vector<int> availableUnits;
-  std::map<int,double> defaultUnit,defaultPrecision;
+  std::map<int64_t,double> conversionFactors;
+  std::vector<int64_t> availableUnits;
+  std::map<int64_t,double> defaultUnit,defaultPrecision;
 };
 #endif

@@ -24,7 +24,7 @@
 
 using namespace std;
 
-MeasureButton::MeasureButton(QObject *parent,int lunit,int whichFoot):QAction(parent)
+MeasureButton::MeasureButton(QObject *parent,int64_t lunit,int whichFoot):QAction(parent)
 /* lunit is:
  * 0 if this button selects which foot is in effect;
  * FOOT if this button selects feet;
