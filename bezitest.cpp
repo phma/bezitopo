@@ -1090,39 +1090,44 @@ void test1tripolygon(int points,int petals,PostScript &ps)
   tassert(doc.pl[1].checkTinConsistency());
 }
 
+#define EHF 89
+/* 89, normally, or 1597, to test filling in big loops.
+ * It should be a Fibonacci number not divisible by 3.
+ */
 void testehcycloid(PostScript &ps)
 /* Makes a TIN out of 178 triangles between an epicycloid and a hypocycloid
  * (deltoid) of three cusps.
  */
 {
   int i,j;
-  array<xyz,89> outer,inner;
+  array<xyz,EHF> outer,inner;
   vector<array<xyz,3> > faces;
   array<xyz,3> face;
   intloop holes;
   int1loop loop1;
-  for (i=0;i<89;i++)
+  for (i=0;i<EHF;i++)
   {
-    outer[i]=xyz(4*cossin(2*M_PI*i/89)-cossin(8*M_PI*i/89),sin(10*M_PI*i/89)/10);
-    inner[i]=xyz(-2*cossin(2*M_PI*i/89)-cossin(-4*M_PI*i/89),sin(10*M_PI*i/89)/10);
+    outer[i]=xyz(4*cossin(2*M_PI*i/EHF)-cossin(8*M_PI*i/EHF),sin(10*M_PI*i/EHF)/10);
+    inner[i]=xyz(-2*cossin(2*M_PI*i/EHF)-cossin(-4*M_PI*i/EHF),sin(10*M_PI*i/EHF)/10);
   }
-  for (i=0;i<89;i++)
+  for (i=0;i<EHF;i++)
   {
     face[0]=outer[i];
-    face[1]=inner[(i+45)%89];
-    face[2]=inner[(i+44)%89];
+    face[1]=inner[(i+(EHF+1)/2)%EHF];
+    face[2]=inner[(i+EHF/2)%EHF];
     faces.push_back(face);
     face[0]=inner[i];
-    face[1]=outer[(i+44)%89];
-    face[2]=outer[(i+45)%89];
+    face[1]=outer[(i+EHF/2)%EHF];
+    face[2]=outer[(i+(EHF+1)/2)%EHF];
     faces.push_back(face);
     //cout<<setw(9)<<hex<<i<<' '<<setw(9)<<inv2adic(i)<<dec<<'\n';
   }
   doc.makepointlist(1);
   doc.pl[1].makeBareTriangles(faces);
   cout<<doc.pl[1].points.size()<<" points "<<doc.pl[1].qinx.size()<<" qindex nodes\n";
-  tassert(doc.pl[1].points.size()==178);
-  tassert(doc.pl[1].qinx.size()==289);
+  tassert(doc.pl[1].points.size()==2*EHF);
+  if (EHF==89)
+    tassert(doc.pl[1].qinx.size()==289);
   doc.pl[1].makeEdges();
   holes=doc.pl[1].boundary();
   holes.push_back(doc.pl[1].convexHull());
