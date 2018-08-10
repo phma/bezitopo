@@ -103,7 +103,7 @@ int neswinx(string ch)
   return ret;
 }
 
-latlong parselatlong(string angstr,int unitp)
+latlong parselatlong(string angstr,int64_t unitp)
 /* Parses a latitude-longitude string. The following are equivalent:
  * 35°N80°W
  * 35°N 80°W
@@ -234,7 +234,7 @@ latlong parselatlong(string angstr,int unitp)
   return ret;
 }
 
-string formatlatlong(latlong ll,int unitp)
+string formatlatlong(latlong ll,int64_t unitp)
 {
   vector<string> nesw;
   nesw.push_back("N"); // This may run into trouble in Arabic, where شمال

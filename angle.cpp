@@ -219,7 +219,7 @@ double gontorad(double angle)
   return angle/200*M_PIl;
 }
 
-string radtoangle(double angle,int unitp)
+string radtoangle(double angle,int64_t unitp)
 {
   double angmult,prec;
   string ret,unitsign;
@@ -242,7 +242,7 @@ string radtoangle(double angle,int unitp)
     default:
       base=0;
   }
-  switch (unitp&0xffffff00)
+  switch (physicalUnit(unitp))
   {
     case DEGREE:
       angmult=radtodeg(angle);
@@ -301,12 +301,12 @@ string radtoangle(double angle,int unitp)
   return ret;
 }
 
-string bintoangle(int angle,int unitp)
+string bintoangle(int angle,int64_t unitp)
 {
   return radtoangle(bintorad(angle),unitp);
 }
 
-double parseangle(string angstr,int unitp)
+double parseangle(string angstr,int64_t unitp)
 {
   double angmult=0,prec,angle;
   int i,ulen;
@@ -369,17 +369,17 @@ double parseangle(string angstr,int unitp)
   return angle;
 }
 
-int parseiangle(string angstr,int unitp)
+int parseiangle(string angstr,int64_t unitp)
 {
   return radtobin(parseangle(angstr,unitp));
 }
 
-int parseazimuth(string angstr,int unitp)
+int parseazimuth(string angstr,int64_t unitp)
 {
   return DEG90-parseiangle(angstr,unitp);
 }
 
-int parsesignedangle(string angstr,int unitp)
+int parsesignedangle(string angstr,int64_t unitp)
 {
   int sign=1;
   if (angstr[0]=='-')
@@ -390,7 +390,7 @@ int parsesignedangle(string angstr,int unitp)
   return parseiangle(angstr,unitp)*sign;
 }
 
-int parsebearing(string angstr,int unitp)
+int parsebearing(string angstr,int64_t unitp)
 {
   int ns,ew,quadrant=-1,angle;
   if (angstr.length())

@@ -62,8 +62,12 @@
 #define MASS 0x000200000000
 #define AREA 0x002700000000
 #define VOLUME 0x002800000000
-#define ANGLE 0x00380000
-/* These are precision codes. DEC3 = 3 digits after the decimal point. */
+#define ANGLE 0x003800000000
+/* These are precision codes. DEC3 = 3 digits after the decimal point.
+ * FIXLARGER means that it's in fixed point with larger units, e.g.
+ * ARCSECOND+FIXLARGER+DEC3 means degrees, minutes, and seconds with
+ * three decimal places.
+ */
 #define DEC0 0x0180
 #define DEC1 0x0181
 #define DEC2 0x0182
@@ -71,12 +75,12 @@
 #define DEC4 0x0184
 #define DEC5 0x0185
 #define DEC6 0x0186
-#define HALF 0x1181
+#define HALF 0x0001
 #define QUARTER 0x0002
 #define EIGHTH 0x0003
 #define SIXTEENTH 0x0004
 #define THIRTYSECOND 0x0005
-
+#define FIXLARGER 0x2000
 #define INTERNATIONAL 0
 #define USSURVEY 1
 #define INSURVEY 2

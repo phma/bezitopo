@@ -37,8 +37,8 @@ struct latlong
 };
 
 void setnesw(std::string neswString);
-latlong parselatlong(std::string angstr,int unitp);
-std::string formatlatlong(latlong ll,int unitp);
+latlong parselatlong(std::string angstr,int64_t unitp);
+std::string formatlatlong(latlong ll,int64_t unitp);
 bool partialLatlong(std::string angstr);
 
 struct latlongelev

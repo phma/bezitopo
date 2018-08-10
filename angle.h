@@ -113,24 +113,26 @@ double gontorad(double angle);
 #define DEG270 0x60000000
 #define DEG360 0x80000000
 
-std::string radtoangle(double angle,int unitp);
-std::string bintoangle(int angle,int unitp);
-double parseangle(std::string angstr,int unitp);
-int parseiangle(std::string angstr,int unitp);
+std::string radtoangle(double angle,int64_t unitp);
+std::string bintoangle(int angle,int64_t unitp);
+double parseangle(std::string angstr,int64_t unitp);
+int parseiangle(std::string angstr,int64_t unitp);
 /* If parseangle is passed a string containing a degree or minus sign, it interprets
  * the string as degrees even if unitp is GON. If the string contains 'g',
  * it interprets it as gons.
  */
-int parsesignedangle(std::string angstr,int unitp);
-int parseazimuth(std::string angstr,int unitp);
-int parsebearing(std::string angstr,int unitp);
+int parsesignedangle(std::string angstr,int64_t unitp);
+int parseazimuth(std::string angstr,int64_t unitp);
+int parsebearing(std::string angstr,int64_t unitp);
 
-#define DEGREE 0x0038ed00
-#define GON 0x00383000
-#define RADIAN 0x00381000
-#define SEXAG0 0x20
-#define SEXAG1 0x21
-#define SEXAG2 0x22
+#define DEGREE 0x0038effe0000
+#define ARCMINUTE 0x0038efff0000
+#define ARCSECOND 0x003801400000
+#define GON 0x003800c00000
+#define RADIAN 0x003800400000
+#define SEXAG0 0x260
+#define SEXAG1 0x261
+#define SEXAG2 0x262
 #define SEXAG0P1 0x24
 #define SEXAG1P1 0x25
 #define SEXAG2P1 0x26
