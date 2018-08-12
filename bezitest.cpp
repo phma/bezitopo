@@ -4195,7 +4195,7 @@ void testangleconv()
   tassert(strang=="-80°00′00″");
   strang=bintoangle(atan2i(2,1),DEGREE+SEXAG2);
   cout<<strang<<endl;
-  strang=bintoangle(atan2i(2,1),DEGREE+SEXAG2P2);
+  strang=bintoangle(atan2i(2,1),ARCSECOND+DEC2+FIXLARGER);
   cout<<strang<<endl;
   strang=bintoangle(atan2i(2,1),GON+DEC4);
   cout<<strang<<endl;
@@ -4219,7 +4219,7 @@ void testangleconv()
   wrangell0=parselatlong("143°52'11.5\"W 61°56'51\"N",DEGREE);
   cout<<formatlatlong(wrangell0,DEGREE+DEC5)<<endl;
   wrangell1=parselatlong("143.86986°W 61.9475°N",DEGREE);
-  cout<<formatlatlong(wrangell1,DEGREE+SEXAG2P2)<<endl;
+  cout<<formatlatlong(wrangell1,ARCSECOND+DEC2+FIXLARGER)<<endl;
   distance=dist(WGS84.geoc(wrangell0,0),WGS84.geoc(wrangell1,0));
   cout<<"Distance between DMS and decimal: "<<distance<<endl;
   tassert(distance<1);

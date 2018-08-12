@@ -88,12 +88,6 @@
 #define SEXAG0 0x260
 #define SEXAG1 0x261
 #define SEXAG2 0x262
-#define SEXAG0P1 0x24
-#define SEXAG1P1 0x25
-#define SEXAG2P1 0x26
-#define SEXAG0P2 0x28
-#define SEXAG1P2 0x29
-#define SEXAG2P2 0x2a
 #define FIXLARGER 0x2000
 #define INTERNATIONAL 0
 #define USSURVEY 1

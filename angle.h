@@ -75,6 +75,10 @@ int gontobin(double angle);
 int radtobin(double angle);
 double radtodeg(double angle);
 double degtorad(double angle);
+double radtomin(double angle);
+double mintorad(double angle);
+double radtosec(double angle);
+double sectorad(double angle);
 double radtogon(double angle);
 double gontorad(double angle);
 

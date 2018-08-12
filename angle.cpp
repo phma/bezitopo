@@ -210,6 +210,26 @@ double degtorad(double angle)
   return angle/180*M_PIl;
 }
 
+double radtomin(double angle)
+{
+  return angle*10800/M_PIl;
+}
+
+double mintorad(double angle)
+{
+  return angle/10800*M_PIl;
+}
+
+double radtosec(double angle)
+{
+  return angle*648000/M_PIl;
+}
+
+double sectorad(double angle)
+{
+  return angle/648000*M_PIl;
+}
+
 double radtogon(double angle)
 {
   return angle*200/M_PIl;
@@ -236,6 +256,14 @@ string radtoangle(double angle,int64_t unitp)
     case DEGREE:
       angmult=radtodeg(angle);
       unitsign="°";
+      break;
+    case ARCMINUTE:
+      angmult=radtomin(angle);
+      unitsign="′";
+      break;
+    case ARCSECOND:
+      angmult=radtosec(angle);
+      unitsign="″";
       break;
     case GON:
       angmult=radtogon(angle);

@@ -181,7 +181,7 @@ void scalefactorxy_i(string args)
 	{
 	  ll=chosenProjection->gridToLatlong(gridCoords);
 	  gridfactor=chosenProjection->scaleFactor(gridCoords);
-	  cout<<formatlatlong(ll,DEGREE+SEXAG2P2)<<"  "<<formatlatlong(ll,DEGREE+6)<<endl;
+	  cout<<formatlatlong(ll,ARCSECOND+DEC2+FIXLARGER)<<"  "<<formatlatlong(ll,DEGREE+6)<<endl;
 	  cout<<"Grid factor is "<<ldecimal(gridfactor)<<endl;
 	  if (!chosenProjection->in(ll))
 	    cout<<"Point is not in the projection's boundary\n";

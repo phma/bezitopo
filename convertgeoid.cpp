@@ -763,8 +763,8 @@ int main(int argc, char *argv[])
       {
         if (latFineness && lonFineness)
         {
-          cout<<"Latitude fineness "<<latFineness<<" ("<<radtoangle(M_PI/latFineness,DEGREE+SEXAG2P2)<<")\n";
-          cout<<"Longitude fineness "<<lonFineness<<" ("<<radtoangle(M_PI/lonFineness,DEGREE+SEXAG2P2)<<")\n";
+          cout<<"Latitude fineness "<<latFineness<<" ("<<radtoangle(M_PI/latFineness,ARCSECOND+DEC2+FIXLARGER)<<")\n";
+          cout<<"Longitude fineness "<<lonFineness<<" ("<<radtoangle(M_PI/lonFineness,ARCSECOND+DEC2+FIXLARGER)<<")\n";
           outputgeoid.glat->setbound(latticebound);
           outputgeoid.glat->setfineness(latFineness,lonFineness);
           outputgeoid.glat->setundula();
