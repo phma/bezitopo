@@ -57,6 +57,11 @@
 #define KILOGRAM 0x000200430000
 #define POUND 0x0002effd0000
 #define HOUR 0x0003effe0000
+#define DEGREE 0x0038effe0000
+#define ARCMINUTE 0x0038efff0000
+#define ARCSECOND 0x003801400000
+#define GON 0x003800c00000
+#define RADIAN 0x003800400000
 // These are physical quantity codes.
 #define LENGTH 0x000100000000
 #define MASS 0x000200000000
@@ -80,6 +85,15 @@
 #define EIGHTH 0x0003
 #define SIXTEENTH 0x0004
 #define THIRTYSECOND 0x0005
+#define SEXAG0 0x260
+#define SEXAG1 0x261
+#define SEXAG2 0x262
+#define SEXAG0P1 0x24
+#define SEXAG1P1 0x25
+#define SEXAG2P1 0x26
+#define SEXAG0P2 0x28
+#define SEXAG1P2 0x29
+#define SEXAG2P2 0x2a
 #define FIXLARGER 0x2000
 #define INTERNATIONAL 0
 #define USSURVEY 1

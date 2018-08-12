@@ -125,18 +125,4 @@ int parsesignedangle(std::string angstr,int64_t unitp);
 int parseazimuth(std::string angstr,int64_t unitp);
 int parsebearing(std::string angstr,int64_t unitp);
 
-#define DEGREE 0x0038effe0000
-#define ARCMINUTE 0x0038efff0000
-#define ARCSECOND 0x003801400000
-#define GON 0x003800c00000
-#define RADIAN 0x003800400000
-#define SEXAG0 0x260
-#define SEXAG1 0x261
-#define SEXAG2 0x262
-#define SEXAG0P1 0x24
-#define SEXAG1P1 0x25
-#define SEXAG2P1 0x26
-#define SEXAG0P2 0x28
-#define SEXAG1P2 0x29
-#define SEXAG2P2 0x2a
 #endif
