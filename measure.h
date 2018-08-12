@@ -106,6 +106,14 @@ inline bool sameUnit(int64_t unitp1,int64_t unitp2)
   return physicalUnit(unitp1)==physicalUnit(unitp2);
 }
 
+struct BasePrecision
+{
+  int notation; // 0=fixed; 1=scientific; 2=with larger units; 3=engineering
+  int base;
+  int power; // -1 means use precisionMagnitude
+};
+
+BasePrecision basePrecision(int64_t unitp);
 double precision(int64_t unitp);
 
 struct Measurement

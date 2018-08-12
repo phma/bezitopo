@@ -25,6 +25,7 @@
 #include <vector>
 #include "angle.h"
 #include "except.h"
+#include "measure.h"
 using namespace std;
 
 double sqr(double x)
@@ -225,23 +226,11 @@ string radtoangle(double angle,int64_t unitp)
   string ret,unitsign;
   char digit[8];
   int i,base,sign,dig;
+  BasePrecision basep;
   if (!compatibleUnits(unitp,ANGLE))
     throw badUnits;
-  base=unitp&0xf0;
-  switch (base)
-  {
-    case 0:
-      base=10;
-      break;
-    case 16:
-      base=2;
-      break;
-    case 32:
-      base=60;
-      break;
-    default:
-      base=0;
-  }
+  basep=basePrecision(unitp);
+  base=basep.base;
   switch (physicalUnit(unitp))
   {
     case DEGREE:
@@ -352,7 +341,7 @@ double parseangle(string angstr,int64_t unitp)
 	}
 	break;
     }
-  switch (unitp&0xffffff00)
+  switch (physicalUnit(unitp))
   {
     case DEGREE:
       angle=degtorad(angmult/prec);

@@ -165,6 +165,25 @@ unsigned short basecodes[][2]=
 };
 #define nbasecodes (sizeof(basecodes)/sizeof(basecodes[0]))
 
+BasePrecision basePrecision(int64_t unitp)
+{
+  BasePrecision ret;
+  int exp,basecode,i;
+  ret.notation=(unitp&0xf000)>>12;
+  basecode=unitp&0xfff;
+  for (i=0;i<nbasecodes;i++)
+  {
+    if (basecodes[i][1]<=basecode)
+    {
+      ret.base=basecodes[i][0];
+      ret.power=basecode-basecodes[i][1];
+    }
+    if (basecodes[i][1]==basecode+1)
+      ret.power=-1;
+  }
+  return ret;
+}
+
 double precision(int64_t unitp)
 /* Returns the precision (>=1) of unitp.
    180 1
@@ -185,7 +204,7 @@ double precision(int64_t unitp)
 {
   double base,p;
   int exp,basecode,i;
-  basecode=unitp&0xffff;
+  basecode=unitp&0xfff; // Nybble 0xf000 indicates whether to use bigger units
   for (i=0;i<nbasecodes;i++)
     if (basecodes[i][1]<=basecode)
     {
