@@ -69,6 +69,7 @@ cf cfactors[]=
   HOUR,		3600,			// hour
   RADIAN,	1,
   DEGREE,	M_PI/180,
+  GON,		M_PI/200,
   ARCMINUTE,	M_PI/10800,
   ARCSECOND,	M_PI/648000,
 };
@@ -100,6 +101,7 @@ symbol symbols[]=
   POUND,	"lb",
   RADIAN,	"rad",
   DEGREE,	"°",
+  GON,		"gon",
   ARCMINUTE,	"′",
   ARCSECOND,	"″",
 };
@@ -424,7 +426,7 @@ int Measure::findPrecision(int64_t unit,double magnitude)
     unit=findUnit(unit);
   if (magnitude<=0)
     magnitude=defaultPrecision[physicalQuantity(unit)];
-  factor=conversionFactors[unit];
+  factor=conversionFactors[physicalUnit(unit)];
   if (factor<=0 || std::isnan(factor) || std::isinf(factor))
     factor=1;
   ret=rint(log10(factor/magnitude));
@@ -468,7 +470,7 @@ string Measure::formatMeasurement(double measurement,int64_t unit,double unitMag
     format.resize(len+1);
     len=snprintf(&format[0],format.size(),"%%.%df",prec);
   }
-  m=measurement/conversionFactors[unit];
+  m=measurement/conversionFactors[physicalUnit(unit)];
   if (localized)
     setlocale(LC_NUMERIC,saveLcNumeric.c_str());
   output.resize(8);
@@ -489,7 +491,7 @@ string Measure::formatMeasurementUnit(double measurement,int64_t unit,double uni
   string unitSymbol;
   if ((unit&0xffff)==0)
     unit=findUnit(unit,unitMagnitude);
-  if (unit==DEGREE || unit==ARCMINUTE || unit==ARCSECOND)
+  if (sameUnit(unit,DEGREE) || sameUnit(unit,ARCMINUTE) || sameUnit(unit,ARCSECOND))
     space=false;
   unitSymbol=symbol(unit);
   if (space)
