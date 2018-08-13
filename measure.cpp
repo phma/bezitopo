@@ -348,7 +348,9 @@ void Measure::localize(bool loc)
 
 void Measure::setMetric()
 {
-  clearUnits();
+  clearUnits(LENGTH);
+  clearUnits(AREA);
+  clearUnits(MASS);
   addUnit(MILLIMETER);
   addUnit(METER);
   addUnit(KILOMETER);
@@ -360,7 +362,9 @@ void Measure::setMetric()
 
 void Measure::setCustomary()
 {
-  clearUnits();
+  clearUnits(LENGTH);
+  clearUnits(AREA);
+  clearUnits(MASS);
   addUnit(FOOT);
   addUnit(CHAIN);
   addUnit(MILE);
