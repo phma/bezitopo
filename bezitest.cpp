@@ -3035,6 +3035,7 @@ void testmeasure()
   meas.addUnit(KILOGRAM);
   meas.setDefaultUnit(LENGTH,0.552); // geometric mean of meter and foot
   meas.setDefaultPrecision(LENGTH,1.746e-3); // g.m. of 1 mm and 0.01 ft
+  meas.setDefaultPrecision(ANGLE,1.57e-10); // 1 mm in a radian of earth
   meas.setDefaultUnit(MASS,0.6735);
   tassert(meas.findUnit(LENGTH)==METER);
   tassert(meas.findUnit(MASS)==KILOGRAM);
@@ -3047,6 +3048,9 @@ void testmeasure()
   meas.addUnit(FOOT);
   meas.addUnit(CHAIN);
   meas.addUnit(POUND);
+  meas.addUnit(DEGREE);
+  meas.addUnit(GON);
+  meas.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
   tassert(meas.findUnit(LENGTH)==FOOT);
   tassert(meas.findUnit(MASS)==POUND);
   tassert(meas.findPrecision(LENGTH)==2);
@@ -3054,9 +3058,12 @@ void testmeasure()
   cout<<"In international feet, easting is "<<measStr<<endl;
   tassert(measStr=="1455432.60 ft");
   meas.setFoot(USSURVEY);
+  meas.setDefaultUnit(ANGLE,0.017);
   measStr=meas.formatMeasurementUnit(easting,LENGTH);
   cout<<"In US survey feet, easting is "<<measStr<<endl;
   tassert(measStr=="1455429.69 ft");
+  measStr=meas.formatMeasurementUnit(longitude,ANGLE);
+  cout<<"In degrees, longitude is "<<measStr<<endl;
   parsed=meas.parseMeasurement("20.61408379530502663289",LENGTH);
   cout<<parsed.magnitude<<" m\n";
   tassert(fabs(parsed.magnitude-2*M_PI)<1e-8);

@@ -470,9 +470,16 @@ string Measure::formatMeasurement(double measurement,int64_t unit,double unitMag
 
 string Measure::formatMeasurementUnit(double measurement,int64_t unit,double unitMagnitude,double precisionMagnitude)
 {
+  bool space=true;
+  string unitSymbol;
   if ((unit&0xffff)==0)
     unit=findUnit(unit,unitMagnitude);
-  return formatMeasurement(measurement,unit,unitMagnitude,precisionMagnitude)+' '+symbol(unit);
+  if (unit==DEGREE || unit==ARCMINUTE || unit==ARCSECOND)
+    space=false;
+  unitSymbol=symbol(unit);
+  if (space)
+    unitSymbol=' '+unitSymbol;
+  return formatMeasurement(measurement,unit,unitMagnitude,precisionMagnitude)+unitSymbol;
 }
 
 Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
