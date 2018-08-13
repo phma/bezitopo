@@ -92,14 +92,17 @@
 #define DEC4 0x0284
 #define DEC5 0x0285
 #define DEC6 0x0286
+#define DECIMAL 0x02bf
 #define HALF 0x0101
 #define QUARTER 0x0102
 #define EIGHTH 0x0103
 #define SIXTEENTH 0x0104
 #define THIRTYSECOND 0x0105
+#define BINARY 0x01ff
 #define SEXAG0 0x360
 #define SEXAG1 0x361
 #define SEXAG2 0x362
+#define SEXAGESIMAL 0x037f
 #define FIXLARGER 0x2000
 #define INTERNATIONAL 0
 #define USSURVEY 1
