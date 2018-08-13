@@ -230,14 +230,45 @@ int64_t moreprecise(int64_t unitp1,int64_t unitp2)
 /* Given two unitp codes, returns the more precise. If one of them has no
    conversion factor, or they are of different quantities, it still returns
    one of them, but which one may not make sense. */
-{double factor1,factor2;
- factor1=cfactor(unitp1)/precision(unitp1);
- factor2=cfactor(unitp2)/precision(unitp2);
- if (factor1<factor2)
+{
+  double factor1,factor2;
+  factor1=cfactor(unitp1)/precision(unitp1);
+  factor2=cfactor(unitp2)/precision(unitp2);
+  if (factor1<factor2)
     return unitp1;
- else
+  else
     return unitp2;
- }
+}
+
+vector<int> largerUnitFactors(int64_t unitp)
+{
+  vector<int> ret;
+  unitp=physicalUnit(unitp);
+  switch (unitp)
+  {
+    case ARCSECOND:
+      ret.push_back(60);
+    case ARCMINUTE:
+      ret.push_back(60);
+      break;
+  }
+  return ret;
+}
+
+vector<string> largerUnitSymbols(int64_t unitp)
+{
+  vector<string> ret;
+  unitp=physicalUnit(unitp);
+  switch (unitp)
+  {
+    case ARCSECOND:
+      ret.push_back("″");
+    case ARCMINUTE:
+      ret.push_back("′");
+      break;
+  }
+  return ret;
+}
 
 void trim(string &str)
 {
