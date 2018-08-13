@@ -153,7 +153,7 @@ public:
   int getFoot();
   void addUnit(int64_t unit);
   void removeUnit(int64_t unit);
-  void clearUnits();
+  void clearUnits(int64_t quantity=0);
   void localize(bool loc);
   void setMetric();
   void setCustomary();

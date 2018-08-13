@@ -315,14 +315,25 @@ void Measure::removeUnit(int64_t unit)
   if (found+1)
   {
     if (found+1<availableUnits.size())
-      swap(availableUnits[i],availableUnits.back());
+      swap(availableUnits[found],availableUnits.back());
     availableUnits.resize(availableUnits.size()-1);
   }
 }
 
-void Measure::clearUnits()
+void Measure::clearUnits(int64_t quantity)
 {
-  availableUnits.clear();
+  int i;
+  vector<int> found;
+  for (i=availableUnits.size()-1;i>=0;i--)
+    if (quantity==0 || compatibleUnits(availableUnits[i],quantity))
+      found.push_back(i);
+  for (i=0;i<found.size();i++)
+  {
+    if (found[i]+1<availableUnits.size())
+      swap(availableUnits[found[i]],availableUnits.back());
+    availableUnits.resize(availableUnits.size()-1);
+  }
+  availableUnits.shrink_to_fit();
 }
 
 void Measure::localize(bool loc)
