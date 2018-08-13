@@ -67,6 +67,10 @@ cf cfactors[]=
   KILOGRAM,	1.0,			// kg
   POUND,	0.45359237,		// lb
   HOUR,		3600,			// hour
+  RADIAN,	1,
+  DEGREE,	M_PI/180,
+  ARCMINUTE,	M_PI/10800,
+  ARCSECOND,	M_PI/648000,
 };
 #define nunits (sizeof(cfactors)/sizeof(struct cf))
 struct symbol
@@ -94,6 +98,10 @@ symbol symbols[]=
   GRAM,		"g",
   KILOGRAM,	"kg",
   POUND,	"lb",
+  RADIAN,	"rad",
+  DEGREE,	"°",
+  ARCMINUTE,	"′",
+  ARCSECOND,	"″",
 };
 #define nsymbols (sizeof(symbols)/sizeof(struct symbol))
 
@@ -153,15 +161,15 @@ char *collapse(char *str)
 
 unsigned short basecodes[][2]=
 {
-  { 2,0x000},
-  { 6,0x100},
-  { 8,0x140},
-  {10,0x180},
-  {12,0x1c0},
-  {16,0x200},
-  {20,0x240},
-  {60,0x260},
-  { 0,0x280}
+  { 2,0x100},
+  { 6,0x200},
+  { 8,0x240},
+  {10,0x280},
+  {12,0x2c0},
+  {16,0x300},
+  {20,0x340},
+  {60,0x360},
+  { 0,0x380}
 };
 #define nbasecodes (sizeof(basecodes)/sizeof(basecodes[0]))
 
@@ -186,20 +194,20 @@ BasePrecision basePrecision(int64_t unitp)
 
 double precision(int64_t unitp)
 /* Returns the precision (>=1) of unitp.
-   180 1
-   181 10
-   182 100
+   280 1
+   281 10
+   282 100
    ...
-   18f 1000000000000000
-   000 1
-   001 2
-   002 4
+   28f 1000000000000000
+   100 1
+   101 2
+   102 4
    ...
-   00f 32768
-   260 1
-   261 60
-   262 3600
-   262 216000
+   10f 32768
+   360 1
+   361 60
+   362 3600
+   362 216000
    */
 {
   double base,p;

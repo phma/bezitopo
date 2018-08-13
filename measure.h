@@ -57,37 +57,49 @@
 #define KILOGRAM 0x000200430000
 #define POUND 0x0002effd0000
 #define HOUR 0x0003effe0000
-#define DEGREE 0x0038effe0000
-#define ARCMINUTE 0x0038efff0000
-#define ARCSECOND 0x003801400000
-#define GON 0x003800c00000
-#define RADIAN 0x003800400000
-// These are physical quantity codes.
+#define DEGREE 0x0020effe0000
+#define ARCMINUTE 0x0020efff0000
+#define ARCSECOND 0x002001400000
+#define GON 0x002000c00000
+#define RADIAN 0x002000400000
+#define DEGREE_B 0x0038effe0000
+#define ARCMINUTE_B 0x0038efff0000
+#define ARCSECOND_B 0x003801400000
+#define GON_B 0x003800c00000
+#define RADIAN_B 0x003800400000
+/* These are physical quantity codes.
+ * ANGLE is used when the angle is in radians (latitude and longitude, except
+ * in geolattices); ANGLE_B is used when it's in fixed-point binary (bearings,
+ * angles turned with a total station, bounds of geolattices, and areas of
+ * the earth). Areas of the earth should really be 0x0021..., but the angle
+ * excess of a spherical polygon is equal to its area.
+ */
 #define LENGTH 0x000100000000
 #define MASS 0x000200000000
 #define AREA 0x002700000000
 #define VOLUME 0x002800000000
-#define ANGLE 0x003800000000
+#define ANGLE 0x002000000000
+#define ANGLE_B 0x003800000000
 /* These are precision codes. DEC3 = 3 digits after the decimal point.
  * FIXLARGER means that it's in fixed point with larger units, e.g.
  * ARCSECOND+FIXLARGER+DEC3 means degrees, minutes, and seconds with
  * three decimal places.
  */
-#define DEC0 0x0180
-#define DEC1 0x0181
-#define DEC2 0x0182
-#define DEC3 0x0183
-#define DEC4 0x0184
-#define DEC5 0x0185
-#define DEC6 0x0186
-#define HALF 0x0001
-#define QUARTER 0x0002
-#define EIGHTH 0x0003
-#define SIXTEENTH 0x0004
-#define THIRTYSECOND 0x0005
-#define SEXAG0 0x260
-#define SEXAG1 0x261
-#define SEXAG2 0x262
+#define DEC0 0x0280
+#define DEC1 0x0281
+#define DEC2 0x0282
+#define DEC3 0x0283
+#define DEC4 0x0284
+#define DEC5 0x0285
+#define DEC6 0x0286
+#define HALF 0x0101
+#define QUARTER 0x0102
+#define EIGHTH 0x0103
+#define SIXTEENTH 0x0104
+#define THIRTYSECOND 0x0105
+#define SEXAG0 0x360
+#define SEXAG1 0x361
+#define SEXAG2 0x362
 #define FIXLARGER 0x2000
 #define INTERNATIONAL 0
 #define USSURVEY 1

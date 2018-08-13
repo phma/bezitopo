@@ -3027,6 +3027,7 @@ void testmeasure()
   Measurement parsed;
   string measStr;
   double easting=443615.85705156205; // of point H, an EIR in Independence Park
+  double longitude=-1.42977054329272687479; // of OAKLAND, a benchmark
   meas.addUnit(KILOMETER);
   meas.addUnit(METER);
   meas.addUnit(MILLIMETER);
