@@ -60,6 +60,11 @@ void criterion::writeXml(ostream &ofile)
   ofile<<"\"/>"<<endl;
 }
 
+pointlist::pointlist()
+{
+  initStlTable();
+}
+
 void pointlist::clear()
 {
   contours.clear();

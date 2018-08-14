@@ -35,6 +35,8 @@
 
 class pointlist;
 
+void initStlTable();
+
 class edge
 {
 public:

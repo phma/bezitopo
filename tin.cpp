@@ -44,7 +44,20 @@ using std::multimap;
 using std::vector;
 using namespace std;
 
-int stltable[240];
+vector<int> stltable;
+
+void initStlTable()
+{
+  int i;
+  if (stltable.size()!=240)
+  {
+    stltable.clear();
+    for (i=1;i<=259200;i++)
+      if (259200%i==0 && smooth5(i))
+	stltable.push_back(i);
+    stltable.shrink_to_fit();
+  }
+}
 
 edge::edge()
 {

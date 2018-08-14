@@ -89,6 +89,7 @@ public:
    * 3: both are valid (you just made a TIN, or you just saved breaklines to a file).
    */
   qindex qinx;
+  pointlist();
   void addpoint(int numb,point pnt,bool overwrite=false);
   void clear();
   int size();
