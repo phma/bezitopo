@@ -113,6 +113,7 @@ public:
   void readBreaklines(std::string filename);
   std::string hitTestString(triangleHit hit);
   std::string hitTestPointString(xy pnt,double radius);
+  void addIfIn(triangle *t,std::set<triangle *> &addenda,xy pnt,double radius);
   void setLocalSets(xy pnt,double radius);
   virtual void writeXml(std::ofstream &ofile);
   // the following methods are in tin.cpp

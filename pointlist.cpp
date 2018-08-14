@@ -586,6 +586,12 @@ string pointlist::hitTestPointString(xy pnt,double radius)
   return ret;
 }
 
+void pointlist::addIfIn(triangle *t,set<triangle *> &addenda,xy pnt,double radius)
+{
+  if (t && !localTriangles.count(t) && t->inCircle(pnt,radius))
+    addenda.insert(t);
+}
+
 void pointlist::setLocalSets(xy pnt,double radius)
 /* If the sets are set to {nullptr}, this means one of two things:
  * • The area in the window is too large; it would be faster to loop through
@@ -599,6 +605,7 @@ void pointlist::setLocalSets(xy pnt,double radius)
   set<triangle *>::iterator k;
   int n;
   vector<edge *> pointEdges;
+  set<triangle *> addenda;
   localTriangles.clear();
   localEdges.clear();
   localPoints.clear();
@@ -614,6 +621,18 @@ void pointlist::setLocalSets(xy pnt,double radius)
   }
   else
   {
+    do
+    {
+      addenda.clear();
+      for (k=localTriangles.begin();k!=localTriangles.end();++k)
+      {
+	addIfIn((*k)->aneigh,addenda,pnt,radius);
+	addIfIn((*k)->bneigh,addenda,pnt,radius);
+	addIfIn((*k)->cneigh,addenda,pnt,radius);
+      }
+      for (k=addenda.begin();k!=addenda.end();++k)
+	localTriangles.insert(*k);
+    } while (addenda.size());
     for (k=localTriangles.begin();k!=localTriangles.end();++k)
     {
       localPoints.insert((*k)->a);
