@@ -35,7 +35,7 @@ public slots:
 signals:
 protected:
 private:
-  int myUnit;
+  int64_t myUnit;
   int myFoot;
 };
 #endif
