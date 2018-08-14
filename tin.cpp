@@ -49,11 +49,11 @@ vector<int> stltable;
 void initStlTable()
 {
   int i;
-  if (stltable.size()!=240)
+  if (stltable.size()!=216)
   {
     stltable.clear();
-    for (i=1;i<=259200;i++)
-      if (259200%i==0 && smooth5(i))
+    for (i=1;i<=7776000;i++)
+      if (7776000%i==0 && smooth5(i))
 	stltable.push_back(i);
     stltable.shrink_to_fit();
   }
@@ -436,8 +436,9 @@ void edge::stlSplit(double maxError)
   if (thisSeg.accel(length())>maxAccel)
     maxAccel=thisSeg.accel(length());
   error=sqr(length())*maxAccel/4;
-  for (stlsplit=0;error>maxError;stlsplit++)
-    error/=4;
+  for (stlmin=0;stlmin<216 && error>maxError*sqr(stltable[stlmin]);stlmin++);
+  if (stlmin==216)
+    stlmin--;
 }
 
 bool goodcenter(xy a,xy b,xy c,xy d)

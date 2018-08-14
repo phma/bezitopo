@@ -60,9 +60,9 @@ public:
    * the next contour of the same elevation. When you go to the next elevation,
    * clear the flags.
    */
-  char stlmin;
+  unsigned char stlmin;
   // Code for the minimum number of pieces this edge must be split into.
-  char stlsplit;
+  unsigned char stlsplit;
   /* Smooth number code of the number of pieces this edge is split into
    * when writing an STL file.
    */
