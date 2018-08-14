@@ -25,6 +25,7 @@
 #include <cassert>
 #include "config.h"
 #include "sourcegeoid.h"
+#include "smooth5.h"
 #include "binio.h"
 #include "bicubic.h"
 #include "manysum.h"
@@ -82,47 +83,6 @@ void writebindouble(ostream &file,double f)
     writebedouble(file,f);
   else
     writeledouble(file,f);
-}
-
-bool smooth5(unsigned n)
-/* Used for deciding the number of divisions of a circle in a lat-long grid.
- * This is in practice always a 5-smooth number, such as 21600.
- * 21600 (1 arc minute) is between 20736 and 21870.
- * 1440 (1/4 degree, 1 time minute) is between 1350 and 1458.
- * The finest division that may be specified is 0.4 second of arc. The
- * coarsest that may not be used is 0.3955 second (180°/1638400), which is
- * too close to 0.3951 (180°/1640250). Between those two, the criterion is
- * 660 (0.3983 second).
- */
-{
-  if (n==0)
-    n=7; // 0 is not smooth, as it is divisible by all primes. It also cannot be the number of divisions.
-  while ((n%2)==0)
-    n/=2;
-  while ((n%3)==0)
-    n/=3;
-  while ((n%5)==0)
-    n/=5;
-  return n==1;
-}
-
-unsigned nearestSmooth(unsigned n)
-{
-  unsigned ub,lb;
-  if (n>4271484375)
-    n=4271484375;
-  if (n==0)
-    n=1;
-  ub=lb=n;
-  while (!smooth5(ub))
-    ub++;
-  while (!smooth5(lb))
-    lb--;
-  if (sqr(n)>(double)ub*lb)
-    n=ub;
-  else
-    n=lb;
-  return n;
 }
 
 string readword(istream &file)

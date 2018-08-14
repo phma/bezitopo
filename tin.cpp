@@ -32,6 +32,7 @@
 #include "ldecimal.h"
 #include "manysum.h"
 #include "random.h"
+#include "smooth5.h"
 #include "relprime.h"
 
 #define THR 16777216
@@ -42,6 +43,8 @@ using std::map;
 using std::multimap;
 using std::vector;
 using namespace std;
+
+int stltable[240];
 
 edge::edge()
 {

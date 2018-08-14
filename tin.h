@@ -3,7 +3,7 @@
 /* tin.h - triangulated irregular network             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2015-2017 Pierre Abbat.
+/* Copyright 2012,2013,2015-2018 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -58,8 +58,10 @@ public:
    * the next contour of the same elevation. When you go to the next elevation,
    * clear the flags.
    */
+  char stlmin;
+  // Code for the minimum number of pieces this edge must be split into.
   char stlsplit;
-  /* Log base 2 of the number of pieces this edge is split into
+  /* Smooth number code of the number of pieces this edge is split into
    * when writing an STL file.
    */
   short flipcnt;

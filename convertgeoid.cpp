@@ -35,6 +35,7 @@
 #include "latlong.h"
 #include "halton.h"
 #include "kml.h"
+#include "smooth5.h"
 using namespace std;
 
 document doc;

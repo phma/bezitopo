@@ -85,6 +85,7 @@
 #include "zoom.h"
 #include "manyarc.h"
 #include "leastsquares.h"
+#include "smooth5.h"
 
 #define psoutput true
 // affects only maketin
