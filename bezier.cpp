@@ -206,12 +206,40 @@ void triangle::setgradmat()
 }
 
 bool triangle::in(xy pnt)
-{return area3(pnt,*b,*c)>=0 && area3(*a,pnt,*c)>=0 && area3(*a,*b,pnt)>=0;
- }
+{
+  return area3(pnt,*b,*c)>=0 && area3(*a,pnt,*c)>=0 && area3(*a,*b,pnt)>=0;
+}
 
 xy triangle::centroid()
-{return (xy(*a)+xy(*b)+xy(*c))/3; //FIXME: check if this affects numerical stability
- }
+{
+  return (xy(*a)+xy(*b)+xy(*c))/3; //FIXME: check if this affects numerical stability
+}
+
+bool triangle::inCircle(xy pnt,double radius)
+/* Quick and dirty test used to fill in missing triangles in localTriangles.
+ * Likely misses a triangle if pnt is out one corner and the circle passes
+ * between that corner and the centroid. May return false positives.
+ */
+{
+  int ba=dir(*a,pnt);
+  int bb=dir(*b,pnt);
+  int bc=dir(*c,pnt);
+  int suba=abs(foldangle(bb-bc));
+  int subb=abs(foldangle(bc-ba));
+  int subc=abs(foldangle(ba-bb));
+  int maxsub;
+  if (foldangle(suba+subb+subc))
+  {
+    maxsub=suba;
+    if (subb>maxsub)
+      maxsub=subb;
+    if (subc>maxsub)
+      maxsub=subc;
+    return coshalf(maxsub)*dist(pnt,centroid())<radius;
+  }
+  else
+    return true; // total subtended angle == 360°, pnt is inside triangle
+}
 
 void triangle::setcentercp()
 {

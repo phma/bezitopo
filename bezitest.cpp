@@ -2944,6 +2944,7 @@ void testtriangle()
   triangle tri;
   double elev,elevd,elevg,eleva;
   xy o(0,0),a(1,0),d(-0.5,0),g(0.5,0);
+  xy h(-5,0),j(-1,0);
   doc.pl[0].clear();
   // Start with an identically 0 surface. The elevation at the center should be 0.
   doc.pl[0].addpoint(1,point(1,0,0,"eip"));
@@ -3020,6 +3021,9 @@ void testtriangle()
 #endif
   tassert(abs(elevd-elev*3+elevg*3-eleva)<1e-7);
   tassert(abs(elev-1)<1e-7);
+  tassert(tri.inCircle(o,0.1));
+  tassert(tri.inCircle(j,0.51));
+  tassert(!tri.inCircle(h,1));
 }
 
 void testmeasure()
