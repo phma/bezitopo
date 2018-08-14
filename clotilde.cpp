@@ -1,0 +1,47 @@
+/******************************************************/
+/*                                                    */
+/* clotilde.cpp - tables of approximations to spirals */
+/*                                                    */
+/******************************************************/
+/* Copyright 2018 Pierre Abbat.
+ * This file is part of Bezitopo.
+ * 
+ * Bezitopo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Bezitopo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
+ */
+/* This program is named Clotilde for similarity to "clotoide", the Spanish
+ * word for the Euler spiral.
+ */
+#include "manyarc.h"
+using namespace std;
+vector<string> args;
+
+/* Ways to specify the spiralarc to be approximated:
+ * • Start radius, end radius, arc length
+ * • Start curvature, end curvature, arc length
+ * • Start radius, end radius, chord length
+ * • Start curvature, end curvature, chord length
+ * Curvature may be specified in diopters or degrees; if in degrees, the length
+ * is assumed to be 100 unless otherwise specified.
+ */
+int main(int argc, char *argv[])
+{
+  int i;
+  spiralarc s;
+  spiralarc trans(xyz(0,0,0),0,0.003,xyz(500,0,0));
+  polyarc approx;
+  for (i=1;i<argc;i++)
+    args.push_back(argv[i]);
+  approx=manyArc(trans,5);
+  return 0;
+}

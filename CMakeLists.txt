@@ -91,6 +91,15 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                random.cpp raster.cpp refinegeoid.cpp relprime.cpp rootfind.cpp
                segment.cpp smooth5.cpp sourcegeoid.cpp spiral.cpp spolygon.cpp
                stl.cpp test.cpp textfile.cpp tin.cpp vball.cpp vcurve.cpp zoom.cpp)
+add_executable(clotilde angle.cpp arc.cpp bezier.cpp
+	       bezier3d.cpp binio.cpp breakline.cpp boundrect.cpp clotilde.cpp cogo.cpp
+	       cogospiral.cpp contour.cpp csv.cpp drawobj.cpp
+               ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
+               intloop.cpp latlong.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp 
+	       matrix.cpp measure.cpp minquad.cpp point.cpp pointlist.cpp polyline.cpp
+	       projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
+	       rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
+	       tin.cpp vball.cpp vcurve.cpp)
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
                binio.cpp boundrect.cpp breakline.cpp cogo.cpp contour.cpp
                convertgeoid.cpp csv.cpp document.cpp drawobj.cpp
@@ -131,6 +140,7 @@ target_link_libraries(bezilib0 Qt5::Widgets Qt5::Core)
 target_link_libraries(bezilib1 Qt5::Widgets Qt5::Core)
 target_link_libraries(bezitopo Qt5::Widgets Qt5::Core)
 target_link_libraries(bezitest Qt5::Widgets Qt5::Core)
+target_link_libraries(clotilde Qt5::Widgets Qt5::Core)
 target_link_libraries(convertgeoid Qt5::Widgets Qt5::Core)
 target_link_libraries(viewtin Qt5::Widgets Qt5::Core)
 target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)
