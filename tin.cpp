@@ -1172,42 +1172,67 @@ void pointlist::triangulatePolygon(vector<point *> poly)
  * if not simply connected.
  */
 {
-  int h,i,j,a,b,c,sz=poly.size(),ba,bb,bc;
+  int h,i,j,a,b,c,ai,bi,ci,sz=poly.size(),ba,bb,bc;
   vector<point *> subpoly;
+  vector<double> coords;
+  multimap<double,int> outwardMap;
+  vector<int> outwardVec;
+  multimap<double,int>::iterator k;
+  double xmean,ymean;
+  xy mean;
   bool found=false;
   triangle newtri;
-  for (h=sz-relprime(sz);sz>2 && h && !found;h=(h>1)?relprime(h):0)
-    for (a=j=0;j<sz && !found;j++,a=(a+(found?0:relprime(sz)))%sz)
-    {
-      b=(a+h)%sz;
-      c=(b+h)%sz;
-      ba=dir(xy(*poly[b]),xy(*poly[c]));
-      bb=dir(xy(*poly[c]),xy(*poly[a]));
-      bc=dir(xy(*poly[a]),xy(*poly[b]));
-      if (area3(*poly[a],*poly[b],*poly[c])<=0 ||
-	  abs(foldangle(ba-bb+DEG180))<2 ||
-	  abs(foldangle(bb-bc+DEG180))<2 ||
-	  abs(foldangle(bc-ba+DEG180))<2)
-	continue;
-      found=true;
-      for (i=0;found && i<sz;i++)
+  for (i=0;i<sz;i++)
+    coords.push_back(poly[i]->getx());
+  xmean=pairwisesum(coords);
+  coords.clear();
+  for (i=0;i<sz;i++)
+    coords.push_back(poly[i]->gety());
+  ymean=pairwisesum(coords);
+  coords.clear();
+  mean=xy(xmean,ymean);
+  for (i=0;i<sz;i++)
+    outwardMap.insert(pair<double,int>(dist(mean,*poly[i]),i));
+  for (k=outwardMap.begin();k!=outwardMap.end();++k)
+    outwardVec.push_back(k->second);
+  outwardMap.clear();
+  assert(outwardVec.size()==sz);
+  for (ai=0;ai<sz && !found;ai++)
+    for (bi=0;bi<ai && !found;bi++)
+      for (ci=0;ci<bi && !found;ci++)
       {
-	if (i!=a && i!=b && i!=c)
+	a=outwardVec[ai];
+	b=outwardVec[bi];
+	c=outwardVec[ci];
+	if ((b+sz-a)%sz+(c+sz-b)%sz>sz)
+	  swap(b,c);
+	ba=dir(xy(*poly[b]),xy(*poly[c]));
+	bb=dir(xy(*poly[c]),xy(*poly[a]));
+	bc=dir(xy(*poly[a]),xy(*poly[b]));
+	if (area3(*poly[a],*poly[b],*poly[c])<=0 ||
+	    abs(foldangle(ba-bb+DEG180))<2 ||
+	    abs(foldangle(bb-bc+DEG180))<2 ||
+	    abs(foldangle(bc-ba+DEG180))<2)
+	  continue;
+	found=true;
+	for (i=0;found && i<sz;i++)
 	{
-	  if (in3(*poly[i],*poly[a],*poly[b],*poly[c]))
-	    found=false;
-	  ba=dir(xy(*poly[i]),xy(*poly[a]));
-	  bb=dir(xy(*poly[i]),xy(*poly[b]));
-	  bc=dir(xy(*poly[i]),xy(*poly[c]));
-	  if (abs(foldangle(ba-bb+DEG180))<2 ||
-	      abs(foldangle(bb-bc+DEG180))<2 ||
-	      abs(foldangle(bc-ba+DEG180))<2)
+	  if (i!=a && i!=b && i!=c)
+	  {
+	    if (in3(*poly[i],*poly[a],*poly[b],*poly[c]))
+	      found=false;
+	    ba=dir(xy(*poly[i]),xy(*poly[a]));
+	    bb=dir(xy(*poly[i]),xy(*poly[b]));
+	    bc=dir(xy(*poly[i]),xy(*poly[c]));
+	    if (abs(foldangle(ba-bb+DEG180))<2 ||
+		abs(foldangle(bb-bc+DEG180))<2 ||
+		abs(foldangle(bc-ba+DEG180))<2)
+	      found=false;
+	  }
+	  if (crossTriangle(*poly[i],*poly[(i+1)%sz],*poly[a],*poly[b],*poly[c]))
 	    found=false;
 	}
-	if (crossTriangle(*poly[i],*poly[(i+1)%sz],*poly[a],*poly[b],*poly[c]))
-	  found=false;
       }
-    }
   if (found)
   {
     newtri.a=poly[a];
