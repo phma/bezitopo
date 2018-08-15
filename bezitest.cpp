@@ -1093,7 +1093,7 @@ void test1tripolygon(int points,int petals,PostScript &ps)
 
 #define EHF 89
 /* 89, normally, or 1597, to test filling in big loops.
- * It should be a Fibonacci number not divisible by 3.
+ * It should be a Fibonacci number not divisible by 2 or 3.
  */
 void testehcycloid(PostScript &ps)
 /* Makes a TIN out of 178 triangles between an epicycloid and a hypocycloid
@@ -1145,10 +1145,10 @@ void testehcycloid(PostScript &ps)
   for (i=0;i<holes.size();i++)
   {
     loop1=holes[i];
-    ps.startline();
+    /*ps.startline();
     for (j=0;j<loop1.size();j++)
       ps.lineto(doc.pl[1].points[loop1[j]]);
-    ps.endline(true);
+    ps.endline(true);*/
   }
   tassert(doc.pl[1].checkTinConsistency());
   cout<<doc.pl[1].edges.size()<<" edges "<<doc.pl[1].convexHull().size()<<" points in convex hull\n";
