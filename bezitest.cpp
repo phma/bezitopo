@@ -1151,6 +1151,11 @@ void testehcycloid(PostScript &ps)
     ps.endline(true);
   }
   tassert(doc.pl[1].checkTinConsistency());
+  cout<<doc.pl[1].edges.size()<<" edges "<<doc.pl[1].convexHull().size()<<" points in convex hull\n";
+  /* 493 edges 38 points in convex hull; 493-4*89-38=99
+   * Four regions to fill in: 89, 19, 19, 19
+   * Edges needed to fill them in: 86+17+17+17
+   */
   ps.endpage();
 }
 
