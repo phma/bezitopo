@@ -1172,14 +1172,14 @@ void pointlist::triangulatePolygon(vector<point *> poly)
  * if not simply connected.
  */
 {
-  int h,i,j,a,b,c,ai,bi,ci,sz=poly.size(),ba,bb,bc;
+  int h,i,j,a,b,c,ai,bi,ci,sz=poly.size(),ba,bb,bc,isInside;
   vector<point *> subpoly;
   vector<double> coords;
   multimap<double,int> outwardMap;
   vector<int> outwardVec;
   multimap<double,int>::iterator k;
   double xmean,ymean;
-  xy mean;
+  xy startpnt;
   bool found=false;
   triangle newtri;
   for (i=0;i<sz;i++)
@@ -1190,9 +1190,17 @@ void pointlist::triangulatePolygon(vector<point *> poly)
     coords.push_back(poly[i]->gety());
   ymean=pairwisesum(coords);
   coords.clear();
-  mean=xy(xmean,ymean);
+  startpnt=xy(xmean,ymean);
+  while (true)
+  {
+    for (isInside=i=0;i<sz;i++)
+      isInside+=foldangle(dir(startpnt,*poly[(i+1)%sz])-dir(startpnt,*poly[i]));
+    if (isInside)
+      break;
+    startpnt=(startpnt+*poly[rng.usrandom()%sz])/2;
+  }
   for (i=0;i<sz;i++)
-    outwardMap.insert(pair<double,int>(dist(mean,*poly[i]),i));
+    outwardMap.insert(pair<double,int>(dist(startpnt,*poly[i]),i));
   for (k=outwardMap.begin();k!=outwardMap.end();++k)
     outwardVec.push_back(k->second);
   outwardMap.clear();
