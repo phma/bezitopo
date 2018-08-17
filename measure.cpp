@@ -262,9 +262,9 @@ vector<string> largerUnitSymbols(int64_t unitp)
   switch (unitp)
   {
     case ARCSECOND:
-      ret.push_back("″");
-    case ARCMINUTE:
       ret.push_back("′");
+    case ARCMINUTE:
+      ret.push_back("°");
       break;
   }
   return ret;
@@ -482,38 +482,63 @@ double Measure::fromCoherent(double measurement,int64_t unit,double unitMagnitud
 
 string Measure::formatMeasurement(double measurement,int64_t unit,double unitMagnitude,double precisionMagnitude)
 {
-  int prec,len;
-  double m;
+  int prec,len,i;
+  BasePrecision bp;
+  vector<double> m;
+  vector<int> luf;
+  vector<string> lus;
   char *pLcNumeric;
-  string saveLcNumeric;
+  string saveLcNumeric,ret;
   vector<char> format,output;
+  vector<string> formats;
   if ((unit&0xffff)==0)
     unit=findUnit(unit,unitMagnitude);
+  bp=basePrecision(unit);
   prec=findPrecision(unit,precisionMagnitude);
   pLcNumeric=setlocale(LC_NUMERIC,nullptr);
   if (pLcNumeric)
     saveLcNumeric=pLcNumeric;
   setlocale(LC_NUMERIC,"C");
   format.resize(8);
-  len=snprintf(&format[0],format.size(),"%%.%df",prec);
-  if (len+1>format.size())
+  m.push_back(measurement/conversionFactors[physicalUnit(unit)]);
+  if (bp.notation==2)
   {
-    format.resize(len+1);
-    len=snprintf(&format[0],format.size(),"%%.%df",prec);
+    luf=largerUnitFactors(unit);
+    lus=largerUnitSymbols(unit);
+    for (i=0;i<luf.size();i++)
+    {
+      m.push_back(trunc(m[i]/luf[i]));
+      m[i]=fabs(m[i]-m[i+1]*luf[i]);
+    }
   }
-  m=measurement/conversionFactors[physicalUnit(unit)];
+  for (i=0;i<m.size();i++)
+  {
+    len=snprintf(&format[0],format.size(),"%%0%d.%df",(i<m.size()-1)?2:0,i?0:prec);
+    if (len+1>format.size())
+    {
+      format.resize(len+1);
+      len=snprintf(&format[0],format.size(),"%%0%d.%df",(i<m.size()-1)?2:0,i?0:prec);
+    }
+    formats.push_back(string(&format[0]));
+  }
   if (localized)
     setlocale(LC_NUMERIC,saveLcNumeric.c_str());
   output.resize(8);
-  len=snprintf(&output[0],output.size(),&format[0],m);
-  if (len+1>output.size())
+  for (i=0;i<m.size();i++)
   {
-    output.resize(len+1);
-    len=snprintf(&output[0],output.size(),&format[0],m);
+    len=snprintf(&output[0],output.size(),formats[i].c_str(),m[i]);
+    if (len+1>output.size())
+    {
+      output.resize(len+1);
+      len=snprintf(&output[0],output.size(),formats[i].c_str(),m[i]);
+    }
+    if (i)
+      ret=lus[i-1]+ret;
+    ret=string(&output[0])+ret;
   }
   if (!localized)
     setlocale(LC_NUMERIC,saveLcNumeric.c_str());
-  return string(&output[0]);
+  return ret;
 }
 
 string Measure::formatMeasurementUnit(double measurement,int64_t unit,double unitMagnitude,double precisionMagnitude)
