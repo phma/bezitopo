@@ -22,9 +22,42 @@
 /* This program is named Clotilde for similarity to "clotoide", the Spanish
  * word for the Euler spiral.
  */
+#include <iostream>
 #include "manyarc.h"
 using namespace std;
 vector<string> args;
+
+void outArc(arc oneArc,Measure ms)
+{
+  cout<<"<tr><td colspan=4>"<<ms.formatMeasurementUnit(oneArc.length(),LENGTH)<<"</td>";
+  cout<<"<td colspan=4>"<<ms.formatMeasurementUnit(oneArc.chordlength(),LENGTH)<<"</td>";
+  cout<<"<td colspan=4>"<<ms.formatMeasurementUnit(oneArc.getdelta(),ANGLE_B)<<"</td></tr>\n";
+}
+
+void outPoint(xy pnt,spiralarc s,Measure ms)
+{
+  int sb=s.startbearing(),eb=s.endbearing();
+  xy sp=s.getstart(),ep=s.getend();
+  cout<<"<tr><td colspan=3>"<<ms.formatMeasurementUnit(dir(sp,pnt)-sb,ANGLE_B)<<"</td>";
+  cout<<"<td colspan=3>"<<ms.formatMeasurementUnit(dist(sp,pnt),LENGTH)<<"</td>";
+  cout<<"<td colspan=3>"<<ms.formatMeasurementUnit(dir(pnt,ep)-eb,ANGLE_B)<<"</td>";
+  cout<<"<td colspan=3>"<<ms.formatMeasurementUnit(dist(pnt,ep),LENGTH)<<"</td></tr>\n";
+}
+
+void outApprox(polyarc approx,spiralarc s,Measure ms)
+{
+  int i;
+  arc oneArc;
+  cout<<"<table border><tr><th colspan=12>"<<approx.size()<<" arcs</th></tr>\n";
+  for (i=0;i<approx.size();i++)
+  {
+    oneArc=approx.getarc(i);
+    outPoint(oneArc.getstart(),s,ms);
+    outArc(oneArc,ms);
+  }
+  outPoint(oneArc.getend(),s,ms);
+  cout<<"</table>\n";
+}
 
 /* Ways to specify the spiralarc to be approximated:
  * • Start radius, end radius, arc length
@@ -40,8 +73,15 @@ int main(int argc, char *argv[])
   spiralarc s;
   spiralarc trans(xyz(0,0,0),0,0.003,xyz(500,0,0));
   polyarc approx;
+  Measure ms;
+  ms.setMetric();
+  ms.setDefaultUnit(LENGTH,0.552);
+  ms.setDefaultPrecision(LENGTH,2e-6);
+  ms.setDefaultPrecision(ANGLE_B,1);
+  ms.addUnit(ARCSECOND_B+FIXLARGER);
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
   approx=manyArc(trans,5);
+  outApprox(approx,trans,ms);
   return 0;
 }
