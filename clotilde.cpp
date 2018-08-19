@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
   ms.setDefaultUnit(LENGTH,0.552);
   ms.setDefaultPrecision(LENGTH,2e-6);
   ms.setDefaultPrecision(ANGLE_B,1);
-  ms.addUnit(ARCSECOND_B+FIXLARGER);
+  ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
   approx=manyArc(trans,5);

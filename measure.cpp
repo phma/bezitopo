@@ -72,6 +72,11 @@ cf cfactors[]=
   GON,		M_PI/200,
   ARCMINUTE,	M_PI/10800,
   ARCSECOND,	M_PI/648000,
+  RADIAN_B,	1073741824./M_PI,
+  DEGREE_B,	1073741824./180,
+  GON_B,	1073741824./200,
+  ARCMINUTE_B,	1073741824./10800,
+  ARCSECOND_B,	1073741824./648000,
 };
 #define nunits (sizeof(cfactors)/sizeof(struct cf))
 struct symbol
@@ -104,6 +109,11 @@ symbol symbols[]=
   GON,		"gon",
   ARCMINUTE,	"′",
   ARCSECOND,	"″",
+  RADIAN_B,	"rad",
+  DEGREE_B,	"°",
+  GON_B,	"gon",
+  ARCMINUTE_B,	"′",
+  ARCSECOND_B,	"″",
 };
 #define nsymbols (sizeof(symbols)/sizeof(struct symbol))
 
@@ -262,8 +272,10 @@ vector<string> largerUnitSymbols(int64_t unitp)
   switch (unitp)
   {
     case ARCSECOND:
+    case ARCSECOND_B:
       ret.push_back("′");
     case ARCMINUTE:
+    case ARCMINUTE_B:
       ret.push_back("°");
       break;
   }
@@ -547,7 +559,8 @@ string Measure::formatMeasurementUnit(double measurement,int64_t unit,double uni
   string unitSymbol;
   if ((unit&0xffff)==0)
     unit=findUnit(unit,unitMagnitude);
-  if (sameUnit(unit,DEGREE) || sameUnit(unit,ARCMINUTE) || sameUnit(unit,ARCSECOND))
+  if (sameUnit(unit,DEGREE) || sameUnit(unit,ARCMINUTE) || sameUnit(unit,ARCSECOND) ||
+      sameUnit(unit,DEGREE_B) || sameUnit(unit,ARCMINUTE_B) || sameUnit(unit,ARCSECOND_B))
     space=false;
   unitSymbol=symbol(unit);
   if (space)
