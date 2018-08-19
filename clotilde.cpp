@@ -38,9 +38,9 @@ void outPoint(xy pnt,spiralarc s,Measure ms)
 {
   int sb=s.startbearing(),eb=s.endbearing();
   xy sp=s.getstart(),ep=s.getend();
-  cout<<"<tr><td colspan=3>"<<ms.formatMeasurementUnit(dir(sp,pnt)-sb,ANGLE_B)<<"</td>";
+  cout<<"<tr><td colspan=3>"<<ms.formatMeasurementUnit((sp==pnt)?0:(dir(sp,pnt)-sb),ANGLE_B)<<"</td>";
   cout<<"<td colspan=3>"<<ms.formatMeasurementUnit(dist(sp,pnt),LENGTH)<<"</td>";
-  cout<<"<td colspan=3>"<<ms.formatMeasurementUnit(dir(pnt,ep)-eb,ANGLE_B)<<"</td>";
+  cout<<"<td colspan=3>"<<ms.formatMeasurementUnit((pnt==ep)?0:(dir(pnt,ep)-eb),ANGLE_B)<<"</td>";
   cout<<"<td colspan=3>"<<ms.formatMeasurementUnit(dist(pnt,ep),LENGTH)<<"</td></tr>\n";
 }
 
