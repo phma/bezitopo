@@ -257,8 +257,10 @@ vector<int> largerUnitFactors(int64_t unitp)
   switch (unitp)
   {
     case ARCSECOND:
+    case ARCSECOND_B:
       ret.push_back(60);
     case ARCMINUTE:
+    case ARCMINUTE_B:
       ret.push_back(60);
       break;
   }
