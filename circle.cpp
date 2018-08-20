@@ -67,6 +67,11 @@ int Circle::bearing(double along) const
   return bear+radtobin(cur*along);
 }
 
+double Circle::curvature() const
+{
+  return cur;
+}
+
 double Circle::length() const
 {
   return 2*M_PI/cur;

@@ -1912,6 +1912,7 @@ void testcircle()
   xyz sta1,sta3;
   vector<segment> lines;
   polyline envelope;
+  tassert(triple.curvature()==1/3.);
   ps.open("circle.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
