@@ -25,6 +25,7 @@
 #include "cogospiral.h"
 #include "manysum.h"
 #include "relprime.h"
+#include "matrix.h"
 
 using namespace std;
 
@@ -498,5 +499,50 @@ array<double,4> weightedDistance(segment *a,segment *b)
   times[3]=closetime;
 #endif
   ret[3]=distanceInDirection(astation,bstation,bbear+DEG90)*sqrt(GAUSSQ4P0W)*sqrtlen;
+  return ret;
+}
+
+array<double,2> closestOrFarthest(Circle a,Circle b)
+/* Returns the distance along the two circles to the points where the circles
+ * are closest or farthest apart. There are two such points on each circle,
+ * unless it's a straight line; it generally returns the one closer to the
+ * zero point.
+ *
+ * If the circles are concentric, the solution is indeterminate. It may return
+ * {NaN,Nan} or a pair of finite numbers, depending on the roundoff error
+ * of bearings. If the circles are both straight lines and intersect, the
+ * solution does not exist; it returns {∞,∞}.
+ */
+{
+  array<double,2> ret;
+  double stepa,stepb,erra,errb,distab;
+  int beara,bearab,bearb;
+  matrix mat(2,2),v(2,1);
+  ret[0]=ret[1]=0;
+  do
+  {
+    beara=a.bearing(ret[0]);
+    bearb=b.bearing(ret[1]);
+    bearab=dir(xy(a.station(ret[0])),xy(b.station(ret[1])));
+    distab=dist(a.station(ret[0]),b.station(ret[1]));
+    erra=cos(beara-bearab);
+    errb=cos(bearab-bearb);
+    mat[0][0]=a.curvature()+1/distab;
+    mat[0][1]=mat[1][0]=-1/distab;
+    mat[1][1]=b.curvature()+1/distab;
+    v[0][0]=erra;
+    v[1][0]=errb;
+    mat.gausselim(v);
+    if (a.curvature())
+      stepa=tanh(v[0][0]*a.curvature())/a.curvature();
+    else
+      stepa=v[0][0];
+    if (b.curvature())
+      stepb=tanh(v[0][0]*b.curvature())/b.curvature();
+    else
+      stepb=v[0][0];
+    ret[0]+=stepa;
+    ret[1]+=stepb;
+  } while (isfinite(ret[0]) && isfinite(ret[1]) && (fabs(erra)>3e-9 || fabs(errb)>3e-9));
   return ret;
 }

@@ -40,6 +40,7 @@
 #include <vector>
 #include "point.h"
 #include "spiral.h"
+#include "circle.h"
 
 /* Constants for Gaussian quadrature of sixth-degree polynomial resulting from
  * squaring a cubic, for calculating the RMS distance between a spiral and
@@ -75,3 +76,4 @@ std::vector<alosta> intersection1(segment *a,double a1,segment *b,double b1,bool
 std::vector<std::array<alosta,2> > intersections(segment *a,segment *b,bool extend=false);
 double meanSquareDistance(segment *a,segment *b);
 std::array<double,4> weightedDistance(segment *a,segment *b);
+std::array<double,2> closestOrFarthest(Circle a,Circle b);

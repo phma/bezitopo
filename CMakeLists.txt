@@ -75,7 +75,8 @@ add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                drawobj.cpp ellipsoid.cpp except.cpp
                geoid.cpp geoidboundary.cpp halton.cpp
                icommon.cpp intloop.cpp kml.cpp latlong.cpp layer.cpp ldecimal.cpp
-               manysum.cpp measure.cpp minquad.cpp mkpoint.cpp objlist.cpp plot.cpp pnezd.cpp
+               manysum.cpp matrix.cpp measure.cpp minquad.cpp
+               mkpoint.cpp objlist.cpp plot.cpp pnezd.cpp
                point.cpp pointlist.cpp polyline.cpp projection.cpp ps.cpp qindex.cpp
                quaternion.cpp random.cpp raster.cpp relprime.cpp rootfind.cpp
                scalefactor.cpp smooth5.cpp spiral.cpp spolygon.cpp stl.cpp test.cpp segment.cpp
@@ -92,7 +93,7 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                segment.cpp smooth5.cpp sourcegeoid.cpp spiral.cpp spolygon.cpp
                stl.cpp test.cpp textfile.cpp tin.cpp vball.cpp vcurve.cpp zoom.cpp)
 add_executable(clotilde angle.cpp arc.cpp bezier.cpp
-	       bezier3d.cpp binio.cpp breakline.cpp boundrect.cpp clotilde.cpp cogo.cpp
+	       bezier3d.cpp binio.cpp breakline.cpp boundrect.cpp circle.cpp clotilde.cpp cogo.cpp
 	       cogospiral.cpp contour.cpp csv.cpp drawobj.cpp
                ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
                intloop.cpp latlong.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp 

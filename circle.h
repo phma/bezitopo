@@ -19,7 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
-
+#ifndef CIRCLE_H
+#define CIRCLE_H
 #include "drawobj.h"
 
 class Circle: public drawobj
@@ -54,3 +55,4 @@ private:
   double cur;
   double visibleLength(double precision);
 };
+#endif
