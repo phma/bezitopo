@@ -58,6 +58,14 @@ private:
   xy gridCoords;
   QLabel *gridLabel;
   QLineEdit *gridOutput; // "grid" means a conformal coordinate system
+  QLabel *separationLabel;
+  QLineEdit *separationOutput;
+  QLabel *elevFactorLabel;
+  QLineEdit *elevFactorOutput;
+  QLabel *gridFactorLabel;
+  QLineEdit *gridFactorOutput;
+  QLabel *combFactorLabel;
+  QLineEdit *combFactorOutput;
   QPushButton *okButton,*cancelButton;
   QGridLayout *gridLayout; // "grid" means a lattice arrangement of widgets
   LlValidator *validator;
