@@ -73,6 +73,8 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
   connect(latlongInput,SIGNAL(textChanged(const QString)),this,SLOT(updateLocationStr(QString)));
   connect(latlongInput,SIGNAL(editingFinished()),this,SLOT(updateLocation()));
+  connect(elevationInput,SIGNAL(textChanged(const QString)),this,SLOT(updateElevationStr(QString)));
+  connect(elevationInput,SIGNAL(editingFinished()),this,SLOT(updateElevation()));
   connect(plWidget,SIGNAL(selectedProjectionChanged(Projection *)),this,SLOT(updateProjection(Projection *)));
 }
 
@@ -99,6 +101,18 @@ void LatlongFactorDialog::updateLocation()
     plWidget->setPoint(encodedir(Sphere.geoc(location,0)));
   else
     plWidget->setPoint(vball(0,xy(0,0)));
+  updateOutput();
+}
+
+void LatlongFactorDialog::updateElevationStr(QString text)
+{
+  elevationStr=text.toStdString();
+}
+
+void LatlongFactorDialog::updateElevation()
+{
+  elevation=doc->ms.parseMeasurement(elevationStr,LENGTH).magnitude;
+  cout<<doc->ms.formatMeasurementUnit(elevation,LENGTH)<<endl;
   updateOutput();
 }
 

@@ -43,6 +43,8 @@ public slots:
   void setDoc(document *docu);
   void updateLocationStr(QString text);
   void updateLocation();
+  void updateElevationStr(QString text);
+  void updateElevation();
   void updateProjection(Projection *proj);
   void updateOutput();
 private:
@@ -51,11 +53,12 @@ private:
   QLabel *elevationLabel;
   QLineEdit *elevationInput;
   ProjListWidget *plWidget;
-  std::string locationStr;
+  std::string locationStr,elevationStr;
   document *doc;
   latlong location;
   Projection *projection;
   xy gridCoords;
+  double separation,elevation,radius,elevfactor,gridfactor;
   QLabel *gridLabel;
   QLineEdit *gridOutput; // "grid" means a conformal coordinate system
   QLabel *separationLabel;
