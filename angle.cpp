@@ -21,6 +21,7 @@
  */
 
 #include <cstring>
+#include <cassert>
 #include <cstdio>
 #include <vector>
 #include "angle.h"
@@ -318,9 +319,21 @@ string radtoangle(double angle,int64_t unitp)
   return ret;
 }
 
+string radtoangle(double angle,int64_t unitp,Measure ms)
+{
+  assert(compatibleUnits(unitp,ANGLE));
+  return ms.formatMeasurementUnit(angle,unitp);
+}
+
 string bintoangle(int angle,int64_t unitp)
 {
   return radtoangle(bintorad(angle),unitp);
+}
+
+string bintoangle(int angle,int64_t unitp,Measure ms)
+{
+  assert(compatibleUnits(unitp,ANGLE_B));
+  return ms.formatMeasurementUnit(angle,unitp);
 }
 
 double parseangle(string angstr,int64_t unitp)

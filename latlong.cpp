@@ -247,6 +247,19 @@ string formatlatlong(latlong ll,int64_t unitp)
   return latstr+' '+lonstr;
 }
 
+string formatlatlong(latlong ll,int64_t unitp,Measure ms)
+{
+  vector<string> nesw;
+  nesw.push_back("N"); // This may run into trouble in Arabic, where شمال
+  nesw.push_back("E"); // and شرق begin with the same letter.
+  nesw.push_back("S");
+  nesw.push_back("W");
+  string latstr,lonstr;
+  latstr=radtoangle(fabs(ll.lat),unitp,ms)+nesw[signbit(ll.lat)?2:0];
+  lonstr=radtoangle(fabs(ll.lon),unitp,ms)+nesw[signbit(ll.lon)?3:1];
+  return latstr+' '+lonstr;
+}
+
 bool partialLatlong(string angstr)
 /* Returns true if angstr is a partially or completely written latlong string.
  * It's for a validator for latlongs being typed in.

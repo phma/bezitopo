@@ -118,7 +118,9 @@ double gontorad(double angle);
 #define DEG360 0x80000000
 
 std::string radtoangle(double angle,int64_t unitp);
+std::string radtoangle(double angle,int64_t unitp,Measure ms);
 std::string bintoangle(int angle,int64_t unitp);
+std::string bintoangle(int angle,int64_t unitp,Measure ms);
 double parseangle(std::string angstr,int64_t unitp);
 int parseiangle(std::string angstr,int64_t unitp);
 /* If parseangle is passed a string containing a degree or minus sign, it interprets

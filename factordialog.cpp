@@ -96,7 +96,7 @@ void LatlongFactorDialog::updateLocationStr(QString text)
 void LatlongFactorDialog::updateLocation()
 {
   location=parselatlong(locationStr,DEGREE);
-  cout<<formatlatlong(location,ARCSECOND+FIXLARGER+DEC4)<<endl;
+  cout<<formatlatlong(location,ARCSECOND+FIXLARGER+DEC4,doc->ms)<<endl;
   if (location.valid()==2)
     plWidget->setPoint(encodedir(Sphere.geoc(location,0)));
   else
