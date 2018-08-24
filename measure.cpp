@@ -191,6 +191,8 @@ BasePrecision basePrecision(int64_t unitp)
   int exp,basecode,i;
   ret.notation=(unitp&0xf000)>>12;
   basecode=unitp&0xfff;
+  if (basecode==0)
+    basecode=DECIMAL;
   for (i=0;i<nbasecodes;i++)
   {
     if (basecodes[i][1]<=basecode)
@@ -467,14 +469,19 @@ int Measure::findPrecision(int64_t unit,double magnitude)
 {
   double factor;
   int ret;
+  BasePrecision bp;
   if ((unit&0xffff0000)==0)
     unit=findUnit(unit);
+  bp=basePrecision(unit);
   if (magnitude<=0)
     magnitude=defaultPrecision[physicalQuantity(unit)];
   factor=conversionFactors[physicalUnit(unit)];
   if (factor<=0 || std::isnan(factor) || std::isinf(factor))
     factor=1;
-  ret=rint(log10(factor/magnitude));
+  if (bp.power<0)
+    ret=rint(log10(factor/magnitude));
+  else
+    ret=bp.power;
   if (ret<0)
     ret=0;
   return ret;
