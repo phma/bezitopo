@@ -111,7 +111,14 @@ void LatlongFactorDialog::updateElevationStr(QString text)
 
 void LatlongFactorDialog::updateElevation()
 {
-  elevation=doc->ms.parseMeasurement(elevationStr,LENGTH).magnitude;
+  try
+  {
+    elevation=doc->ms.parseMeasurement(elevationStr,LENGTH).magnitude;
+  }
+  catch (...)
+  {
+    elevation=NAN;
+  }
   cout<<doc->ms.formatMeasurementUnit(elevation,LENGTH)<<endl;
   updateOutput();
 }
