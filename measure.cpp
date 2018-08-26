@@ -299,7 +299,8 @@ void trim(string &str)
 
 int64_t parseSymbol(string unitStr)
 {
-  int i,ret=0;
+  int i;
+  int64_t ret=0;
   for (i=0;i<nsymbols;i++)
     if (unitStr==symbols[i].symb)
       ret=symbols[i].unitp;
