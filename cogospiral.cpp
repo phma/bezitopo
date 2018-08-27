@@ -529,7 +529,7 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
     errb=cos(bearab-bearb);
     mat[0][0]=a.curvature()+1/distab;
     mat[0][1]=mat[1][0]=-1/distab;
-    mat[1][1]=b.curvature()+1/distab;
+    mat[1][1]=-b.curvature()+1/distab;
     v[0][0]=erra;
     v[1][0]=errb;
     mat.gausselim(v);
@@ -538,7 +538,7 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
     else
       stepa=v[0][0];
     if (b.curvature())
-      stepb=tanh(v[0][0]*b.curvature())/b.curvature();
+      stepb=tanh(v[1][0]*b.curvature())/b.curvature();
     else
       stepb=v[0][0];
     ret[0]+=stepa;

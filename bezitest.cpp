@@ -1908,13 +1908,15 @@ void testcircle()
   Circle xaxis(xy(0,0),0,0);
   Circle yaxis(xy(0,0),DEG90,0);
   Circle c41(xy(205,0),DEG90,1/205.);
-  Circle c43(xy(125,169),DEG180-AT34,1/215.);
+  //Circle c43(xy(125,169),DEG180-AT34,1/215.);
+  Circle c43(xy(215,0),DEG90+radtobin(0.001),1/215.);
   PostScript ps;
   BoundRect br;
   int i,shortCount=0,longCount=0;
   xyz sta1,sta3;
   vector<segment> lines;
   polyline envelope;
+  array<double,2> close2;
   tassert(triple.curvature()==1/3.);
   ps.open("circle.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
@@ -1959,6 +1961,10 @@ void testcircle()
   ps.setcolor(0,0,0);
   ps.spline(c43.approx3d(0.1/ps.getscale()));
   ps.spline(c41.approx3d(0.1/ps.getscale()));
+  close2=closestOrFarthest(c41,c43);
+  sta1=c41.station(close2[0]);
+  sta3=c43.station(close2[0]);
+  ps.line2p(sta1,sta3);
   ps.endpage();
   ps.close();
 }
