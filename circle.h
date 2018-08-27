@@ -45,6 +45,7 @@ public:
   virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
   virtual unsigned hash();
+  virtual double dirbound(int angle,double boundsofar=INFINITY);
   bezier3d approx3d(double precision);
   virtual std::vector<drawingElement> render3d(double precision,int layer,int color,int width,int linetype);
   virtual void writeXml(std::ofstream &ofile);

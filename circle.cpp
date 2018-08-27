@@ -22,6 +22,7 @@
 
 #include "circle.h"
 #include "angle.h"
+#include "cogo.h"
 #include "ldecimal.h"
 
 using namespace std;
@@ -94,6 +95,20 @@ unsigned Circle::hash()
   return memHash(&mid,sizeof(xy),
          memHash(&bear,sizeof(int),
          memHash(&cur,sizeof(double))));
+}
+
+double Circle::dirbound(int angle,double boundsofar)
+{
+  int ang;
+  double l;
+  if (cur)
+  {
+    ang=foldangle(angle-bear-DEG90*sign(cur));
+    l=bintorad(ang)/cur;
+    return xy(station(l)).dirbound(angle);
+  }
+  else
+    return INFINITY;
 }
 
 double Circle::visibleLength(double precision)

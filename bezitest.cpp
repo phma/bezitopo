@@ -1907,7 +1907,10 @@ void testcircle()
   Circle triple(xy(0,0),3.);
   Circle xaxis(xy(0,0),0,0);
   Circle yaxis(xy(0,0),DEG90,0);
+  Circle c41(xy(205,0),DEG90,1/205.);
+  Circle c43(xy(125,169),DEG180-AT34,1/215.);
   PostScript ps;
+  BoundRect br;
   int i,shortCount=0,longCount=0;
   xyz sta1,sta3;
   vector<segment> lines;
@@ -1944,6 +1947,18 @@ void testcircle()
     ps.line2p(xaxis.station(tan(i)),yaxis.station(cot(i)));
   ps.spline(xaxis.approx3d(0.1/ps.getscale()));
   ps.spline(yaxis.approx3d(0.1/ps.getscale()));
+  ps.endpage();
+  ps.startpage();
+  br.clear();
+  br.include(&c41);
+  br.include(&c43);
+  ps.setscale(br);
+  //ps.setscale(-215,-215,215,215,degtobin(0));
+  for (i=8388608-DEG180;i<=DEG180;i+=16777216)
+    tassert(c43.dirbound(i)<-200);
+  ps.setcolor(0,0,0);
+  ps.spline(c43.approx3d(0.1/ps.getscale()));
+  ps.spline(c41.approx3d(0.1/ps.getscale()));
   ps.endpage();
   ps.close();
 }
