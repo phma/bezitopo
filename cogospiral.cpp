@@ -533,8 +533,8 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
   }
   else
   {
-    scra=sign(a.curvature());
-    scrb=sign(b.curvature());
+    scra=sign(b.curvature());
+    scrb=sign(a.curvature());
   }
   beara=a.bearing(0);
   bearb=b.bearing(0);

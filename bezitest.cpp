@@ -1962,6 +1962,8 @@ void testcircle()
   for (i=8388608-DEG180;i<=DEG180;i+=16777216)
     tassert(c43.dirbound(i)<-200);
   ps.setcolor(0,0,0);
+  ps.spline(xaxis.approx3d(0.1/ps.getscale()));
+  ps.spline(yaxis.approx3d(0.1/ps.getscale()));
   ps.spline(c43.approx3d(0.1/ps.getscale()));
   ps.spline(c41.approx3d(0.1/ps.getscale()));
   sta1=c41.station(0);
@@ -1973,6 +1975,13 @@ void testcircle()
   sta3=c43.station(close2[1]);
   cout<<"Circles approach within "<<ldecimal(dist(sta1,sta3))<<endl;
   tassert(fabs(dist(sta1,sta3)-5)<1e-7);
+  ps.setcolor(0,0,0);
+  ps.line2p(sta1,sta3);
+  close2=closestOrFarthest(xaxis,c43);
+  sta1=xaxis.station(close2[0]);
+  sta3=c43.station(close2[1]);
+  cout<<"Circle and x-axis "<<ldecimal(dist(sta1,sta3))<<endl;
+  //tassert(fabs(dist(sta1,sta3)-5)<1e-7);
   ps.setcolor(0,0,0);
   ps.line2p(sta1,sta3);
   ps.endpage();
