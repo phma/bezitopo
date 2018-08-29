@@ -52,6 +52,11 @@ Circle::Circle(xy m,int b,double c)
   rbear=bintorad(bear);
 }
 
+xy Circle::center() const
+{
+  return mid+cossin(bear+DEG90)/cur;
+}
+
 xyz Circle::station(double along) const
 {
   double angalong=cur*along;

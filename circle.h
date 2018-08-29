@@ -38,6 +38,7 @@ public:
   Circle();
   Circle(xy c,double r);
   Circle(xy m,int b,double c=0);
+  xy center() const;
   xyz station(double along) const;
   int bearing(double along) const;
   double curvature() const;
