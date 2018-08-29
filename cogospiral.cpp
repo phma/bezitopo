@@ -510,7 +510,7 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
  * not 180° apart.
  *
  * If the circles are concentric, the solution is indeterminate. It may return
- * {NaN,Nan} or a pair of finite numbers, depending on the roundoff error
+ * {NaN,NaN} or a pair of finite numbers, depending on the roundoff error
  * of bearings. If the circles are both straight lines and intersect, the
  * solution does not exist; it returns {∞,∞}.
  */
@@ -563,6 +563,11 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
     stepb=bintorad(cendir-bearhd)/b.curvature();
   else
     stepb=distanceInDirection(pntb,a.center(),bearb);
+  if (a.curvature()==0 && b.curvature()==0)
+    if (foldangle(beara-bearb))
+      stepa=stepb=INFINITY;
+    else
+      stepa=stepb=NAN;
   ret[0]=stepa;
   ret[1]=stepb;
   return ret;

@@ -1991,6 +1991,10 @@ void testcircle()
   tassert(fabs(dist(sta1,sta3)-211)<2e-7);
   ps.setcolor(0,0,0);
   ps.line2p(sta1,sta3);
+  close2=closestOrFarthest(xaxis,yaxis);
+  tassert(isinf(close2[0]) && isinf(close2[1]));
+  ps.setcolor(0,0,0);
+  ps.line2p(sta1,sta3);
   ps.endpage();
   ps.close();
 }
