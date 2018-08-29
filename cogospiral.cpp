@@ -518,7 +518,7 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
   array<double,2> ret;
   xy pnta,pntb;
   double stepa,stepb,erra,errb,distalong,distacross,curscale;
-  double scra,scrb;
+  double scra,scrb,atx,aty;
   int beara,bearavg,bearhd,bearb,cendir;
   matrix mat(2,2),v(2,1);
   //Measure ms; // for debugging
@@ -549,7 +549,8 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
   //cout<<" Distance across "<<ms.formatMeasurementUnit(distacross,LENGTH)<<' '<<
   //  ms.formatMeasurementUnit(bearavg-DEG90,ANGLE_B)<<endl;
   //cout<<"Bearing half difference "<<ms.formatMeasurementUnit(bearhd,ANGLE_B)<<endl;
-  cendir=atan2i(distalong*curscale-sin(bearhd)*(scra+scrb),distacross*curscale+cos(bearhd)*(scra-scrb));
+  cendir=atan2i(aty=distalong*curscale-sin(bearhd)*(scra+scrb),
+		atx=distacross*curscale+cos(bearhd)*(scra-scrb));
   if (cendir>DEG90)
     cendir-=DEG180;
   if (cendir<-DEG90)
@@ -568,6 +569,8 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
       stepa=stepb=INFINITY;
     else
       stepa=stepb=NAN;
+  if (atx==0 && aty==0 && curscale>0)
+    stepa=stepb=NAN;
   ret[0]=stepa;
   ret[1]=stepb;
   return ret;
