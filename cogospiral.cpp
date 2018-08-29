@@ -506,7 +506,8 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
 /* Returns the distance along the two circles to the points where the circles
  * are closest or farthest apart. There are two such points on each circle,
  * unless it's a straight line; it generally returns the one closer to the
- * zero point.
+ * zero point. The bearings of the circles at the points returned are the same,
+ * not 180° apart.
  *
  * If the circles are concentric, the solution is indeterminate. It may return
  * {NaN,Nan} or a pair of finite numbers, depending on the roundoff error
@@ -520,11 +521,11 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
   double scra,scrb;
   int beara,bearavg,bearhd,bearb,cendir;
   matrix mat(2,2),v(2,1);
-  Measure ms; // for debugging
-  ms.addUnit(DEGREE_B);
-  ms.addUnit(METER);
-  ms.setDefaultPrecision(LENGTH,0.001);
-  ms.setDefaultPrecision(ANGLE_B,SEC1);
+  //Measure ms; // for debugging
+  //ms.addUnit(DEGREE_B);
+  //ms.addUnit(METER);
+  //ms.setDefaultPrecision(LENGTH,0.001);
+  //ms.setDefaultPrecision(ANGLE_B,SEC1);
   curscale=1/hypot(a.radius(),b.radius());
   if (curscale)
   {
@@ -543,17 +544,17 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
   bearavg=beara+(bearhd=(bearb-beara)/2);
   distalong=distanceInDirection(pnta,pntb,bearavg);
   distacross=distanceInDirection(pnta,pntb,bearavg-DEG90);
-  cout<<"Distance along "<<ms.formatMeasurementUnit(distalong,LENGTH)<<' '<<
-    ms.formatMeasurementUnit(bearavg,ANGLE_B);
-  cout<<" Distance across "<<ms.formatMeasurementUnit(distacross,LENGTH)<<' '<<
-    ms.formatMeasurementUnit(bearavg-DEG90,ANGLE_B)<<endl;
-  cout<<"Bearing half difference "<<ms.formatMeasurementUnit(bearhd,ANGLE_B)<<endl;
+  //cout<<"Distance along "<<ms.formatMeasurementUnit(distalong,LENGTH)<<' '<<
+  //  ms.formatMeasurementUnit(bearavg,ANGLE_B);
+  //cout<<" Distance across "<<ms.formatMeasurementUnit(distacross,LENGTH)<<' '<<
+  //  ms.formatMeasurementUnit(bearavg-DEG90,ANGLE_B)<<endl;
+  //cout<<"Bearing half difference "<<ms.formatMeasurementUnit(bearhd,ANGLE_B)<<endl;
   cendir=atan2i(distalong*curscale-sin(bearhd)*(scra+scrb),distacross*curscale+cos(bearhd)*(scra-scrb));
   if (cendir>DEG90)
     cendir-=DEG180;
   if (cendir<-DEG90)
     cendir+=DEG180;
-  cout<<"cendir "<<ms.formatMeasurementUnit(cendir,ANGLE_B)<<endl;
+  //cout<<"cendir "<<ms.formatMeasurementUnit(cendir,ANGLE_B)<<endl;
   if (a.curvature())
     stepa=bintorad(cendir+bearhd)/a.curvature();
   else
