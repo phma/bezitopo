@@ -520,7 +520,11 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
   double scra,scrb;
   int beara,bearavg,bearhd,bearb,cendir;
   matrix mat(2,2),v(2,1);
-  ret[0]=ret[1]=0;
+  Measure ms; // for debugging
+  ms.addUnit(DEGREE_B);
+  ms.addUnit(METER);
+  ms.setDefaultPrecision(LENGTH,0.001);
+  ms.setDefaultPrecision(ANGLE_B,SEC1);
   curscale=1/hypot(a.radius(),b.radius());
   if (curscale)
   {
@@ -532,23 +536,29 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
     scra=sign(a.curvature());
     scrb=sign(b.curvature());
   }
-  beara=a.bearing(ret[0]);
-  bearb=b.bearing(ret[1]);
-  pnta=a.station(ret[0]);
-  pntb=b.station(ret[1]);
+  beara=a.bearing(0);
+  bearb=b.bearing(0);
+  pnta=a.station(0);
+  pntb=b.station(0);
   bearavg=beara+(bearhd=(bearb-beara)/2);
   distalong=distanceInDirection(pnta,pntb,bearavg);
   distacross=distanceInDirection(pnta,pntb,bearavg-DEG90);
-  cendir=atan2i(distalong*curscale+sin(bearhd)*(scra+scrb),distacross*curscale+cos(bearhd)*(scra-scrb));
+  cout<<"Distance along "<<ms.formatMeasurementUnit(distalong,LENGTH)<<' '<<
+    ms.formatMeasurementUnit(bearavg,ANGLE_B);
+  cout<<" Distance across "<<ms.formatMeasurementUnit(distacross,LENGTH)<<' '<<
+    ms.formatMeasurementUnit(bearavg-DEG90,ANGLE_B)<<endl;
+  cout<<"Bearing half difference "<<ms.formatMeasurementUnit(bearhd,ANGLE_B)<<endl;
+  cendir=atan2i(distalong*curscale-sin(bearhd)*(scra+scrb),distacross*curscale+cos(bearhd)*(scra-scrb));
   if (cendir>DEG90)
     cendir-=DEG180;
   if (cendir<-DEG90)
     cendir+=DEG180;
+  cout<<"cendir "<<ms.formatMeasurementUnit(cendir,ANGLE_B)<<endl;
   if (a.curvature())
     stepa=cendir/a.curvature();
   if (b.curvature())
     stepb=cendir/b.curvature();
-  ret[0]+=stepa;
-  ret[1]+=stepb;
+  ret[0]=stepa;
+  ret[1]=stepb;
   return ret;
 }
