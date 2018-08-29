@@ -1981,7 +1981,14 @@ void testcircle()
   sta1=xaxis.station(close2[0]);
   sta3=c43.station(close2[1]);
   cout<<"Circle and x-axis "<<ldecimal(dist(sta1,sta3))<<endl;
-  //tassert(fabs(dist(sta1,sta3)-5)<1e-7);
+  tassert(fabs(dist(sta1,sta3)-218)<2e-7);
+  ps.setcolor(0,0,0);
+  ps.line2p(sta1,sta3);
+  close2=closestOrFarthest(c43,yaxis);
+  sta1=yaxis.station(close2[1]);
+  sta3=c43.station(close2[0]);
+  cout<<"Circle and y-axis "<<ldecimal(dist(sta1,sta3))<<endl;
+  tassert(fabs(dist(sta1,sta3)-211)<2e-7);
   ps.setcolor(0,0,0);
   ps.line2p(sta1,sta3);
   ps.endpage();
