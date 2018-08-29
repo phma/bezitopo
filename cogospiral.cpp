@@ -555,9 +555,9 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
     cendir+=DEG180;
   cout<<"cendir "<<ms.formatMeasurementUnit(cendir,ANGLE_B)<<endl;
   if (a.curvature())
-    stepa=cendir/a.curvature();
+    stepa=bintorad(cendir+bearhd)/a.curvature();
   if (b.curvature())
-    stepb=cendir/b.curvature();
+    stepb=bintorad(cendir-bearhd)/b.curvature();
   ret[0]=stepa;
   ret[1]=stepb;
   return ret;
