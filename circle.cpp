@@ -73,6 +73,11 @@ double Circle::curvature() const
   return cur;
 }
 
+double Circle::radius() const
+{
+  return 1/cur;
+}
+
 double Circle::length() const
 {
   return 2*M_PI/cur;

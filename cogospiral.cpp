@@ -515,34 +515,40 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
  */
 {
   array<double,2> ret;
-  double stepa,stepb,erra,errb,distab;
-  int beara,bearab,bearb;
+  xy pnta,pntb;
+  double stepa,stepb,erra,errb,distalong,distacross,curscale;
+  double scra,scrb;
+  int beara,bearavg,bearhd,bearb,cendir;
   matrix mat(2,2),v(2,1);
   ret[0]=ret[1]=0;
-  do
+  curscale=1/hypot(a.radius(),b.radius());
+  if (curscale)
   {
-    beara=a.bearing(ret[0]);
-    bearb=b.bearing(ret[1]);
-    bearab=dir(xy(a.station(ret[0])),xy(b.station(ret[1])));
-    distab=dist(a.station(ret[0]),b.station(ret[1]));
-    erra=cos(beara-bearab);
-    errb=cos(bearab-bearb);
-    mat[0][0]=a.curvature()+1/distab;
-    mat[0][1]=mat[1][0]=-1/distab;
-    mat[1][1]=-b.curvature()+1/distab;
-    v[0][0]=erra;
-    v[1][0]=errb;
-    mat.gausselim(v);
-    if (a.curvature())
-      stepa=tanh(v[0][0]*a.curvature())/a.curvature();
-    else
-      stepa=v[0][0];
-    if (b.curvature())
-      stepb=tanh(v[1][0]*b.curvature())/b.curvature();
-    else
-      stepb=v[0][0];
-    ret[0]+=stepa;
-    ret[1]+=stepb;
-  } while (isfinite(ret[0]) && isfinite(ret[1]) && (fabs(erra)>3e-9 || fabs(errb)>3e-9));
+    scra=a.radius()*curscale;
+    scrb=b.radius()*curscale;
+  }
+  else
+  {
+    scra=sign(a.curvature());
+    scrb=sign(b.curvature());
+  }
+  beara=a.bearing(ret[0]);
+  bearb=b.bearing(ret[1]);
+  pnta=a.station(ret[0]);
+  pntb=b.station(ret[1]);
+  bearavg=beara+(bearhd=(bearb-beara)/2);
+  distalong=distanceInDirection(pnta,pntb,bearavg);
+  distacross=distanceInDirection(pnta,pntb,bearavg-DEG90);
+  cendir=atan2i(distalong*curscale+sin(bearhd)*(scra+scrb),distacross*curscale+cos(bearhd)*(scra-scrb));
+  if (cendir>DEG90)
+    cendir-=DEG180;
+  if (cendir<-DEG90)
+    cendir+=DEG180;
+  if (a.curvature())
+    stepa=cendir/a.curvature();
+  if (b.curvature())
+    stepb=cendir/b.curvature();
+  ret[0]+=stepa;
+  ret[1]+=stepb;
   return ret;
 }

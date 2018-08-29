@@ -41,6 +41,7 @@ public:
   xyz station(double along) const;
   int bearing(double along) const;
   double curvature() const;
+  double radius() const;
   double length() const;
   virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
