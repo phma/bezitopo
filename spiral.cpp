@@ -59,6 +59,7 @@
 #include "angle.h"
 #include "vcurve.h"
 #include "manysum.h"
+#include "cogospiral.h"
 using namespace std;
 #define MAXITER 128
 /* The most iterations in an actual run is 90 (was 45 before adding setcurvature).
@@ -355,6 +356,16 @@ xyz spiralarc::station(double along) const
   midlong=along-len/2;
   relpos=cornu(midlong,cur,clo);
   return xyz(turn(relpos,midbear)+mid,elev(along));
+}
+
+double spiralarc::sthrow()
+{
+  Circle startCircle=osculatingCircle(0),endCircle=osculatingCircle(len);
+  array<double,2> closeAlong=closestOrFarthest(startCircle,endCircle);
+  double dist0,dist1;
+  dist0=dist(startCircle.station(closeAlong[0]),endCircle.station(closeAlong[1]));
+  // If the spiralarc is curly, closestOrFarthest may return farthest instead of closest.
+  return dist0;
 }
 
 void spiralarc::_setdelta(int d,int s)

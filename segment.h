@@ -30,6 +30,7 @@
 #include "bezier3d.h"
 #include "cogo.h"
 #include "drawobj.h"
+#include "circle.h"
 #define START 1
 #define END 2
 #ifndef NDEBUG
@@ -97,7 +98,7 @@ public:
   {
     return chordbearing();
   }
-  virtual int bearing(double along)
+  virtual int bearing(double along) const
   {
     return chordbearing();
   }
@@ -124,6 +125,7 @@ public:
   xy center();
   xyz midpoint() const;
   bcir boundCircle() const;
+  Circle osculatingCircle(double along) const;
   virtual xy pointOfIntersection();
   virtual double tangentLength(int which);
   virtual int diffinside(xy pnt)

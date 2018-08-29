@@ -216,6 +216,11 @@ bcir segment::boundCircle() const
   return ret;
 }
 
+Circle segment::osculatingCircle(double along) const
+{
+  return Circle(station(along),bearing(along),curvature(along));
+}
+
 xy segment::center()
 {
   return xy(nan(""),nan(""));

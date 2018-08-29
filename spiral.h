@@ -71,7 +71,7 @@ public:
   {
     return len;
   }
-  virtual int bearing(double along)
+  virtual int bearing(double along) const
   {
     return midbear+ispiralbearing(along-len/2,cur,clo);
   }
@@ -104,7 +104,7 @@ public:
     return clo;
   }
   virtual xyz station(double along) const;
-  //virtual double sthrow();
+  virtual double sthrow();
   /* "throw" is a reserved word.
    * The throw is the minimum distance between the circles (one of which may be a line)
    * that osculate the ends of the spiral arc. It is also called the offset, but

@@ -136,7 +136,7 @@ xyz arc::station(double along) const
     return segment::station(along);
 }
 
-int arc::bearing(double along)
+int arc::bearing(double along) const
 {
   double len;
   int angalong;

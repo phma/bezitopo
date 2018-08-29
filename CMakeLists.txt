@@ -102,7 +102,8 @@ add_executable(clotilde angle.cpp arc.cpp bezier.cpp
 	       rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
 	       tin.cpp vball.cpp vcurve.cpp)
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
-               binio.cpp boundrect.cpp breakline.cpp cogo.cpp contour.cpp
+               binio.cpp boundrect.cpp breakline.cpp circle.cpp
+               cogo.cpp cogospiral.cpp contour.cpp
                convertgeoid.cpp csv.cpp document.cpp drawobj.cpp
                ellipsoid.cpp except.cpp
                geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp
@@ -113,12 +114,13 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp smooth5.cpp sourcegeoid.cpp
                spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
 add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp boundrect.cpp
-               breakline.cpp cidialog.cpp circle.cpp cogo.cpp color.cpp
+               breakline.cpp cidialog.cpp circle.cpp cogo.cpp cogospiral.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp dxf.cpp ellipsoid.cpp
                except.cpp factordialog.cpp geoid.cpp geoidboundary.cpp
                halton.cpp intloop.cpp kml.cpp
                latlong.cpp ldecimal.cpp linetype.cpp llvalidator.cpp
-               manysum.cpp measure.cpp measurebutton.cpp minquad.cpp objlist.cpp penwidth.cpp
+               manysum.cpp matrix.cpp measure.cpp measurebutton.cpp
+               minquad.cpp objlist.cpp penwidth.cpp
                plwidget.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
                ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp rendercache.cpp
                rootfind.cpp segment.cpp smooth5.cpp
@@ -128,10 +130,10 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
 if (${FFTW_FOUND})
 add_executable(transmer angle.cpp arc.cpp bezier.cpp
-               bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp cogo.cpp
-               contour.cpp csv.cpp drawobj.cpp
+               bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp
+               cogospiral.cpp contour.cpp csv.cpp drawobj.cpp
                ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-               intloop.cpp latlong.cpp ldecimal.cpp manysum.cpp
+               intloop.cpp latlong.cpp ldecimal.cpp manysum.cpp matrix.cpp
                measure.cpp minquad.cpp point.cpp pointlist.cpp polyline.cpp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
                rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp

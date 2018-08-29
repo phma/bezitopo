@@ -68,7 +68,7 @@ public:
   virtual double in(xy pnt);
   double length() const;
   virtual xyz station(double along) const;
-  virtual int bearing(double along);
+  virtual int bearing(double along) const;
   xy center();
   virtual bool isCurly();
   virtual bool isTooCurly();
