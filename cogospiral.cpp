@@ -26,6 +26,8 @@
 #include "manysum.h"
 #include "relprime.h"
 #include "matrix.h"
+#include "pointlist.h"
+#include "minquad.h"
 
 using namespace std;
 
@@ -518,7 +520,7 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
   array<double,2> ret;
   xy pnta,pntb;
   double stepa,stepb,erra,errb,distalong,distacross,curscale;
-  double scra,scrb,atx,aty;
+  double scra,scrb,atx,aty,h;
   int beara,bearavg,bearhd,bearb,cendir;
   matrix mat(2,2),v(2,1);
   //Measure ms; // for debugging
@@ -571,7 +573,39 @@ array<double,2> closestOrFarthest(Circle a,Circle b)
       stepa=stepb=NAN;
   if (atx==0 && aty==0 && curscale>0)
     stepa=stepb=NAN;
-  ret[0]=stepa;
-  ret[1]=stepb;
+  h=0.001/hypot(a.curvature(),b.curvature());
+  h/=significand(h);
+  pnta=a.station(stepa);
+  pntb=b.station(stepb);
+  if (a.curvature() && b.curvature())
+  {
+    ret[0]=minquad(stepa-h,sqr(dist(pntb,a.station(stepa-h))),
+		   stepa  ,sqr(dist(pntb,a.station(stepa  ))),
+		   stepa+h,sqr(dist(pntb,a.station(stepa+h))));
+    ret[1]=minquad(stepb-h,sqr(dist(pnta,b.station(stepb-h))),
+		   stepb  ,sqr(dist(pnta,b.station(stepb  ))),
+		   stepb+h,sqr(dist(pnta,b.station(stepb+h))));
+    ret[0]=(ret[0]*fabs(b.curvature())+stepa*fabs(a.curvature()))/(fabs(b.curvature())+fabs(a.curvature()));
+    ret[1]=(ret[1]*fabs(a.curvature())+stepb*fabs(b.curvature()))/(fabs(a.curvature())+fabs(b.curvature()));
+  }
+  else if (a.curvature())
+  {
+    ret[1]=stepb;
+    ret[0]=minquad(stepa-h,sqr(dist(pntb,a.station(stepa-h))),
+		   stepa  ,sqr(dist(pntb,a.station(stepa  ))),
+		   stepa+h,sqr(dist(pntb,a.station(stepa+h))));
+  }
+  else if (b.curvature())
+  {
+    ret[0]=stepa;
+    ret[1]=minquad(stepb-h,sqr(dist(pnta,b.station(stepb-h))),
+		   stepb  ,sqr(dist(pnta,b.station(stepb  ))),
+		   stepb+h,sqr(dist(pnta,b.station(stepb+h))));
+  }
+  else
+  {
+    ret[0]=stepa;
+    ret[1]=stepb;
+  }
   return ret;
 }

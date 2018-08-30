@@ -31,6 +31,10 @@
 
 class PostScript;
 
+#if defined(_WIN32) || defined(__CYGWIN__)
+double significand(double x);
+#endif
+
 class qindex
 {
 public:
