@@ -2627,6 +2627,8 @@ void test1manyarc(spiralarc s,PostScript &ps)
   BoundRect br;
   for (i=0;i<4;i++)
     crossingsPerArc[i]=0;
+  cout<<"Throw "<<s.sthrow();
+  cout<<" Estimated throw "<<(s.curvature(s.length())-s.curvature(0))*sqr(s.length())/24<<'\n';
   for (narcs=2;narcs<9;narcs++)
   {
     approx=manyArc(s,narcs);

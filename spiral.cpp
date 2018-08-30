@@ -363,8 +363,15 @@ double spiralarc::sthrow()
   Circle startCircle=osculatingCircle(0),endCircle=osculatingCircle(len);
   array<double,2> closeAlong=closestOrFarthest(startCircle,endCircle);
   double dist0,dist1;
-  dist0=dist(startCircle.station(closeAlong[0]),endCircle.station(closeAlong[1]));
-  // If the spiralarc is curly, closestOrFarthest may return farthest instead of closest.
+  if (isfinite(closeAlong[0]))
+  {
+    dist0=dist(startCircle.station(closeAlong[0]),endCircle.station(closeAlong[1]));
+    // If the spiralarc is curly, closestOrFarthest may return farthest instead of closest.
+  }
+  else
+    dist0=dist1=0;
+  if (clo<0)
+    dist0=-dist0;
   return dist0;
 }
 
