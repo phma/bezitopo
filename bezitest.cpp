@@ -2465,7 +2465,11 @@ void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps,vector<xy> expected,
   }
   ps.setcolor(0,1,0);
   if (beside.size())
+  {
     ps.line2p(beside[0].station,beside[1].station);
+    cout<<"beside: bearing diff "<<foldangle(beside[1].bearing-beside[0].bearing)<<endl;
+    tassert(abs(foldangle(beside[1].bearing-beside[0].bearing))<2);
+  }
   ps.endpage();
 }
 
