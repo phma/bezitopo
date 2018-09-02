@@ -619,12 +619,15 @@ vector<alosta> besidement1(segment *a,double a1,segment *b,double b1)
  * • It finds a cycle of length 1, i.e. neither aalosta nor balosta changes, and
  *   both are within their curve lengths. They are returned.
  * • It finds a cycle of length greater than 2. Returns an empty vector.
- * • One or both of the alostas goes off the end of its curve or is NaN.
+ * • One or both of the points goes off the end of its curve or is NaN.
  *   Returns an empty vector.
+ * • The points jiggle chaotically in a small area. Returns the average.
  */
 {
   int i=0,lasti,done=0;
   double aalong[2],balong[2];
+  double aavg=NAN,adev=NAN,bavg=NAN,bdev=NAN;
+  vector<double> asum,adevsum,bsum,bdevsum;
   vector<alosta> ret;
   array<double,2> step;
   aalong[0]=a1;
@@ -635,10 +638,25 @@ vector<alosta> besidement1(segment *a,double a1,segment *b,double b1)
     step=besidement(a->osculatingCircle(aalong[0]),b->osculatingCircle(balong[0]));
     aalong[0]+=step[0];
     balong[0]+=step[1];
+    asum.push_back(aalong[0]);
+    adevsum.push_back(sqr(aalong[0]-aavg));
+    bsum.push_back(balong[0]);
+    bdevsum.push_back(sqr(balong[0]-bavg));
     if ((i&(i-1))==0)
     {
       aalong[1]=aalong[0];
       balong[1]=balong[0];
+      aavg=pairwisesum(asum)/asum.size();
+      bavg=pairwisesum(bsum)/bsum.size();
+      adev=sqrt(pairwisesum(adevsum)/adevsum.size());
+      bdev=sqrt(pairwisesum(bdevsum)/bdevsum.size());
+      //cout<<i<<' '<<ldecimal(aavg)<<' '<<ldecimal(bavg)<<' '<<adev*a->curvature(aavg)<<' '<<bdev*b->curvature(bavg)<<endl;
+      if (fabs(adev*a->curvature(aavg))<1.2e-8 && fabs(bdev*b->curvature(bavg))<1.2e-8)
+	done=4;
+      asum.clear();
+      bsum.clear();
+      adevsum.clear();
+      bdevsum.clear();
       lasti=i;
     }
     else if (aalong[0]==aalong[1] && balong[0]==balong[1])
@@ -655,6 +673,12 @@ vector<alosta> besidement1(segment *a,double a1,segment *b,double b1)
     ret.resize(2);
     ret[0].setStation(a,aalong[0]);
     ret[1].setStation(b,balong[0]);
+  }
+  if (done==4)
+  {
+    ret.resize(2);
+    ret[0].setStation(a,aavg);
+    ret[1].setStation(b,bavg);
   }
   return ret;
 }
