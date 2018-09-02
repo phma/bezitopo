@@ -263,7 +263,7 @@ spiralarc::spiralarc(xyz kra,int sbear,double c1,double c2,double length,double 
   end=station(length);
 }
 
-spiralarc::spiralarc(xyz kra,xyz mij,xyz fam,int mbear,double curvature,double clothance,double length)
+spiralarc::spiralarc(xyz kra,xy mij,xyz fam,int mbear,double curvature,double clothance,double length)
 // This does NO checking and is intended for polyspiral and alignment.
 {
   start=kra;
@@ -289,6 +289,14 @@ spiralarc::spiralarc(xyz pnt,double curvature,double clothance,int bear,double s
   clo=clothance;
   len=endLength-startLength;
   control1=control2=pnt.elev();
+}
+
+spiralarc spiralarc::operator-() const
+{
+  spiralarc ret(end,mid,start,midbear+DEG180,-cur,clo,len);
+  ret.control1=control2;
+  ret.control2=control1;
+  return ret;
 }
 
 double spiralarc::in(xy pnt)

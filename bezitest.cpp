@@ -2413,12 +2413,14 @@ void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps,vector<xy> expected,
  * nint is a bitmask; 5 means that the number of intersections should be 0 or 2.
  */
 {
-  spiralarc aSnip,aStart,aEnd,bSnip,bStart,bEnd;
+  spiralarc aSnip,aStart,aEnd,bSnip,bStart,bEnd,bNeg;
   BoundRect br;
   vector<array<alosta,2> > inters;
+  vector<alosta> beside;
   int i,j;
   aSnip=snip20(a,aStart,aEnd);
   bSnip=snip20(b,bStart,bEnd);
+  bNeg=-bSnip;
   br.include(&a);
   br.include(&b);
   ps.startpage();
@@ -2433,6 +2435,7 @@ void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps,vector<xy> expected,
   ps.spline(aEnd.approx3d(0.001/ps.getscale()));
   ps.spline(bEnd.approx3d(0.001/ps.getscale()));
   inters=intersections(&aSnip,&bSnip);
+  beside=besidement1(&aSnip,aSnip.length()/2,&bNeg,bSnip.length()/2);
   tassert((nint>>inters.size())&1);
   if (((nint>>inters.size())&1)==0)
   {
@@ -2460,6 +2463,9 @@ void testcogospiral2(spiralarc a,spiralarc b,PostScript &ps,vector<xy> expected,
     cout<<ldecimal(inters[i][0].station.getx())<<','<<ldecimal(inters[i][0].station.gety())<<' '
         <<ldecimal(inters[i][1].station.getx())<<','<<ldecimal(inters[i][1].station.gety())<<'\n';
   }
+  ps.setcolor(0,1,0);
+  if (beside.size())
+    ps.line2p(beside[0].station,beside[1].station);
   ps.endpage();
 }
 

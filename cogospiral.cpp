@@ -543,7 +543,7 @@ array<double,2> besidement(Circle a,Circle b)
   bearb=b.bearing(0);
   pnta=a.station(0);
   pntb=b.station(0);
-  bearavg=beara+(bearhd=(bearb-beara)/2);
+  bearavg=beara+(bearhd=foldangle(bearb-beara)/2);
   distalong=distanceInDirection(pnta,pntb,bearavg);
   distacross=distanceInDirection(pnta,pntb,bearavg-DEG90);
   //cout<<"Distance along "<<ms.formatMeasurementUnit(distalong,LENGTH)<<' '<<
@@ -631,13 +631,14 @@ vector<alosta> besidement1(segment *a,double a1,segment *b,double b1)
   balong[0]=b1;
   do
   {
+    i++;
     step=besidement(a->osculatingCircle(aalong[0]),b->osculatingCircle(balong[0]));
     aalong[0]+=step[0];
     balong[0]+=step[1];
     if ((i&(i-1))==0)
     {
-      aalong[1]==aalong[0];
-      balong[1]==balong[0];
+      aalong[1]=aalong[0];
+      balong[1]=balong[0];
       lasti=i;
     }
     else if (aalong[0]==aalong[1] && balong[0]==balong[1])
