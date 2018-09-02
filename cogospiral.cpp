@@ -504,7 +504,7 @@ array<double,4> weightedDistance(segment *a,segment *b)
   return ret;
 }
 
-array<double,2> closestOrFarthest(Circle a,Circle b)
+array<double,2> besidement(Circle a,Circle b)
 /* Returns the distance along the two circles to the points where the circles
  * are closest or farthest apart. There are two such points on each circle,
  * unless it's a straight line; it generally returns the one closer to the
