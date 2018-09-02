@@ -77,4 +77,4 @@ std::vector<std::array<alosta,2> > intersections(segment *a,segment *b,bool exte
 double meanSquareDistance(segment *a,segment *b);
 std::array<double,4> weightedDistance(segment *a,segment *b);
 std::array<double,2> besidement(Circle a,Circle b);
-//std::vector<alosta> besidement1(segment *a,double a1,segment *b,double b1);
+std::vector<alosta> besidement1(segment *a,double a1,segment *b,double b1);

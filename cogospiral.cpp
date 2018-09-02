@@ -609,3 +609,51 @@ array<double,2> besidement(Circle a,Circle b)
   }
   return ret;
 }
+
+vector<alosta> besidement1(segment *a,double a1,segment *b,double b1)
+/* Finds a point on a and a point on b which are beside each other, that is,
+ * the bearings of the curves at those points are equal and perpendicular to
+ * the direction from one point to the other.
+ * Returns two alostas, one for a and one for b, or nothing.
+ * It can exit in three ways:
+ * • It finds a cycle of length 1, i.e. neither aalosta nor balosta changes, and
+ *   both are within their curve lengths. They are returned.
+ * • It finds a cycle of length greater than 2. Returns an empty vector.
+ * • One or both of the alostas goes off the end of its curve or is NaN.
+ *   Returns an empty vector.
+ */
+{
+  int i=0,lasti,done=0;
+  double aalong[2],balong[2];
+  vector<alosta> ret;
+  array<double,2> step;
+  aalong[0]=a1;
+  balong[0]=b1;
+  do
+  {
+    step=besidement(a->osculatingCircle(aalong[0]),b->osculatingCircle(balong[0]));
+    aalong[0]+=step[0];
+    balong[0]+=step[1];
+    if ((i&(i-1))==0)
+    {
+      aalong[1]==aalong[0];
+      balong[1]==balong[0];
+      lasti=i;
+    }
+    else if (aalong[0]==aalong[1] && balong[0]==balong[1])
+      if (i-lasti==1)
+	done=1;
+      else
+	done=2;
+    if (aalong[0]<0 || aalong[0]>a->length() || isnan(aalong[0]) ||
+        balong[0]<0 || balong[0]>a->length() || isnan(balong[0]))
+      done=3;
+  } while (!done);
+  if (done==1)
+  {
+    ret.resize(2);
+    ret[0].setStation(a,aalong[0]);
+    ret[1].setStation(b,balong[0]);
+  }
+  return ret;
+}
