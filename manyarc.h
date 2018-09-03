@@ -31,3 +31,4 @@ double meanSquareDistance(polyarc apx,spiralarc a);
 std::vector<double> weightedDistance(polyarc apx,spiralarc a);
 polyarc manyArcUnadjusted(spiralarc a,int narcs);
 polyarc manyArc(spiralarc a,int narcs);
+double maxError(polyarc apx,spiralarc a);

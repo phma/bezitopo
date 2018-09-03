@@ -2645,7 +2645,8 @@ void test1manyarc(spiralarc s,PostScript &ps)
     enddiff=approx.getend()-s.getend();
     cout<<narcs<<" arcs, ";
     tassert(enddiff.length()==0);
-    cout<<"mean square error "<<meanSquareDistance(approx,s)<<endl;
+    cout<<"mean square error "<<meanSquareDistance(approx,s);
+    cout<<" linear error "<<maxError(approx,s)<<endl;
     crossings.clear();
     tickmarks.clear();
     for (i=0;i<narcs-1;i++)

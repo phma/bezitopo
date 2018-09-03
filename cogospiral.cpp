@@ -636,8 +636,8 @@ vector<alosta> besidement1(segment *a,double a1,segment *b,double b1)
   {
     i++;
     step=besidement(a->osculatingCircle(aalong[0]),b->osculatingCircle(balong[0]));
-    aalong[0]+=step[0];
-    balong[0]+=step[1];
+    aalong[0]+=step[0]/sqrt(i);
+    balong[0]+=step[1]/sqrt(i);
     asum.push_back(aalong[0]);
     adevsum.push_back(sqr(aalong[0]-aavg));
     bsum.push_back(balong[0]);
@@ -665,7 +665,7 @@ vector<alosta> besidement1(segment *a,double a1,segment *b,double b1)
       else
 	done=2;
     if (aalong[0]<0 || aalong[0]>a->length() || isnan(aalong[0]) ||
-        balong[0]<0 || balong[0]>a->length() || isnan(balong[0]))
+        balong[0]<0 || balong[0]>b->length() || isnan(balong[0]))
       done=3;
   } while (!done);
   if (done==1)

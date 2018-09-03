@@ -484,3 +484,25 @@ polyarc manyArc(spiralarc a,int narcs)
   ret=adjustManyArc(ret,a);
   return ret;
 }
+
+double maxError(polyarc apx,spiralarc a)
+/* Returns the maximum error (always positive) of approximation apx to
+ * spiralarc a. It checks only the first and last arcs, because the others
+ * always have less error.
+ */
+{
+  double firstError=0,lastError=0;
+  vector<alosta> beside;
+  arc oneArc;
+  oneArc=apx.getarc(0);
+  beside=besidement1(&oneArc,oneArc.length()*2/3,&a,oneArc.length()*2/3);
+  if (beside.size())
+    firstError=dist(beside[0].station,beside[1].station);
+  oneArc=apx.getarc(apx.size()-1);
+  beside=besidement1(&oneArc,oneArc.length()/3,&a,a.length()-oneArc.length()*2/3);
+  if (beside.size())
+    lastError=dist(beside[0].station,beside[1].station);
+  if (lastError>firstError)
+    swap(firstError,lastError);
+  return firstError;
+}
