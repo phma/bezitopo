@@ -668,6 +668,7 @@ vector<alosta> besidement1(segment *a,double a1,segment *b,double b1)
         balong[0]<0 || balong[0]>b->length() || isnan(balong[0]))
       done=3;
   } while (!done);
+  cout<<"done="<<done<<'\n';
   if (done==1)
   {
     ret.resize(2);

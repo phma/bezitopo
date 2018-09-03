@@ -493,13 +493,14 @@ double maxError(polyarc apx,spiralarc a)
 {
   double firstError=0,lastError=0;
   vector<alosta> beside;
+  const double fraction=10/17.;
   arc oneArc;
   oneArc=apx.getarc(0);
-  beside=besidement1(&oneArc,oneArc.length()*2/3,&a,oneArc.length()*2/3);
+  beside=besidement1(&oneArc,oneArc.length()*fraction,&a,oneArc.length()*fraction);
   if (beside.size())
     firstError=dist(beside[0].station,beside[1].station);
   oneArc=apx.getarc(apx.size()-1);
-  beside=besidement1(&oneArc,oneArc.length()/3,&a,a.length()-oneArc.length()*2/3);
+  beside=besidement1(&oneArc,oneArc.length()*(1-fraction),&a,a.length()-oneArc.length()*fraction);
   if (beside.size())
     lastError=dist(beside[0].station,beside[1].station);
   if (lastError>firstError)
