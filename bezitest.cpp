@@ -2626,7 +2626,7 @@ void testcurvefit()
 
 void test1manyarc(spiralarc s,PostScript &ps)
 {
-  int narcs,i,j;
+  int narcs,i,j,ncenters;
   polyarc approx;
   vector<xy> crossings;
   vector<segment> tickmarks;
@@ -2634,6 +2634,7 @@ void test1manyarc(spiralarc s,PostScript &ps)
   int crossingsPerArc[4];
   vector<array<alosta,2> > crossings1;
   xy enddiff;
+  bool showCenters=true;
   BoundRect br;
   for (i=0;i<4;i++)
     crossingsPerArc[i]=0;
@@ -2678,11 +2679,30 @@ void test1manyarc(spiralarc s,PostScript &ps)
     br.clear();
     br.include(&s);
     br.include(&approx);
+    for (i=0;showCenters && i<approx.size();i++)
+      br.include(approx.getarc(i).center());
     ps.startpage();
     ps.setscale(br);
     ps.setcolor(0.8,0.8,0);
     for (i=0;i<crossings.size();i++)
       ps.circle(crossings[i],s.length()/100);
+    for (i=0;showCenters && i<approx.size();i++)
+    {
+      if (i&1)
+	ps.setcolor(0.2,0.2,1);
+      else
+	ps.setcolor(0,0.7,0);
+      ps.circle(approx.getarc(i).center(),s.length()/50);
+    }
+    ncenters=9*narcs-4; // The first and last arcs are about 7/9 as long as the others.
+    for (i=0;showCenters && i<ncenters;i++)
+    {
+      if (((i+2)/9)&1)
+	ps.setcolor(1,0.2,1);
+      else
+	ps.setcolor(0.8,0.7,0);
+      ps.circle(s.osculatingCircle((i+0.5)/ncenters*s.length()).center(),s.length()/50);
+    }
     ps.setcolor(0,0,1);
     ps.spline(s.approx3d(0.01));
     ps.setcolor(0,0,0);
