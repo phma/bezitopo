@@ -28,6 +28,7 @@
 #include "matrix.h"
 #include "pointlist.h"
 #include "minquad.h"
+#include "rootfind.h"
 
 using namespace std;
 
@@ -711,6 +712,8 @@ vector<alosta> besidement2(arc a,spiralarc b)
   double scale; // length of a / length of corresponding part of b
   double spiralstart,spiralend;
   double x0,y0,x1,y1,x2,y2;
+  double split0,split2;
+  brent br;
   spiralstart=b.closest(a.getstart(),INFINITY,true);
   spiralend=b.closest(a.getend(),INFINITY,true);
   spiralmid=(spiralstart+spiralend)/2;
@@ -736,6 +739,36 @@ vector<alosta> besidement2(arc a,spiralarc b)
     x1=(x0+x2)/2;
     y1=fbeside(x1,a,b,arcmid,spiralmid,scale);
   }
-  cout<<"It flips at "<<x1<<" between "<<spiralstart<<" and "<<spiralend<<'\n';
+  //cout<<"It flips at "<<x1<<" between "<<spiralstart<<" and "<<spiralend<<'\n';
+  split0=x0;
+  split2=x2;
+  x0=spiralstart;
+  x2=split0;
+  y0=fbeside(x0,a,b,arcmid,spiralmid,scale)-x0;
+  y2=fbeside(x2,a,b,arcmid,spiralmid,scale)-x2;
+  x1=br.init(x0,x2,y0,y2);
+  while (!br.finished())
+  {
+    y1=fbeside(x1,a,b,arcmid,spiralmid,scale)-x1;
+    x1=br.step(y1);
+  }
+  ret.resize(ret.size()+2);
+  cout<<"beside "<<x1<<endl;
+  ret[ret.size()-1].setStation(&b,x1);
+  ret[ret.size()-2].setStation(&a,a.closest(ret[ret.size()-1].station));
+  x0=split2;
+  x2=spiralend;
+  y0=fbeside(x0,a,b,arcmid,spiralmid,scale)-x0;
+  y2=fbeside(x2,a,b,arcmid,spiralmid,scale)-x2;
+  x1=br.init(x0,x2,y0,y2);
+  while (!br.finished())
+  {
+    y1=fbeside(x1,a,b,arcmid,spiralmid,scale)-x1;
+    x1=br.step(y1);
+  }
+  ret.resize(ret.size()+2);
+  cout<<"beside "<<x1<<endl;
+  ret[ret.size()-1].setStation(&b,x1);
+  ret[ret.size()-2].setStation(&a,a.closest(ret[ret.size()-1].station));
   return ret;
 }
