@@ -746,29 +746,35 @@ vector<alosta> besidement2(arc a,spiralarc b)
   x2=split0;
   y0=fbeside(x0,a,b,arcmid,spiralmid,scale)-x0;
   y2=fbeside(x2,a,b,arcmid,spiralmid,scale)-x2;
-  x1=br.init(x0,x2,y0,y2);
-  while (!br.finished())
+  if (y0*y2<=0)
   {
-    y1=fbeside(x1,a,b,arcmid,spiralmid,scale)-x1;
-    x1=br.step(y1);
+    x1=br.init(x0,y0,x2,y2);
+    while (!br.finished())
+    {
+      y1=fbeside(x1,a,b,arcmid,spiralmid,scale)-x1;
+      x1=br.step(y1);
+    }
+    ret.resize(ret.size()+2);
+    cout<<"beside "<<x1<<endl;
+    ret[ret.size()-1].setStation(&b,x1);
+    ret[ret.size()-2].setStation(&a,a.closest(ret[ret.size()-1].station));
   }
-  ret.resize(ret.size()+2);
-  cout<<"beside "<<x1<<endl;
-  ret[ret.size()-1].setStation(&b,x1);
-  ret[ret.size()-2].setStation(&a,a.closest(ret[ret.size()-1].station));
   x0=split2;
   x2=spiralend;
   y0=fbeside(x0,a,b,arcmid,spiralmid,scale)-x0;
   y2=fbeside(x2,a,b,arcmid,spiralmid,scale)-x2;
-  x1=br.init(x0,x2,y0,y2);
-  while (!br.finished())
+  if (y0*y2<=0)
   {
-    y1=fbeside(x1,a,b,arcmid,spiralmid,scale)-x1;
-    x1=br.step(y1);
+    x1=br.init(x0,y0,x2,y2);
+    while (!br.finished())
+    {
+      y1=fbeside(x1,a,b,arcmid,spiralmid,scale)-x1;
+      x1=br.step(y1);
+    }
+    ret.resize(ret.size()+2);
+    cout<<"beside "<<x1<<endl;
+    ret[ret.size()-1].setStation(&b,x1);
+    ret[ret.size()-2].setStation(&a,a.closest(ret[ret.size()-1].station));
   }
-  ret.resize(ret.size()+2);
-  cout<<"beside "<<x1<<endl;
-  ret[ret.size()-1].setStation(&b,x1);
-  ret[ret.size()-2].setStation(&a,a.closest(ret[ret.size()-1].station));
   return ret;
 }
