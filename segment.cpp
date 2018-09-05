@@ -35,6 +35,12 @@
 #include "rootfind.h"
 #include "minquad.h"
 
+#define TOLERMULT 33
+/* TOLERMULT must have a power between DEG90 and DEG180.
+ * Possible values: 3, 7, 14, 20, 33, ...
+ * Smaller values make closest slower.
+ */
+
 using namespace std;
 #ifndef NDEBUG
 int closetime; // Holds the time spent in segment::closest.
@@ -411,7 +417,7 @@ double segment::closest(xy topoint,double closesofar,bool offends)
     if (lastclosedist>closedist)
       angtoler=1;
     else
-      angtoler*=7;
+      angtoler*=TOLERMULT;
   } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<closesofar && !((closest==0 && isinsector(dir(topoint,start)-startbearing(),0xf00ff00f)) || (closest==len && isinsector(dir(topoint,end)-endbearing(),0x0ff00ff0))));
   endangle=DEG90;
   if (closest==0)
@@ -488,7 +494,7 @@ double segment::dirbound(int angle,double boundsofar)
       if (lastclosedist>closedist)
 	angtoler=1;
       else
-	angtoler*=7;
+	angtoler*=TOLERMULT;
     } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<boundsofar && !((closest==0 && isinsector(angle-startbearing(),0xf00ff00f)) || (closest==len && isinsector(angle-endbearing(),0x0ff00ff0))));
   }
   return closedist;
