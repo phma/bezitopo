@@ -683,3 +683,59 @@ vector<alosta> besidement1(segment *a,double a1,segment *b,double b1)
   }
   return ret;
 }
+
+double fbeside(double x,arc &a,spiralarc &b,double arcmid,double spiralmid,double scale)
+{
+  array<double,2> step;
+  step=besidement(a.osculatingCircle(arcmid+scale*(x-spiralmid)),b.osculatingCircle(x));
+  return x+step[1];
+}
+
+vector<alosta> besidement2(arc a,spiralarc b)
+/* This should work where besidement1 doesn't. In an approximation, there's a
+ * point near the middle of an arc where the spiral has the same curvature as
+ * the arc, so the line between the centers of curvature (that of the arc lying
+ * just outside the evolute of the spiral) is parallel to the average of the
+ * bearings of the arc and the spiral. This results in the bearing it tries
+ * to find suddenly flipping, and the next point in the iteration being way off
+ * the end of the arc, and besidement1 gives up.
+ *
+ * besidement2 uses this flip point to split the arc and spiral in two parts,
+ * in each of which it searches for the point where f(x)-x=0, where f(x) is
+ * the distance along the spiral returned by besidement and x is the distance
+ * along the spiral where the osculating circle is taken.
+ */
+{
+  vector<alosta> ret;
+  double arcmid=a.length()/2,spiralmid;
+  double scale; // length of a / length of corresponding part of b
+  double spiralstart,spiralend;
+  double x0,y0,x1,y1,x2,y2;
+  spiralstart=b.closest(a.getstart(),INFINITY,true);
+  spiralend=b.closest(a.getend(),INFINITY,true);
+  spiralmid=(spiralstart+spiralend)/2;
+  scale=a.length()/(spiralend-spiralstart);
+  x0=spiralstart;
+  x1=spiralmid;
+  x2=spiralend;
+  y0=fbeside(x0,a,b,arcmid,spiralmid,scale);
+  y1=fbeside(x1,a,b,arcmid,spiralmid,scale);
+  y2=fbeside(x2,a,b,arcmid,spiralmid,scale);
+  while (x0<x1 && x1<x2)
+  {
+    if (fabs(y0-y1)>fabs(y1-y2))
+    {
+      x2=x1;
+      y2=y1;
+    }
+    else
+    {
+      x0=x1;
+      y0=y1;
+    }
+    x1=(x0+x2)/2;
+    y1=fbeside(x1,a,b,arcmid,spiralmid,scale);
+  }
+  cout<<"It flips at "<<x1<<" between "<<spiralstart<<" and "<<spiralend<<'\n';
+  return ret;
+}

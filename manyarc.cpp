@@ -496,11 +496,13 @@ double maxError(polyarc apx,spiralarc a)
   const double fraction=10/17.;
   arc oneArc;
   oneArc=apx.getarc(0);
-  beside=besidement1(&oneArc,oneArc.length()*fraction,&a,oneArc.length()*fraction);
+  //beside=besidement1(&oneArc,oneArc.length()*fraction,&a,oneArc.length()*fraction);
+  beside=besidement2(oneArc,a);
   if (beside.size())
     firstError=dist(beside[0].station,beside[1].station);
   oneArc=apx.getarc(apx.size()-1);
-  beside=besidement1(&oneArc,oneArc.length()*(1-fraction),&a,a.length()-oneArc.length()*fraction);
+  //beside=besidement1(&oneArc,oneArc.length()*(1-fraction),&a,a.length()-oneArc.length()*fraction);
+  beside=besidement2(oneArc,a);
   if (beside.size())
     lastError=dist(beside[0].station,beside[1].station);
   if (lastError>firstError)
