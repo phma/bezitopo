@@ -491,6 +491,7 @@ double maxError(polyarc apx,spiralarc a)
  * always have less error.
  */
 {
+  int i;
   double firstError=0,lastError=0;
   vector<alosta> beside;
   const double fraction=10/17.;
@@ -498,14 +499,20 @@ double maxError(polyarc apx,spiralarc a)
   oneArc=apx.getarc(0);
   //beside=besidement1(&oneArc,oneArc.length()*fraction,&a,oneArc.length()*fraction);
   beside=besidement2(oneArc,a);
-  if (beside.size())
-    firstError=dist(beside[0].station,beside[1].station);
+  for (i=0;i<beside.size();i+=2)
+  {
+    lastError=dist(beside[i].station,beside[i+1].station);
+    if (lastError>firstError)
+      swap(firstError,lastError);
+  }
   oneArc=apx.getarc(apx.size()-1);
   //beside=besidement1(&oneArc,oneArc.length()*(1-fraction),&a,a.length()-oneArc.length()*fraction);
   beside=besidement2(oneArc,a);
-  if (beside.size())
-    lastError=dist(beside[0].station,beside[1].station);
-  if (lastError>firstError)
-    swap(firstError,lastError);
+  for (i=0;i<beside.size();i+=2)
+  {
+    lastError=dist(beside[i].station,beside[i+1].station);
+    if (lastError>firstError)
+      swap(firstError,lastError);
+  }
   return firstError;
 }
