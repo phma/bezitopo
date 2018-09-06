@@ -2634,7 +2634,7 @@ void test1manyarc(spiralarc s,PostScript &ps)
   int crossingsPerArc[4];
   vector<array<alosta,2> > crossings1;
   xy enddiff;
-  bool showCenters=true;
+  bool showCenters=false;
   BoundRect br;
   for (i=0;i<4;i++)
     crossingsPerArc[i]=0;
