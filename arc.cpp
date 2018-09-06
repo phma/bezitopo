@@ -138,7 +138,7 @@ xyz arc::station(double along) const
 
 int arc::bearing(double along) const
 {
-  double len;
+  double len=length();
   int angalong;
   angalong=lrint((along/len-0.5)*delta);
   return chordbearing()+angalong;
