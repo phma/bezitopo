@@ -48,7 +48,8 @@ void outApprox(polyarc approx,spiralarc s,Measure ms)
 {
   int i;
   arc oneArc;
-  cout<<"<table border><tr><th colspan=12>"<<approx.size()<<" arcs</th></tr>\n";
+  cout<<"<table border><tr><th colspan=12>"<<approx.size()<<" arcs, error "
+    <<ms.formatMeasurementUnit(maxError(approx,s),LENGTH)<<"</th></tr>\n";
   for (i=0;i<approx.size();i++)
   {
     oneArc=approx.getarc(i);
