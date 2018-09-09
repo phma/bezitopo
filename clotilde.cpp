@@ -27,6 +27,16 @@
 using namespace std;
 vector<string> args;
 
+void startHtml(spiralarc s)
+{
+  cout<<"<html><head><title>Approximation</title></head><body>\n";
+}
+
+void endHtml()
+{
+  cout<<"</body></html>\n";
+}
+
 void outArc(arc oneArc,Measure ms)
 {
   cout<<"<tr><td colspan=4>"<<ms.formatMeasurementUnit(oneArc.length(),LENGTH)<<"</td>";
@@ -83,6 +93,7 @@ int main(int argc, char *argv[])
   ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
+  startHtml(trans);
   i=2;
   do
   {
@@ -90,5 +101,6 @@ int main(int argc, char *argv[])
     outApprox(approx,trans,ms);
     i++;
   } while (maxError(approx,trans)>0.001);
+  endHtml();
   return 0;
 }
