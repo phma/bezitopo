@@ -41,17 +41,19 @@ void outArc(arc oneArc,Measure ms)
 {
   cout<<"<tr><td colspan=4>"<<ms.formatMeasurementUnit(oneArc.length(),LENGTH)<<"</td>";
   cout<<"<td colspan=4>"<<ms.formatMeasurementUnit(oneArc.chordlength(),LENGTH)<<"</td>";
-  cout<<"<td colspan=4>"<<ms.formatMeasurementUnit(oneArc.getdelta(),ANGLE_B)<<"</td></tr>\n";
+  cout<<"<td colspan=4>"<<ms.formatMeasurementUnit(oneArc.getdelta(),ANGLE_B)<<"</td>";
+  cout<<"<td colspan=4>"<<formatCurvature(oneArc.curvature(0),ms)<<"</td>";
+  cout<<"<td colspan=4>"<<ms.formatMeasurementUnit(oneArc.radius(0),LENGTH)<<"</td></tr>\n";
 }
 
 void outPoint(xy pnt,spiralarc s,Measure ms)
 {
   int sb=s.startbearing(),eb=s.endbearing();
   xy sp=s.getstart(),ep=s.getend();
-  cout<<"<tr><td colspan=3>"<<ms.formatMeasurementUnit((sp==pnt)?0:(dir(sp,pnt)-sb),ANGLE_B)<<"</td>";
-  cout<<"<td colspan=3>"<<ms.formatMeasurementUnit(dist(sp,pnt),LENGTH)<<"</td>";
-  cout<<"<td colspan=3>"<<ms.formatMeasurementUnit((pnt==ep)?0:(dir(pnt,ep)-eb),ANGLE_B)<<"</td>";
-  cout<<"<td colspan=3>"<<ms.formatMeasurementUnit(dist(pnt,ep),LENGTH)<<"</td></tr>\n";
+  cout<<"<tr><td colspan=5>"<<ms.formatMeasurementUnit((sp==pnt)?0:(dir(sp,pnt)-sb),ANGLE_B)<<"</td>";
+  cout<<"<td colspan=5>"<<ms.formatMeasurementUnit(dist(sp,pnt),LENGTH)<<"</td>";
+  cout<<"<td colspan=5>"<<ms.formatMeasurementUnit((pnt==ep)?0:(dir(pnt,ep)-eb),ANGLE_B)<<"</td>";
+  cout<<"<td colspan=5>"<<ms.formatMeasurementUnit(dist(pnt,ep),LENGTH)<<"</td></tr>\n";
 }
 
 void outApprox(polyarc approx,spiralarc s,Measure ms)
@@ -59,7 +61,7 @@ void outApprox(polyarc approx,spiralarc s,Measure ms)
   int i;
   arc oneArc;
   double err=maxError(approx,s);
-  cout<<"<table border><tr><th colspan=12>"<<approx.size()<<" arcs, error "
+  cout<<"<table border><tr><th colspan=20>"<<approx.size()<<" arcs, error "
     <<ms.formatMeasurementUnit(err,LENGTH,0,err/32)<<"</th></tr>\n";
   for (i=0;i<approx.size();i++)
   {
@@ -89,8 +91,12 @@ int main(int argc, char *argv[])
   ms.setMetric();
   ms.setDefaultUnit(LENGTH,0.552);
   ms.setDefaultPrecision(LENGTH,2e-6);
+  ms.setDefaultUnit(CURVATURE,0.001);
+  ms.setDefaultPrecision(CURVATURE,2e-6);
   ms.setDefaultPrecision(ANGLE_B,1);
   ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
+  ms.setDefaultPrecision(ANGLE,bintorad(1));
+  ms.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
   startHtml(trans);

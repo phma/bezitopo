@@ -416,6 +416,10 @@ void Measure::setMetric()
   addUnit(HECTARE);
   addUnit(GRAM);
   addUnit(KILOGRAM);
+  addUnit(DIOPTER);
+  addUnit(MILLIDIOPTER);
+  addUnit(SQUAREDIOPTER);
+  addUnit(SQUAREMILLIDIOPTER);
 }
 
 void Measure::setCustomary()
