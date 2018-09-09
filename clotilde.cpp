@@ -82,7 +82,12 @@ int main(int argc, char *argv[])
   ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
-  approx=manyArc(trans,5);
-  outApprox(approx,trans,ms);
+  i=2;
+  do
+  {
+    approx=manyArc(trans,i);
+    outApprox(approx,trans,ms);
+    i++;
+  } while (maxError(approx,trans)>0.001);
   return 0;
 }
