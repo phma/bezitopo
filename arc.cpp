@@ -26,6 +26,8 @@
 #include "vcurve.h"
 #include "spiral.h"
 
+using namespace std;
+
 arc::arc()
 {
   start=end=xyz(0,0,0);
@@ -197,3 +199,34 @@ double arc::in(xy pnt)
    interpolation and calong(). Then use parabolic interpolation to find
    the closest point on the circle.
    */
+
+string formatCurvature(double curvature,Measure ms)
+/* The coherent unit of curvature is the diopter (not an SI unit, but coherent
+ * with SI). For roads, the millidiopter is closer to the size. When roads
+ * are measured in feet, however, curvature is expressed not in per feet,
+ * but by stating the angle subtended by a 100-foot arc. Railroads use
+ * a 100-foot chord, which I may add later (it'll require a flag somewhere).
+ */
+{
+  double hundredFeet=ms.parseMeasurement("100 ft",LENGTH).magnitude;
+  bool isFoot;
+  string hundredFeetString=ms.formatMeasurement(hundredFeet,LENGTH);
+  int i;
+  for (i=0;i<hundredFeetString.length();i++)
+  {
+    if (hundredFeetString[i]=='1')
+    {
+      isFoot=true;
+      break;
+    }
+    if (hundredFeetString[i]=='3')
+    {
+      isFoot=false;
+      break;
+    }
+  }
+  if (isFoot)
+    return ms.formatMeasurementUnit(curvature*hundredFeet,ANGLE);
+  else
+    return ms.formatMeasurementUnit(curvature,CURVATURE);
+}

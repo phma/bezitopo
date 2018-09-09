@@ -74,6 +74,8 @@ public:
   virtual bool isTooCurly();
   void split(double along,arc &a,arc &b);
   //xyz midpoint();
-  };
+};
+
+std::string formatCurvature(double curvature,Measure ms);
 
 #endif

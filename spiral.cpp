@@ -522,3 +522,33 @@ void spiralarc::setcurvature(double startc,double endc)
   if (abs(midbear-lastmidbear)>1 || dist(mid,lastmid)>1e-6)
     cur=clo=len=NAN;
 }
+
+string formatClothance(double clothance,Measure ms)
+/* The coherent unit of clothance is the square diopter (not an SI unit, but
+ * coherent with SI). For roads, the square millidiopter is closer to the size.
+ * When roads are measured in feet, however, clothance is expressed not in per
+ * square feet, but by stating the change in degree of curve over a 100-foot arc.
+ */
+{
+  double hundredFeet=ms.parseMeasurement("100 ft",LENGTH).magnitude;
+  bool isFoot;
+  string hundredFeetString=ms.formatMeasurement(hundredFeet,LENGTH);
+  int i;
+  for (i=0;i<hundredFeetString.length();i++)
+  {
+    if (hundredFeetString[i]=='1')
+    {
+      isFoot=true;
+      break;
+    }
+    if (hundredFeetString[i]=='3')
+    {
+      isFoot=false;
+      break;
+    }
+  }
+  if (isFoot)
+    return ms.formatMeasurementUnit(clothance*hundredFeet*hundredFeet,ANGLE);
+  else
+    return ms.formatMeasurementUnit(clothance,CLOTHANCE);
+}

@@ -67,6 +67,10 @@
 #define ARCSECOND_B 0x003801400000
 #define GON_B 0x003800c00000
 #define RADIAN_B 0x003800400000
+#define DIOPTER 0x002b00400000
+#define SQUAREDIOPTER 0x003900400000
+#define MILLIDIOPTER 0x002b003b0000
+#define SQUAREMILLIDIOPTER 0x0039003b0000
 /* These are physical quantity codes.
  * ANGLE is used when the angle is in radians (latitude and longitude, except
  * in geolattices); ANGLE_B is used when it's in fixed-point binary (bearings,
@@ -80,6 +84,8 @@
 #define VOLUME 0x002800000000
 #define ANGLE 0x002000000000
 #define ANGLE_B 0x003800000000
+#define CURVATURE 0x002b00000000
+#define CLOTHANCE 0x003900000000
 /* These are precision codes. DEC3 = 3 digits after the decimal point.
  * FIXLARGER means that it's in fixed point with larger units, e.g.
  * ARCSECOND+FIXLARGER+DEC3 means degrees, minutes, and seconds with

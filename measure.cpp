@@ -51,32 +51,36 @@ struct cf
 
 cf cfactors[]=
 {
-  FOOT,		0.3048,			// ft (any of three)
-  CHAIN,	20.1168,		// ch (any of three)
-  MILE,		1609.344,		// mi (any of three)
-  0,		1,			// unknown unit
-  MILLIMETER,	0.001,			// mm
-  MICROMETER,	0.000001,		// μm
-  KILOMETER,	1000,			// km
-  METER,	1,			// m
-  SQUAREMETER,	1,			// m²
-  SQUAREFOOT,	0.09290304,		// ft²
-  HECTARE,	10000,			// ha
-  ACRE,		4046.8564224,		// ac
-  GRAM,		0.001,			// g
-  KILOGRAM,	1.0,			// kg
-  POUND,	0.45359237,		// lb
-  HOUR,		3600,			// hour
-  RADIAN,	1,
-  DEGREE,	M_PI/180,
-  GON,		M_PI/200,
-  ARCMINUTE,	M_PI/10800,
-  ARCSECOND,	M_PI/648000,
-  RADIAN_B,	1073741824./M_PI,
-  DEGREE_B,	1073741824./180,
-  GON_B,	1073741824./200,
-  ARCMINUTE_B,	1073741824./10800,
-  ARCSECOND_B,	1073741824./648000,
+  FOOT,			0.3048,			// ft (any of three)
+  CHAIN,		20.1168,		// ch (any of three)
+  MILE,			1609.344,		// mi (any of three)
+  0,			1,			// unknown unit
+  MILLIMETER,		0.001,			// mm
+  MICROMETER,		0.000001,		// μm
+  KILOMETER,		1000,			// km
+  METER,		1,			// m
+  SQUAREMETER,		1,			// m²
+  SQUAREFOOT,		0.09290304,		// ft²
+  HECTARE,		10000,			// ha
+  ACRE,			4046.8564224,		// ac
+  GRAM,			0.001,			// g
+  KILOGRAM,		1.0,			// kg
+  POUND,		0.45359237,		// lb
+  DIOPTER,		1,
+  MILLIDIOPTER,		0.001,
+  SQUAREDIOPTER,	1,
+  SQUAREMILLIDIOPTER,	1e-6,
+  HOUR,			3600,			// hour
+  RADIAN,		1,
+  DEGREE,		M_PI/180,
+  GON,			M_PI/200,
+  ARCMINUTE,		M_PI/10800,
+  ARCSECOND,		M_PI/648000,
+  RADIAN_B,		1073741824./M_PI,
+  DEGREE_B,		1073741824./180,
+  GON_B,		1073741824./200,
+  ARCMINUTE_B,		1073741824./10800,
+  ARCSECOND_B,		1073741824./648000,
 };
 #define nunits (sizeof(cfactors)/sizeof(struct cf))
 struct symbol
@@ -88,32 +92,36 @@ struct symbol
 symbol symbols[]=
 /* The first symbol is the canonical one, if there is one. */
 {
-  MILLIMETER,	"mm",
-  MICROMETER,	"µm", //0000b5 00006d
-  MICROMETER,	"μm", //0003bc 00006d
-  MICROMETER,	"um",
-  KILOMETER,	"km",
-  MILE,		"mi",
-  FOOT,		"ft",
-  FOOT,		"'",
-  METER,	"m",
-  SQUAREMETER,	"m²",
-  SQUAREFOOT,	"ft²",
-  HECTARE,	"ha",
-  ACRE,		"ac",
-  GRAM,		"g",
-  KILOGRAM,	"kg",
-  POUND,	"lb",
-  RADIAN,	"rad",
-  DEGREE,	"°",
-  GON,		"gon",
-  ARCMINUTE,	"′",
-  ARCSECOND,	"″",
-  RADIAN_B,	"rad",
-  DEGREE_B,	"°",
-  GON_B,	"gon",
-  ARCMINUTE_B,	"′",
-  ARCSECOND_B,	"″",
+  MILLIMETER,		"mm",
+  MICROMETER,		"µm", //0000b5 00006d
+  MICROMETER,		"μm", //0003bc 00006d
+  MICROMETER,		"um",
+  KILOMETER,		"km",
+  MILE,			"mi",
+  FOOT,			"ft",
+  FOOT,			"'",
+  METER,		"m",
+  SQUAREMETER,		"m²",
+  SQUAREFOOT,		"ft²",
+  HECTARE,		"ha",
+  ACRE,			"ac",
+  GRAM,			"g",
+  KILOGRAM,		"kg",
+  POUND,		"lb",
+  DIOPTER,		"dpt",
+  MILLIDIOPTER,		"mdpt",
+  SQUAREDIOPTER,	"dpt²",
+  SQUAREMILLIDIOPTER,	"mdpt²",
+  RADIAN,		"rad",
+  DEGREE,		"°",
+  GON,			"gon",
+  ARCMINUTE,		"′",
+  ARCSECOND,		"″",
+  RADIAN_B,		"rad",
+  DEGREE_B,		"°",
+  GON_B,		"gon",
+  ARCMINUTE_B,		"′",
+  ARCSECOND_B,		"″",
 };
 #define nsymbols (sizeof(symbols)/sizeof(struct symbol))
 

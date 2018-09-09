@@ -124,4 +124,6 @@ public:
   }
 };
 
+std::string formatClothance(double clothance,Measure ms);
+
 #endif
