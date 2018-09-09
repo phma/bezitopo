@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
     approx=manyArc(trans,i);
     outApprox(approx,trans,ms);
     i++;
-  } while (maxError(approx,trans)>0.001);
+  } while (maxError(approx,trans)>0.01);
   endHtml();
   return 0;
 }
