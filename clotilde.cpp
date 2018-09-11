@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
   ms.setDefaultUnit(LENGTH,0.552);
   ms.setDefaultPrecision(LENGTH,2e-6);
   ms.setDefaultUnit(CURVATURE,0.001);
-  ms.setDefaultPrecision(CURVATURE,2e-6);
+  ms.setDefaultPrecision(CURVATURE,2e-9);
   ms.setDefaultPrecision(ANGLE_B,1);
   ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
   ms.setDefaultPrecision(ANGLE,bintorad(1));
