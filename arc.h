@@ -76,6 +76,6 @@ public:
   //xyz midpoint();
 };
 
-std::string formatCurvature(double curvature,Measure ms);
+std::string formatCurvature(double curvature,Measure ms,double precisionMagnitude=0);
 
 #endif

@@ -200,7 +200,7 @@ double arc::in(xy pnt)
    the closest point on the circle.
    */
 
-string formatCurvature(double curvature,Measure ms)
+string formatCurvature(double curvature,Measure ms,double precisionMagnitude)
 /* The coherent unit of curvature is the diopter (not an SI unit, but coherent
  * with SI). For roads, the millidiopter is closer to the size. When roads
  * are measured in feet, however, curvature is expressed not in per feet,
@@ -226,7 +226,7 @@ string formatCurvature(double curvature,Measure ms)
     }
   }
   if (isFoot)
-    return ms.formatMeasurementUnit(curvature*hundredFeet,ANGLE);
+    return ms.formatMeasurementUnit(curvature*hundredFeet,ANGLE,0,precisionMagnitude*hundredFeet);
   else
-    return ms.formatMeasurementUnit(curvature,CURVATURE);
+    return ms.formatMeasurementUnit(curvature,CURVATURE,0,precisionMagnitude);
 }

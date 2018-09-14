@@ -39,11 +39,14 @@ void endHtml()
 
 void outArc(arc oneArc,Measure ms)
 {
+  double relprec=abs(oneArc.getdelta());
+  if (relprec==0)
+    relprec=1;
   cout<<"<tr><td colspan=4>"<<ms.formatMeasurementUnit(oneArc.length(),LENGTH)<<"</td>";
   cout<<"<td colspan=4>"<<ms.formatMeasurementUnit(oneArc.chordlength(),LENGTH)<<"</td>";
   cout<<"<td colspan=4>"<<ms.formatMeasurementUnit(oneArc.getdelta(),ANGLE_B)<<"</td>";
-  cout<<"<td colspan=4>"<<formatCurvature(oneArc.curvature(0),ms)<<"</td>";
-  cout<<"<td colspan=4>"<<ms.formatMeasurementUnit(oneArc.radius(0),LENGTH)<<"</td></tr>\n";
+  cout<<"<td colspan=4>"<<formatCurvature(oneArc.curvature(0),ms,oneArc.curvature(0)/relprec)<<"</td>";
+  cout<<"<td colspan=4>"<<ms.formatMeasurementUnit(oneArc.radius(0),LENGTH,0,oneArc.radius(0)/relprec)<<"</td></tr>\n";
 }
 
 void outPoint(xy pnt,spiralarc s,Measure ms)
