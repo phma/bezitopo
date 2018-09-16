@@ -25,6 +25,7 @@
 #include <iostream>
 #include "manyarc.h"
 #include "vball.h"
+#include "cmdopt.h"
 using namespace std;
 vector<string> args;
 

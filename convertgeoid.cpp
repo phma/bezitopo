@@ -36,6 +36,7 @@
 #include "halton.h"
 #include "kml.h"
 #include "smooth5.h"
+#include "cmdopt.h"
 using namespace std;
 
 document doc;
@@ -48,20 +49,6 @@ double bolTolerance=0,bolSubdivision=0,bolSpacing=0;
 int nInputFiles=0;
 vector<string> infilebasenames,infilenames;
 string outfilename;
-
-struct option
-{
-  char shopt;
-  string lopt;
-  string args;
-  string desc;
-};
-
-struct token
-{
-  int optnum;
-  string nonopt;
-};
 
 vector<option> options(
   {
