@@ -80,7 +80,8 @@ void outSpiral(spiralarc s,Measure ms)
   cout<<"<td><h1>End curvature: "<<formatCurvature(endCur,ms)<<"</h1></td></tr>\n";
   cout<<"<tr><td><h1>Start radius: "<<ms.formatMeasurementUnit(1/startCur,LENGTH)<<"</h1></td>\n";
   cout<<"<td><h1>End radius: "<<ms.formatMeasurementUnit(1/endCur,LENGTH)<<"</h1></td></tr>\n";
-  cout<<"<tr><td colspan=2><h1>Delta: "<<ms.formatMeasurementUnit(s.getdelta(),ANGLE_B)<<"</h1></td></tr></table>\n";
+  cout<<"<tr><td><h1>Clothance: "<<formatClothance(s.clothance(),ms)<<"</h1></td>\n";
+  cout<<"<td><h1>Delta: "<<ms.formatMeasurementUnit(s.getdelta(),ANGLE_B)<<"</h1></td></tr></table>\n";
 }
 
 void outArc(arc oneArc,Measure ms)
@@ -142,6 +143,8 @@ int main(int argc, char *argv[])
   ms.setDefaultPrecision(LENGTH,2e-6);
   ms.setDefaultUnit(CURVATURE,0.001);
   ms.setDefaultPrecision(CURVATURE,2e-9);
+  ms.setDefaultUnit(CLOTHANCE,1e-6);
+  ms.setDefaultPrecision(CLOTHANCE,2e-12);
   ms.setDefaultPrecision(ANGLE_B,1);
   ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
   ms.setDefaultPrecision(ANGLE,bintorad(1));
