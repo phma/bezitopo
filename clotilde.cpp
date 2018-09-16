@@ -33,7 +33,12 @@ vector<option> options(
   {
     {'h',"help","","Help using the program"},
     {'\0',"version","","Output version number"},
-    {'v',"verbose","","Increase verbosity"}
+    {'v',"verbose","","Increase verbosity"},
+    {'l',"length","length","Arc length"},
+    {'\0',"chordlength","length","Chord length"},
+    {'c',"curvature","cur cur","Start and end curvatures"},
+    {'r',"radius","length length","Start and end radii"},
+    {'u',"unit","m/ft/usft/inft/deg/dms/gon","Length or angle unit"}
   });
 
 vector<token> cmdline;
@@ -42,7 +47,14 @@ void outhelp()
 {
   int i,j;
   cout<<"Clotilde outputs approximations to spiralarcs. Example:\n"
-    <<"tbd.\n";
+    <<"clotilde -u m -l 200 -r inf 900\n"
+    <<"approximates a 200-meter-long spiral starting straight and ending on 900 m radius.\n"
+    <<"clotilde -u ft -l 500 -c 0 7\n"
+    <<"approximates a 500-foot-long spiral starting straight and ending on a 7° curve.\n"
+    <<"clotilde -u usft -l 500 -c 0 7 -u m\n"
+    <<"approximates a 500-USfoot-long spiral, outputting the arcs in meters.\n"
+    <<"When using feet, curvature is expressed as angle of 100 ft arc,\n"
+    <<"and clothance is expressed as change in 100 ft of angle of 100 ft arc.\n";
   for (i=0;i<options.size();i++)
   {
     cout<<(options[i].shopt?options[i].shopt:' ')<<' ';
