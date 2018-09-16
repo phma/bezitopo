@@ -24,17 +24,35 @@
  */
 #include <iostream>
 #include "manyarc.h"
+#include "vball.h"
 using namespace std;
 vector<string> args;
 
-void startHtml(spiralarc s)
+void startHtml(spiralarc s,Measure ms)
 {
-  cout<<"<html><head><title>Approximation</title></head><body>\n";
+  cout<<"<html><head><title>Approximation ";
+  cout<<ms.formatMeasurementUnit(s.length(),LENGTH,0,0.522)<<"</title></head><body>\n";
 }
 
 void endHtml()
 {
   cout<<"</body></html>\n";
+}
+
+void outSpiral(spiralarc s,Measure ms)
+{
+  double startCur=s.curvature(0),endCur=s.curvature(s.length());
+  if (fabs(startCur)<1/EARTHRAD)
+    startCur=0;
+  if (fabs(endCur)<1/EARTHRAD)
+    endCur=0;
+  cout<<"<table border><tr><td><h1>Arc length: "<<ms.formatMeasurementUnit(s.length(),LENGTH)<<"</h1></td>\n";
+  cout<<"<td><h1>Chord length: "<<ms.formatMeasurementUnit(s.chordlength(),LENGTH)<<"</h1></td></tr>\n";
+  cout<<"<tr><td><h1>Start curvature: "<<formatCurvature(startCur,ms)<<"</h1></td>\n";
+  cout<<"<td><h1>End curvature: "<<formatCurvature(endCur,ms)<<"</h1></td></tr>\n";
+  cout<<"<tr><td><h1>Start radius: "<<ms.formatMeasurementUnit(1/startCur,LENGTH)<<"</h1></td>\n";
+  cout<<"<td><h1>End radius: "<<ms.formatMeasurementUnit(1/endCur,LENGTH)<<"</h1></td></tr>\n";
+  cout<<"<tr><td colspan=2><h1>Delta: "<<ms.formatMeasurementUnit(s.getdelta(),ANGLE_B)<<"</h1></td></tr></table>\n";
 }
 
 void outArc(arc oneArc,Measure ms)
@@ -102,7 +120,8 @@ int main(int argc, char *argv[])
   ms.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
-  startHtml(trans);
+  startHtml(trans,ms);
+  outSpiral(trans,ms);
   i=2;
   do
   {
