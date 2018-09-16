@@ -29,6 +29,33 @@
 using namespace std;
 vector<string> args;
 
+vector<option> options(
+  {
+    {'h',"help","","Help using the program"},
+    {'\0',"version","","Output version number"},
+    {'v',"verbose","","Increase verbosity"}
+  });
+
+vector<token> cmdline;
+
+void outhelp()
+{
+  int i,j;
+  cout<<"Clotilde outputs approximations to spiralarcs. Example:\n"
+    <<"tbd.\n";
+  for (i=0;i<options.size();i++)
+  {
+    cout<<(options[i].shopt?options[i].shopt:' ')<<' ';
+    cout<<options[i].lopt;
+    for (j=options[i].lopt.length();j<14;j++)
+      cout<<' ';
+    cout<<options[i].args;
+    for (j=options[i].args.length();j<20;j++)
+      cout<<' ';
+    cout<<options[i].desc<<endl;
+  }
+}
+
 void startHtml(spiralarc s,Measure ms)
 {
   cout<<"<html><head><title>Approximation ";
