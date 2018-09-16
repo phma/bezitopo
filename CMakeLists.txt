@@ -93,7 +93,8 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                segment.cpp smooth5.cpp sourcegeoid.cpp spiral.cpp spolygon.cpp
                stl.cpp test.cpp textfile.cpp tin.cpp vball.cpp vcurve.cpp zoom.cpp)
 add_executable(clotilde angle.cpp arc.cpp bezier.cpp
-	       bezier3d.cpp binio.cpp breakline.cpp boundrect.cpp circle.cpp clotilde.cpp cogo.cpp
+	       bezier3d.cpp binio.cpp breakline.cpp boundrect.cpp
+	       circle.cpp clotilde.cpp cmdopt.cpp cogo.cpp
 	       cogospiral.cpp contour.cpp csv.cpp drawobj.cpp
                ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
                intloop.cpp latlong.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp 
@@ -103,7 +104,7 @@ add_executable(clotilde angle.cpp arc.cpp bezier.cpp
 	       tin.cpp vball.cpp vcurve.cpp)
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
                binio.cpp boundrect.cpp breakline.cpp circle.cpp
-               cogo.cpp cogospiral.cpp contour.cpp
+               cmdopt.cpp cogo.cpp cogospiral.cpp contour.cpp
                convertgeoid.cpp csv.cpp document.cpp drawobj.cpp
                ellipsoid.cpp except.cpp
                geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp

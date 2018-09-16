@@ -1,6 +1,6 @@
 /******************************************************/
 /*                                                    */
-/* cmdopt.h - command-line options                    */
+/* cmdopt.cpp - command-line options                  */
 /*                                                    */
 /******************************************************/
 /* Copyright 2018 Pierre Abbat.
@@ -19,23 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
-#include <string>
-#include <vector>
+#include "cmdopt.h"
+using namespace std;
 
-struct option
+void argpass1(int argc, char *argv[])
 {
-  char shopt;
-  std::string lopt;
-  std::string args;
-  std::string desc;
-};
-
-struct token
-{
-  int optnum;
-  std::string nonopt;
-};
-
-extern std::vector<option> options;
-extern std::vector<token> cmdline;
-void argpass1(int argc, char *argv[]);
+  int i,j;
+  token tok;
+  for (i=1;i<argc;i++)
+  {
+    tok.optnum=-1;
+    tok.nonopt=argv[i];
+    for (j=0;j<options.size();j++)
+    {
+      if (options[j].shopt && argv[i]==string("-")+options[j].shopt)
+      {
+	tok.optnum=j;
+	tok.nonopt="";
+	cmdline.push_back(tok);
+      }
+      else if (options[j].lopt.length() && argv[i]=="--"+options[j].lopt)
+      {
+	tok.optnum=j;
+	tok.nonopt="";
+	cmdline.push_back(tok);
+      }
+    }
+    if (tok.optnum<0)
+      cmdline.push_back(tok);
+  }
+}

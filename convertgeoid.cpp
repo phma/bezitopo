@@ -338,34 +338,6 @@ int parseFineness(string str)
   return nearestSmooth(rint((double)DEG180/angle));
 }
 
-void argpass1(int argc, char *argv[])
-{
-  int i,j;
-  token tok;
-  for (i=1;i<argc;i++)
-  {
-    tok.optnum=-1;
-    tok.nonopt=argv[i];
-    for (j=0;j<options.size();j++)
-    {
-      if (options[j].shopt && argv[i]==string("-")+options[j].shopt)
-      {
-	tok.optnum=j;
-	tok.nonopt="";
-	cmdline.push_back(tok);
-      }
-      else if (options[j].lopt.length() && argv[i]=="--"+options[j].lopt)
-      {
-	tok.optnum=j;
-	tok.nonopt="";
-	cmdline.push_back(tok);
-      }
-    }
-    if (tok.optnum<0)
-      cmdline.push_back(tok);
-  }
-}
-
 void argpass2()
 {
   int i,j,foundunit;
