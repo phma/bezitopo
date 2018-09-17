@@ -241,12 +241,41 @@ int main(int argc, char *argv[])
   ms.setDefaultUnit(CLOTHANCE,1e-6);
   ms.setDefaultPrecision(CLOTHANCE,2e-12);
   ms.setDefaultPrecision(ANGLE_B,1);
-  ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
   ms.setDefaultPrecision(ANGLE,bintorad(1));
-  ms.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
   argpass1(argc,argv);
   argpass2();
-  if (false)
+  if (angleUnits.size()>2 || lengthUnits.size()>2)
+    commandError=true;
+  if (lengthUnits.size())
+    if (lengthUnits[0]==255)
+      ms.setMetric();
+    else
+    {
+      ms.setCustomary();
+      ms.setFoot(lengthUnits[0]);
+    }
+  if (angleUnits.size())
+    switch (angleUnits[0])
+    {
+      case 10000:
+	ms.addUnit(GON);
+	ms.addUnit(GON_B);
+	break;
+      case 9000:
+	ms.addUnit(DEGREE);
+	ms.addUnit(DEGREE_B);
+	break;
+      case 5400:
+	ms.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
+	ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
+	break;
+    }
+  else
+  {
+    ms.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
+    ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
+  }
+  if (!commandError)
   {
     startHtml(trans,ms);
     outSpiral(trans,ms);
