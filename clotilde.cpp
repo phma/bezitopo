@@ -26,19 +26,24 @@
 #include "manyarc.h"
 #include "vball.h"
 #include "cmdopt.h"
+#include "config.h"
 using namespace std;
-vector<string> args;
+
+int verbosity=1;
+bool helporversion=false,commandError=false;
+double arcLength=NAN,chordLength=NAN;
+vector<double> curvature;
+vector<int> lengthUnits,angleUnits;
 
 vector<option> options(
   {
     {'h',"help","","Help using the program"},
     {'\0',"version","","Output version number"},
-    {'v',"verbose","","Increase verbosity"},
     {'l',"length","length","Arc length"},
-    {'\0',"chordlength","length","Chord length"},
+    {'C',"chordlength","length","Chord length"},
     {'c',"curvature","cur cur","Start and end curvatures"},
     {'r',"radius","length length","Start and end radii"},
-    {'u',"unit","m/ft/usft/inft/deg/dms/gon","Length or angle unit"}
+    {'u',"unit","m/ft/deg/dms","Length or angle unit"}
   });
 
 vector<token> cmdline;
@@ -135,6 +140,84 @@ void outApprox(polyarc approx,spiralarc s,Measure ms)
   cout<<"</table>\n";
 }
 
+void argpass2()
+/* Pass 2 does not parse lengths or curvatures, since the units may be
+ * specified after the lengths and curvatures, or both input and output
+ * units may be specified before the lengths.
+ */
+{
+  int i,j;
+  for (i=0;i<cmdline.size();i++)
+    switch (cmdline[i].optnum)
+    {
+      case 0:
+	helporversion=true;
+	outhelp();
+	break;
+      case 1:
+	helporversion=true;
+	cout<<"Clotilde, part of Bezitopo version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat\n"
+	<<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
+	break;
+      case 2: // arc length
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+	}
+	break;
+      case 3: // chord length
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+	}
+	break;
+      case 4: // curvature
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+	}
+	break;
+      case 5: // radius
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+	}
+	break;
+      case 6:
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+	  if (cmdline[i].nonopt=="m")
+	    lengthUnits.push_back(255);
+	  else if (cmdline[i].nonopt=="ft")
+	    lengthUnits.push_back(INTERNATIONAL);
+	  else if (cmdline[i].nonopt=="usft")
+	    lengthUnits.push_back(USSURVEY);
+	  else if (cmdline[i].nonopt=="inft")
+	    lengthUnits.push_back(INSURVEY);
+	  else if (cmdline[i].nonopt=="deg")
+	    angleUnits.push_back(9000);
+	  else if (cmdline[i].nonopt=="dms")
+	    angleUnits.push_back(5400);
+	  else if (cmdline[i].nonopt=="gon")
+	    angleUnits.push_back(10000);
+	  else
+	  {
+	    commandError=true;
+	    cerr<<"Unrecognized unit "<<cmdline[i].nonopt<<"; should be m, ft, usft, inft, deg, dms, or gon.\n";
+	  }
+	}
+	else
+	{
+	  cerr<<"--unit requires an argument, one of m, ft, usft, inft, deg, dms, and gon.\n";
+	  commandError=true;
+	}
+	break;
+      default:
+	;
+    }
+}
+
 /* Ways to specify the spiralarc to be approximated:
  * • Start radius, end radius, arc length
  * • Start curvature, end curvature, arc length
@@ -161,17 +244,20 @@ int main(int argc, char *argv[])
   ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
   ms.setDefaultPrecision(ANGLE,bintorad(1));
   ms.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
-  for (i=1;i<argc;i++)
-    args.push_back(argv[i]);
-  startHtml(trans,ms);
-  outSpiral(trans,ms);
-  i=2;
-  do
+  argpass1(argc,argv);
+  argpass2();
+  if (false)
   {
-    approx=manyArc(trans,i);
-    outApprox(approx,trans,ms);
-    i++;
-  } while (maxError(approx,trans)>0.01);
-  endHtml();
+    startHtml(trans,ms);
+    outSpiral(trans,ms);
+    i=2;
+    do
+    {
+      approx=manyArc(trans,i);
+      outApprox(approx,trans,ms);
+      i++;
+    } while (maxError(approx,trans)>0.01);
+    endHtml();
+  }
   return 0;
 }

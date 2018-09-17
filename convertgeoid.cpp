@@ -567,7 +567,7 @@ void argpass2()
 	  readgeoid(cmdline[i].nonopt);
     }
 }
-	
+
 /* Command line syntax:
  * -f format		Puts format first on the list of formats to try.
  * -o file		Sets the output filename. The file is written after
