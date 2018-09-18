@@ -77,5 +77,6 @@ public:
 };
 
 std::string formatCurvature(double curvature,Measure ms,double precisionMagnitude=0);
+double parseCurvature(std::string curString,Measure ms);
 
 #endif

@@ -230,3 +230,46 @@ string formatCurvature(double curvature,Measure ms,double precisionMagnitude)
   else
     return ms.formatMeasurementUnit(curvature,CURVATURE,0,precisionMagnitude);
 }
+
+double parseCurvature(string curString,Measure ms)
+/* Parses a curvature. If ms is in feet, accepts an angle and interprets it
+ * as the angle subtended by a 100 ft arc. If ms is in meters or the input
+ * is not an angle, parses it as a curvature. Can throw badUnits or badNumber.
+ */
+{
+  double hundredFeet=ms.parseMeasurement("100 ft",LENGTH).magnitude;
+  bool isFoot;
+  string hundredFeetString=ms.formatMeasurement(hundredFeet,LENGTH);
+  int i;
+  double ret;
+  Measurement meas;
+  meas.unit=0;
+  for (i=0;i<hundredFeetString.length();i++)
+  {
+    if (hundredFeetString[i]=='1')
+    {
+      isFoot=true;
+      break;
+    }
+    if (hundredFeetString[i]=='3')
+    {
+      isFoot=false;
+      break;
+    }
+  }
+  if (isFoot)
+    try
+    {
+      meas=ms.parseMeasurement(curString,ANGLE);
+      ret=meas.magnitude/hundredFeet;
+    }
+    catch (...)
+    {
+    }
+  if (!meas.unit)
+    {
+      meas=ms.parseMeasurement(curString,CURVATURE);
+      ret=meas.magnitude;
+    }
+  return ret;
+}
