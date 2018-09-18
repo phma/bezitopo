@@ -218,6 +218,36 @@ void argpass2()
     }
 }
 
+void setUnits(Measure &ms,int unit)
+{
+  if (unit>256)
+  {
+    ms.clearUnits(ANGLE);
+    ms.clearUnits(ANGLE_B);
+  }
+  switch (unit)
+  {
+    case 255:
+      ms.setMetric();
+      break;
+    case 10000:
+      ms.addUnit(GON);
+      ms.addUnit(GON_B);
+      break;
+    case 9000:
+      ms.addUnit(DEGREE);
+      ms.addUnit(DEGREE_B);
+      break;
+    case 5400:
+      ms.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
+      ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
+      break;
+    default:
+      ms.setCustomary();
+      ms.setFoot(unit);
+  }
+}
+
 /* Ways to specify the spiralarc to be approximated:
  * • Start radius, end radius, arc length
  * • Start curvature, end curvature, arc length
@@ -250,29 +280,9 @@ int main(int argc, char *argv[])
     commandError=true;
   }
   if (lengthUnits.size())
-    if (lengthUnits[0]==255)
-      ms.setMetric();
-    else
-    {
-      ms.setCustomary();
-      ms.setFoot(lengthUnits[0]);
-    }
+    setUnits(ms,lengthUnits[0]);
   if (angleUnits.size())
-    switch (angleUnits[0])
-    {
-      case 10000:
-	ms.addUnit(GON);
-	ms.addUnit(GON_B);
-	break;
-      case 9000:
-	ms.addUnit(DEGREE);
-	ms.addUnit(DEGREE_B);
-	break;
-      case 5400:
-	ms.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
-	ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
-	break;
-    }
+    setUnits(ms,angleUnits[0]);
   else
   {
     ms.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
@@ -282,6 +292,12 @@ int main(int argc, char *argv[])
   {
     startHtml(trans,ms);
     outSpiral(trans,ms);
+    if (lengthUnits.size()>1)
+      setUnits(ms,lengthUnits[1]);
+    if (angleUnits.size()>1)
+      setUnits(ms,angleUnits[1]);
+    if (lengthUnits.size()>1 || angleUnits.size()>1)
+      outSpiral(trans,ms);
     i=2;
     do
     {
