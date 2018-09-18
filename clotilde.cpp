@@ -218,6 +218,89 @@ void argpass2()
     }
 }
 
+void argpass3(Measure ms)
+{
+  int i,j;
+  for (i=0;i<cmdline.size();i++)
+    switch (cmdline[i].optnum)
+    {
+      case 0:
+	helporversion=true;
+	break;
+      case 1:
+	helporversion=true;
+	break;
+      case 2: // arc length
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+          try
+          {
+            arcLength=ms.parseMeasurement(cmdline[i].nonopt,LENGTH).magnitude;
+          }
+          catch (...)
+          {
+            cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a length"<<endl;
+            commandError=true;
+          }
+	}
+	break;
+      case 3: // chord length
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+          try
+          {
+            chordLength=ms.parseMeasurement(cmdline[i].nonopt,LENGTH).magnitude;
+          }
+          catch (...)
+          {
+            cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a length"<<endl;
+            commandError=true;
+          }
+	}
+	break;
+      case 4: // curvature
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+          try
+          {
+            curvature.push_back(parseCurvature(cmdline[i].nonopt,ms));
+          }
+          catch (...)
+          {
+            cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a curvature"<<endl;
+            commandError=true;
+          }
+	}
+	break;
+      case 5: // radius
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+          try
+          {
+            curvature.push_back(1/ms.parseMeasurement(cmdline[i].nonopt,LENGTH).magnitude);
+          }
+          catch (...)
+          {
+            cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a length"<<endl;
+            commandError=true;
+          }
+	}
+	break;
+      case 6:
+        if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	{
+	  i++;
+	}
+	break;
+      default:
+	;
+    }
+}
+
 void setUnits(Measure &ms,int unit)
 {
   if (unit>256)
@@ -260,7 +343,6 @@ int main(int argc, char *argv[])
 {
   int i;
   spiralarc s;
-  spiralarc trans(xyz(0,0,0),0,0.003,xyz(500,0,0));
   polyarc approx;
   Measure ms;
   ms.setMetric();
@@ -288,24 +370,54 @@ int main(int argc, char *argv[])
     ms.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
     ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
   }
-  if (!commandError)
+  if (!commandError && !helporversion)
+    argpass3(ms);
+  if (!commandError && !helporversion)
   {
-    startHtml(trans,ms);
-    outSpiral(trans,ms);
+    if (isfinite(arcLength) == isfinite(chordLength))
+    {
+      commandError=true;
+      cerr<<"Please specify one of -l and -C, not both\n";
+    }
+    if (curvature.size()!=2)
+    {
+      commandError=true;
+      cerr<<"Please specify two radii or curvatures\n";
+    }
+  }
+  if (!commandError && !helporversion)
+  {
+    if (isfinite(arcLength))
+      s=spiralarc(xyz(0,0,0),0,curvature[0],curvature[1],arcLength,0);
+    else
+      s=spiralarc(xyz(0,0,0),curvature[0],curvature[1],xyz(chordLength,0,0));
+    startHtml(s,ms);
+    outSpiral(s,ms);
     if (lengthUnits.size()>1)
       setUnits(ms,lengthUnits[1]);
     if (angleUnits.size()>1)
       setUnits(ms,angleUnits[1]);
     if (lengthUnits.size()>1 || angleUnits.size()>1)
-      outSpiral(trans,ms);
+      outSpiral(s,ms);
     i=2;
-    do
+    if (!s.valid())
     {
-      approx=manyArc(trans,i);
-      outApprox(approx,trans,ms);
-      i++;
-    } while (maxError(approx,trans)>0.01);
+      cerr<<"Could not make a spiralarc with the given dimensions\n";
+      cout<<"<h2>Invalid spiral</h2>\n";
+    }
+    else
+      do
+      {
+	approx=manyArc(s,i);
+	outApprox(approx,s,ms);
+	i++;
+      } while (maxError(approx,s)>0.01);
     endHtml();
   }
-  return 0;
+  if (commandError)
+    return 2;
+  else if (!s.valid())
+    return 1;
+  else
+    return 0;
 }
