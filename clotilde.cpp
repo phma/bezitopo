@@ -245,7 +245,10 @@ int main(int argc, char *argv[])
   argpass1(argc,argv);
   argpass2();
   if (angleUnits.size()>2 || lengthUnits.size()>2)
+  {
+    cerr<<"Too many units\n";
     commandError=true;
+  }
   if (lengthUnits.size())
     if (lengthUnits[0]==255)
       ms.setMetric();
