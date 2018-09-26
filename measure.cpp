@@ -43,6 +43,11 @@
 #include "ldecimal.h"
 using namespace std;
 
+bool isnumeric(int ch)
+{
+  return (ch>='0' && ch<='9') || ch=='.' || ch=='-' || ch=='+';
+}
+
 struct cf
 {
   int64_t unitp;
@@ -601,27 +606,47 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
  */
 {
   char *pLcNumeric;
-  string saveLcNumeric,unitStr;
+  string saveLcNumeric;
+  vector<string> numberStr,unitStr;
   double valueInUnit;
   size_t endOfNumber;
+  int i,j,ch,lastch=-1;
   Measurement ret;
   pLcNumeric=setlocale(LC_NUMERIC,nullptr);
   if (pLcNumeric)
     saveLcNumeric=pLcNumeric;
   if (!localized)
     setlocale(LC_NUMERIC,"C");
+  for (i=j=0;i<measStr.length();i++)
+  {
+    ch=(unsigned char)measStr[i];
+    if (isnumeric(ch))
+    {
+      if (lastch>=0 && !isnumeric(lastch))
+	j++;
+      while (j>=numberStr.size())
+	numberStr.push_back("");
+      while(j>=unitStr.size())
+	unitStr.push_back("");
+      numberStr[j]+=(char)ch;
+    }
+    else
+    {
+      unitStr[j]+=(char)ch;
+    }
+    lastch=ch;
+  }
   try
   {
-    valueInUnit=stod(measStr,&endOfNumber); // TODO later: handle 12+3/8 when needed
+    valueInUnit=stod(numberStr[0],&endOfNumber); // TODO later: handle 12+3/8 when needed
   }
   catch (...)
   {
     throw badNumber;
   }
-  unitStr=measStr.substr(endOfNumber);
-  trim(unitStr);
-  if (unitStr.length())
-    ret.unit=parseSymbol(unitStr);
+  trim(unitStr[0]);
+  if (unitStr[0].length())
+    ret.unit=parseSymbol(unitStr[0]);
   else
     ret.unit=findUnit(quantity);
   if (!localized)
