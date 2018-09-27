@@ -608,7 +608,8 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
   char *pLcNumeric;
   string saveLcNumeric;
   vector<string> numberStr,unitStr;
-  double valueInUnit;
+  vector<double> valueInUnit;
+  vector<int64_t> unit;
   size_t endOfNumber;
   int i,j,ch,lastch=-1;
   Measurement ret;
@@ -638,22 +639,37 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
   }
   try
   {
-    valueInUnit=stod(numberStr[0],&endOfNumber); // TODO later: handle 12+3/8 when needed
+    for (i=0;i<numberStr.size();i++)
+      valueInUnit.push_back(stod(numberStr[i],&endOfNumber)); // TODO later: handle 12+3/8 when needed
   }
   catch (...)
   {
     throw badNumber;
   }
-  trim(unitStr[0]);
-  if (unitStr[0].length())
-    ret.unit=parseSymbol(unitStr[0]);
-  else
-    ret.unit=findUnit(quantity);
+  /* If the string has multiple unit symbols, like 34°27'18", and they belong
+   * to the same physical quantity which does not disagree with quantity, it is
+   * valid. If the string has hyphens between numbers, but ends with a unit
+   * symbol that has larger unit factors, it is valid. However, if it has
+   * hyphens but no unit symbol, it is valid only if findUnit returns a unit
+   * that has larger unit factors. So 24-45, when expecting a distance in meters,
+   * is invalid, but when expecting an angle in minutes or seconds, is valid.
+   */
+  for (i=0;i<unitStr.size();i++)
+  {
+    trim(unitStr[i]);
+    if (unitStr[i]=="-")
+      unit.push_back(1);
+    else if (unitStr[i].length())
+      unit.push_back(parseSymbol(unitStr[i]));
+    else
+      unit.push_back(findUnit(quantity));
+  }
+  ret.unit=unit.back();
   if (!localized)
     setlocale(LC_NUMERIC,saveLcNumeric.c_str());
   if (ret.unit==0 || (quantity>0 && !compatibleUnits(ret.unit,quantity)))
     throw badUnits;
-  ret.magnitude=valueInUnit*conversionFactors[ret.unit];
+  ret.magnitude=valueInUnit.back()*conversionFactors[ret.unit];
   return ret;
 }
 
