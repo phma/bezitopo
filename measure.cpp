@@ -311,12 +311,12 @@ void trim(string &str)
     str.erase(pos+1);
 }
 
-int64_t parseSymbol(string unitStr)
+int64_t parseSymbol(string unitStr,int64_t quantity)
 {
   int i;
   int64_t ret=0;
   for (i=0;i<nsymbols;i++)
-    if (unitStr==symbols[i].symb)
+    if (unitStr==symbols[i].symb && !compatibleUnits(ret,quantity))
       ret=symbols[i].unitp;
   return ret;
 }
@@ -642,7 +642,11 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
   try
   {
     for (i=0;i<numberStr.size();i++)
+    {
       valueInUnit.push_back(stod(numberStr[i],&endOfNumber)); // TODO later: handle 12+3/8 when needed
+      if (valueInUnit[0]<0 && valueInUnit.back()>0)
+	valueInUnit.back()*=-1;
+    }
   }
   catch (...)
   {
@@ -662,7 +666,7 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
     if (unitStr[i]=="-")
       unit.push_back(1);
     else if (unitStr[i].length())
-      unit.push_back(parseSymbol(unitStr[i]));
+      unit.push_back(parseSymbol(unitStr[i],quantity));
     else
       unit.push_back(findUnit(quantity));
   }

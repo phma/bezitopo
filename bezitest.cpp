@@ -3168,6 +3168,9 @@ void testmeasure()
   parsed=meas.parseMeasurement("20.61408379530502663289",LENGTH);
   cout<<parsed.magnitude<<" m\n";
   tassert(fabs(parsed.magnitude-2*M_PI)<1e-8);
+  parsed=meas.parseMeasurement(measStr,ANGLE);
+  cout<<ldecimal(parsed.magnitude)<<" rad\n";
+  tassert(fabs(parsed.magnitude-longitude)<1e-9);
 }
 
 void testqindex()
