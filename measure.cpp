@@ -41,6 +41,7 @@
 #include "angle.h"
 #include "except.h"
 #include "ldecimal.h"
+#include "manysum.h"
 using namespace std;
 
 bool isnumeric(int ch)
@@ -608,8 +609,9 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
   char *pLcNumeric;
   string saveLcNumeric;
   vector<string> numberStr,unitStr;
-  vector<double> valueInUnit;
+  vector<double> valueInUnit,conversionFactor,coherentValue;
   vector<int64_t> unit;
+  vector<int> luf;
   size_t endOfNumber;
   int i,j,ch,lastch=-1;
   Measurement ret;
@@ -665,11 +667,27 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
       unit.push_back(findUnit(quantity));
   }
   ret.unit=unit.back();
+  conversionFactor=valueInUnit;
+  for (i=0;i<unit.size();i++)
+    if (physicalUnit(unit[i]))
+      conversionFactor[i]=conversionFactors[physicalUnit(unit[i])];
+    else
+      conversionFactor[i]=0;
+  luf=largerUnitFactors(ret.unit);
+  for (i=0;i<conversionFactor.size()-1;i++)
+    if (conversionFactor[i]==0 && conversionFactor.size()-2-i<luf.size())
+      conversionFactor[i]=conversionFactor.back()*luf[conversionFactor.size()-2-i];
   if (!localized)
     setlocale(LC_NUMERIC,saveLcNumeric.c_str());
+  for (i=0;i<valueInUnit.size();i++)
+  {
+    coherentValue.push_back(valueInUnit[i]*conversionFactor[i]);
+    if (conversionFactor[i]==0 || (unit[i]>1 && !compatibleUnits(ret.unit,unit[i])))
+      throw badUnits;
+  }
   if (ret.unit==0 || (quantity>0 && !compatibleUnits(ret.unit,quantity)))
     throw badUnits;
-  ret.magnitude=valueInUnit.back()*conversionFactors[ret.unit];
+  ret.magnitude=pairwisesum(coherentValue);
   return ret;
 }
 
