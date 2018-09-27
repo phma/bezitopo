@@ -3146,6 +3146,9 @@ void testmeasure()
   meas.addUnit(DEGREE);
   meas.addUnit(GON);
   meas.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
+  meas.addUnit(DEGREE_B);
+  meas.addUnit(GON_B);
+  meas.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
   tassert(meas.findUnit(LENGTH)==FOOT);
   tassert(meas.findUnit(MASS)==POUND);
   tassert(meas.findPrecision(LENGTH)==2);
@@ -3171,6 +3174,11 @@ void testmeasure()
   parsed=meas.parseMeasurement(measStr,ANGLE);
   cout<<ldecimal(parsed.magnitude)<<" rad\n";
   tassert(fabs(parsed.magnitude-longitude)<1e-9);
+  meas.setDefaultUnit(ANGLE_B,1732);
+  parsed=meas.parseMeasurement("-81-55-11.3441",ANGLE_B);
+  cout<<ldecimal(parsed.magnitude)<<" furmanlets\n";
+  // There has to be a better name. The unit is 1/32768 furman.
+  tassert(fabs(parsed.magnitude-radtobin(longitude))<1);
 }
 
 void testqindex()

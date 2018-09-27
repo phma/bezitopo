@@ -44,9 +44,9 @@
 #include "manysum.h"
 using namespace std;
 
-bool isnumeric(int ch)
+bool isnumeric(int ch,int i)
 {
-  return (ch>='0' && ch<='9') || ch=='.' || ch=='-' || ch=='+';
+  return (ch>='0' && ch<='9') || ch=='.' || (i==0 && (ch=='-' || ch=='+'));
 }
 
 struct cf
@@ -623,9 +623,9 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
   for (i=j=0;i<measStr.length();i++)
   {
     ch=(unsigned char)measStr[i];
-    if (isnumeric(ch))
+    if (isnumeric(ch,i))
     {
-      if (lastch>=0 && !isnumeric(lastch))
+      if (lastch>=0 && !isnumeric(lastch,i-1))
 	j++;
       while (j>=numberStr.size())
 	numberStr.push_back("");
@@ -678,9 +678,9 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
     else
       conversionFactor[i]=0;
   luf=largerUnitFactors(ret.unit);
-  for (i=0;i<conversionFactor.size()-1;i++)
+  for (i=conversionFactor.size()-2;i>=0;i--)
     if (conversionFactor[i]==0 && conversionFactor.size()-2-i<luf.size())
-      conversionFactor[i]=conversionFactor.back()*luf[conversionFactor.size()-2-i];
+      conversionFactor[i]=conversionFactor[i+1]*luf[conversionFactor.size()-2-i];
   if (!localized)
     setlocale(LC_NUMERIC,saveLcNumeric.c_str());
   for (i=0;i<valueInUnit.size();i++)
