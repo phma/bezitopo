@@ -87,6 +87,7 @@ void endHtml()
 void outSpiral(spiralarc s,Measure ms)
 {
   double startCur=s.curvature(0),endCur=s.curvature(s.length());
+  double startTan=s.tangentLength(START),endTan=s.tangentLength(END);
   if (fabs(startCur)<1/EARTHRAD)
     startCur=0;
   if (fabs(endCur)<1/EARTHRAD)
@@ -97,6 +98,8 @@ void outSpiral(spiralarc s,Measure ms)
   cout<<"<td><h1>End curvature: "<<formatCurvature(endCur,ms)<<"</h1></td></tr>\n";
   cout<<"<tr><td><h1>Start radius: "<<ms.formatMeasurementUnit(1/startCur,LENGTH)<<"</h1></td>\n";
   cout<<"<td><h1>End radius: "<<ms.formatMeasurementUnit(1/endCur,LENGTH)<<"</h1></td></tr>\n";
+  cout<<"<tr><td><h1>Start tangent: "<<ms.formatMeasurementUnit(startTan,LENGTH)<<"</h1></td>\n";
+  cout<<"<td><h1>End tangent: "<<ms.formatMeasurementUnit(endTan,LENGTH)<<"</h1></td></tr>\n";
   cout<<"<tr><td><h1>Clothance: "<<formatClothance(s.clothance(),ms)<<"</h1></td>\n";
   cout<<"<td><h1>Delta: "<<ms.formatMeasurementUnit(s.getdelta(),ANGLE_B)<<"</h1></td></tr></table>\n";
 }
