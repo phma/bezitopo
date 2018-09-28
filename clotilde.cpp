@@ -178,12 +178,16 @@ void argpass2()
         if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
 	  i++;
+	  if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	    i++;
 	}
 	break;
       case 5: // radius
         if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
 	  i++;
+	  if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	    i++;
 	}
 	break;
       case 6:
@@ -276,6 +280,19 @@ void argpass3(Measure ms)
             cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a curvature"<<endl;
             commandError=true;
           }
+	  if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	  {
+	    i++;
+	    try
+	    {
+	      curvature.push_back(parseCurvature(cmdline[i].nonopt,ms));
+	    }
+	    catch (...)
+	    {
+	      cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a curvature"<<endl;
+	      commandError=true;
+	    }
+	  }
 	}
 	break;
       case 5: // radius
@@ -291,6 +308,19 @@ void argpass3(Measure ms)
             cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a length"<<endl;
             commandError=true;
           }
+	  if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
+	  {
+	    i++;
+	    try
+	    {
+	      curvature.push_back(1/ms.parseMeasurement(cmdline[i].nonopt,LENGTH).magnitude);
+	    }
+	    catch (...)
+	    {
+	      cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a length"<<endl;
+	      commandError=true;
+	    }
+	  }
 	}
 	break;
       case 6:
