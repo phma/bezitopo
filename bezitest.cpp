@@ -2730,6 +2730,7 @@ void testmanyarc()
   spiralarc trans(xyz(0,0,0),0,0.003,xyz(500,0,0));
   spiralarc trans43(xyz(0,0,0),0,0.003,xyz(400,300,0));
   spiralarc trans34(xyz(0,0,0),0,0.003,xyz(300,400,0));
+  spiralarc symm(xyz(0,0,0),-0.003,0.003,xyz(500,0,0));
   spiralarc straight(xyz(0,0,0),0,0,xyz(500,0,0));
   int narcs,i,j;
   PostScript ps;
@@ -2788,6 +2789,7 @@ void testmanyarc()
   test1manyarc(trans,ps);
   test1manyarc(trans43,ps);
   test1manyarc(trans34,ps);
+  test1manyarc(symm,ps);
   test1manyarc(straight,ps);
   ps.close();
 }
