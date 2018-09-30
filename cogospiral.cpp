@@ -194,7 +194,10 @@ vector<alosta> intersection1(segment *a,double a1,double a2,segment *b,double b1
       di1=-di1;
     aalosta[2].along=(aalosta[0].along*di1+aalosta[1].along*di0)/d01;
     if (aalosta[2].along<-a->length()/2 || aalosta[2].along>3*a->length()/2)
+    {
       aalosta[2].along=NAN;
+      mirrorcount++;
+    }
     if (!extend && aalosta[2].along<0)
     {
       aalosta[2].along=-aalosta[2].along;
@@ -215,7 +218,10 @@ vector<alosta> intersection1(segment *a,double a1,double a2,segment *b,double b1
       di1=-di1;
     balosta[2].along=(balosta[0].along*di1+balosta[1].along*di0)/d01;
     if (balosta[2].along<-b->length()/2 || balosta[2].along>3*b->length()/2)
+    {
       balosta[2].along=NAN;
+      mirrorcount++;
+    }
     if (!extend && balosta[2].along<0)
     {
       balosta[2].along=-balosta[2].along;
