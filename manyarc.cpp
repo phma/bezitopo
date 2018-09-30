@@ -232,6 +232,7 @@ polyarc twoArcs(spiralarc a)
   midbear=2*a.bearing(a.length()/2)-a.chordbearing();
   ret.setdelta(0,midbear-a.startbearing());
   ret.setdelta(1,a.endbearing()-midbear);
+  ret.setlengths();
   return ret;
 }
 
