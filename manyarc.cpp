@@ -213,6 +213,28 @@ vector<double> weightedDistance(polyarc apx,spiralarc a)
   return ret;
 }
 
+polyarc twoArcs(spiralarc a)
+/* When narcs=2 and the inflection point is close to the midpoint of the
+ * spiralarc, manyArcUnadjusted produces a polyarc for which adjustment is
+ * numerically unstable, producing arcs with negative length or failing to
+ * adjust. twoArcs constructs one arc whose delta equals the spiralarc's
+ * first delta, then constructs two arcs tangent to the ends of the spiralarc,
+ * meeting tangently in the middle of the first arc.
+ */
+{
+  arc frame(a.getstart(),a.getend(),a.getdelta());
+  polyarc ret;
+  int midbear;
+  ret.insert(frame.getstart());
+  ret.insert(frame.midpoint());
+  ret.insert(frame.getend());
+  ret.open();
+  midbear=2*a.bearing(a.length()/2)-a.chordbearing();
+  ret.setdelta(0,midbear-a.startbearing());
+  ret.setdelta(1,a.endbearing()-midbear);
+  return ret;
+}
+
 polyarc manyArcUnadjusted(spiralarc a,int narcs)
 {
   int sb=a.startbearing(),eb=a.endbearing();
@@ -480,8 +502,13 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
 polyarc manyArc(spiralarc a,int narcs)
 {
   polyarc ret;
-  ret=manyArcUnadjusted(a,narcs);
-  ret=adjustManyArc(ret,a);
+  if (narcs>2)
+  {
+    ret=manyArcUnadjusted(a,narcs);
+    ret=adjustManyArc(ret,a);
+  }
+  else
+    ret=twoArcs(a);
   return ret;
 }
 
