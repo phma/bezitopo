@@ -370,8 +370,8 @@ double segment::closest(xy topoint,double closesofar,bool offends)
 #endif
   closesofar*=closesofar;
   len=length();
-  closest=curvature(0);
-  closedist=curvature(len);
+  closest=fabs(curvature(0));
+  closedist=fabs(curvature(len));
   if (closedist>closest)
     closest=closedist;
   nstartpoints=nearbyint(closest*len)+2;
