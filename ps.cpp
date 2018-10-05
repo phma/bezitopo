@@ -91,7 +91,7 @@ PostScript::PostScript()
   paper=xy(210,297);
   scale=1;
   orientation=pages=0;
-  indocument=inpage=false;
+  indocument=inpage=inlin=false;
   psfile=nullptr;
 }
 
