@@ -620,6 +620,7 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
     saveLcNumeric=pLcNumeric;
   if (!localized)
     setlocale(LC_NUMERIC,"C");
+  trim(measStr);
   for (i=j=0;i<measStr.length();i++)
   {
     ch=(unsigned char)measStr[i];
@@ -635,7 +636,10 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
     }
     else
     {
-      unitStr[j]+=(char)ch;
+      if (j<unitStr.size())
+	unitStr[j]+=(char)ch;
+      else if (!isspace(ch))
+	throw badNumber;
     }
     lastch=ch;
   }
