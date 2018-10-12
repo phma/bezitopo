@@ -53,7 +53,7 @@ private:
   QLabel *elevationLabel;
   QLineEdit *elevationInput;
   ProjListWidget *plWidget;
-  std::string locationStr,elevationStr,separationStr;
+  std::string locationStr,elevationStr,separationStr,elevFactorStr,gridFactorStr,combFactorStr;
   document *doc;
   latlong location;
   Projection *projection;

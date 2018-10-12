@@ -20,6 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <iostream>
+#include "ldecimal.h"
 #include "factordialog.h"
 #include "globals.h"
 using namespace std;
@@ -135,13 +136,16 @@ void LatlongFactorDialog::updateOutput()
   if (projection && location.valid()==2)
   {
     gridCoords=projection->latlongToGrid(location);
+    gridfactor=projection->scaleFactor(location);
     separation=cube.undulation(location);
+    radius=projection->ellip->radiusAtLatitude(location,DEG45);
   }
   else
   {
     gridCoords=xy(NAN,NAN);
-    separation=NAN;
+    separation=radius=NAN;
   }
+  elevfactor=radius/(radius+elevation+separation);
   if (gridCoords.isfinite() && doc)
   {
     gridStr=doc->ms.formatMeasurement(gridCoords.east(),LENGTH)+' '+
@@ -157,5 +161,26 @@ void LatlongFactorDialog::updateOutput()
   }
   else
     separationOutput->setText("");
+  if (isfinite(elevfactor))
+  {
+    elevFactorStr=ldecimal(elevfactor,1e-8)+' ';
+    elevFactorOutput->setText(QString::fromStdString(elevFactorStr));
+  }
+  else
+    elevFactorOutput->setText("");
+  if (isfinite(gridfactor))
+  {
+    gridFactorStr=ldecimal(gridfactor,1e-8)+' ';
+    gridFactorOutput->setText(QString::fromStdString(gridFactorStr));
+  }
+  else
+    gridFactorOutput->setText("");
+  if (isfinite(elevfactor*gridfactor))
+  {
+    combFactorStr=ldecimal(elevfactor*gridfactor,1e-8)+' ';
+    combFactorOutput->setText(QString::fromStdString(combFactorStr));
+  }
+  else
+    combFactorOutput->setText("");
 }
 
