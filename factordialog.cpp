@@ -133,9 +133,15 @@ void LatlongFactorDialog::updateOutput()
 {
   string gridStr;
   if (projection && location.valid()==2)
+  {
     gridCoords=projection->latlongToGrid(location);
+    separation=cube.undulation(location);
+  }
   else
+  {
     gridCoords=xy(NAN,NAN);
+    separation=NAN;
+  }
   if (gridCoords.isfinite() && doc)
   {
     gridStr=doc->ms.formatMeasurement(gridCoords.east(),LENGTH)+' '+
@@ -144,5 +150,12 @@ void LatlongFactorDialog::updateOutput()
   }
   else
     gridOutput->setText("");
+  if (isfinite(separation) && doc)
+  {
+    separationStr=doc->ms.formatMeasurement(separation,LENGTH)+' ';
+    separationOutput->setText(QString::fromStdString(separationStr));
+  }
+  else
+    separationOutput->setText("");
 }
 
