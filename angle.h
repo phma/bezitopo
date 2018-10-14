@@ -96,7 +96,7 @@ double gontorad(double angle);
  */
 
 #define SMOOTH5LIMIT 660
-// see sourcegeoid.cpp for explanation
+// see smooth5.cpp for explanation
 #define SEC1 1657
 #define FURMAN1 32768
 #define MIN1 99421
