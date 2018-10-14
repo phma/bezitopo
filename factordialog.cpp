@@ -69,6 +69,7 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   plWidget->setProjectionList(allProjections);
   plWidget->setPoint(vball(0,xy(0,0)));
   projection=nullptr;
+  elevation=NAN;
   latlongInput->setValidator(validator);
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
@@ -143,7 +144,7 @@ void LatlongFactorDialog::updateOutput()
   else
   {
     gridCoords=xy(NAN,NAN);
-    separation=radius=NAN;
+    separation=radius=gridfactor=NAN;
   }
   elevfactor=radius/(radius+elevation+separation);
   if (gridCoords.isfinite() && doc)
