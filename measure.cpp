@@ -674,7 +674,10 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
     else
       unit.push_back(findUnit(quantity));
   }
-  ret.unit=unit.back();
+  if (unit.size())
+    ret.unit=unit.back();
+  else
+    throw badNumber;
   conversionFactor=valueInUnit;
   for (i=0;i<unit.size();i++)
     if (physicalUnit(unit[i]))
