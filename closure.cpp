@@ -115,7 +115,7 @@ void closure_i(string args)
       chpos=input.find_last_of(' ',chpos); // split the string at the last space before the last digit
       if (chpos>input.length())
 	chpos=input.length();
-      bearingstr=input.substr(0,chpos);
+      bearingstr=trim(input.substr(0,chpos));
       distancestr=input.substr(chpos);
       validbearing=validdistance=true;
       try
