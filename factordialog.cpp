@@ -34,6 +34,8 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   plWidget=new ProjListWidget(this);
   gridLabel=new QLabel(tr("Grid"),this);
   gridOutput=new QLineEdit(this);
+  QFontMetrics fm(gridOutput->fontMetrics());
+  gridOutput->setMinimumSize(fm.size(0," 1073741.824 128140.163 ft "));
   separationLabel=new QLabel(tr("Geoid separation"),this);
   separationOutput=new QLineEdit(this);
   elevFactorLabel=new QLabel(tr("Elevation factor"),this);
