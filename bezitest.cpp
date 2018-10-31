@@ -4887,6 +4887,8 @@ void testprojection()
   latlong gawll(degtorad(30),degtorad(-505/6.));
   xy gawxy(7e5,0);
   TransverseMercatorEllipsoid GeorgiaWest(&GRS80,gawll.lon,0.9999,gawll,gawxy);
+  latlong llBV067202(degtorad(33.936322861),degtorad(-84.158358964));
+  xy xyBV067202(700768.001,436441.243);
   latlong EWN(degtorad(35.07),degtorad(-77.04));
   // New Bern is far enough from the borders that it should not be in an adjacent state's grid.
   latlong ll196(degtorad(-14.1758035159),degtorad(-120.343248884));
@@ -4961,6 +4963,9 @@ void testprojection()
   grid=NorthCarolina.latlongToGrid(llOakland);
   cout<<grid.east()<<' '<<grid.north()<<' '<<dist(grid,xyOakland)<<endl;
   tassert(dist(grid,xyOakland)<0.001);
+  grid=GeorgiaWest.latlongToGrid(llBV067202);
+  cout<<grid.east()<<' '<<grid.north()<<' '<<dist(grid,xyBV067202)<<endl;
+  tassert(dist(grid,xyBV067202)<0.001);
   if (pfile)
   {
     plist.readFile(pfile);
