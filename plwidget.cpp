@@ -27,6 +27,7 @@ using namespace std;
 
 ProjListWidget::ProjListWidget(QWidget *parent):QWidget(parent)
 {
+  QSizePolicy pol(QSizePolicy::Minimum,QSizePolicy::Fixed);
   countryBox=new QComboBox(this);
   provinceBox=new QComboBox(this);
   zoneBox=new QComboBox(this);
@@ -37,6 +38,7 @@ ProjListWidget::ProjListWidget(QWidget *parent):QWidget(parent)
   gridLayout->addWidget(provinceBox,0,1);
   gridLayout->addWidget(zoneBox,0,2);
   gridLayout->addWidget(versionBox,0,3);
+  setSizePolicy(pol);
   selectedProjection=nullptr;
   connect(countryBox,SIGNAL(activated(int)),this,SLOT(updateComboBoxes()));
   connect(provinceBox,SIGNAL(activated(int)),this,SLOT(updateComboBoxes()));
