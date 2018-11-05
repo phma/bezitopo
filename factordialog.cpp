@@ -82,6 +82,13 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   connect(plWidget,SIGNAL(selectedProjectionChanged(Projection *)),this,SLOT(updateProjection(Projection *)));
 }
 
+QSize LatlongFactorDialog::sizeHint() const
+{
+  QSize ret=QWidget::sizeHint();
+  cout<<"sizeHint "<<ret.width()<<','<<ret.height()<<endl;
+  return ret;
+}
+
 void LatlongFactorDialog::accept()
 {
   QDialog::accept();

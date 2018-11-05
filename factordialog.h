@@ -37,6 +37,7 @@ class LatlongFactorDialog: public QDialog
   Q_OBJECT
 public:
   LatlongFactorDialog(QWidget *parent=0);
+  virtual QSize sizeHint() const;
 signals:
 public slots:
   virtual void accept();
