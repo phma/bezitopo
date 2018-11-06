@@ -164,6 +164,7 @@ public slots:
   void prepareZoomSteps(int steps);
   void zoomSteps(bool checked);
   void changeButtonBits();
+  void gridToLatlong();
   void latlongToGrid();
   void aboutProgram();
   void aboutQt();
@@ -175,6 +176,7 @@ private:
   std::vector<ZoomButton *> zoomButtons;
   std::vector<MeasureButton *> measureButtons;
   LatlongFactorDialog *llDialog;
+  GridFactorDialog *grDialog;
   QAction *sizeToFitAction;
   QAction *openAction,*saveAction,*saveAsAction;
   QAction *asterAction,*importPnezdAction,*importCriteriaAction;

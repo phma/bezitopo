@@ -218,3 +218,99 @@ void LatlongFactorDialog::updateOutput()
     combFactorOutput->setText("");
 }
 
+GridFactorDialog::GridFactorDialog(QWidget *parent):QDialog(parent)
+{
+  gridLabel=new QLabel(tr("Grid"),this);
+  gridInput=new QLineEdit(this);
+  elevationLabel=new QLabel(tr("Elevation"),this);
+  elevationInput=new QLineEdit(this);
+  plWidget=new ProjListWidget(this);
+  latlongLabel=new QLabel(tr("Lat/Long"),this);
+  latlongOutput=new QLineEdit(this);
+  separationLabel=new QLabel(tr("Geoid separation"),this);
+  separationOutput=new QLineEdit(this);
+  elevFactorLabel=new QLabel(tr("Elevation factor"),this);
+  elevFactorOutput=new QLineEdit(this);
+  gridFactorLabel=new QLabel(tr("Grid factor"),this);
+  gridFactorOutput=new QLineEdit(this);
+  combFactorLabel=new QLabel(tr("Combined factor"),this);
+  combFactorOutput=new QLineEdit(this);
+  okButton=new QPushButton(tr("OK"),this);
+  cancelButton=new QPushButton(tr("Cancel"),this);
+  gridLayout=new QGridLayout(this);
+  //validator=new LlValidator(this);
+  setLayout(gridLayout);
+  gridLayout->addWidget(gridLabel,0,0,1,2);
+  gridLayout->addWidget(gridInput,0,2,1,4);
+  gridLayout->addWidget(elevationLabel,1,0,1,2);
+  gridLayout->addWidget(elevationInput,1,2,1,4);
+  gridLayout->addWidget(plWidget,2,0,1,6);
+  gridLayout->addWidget(latlongLabel,3,0,1,2);
+  gridLayout->addWidget(latlongOutput,3,2,1,4);
+  gridLayout->addWidget(separationLabel,4,0,1,2);
+  gridLayout->addWidget(separationOutput,4,2,1,4);
+  gridLayout->addWidget(elevFactorLabel,5,0,1,2);
+  gridLayout->addWidget(elevFactorOutput,5,2,1,4);
+  gridLayout->addWidget(gridFactorLabel,6,0,1,2);
+  gridLayout->addWidget(gridFactorOutput,6,2,1,4);
+  gridLayout->addWidget(combFactorLabel,7,0,1,2);
+  gridLayout->addWidget(combFactorOutput,7,2,1,4);
+  gridLayout->addWidget(okButton,8,0,1,3);
+  gridLayout->addWidget(cancelButton,8,3,1,3);
+  okButton->setEnabled(false);
+  okButton->setDefault(true);
+  plWidget->setProjectionList(allProjections);
+  plWidget->setPoint(vball(0,xy(0,0)));
+  projection=nullptr;
+  elevation=NAN;
+  connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
+  connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
+  //connect(gridInput,SIGNAL(textChanged(const QString)),this,SLOT(updateLocationStr(QString)));
+  //connect(gridInput,SIGNAL(editingFinished()),this,SLOT(updateLocation()));
+  //connect(elevationInput,SIGNAL(textChanged(const QString)),this,SLOT(updateElevationStr(QString)));
+  //connect(elevationInput,SIGNAL(editingFinished()),this,SLOT(updateElevation()));
+  //connect(plWidget,SIGNAL(selectedProjectionChanged(Projection *)),this,SLOT(updateProjection(Projection *)));
+}
+
+void GridFactorDialog::accept()
+{
+  QDialog::accept();
+}
+
+void GridFactorDialog::setDoc(document *docu)
+{
+  doc=docu;
+}
+
+QSize GridFactorDialog::sizeHint() const
+{
+  QSize ret=QWidget::sizeHint();
+  int leftColumn=0,rightColumn,labelWidth;
+  QFontMetrics fm(gridInput->fontMetrics());
+  rightColumn=fm.size(0," 1073741.824 128140.163 ft ").width()+32;
+  labelWidth=latlongLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  labelWidth=elevationLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  labelWidth=gridLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  labelWidth=separationLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  labelWidth=elevFactorLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  labelWidth=gridFactorLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  labelWidth=combFactorLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  if (leftColumn+rightColumn>ret.width())
+    ret.setWidth(leftColumn+rightColumn);
+  //cout<<"sizeHint "<<ret.width()<<','<<ret.height()<<endl;
+  return ret;
+}

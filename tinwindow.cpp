@@ -1199,6 +1199,7 @@ TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
   canvas=new TinCanvas(this);
   setCentralWidget(canvas);
   llDialog=new LatlongFactorDialog(this);
+  grDialog=new GridFactorDialog(this);
   canvas->show();
   makeActions();
   canvas->setMeter();
@@ -1351,7 +1352,7 @@ void TinWindow::makeActions()
   //gridToLatlongAction->setIcon(QIcon(":/gridtoll.png"));
   gridToLatlongAction->setText(tr("Grid to lat/long"));
   coordMenu->addAction(gridToLatlongAction);
-  //connect(gridToLatLongAction,SIGNAL(triggered(bool)),this,SLOT(gridToLatlong()));
+  connect(gridToLatlongAction,SIGNAL(triggered(bool)),this,SLOT(gridToLatlong()));
   latlongToGridAction=new QAction(this);
   //latlongToGridAction->setIcon(QIcon(":/lltogrid.png"));
   latlongToGridAction->setText(tr("Lat/long to grid"));
@@ -1447,6 +1448,14 @@ void TinWindow::changeButtonBits()
 {
   buttonBitsChanged((curvyTriangleAction->isChecked()<<0)|
                     (curvyContourAction->isChecked()<<1));
+}
+
+void TinWindow::gridToLatlong()
+{
+  grDialog->setDoc(canvas->getDoc());
+  grDialog->show();
+  grDialog->raise();
+  grDialog->activateWindow();
 }
 
 void TinWindow::latlongToGrid()

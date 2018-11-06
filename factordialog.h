@@ -74,4 +74,46 @@ private:
   QGridLayout *gridLayout; // "grid" means a lattice arrangement of widgets
   LlValidator *validator;
 };
+
+class GridFactorDialog: public QDialog
+{
+  Q_OBJECT
+public:
+  GridFactorDialog(QWidget *parent=0);
+  virtual QSize sizeHint() const;
+signals:
+public slots:
+  virtual void accept();
+  void setDoc(document *docu);
+  //void updateLocationStr(QString text);
+  //void updateLocation();
+  //void updateElevationStr(QString text);
+  //void updateElevation();
+  //void updateProjection(Projection *proj);
+  //void updateOutput();
+private:
+  QLabel *gridLabel;
+  QLineEdit *gridInput; // "grid" means a conformal coordinate system
+  QLabel *elevationLabel;
+  QLineEdit *elevationInput;
+  ProjListWidget *plWidget;
+  std::string locationStr,elevationStr,separationStr,elevFactorStr,gridFactorStr,combFactorStr;
+  document *doc;
+  latlong location;
+  Projection *projection;
+  xy gridCoords;
+  double separation,elevation,radius,elevfactor,gridfactor;
+  QLabel *latlongLabel;
+  QLineEdit *latlongOutput;
+  QLabel *separationLabel;
+  QLineEdit *separationOutput;
+  QLabel *elevFactorLabel;
+  QLineEdit *elevFactorOutput;
+  QLabel *gridFactorLabel;
+  QLineEdit *gridFactorOutput;
+  QLabel *combFactorLabel;
+  QLineEdit *combFactorOutput;
+  QPushButton *okButton,*cancelButton;
+  QGridLayout *gridLayout; // "grid" means a lattice arrangement of widgets
+};
 #endif
