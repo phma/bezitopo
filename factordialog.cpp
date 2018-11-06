@@ -34,8 +34,6 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   plWidget=new ProjListWidget(this);
   gridLabel=new QLabel(tr("Grid"),this);
   gridOutput=new QLineEdit(this);
-  QFontMetrics fm(gridOutput->fontMetrics());
-  gridOutput->setMinimumSize(fm.size(0," 1073741.824 128140.163 ft "));
   separationLabel=new QLabel(tr("Geoid separation"),this);
   separationOutput=new QLineEdit(this);
   elevFactorLabel=new QLabel(tr("Elevation factor"),this);
@@ -85,7 +83,33 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
 QSize LatlongFactorDialog::sizeHint() const
 {
   QSize ret=QWidget::sizeHint();
-  cout<<"sizeHint "<<ret.width()<<','<<ret.height()<<endl;
+  int leftColumn=0,rightColumn,labelWidth;
+  QFontMetrics fm(gridOutput->fontMetrics());
+  rightColumn=fm.size(0," 1073741.824 128140.163 ft ").width()+32;
+  labelWidth=latlongLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  labelWidth=elevationLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  labelWidth=gridLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  labelWidth=separationLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  labelWidth=elevFactorLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  labelWidth=gridFactorLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  labelWidth=combFactorLabel->sizeHint().width();
+  if (labelWidth>leftColumn)
+    leftColumn=labelWidth;
+  if (leftColumn+rightColumn>ret.width())
+    ret.setWidth(leftColumn+rightColumn);
+  //cout<<"sizeHint "<<ret.width()<<','<<ret.height()<<endl;
   return ret;
 }
 
