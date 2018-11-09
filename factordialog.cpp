@@ -78,6 +78,7 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   connect(elevationInput,SIGNAL(textChanged(const QString)),this,SLOT(updateElevationStr(QString)));
   connect(elevationInput,SIGNAL(editingFinished()),this,SLOT(updateElevation()));
   connect(plWidget,SIGNAL(selectedProjectionChanged(Projection *)),this,SLOT(updateProjection(Projection *)));
+  setWindowTitle(tr("Lat/long to grid"));
 }
 
 QSize LatlongFactorDialog::sizeHint() const
@@ -270,6 +271,7 @@ GridFactorDialog::GridFactorDialog(QWidget *parent):QDialog(parent)
   //connect(elevationInput,SIGNAL(textChanged(const QString)),this,SLOT(updateElevationStr(QString)));
   //connect(elevationInput,SIGNAL(editingFinished()),this,SLOT(updateElevation()));
   //connect(plWidget,SIGNAL(selectedProjectionChanged(Projection *)),this,SLOT(updateProjection(Projection *)));
+  setWindowTitle(tr("Grid to lat/long"));
 }
 
 void GridFactorDialog::accept()
