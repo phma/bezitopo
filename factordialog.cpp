@@ -266,10 +266,10 @@ GridFactorDialog::GridFactorDialog(QWidget *parent):QDialog(parent)
   elevation=NAN;
   connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
-  //connect(gridInput,SIGNAL(textChanged(const QString)),this,SLOT(updateLocationStr(QString)));
-  //connect(gridInput,SIGNAL(editingFinished()),this,SLOT(updateLocation()));
-  //connect(elevationInput,SIGNAL(textChanged(const QString)),this,SLOT(updateElevationStr(QString)));
-  //connect(elevationInput,SIGNAL(editingFinished()),this,SLOT(updateElevation()));
+  connect(gridInput,SIGNAL(textChanged(const QString)),this,SLOT(updateGridCoordsStr(QString)));
+  connect(gridInput,SIGNAL(editingFinished()),this,SLOT(updateGridCoords()));
+  connect(elevationInput,SIGNAL(textChanged(const QString)),this,SLOT(updateElevationStr(QString)));
+  connect(elevationInput,SIGNAL(editingFinished()),this,SLOT(updateElevation()));
   //connect(plWidget,SIGNAL(selectedProjectionChanged(Projection *)),this,SLOT(updateProjection(Projection *)));
   setWindowTitle(tr("Grid to lat/long"));
 }
@@ -282,6 +282,38 @@ void GridFactorDialog::accept()
 void GridFactorDialog::setDoc(document *docu)
 {
   doc=docu;
+}
+
+void GridFactorDialog::updateGridCoordsStr(QString text)
+{
+  gridCoordsStr=text.toStdString();
+}
+
+void GridFactorDialog::updateGridCoords()
+{
+  gridCoords=doc->ms.parseXy(gridCoordsStr);
+  cout<<doc->ms.formatMeasurementUnit(gridCoords.east(),LENGTH)<<','
+      <<doc->ms.formatMeasurementUnit(gridCoords.north(),LENGTH)<<endl;
+  //updateOutput();
+}
+
+void GridFactorDialog::updateElevationStr(QString text)
+{
+  elevationStr=text.toStdString();
+}
+
+void GridFactorDialog::updateElevation()
+{
+  try
+  {
+    elevation=doc->ms.parseMeasurement(elevationStr,LENGTH).magnitude;
+  }
+  catch (...)
+  {
+    elevation=NAN;
+  }
+  cout<<doc->ms.formatMeasurementUnit(elevation,LENGTH)<<endl;
+  //updateOutput();
 }
 
 QSize GridFactorDialog::sizeHint() const

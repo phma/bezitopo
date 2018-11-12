@@ -87,10 +87,10 @@ signals:
 public slots:
   virtual void accept();
   void setDoc(document *docu);
-  //void updateLocationStr(QString text);
-  //void updateLocation();
-  //void updateElevationStr(QString text);
-  //void updateElevation();
+  void updateGridCoordsStr(QString text);
+  void updateGridCoords();
+  void updateElevationStr(QString text);
+  void updateElevation();
   //void updateProjection(Projection *proj);
   //void updateOutput();
 private:
@@ -99,7 +99,7 @@ private:
   QLabel *elevationLabel;
   QLineEdit *elevationInput;
   ProjListWidget *plWidget;
-  std::string locationStr,elevationStr,separationStr,elevFactorStr,gridFactorStr,combFactorStr;
+  std::string gridCoordsStr,elevationStr,separationStr,elevFactorStr,gridFactorStr,combFactorStr;
   document *doc;
   latlong location;
   Projection *projection;
