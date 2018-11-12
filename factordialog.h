@@ -39,6 +39,7 @@ public:
   LatlongFactorDialog(QWidget *parent=0);
   virtual QSize sizeHint() const;
 signals:
+  void basePointChanged(xy baseXy,vball baseVball,double scale); // this will have more args
 public slots:
   virtual void accept();
   void setDoc(document *docu);
@@ -82,6 +83,7 @@ public:
   GridFactorDialog(QWidget *parent=0);
   virtual QSize sizeHint() const;
 signals:
+  void basePointChanged(xy baseXy,vball baseVball,double scale); // this will have more args
 public slots:
   virtual void accept();
   void setDoc(document *docu);
