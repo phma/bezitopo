@@ -91,7 +91,7 @@ public slots:
   void updateGridCoords();
   void updateElevationStr(QString text);
   void updateElevation();
-  //void updateProjection(Projection *proj);
+  void updateProjection(Projection *proj);
   //void updateOutput();
 private:
   QLabel *gridLabel;

@@ -316,6 +316,12 @@ void GridFactorDialog::updateElevation()
   //updateOutput();
 }
 
+void GridFactorDialog::updateProjection(Projection *proj)
+{
+  projection=proj;
+  //updateOutput();
+}
+
 QSize GridFactorDialog::sizeHint() const
 {
   QSize ret=QWidget::sizeHint();
