@@ -270,7 +270,7 @@ GridFactorDialog::GridFactorDialog(QWidget *parent):QDialog(parent)
   connect(gridInput,SIGNAL(editingFinished()),this,SLOT(updateGridCoords()));
   connect(elevationInput,SIGNAL(textChanged(const QString)),this,SLOT(updateElevationStr(QString)));
   connect(elevationInput,SIGNAL(editingFinished()),this,SLOT(updateElevation()));
-  //connect(plWidget,SIGNAL(selectedProjectionChanged(Projection *)),this,SLOT(updateProjection(Projection *)));
+  connect(plWidget,SIGNAL(selectedProjectionChanged(Projection *)),this,SLOT(updateProjection(Projection *)));
   setWindowTitle(tr("Grid to lat/long"));
 }
 
@@ -294,7 +294,7 @@ void GridFactorDialog::updateGridCoords()
   gridCoords=doc->ms.parseXy(gridCoordsStr);
   cout<<doc->ms.formatMeasurementUnit(gridCoords.east(),LENGTH)<<','
       <<doc->ms.formatMeasurementUnit(gridCoords.north(),LENGTH)<<endl;
-  //updateOutput();
+  updateOutput();
 }
 
 void GridFactorDialog::updateElevationStr(QString text)
@@ -313,13 +313,13 @@ void GridFactorDialog::updateElevation()
     elevation=NAN;
   }
   cout<<doc->ms.formatMeasurementUnit(elevation,LENGTH)<<endl;
-  //updateOutput();
+  updateOutput();
 }
 
 void GridFactorDialog::updateProjection(Projection *proj)
 {
   projection=proj;
-  //updateOutput();
+  updateOutput();
 }
 
 QSize GridFactorDialog::sizeHint() const
@@ -353,4 +353,57 @@ QSize GridFactorDialog::sizeHint() const
     ret.setWidth(leftColumn+rightColumn);
   //cout<<"sizeHint "<<ret.width()<<','<<ret.height()<<endl;
   return ret;
+}
+
+void GridFactorDialog::updateOutput()
+{
+  string latlongStr;
+  if (projection && gridCoords.isfinite())
+  {
+    location=projection->gridToLatlong(gridCoords);
+    gridfactor=projection->scaleFactor(gridCoords);
+    separation=cube.undulation(location);
+    radius=projection->ellip->radiusAtLatitude(location,DEG45);
+  }
+  else
+  {
+    location=latlong(NAN,NAN);
+    separation=radius=gridfactor=NAN;
+  }
+  elevfactor=radius/(radius+elevation+separation);
+  if (location.valid()==2 && doc)
+  {
+    latlongStr=formatlatlong(location,ARCSECOND+FIXLARGER+DEC4,doc->ms);
+    latlongOutput->setText(QString::fromStdString(latlongStr));
+  }
+  else
+    latlongOutput->setText("");
+  if (isfinite(separation) && doc)
+  {
+    separationStr=doc->ms.formatMeasurement(separation,LENGTH)+' ';
+    separationOutput->setText(QString::fromStdString(separationStr));
+  }
+  else
+    separationOutput->setText("");
+  if (isfinite(elevfactor))
+  {
+    elevFactorStr=ldecimal(elevfactor,1e-8)+' ';
+    elevFactorOutput->setText(QString::fromStdString(elevFactorStr));
+  }
+  else
+    elevFactorOutput->setText("");
+  if (isfinite(gridfactor))
+  {
+    gridFactorStr=ldecimal(gridfactor,1e-8)+' ';
+    gridFactorOutput->setText(QString::fromStdString(gridFactorStr));
+  }
+  else
+    gridFactorOutput->setText("");
+  if (isfinite(elevfactor*gridfactor))
+  {
+    combFactorStr=ldecimal(elevfactor*gridfactor,1e-8)+' ';
+    combFactorOutput->setText(QString::fromStdString(combFactorStr));
+  }
+  else
+    combFactorOutput->setText("");
 }

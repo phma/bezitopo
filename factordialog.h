@@ -92,7 +92,7 @@ public slots:
   void updateElevationStr(QString text);
   void updateElevation();
   void updateProjection(Projection *proj);
-  //void updateOutput();
+  void updateOutput();
 private:
   QLabel *gridLabel;
   QLineEdit *gridInput; // "grid" means a conformal coordinate system
