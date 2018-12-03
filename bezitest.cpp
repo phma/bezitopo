@@ -4353,7 +4353,7 @@ void testangleconv()
   testangleconvcorner("35°15'52\"N45°E",totxyz);
   testangleconvcorner("135°E35°15'52\"N",totxyz);
   testangleconvcorner("135°W35°15'52\"N",totxyz);
-  testangleconvcorner("35°15'52\"N45°W",totxyz);
+  testangleconvcorner("35°15′52″N45°W",totxyz);
   testangleconvcorner("35.26439°S45°E",totxyz);
   testangleconvcorner("135°E35.26439°S",totxyz);
   testangleconvcorner("135°W35.26439°S",totxyz);
