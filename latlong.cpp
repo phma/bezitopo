@@ -267,7 +267,7 @@ bool partialLatlong(string angstr)
 {
   vector<string> angles;
   string uchar;
-  int i,j,ulen,ctype,ncount=0,ecount=0,dmscount,dotcount,gcount;
+  int i,j,ulen,ctype,ncount=0,ecount=0,dmscount,dotcount,dmsafterdot,gcount;
   bool ret=true;
   angles.push_back("");
   for (i=0;i<angstr.length();i++)
@@ -321,7 +321,7 @@ bool partialLatlong(string angstr)
     ret=false;
   for (i=0;i<angles.size();i++)
   {
-    dmscount=dotcount=gcount=0;
+    dmscount=dotcount=dmsafterdot=gcount=0;
     for (j=0;j<angles[i].length();j++)
     {
       if (!std::isdigit(angles[i][j]) && angles[i][j]!='g' && angles[i][j]!='-' &&
@@ -334,8 +334,8 @@ bool partialLatlong(string angstr)
       if (angles[i][j]=='\'')
       {
 	++dmscount;	// There can be no more than 3 DMS signs
-	if (dotcount && dmscount>1)
-	  ret=false;	// No more than one DMS sign can come after the decimal point
+	dmsafterdot+=dotcount;
+			// No more than one DMS sign can come after the decimal point
       }
       if (angles[i][j]=='.')
 	++dotcount;	// There can be only one decimal point
@@ -344,7 +344,7 @@ bool partialLatlong(string angstr)
       if (angles[i][j]=='g' && j<angles[i].length()-1)
 	ret=false;	// The gon sign may not have anything after it
     }
-    if (dmscount>3 || dotcount>1 || gcount>1)
+    if (dmscount>3 || dotcount>1 || dmsafterdot>1 || gcount>1)
       ret=false;
     if (dmscount && gcount)
       ret=false;	// An angle cannot be in both degrees and gons
