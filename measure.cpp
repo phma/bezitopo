@@ -705,10 +705,26 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
 xy Measure::parseXy(string xystr)
 {
   size_t pos;
+  vector<size_t> spacepos;
+  int i;
   string xstr,ystr;
   xy ret;
   Measurement xmeas,ymeas;
   pos=xystr.find(',');
+  if (pos==string::npos)
+  {
+    do
+    {
+      pos=xystr.find(' ',pos+1);
+      spacepos.push_back(pos);
+    } while (pos!=string::npos);
+    /* There can be up to three spaces in the string.
+     * Find the last which has digits both before and after it.
+     */
+    for (i=0;i<spacepos.size();i++)
+      if (xystr.find_first_of("0123456789",0,spacepos[i])!=string::npos && xystr.find_first_of("0123456789",spacepos[i])!=string::npos)
+	pos=spacepos[i];
+  }
   if (pos==string::npos)
     ret=xy(NAN,NAN);
   else
