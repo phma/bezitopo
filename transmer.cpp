@@ -309,6 +309,7 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
       if (x+1<0)
 	node1=xy(-node1.getx(),node1.gety());
       edge=spiralarc(xyz(node,0),xyz(node1,0));
+      edge.setdelta(bear1-bear,bear1+bear-2*edge.chordbearing());
       ps.spline(edge.approx3d(1e3));
     }
   for (x=-maxx;x<=maxx;x++) // Draw vertical lines
@@ -328,6 +329,7 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
       if (y+1<0)
 	node1=xy(node1.getx(),-node1.gety());
       edge=spiralarc(xyz(node,0),xyz(node1,0));
+      edge.setdelta(bear1-bear,bear1+bear-2*edge.chordbearing());
       ps.spline(edge.approx3d(1e3));
     }
   ps.endpage();
