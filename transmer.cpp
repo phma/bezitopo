@@ -280,7 +280,7 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
       else
       {
 	nodes[y].push_back(ell.krugerize(xy(x*sq,y*sq)));
-	bears[y].push_back(atan2i(ell.dekrugerizeDeriv(xy(x*sq,y*sq))));
+	bears[y].push_back(atan2i(ell.krugerizeDeriv(xy(x*sq,y*sq))));
       }
   for (y=0;y<=maxy;y++)
     for (x=0;x<=maxx;x++)
