@@ -303,11 +303,19 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
       {
 	node=xy(node.getx(),-node.gety());
 	node1=xy(node1.getx(),-node1.gety());
+	bear=-bear;
+	bear1=-bear1;
       }
       if (x<0)
+      {
 	node=xy(-node.getx(),node.gety());
+	bear=-bear;
+      }
       if (x+1<0)
+      {
 	node1=xy(-node1.getx(),node1.gety());
+	bear1=-bear1;
+      }
       edge=spiralarc(xyz(node,0),xyz(node1,0));
       edge.setdelta(bear1-bear,bear1+bear-2*edge.chordbearing());
       ps.spline(edge.approx3d(1e3));
@@ -323,11 +331,19 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
       {
 	node=xy(-node.getx(),node.gety());
 	node1=xy(-node1.getx(),node1.gety());
+	bear=DEG180-bear;
+	bear1=DEG180-bear1;
       }
       if (y<0)
+      {
 	node=xy(node.getx(),-node.gety());
+	bear=DEG180-bear;
+      }
       if (y+1<0)
+      {
 	node1=xy(node1.getx(),-node1.gety());
+	bear1=DEG180-bear1;
+      }
       edge=spiralarc(xyz(node,0),xyz(node1,0));
       edge.setdelta(bear1-bear,bear1+bear-2*edge.chordbearing());
       ps.spline(edge.approx3d(1e3));
