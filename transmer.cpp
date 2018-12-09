@@ -257,7 +257,10 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
   double yHalfHeight=1e7,xHalfHeight,sq=1e6;
   int x,y,maxx,maxy;
   vector<vector<xy> > nodes;
+  vector<vector<int> > bears;
   xy node,node1;
+  int bear,bear1;
+  spiralarc edge;
   BoundRect br;
   if (totalTerms<8)
     xHalfHeight=2e7;
@@ -266,12 +269,19 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
   maxy=rint(yHalfHeight/sq);
   maxx=rint(xHalfHeight/sq);
   nodes.resize(maxy+1);
+  bears.resize(maxy+1);
   for (y=0;y<=maxy;y++)
     for (x=0;x<=maxx;x++)
       if (rev)
+      {
 	nodes[y].push_back(ell.dekrugerize(xy(x*sq,y*sq)));
+	bears[y].push_back(atan2i(ell.dekrugerizeDeriv(xy(x*sq,y*sq))));
+      }
       else
+      {
 	nodes[y].push_back(ell.krugerize(xy(x*sq,y*sq)));
+	bears[y].push_back(atan2i(ell.dekrugerizeDeriv(xy(x*sq,y*sq))));
+      }
   for (y=0;y<=maxy;y++)
     for (x=0;x<=maxx;x++)
     {
@@ -282,11 +292,13 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
     }
   ps.startpage();
   ps.setscale(br);
-  for (y=-maxy;y<=maxy;y++)
+  for (y=-maxy;y<=maxy;y++) // Draw horizontal lines
     for (x=-maxx;x<maxx;x++)
     {
       node=nodes[abs(y)][abs(x)];
       node1=nodes[abs(y)][abs(x+1)];
+      bear=bears[abs(y)][abs(x)];
+      bear1=bears[abs(y)][abs(x+1)];
       if (y<0)
       {
 	node=xy(node.getx(),-node.gety());
@@ -296,13 +308,16 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
 	node=xy(-node.getx(),node.gety());
       if (x+1<0)
 	node1=xy(-node1.getx(),node1.gety());
-      ps.line2p(node,node1);
+      edge=spiralarc(xyz(node,0),xyz(node1,0));
+      ps.spline(edge.approx3d(1e3));
     }
-  for (x=-maxx;x<=maxx;x++)
+  for (x=-maxx;x<=maxx;x++) // Draw vertical lines
     for (y=-maxy;y<maxy;y++)
     {
       node=nodes[abs(y)][abs(x)];
       node1=nodes[abs(y+1)][abs(x)];
+      bear=bears[abs(y)][abs(x)]+DEG90;
+      bear1=bears[abs(y+1)][abs(x)]+DEG90;
       if (x<0)
       {
 	node=xy(-node.getx(),node.gety());
@@ -312,7 +327,8 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
 	node=xy(node.getx(),-node.gety());
       if (y+1<0)
 	node1=xy(node1.getx(),-node1.gety());
-      ps.line2p(node,node1);
+      edge=spiralarc(xyz(node,0),xyz(node1,0));
+      ps.spline(edge.approx3d(1e3));
     }
   ps.endpage();
 }
