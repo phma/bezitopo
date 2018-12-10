@@ -3122,6 +3122,7 @@ void testmeasure()
 {
   Measure meas;
   Measurement parsed;
+  xy xy0,xy1,xy2;
   string measStr;
   double easting=443615.85705156205; // of point H, an EIR in Independence Park
   double longitude=-1.42977054329272687479; // of OAKLAND, a benchmark
@@ -3161,6 +3162,12 @@ void testmeasure()
   measStr=meas.formatMeasurementUnit(easting,LENGTH);
   cout<<"In US survey feet, easting is "<<measStr<<endl;
   tassert(measStr=="1455429.69 ft");
+  xy0=meas.parseXy("30,40 ft");
+  xy1=meas.parseXy("30 ft,40 m");
+  xy2=meas.parseXy("30,40 m");
+  cout<<"xy0-xy1 "<<dist(xy0,xy1)<<endl;
+  cout<<"xy1-xy2 "<<dist(xy1,xy2)<<endl;
+  cout<<"xy2-xy0 "<<dist(xy2,xy0)<<endl;
   meas.setDefaultUnit(ANGLE,0.017);
   measStr=meas.formatMeasurementUnit(longitude,ANGLE);
   cout<<"In degrees, longitude is "<<measStr<<endl;
