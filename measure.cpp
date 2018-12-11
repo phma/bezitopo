@@ -704,7 +704,7 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
 
 xy Measure::parseXy(string xystr)
 {
-  size_t pos;
+  size_t pos,xunitpos,yunitpos;
   vector<size_t> spacepos;
   int i;
   string xstr,ystr;
@@ -731,6 +731,16 @@ xy Measure::parseXy(string xystr)
   {
     xstr=xystr.substr(0,pos);
     ystr=xystr.substr(pos+1);
+    trim(xstr);
+    trim(ystr);
+    xunitpos=xstr.find_last_of("0123456789.");
+    if (xunitpos!=string::npos)
+      xunitpos++;
+    yunitpos=ystr.find_last_of("0123456789.");
+    if (yunitpos!=string::npos)
+      yunitpos++; // If only y has a unit, e.g. "9.5,3.4 m",
+    if (xunitpos==xstr.length() && yunitpos<ystr.length())
+      xstr+=ystr.substr(yunitpos); // then copy the unit from y to x.
     xmeas=parseMeasurement(xstr,LENGTH);
     ymeas=parseMeasurement(ystr,LENGTH);
     ret=xy(xmeas.magnitude,ymeas.magnitude);

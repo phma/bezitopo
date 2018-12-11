@@ -3168,6 +3168,9 @@ void testmeasure()
   cout<<"xy0-xy1 "<<dist(xy0,xy1)<<endl;
   cout<<"xy1-xy2 "<<dist(xy1,xy2)<<endl;
   cout<<"xy2-xy0 "<<dist(xy2,xy0)<<endl;
+  tassert(fabs(dist(xy0,xy1)-4*6.95)<0.1);
+  tassert(fabs(dist(xy1,xy2)-3*6.95)<0.1);
+  tassert(fabs(dist(xy2,xy0)-5*6.95)<0.1);
   meas.setDefaultUnit(ANGLE,0.017);
   measStr=meas.formatMeasurementUnit(longitude,ANGLE);
   cout<<"In degrees, longitude is "<<measStr<<endl;
