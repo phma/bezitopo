@@ -116,6 +116,13 @@ QSize LatlongFactorDialog::sizeHint() const
 
 void LatlongFactorDialog::accept()
 {
+  GeoLocalization local;
+  local.proj=projection;
+  local.fixedLl=location;
+  local.fixedXy=gridCoords;
+  local.elev=elevation;
+  local.combFactor=elevfactor*gridfactor;
+  basePointChanged(local);
   QDialog::accept();
 }
 
@@ -276,6 +283,13 @@ GridFactorDialog::GridFactorDialog(QWidget *parent):QDialog(parent)
 
 void GridFactorDialog::accept()
 {
+  GeoLocalization local;
+  local.proj=projection;
+  local.fixedLl=location;
+  local.fixedXy=gridCoords;
+  local.elev=elevation;
+  local.combFactor=elevfactor*gridfactor;
+  basePointChanged(local);
   QDialog::accept();
 }
 

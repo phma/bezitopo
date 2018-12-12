@@ -32,6 +32,20 @@
 #include "plwidget.h"
 #include "llvalidator.h"
 
+class GeoLocalization
+/* This localizes a survey on the earth. It has nothing to do with
+ * internationalization.
+ * This is a stub and will have more members later.
+ */
+{
+public:
+  Projection *proj;
+  latlong fixedLl;
+  xy fixedXy;
+  double elev;
+  double combFactor;
+};
+
 class LatlongFactorDialog: public QDialog
 {
   Q_OBJECT
@@ -39,7 +53,7 @@ public:
   LatlongFactorDialog(QWidget *parent=0);
   virtual QSize sizeHint() const;
 signals:
-  void basePointChanged(xy baseXy,vball baseVball,double scale); // this will have more args
+  void basePointChanged(GeoLocalization local);
 public slots:
   virtual void accept();
   void setDoc(document *docu);
@@ -83,7 +97,7 @@ public:
   GridFactorDialog(QWidget *parent=0);
   virtual QSize sizeHint() const;
 signals:
-  void basePointChanged(xy baseXy,vball baseVball,double scale); // this will have more args
+  void basePointChanged(GeoLocalization local);
 public slots:
   virtual void accept();
   void setDoc(document *docu);
