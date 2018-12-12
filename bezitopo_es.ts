@@ -114,32 +114,110 @@
     </message>
 </context>
 <context>
-    <name>LatlongFactorDialog</name>
+    <name>GridFactorDialog</name>
     <message>
-        <location filename="factordialog.cpp" line="29"/>
-        <source>Lat/Long</source>
-        <translation>Lat/Long</translation>
+        <location filename="factordialog.cpp" line="233"/>
+        <source>Grid</source>
+        <translation>Grilla</translation>
     </message>
     <message>
-        <location filename="factordialog.cpp" line="31"/>
+        <location filename="factordialog.cpp" line="235"/>
         <source>Elevation</source>
         <translation>Elevación</translation>
     </message>
     <message>
-        <location filename="factordialog.cpp" line="34"/>
+        <location filename="factordialog.cpp" line="238"/>
+        <source>Lat/Long</source>
+        <translation>Lat/Long</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="240"/>
+        <source>Geoid separation</source>
+        <translation>Separación geoidal</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="242"/>
+        <source>Elevation factor</source>
+        <translation>Factor de elevación</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="244"/>
+        <source>Grid factor</source>
+        <translation>Factor de grilla</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="246"/>
+        <source>Combined factor</source>
+        <translation>Factor combinado</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="248"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="249"/>
+        <source>Cancel</source>
+        <translation>Cancelar</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="283"/>
+        <source>Grid to lat/long</source>
+        <translation>Grilla a lat/long</translation>
+    </message>
+</context>
+<context>
+    <name>LatlongFactorDialog</name>
+    <message>
+        <location filename="factordialog.cpp" line="30"/>
+        <source>Lat/Long</source>
+        <translation>Lat/Long</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="32"/>
+        <source>Elevation</source>
+        <translation>Elevación</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="35"/>
         <source>Grid</source>
         <translatorcomment>Necesita ser averiguada por un agrimensor.</translatorcomment>
         <translation>Grilla</translation>
     </message>
     <message>
-        <location filename="factordialog.cpp" line="36"/>
+        <location filename="factordialog.cpp" line="37"/>
+        <source>Geoid separation</source>
+        <translation>Separación geoidal</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="39"/>
+        <source>Elevation factor</source>
+        <translation>Factor de elevación</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="41"/>
+        <source>Grid factor</source>
+        <translation>Factor de grilla</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="43"/>
+        <source>Combined factor</source>
+        <translation>Factor combinado</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="45"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="factordialog.cpp" line="37"/>
+        <location filename="factordialog.cpp" line="46"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
+    </message>
+    <message>
+        <location filename="factordialog.cpp" line="81"/>
+        <source>Lat/long to grid</source>
+        <translation>Lat/long a grilla</translation>
     </message>
 </context>
 <context>
@@ -153,146 +231,156 @@
 <context>
     <name>TinCanvas</name>
     <message>
-        <location filename="tinwindow.cpp" line="280"/>
+        <location filename="tinwindow.cpp" line="290"/>
+        <source>Load TIN</source>
+        <translation>Cargar TIN</translation>
+    </message>
+    <message>
+        <location filename="tinwindow.cpp" line="292"/>
+        <source>(*.dxf);;(*)</source>
+        <translation>Ficheros de intercambio de dibujos (*.dxf);;Todos los ficheros (*)</translation>
+    </message>
+    <message>
+        <location filename="tinwindow.cpp" line="323"/>
         <source>Save Drawing</source>
         <translation>Guardar Dibujo</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="283"/>
+        <location filename="tinwindow.cpp" line="326"/>
         <source>(*.bez);;(*)</source>
         <translation>Ficheros de Bezitopo (*.bez);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="324"/>
+        <location filename="tinwindow.cpp" line="367"/>
         <source>Open PNEZD File</source>
         <translation>Abrir fichero PNEZD</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="326"/>
+        <location filename="tinwindow.cpp" line="369"/>
         <source>(*.asc);;(*)</source>
         <translation>Ficheros PNEZD (*.asc);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="350"/>
+        <location filename="tinwindow.cpp" line="393"/>
         <source>Open Criteria File</source>
         <translation>Abrir fichero de criterios</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="352"/>
+        <location filename="tinwindow.cpp" line="395"/>
         <source>(*.crit);;(*)</source>
         <translation>Ficheros de criterios (*.crit);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="377"/>
+        <location filename="tinwindow.cpp" line="420"/>
         <source>Open Breakline File</source>
         <translation>Abrir fichero de líneas de rotura</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="379"/>
-        <location filename="tinwindow.cpp" line="439"/>
+        <location filename="tinwindow.cpp" line="422"/>
+        <location filename="tinwindow.cpp" line="482"/>
         <source>(*.brk);;(*)</source>
         <translation>Ficheros de líneas de rotura (*.brk);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="386"/>
-        <location filename="tinwindow.cpp" line="466"/>
+        <location filename="tinwindow.cpp" line="429"/>
+        <location filename="tinwindow.cpp" line="509"/>
         <source>You have edited breaklines.</source>
         <translation>Has editado líneas de rotura.</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="387"/>
+        <location filename="tinwindow.cpp" line="430"/>
         <source>Do you want to load?</source>
         <translation>Me pides importar líneas de rotura, pero las líneas de rotura en el TIN están más nuevas que las leídas de fichero. ¿Quieres leerlas de un fichero?</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="421"/>
+        <location filename="tinwindow.cpp" line="464"/>
         <source>Can&apos;t read breaklines. Error: </source>
         <translation>No puedo leer líneas de rotura. Error: </translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="436"/>
+        <location filename="tinwindow.cpp" line="479"/>
         <source>Save Breakline File</source>
         <translation>Guardar fichero de líneas de rotura</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="467"/>
+        <location filename="tinwindow.cpp" line="510"/>
         <source>Do you want to make TIN?</source>
         <translation>Me pides hacer un TIN, pero has editado las líneas de rotura en el TIN después que las has leídas de un fichero. ¿Quieres hacer un nuevo TIN?</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="513"/>
-        <location filename="tinwindow.cpp" line="548"/>
+        <location filename="tinwindow.cpp" line="556"/>
+        <location filename="tinwindow.cpp" line="591"/>
         <source>Making TIN</source>
         <translation>Haciendo TIN</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="514"/>
+        <location filename="tinwindow.cpp" line="557"/>
         <source>Sweeping convex hull...</source>
         <translation>Barriendo cápsula convexa...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="549"/>
+        <location filename="tinwindow.cpp" line="592"/>
         <source>Flipping edges...</source>
         <translation>Girando aristas...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="572"/>
+        <location filename="tinwindow.cpp" line="615"/>
         <source>Took too long to make TIN</source>
         <translation>Hacer TIN duró demasiado tiempo</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="613"/>
+        <location filename="tinwindow.cpp" line="656"/>
         <source>Making surface</source>
         <translation>Haciendo superficie</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="614"/>
+        <location filename="tinwindow.cpp" line="657"/>
         <source>Finding critical points...</source>
         <translation>Hallando puntos críticos...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="657"/>
+        <location filename="tinwindow.cpp" line="700"/>
         <source>Can&apos;t make TIN. Error: </source>
         <translation>No puedo hacer TIN. Error: </translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="719"/>
-        <location filename="tinwindow.cpp" line="785"/>
+        <location filename="tinwindow.cpp" line="767"/>
+        <location filename="tinwindow.cpp" line="833"/>
         <source>Drawing contours</source>
         <translation>Dibujando contornos</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="720"/>
+        <location filename="tinwindow.cpp" line="768"/>
         <source>Drawing rough contours...</source>
         <translation>Dibujando contornos ásperos...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="786"/>
+        <location filename="tinwindow.cpp" line="834"/>
         <source>Drawing smooth contours...</source>
         <translation>Dibujando contornos lisos</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="837"/>
+        <location filename="tinwindow.cpp" line="885"/>
         <source>Load Geoid File</source>
         <translation>Cargar Fichero Geoide</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="839"/>
+        <location filename="tinwindow.cpp" line="887"/>
         <source>(*.bol);;(*)</source>
         <translation>Ficheros de Boldatni (*.bol);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="862"/>
+        <location filename="tinwindow.cpp" line="910"/>
         <source>Can&apos;t read geoid. Error: </source>
         <translation>No puedo leer geoide. Error: </translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1013"/>
+        <location filename="tinwindow.cpp" line="1084"/>
         <source>You have imported breaklines.</source>
         <translation>Has importado líneas de rotura.</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1014"/>
+        <location filename="tinwindow.cpp" line="1085"/>
         <source>Do you want to edit?</source>
         <translation>Tientas editar una línea de rotura, pero las líneas de rotura leídas de fichero están más nuevas que las en el TIN. ¿Quieres editar líneas de rotura?</translation>
     </message>
@@ -300,212 +388,217 @@
 <context>
     <name>TinWindow</name>
     <message>
-        <location filename="tinwindow.cpp" line="1146"/>
+        <location filename="tinwindow.cpp" line="1218"/>
         <source>&amp;File</source>
         <translation>&amp;Fichero</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1147"/>
+        <location filename="tinwindow.cpp" line="1219"/>
         <source>&amp;Edit</source>
         <translation>&amp;Editar</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1148"/>
+        <location filename="tinwindow.cpp" line="1220"/>
         <source>&amp;View</source>
         <translation>&amp;Ver</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1149"/>
+        <location filename="tinwindow.cpp" line="1221"/>
         <source>&amp;Units</source>
         <translation>&amp;Unidades</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1150"/>
+        <location filename="tinwindow.cpp" line="1222"/>
         <source>&amp;Contour</source>
         <translation>&amp;Contorno</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1151"/>
+        <location filename="tinwindow.cpp" line="1223"/>
         <source>&amp;Coordinates</source>
         <translation>&amp;Coordenadas</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1152"/>
+        <location filename="tinwindow.cpp" line="1224"/>
         <source>&amp;Help</source>
         <translation>&amp;Ayuda</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1156"/>
+        <location filename="tinwindow.cpp" line="1228"/>
         <source>Zoom out 10</source>
         <translation>Reducir par 10</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1160"/>
+        <location filename="tinwindow.cpp" line="1232"/>
         <source>Zoom out 2</source>
         <translation>Reducir par 2</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1164"/>
+        <location filename="tinwindow.cpp" line="1236"/>
         <source>Zoom out</source>
         <translation>Reducir</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1168"/>
+        <location filename="tinwindow.cpp" line="1240"/>
         <source>Zoom in</source>
         <translation>Ampliar</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1172"/>
+        <location filename="tinwindow.cpp" line="1244"/>
         <source>Zoom in 2</source>
         <translation>Ampliar par 2</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1176"/>
+        <location filename="tinwindow.cpp" line="1248"/>
         <source>Zoom in 10</source>
         <translation>Ampliar par 10</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1180"/>
+        <location filename="tinwindow.cpp" line="1252"/>
         <source>Rotate right</source>
         <translation>Rotar al derecho</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1184"/>
+        <location filename="tinwindow.cpp" line="1256"/>
         <source>Rotate left</source>
         <translation>Rotar al izquierdo</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1193"/>
+        <location filename="tinwindow.cpp" line="1265"/>
         <source>Size to Fit</source>
         <translation>Caber en Tamaño</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1199"/>
+        <location filename="tinwindow.cpp" line="1271"/>
+        <source>Open</source>
+        <translation>Abrir</translation>
+    </message>
+    <message>
+        <location filename="tinwindow.cpp" line="1276"/>
         <source>Save</source>
         <translation>Guardar</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1204"/>
+        <location filename="tinwindow.cpp" line="1281"/>
         <source>Save As</source>
         <translation>Guardar Como</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1209"/>
+        <location filename="tinwindow.cpp" line="1286"/>
         <source>Test pattern Aster</source>
         <translation>Patrón de prueba Aster</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1214"/>
+        <location filename="tinwindow.cpp" line="1291"/>
         <source>Import PNEZD file</source>
         <translation>Importar fichero PNEZD</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1219"/>
+        <location filename="tinwindow.cpp" line="1296"/>
         <source>Import Criteria file</source>
         <translation>Importar fichero de criterios</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1224"/>
+        <location filename="tinwindow.cpp" line="1301"/>
         <source>Import Breaklines file</source>
         <translation>Importar fichero de líneas de rotura</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1229"/>
+        <location filename="tinwindow.cpp" line="1306"/>
         <source>Export Breaklines file</source>
         <translation>Exportar fichero de líneas de rotura</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1235"/>
+        <location filename="tinwindow.cpp" line="1312"/>
         <source>Make TIN</source>
         <translation>Hacer TIN</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1240"/>
+        <location filename="tinwindow.cpp" line="1317"/>
         <source>Select contour interval</source>
         <translation>Escoger intervalo de contorno</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1245"/>
+        <location filename="tinwindow.cpp" line="1322"/>
         <source>Draw rough contours</source>
         <translation>Dibujar contornos ásperos...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1250"/>
+        <location filename="tinwindow.cpp" line="1327"/>
         <source>Draw smooth contours</source>
         <translation>Dibujar contornos lisos</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1255"/>
+        <location filename="tinwindow.cpp" line="1332"/>
         <source>Draw smooth contours with curves</source>
         <translation>Dibujar contornos lisos con curvas</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1262"/>
+        <location filename="tinwindow.cpp" line="1339"/>
         <source>Use curved triangular surfaces</source>
         <translation>Usar superficies triangulares curvas</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1271"/>
+        <location filename="tinwindow.cpp" line="1348"/>
         <source>Load geoid file</source>
         <translation>Cargar fichero geoide</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1276"/>
+        <location filename="tinwindow.cpp" line="1353"/>
         <source>Grid to lat/long</source>
         <translation>Grilla a lat/long</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1281"/>
+        <location filename="tinwindow.cpp" line="1358"/>
         <source>Lat/long to grid</source>
         <translation>Lat/long a grilla</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1287"/>
+        <location filename="tinwindow.cpp" line="1364"/>
         <source>About Bezitopo</source>
         <translation>Acerca de Bezitopo</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1292"/>
+        <location filename="tinwindow.cpp" line="1369"/>
         <source>About Qt</source>
         <translation>Acerca de Qt</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1297"/>
+        <location filename="tinwindow.cpp" line="1374"/>
         <source>Dump</source>
         <translation>Volcar</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1302"/>
+        <location filename="tinwindow.cpp" line="1379"/>
         <source>Meter</source>
         <translation>Metro</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1308"/>
+        <location filename="tinwindow.cpp" line="1385"/>
         <source>Foot</source>
         <translation>Pie</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1314"/>
+        <location filename="tinwindow.cpp" line="1391"/>
         <source>International foot</source>
         <translation>Pie internacional</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1320"/>
+        <location filename="tinwindow.cpp" line="1397"/>
         <source>US survey foot</source>
         <translation>Pie agrimensural EE.UU.</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1326"/>
+        <location filename="tinwindow.cpp" line="1403"/>
         <source>Indian survey foot</source>
         <translation>Pie agrimensural indio</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1385"/>
+        <location filename="tinwindow.cpp" line="1471"/>
         <source>Bezitopo</source>
         <translation>Bezitopo</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1387"/>
+        <location filename="tinwindow.cpp" line="1473"/>
         <source>%1
 Version %2
 Copyright %3 Pierre Abbat
@@ -520,8 +613,8 @@ Licencia GPL 3 o posterior</translation>
         <translation type="obsolete"> versión </translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="1386"/>
-        <location filename="tinwindow.cpp" line="1393"/>
+        <location filename="tinwindow.cpp" line="1472"/>
+        <location filename="tinwindow.cpp" line="1479"/>
         <source>ViewTIN</source>
         <translation>ViewTIN</translation>
     </message>
@@ -537,7 +630,7 @@ Licencia GPL 3 o posterior</translation>
 <context>
     <name>main</name>
     <message>
-        <location filename="tinwindow.cpp" line="1123"/>
+        <location filename="tinwindow.cpp" line="1194"/>
         <source>ViewTIN</source>
         <translation>ViewTIN</translation>
     </message>
