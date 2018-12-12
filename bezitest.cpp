@@ -1992,7 +1992,7 @@ void testcircle()
   ps.setcolor(0,0,0);
   ps.line2p(sta1,sta3);
   close2=besidement(xaxis,yaxis);
-  tassert(isinf(close2[0]) && isinf(close2[1]));
+  tassert(std::isinf(close2[0]) && std::isinf(close2[1]));
   ps.setcolor(0,0,0);
   ps.line2p(sta1,sta3);
   ps.endpage();

@@ -671,8 +671,8 @@ vector<alosta> besidement1(segment *a,double a1,segment *b,double b1)
 	done=1;
       else
 	done=2;
-    if (aalong[0]<0 || aalong[0]>a->length() || isnan(aalong[0]) ||
-        balong[0]<0 || balong[0]>b->length() || isnan(balong[0]))
+    if (aalong[0]<0 || aalong[0]>a->length() || std::isnan(aalong[0]) ||
+        balong[0]<0 || balong[0]>b->length() || std::isnan(balong[0]))
       done=3;
   } while (!done);
   cout<<"done="<<done<<'\n';

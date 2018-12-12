@@ -225,7 +225,7 @@ void LatlongFactorDialog::updateOutput()
   else
     combFactorOutput->setText("");
   okButton->setEnabled(projection && location.valid()==2 && !gridCoords.isnan()
-		       && isfinite(elevation) && isnormal(elevfactor*gridfactor));
+		       && std::isfinite(elevation) && std::isnormal(elevfactor*gridfactor));
 }
 
 GridFactorDialog::GridFactorDialog(QWidget *parent):QDialog(parent)
