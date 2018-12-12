@@ -25,6 +25,7 @@
 #include <cassert>
 #include <fftw3.h>
 #include "polyline.h"
+#include "ldecimal.h"
 #include "projection.h"
 #include "ellipsoid.h"
 #include "ps.h"
@@ -351,7 +352,7 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
   ps.endpage();
 }
 
-void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc)
+void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
 /* Computes approximations to the meridian of the ellipsoid. Projects
  * equidistant points along the meridian of the ellipsoid to the sphere,
  * and vice versa. Then takes the Fourier transform of the difference between
@@ -496,23 +497,29 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc)
   ps.spline(reverseSpectrum.approx3d(1e-2));
   ps.endpage();
   writeustring(merc,ell.getName());
+  merctext<<ell.getName()<<'\n';
   writegeint(merc,forwardNoiseFloor+1);
   writebedouble(merc,forwardLengths3.back()[1]);
+  merctext<<ldecimal(forwardLengths3.back()[1])<<'\n';
   forwardTm.push_back(forwardLengths3.back()[1]);
   for (i=0;i<forwardNoiseFloor;i++)
   {
     writebedouble(merc,forwardTransform[i]);
+    merctext<<ldecimal(forwardTransform[i])<<'\n';
     forwardTm.push_back(forwardTransform[i]);
   }
   writegeint(merc,reverseNoiseFloor+1);
   writebedouble(merc,reverseLengths3.back()[1]);
+  merctext<<"--------\n"<<ldecimal(reverseLengths3.back()[1])<<'\n';
   reverseTm.push_back(reverseLengths3.back()[1]);
   for (i=0;i<reverseNoiseFloor;i++)
   {
     writebedouble(merc,reverseTransform[i]);
+    merctext<<ldecimal(reverseTransform[i])<<'\n';
     reverseTm.push_back(reverseTransform[i]);
   }
   ell.setTmCoefficients(forwardTm,reverseTm);
+  merctext<<"========\n";
   drawKrugerize(ell,ps,false,forwardNoiseFloor+reverseNoiseFloor);
   drawKrugerize(ell,ps,true,forwardNoiseFloor+reverseNoiseFloor);
 }
@@ -532,13 +539,14 @@ int main(int argc, char *argv[])
   int i;
   PostScript ps;
   ofstream merc("transmer.dat",ios::binary);
+  ofstream merctext("transmer.txt");
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
   ps.open("transmer.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
   for (i=0;i<countEllipsoids();i++)
-    doEllipsoid(getEllipsoid(i),ps,merc);
+    doEllipsoid(getEllipsoid(i),ps,merc,merctext);
   ps.trailer();
   ps.close();
   calibrate();
