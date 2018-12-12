@@ -224,6 +224,8 @@ void LatlongFactorDialog::updateOutput()
   }
   else
     combFactorOutput->setText("");
+  okButton->setEnabled(projection && location.valid()==2 && !gridCoords.isnan()
+		       && isfinite(elevation) && isnormal(elevfactor*gridfactor));
 }
 
 GridFactorDialog::GridFactorDialog(QWidget *parent):QDialog(parent)
@@ -420,4 +422,6 @@ void GridFactorDialog::updateOutput()
   }
   else
     combFactorOutput->setText("");
+  okButton->setEnabled(projection && location.valid()==2 && !gridCoords.isnan()
+		       && isfinite(elevation) && isnormal(elevfactor*gridfactor));
 }
