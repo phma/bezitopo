@@ -363,6 +363,10 @@ vector<array<alosta,2> > intersections(segment *a,segment *b,bool extend)
   bdiv=nearbyint(maxcur*blen+blen/alen)+3;
   if (bdiv<3 || bdiv>4096)
     bdiv=4096;
+  if (std::isnan(alen))
+    adiv=-1;
+  if (std::isnan(blen))
+    bdiv=-1;
   for (i=0;i<adiv;i++)
     for (j=0;j<bdiv;j++)
     {
