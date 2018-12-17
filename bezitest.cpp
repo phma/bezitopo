@@ -6088,8 +6088,6 @@ char displayDigits[6][7]=
 void testgeoidboundary()
 {
   int i,j,r,gbarea;
-  int nCircles=11;
-  int circleSize=rint(DEG45/nCircles);
   double x,peri;
   g1boundary g1,g2;
   gboundary gb;
@@ -6312,9 +6310,21 @@ void testgeoidboundary()
   cout<<"area "<<gbarea<<' '<<bintodeg(gbarea)<<endl;
   tassert(gbarea>2038756371 && gbarea<2060000000);
   // The area is a little bigger so that it covers all the circles completely.
+}
+
+void testvballgeoid()
   /* Make a geoid file showing the numerals 1-6 on their faces. The KML file
    * will be for developers to see how volleyball coordinates work.
    */
+{
+  int i,j;
+  int nCircles=11;
+  int circleSize=rint(DEG45/nCircles);
+  gboundary gb;
+  vball v;
+  smallcircle c;
+  geoid gd,outgd;
+  PostScript ps;
   excerptcircles.clear();
   for (v.face=1;v.face<7;v.face++)
   {
@@ -6352,7 +6362,19 @@ void testgeoidboundary()
 	  excerptcircles.push_back(c);
 	}
   }
-  outgd.cmap->clear();
+  geo.clear();
+  geo.push_back(gd);
+  outgd.ghdr=new geoheader;
+  outgd.cmap=new cubemap;
+  outgd.cmap->scale=1/65536.;
+  outgd.ghdr->logScale=-16;
+  outgd.ghdr->planet=BOL_EARTH;
+  outgd.ghdr->dataType=BOL_UNDULATION;
+  outgd.ghdr->encoding=BOL_VARLENGTH;
+  outgd.ghdr->ncomponents=1;
+  outgd.ghdr->tolerance=0.003;
+  outgd.ghdr->sublimit=1000;
+  outgd.ghdr->spacing=1e5;
   totalArea.clear();
   dataArea.clear();
   for (i=0;i<6;i++)
@@ -6459,8 +6481,7 @@ void testkml()
   plotbdy(ps,gPodes);
   ps.endpage();
   // Start test with file previously written by testgeoidboundary
-  if (readboldatni(ringFive,"geoidboundary.bol")<2 ||
-      readboldatni(vballGeoid,"vball.bol")<2)
+  if (readboldatni(ringFive,"geoidboundary.bol")<2)
     cerr<<"Please run \"bezitest geoidboundary\" first."<<endl;
   else
     cout<<"Read geoidboundary.bol written by geoidboundary test"<<endl;
@@ -6488,8 +6509,11 @@ void testkml()
   ps.trailer();
   ps.close();
   outKml(gRingFive,"geoidboundary.kml");
-  gVballGeoid=vballGeoid.cmap->gbounds();
-  outKml(gVballGeoid,"vball.kml");
+  if (readboldatni(vballGeoid,"vball.bol")==2)
+  {
+    gVballGeoid=vballGeoid.cmap->gbounds();
+    outKml(gVballGeoid,"vball.kml");
+  }
   /* Test a single face. This is to check whether the polygons in KML consist
    * of geodesics or loxodromes.
    */
@@ -7369,6 +7393,8 @@ int main(int argc, char *argv[])
     testgeoid();
   if (shoulddo("geoidboundary"))
     testgeoidboundary();
+  if (shoulddo("vballgeoid"))
+    testvballgeoid();
   if (shoulddo("kml"))
     testkml();
   if (shoulddo("geint"))
