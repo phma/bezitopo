@@ -477,6 +477,7 @@ array<double,4> weightedDistance(segment *a,segment *b)
   xy astation,bstation;
   double aalong,balong,alen=a->length(),sqrtlen=sqrt(alen);
   int bbear;
+  aalong=GAUSSQ4P0P*alen;
   astation=a->station(aalong);
   balong=b->closest(astation);
   bstation=b->station(balong);
