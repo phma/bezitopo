@@ -383,9 +383,12 @@ TmNameCoeff readTmCoefficients1(istream &tmfile)
 
 void readTmCoefficients()
 {
-  ifstream tmfile(string(SHARE_DIR)+"/transmer.dat",ios::binary);
+  ifstream tmfile;
   TmNameCoeff tmNameCoeff;
   ellipsoid *ell;
+  tmfile.open(string(SHARE_DIR)+"/transmer.dat",ios::binary);
+  if (!tmfile.is_open())
+      tmfile.open("transmer.dat",ios::binary);
   while (tmfile.good())
   {
     tmNameCoeff=readTmCoefficients1(tmfile);
