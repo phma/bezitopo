@@ -305,8 +305,13 @@ void argpass3(Measure ms)
           }
           catch (...)
           {
-            cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a length"<<endl;
-            commandError=true;
+	    if (cmdline[i].nonopt=="inf")
+	      curvature.push_back(0);
+	    else
+	    {
+	      cerr<<"Could not parse \""<<cmdline[i].nonopt<<"\" as a length"<<endl;
+	      commandError=true;
+	    }
           }
 	  if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	  {
