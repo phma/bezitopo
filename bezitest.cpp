@@ -7244,7 +7244,7 @@ int main(int argc, char *argv[])
   if (shoulddo("zoom"))
     testzoom();
   if (shoulddo("random"))
-    testrandom();
+    testrandom(); // may take >7 s; time is random
   if (shoulddo("intersection"))
     testintersection();
   if (shoulddo("in"))
@@ -7270,7 +7270,7 @@ int main(int argc, char *argv[])
   if (shoulddo("maketinaster"))
     testmaketinaster();
   if (shoulddo("maketinbigaster"))
-    testmaketinbigaster();
+    testmaketinbigaster(); // >1 s
   if (shoulddo("maketinstraightrow"))
     testmaketinstraightrow();
   if (shoulddo("maketinlongandthin"))
@@ -7294,7 +7294,7 @@ int main(int argc, char *argv[])
   if (shoulddo("newton"))
     testnewton();
   if (shoulddo("manysum"))
-    testmanysum();
+    testmanysum(); // >2 s
   if (shoulddo("vcurve"))
     testvcurve();
   if (shoulddo("integertrig"))
@@ -7312,13 +7312,13 @@ int main(int argc, char *argv[])
   if (shoulddo("spiral"))
     testspiral();
   if (shoulddo("spiralarc"))
-    testspiralarc();
+    testspiralarc(); // 10.5 s
   if (shoulddo("cogospiral"))
     testcogospiral();
   if (shoulddo("curvefit"))
     testcurvefit();
   if (shoulddo("manyarc"))
-    testmanyarc();
+    testmanyarc(); // 3 s
   if (shoulddo("closest"))
     testclosest();
   if (shoulddo("qindex"))
@@ -7328,19 +7328,19 @@ int main(int argc, char *argv[])
   if (shoulddo("derivs"))
     testderivs();
   if (shoulddo("trianglecontours"))
-    trianglecontours();
+    trianglecontours(); // >5 s and outputs some new files each time
 #ifndef NDEBUG
   if (shoulddo("parabinter"))
     testparabinter();
 #endif
   if (shoulddo("rasterdraw"))
-    testrasterdraw();
+    testrasterdraw(); // 2 s
   if (shoulddo("dirbound"))
     testdirbound();
   if (shoulddo("stl"))
     teststl();
   if (shoulddo("halton"))
-    testhalton();
+    testhalton(); // 2.5 s
   if (shoulddo("polyline"))
     testpolyline();
   if (shoulddo("bezier3d"))
@@ -7362,7 +7362,7 @@ int main(int argc, char *argv[])
   if (shoulddo("color"))
     testcolor();
   if (shoulddo("contour"))
-    testcontour();
+    testcontour(); // >7 s
   if (shoulddo("foldcontour"))
     testfoldcontour();
   if (shoulddo("zigzagcontour"))
@@ -7382,7 +7382,7 @@ int main(int argc, char *argv[])
   if (shoulddo("smooth5"))
     testsmooth5();
   if (shoulddo("quadhash"))
-    testquadhash();
+    testquadhash(); // 8 s
   if (shoulddo("smallcircle"))
     testsmallcircle();
   if (shoulddo("cylinterval"))
@@ -7392,11 +7392,11 @@ int main(int argc, char *argv[])
   if (shoulddo("geoid"))
     testgeoid();
   if (shoulddo("geoidboundary"))
-    testgeoidboundary();
+    testgeoidboundary(); // 45 s
   if (shoulddo("vballgeoid"))
-    testvballgeoid();
+    testvballgeoid(); // 206 s
   if (shoulddo("kml"))
-    testkml();
+    testkml(); // 19.5 s
   if (shoulddo("geint"))
     testgeint();
   //clampcubic();
