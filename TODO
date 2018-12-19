@@ -34,6 +34,7 @@ Before 0.2.0:
 •Adjust a traverse by least squares. Some points may have coordinates from GPS too.
 •Rotate and translate one pointlist to another pointlist, given a list of matching points.
 •Rewrite measure.cpp in more proper C++. ✓
+•Speed up boldatni generation with multithreading.
 
 Before 0.3.0:
 •Save and open a file containing a scene.
