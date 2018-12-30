@@ -35,6 +35,7 @@
 
 #define PETERS 1
 #define EQUIREC 0
+#define NDOTS 10000
 
 using namespace std;
 
@@ -381,7 +382,7 @@ void plotErrorDot(Projection &proj,PostScript &ps,latlong ll,int cylproj)
       dotpos=xy(ll.lon,ll.lat);
       break;
   }
-  radius=(dottype+1)*0.01;
+  radius=(dottype+1)*0.002;
   if (dottype<3)
     ps.setcolor(0,0,1);
   else if (dottype<6)
@@ -394,6 +395,22 @@ void plotErrorDot(Projection &proj,PostScript &ps,latlong ll,int cylproj)
     ps.setcolor(1,1,1);
     ps.circle(dotpos,2*radius/3);
   }
+}
+
+void plotErrorPeters(ellipsoid &ell,PostScript &ps)
+{
+  TransverseMercatorEllipsoid proj(&ell,0);
+  int i;
+  latlong ll;
+  ps.startpage();
+  ps.setscale(-3.15,-2,3.15,2);
+  for (i=0;i<NDOTS;i++)
+  {
+    ll.lat=asin((2*i+1.)/NDOTS-1);
+    ll.lon=bintorad(foldangle(i*PHITURN));
+    plotErrorDot(proj,ps,ll,PETERS);
+  }
+  ps.endpage();
 }
 
 void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
@@ -566,6 +583,7 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
   merctext<<"========\n";
   drawKrugerize(ell,ps,false,forwardNoiseFloor+reverseNoiseFloor);
   drawKrugerize(ell,ps,true,forwardNoiseFloor+reverseNoiseFloor);
+  plotErrorPeters(ell,ps);
 }
 
 void calibrate()

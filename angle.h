@@ -116,7 +116,7 @@ double gontorad(double angle);
 #define DEG180 0x40000000
 #define DEG270 0x60000000
 #define DEG360 0x80000000
-
+#define PHITURN 0xcf1bbcdd
 std::string radtoangle(double angle,int64_t unitp);
 std::string radtoangle(double angle,int64_t unitp,Measure ms);
 std::string bintoangle(int angle,int64_t unitp);
