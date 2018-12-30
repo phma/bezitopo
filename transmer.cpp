@@ -33,6 +33,9 @@
 #include "manysum.h"
 #include "binio.h"
 
+#define PETERS 1
+#define EQUIREC 0
+
 using namespace std;
 
 vector<string> args;
@@ -350,6 +353,47 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
       ps.spline(edge.approx3d(1e3));
     }
   ps.endpage();
+}
+
+void plotErrorDot(Projection &proj,PostScript &ps,latlong ll,int cylproj)
+{
+  xyz before3d,after3d;
+  latlong afterll;
+  double error,radius;
+  int dottype;
+  xy dotpos;
+  afterll=proj.gridToLatlong(proj.latlongToGrid(ll));
+  before3d=proj.ellip->geoc(ll,0);
+  after3d=proj.ellip->geoc(afterll,0);
+  error=dist(before3d,after3d);
+  if (std::isfinite(error))
+    dottype=floor(log10(error)+4);
+  else
+    dottype=15;
+  if (dottype<0)
+    dottype=0;
+  switch (cylproj)
+  {
+    case PETERS:
+      dotpos=xy(ll.lon,2*sin(ll.lat));
+      break;
+    case EQUIREC:
+      dotpos=xy(ll.lon,ll.lat);
+      break;
+  }
+  radius=(dottype+1)*0.01;
+  if (dottype<3)
+    ps.setcolor(0,0,1);
+  else if (dottype<6)
+    ps.setcolor(0,0,0);
+  else
+    ps.setcolor(1,0,0);
+  ps.circle(dotpos,radius);
+  if (dottype==15)
+  {
+    ps.setcolor(1,1,1);
+    ps.circle(dotpos,2*radius/3);
+  }
 }
 
 void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
