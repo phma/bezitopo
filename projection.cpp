@@ -722,7 +722,7 @@ latlong TransverseMercatorEllipsoid::gridToLatlong(xy grid)
 {
   grid=ellip->dekrugerize((grid-offset)/scale);
   xyz sphpnt=rotation.conj().rotate(invTransMerc(grid,ellip->sphere->getpor()));
-  latlong ll=ellip->sphere->geod(sphpnt);
+  latlong ll=ellip->sphere->geod(sphpnt+ellip->getCenter());
   return ellip->inverseConformalLatitude(ll);
 }
 
@@ -741,7 +741,7 @@ xy TransverseMercatorEllipsoid::geocentricToGrid(xyz geoc)
 xy TransverseMercatorEllipsoid::latlongToGrid(latlong ll)
 {
   ll=ellip->conformalLatitude(ll);
-  xyz sphpnt=ellip->sphere->geoc(ll,0);
+  xyz sphpnt=ellip->sphere->geoc(ll,0)-ellip->getCenter();
   xy grid=transMerc(rotation.rotate(sphpnt));
   return ellip->krugerize(grid)*scale+offset;
 }

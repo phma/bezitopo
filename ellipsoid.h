@@ -33,7 +33,7 @@ class ellipsoid
   Q_DECLARE_TR_FUNCTIONS(ellipsoid)
 private:
   double eqr,por;
-  xyz cen;
+  xyz cen; // Some ellipsoids are offset. The center of an ellipsoid's sphere is the same as the ellipsoid's center.
   std::string name;
   std::vector<double> tmForward,tmReverse; // for Gauss-Krüger tranverse Mercator
 public:
