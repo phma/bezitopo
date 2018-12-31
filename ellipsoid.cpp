@@ -21,6 +21,7 @@
  */
 #include <complex>
 #include <cassert>
+#include <iostream>
 #include "config.h"
 #include "ellipsoid.h"
 #include "rootfind.h"
@@ -115,7 +116,7 @@ latlongelev ellipsoid::geod(xyz geocen)
     chk=geoc(ret)-cen;
     if (dist(chk,geocen)<toler)
       break;
-    normal=sphere->geoc(ret);
+    normal=sphere->geoc(ret)-cen;
     normal.normalize();
     ret.elev+=dot(geocen-chk,normal);
     at0=geocen-ret.elev*normal;
