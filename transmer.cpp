@@ -356,7 +356,7 @@ void drawKrugerize(ellipsoid &ell,PostScript &ps,bool rev,int totalTerms)
   ps.endpage();
 }
 
-void plotErrorDot(Projection &proj,PostScript &ps,latlong ll,int cylproj)
+int plotErrorDot(Projection &proj,PostScript &ps,latlong ll,int cylproj)
 {
   xyz before3d,after3d;
   latlong afterll;
@@ -368,7 +368,7 @@ void plotErrorDot(Projection &proj,PostScript &ps,latlong ll,int cylproj)
   after3d=proj.ellip->geoc(afterll,0);
   error=dist(before3d,after3d);
   if (std::isfinite(error))
-    dottype=floor(log10(error)+4);
+    dottype=floor(log10(error)+5);
   else
     dottype=15;
   if (dottype<0)
@@ -395,22 +395,51 @@ void plotErrorDot(Projection &proj,PostScript &ps,latlong ll,int cylproj)
     ps.setcolor(1,1,1);
     ps.circle(dotpos,2*radius/3);
   }
+  return dottype;
 }
 
-void plotErrorPeters(ellipsoid &ell,PostScript &ps)
+void plotErrorPeters(ellipsoid &ell,PostScript &ps,ostream &merctext)
 {
   TransverseMercatorEllipsoid proj(&ell,0);
   int i;
   latlong ll;
+  int histo[16];
+  double lo,hi,pre;
+  Measure ms;
+  ms.setMetric();
+  memset(histo,0,sizeof(histo));
   ps.startpage();
   ps.setscale(-3.15,-2,3.15,2);
   for (i=0;i<NDOTS;i++)
   {
     ll.lat=asin((2*i+1.)/NDOTS-1);
     ll.lon=bintorad(foldangle(i*PHITURN));
-    plotErrorDot(proj,ps,ll,PETERS);
+    histo[plotErrorDot(proj,ps,ll,PETERS)]++;
   }
   ps.endpage();
+  merctext<<"--------\n";
+  for (i=0;i<16;i++)
+    if (histo[i])
+    {
+      merctext<<ldecimal(histo[i]*1e2/NDOTS,0.01)<<"% ";
+      if (i==15)
+	merctext<<"floating-point overflow";
+      else
+      {
+	lo=exp10(i-5);
+	hi=lo*10;
+	if (i<5)
+	  pre=0.001;
+	else if (i<8)
+	  pre=1;
+	else
+	  pre=1000;
+	if (i==0)
+	  lo=0;
+	merctext<<ms.formatMeasurementUnit(lo,LENGTH,pre,pre/10)<<" - "<<ms.formatMeasurementUnit(hi,LENGTH,pre,pre/10);
+      }
+      merctext<<endl;
+    }
 }
 
 void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
@@ -580,10 +609,10 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
     reverseTm.push_back(reverseTransform[i]);
   }
   ell.setTmCoefficients(forwardTm,reverseTm);
-  merctext<<"========\n";
   drawKrugerize(ell,ps,false,forwardNoiseFloor+reverseNoiseFloor);
   drawKrugerize(ell,ps,true,forwardNoiseFloor+reverseNoiseFloor);
-  plotErrorPeters(ell,ps);
+  plotErrorPeters(ell,ps,merctext);
+  merctext<<"========\n";
 }
 
 void calibrate()
