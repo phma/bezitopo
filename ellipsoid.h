@@ -89,7 +89,7 @@ struct TmNameCoeff
   std::vector<double> tmForward,tmReverse;
 };
 
-extern ellipsoid Sphere,Clarke,GRS80,WGS84,ITRS;
+extern ellipsoid Sphere,Clarke,GRS80,HGRS87,WGS84,ITRS,Hayford;
 int countEllipsoids();
 ellipsoid& getEllipsoid(int n);
 ellipsoid *getEllipsoid(std::string name);

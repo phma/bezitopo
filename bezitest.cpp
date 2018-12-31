@@ -4586,8 +4586,8 @@ void testellipsoid()
   double rad,cenlat,conlat,invconlat,conscale;
   int i,j;
   xyz sealevel,kmhigh,noffset,soffset,diff,benin,bengal,howland,galapagos,npole,spole;
-  latlongelev greenhill,greenhill2;
-  xyz gh;
+  latlongelev greenhill,greenhill2,athens,athens2;
+  xyz gh,ath;
   xy pnt0,pnt1,pnt2;
   ellipsoid test1(8026957,0,0.5,xyz(0,0,0),"test1"),
             test2(8026957,4013478.5,0,xyz(0,0,0),"test2");
@@ -4654,6 +4654,9 @@ void testellipsoid()
   greenhill.lat=degtorad(35.4);
   greenhill.lon=degtorad(-82.05);
   greenhill.elev=310; // over ellipsoid; geoid is about 30 m below ellipsoid
+  athens.lat=degtorad(37.984);
+  athens.lon=degtorad(23.728);
+  athens.elev=200;
   gh=GRS80.geoc(greenhill);
   greenhill2=GRS80.geod(gh);
   cout<<"Green Hill "<<radtodeg(greenhill2.lat)<<' '<<radtodeg(greenhill2.lon)<<' '<<greenhill2.elev<<endl;
@@ -4661,6 +4664,12 @@ void testellipsoid()
   tassert(fabs(greenhill2.lon-greenhill.lon)<1e-3/EARTHRAD);
   tassert(fabs(greenhill2.elev-greenhill.elev)<1e-3);
   greenhill2=GRS80.geod(gh/1000);
+  ath=HGRS87.geoc(athens);
+  athens2=HGRS87.geod(ath);
+  cout<<"Athens "<<radtodeg(athens2.lat)<<' '<<radtodeg(athens2.lon)<<' '<<athens2.elev<<endl;
+  tassert(fabs(athens2.lat-athens.lat)<1e-3/EARTHRAD);
+  tassert(fabs(athens2.lon-athens.lon)<1e-3/EARTHRAD);
+  tassert(fabs(athens2.elev-athens.elev)<1e-3);
   rad=GRS80.radiusAtLatitude(latlong(0,0),0);
   cout<<"Radius in prime at equator: "<<ldecimal(rad)<<endl;
   tassert(fabs(rad-6378137)<0.5);
