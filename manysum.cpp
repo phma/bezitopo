@@ -130,6 +130,29 @@ double pairwisesum(double *a,unsigned n)
     return 0;
 }
 
+double pairwisesum2(double *a,unsigned n)
+{
+  unsigned i,j,b;
+  double sums[32],sum=0;
+  for (i=0;i<n;i++)
+  {
+    b=i^(i+1);
+    if (b==1)
+      sums[0]=a[i];
+    else
+    {
+      sums[0]+=a[i];
+      for (j=1;b>>(j+1);j++)
+	sums[j]+=sums[j-1];
+      sums[j]=sums[j-1];
+    }
+  }
+  for (i=0;i<32;i++)
+    if ((n>>i)&1)
+      sum+=sums[i];
+  return sum;
+}
+
 long double pairwisesum(long double *a,unsigned n)
 // a is clobbered.
 {
@@ -147,7 +170,7 @@ long double pairwisesum(long double *a,unsigned n)
 
 double pairwisesum(vector<double> &a)
 {
-  return pairwisesum(&a[0],a.size());
+  return pairwisesum2(&a[0],a.size());
 }
 
 long double pairwisesum(vector<long double> &a)
