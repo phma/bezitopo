@@ -30,6 +30,7 @@
 #include <cfloat>
 #include <cstring>
 #include <unistd.h>
+#include <QTime>
 #include "config.h"
 #include "point.h"
 #include "cogo.h"
@@ -99,7 +100,7 @@
 using namespace std;
 
 char hexdig[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
-bool slowmanysum=false;
+bool slowmanysum=true;
 bool testfail=false;
 document doc;
 vector<string> args;
@@ -1743,6 +1744,8 @@ void testmanysum()
   int i,j,h;
   double x,naiveforwardsum,forwardsum,pairforwardsum,naivebackwardsum,backwardsum,pairbackwardsum;
   vector<double> summands;
+  int pairtime=0;
+  QTime starttime;
   cout<<"manysum"<<endl;
   ms.clear();
   summands.clear();
@@ -1761,7 +1764,9 @@ void testmanysum()
   ms.prune();
   forwardsum=ms.total();
   tassert(forwardsum==-negms.total());
+  starttime.start();
   pairforwardsum=pairwisesum(summands);
+  pairtime+=starttime.elapsed();
   ms.clear();
   summands.clear();
   for (naivebackwardsum=0,i=-6;i<1;i++)
@@ -1776,7 +1781,9 @@ void testmanysum()
   }
   ms.prune();
   backwardsum=ms.total();
+  starttime.start();
   pairbackwardsum=pairwisesum(summands);
+  pairtime+=starttime.elapsed();
   cout<<"Forward: "<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(pairforwardsum)<<endl;
   cout<<"Backward: "<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<' '<<ldecimal(pairbackwardsum)<<endl;
   tassert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
@@ -1798,7 +1805,9 @@ void testmanysum()
   }
   ms.prune();
   forwardsum=ms.total();
+  starttime.start();
   pairforwardsum=pairwisesum(summands);
+  pairtime+=starttime.elapsed();
   ms.clear();
   summands.clear();
   for (naivebackwardsum=0,i=-0x35ffff&-h;i<1;i+=h)
@@ -1810,7 +1819,9 @@ void testmanysum()
   }
   ms.prune();
   backwardsum=ms.total();
+  starttime.start();
   pairbackwardsum=pairwisesum(summands);
+  pairtime+=starttime.elapsed();
   cout<<"Forward: "<<ldecimal(naiveforwardsum)<<' '<<ldecimal(forwardsum)<<' '<<ldecimal(pairforwardsum)<<endl;
   cout<<"Backward: "<<ldecimal(naivebackwardsum)<<' '<<ldecimal(backwardsum)<<' '<<ldecimal(pairbackwardsum)<<endl;
   tassert(fabs((forwardsum-backwardsum)/(forwardsum+backwardsum))<DBL_EPSILON);
@@ -1820,6 +1831,7 @@ void testmanysum()
   tassert(fabs((forwardsum-naiveforwardsum)/(forwardsum+naiveforwardsum))<1000000*DBL_EPSILON);
   tassert(fabs((backwardsum-naivebackwardsum)/(backwardsum+naivebackwardsum))<1000*DBL_EPSILON);
   tassert(fabs((naiveforwardsum-naivebackwardsum)/(naiveforwardsum+naivebackwardsum))>30*DBL_EPSILON);
+  cout<<"Time in pairwisesum: "<<pairtime<<endl;
 }
 
 void testvcurve()
