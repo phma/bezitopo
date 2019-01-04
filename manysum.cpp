@@ -116,21 +116,6 @@ manysum& manysum::operator-=(double x)
 }
 
 double pairwisesum(double *a,unsigned n)
-// a is clobbered.
-{
-  unsigned i,j;
-  if (n)
-  {
-    for (i=1;i<n;i*=2)
-      for (j=0;j+i<n;j+=2*i)
-	a[j]+=a[j+i];
-    return a[0];
-  }
-  else
-    return 0;
-}
-
-double pairwisesum2(double *a,unsigned n)
 {
   unsigned i,j,b;
   double sums[32],sum=0;
@@ -154,23 +139,31 @@ double pairwisesum2(double *a,unsigned n)
 }
 
 long double pairwisesum(long double *a,unsigned n)
-// a is clobbered.
 {
-  unsigned i,j;
-  if (n)
+  unsigned i,j,b;
+  long double sums[32],sum=0;
+  for (i=0;i<n;i++)
   {
-    for (i=1;i<n;i*=2)
-      for (j=0;j+i<n;j+=2*i)
-	a[j]+=a[j+i];
-    return a[0];
+    b=i^(i+1);
+    if (b==1)
+      sums[0]=a[i];
+    else
+    {
+      sums[0]+=a[i];
+      for (j=1;b>>(j+1);j++)
+	sums[j]+=sums[j-1];
+      sums[j]=sums[j-1];
+    }
   }
-  else
-    return 0;
+  for (i=0;i<32;i++)
+    if ((n>>i)&1)
+      sum+=sums[i];
+  return sum;
 }
 
 double pairwisesum(vector<double> &a)
 {
-  return pairwisesum2(&a[0],a.size());
+  return pairwisesum(&a[0],a.size());
 }
 
 long double pairwisesum(vector<long double> &a)

@@ -100,7 +100,7 @@
 using namespace std;
 
 char hexdig[16]={'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
-bool slowmanysum=true;
+bool slowmanysum=false;
 bool testfail=false;
 document doc;
 vector<string> args;
