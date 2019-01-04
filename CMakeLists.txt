@@ -1,6 +1,6 @@
 project(bezitopo)
 cmake_minimum_required(VERSION 3.1.0)
-# Copyright 2012-2018 Pierre Abbat.
+# Copyright 2012-2019 Pierre Abbat.
 # This file is part of Bezitopo.
 # 
 # Bezitopo is free software: you can redistribute it and/or modify
@@ -184,7 +184,7 @@ set(BEZITOPO_MAJOR_VERSION 0)
 set(BEZITOPO_MINOR_VERSION 1)
 set(BEZITOPO_PATCH_VERSION 4)
 set(BEZITOPO_VERSION ${BEZITOPO_MAJOR_VERSION}.${BEZITOPO_MINOR_VERSION}.${BEZITOPO_PATCH_VERSION})
-set(COPY_YEAR 2018)
+set(COPY_YEAR 2019)
 
 set_target_properties(bezilib0 PROPERTIES OUTPUT_NAME "bezitopo" VERSION ${BEZITOPO_VERSION})
 set_target_properties(bezilib1 PROPERTIES OUTPUT_NAME "bezitopo" VERSION ${BEZITOPO_VERSION})
