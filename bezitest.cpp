@@ -1744,9 +1744,18 @@ void testmanysum()
   int i,j,h;
   double x,naiveforwardsum,forwardsum,pairforwardsum,naivebackwardsum,backwardsum,pairbackwardsum;
   vector<double> summands;
+  double odd[32];
+  long double oddl[32];
   int pairtime=0;
   QTime starttime;
   cout<<"manysum"<<endl;
+  for (i=0;i<32;i++)
+    oddl[i]=odd[i]=2*i+1;
+  for (i=0;i<32;i++)
+  {
+    tassert(pairwisesum(odd,i)==i*i);
+    tassert(pairwisesum(oddl,i)==i*i);
+  }
   ms.clear();
   summands.clear();
   tassert(pairwisesum(summands)==0);
