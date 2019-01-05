@@ -119,7 +119,20 @@ double pairwisesum(double *a,unsigned n)
 {
   unsigned i,j,b;
   double sums[32],sum=0;
-  for (i=0;i<n;i++)
+  for (i=0;i+7<n;i+=8)
+  {
+    b=i^(i+8);
+    if (b==8)
+      sums[3]=(((a[i]+a[i+1])+(a[i+2]+a[i+3]))+((a[i+4]+a[i+5])+(a[i+6]+a[i+7])));
+    else
+    {
+      sums[3]+=(((a[i]+a[i+1])+(a[i+2]+a[i+3]))+((a[i+4]+a[i+5])+(a[i+6]+a[i+7])));
+      for (j=4;b>>(j+1);j++)
+	sums[j]+=sums[j-1];
+      sums[j]=sums[j-1];
+    }
+  }
+  for (;i<n;i++)
   {
     b=i^(i+1);
     if (b==1)
@@ -142,7 +155,20 @@ long double pairwisesum(long double *a,unsigned n)
 {
   unsigned i,j,b;
   long double sums[32],sum=0;
-  for (i=0;i<n;i++)
+  for (i=0;i+7<n;i+=8)
+  {
+    b=i^(i+8);
+    if (b==8)
+      sums[3]=(((a[i]+a[i+1])+(a[i+2]+a[i+3]))+((a[i+4]+a[i+5])+(a[i+6]+a[i+7])));
+    else
+    {
+      sums[3]+=(((a[i]+a[i+1])+(a[i+2]+a[i+3]))+((a[i+4]+a[i+5])+(a[i+6]+a[i+7])));
+      for (j=4;b>>(j+1);j++)
+	sums[j]+=sums[j-1];
+      sums[j]=sums[j-1];
+    }
+  }
+  for (;i<n;i++)
   {
     b=i^(i+1);
     if (b==1)
