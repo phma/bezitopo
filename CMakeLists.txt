@@ -126,7 +126,8 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
                ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp rendercache.cpp
                rootfind.cpp segment.cpp smooth5.cpp
                spiral.cpp spolygon.cpp test.cpp textfile.cpp tin.cpp
-               tinwindow.cpp vball.cpp vcurve.cpp viewtin.cpp zoom.cpp zoombutton.cpp
+               tinwindow.cpp topocanvas.cpp vball.cpp vcurve.cpp
+               viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources} ${qm_files})
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
 if (${FFTW_FOUND})

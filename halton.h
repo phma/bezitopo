@@ -3,7 +3,7 @@
 /* halton.h - Halton subrandom point generator        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2014,2015,2016 Pierre Abbat.
+/* Copyright 2014-2016,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -37,6 +37,8 @@
  * a random point within a boundary.
  */
 
+#ifndef HALTON_H
+#define HALTON_H
 #include <vector>
 #include "point.h"
 #include "angle.h"
@@ -61,3 +63,5 @@ public:
   double _scalar(double x);
   double scalar(double x); // this can return x because of roundoff
 };
+
+#endif

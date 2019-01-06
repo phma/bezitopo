@@ -3,7 +3,7 @@
 /* rendercache.h - cache of renderings of drawobjs    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017 Pierre Abbat.
+/* Copyright 2017,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef RENDERCACHE_H
+#define RENDERCACHE_H
 #include <map>
 #include "drawobj.h"
 #include "halton.h"
@@ -64,3 +66,4 @@ public:
   void checkInObject(drawobj *obj,double pixelScale,int layr,int colr,int thik,int ltype);
   RenderItem nextRenderItem();
 };
+#endif
