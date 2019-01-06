@@ -3,7 +3,7 @@
 /* transmer.cpp - series for transverse Mercator      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018 Pierre Abbat.
+/* Copyright 2018,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -410,6 +410,10 @@ void plotErrorPeters(ellipsoid &ell,PostScript &ps,ostream &merctext)
   memset(histo,0,sizeof(histo));
   ps.startpage();
   ps.setscale(-3.15,-2,3.15,2);
+  for (i=-180;i<=180;i+=15)
+    ps.line2p(xy(degtorad(i),-2),xy(degtorad(i),2));
+  for (i=-90;i<=90;i+=15)
+    ps.line2p(xy(-M_PI,2*sin(degtorad(i))),xy(M_PI,2*sin(degtorad(i))));
   for (i=0;i<NDOTS;i++)
   {
     ll.lat=asin((2*i+1.)/NDOTS-1);
