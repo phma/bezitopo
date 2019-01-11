@@ -475,6 +475,7 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
   polyline forwardSpectrum,reverseSpectrum;
   double minNonzero,minLog,maxLog;
   int goodForwardTerms,goodReverseTerms,forwardNoiseFloor,reverseNoiseFloor;
+  int graphWidth;
   vector<polyspiral> apx3,apx7,apxK;
   vector<array<double,2> > forwardLengths3,reverseLengths3;
   vector<array<double,2> > forwardLengths7,reverseLengths7;
@@ -569,7 +570,10 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
   minLog=INFINITY;
   maxLog=-INFINITY;
   minNonzero/=65536;
-  for (i=0;i<forwardTransform.size();i++)
+  graphWidth=max(forwardNoiseFloor,reverseNoiseFloor);
+  if (graphWidth==0)
+    graphWidth=forwardTransform.size();
+  for (i=0;i<graphWidth;i++)
   {
     if (log(fabs(forwardTransform[i])+minNonzero)<minLog)
       minLog=log(fabs(forwardTransform[i])+minNonzero);
@@ -580,10 +584,10 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
     if (log(fabs(reverseTransform[i])+minNonzero)>maxLog)
       maxLog=log(fabs(reverseTransform[i])+minNonzero);
   }
-  for (i=0;i<forwardTransform.size();i++)
+  for (i=0;i<graphWidth;i++)
   {
-    forwardSpectrum.insert(xy(3.*i/forwardTransform.size(),2*(log(fabs(forwardTransform[i])+minNonzero)-minLog)/(maxLog-minLog)));
-    reverseSpectrum.insert(xy(3.*i/reverseTransform.size(),2*(log(fabs(reverseTransform[i])+minNonzero)-minLog)/(maxLog-minLog)));
+    forwardSpectrum.insert(xy(3.*i/graphWidth,2*(log(fabs(forwardTransform[i])+minNonzero)-minLog)/(maxLog-minLog)));
+    reverseSpectrum.insert(xy(3.*i/graphWidth,2*(log(fabs(reverseTransform[i])+minNonzero)-minLog)/(maxLog-minLog)));
   }
   forwardSpectrum.open();
   reverseSpectrum.open();
