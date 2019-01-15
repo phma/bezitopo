@@ -3,7 +3,7 @@
 /* layer.h - drawing layers                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015 Pierre Abbat.
+/* Copyright 2015,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -23,15 +23,30 @@
 #ifndef LAYER_H
 #define LAYER_H
 #include <string>
-#include <vector>
+#include <map>
 #include "color.h"
 #include "linetype.h"
+#include "penwidth.h"
 
 class layer
 {
 public:
-  unsigned short ltype,colr,thik;
+  unsigned short colr,thik,ltype;
   bool visible;
   std::string name;
+};
+
+class LayerList
+{
+public:
+  int newLayer(std::string na="");
+  int findLayer(std::string na);
+  bool setName(int l,std::string na);
+  bool setColor(int l,int color);
+  bool setWidth(int l,int width);
+  bool setLinetype(int l,int linetype);
+  void applyLayer(int l,int &color,int &width,int &linetype);
+private:
+  std::map<int,layer> layerMap;
 };
 #endif

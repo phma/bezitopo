@@ -119,7 +119,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
                contour.cpp csv.cpp document.cpp drawobj.cpp dxf.cpp ellipsoid.cpp
                except.cpp factordialog.cpp geoid.cpp geoidboundary.cpp
                halton.cpp intloop.cpp kml.cpp
-               latlong.cpp ldecimal.cpp linetype.cpp llvalidator.cpp
+               latlong.cpp layer.cpp ldecimal.cpp linetype.cpp llvalidator.cpp
                manysum.cpp matrix.cpp measure.cpp measurebutton.cpp
                minquad.cpp objlist.cpp penwidth.cpp
                plwidget.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
