@@ -36,6 +36,7 @@ int LayerList::newLayer(string na)
   layerMap[i].colr=WHITE;
   layerMap[i].thik=ZEROWIDTH;
   layerMap[i].ltype=SOLIDLINE;
+  return i;
 }
 
 int LayerList::findLayer(std::string na)
