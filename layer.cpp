@@ -33,7 +33,7 @@ int LayerList::newLayer(string na)
   while (na.length()==0 || layerMap.count(findLayer(na)))
     na+=numstr;
   layerMap[i].name=na;
-  layerMap[i].colr=WHITE;
+  layerMap[i].colr=BLACK;
   layerMap[i].thik=ZEROWIDTH;
   layerMap[i].ltype=SOLIDLINE;
   return i;
