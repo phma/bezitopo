@@ -30,7 +30,7 @@ int LayerList::newLayer(string na)
   string numstr;
   for (i=0;layerMap.count(i);i++);
   numstr=to_string(i);
-  while (layerMap.count(findLayer(na)))
+  while (na.length()==0 || layerMap.count(findLayer(na)))
     na+=numstr;
   layerMap[i].name=na;
   layerMap[i].colr=WHITE;
@@ -62,7 +62,7 @@ bool LayerList::setName(int l,std::string na)
  */
 {
   int i=findLayer(na);
-  if (layerMap.count(l)==0 || layerMap.count(i)>0)
+  if (na.length()==0 || layerMap.count(l)==0 || layerMap.count(i)>0)
     return false;
   else
   {
