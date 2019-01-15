@@ -42,6 +42,10 @@ public:
   int newLayer(std::string na="");
   int findLayer(std::string na);
   size_t size();
+  bool isLayer(int l)
+  {
+    return layerMap.count(l);
+  }
   bool setName(int l,std::string na);
   bool setColor(int l,int color);
   bool setWidth(int l,int width);
