@@ -5112,6 +5112,19 @@ void testcolor()
   }
 }
 
+void testlayer()
+{
+  LayerList layers;
+  tassert(layers.findLayer("0")<0);
+  tassert(layers.newLayer()==0);
+  tassert(layers.findLayer("0")==0);
+  tassert(layers.newLayer("drawing")==1);
+  tassert(layers.newLayer("easement")==2);
+  tassert(layers.newLayer("text")==3);
+  tassert(layers.setColor(2,RED));
+  tassert(!layers.setColor(256,MAGENTA));
+}
+
 void test1contour(string contourName,xyz offset,xy tripoint,double conterval,double expectedLength)
 {
   int i,j,excessElevCount=0;
@@ -7391,6 +7404,8 @@ int main(int argc, char *argv[])
     testprojection();
   if (shoulddo("color"))
     testcolor();
+  if (shoulddo("layer"))
+    testlayer();
   if (shoulddo("contour"))
     testcontour(); // >7 s
   if (shoulddo("foldcontour"))

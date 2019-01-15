@@ -46,7 +46,7 @@ int LayerList::findLayer(std::string na)
   map<int,layer>::iterator it;
   int i;
   for (i=-1;layerMap.count(i);i--);
-  for (it=layerMap.begin();it!=layerMap.end();i++)
+  for (it=layerMap.begin();it!=layerMap.end();it++)
     if (it->second.name==na)
     {
       i=it->first;
