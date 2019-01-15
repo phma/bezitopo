@@ -596,6 +596,7 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
   ps.endpage();
   writeustring(merc,ell.getName());
   merctext<<ell.getName()<<'\n';
+  merctext<<"Eccentricity "<<ldecimal(ell.eccentricity())<<'\n';
   writegeint(merc,forwardNoiseFloor+1);
   writebedouble(merc,forwardLengths3.back()[1]);
   merctext<<ldecimal(forwardLengths3.back()[1])<<'\n';
