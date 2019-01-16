@@ -108,8 +108,8 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                convertgeoid.cpp csv.cpp document.cpp drawobj.cpp
                ellipsoid.cpp except.cpp
                geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp
-               hlattice.cpp intloop.cpp kml.cpp latlong.cpp ldecimal.cpp manysum.cpp
-               matrix.cpp measure.cpp minquad.cpp objlist.cpp
+               hlattice.cpp intloop.cpp kml.cpp latlong.cpp layer.cpp
+               ldecimal.cpp manysum.cpp matrix.cpp measure.cpp minquad.cpp objlist.cpp
                pnezd.cpp point.cpp pointlist.cpp polyline.cpp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp smooth5.cpp sourcegeoid.cpp

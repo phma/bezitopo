@@ -46,6 +46,7 @@ public:
   {
     return layerMap.count(l);
   }
+  layer operator[](int l);
   bool setName(int l,std::string na);
   bool setColor(int l,int color);
   bool setWidth(int l,int width);

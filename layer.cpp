@@ -62,6 +62,11 @@ size_t LayerList::size()
   return layerMap.size();
 }
 
+layer LayerList::operator[](int l)
+{
+  return layerMap[l];
+}
+
 bool LayerList::setName(int l,std::string na)
 /* Returns true if successful. Returns false if layer l does not exist
  * or the name is already in use. If you try to rename a layer to the same name,

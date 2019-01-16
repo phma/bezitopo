@@ -3,7 +3,7 @@
 /* document.cpp - main document class                 */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2018 Pierre Abbat.
+/* Copyright 2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -92,17 +92,11 @@ int document::writepenzd(string fname)
 void document::addobject(drawobj *obj)
 // The drawobj must be created with new; it will be destroyed with delete.
 {
-  if (objlist.getCurrentLayer()<0 || objlist.getCurrentLayer()>=layers.size())
+  if (!layers.isLayer(objlist.getCurrentLayer()))
   {
     objlist.setCurrentLayer(0);
-    if (layers.size()==0)
-    {
-      layer l;
-      l.colr=WHITE;
-      l.visible=true;
-      l.name="0";
-      layers.push_back(l);
-    }
+    if (!layers.isLayer(0))
+      layers.newLayer(0);
   }
   objlist.insert(obj);
 }

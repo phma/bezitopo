@@ -3,7 +3,7 @@
 /* document.h - main document class                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2017 Pierre Abbat.
+/* Copyright 2015-2017,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -46,7 +46,7 @@ public:
   //int curlayer;
   xyz offset;
   ObjectList objlist;
-  std::vector<layer> layers;
+  LayerList layers;
   std::vector<pointlist> pl;
   /* pointlists[0] is the points downloaded from the total station.
    * pointlists[1] and farther are used for surfaces.
