@@ -3,7 +3,7 @@
 /* xyz.h - classes for points and gradients           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2018 Pierre Abbat.
+/* Copyright 2015,2016,2018,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -75,6 +75,8 @@ protected:
   double x,y;
 };
 
+extern const xy nanxy;
+
 class xyz
 {
 public:
@@ -129,5 +131,7 @@ public:
 protected:
   double x,y,z;
 };
+
+extern const xyz nanxyz;
 
 #endif

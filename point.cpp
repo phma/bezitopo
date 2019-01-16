@@ -3,7 +3,7 @@
 /* point.cpp - classes for points and gradients       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2018 Pierre Abbat.
+/* Copyright 2012,2014-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -33,19 +33,22 @@
 using namespace std;
 
 xy::xy(double e,double n)
-{x=e;
- y=n;
- }
+{
+  x=e;
+  y=n;
+}
 
 xy::xy()
-{x=0;
- y=0;
- }
+{
+  x=0;
+  y=0;
+}
 
 xy::xy(xyz point)
-{x=point.x;
- y=point.y;
- }
+{
+  x=point.x;
+  y=point.y;
+}
 
 double xy::east() const
 {
@@ -192,31 +195,37 @@ xy turn(xy a,int angle)
 }
 
 double dist(xy a,xy b)
-{return hypot(a.x-b.x,a.y-b.y);
- }
+{
+  return hypot(a.x-b.x,a.y-b.y);
+}
 
 int dir(xy a,xy b)
-{return atan2i(b-a);
- }
+{
+  return atan2i(b-a);
+}
 
 double dot(xy a,xy b)
-{return (a.y*b.y+a.x*b.x);
- }
+{
+  return (a.y*b.y+a.x*b.x);
+}
 
 const xy beforestart(-INFINITY,-INFINITY);
 const xy afterend(INFINITY,INFINITY);
+const xy nanxy(NAN,NAN);
 
 xyz::xyz(double e,double n,double h)
-{x=e;
- y=n;
- z=h;
- }
+{
+  x=e;
+  y=n;
+  z=h;
+}
 
 xyz::xyz(xy en,double h)
-{x=en.x;
- y=en.y;
- z=h;
- }
+{
+  x=en.x;
+  y=en.y;
+  z=h;
+}
 
 double xyz::east() const
 {
@@ -416,6 +425,8 @@ double dist(xyz a,xyz b)
 {
   return hypot(hypot(a.x-b.x,a.y-b.y),a.z-b.z);
 }
+
+const xyz nanxyz(NAN,NAN,NAN);
 
 point::point()
 {

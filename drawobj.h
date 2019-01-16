@@ -3,7 +3,7 @@
 /* drawobj.h - drawing object base class              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2018 Pierre Abbat.
+/* Copyright 2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -115,6 +115,11 @@ public:
    * layers.
    */
   virtual bool hasProperty(int prop);
+  virtual int getIntProperty(int prop);
+  virtual double getDoubleProperty(int prop);
+  virtual xy getXyProperty(int prop);
+  virtual xyz getXyzProperty(int prop);
+  virtual std::string getStringProperty(int prop);
   virtual void writeXml(std::ofstream &ofile);
 };
 

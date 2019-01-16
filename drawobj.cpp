@@ -157,6 +157,31 @@ bool drawobj::hasProperty(int prop)
   return false;
 }
 
+int drawobj::getIntProperty(int prop)
+{
+  return 0;
+}
+
+double drawobj::getDoubleProperty(int prop)
+{
+  return NAN;
+}
+
+xy drawobj::getXyProperty(int prop)
+{
+  return nanxy;
+}
+
+xyz drawobj::getXyzProperty(int prop)
+{
+  return nanxyz;
+}
+
+string drawobj::getStringProperty(int prop)
+{
+  return "";
+}
+
 void drawobj::writeXml(ofstream &ofile)
 {
   ofile<<"<DrawingObject />";
