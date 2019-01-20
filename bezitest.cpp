@@ -2588,6 +2588,8 @@ void testcurly()
     ps.startpage();
     ps.setscale(-0.5,-0.43,0.5,0.43,0);
     ps.spline(s.approx3d(0.001/ps.getscale()));
+    ps.write(xy(-0.5,-0.3),"Curvature "+ldecimal(curvature));
+    ps.write(xy(-0.5,-0.35),"Clothance "+ldecimal(clothance));
     ps.endpage();
   }
 }
