@@ -2577,16 +2577,16 @@ void testcurly()
   spiralarc s;
   PostScript ps;
   ps.open("curly.ps");
-  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
   for (i=0;i<100;i++)
   {
     curvature=(rng.usrandom()-32767.5)/2896.31;
     clothance=(rng.usrandom()-32767.5)/1024;
     length=(rng.ucrandom()+745)/1e3;
-    s=spiralarc(xyz(0,0,0),curvature,clothance,DEG90,-length/2,length/2);
+    s=spiralarc(xyz(0,0,0),curvature,clothance,0,-length/2,length/2);
     ps.startpage();
-    ps.setscale(-0.3,-0.5,0.3,0.5,0);
+    ps.setscale(-0.5,-0.43,0.5,0.43,0);
     ps.spline(s.approx3d(0.001/ps.getscale()));
     ps.endpage();
   }
