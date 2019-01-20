@@ -269,7 +269,7 @@ bezier3d segment::approx3d(double precision)
   sb=startbearing();
   eb=endbearing();
   cb=chordbearing();
-  if (abs(foldangle(sb-cb))<DEG30 && abs(foldangle(eb-cb))<DEG30 && abs(foldangle(sb+eb-2*cb))<DEG30)
+  if ((abs(foldangle(sb-cb))<DEG30 && abs(foldangle(eb-cb))<DEG30 && abs(foldangle(sb+eb-2*cb))<DEG30) || length()==0)
     est=bez3destimate(start,sb,length(),eb,end);
   else
     est=fabs(precision*2)+1;
@@ -278,7 +278,7 @@ bezier3d segment::approx3d(double precision)
     ret=bezier3d(start,sb,startslope(),endslope(),eb,end);
   else
   {
-    if (dist(xy(start),xy(end))>length())
+    if (dist(xy(start),xy(end))>length() || std::isnan(control1) || std::isnan(control2))
       cerr<<"approx3d: bogus spiralarc"<<endl;
     if (typeid(*this)==typeid(spiralarc))
     {
