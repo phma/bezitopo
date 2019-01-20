@@ -2570,6 +2570,28 @@ void testcogospiral()
   testcogospiral2(s,t,ps,expected,5.1e-5,7);
 }
 
+void testcurly()
+{
+  int i;
+  double curvature,clothance,length;
+  spiralarc s;
+  PostScript ps;
+  ps.open("curly.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  for (i=0;i<100;i++)
+  {
+    curvature=(rng.usrandom()-32767.5)/2896.31;
+    clothance=(rng.usrandom()-32767.5)/1024;
+    length=(rng.ucrandom()+745)/1e3;
+    s=spiralarc(xyz(0,0,0),curvature,clothance,DEG90,-length/2,length/2);
+    ps.startpage();
+    ps.setscale(-0.3,-0.5,0.3,0.5,0);
+    ps.spline(s.approx3d(0.001/ps.getscale()));
+    ps.endpage();
+  }
+}
+
 void testcurvefit()
 /* Test fitting a 3D curve to a sequence of points, which are somewhat evenly
  * spaced along the centerline of a rural road.
@@ -7358,6 +7380,8 @@ int main(int argc, char *argv[])
     testspiralarc(); // 10.5 s
   if (shoulddo("cogospiral"))
     testcogospiral();
+  if (shoulddo("curly"))
+    testcurly();
   if (shoulddo("curvefit"))
     testcurvefit();
   if (shoulddo("manyarc"))
