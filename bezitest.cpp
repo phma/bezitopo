@@ -2593,14 +2593,39 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
       hi=mid;
   }
   maxLength=lo;
-  s=spiralarc(xyz(0,0,0),curvature,clothance,0,-lo/2,lo/2);
+  // Compute curlyLength
+  lo=0;
+  hi=maxLength;
+  while (true)
+  {
+    mid=(hi+lo)/2;
+    if (mid==hi || mid==lo)
+      break;
+    s=spiralarc(xyz(0,0,0),curvature,clothance,0,-mid/2,mid/2);
+    if (s.isCurly())
+      hi=mid;
+    else
+      lo=mid;
+  }
+  curlyLength=mid;
   br.clear();
   br.include(xy(-0.5,-0.43));
   br.include(xy(0.5,0.43));
   br.include(&s);
   ps.startpage();
   ps.setscale(br);
+  s=spiralarc(xyz(0,0,0),curvature,clothance,0,-maxLength/2,maxLength/2);
   ps.spline(s.approx3d(0.001/ps.getscale()));
+  //ps.line2p(s.getstart(),s.getend());
+  ps.write(xy(-0.5,-0.3),"Curvature "+ldecimal(curvature));
+  ps.write(xy(-0.5,-0.325),"Clothance "+ldecimal(clothance));
+  ps.write(xy(-0.5,-0.35),"Maximum length "+ldecimal(maxLength));
+  ps.endpage();
+  ps.startpage();
+  ps.setscale(br);
+  s=spiralarc(xyz(0,0,0),curvature,clothance,0,-curlyLength/2,curlyLength/2);
+  ps.spline(s.approx3d(0.001/ps.getscale()));
+  //ps.line2p(s.getstart(),s.getend());
   ps.write(xy(-0.5,-0.3),"Curvature "+ldecimal(curvature));
   ps.write(xy(-0.5,-0.325),"Clothance "+ldecimal(clothance));
   ps.write(xy(-0.5,-0.35),"Maximum length "+ldecimal(maxLength));
@@ -2608,6 +2633,9 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
 }
 
 void testcurly()
+/* This outputs "cornu needs more iterations" as it finds maxLength.
+ * maxLength may depend on MAXITER in spiral.cpp.
+ */
 {
   int i;
   double curvature,clothance,length;
