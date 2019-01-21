@@ -2630,6 +2630,7 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
   ps.write(xy(-0.5,-0.325),"Clothance "+ldecimal(clothance));
   ps.write(xy(-0.5,-0.35),"Maximum length "+ldecimal(maxLength));
   ps.endpage();
+  tassert(std::isnan(tMaxLength) || fabs(log(maxLength/tMaxLength))<1e-15);
 }
 
 void testcurly()
