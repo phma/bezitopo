@@ -3,7 +3,7 @@
 /* spiral.cpp - Cornu or Euler spirals                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2018 Pierre Abbat.
+/* Copyright 2012-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -381,6 +381,22 @@ double spiralarc::sthrow()
   if (clo<0)
     dist0=-dist0;
   return dist0;
+}
+
+bool spiralarc::isCurly()
+{
+  xy inflect(NAN,NAN);
+  bool ret;
+  double startCur=curvature(0),endCur=curvature(len);
+  if (sign(startCur)*sign(endCur)<0)
+    inflect=station(len*startCur/(startCur-endCur));
+  ret=distanceInDirection(end,start,startbearing())<=0 || distanceInDirection(end,start,endbearing())<=0;
+  return ret;
+}
+
+bool spiralarc::isTooCurly()
+{
+  return false;
 }
 
 void spiralarc::_setdelta(int d,int s)

@@ -3,7 +3,7 @@
 /* spiral.h - Cornu or Euler spirals                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2018 Pierre Abbat.
+/* Copyright 2012,2014-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -112,6 +112,8 @@ public:
    * offset() will create a segment or arc that is parallel to the given one.
    * Trying to offset a spiral arc will throw an error.
    */
+  virtual bool isCurly();
+  virtual bool isTooCurly();
   void _setdelta(int d,int s=0);
   void _setcurvature(double startc,double endc);
   void _fixends(double p);
