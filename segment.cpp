@@ -280,23 +280,26 @@ bezier3d segment::approx3d(double precision)
   {
     if (dist(xy(start),xy(end))>length() || std::isnan(control1) || std::isnan(control2))
       cerr<<"approx3d: bogus spiralarc"<<endl;
-    if (typeid(*this)==typeid(spiralarc))
-    {
-      a=new spiralarc;
-      b=new spiralarc;
-      ((spiralarc *)this)->split(length()/2,*(spiralarc *)a,*(spiralarc *)b);
-    }
     else
     {
-      a=new arc;
-      b=new arc;
-      ((arc *)this)->split(length()/2,*(arc *)a,*(arc *)b);
+      if (typeid(*this)==typeid(spiralarc))
+      {
+	a=new spiralarc;
+	b=new spiralarc;
+	((spiralarc *)this)->split(length()/2,*(spiralarc *)a,*(spiralarc *)b);
+      }
+      else
+      {
+	a=new arc;
+	b=new arc;
+	((arc *)this)->split(length()/2,*(arc *)a,*(arc *)b);
+      }
+      //cout<<"{"<<endl;
+      ret=a->approx3d(precision)+b->approx3d(precision);
+      //cout<<"}"<<endl;
+      delete a;
+      delete b;
     }
-    //cout<<"{"<<endl;
-    ret=a->approx3d(precision)+b->approx3d(precision);
-    //cout<<"}"<<endl;
-    delete a;
-    delete b;
   }
   return ret;
 }
