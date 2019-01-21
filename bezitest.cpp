@@ -2570,6 +2570,43 @@ void testcogospiral()
   testcogospiral2(s,t,ps,expected,5.1e-5,7);
 }
 
+void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLength,double tTooCurlyLength,double tMaxLength)
+{
+  double curlyLength,tooCurlyLength,maxLength;
+  spiralarc s;
+  double lo=0,hi=1,mid;
+  BoundRect br;
+  while (s.getstart().isfinite() && s.getend().isfinite())
+  {
+    hi*=2;
+    s=spiralarc(xyz(0,0,0),curvature,clothance,0,-hi/2,hi/2);
+  }
+  while (true)
+  {
+    mid=(hi+lo)/2;
+    if (mid==hi || mid==lo)
+      break;
+    s=spiralarc(xyz(0,0,0),curvature,clothance,0,-mid/2,mid/2);
+    if (s.getstart().isfinite() && s.getend().isfinite())
+      lo=mid;
+    else
+      hi=mid;
+  }
+  maxLength=lo;
+  s=spiralarc(xyz(0,0,0),curvature,clothance,0,-lo/2,lo/2);
+  br.clear();
+  br.include(xy(-0.5,-0.43));
+  br.include(xy(0.5,0.43));
+  br.include(&s);
+  ps.startpage();
+  ps.setscale(br);
+  ps.spline(s.approx3d(0.001/ps.getscale()));
+  ps.write(xy(-0.5,-0.3),"Curvature "+ldecimal(curvature));
+  ps.write(xy(-0.5,-0.325),"Clothance "+ldecimal(clothance));
+  ps.write(xy(-0.5,-0.35),"Maximum length "+ldecimal(maxLength));
+  ps.endpage();
+}
+
 void testcurly()
 {
   int i;
@@ -2579,7 +2616,7 @@ void testcurly()
   ps.open("curly.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
-  for (i=0;i<100;i++)
+  for (i=0;i<0;i++)
   {
     curvature=(rng.usrandom()-32767.5)/2896.31;
     clothance=(rng.usrandom()-32767.5)/1024;
@@ -2592,6 +2629,7 @@ void testcurly()
     ps.write(xy(-0.5,-0.35),"Clothance "+ldecimal(clothance));
     ps.endpage();
   }
+  test1curly(0,28.25,ps,NAN,NAN,NAN);
 }
 
 void testcurvefit()
