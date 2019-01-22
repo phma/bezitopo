@@ -2628,9 +2628,10 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
   //ps.line2p(s.getstart(),s.getend());
   ps.write(xy(-0.5,-0.3),"Curvature "+ldecimal(curvature));
   ps.write(xy(-0.5,-0.325),"Clothance "+ldecimal(clothance));
-  ps.write(xy(-0.5,-0.35),"Curly length "+ldecimal(maxLength));
+  ps.write(xy(-0.5,-0.35),"Curly length "+ldecimal(curlyLength));
   ps.endpage();
   tassert(std::isnan(tMaxLength) || fabs(log(maxLength/tMaxLength))<1e-15);
+  tassert(std::isnan(tCurlyLength) || fabs(log(curlyLength/tCurlyLength))<1e-15);
 }
 
 void testcurly()
@@ -2658,7 +2659,7 @@ void testcurly()
     ps.write(xy(-0.5,-0.35),"Clothance "+ldecimal(clothance));
     ps.endpage();
   }
-  test1curly(0,28.25,ps,NAN,NAN,NAN);
+  test1curly(0,28.25,ps,0.761013024660324,NAN,3.238467135241204);
 }
 
 void testcurvefit()

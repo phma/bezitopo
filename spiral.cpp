@@ -387,10 +387,29 @@ bool spiralarc::isCurly()
 {
   xy inflect(NAN,NAN);
   bool ret;
+  double inflpos=NAN;
   double startCur=curvature(0),endCur=curvature(len);
+  double lessDelta=0,moreDelta=0;
   if (sign(startCur)*sign(endCur)<0)
-    inflect=station(len*startCur/(startCur-endCur));
-  ret=distanceInDirection(end,start,startbearing())<=0 || distanceInDirection(end,start,endbearing())<=0;
+  {
+    inflect=station(inflpos=len*startCur/(startCur-endCur));
+    lessDelta=fabs(spiralbearing(inflpos,0,clo));
+    moreDelta=fabs(spiralbearing(inflpos-len,0,clo));
+    if (lessDelta>moreDelta)
+      swap(lessDelta,moreDelta);
+  }
+  else
+    moreDelta=fabs(len*cur);
+  ret=moreDelta>M_PI;
+  if (!ret)
+    ret=lessDelta>0.47429470686 && moreDelta>2.0450910337;
+  /* A spiralarc with 0.47429470686 rad on one side of the inflection point
+   * and 2.0450910337 rad on the other has the tangent to one end perpendicular
+   * to the other. If it exceeds both of these, it is curly, even if the
+   * distanceInDirection criterion says it isn't. See testspiral.
+   */
+  if (!ret)
+    ret=distanceInDirection(start,end,startbearing())<=0 || distanceInDirection(start,end,endbearing())<=0;
   return ret;
 }
 
