@@ -3132,7 +3132,7 @@ void testspiral()
   ps.trailer();
   ps.close();
   tassert(bearing==162105696);
-  printf("Maximum useful t of spiral is %f\n",sqrt(t+M_PI/2));
+  cout<<"Barely curly spiralarc is from "<<ldecimal(-sqrt(t))<<" to "<<ldecimal(sqrt(t+M_PI/2))<<endl;
 }
 
 void testarea3()
