@@ -2979,9 +2979,9 @@ void testclosest()
 
 void testspiral()
 {
-  xy a,b,c,limitpoint;
-  int i,j,bearing,lastbearing,curvebearing,diff,badcount;
-  double t;
+  xy a,b,c,d,limitpoint;
+  int i,j,bearing,bearing2,lastbearing,curvebearing,diff,badcount;
+  double t,t2;
   float segalo[]={-5.96875,-5.65625,-5.3125,-4.875,-4.5,-4,-3.5,-2.828125,-2,0,
     2,2.828125,3.5,4,4.5,4.875,5.3125,5.65625,5.96875};
   vector<xy> spoints;
@@ -3124,15 +3124,26 @@ void testspiral()
     lastbearing=bearing;
     bearing=dir(a,b);
   }
+  for (bearing2=i=0,lastbearing=1;i<100 && bearing2!=lastbearing;i++)
+  {
+    t2=bintorad(bearing2);
+    c=cornu(-sqrt(t2));
+    d=cornu(sqrt(t2+M_PI));
+    lastbearing=bearing2;
+    bearing2=dir(c,d);
+  }
   ps.dot(limitpoint);
   ps.dot(-limitpoint);
   ps.setcolor(0,0,1);
   ps.line2p(a,b);
+  //ps.line2p(c,d);
   ps.endpage();
   ps.trailer();
   ps.close();
   tassert(bearing==162105696);
+  tassert(bearing2==229309921);
   cout<<"Barely curly spiralarc is from "<<ldecimal(-sqrt(t))<<" to "<<ldecimal(sqrt(t+M_PI/2))<<endl;
+  cout<<"Barely too curly spiralarc is from "<<ldecimal(-sqrt(t2))<<" to "<<ldecimal(sqrt(t2+M_PI))<<endl;
 }
 
 void testarea3()
