@@ -2626,8 +2626,8 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
   s=spiralarc(xyz(0,0,0),curvature,clothance,0,-curlyLength/2,curlyLength/2);
   ps.spline(s.approx3d(0.001/ps.getscale()));
   ps.setcolor(0,1,0);
-  ps.spline(Circle(s.getstart(),s.startbearing()+DEG90).approx3d(0.001/ps.getscale()));
-  ps.spline(Circle(s.getend(),s.endbearing()+DEG90).approx3d(0.001/ps.getscale()));
+  ps.spline(Circle(s.getstart(),s.startbearing()+DEG90).approx3d(1/ps.getscale()));
+  ps.spline(Circle(s.getend(),s.endbearing()+DEG90).approx3d(1/ps.getscale()));
   ps.setcolor(0,0,0);
   ps.write(xy(-0.5,-0.3),"Curvature "+ldecimal(curvature));
   ps.write(xy(-0.5,-0.325),"Clothance "+ldecimal(clothance));
