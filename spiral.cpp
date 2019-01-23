@@ -415,7 +415,33 @@ bool spiralarc::isCurly()
 
 bool spiralarc::isTooCurly()
 {
-  return false;
+  xy inflect(NAN,NAN);
+  bool ret;
+  double inflpos=NAN;
+  double startCur=curvature(0),endCur=curvature(len);
+  double lessDelta=0,moreDelta=0;
+  if (sign(startCur)*sign(endCur)<0)
+  {
+    inflect=station(inflpos=len*startCur/(startCur-endCur));
+    lessDelta=fabs(spiralbearing(inflpos,0,clo));
+    moreDelta=fabs(spiralbearing(inflpos-len,0,clo));
+    if (lessDelta>moreDelta)
+      swap(lessDelta,moreDelta);
+  }
+  else
+    moreDelta=fabs(len*cur);
+  ret=moreDelta>2*M_PI;
+  if (!ret)
+    ret=lessDelta>0.67092325837 && moreDelta>3.81251591196;
+  /* A spiralarc with 0.67092325837 rad on one side of the inflection point
+   * and 3.81251591196 rad on the other has the tangents at both ends
+   * coincident in opposite directcions. If it exceeds both of these, it is
+   * too curly, even if the distanceInDirection criterion says it isn't.
+   * See testspiral.
+   */
+  //if (!ret)
+    //ret=distanceInDirection(start,end,startbearing())<=0 || distanceInDirection(start,end,endbearing())<=0;
+  return ret;
 }
 
 void spiralarc::_setdelta(int d,int s)

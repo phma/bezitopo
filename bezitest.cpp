@@ -2608,6 +2608,21 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
       lo=mid;
   }
   curlyLength=mid;
+  // Compute tooCurlyLength
+  lo=0;
+  hi=maxLength;
+  while (true)
+  {
+    mid=(hi+lo)/2;
+    if (mid==hi || mid==lo)
+      break;
+    s=spiralarc(xyz(0,0,0),curvature,clothance,0,-mid/2,mid/2);
+    if (s.isTooCurly())
+      hi=mid;
+    else
+      lo=mid;
+  }
+  tooCurlyLength=mid;
   br.clear();
   br.include(xy(-0.5,-0.43));
   br.include(xy(0.5,0.43));
@@ -2633,8 +2648,21 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
   ps.write(xy(-0.5,-0.325),"Clothance "+ldecimal(clothance));
   ps.write(xy(-0.5,-0.35),"Curly length "+ldecimal(curlyLength));
   ps.endpage();
+  ps.startpage();
+  ps.setscale(br);
+  s=spiralarc(xyz(0,0,0),curvature,clothance,0,-tooCurlyLength/2,tooCurlyLength/2);
+  ps.spline(s.approx3d(0.001/ps.getscale()));
+  ps.setcolor(0,1,0);
+  ps.spline(Circle(s.getstart(),s.startbearing()).approx3d(1/ps.getscale()));
+  ps.spline(Circle(s.getend(),s.endbearing()).approx3d(1/ps.getscale()));
+  ps.setcolor(0,0,0);
+  ps.write(xy(-0.5,-0.3),"Curvature "+ldecimal(curvature));
+  ps.write(xy(-0.5,-0.325),"Clothance "+ldecimal(clothance));
+  ps.write(xy(-0.5,-0.35),"Too curly length "+ldecimal(tooCurlyLength));
+  ps.endpage();
   tassert(std::isnan(tMaxLength) || fabs(log(maxLength/tMaxLength))<1e-15);
   tassert(std::isnan(tCurlyLength) || fabs(log(curlyLength/tCurlyLength))<1e-15);
+  tassert(std::isnan(tTooCurlyLength) || fabs(log(tooCurlyLength/tTooCurlyLength))<1e-15);
 }
 
 void testcurly()
