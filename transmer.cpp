@@ -470,12 +470,13 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
  * BD 43 66 F9 D6 AA BF A6 -1.3786127605631334e-13 Fourth harmonic
  */
 {
-  int i,j,nseg,sz1;
+  int i,j,nseg,sz1,decades;
   bool done=false;
-  polyline forwardSpectrum,reverseSpectrum;
+  polyline forwardSpectrum,reverseSpectrum,frame;
   double minNonzero,minLog,maxLog;
   int goodForwardTerms,goodReverseTerms,forwardNoiseFloor,reverseNoiseFloor;
   int graphWidth;
+  xy pnt;
   vector<polyspiral> apx3,apx7,apxK;
   vector<array<double,2> > forwardLengths3,reverseLengths3;
   vector<array<double,2> > forwardLengths7,reverseLengths7;
@@ -486,6 +487,10 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
   vector<double> forwardTransform,reverseTransform,lastForwardTransform,lastReverseTransform;
   vector<double> forwardTm,reverseTm;
   array<double,3> forwardDifference,reverseDifference;
+  frame.insert(xy(0,0));
+  frame.insert(xy(3,0));
+  frame.insert(xy(3,2));
+  frame.insert(xy(0,2));
   ps.startpage();
   ps.setscale(0,0,EARTHRAD,EARTHRAD,0);
   for (i=0,nseg=1;i<5;i++,nseg*=7)
@@ -570,6 +575,7 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
   minLog=INFINITY;
   maxLog=-INFINITY;
   minNonzero/=65536;
+  // Comment out the next line to see all the noise floor
   graphWidth=max(forwardNoiseFloor,reverseNoiseFloor);
   if (graphWidth==0)
     graphWidth=forwardTransform.size();
@@ -584,13 +590,32 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
     if (log(fabs(reverseTransform[i])+minNonzero)>maxLog)
       maxLog=log(fabs(reverseTransform[i])+minNonzero);
   }
+  minLog=floor(minLog/log(10))*log(10);
+  maxLog=ceil (maxLog/log(10))*log(10);
   for (i=0;i<graphWidth;i++)
   {
-    forwardSpectrum.insert(xy(3.*i/graphWidth,2*(log(fabs(forwardTransform[i])+minNonzero)-minLog)/(maxLog-minLog)));
-    reverseSpectrum.insert(xy(3.*i/graphWidth,2*(log(fabs(reverseTransform[i])+minNonzero)-minLog)/(maxLog-minLog)));
+    pnt=xy(3.*i/graphWidth,2*(log(fabs(forwardTransform[i])+minNonzero)-minLog)/(maxLog-minLog));
+    forwardSpectrum.insert(pnt);
+    ps.setcolor(0,0,1);
+    ps.circle(pnt,0.02);
+    pnt=xy(3.*i/graphWidth,2*(log(fabs(reverseTransform[i])+minNonzero)-minLog)/(maxLog-minLog));
+    reverseSpectrum.insert(pnt);
+    ps.setcolor(1,0,0);
+    ps.circle(pnt,0.02);
+  }
+  ps.setcolor(0,0,0);
+  decades=rint((maxLog-minLog)/log(10));
+  for (i=0;i<=decades;i++)
+  {
+    ps.write(xy(3.1,i*2./decades),ldecimal(exp(minLog)*pow(10,i),exp(minLog)*pow(10,i-1)));
+    ps.startline();
+    ps.lineto(xy(3,i*2./decades));
+    ps.lineto(xy(3.1,i*2./decades));
+    ps.endline();
   }
   forwardSpectrum.open();
   reverseSpectrum.open();
+  ps.spline(frame.approx3d(1e-2));
   ps.spline(forwardSpectrum.approx3d(1e-2));
   ps.spline(reverseSpectrum.approx3d(1e-2));
   ps.endpage();
