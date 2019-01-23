@@ -594,11 +594,11 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
   maxLog=ceil (maxLog/log(10))*log(10);
   for (i=0;i<graphWidth;i++)
   {
-    pnt=xy(3.*i/graphWidth,2*(log(fabs(forwardTransform[i])+minNonzero)-minLog)/(maxLog-minLog));
+    pnt=xy(3.*(i+1)/graphWidth,2*(log(fabs(forwardTransform[i])+minNonzero)-minLog)/(maxLog-minLog));
     forwardSpectrum.insert(pnt);
     ps.setcolor(0,0,1);
     ps.circle(pnt,0.02);
-    pnt=xy(3.*i/graphWidth,2*(log(fabs(reverseTransform[i])+minNonzero)-minLog)/(maxLog-minLog));
+    pnt=xy(3.*(i+1)/graphWidth,2*(log(fabs(reverseTransform[i])+minNonzero)-minLog)/(maxLog-minLog));
     reverseSpectrum.insert(pnt);
     ps.setcolor(1,0,0);
     ps.circle(pnt,0.02);
