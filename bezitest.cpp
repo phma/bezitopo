@@ -2627,9 +2627,11 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
   br.include(xy(-0.5,-0.43));
   br.include(xy(0.5,0.43));
   br.include(&s);
+  s=spiralarc(xyz(0,0,0),curvature,clothance,0,-maxLength/2,maxLength/2);
+  br.include(s.getstart()); // Including the whole curve would take too long
+  br.include(s.getend());   // because it has many spiral turns.
   ps.startpage();
   ps.setscale(br);
-  s=spiralarc(xyz(0,0,0),curvature,clothance,0,-maxLength/2,maxLength/2);
   ps.spline(s.approx3d(0.001/ps.getscale()));
   //ps.line2p(s.getstart(),s.getend());
   ps.write(xy(-0.5,-0.3),"Curvature "+ldecimal(curvature));
@@ -2660,9 +2662,9 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
   ps.write(xy(-0.5,-0.325),"Clothance "+ldecimal(clothance));
   ps.write(xy(-0.5,-0.35),"Too curly length "+ldecimal(tooCurlyLength));
   ps.endpage();
-  tassert(std::isnan(tMaxLength) || fabs(log(maxLength/tMaxLength))<1e-15);
-  tassert(std::isnan(tCurlyLength) || fabs(log(curlyLength/tCurlyLength))<1e-15);
-  tassert(std::isnan(tTooCurlyLength) || fabs(log(tooCurlyLength/tTooCurlyLength))<1e-15);
+  tassert(std::isnan(tMaxLength) || fabs(log(maxLength/tMaxLength))<1e-9);
+  tassert(std::isnan(tCurlyLength) || fabs(log(curlyLength/tCurlyLength))<1e-9);
+  tassert(std::isnan(tTooCurlyLength) || fabs(log(tooCurlyLength/tTooCurlyLength))<1e-9);
 }
 
 void testcurly()
@@ -2671,26 +2673,21 @@ void testcurly()
  */
 {
   int i;
-  double curvature,clothance,length;
+  double curvature,clothance;
   spiralarc s;
   PostScript ps;
   ps.open("curly.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
-  for (i=0;i<0;i++)
+  for (i=0;i<10;i++)
   {
     curvature=(rng.usrandom()-32767.5)/2896.31;
     clothance=(rng.usrandom()-32767.5)/1024;
-    length=(rng.ucrandom()+745)/1e3;
-    s=spiralarc(xyz(0,0,0),curvature,clothance,0,-length/2,length/2);
-    ps.startpage();
-    ps.setscale(-0.5,-0.43,0.5,0.43,0);
-    ps.spline(s.approx3d(0.001/ps.getscale()));
-    ps.write(xy(-0.5,-0.3),"Curvature "+ldecimal(curvature));
-    ps.write(xy(-0.5,-0.35),"Clothance "+ldecimal(clothance));
-    ps.endpage();
+    test1curly(curvature,clothance,ps,NAN,NAN,NAN);
   }
   test1curly(0,28.25,ps,0.761013024660324,NAN,3.238467135241204);
+  test1curly(10,0,ps,M_PI/10,M_PI/5,NAN);
+  test1curly(10,0.4,ps,NAN,NAN,NAN);
 }
 
 void testcurvefit()
