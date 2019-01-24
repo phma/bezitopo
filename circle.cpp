@@ -3,7 +3,7 @@
 /* circle.cpp - circles, including lines              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017-2018 Pierre Abbat.
+/* Copyright 2017-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -169,6 +169,12 @@ vector<drawingElement> Circle::render3d(double precision,int layer,int color,int
   vector<drawingElement> ret;
   ret.push_back(drawingElement(approx3d(precision),color,width,linetype));
   return ret;
+}
+
+bool Circle::hasProperty(int prop)
+{
+  return (prop>=PROP_LENGTH && prop<=PROP_CURVATURE) ||
+         (prop>=PROP_CENTER && prop<=PROP_MIDPOINT_XY);
 }
 
 void Circle::writeXml(ofstream &ofile)

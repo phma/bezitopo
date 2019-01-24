@@ -4,7 +4,7 @@
 /* base class of arc and spiral                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2018 Pierre Abbat.
+/* Copyright 2012,2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -501,6 +501,15 @@ double segment::dirbound(int angle,double boundsofar)
     } while (abs(angerr)>=angtoler && closedist-(fardist-closedist)/7<boundsofar && !((closest==0 && isinsector(angle-startbearing(),0xf00ff00f)) || (closest==len && isinsector(angle-endbearing(),0x0ff00ff0))));
   }
   return closedist;
+}
+
+bool segment::hasProperty(int prop)
+{
+  return (prop>=PROP_DELTA && prop<=PROP_END_CURVATURE) ||
+         (prop>=PROP_CENTER && prop<=PROP_POINT_INTERSECTION) ||
+         prop==PROP_MIDPOINT_XYZ ||
+         prop==PROP_MIDPOINT_XY ||
+         (prop>=PROP_STARTPOINT && prop<=PROP_ENDPOINT);
 }
 
 void segment::writeXml(ofstream &ofile)

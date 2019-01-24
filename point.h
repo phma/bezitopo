@@ -3,7 +3,7 @@
 /* point.h - classes for points and gradients         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2018 Pierre Abbat.
+/* Copyright 2012,2014-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -66,6 +66,7 @@ public:
   const point& operator=(const point &rhs);
   //void setedge(point *oend);
   //void dump(document doc);
+  virtual bool hasProperty(int prop);
   virtual void writeXml(std::ofstream &ofile,pointlist &pl);
   friend class edge;
   friend void maketin(std::string filename);

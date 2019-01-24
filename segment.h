@@ -4,7 +4,7 @@
 /* base class of arc and spiral                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2018 Pierre Abbat.
+/* Copyright 2012,2014-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -157,6 +157,7 @@ public:
   friend double missDistance(segment seg1,segment seg2);
   friend class arc;
   friend class spiralarc;
+  virtual bool hasProperty(int prop);
   virtual void writeXml(std::ofstream &ofile);
 };
 

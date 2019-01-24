@@ -3,7 +3,7 @@
 /* polyline.cpp - polylines                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2018 Pierre Abbat.
+/* Copyright 2012,2014-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -1030,6 +1030,13 @@ void crspace(ofstream &ofile,int i)
     ofile<<' ';
   else if (i)
     ofile<<endl;
+}
+
+bool polyline::hasProperty(int prop)
+{
+  return prop==PROP_LENGTH ||
+         (prop>=PROP_START_RADIUS && prop<=PROP_END_CURVATURE) ||
+         (prop>=PROP_STARTPOINT && prop<=PROP_ENDPOINT);
 }
 
 void polyline::writeXml(ofstream &ofile)
