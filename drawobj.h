@@ -48,10 +48,18 @@ unsigned memHash(void *mem,unsigned len,unsigned previous=0);
 #define PROP_START_TANGENT 0x8004
 #define PROP_END_TANGENT 0x8005
 #define PROP_THROW 0x8006
+#define PROP_START_RADIUS 0x8007
+#define PROP_END_RADIUS 0x8008
+#define PROP_START_CURVATURE 0x8009
+#define PROP_END_CURVATURE 0x800a
 #define PROP_CENTER 0x4000
 #define PROP_MIDPOINT_XY 0x4001
 #define PROP_POINT_INTERSECTION 0x4002
 #define PROP_MIDPOINT_XYZ 0xc000
+#define PROP_LOCATION 0xc001
+#define PROP_STARTPOINT 0xc002
+#define PROP_ENDPOINT 0xc003
+#define PROP_STRINGVAL 0x2000
 
 class bsph
 {
