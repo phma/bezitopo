@@ -2576,6 +2576,7 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
   spiralarc s;
   double lo=0,hi=1,mid;
   BoundRect br;
+  cerr<<"start maxLength\n"; // cerr, because "more iterations" goes to cerr
   while (s.getstart().isfinite() && s.getend().isfinite())
   {
     hi*=2;
@@ -2593,6 +2594,7 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
       hi=mid;
   }
   maxLength=lo;
+  cerr<<"start curlyLength\n";
   // Compute curlyLength
   lo=0;
   hi=maxLength;
@@ -2608,6 +2610,7 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
       lo=mid;
   }
   curlyLength=mid;
+  cerr<<"start tooCurlyLength\n";
   // Compute tooCurlyLength
   lo=0;
   hi=maxLength;
@@ -2627,9 +2630,11 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
   br.include(xy(-0.5,-0.43));
   br.include(xy(0.5,0.43));
   br.include(&s);
+  cerr<<"include ends\n";
   s=spiralarc(xyz(0,0,0),curvature,clothance,0,-maxLength/2,maxLength/2);
   br.include(s.getstart()); // Including the whole curve would take too long
   br.include(s.getend());   // because it has many spiral turns.
+  cerr<<"draw curves\n";
   ps.startpage();
   ps.setscale(br);
   ps.spline(s.approx3d(0.001/ps.getscale()));
@@ -2662,6 +2667,7 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
   ps.write(xy(-0.5,-0.325),"Clothance "+ldecimal(clothance));
   ps.write(xy(-0.5,-0.35),"Too curly length "+ldecimal(tooCurlyLength));
   ps.endpage();
+  cerr<<"end\n";
   tassert(std::isnan(tMaxLength) || fabs(log(maxLength/tMaxLength))<1e-9);
   tassert(std::isnan(tCurlyLength) || fabs(log(curlyLength/tCurlyLength))<1e-9);
   tassert(std::isnan(tTooCurlyLength) || fabs(log(tooCurlyLength/tTooCurlyLength))<1e-9);
