@@ -61,9 +61,9 @@
 #include "manysum.h"
 #include "cogospiral.h"
 using namespace std;
-#define MAXITER 128
-/* The most iterations in an actual run is 90 (was 45 before adding setcurvature).
- * This occurs at the ends of the bendiest curves in testspiral.
+#define MAXITER 144
+/* The most iterations without losing precision in an actual run is 138.
+ * This occurs at the ends of the bendiest curves in testcurly.
  */
 #define MAXTOTCUR 0.05
 #define MAXTOTCLO 0.01
@@ -162,12 +162,12 @@ xy cornu(double t,double curvature,double clothance)
   /*if (i>=cornuhisto.size())
     cornuhisto.resize(i+1);
   cornuhisto[i]++;*/
-  if (i>=MAXITER-1)
+  precision=nextafterl(bigpart,2*bigpart)-bigpart;
+  //printf("precision %e\n",precision);
+  if (i>=MAXITER-1 && precision<=1e-6)
     cerr<<"cornu needs more iterations"<<endl;
   rsum=pairwisesum(realparts,rinx);
   isum=pairwisesum(imagparts,iinx);
-  precision=nextafterl(bigpart,2*bigpart)-bigpart;
-  //printf("precision %e\n",precision);
   if (precision>1e-6)
     rsum=isum=nan("cornu");
   return xy(rsum,isum);
