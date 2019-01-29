@@ -40,7 +40,7 @@ geoheader ghead;
  * it is using. The geoid data are in cube.
  */
 
-TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
+TopoCanvas::TopoCanvas(QWidget *parent):QWidget(parent)
 {
   int i,j,rgb;
   doc.ms.setFoot(INTERNATIONAL);
@@ -89,36 +89,36 @@ TinCanvas::TinCanvas(QWidget *parent):QWidget(parent)
   contoursShouldBeCurvy=true;
 }
 
-QPointF TinCanvas::worldToWindow(xy pnt)
+QPointF TopoCanvas::worldToWindow(xy pnt)
 {
   pnt.roscat(worldCenter,rotation,zoomratio(scale)*windowSize,windowCenter);
   QPointF ret(pnt.getx(),height()-pnt.gety());
   return ret;
 }
 
-xy TinCanvas::windowToWorld(QPointF pnt)
+xy TopoCanvas::windowToWorld(QPointF pnt)
 {
   xy ret(pnt.x(),height()-pnt.y());
   ret.roscat(windowCenter,-rotation,zoomratio(-scale)/windowSize,worldCenter);
   return ret;
 }
 
-double TinCanvas::pixelScale()
+double TopoCanvas::pixelScale()
 {
   return zoomratio(-scale)/windowSize;
 }
 
-double TinCanvas::viewableRadius()
+double TopoCanvas::viewableRadius()
 {
   return zoomratio(-scale)/windowSize*(1+windowDiag/2);
 }
 
-void TinCanvas::setBrush(const QBrush &qbrush)
+void TopoCanvas::setBrush(const QBrush &qbrush)
 {
   brush=qbrush;
 }
 
-void TinCanvas::sizeToFit()
+void TopoCanvas::sizeToFit()
 {
   double top,left,bottom,right;
   int vscale,hscale;
@@ -162,98 +162,98 @@ void TinCanvas::sizeToFit()
   update();
 }
 
-void TinCanvas::zoom(int steps)
+void TopoCanvas::zoom(int steps)
 {
   scale+=steps;
   update();
 }
 
-void TinCanvas::zoomm10()
+void TopoCanvas::zoomm10()
 {
   zoom(-10);
 }
 
-void TinCanvas::zoomm3()
+void TopoCanvas::zoomm3()
 {
   zoom(-3);
 }
 
-void TinCanvas::zoomm1()
+void TopoCanvas::zoomm1()
 {
   zoom(-1);
 }
 
-void TinCanvas::zoomp1()
+void TopoCanvas::zoomp1()
 {
   zoom(1);
 }
 
-void TinCanvas::zoomp3()
+void TopoCanvas::zoomp3()
 {
   zoom(3);
 }
 
-void TinCanvas::zoomp10()
+void TopoCanvas::zoomp10()
 {
   zoom(10);
 }
 
-void TinCanvas::rotatecw()
+void TopoCanvas::rotatecw()
 {
   rotation-=DEG45/4;
   update();
 }
 
-void TinCanvas::rotateccw()
+void TopoCanvas::rotateccw()
 {
   rotation+=DEG45/4;
   update();
 }
 
-void TinCanvas::setButtonBits(int bits)
+void TopoCanvas::setButtonBits(int bits)
 {
   trianglesShouldBeCurvy=(bits>>0)&1;
   contoursShouldBeCurvy=(bits>>1)&1;
 }
 
-void TinCanvas::setMeter()
+void TopoCanvas::setMeter()
 {
   doc.ms.setMetric();
   measureChanged(doc.ms);
 }
 
-void TinCanvas::setFoot()
+void TopoCanvas::setFoot()
 {
   doc.ms.setCustomary();
   measureChanged(doc.ms);
 }
 
-void TinCanvas::setInternationalFoot()
+void TopoCanvas::setInternationalFoot()
 {
   doc.ms.setFoot(INTERNATIONAL);
   measureChanged(doc.ms);
 }
 
-void TinCanvas::setUSFoot()
+void TopoCanvas::setUSFoot()
 {
   doc.ms.setFoot(USSURVEY);
   measureChanged(doc.ms);
 }
 
-void TinCanvas::setIndianFoot()
+void TopoCanvas::setIndianFoot()
 {
   doc.ms.setFoot(INSURVEY);
   measureChanged(doc.ms);
 }
 
-void TinCanvas::repaintSeldom()
+void TopoCanvas::repaintSeldom()
 // Spends up to 5% of the time repainting during long operations.
 {
   if (lastPaintTime.elapsed()>20*lastPaintDuration)
     repaint();
 }
 
-void TinCanvas::updateEdge(edge *e)
+void TopoCanvas::updateEdge(edge *e)
 {
   QMarginsF marge(1,1,1,1);
   QPointF aWindow=worldToWindow(*e->a);
@@ -263,7 +263,7 @@ void TinCanvas::updateEdge(edge *e)
   update(rect.toAlignedRect());
 }
 
-void TinCanvas::updateEdgeNeighbors(edge *e)
+void TopoCanvas::updateEdgeNeighbors(edge *e)
 {
   QMarginsF marge(1,1,1,1);
   QPointF aWindow=worldToWindow(*e->a);
@@ -276,7 +276,7 @@ void TinCanvas::updateEdgeNeighbors(edge *e)
   update(rect.toAlignedRect());
 }
 
-void TinCanvas::open()
+void TopoCanvas::open()
 /* For now, this reads a bare TIN from a DXF file.
  * When I implement reading Bezitopo files, I'll duplicate it.
  */
@@ -313,7 +313,7 @@ void TinCanvas::open()
   }
 }
 
-void TinCanvas::saveAs()
+void TopoCanvas::saveAs()
 {
   int i;
   int dialogResult;
@@ -337,7 +337,7 @@ void TinCanvas::saveAs()
   }
 }
 
-void TinCanvas::save()
+void TopoCanvas::save()
 {
   ofstream file;
   if (docFileName.length())
@@ -350,7 +350,7 @@ void TinCanvas::save()
     saveAs();
 }
 
-void TinCanvas::testPatternAster()
+void TopoCanvas::testPatternAster()
 {
   doc.pl.clear();
   doc.makepointlist(1);
@@ -359,7 +359,7 @@ void TinCanvas::testPatternAster()
   sizeToFit();
 }
 
-void TinCanvas::importPnezd()
+void TopoCanvas::importPnezd()
 {
   int dialogResult;
   QStringList files;
@@ -385,7 +385,7 @@ void TinCanvas::importPnezd()
   }
 }
 
-void TinCanvas::importCriteria()
+void TopoCanvas::importCriteria()
 {
   int dialogResult;
   QStringList files;
@@ -407,7 +407,7 @@ void TinCanvas::importCriteria()
   }
 }
 
-void TinCanvas::importBreaklines()
+void TopoCanvas::importBreaklines()
 {
   int i,err=0;
   bool loadAnyway;
@@ -469,7 +469,7 @@ void TinCanvas::importBreaklines()
   }
 }
 
-void TinCanvas::exportBreaklines()
+void TopoCanvas::exportBreaklines()
 {
   int i;
   int dialogResult;
@@ -496,7 +496,7 @@ void TinCanvas::exportBreaklines()
   }
 }
 
-bool TinCanvas::makeTinCheckEdited()
+bool TopoCanvas::makeTinCheckEdited()
 /* If the user asks to make the TIN, but the edited TIN is more recent
  * than the imported breaklines, pops up a message box and asks if he wants
  * to make the TIN. Else returns true.
@@ -518,7 +518,7 @@ bool TinCanvas::makeTinCheckEdited()
   return ret;
 }
 
-void TinCanvas::makeTin()
+void TopoCanvas::makeTin()
 {
   //cout<<"makeTin"<<endl;
   doc.makepointlist(1);
@@ -567,7 +567,7 @@ void TinCanvas::makeTin()
   }
 }
 
-void TinCanvas::tryStartPoint()
+void TopoCanvas::tryStartPoint()
 {
   //cout<<"tryStartPoint"<<endl;
   if (startPointTries>=100)
@@ -600,7 +600,7 @@ void TinCanvas::tryStartPoint()
   repaintSeldom();
 }
 
-void TinCanvas::flipPass()
+void TopoCanvas::flipPass()
 {
   //cout<<"flipPass"<<endl;
   int nFlip,nGoodEdges,i;
@@ -637,7 +637,7 @@ void TinCanvas::flipPass()
   repaintSeldom();
 }
 
-void TinCanvas::redoSurface()
+void TopoCanvas::redoSurface()
 /* This can be done as part of making the TIN, or when making the contours it
  * can find that this needs to be done first.
  */
@@ -664,7 +664,7 @@ void TinCanvas::redoSurface()
     connect(timer,SIGNAL(timeout()),this,SLOT(makeTin()));
 }
 
-void TinCanvas::findCriticalPoints()
+void TopoCanvas::findCriticalPoints()
 {
   //cout<<"findCriticalPoints"<<endl;
   if (tinerror)
@@ -692,7 +692,7 @@ void TinCanvas::findCriticalPoints()
   }
 }
 
-void TinCanvas::makeTinFinish()
+void TopoCanvas::makeTinFinish()
 {
   //cout<<"makeTinFinish"<<endl;
   if (tinerror)
@@ -724,7 +724,7 @@ void TinCanvas::makeTinFinish()
   surfaceValid=true;
 }
 
-void TinCanvas::tinCancel()
+void TopoCanvas::tinCancel()
 {
   goal=DONE;
   progressDialog->reset();
@@ -733,12 +733,12 @@ void TinCanvas::tinCancel()
   update();
 }
 
-document *TinCanvas::getDoc()
+document *TopoCanvas::getDoc()
 {
   return &doc;
 }
 
-void TinCanvas::selectContourInterval()
+void TopoCanvas::selectContourInterval()
 {
   if (plnum>=0 && plnum<doc.pl.size())
     ciDialog->set(&doc.pl[plnum].contourInterval,doc.ms);
@@ -747,7 +747,7 @@ void TinCanvas::selectContourInterval()
   ciDialog->exec();
 }
 
-void TinCanvas::roughContours()
+void TopoCanvas::roughContours()
 {
   conterval=doc.pl[plnum].contourInterval.fineInterval();
   if (goal==DONE)
@@ -778,7 +778,7 @@ void TinCanvas::roughContours()
     connect(timer,SIGNAL(timeout()),this,SLOT(makeTin()));
 }
 
-void TinCanvas::rough1Contour()
+void TopoCanvas::rough1Contour()
 {
   rough1contour(doc.pl[plnum],progInx*conterval);
   if (++progInx>elevHi)
@@ -791,7 +791,7 @@ void TinCanvas::rough1Contour()
   repaintSeldom();
 }
 
-void TinCanvas::roughContoursFinish()
+void TopoCanvas::roughContoursFinish()
 {
   disconnect(timer,SIGNAL(timeout()),this,SLOT(roughContoursFinish()));
   switch (goal)
@@ -810,7 +810,7 @@ void TinCanvas::roughContoursFinish()
   update();
 }
 
-void TinCanvas::contoursCancel()
+void TopoCanvas::contoursCancel()
 {
   goal=DONE;
   progressDialog->reset();
@@ -819,7 +819,7 @@ void TinCanvas::contoursCancel()
   update();
 }
 
-void TinCanvas::smoothContours()
+void TopoCanvas::smoothContours()
 {
   if (goal==DONE)
   {
@@ -845,7 +845,7 @@ void TinCanvas::smoothContours()
     connect(timer,SIGNAL(timeout()),this,SLOT(roughContours()));
 }
 
-void TinCanvas::smooth1Contour()
+void TopoCanvas::smooth1Contour()
 {
   if (progInx<doc.pl[plnum].contours.size())
   {
@@ -860,7 +860,7 @@ void TinCanvas::smooth1Contour()
   repaintSeldom();
 }
 
-void TinCanvas::smoothContoursFinish()
+void TopoCanvas::smoothContoursFinish()
 {
   switch (goal)
   {
@@ -876,7 +876,7 @@ void TinCanvas::smoothContoursFinish()
   update();
 }
 
-void TinCanvas::loadGeoid()
+void TopoCanvas::loadGeoid()
 {
   int dialogResult,err=0;
   QString errMsg;
@@ -914,7 +914,7 @@ void TinCanvas::loadGeoid()
   }
 }
 
-void TinCanvas::dump()
+void TopoCanvas::dump()
 /* For debugging.
  * This method outputs any state of the program that may be useful for
  * debugging whatever needs to be debugged at the moment.
@@ -934,7 +934,7 @@ void TinCanvas::dump()
   }
 }
 
-void TinCanvas::paintEvent(QPaintEvent *event)
+void TopoCanvas::paintEvent(QPaintEvent *event)
 {
   int i,k,contourType,renderTime=0,pathTime=0,strokeTime=0;
   double r;
@@ -1058,20 +1058,20 @@ void TinCanvas::paintEvent(QPaintEvent *event)
   lastPaintDuration=paintTime.elapsed();
 }
 
-void TinCanvas::setSize()
+void TopoCanvas::setSize()
 {
   windowCenter=xy(width(),height())/2.;
   windowSize=1/sqrt(1/sqr(width())+1/sqr(height()));
   windowDiag=sqrt(sqr(width())+sqr(height()));
 }
 
-void TinCanvas::resizeEvent(QResizeEvent *event)
+void TopoCanvas::resizeEvent(QResizeEvent *event)
 {
   setSize();
   QWidget::resizeEvent(event);
 }
 
-bool TinCanvas::mouseCheckImported()
+bool TopoCanvas::mouseCheckImported()
 /* If the user clicks on an edge to edit the breaklines in the TIN, but the
  * breaklines imported from a file are more recent, pops up a message box
  * and asks if he wants to edit the TIN. Else returns true.
@@ -1093,7 +1093,7 @@ bool TinCanvas::mouseCheckImported()
   return ret;
 }
 
-void TinCanvas::mousePressEvent(QMouseEvent *event)
+void TopoCanvas::mousePressEvent(QMouseEvent *event)
 {
   xy eventLoc=windowToWorld(event->pos());
   if (event->button()==Qt::LeftButton)
@@ -1102,14 +1102,14 @@ void TinCanvas::mousePressEvent(QMouseEvent *event)
   mouseClicked=true;
 }
 
-void TinCanvas::mouseDoubleClickEvent(QMouseEvent *event)
+void TopoCanvas::mouseDoubleClickEvent(QMouseEvent *event)
 {
   xy eventLoc=windowToWorld(event->pos());
   //cout<<"mouseDoubleClick "<<eventLoc.east()<<','<<eventLoc.north()<<endl;
   mouseDoubleClicked=true;
 }
 
-void TinCanvas::mouseMoveEvent(QMouseEvent *event)
+void TopoCanvas::mouseMoveEvent(QMouseEvent *event)
 {
   xy eventLoc=windowToWorld(event->pos());
   triangleHit hitRec;
@@ -1140,7 +1140,7 @@ void TinCanvas::mouseMoveEvent(QMouseEvent *event)
   mouseClicked=mouseDoubleClicked=false;
 }
 
-void TinCanvas::mouseReleaseEvent(QMouseEvent *event)
+void TopoCanvas::mouseReleaseEvent(QMouseEvent *event)
 {
   triangleHit hitRec;
   triangle *tri=nullptr;

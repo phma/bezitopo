@@ -58,7 +58,7 @@ public slots:
   void aboutProgram();
   void aboutQt();
 private:
-  TinCanvas *canvas;
+  TopoCanvas *canvas;
   QToolBar *toolbar;
   QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu,*contourMenu,*coordMenu,*helpMenu;
   int preZoomStep;

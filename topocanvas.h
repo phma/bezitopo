@@ -39,11 +39,11 @@
 #define ROUGH_CONTOURS 2
 #define SMOOTH_CONTOURS 3
 
-class TinCanvas: public QWidget
+class TopoCanvas: public QWidget
 {
   Q_OBJECT
 public:
-  TinCanvas(QWidget *parent=0);
+  TopoCanvas(QWidget *parent=0);
   void setBrush(const QBrush &qbrush);
   QPointF worldToWindow(xy pnt);
   xy windowToWorld(QPointF pnt);

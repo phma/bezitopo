@@ -42,7 +42,7 @@ TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
   toolbar=new QToolBar(this);
   addToolBar(Qt::TopToolBarArea,toolbar);
   //toolbar->setIconSize(QSize(40,40));
-  canvas=new TinCanvas(this);
+  canvas=new TopoCanvas(this);
   setCentralWidget(canvas);
   llDialog=new LatlongFactorDialog(this);
   grDialog=new GridFactorDialog(this);
