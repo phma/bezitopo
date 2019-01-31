@@ -3,7 +3,7 @@
 /* tin.h - triangulated irregular network             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2015-2018 Pierre Abbat.
+/* Copyright 2012,2013,2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -35,6 +35,7 @@
 
 class pointlist;
 
+extern std::vector<int> stltable; // used in bezier.cpp
 void initStlTable();
 
 class edge
