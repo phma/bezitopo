@@ -3,7 +3,7 @@
 /* tin.cpp - triangulated irregular network           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2018 Pierre Abbat.
+/* Copyright 2012-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -34,6 +34,7 @@
 #include "random.h"
 #include "smooth5.h"
 #include "relprime.h"
+#include "stl.h"
 
 #define THR 16777216
 //threshold for goodcenter to determine if a point is sufficiently
@@ -43,21 +44,6 @@ using std::map;
 using std::multimap;
 using std::vector;
 using namespace std;
-
-vector<int> stltable;
-
-void initStlTable()
-{
-  int i;
-  if (stltable.size()!=216)
-  {
-    stltable.clear();
-    for (i=1;i<=7776000;i++)
-      if (7776000%i==0 && smooth5(i))
-	stltable.push_back(i);
-    stltable.shrink_to_fit();
-  }
-}
 
 edge::edge()
 {

@@ -101,7 +101,7 @@ add_executable(clotilde angle.cpp arc.cpp bezier.cpp
 	       matrix.cpp measure.cpp minquad.cpp point.cpp pointlist.cpp polyline.cpp
 	       projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
 	       rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
-	       tin.cpp vball.cpp vcurve.cpp)
+	       stl.cpp tin.cpp vball.cpp vcurve.cpp)
 add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
                binio.cpp boundrect.cpp breakline.cpp circle.cpp
                cmdopt.cpp cogo.cpp cogospiral.cpp contour.cpp
@@ -112,8 +112,8 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                ldecimal.cpp manysum.cpp matrix.cpp measure.cpp minquad.cpp objlist.cpp
                pnezd.cpp point.cpp pointlist.cpp polyline.cpp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp
-               refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp smooth5.cpp sourcegeoid.cpp
-               spiral.cpp spolygon.cpp tin.cpp vball.cpp vcurve.cpp)
+               refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp smooth5.cpp
+               sourcegeoid.cpp spiral.cpp spolygon.cpp stl.cpp tin.cpp vball.cpp vcurve.cpp)
 add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp boundrect.cpp
                breakline.cpp cidialog.cpp circle.cpp cogo.cpp cogospiral.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp dxf.cpp ellipsoid.cpp
@@ -125,7 +125,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
                plwidget.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
                ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp rendercache.cpp
                rootfind.cpp segment.cpp smooth5.cpp
-               spiral.cpp spolygon.cpp test.cpp textfile.cpp tin.cpp
+               spiral.cpp spolygon.cpp stl.cpp test.cpp textfile.cpp tin.cpp
                tinwindow.cpp topocanvas.cpp vball.cpp vcurve.cpp
                viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources} ${qm_files})
@@ -139,7 +139,7 @@ add_executable(transmer angle.cpp arc.cpp bezier.cpp
                measure.cpp minquad.cpp point.cpp pointlist.cpp polyline.cpp
                projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
                rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
-               tin.cpp transmer.cpp vball.cpp vcurve.cpp)
+               stl.cpp tin.cpp transmer.cpp vball.cpp vcurve.cpp)
 endif (${FFTW_FOUND})
 target_link_libraries(bezilib0 Qt5::Widgets Qt5::Core)
 target_link_libraries(bezilib1 Qt5::Widgets Qt5::Core)

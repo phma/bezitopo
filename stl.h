@@ -3,7 +3,7 @@
 /* stl.h - stereolithography (3D printing) export     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2013,2017 Pierre Abbat.
+/* Copyright 2013,2017,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -20,8 +20,12 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <vector>
 #include "point.h"
 #include "config.h"
+
+extern std::vector<int> stltable; // used in bezier.cpp
+void initStlTable();
 
 struct stltriangle
 {

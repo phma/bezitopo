@@ -35,9 +35,6 @@
 
 class pointlist;
 
-extern std::vector<int> stltable; // used in bezier.cpp
-void initStlTable();
-
 class edge
 {
 public:

@@ -3,7 +3,7 @@
 /* stl.cpp - stereolithography (3D printing) export   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2013,2015 Pierre Abbat.
+/* Copyright 2013,2015,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -21,6 +21,8 @@
  */
 
 #include "stl.h"
+#include "smooth5.h"
+using namespace std;
 
 /* The STL polyhedron consists of three kinds of face: bottom, side, and top.
  * The bottom is a convex polygon which is triangulated. The sides are
@@ -31,6 +33,21 @@
  * is split into a number of pieces that is a multiple of the number of
  * pieces that the other two sides are split into, which must be equal.
  */
+
+vector<int> stltable;
+
+void initStlTable()
+{
+  int i;
+  if (stltable.size()!=216)
+  {
+    stltable.clear();
+    for (i=1;i<=7776000;i++)
+      if (7776000%i==0 && smooth5(i))
+	stltable.push_back(i);
+    stltable.shrink_to_fit();
+  }
+}
 
 stltriangle::stltriangle()
 {
