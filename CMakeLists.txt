@@ -129,6 +129,21 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
                tinwindow.cpp topocanvas.cpp vball.cpp vcurve.cpp
                viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources} ${qm_files})
+add_executable(sitecheck angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp boundrect.cpp
+               breakline.cpp cidialog.cpp circle.cpp cogo.cpp cogospiral.cpp color.cpp
+               contour.cpp csv.cpp document.cpp drawobj.cpp dxf.cpp ellipsoid.cpp
+               except.cpp factordialog.cpp geoid.cpp geoidboundary.cpp
+               halton.cpp intloop.cpp kml.cpp
+               latlong.cpp layer.cpp ldecimal.cpp linetype.cpp llvalidator.cpp
+               manysum.cpp matrix.cpp measure.cpp measurebutton.cpp
+               minquad.cpp objlist.cpp penwidth.cpp
+               plwidget.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
+               ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp rendercache.cpp
+               rootfind.cpp segment.cpp sitecheck.cpp sitewindow.cpp smooth5.cpp
+               spiral.cpp spolygon.cpp stl.cpp test.cpp textfile.cpp tin.cpp
+               topocanvas.cpp vball.cpp vcurve.cpp
+               zoom.cpp zoombutton.cpp
+               ${lib_resources} ${qm_files})
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
 if (${FFTW_FOUND})
 add_executable(transmer angle.cpp arc.cpp bezier.cpp
@@ -148,6 +163,7 @@ target_link_libraries(bezitest Qt5::Widgets Qt5::Core)
 target_link_libraries(clotilde Qt5::Widgets Qt5::Core)
 target_link_libraries(convertgeoid Qt5::Widgets Qt5::Core)
 target_link_libraries(viewtin Qt5::Widgets Qt5::Core)
+target_link_libraries(sitecheck Qt5::Widgets Qt5::Core)
 target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)
 if (${FFTW_FOUND})
 target_link_libraries(transmer Qt5::Widgets Qt5::Core ${FFTW_LIBRARIES})
@@ -162,6 +178,7 @@ target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID NUMSGEOID)
 target_compile_definitions(bezitest PUBLIC NUMSGEOID POINTLIST)
 target_compile_definitions(bezitopo PUBLIC POINTLIST)
 target_compile_definitions(viewtin PUBLIC POINTLIST)
+target_compile_definitions(sitecheck PUBLIC POINTLIST FLATTRIANGLE)
 #target_compile_definitions(pangeoid PUBLIC CONVERTGEOID NUMSGEOID)
 
 include(CheckIncludeFiles)
