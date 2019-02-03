@@ -20,12 +20,14 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <array>
 #include <vector>
 #include "point.h"
 #include "config.h"
 
 extern std::vector<int> stltable; // used in bezier.cpp
 void initStlTable();
+//std::array<int,3> adjustStlSplit(std::array<int,3> stlSplit,std::array<int,3> stlMin);
 
 struct stltriangle
 {

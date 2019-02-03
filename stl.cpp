@@ -35,17 +35,42 @@ using namespace std;
  */
 
 vector<int> stltable;
+vector<short> stlfac;
 
 void initStlTable()
 {
-  int i;
+  int i,fac,j,n;
   if (stltable.size()!=216)
   {
     stltable.clear();
     for (i=1;i<=7776000;i++)
       if (7776000%i==0 && smooth5(i))
+      {
 	stltable.push_back(i);
+	fac=0;
+	n=i;
+	for (j=0;j<9;j++)
+	  if (n%2==0)
+	  {
+	    n/=2;
+	    fac++;
+	  }
+	for (j=0;j<6;j++)
+	  if (n%3==0)
+	  {
+	    n/=3;
+	    fac+=16;
+	  }
+	for (j=0;j<4;j++)
+	  if (n%5==0)
+	  {
+	    n/=5;
+	    fac+=256;
+	  }
+	stlfac.push_back(fac);
+      }
     stltable.shrink_to_fit();
+    stlfac.shrink_to_fit();
   }
 }
 
