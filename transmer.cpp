@@ -505,6 +505,15 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
   for (i=0;i<apx7.size()-1;i++)
     cout<<setw(2)<<i<<setw(12)<<compareLengths(apx7[i],apx7[i+1])<<
           setw(12)<<apx7[i+1].length()-apx7[i].length()<<endl;
+  // Draw 32 dots along the meridian, representing the input to the FFT
+  forwardLengths3=projectForward(&ell,apx3[5],32);
+  for (i=0;i<32;i++)
+  {
+    ps.setcolor(0,0,1);
+    ps.circle(apx3.back().station(forwardLengths3[i][1]),1e5);
+  }
+  // Draw a meridian of the ellipsoid from equator to pole
+  ps.setcolor(0,0,0);
   ps.spline(apx3.back().approx3d(1e3));
   for (i=0,nseg=1;i<24 && !done;i++,nseg*=2)
   {
