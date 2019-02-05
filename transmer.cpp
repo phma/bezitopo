@@ -477,6 +477,7 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
   int goodForwardTerms,goodReverseTerms,forwardNoiseFloor,reverseNoiseFloor;
   int graphWidth;
   xy pnt;
+  xyz belowPoint,abovePoint;
   vector<polyspiral> apx3,apx7,apxK;
   vector<array<double,2> > forwardLengths3,reverseLengths3;
   vector<array<double,2> > forwardLengths7,reverseLengths7;
@@ -517,6 +518,13 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
   // Draw a meridian of the ellipsoid from equator to pole
   ps.setcolor(0,0,0);
   ps.spline(apx3.back().approx3d(1e3));
+  // Draw 26 tickmarks, separating the meridian into 27 parts, each 3+1/3° lat
+  for (i=1;i<27;i++)
+  {
+    belowPoint=ell.geoc(M_PI*i/54,0.,-1e5)-ell.getCenter();
+    abovePoint=ell.geoc(M_PI*i/54,0., 1e5)-ell.getCenter();
+    ps.line2p(xy(belowPoint.getx(),belowPoint.getz()),xy(abovePoint.getx(),abovePoint.getz()));
+  }
   for (i=0,nseg=1;i<24 && !done;i++,nseg*=2)
   {
     forwardLengths3=projectForward(&ell,apx3[5],nseg);
