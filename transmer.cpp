@@ -509,8 +509,10 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
   forwardLengths3=projectForward(&ell,apx3[5],32);
   for (i=0;i<32;i++)
   {
+    ps.setcolor(1,0,1);
+    ps.circle(apx3.back().station(forwardLengths3[32][1]*(i+0.5)/32),5e4);
     ps.setcolor(0,0,1);
-    ps.circle(apx3.back().station(forwardLengths3[i][1]),1e5);
+    ps.circle(apx3.back().station(forwardLengths3[i][1]),3e4);
   }
   // Draw a meridian of the ellipsoid from equator to pole
   ps.setcolor(0,0,0);
