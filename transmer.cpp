@@ -403,7 +403,7 @@ void plotErrorPeters(ellipsoid &ell,PostScript &ps,ostream &merctext)
   TransverseMercatorEllipsoid proj(&ell,0);
   int i;
   latlong ll;
-  int histo[16];
+  int histo[16],tallestbar=0;
   double lo,hi,pre;
   Measure ms;
   ms.setMetric();
@@ -423,8 +423,23 @@ void plotErrorPeters(ellipsoid &ell,PostScript &ps,ostream &merctext)
   ps.endpage();
   merctext<<"--------\n";
   for (i=0;i<16;i++)
+    if (histo[i]>tallestbar)
+      tallestbar=histo[i];
+  ps.startpage();
+  ps.setscale(0,0,42,28,0);
+  for (i=0;i<16;i++)
     if (histo[i])
-    {
+    { // There are 14 bars, numbered 0 through 12 and 15.
+      if (i==15)
+	ps.setcolor(1,0,0);
+      else
+	ps.setcolor(0,0,1);
+      ps.startline();
+      ps.lineto(xy(i*3-6*(i>12)+0.5,0));
+      ps.lineto(xy(i*3-6*(i>12)+2.5,0));
+      ps.lineto(xy(i*3-6*(i>12)+2.5,histo[i]*28./tallestbar));
+      ps.lineto(xy(i*3-6*(i>12)+0.5,histo[i]*28./tallestbar));
+      ps.endline(true);
       merctext<<ldecimal(histo[i]*1e2/NDOTS,0.01)<<"% ";
       if (i==15)
 	merctext<<"floating-point overflow";
@@ -444,6 +459,7 @@ void plotErrorPeters(ellipsoid &ell,PostScript &ps,ostream &merctext)
       }
       merctext<<endl;
     }
+  ps.endpage();
 }
 
 void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
