@@ -404,6 +404,7 @@ void plotErrorPeters(ellipsoid &ell,PostScript &ps,ostream &merctext)
   int i;
   latlong ll;
   int histo[16],tallestbar=0;
+  polyline bar;
   double lo,hi,pre;
   Measure ms;
   ms.setMetric();
@@ -434,12 +435,12 @@ void plotErrorPeters(ellipsoid &ell,PostScript &ps,ostream &merctext)
 	ps.setcolor(1,0,0);
       else
 	ps.setcolor(0,0,1);
-      ps.startline();
-      ps.lineto(xy(i*3-6*(i>12)+0.5,0));
-      ps.lineto(xy(i*3-6*(i>12)+2.5,0));
-      ps.lineto(xy(i*3-6*(i>12)+2.5,histo[i]*28./tallestbar));
-      ps.lineto(xy(i*3-6*(i>12)+0.5,histo[i]*28./tallestbar));
-      ps.endline(true);
+      bar=polyline(0);
+      bar.insert(xy(i*3-6*(i>12)+0.5,0));
+      bar.insert(xy(i*3-6*(i>12)+2.5,0));
+      bar.insert(xy(i*3-6*(i>12)+2.5,histo[i]*28./tallestbar));
+      bar.insert(xy(i*3-6*(i>12)+0.5,histo[i]*28./tallestbar));
+      ps.spline(bar.approx3d(1),true);
       merctext<<ldecimal(histo[i]*1e2/NDOTS,0.01)<<"% ";
       if (i==15)
 	merctext<<"floating-point overflow";
