@@ -303,7 +303,8 @@ void PostScript::circle(xy pnt,double radius)
   pnt=turn(pnt,orientation);
   if (isfinite(pnt.east()) && isfinite(pnt.north()))
     *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)
-    <<" n "<<ldecimal(scale*radius,PAPERRES)<<" 0 360 af %"<<radius*radius<<endl;
+    <<" n "<<ldecimal(scale*radius,PAPERRES)<<" 0 360 af %"
+    <<ldecimal(radius*radius,radius*radius/1000)<<endl;
 }
 
 void PostScript::line(edge lin,int num,bool colorfibaster,bool directed)
