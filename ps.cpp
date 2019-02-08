@@ -148,6 +148,7 @@ void PostScript::prolog()
     *psfile<<"/m { moveto } def\n";
     *psfile<<"/l { lineto } def\n";
     *psfile<<"/c { curveto } def\n";
+    *psfile<<"/s { stroke } def\n";
     *psfile<<"/af { arc fill } def\n";
     *psfile<<"%%EndProlog"<<endl;
     indocument=true;
@@ -382,7 +383,7 @@ void PostScript::endline(bool closed)
   assert(psfile);
   if (closed)
     *psfile<<"closepath ";
-  *psfile<<"stroke"<<endl;
+  *psfile<<"s"<<endl;
   inlin=false;
 }
 
@@ -414,7 +415,7 @@ void PostScript::spline(bezier3d spl,bool fill)
       *psfile<<"c\n";
     }
   }
-  *psfile<<(fill?"fill":"stroke")<<endl;
+  *psfile<<(fill?"fill":"s")<<endl;
 }
 
 void PostScript::widen(double factor)
