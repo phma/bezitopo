@@ -3,7 +3,7 @@
 /* ps.cpp - PostScript output                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2018 Pierre Abbat.
+/* Copyright 2012-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -143,6 +143,12 @@ void PostScript::prolog()
     *psfile<<"/c. % ( str )\n{ dup stringwidth -2 div exch -2 div exch\n"<<
             "3 2 roll 2 index 2 index rmoveto show rmoveto } bind def\n\n";
     *psfile<<"/mmscale { 720 254 div dup scale } bind def\n";
+    *psfile<<"/col { setrgbcolor } def\n";
+    *psfile<<"/n { newpath } def\n";
+    *psfile<<"/m { moveto } def\n";
+    *psfile<<"/l { lineto } def\n";
+    *psfile<<"/c { curveto } def\n";
+    *psfile<<"/af { arc fill } def\n";
     *psfile<<"%%EndProlog"<<endl;
     indocument=true;
     pages=0;
@@ -236,7 +242,7 @@ void PostScript::setcolor(double r,double g,double b)
 {
   if (r!=oldr || g!=oldg || b!=oldb)
   {
-    *psfile<<fixed<<setprecision(3)<<r<<' '<<g<<' '<<b<<" setrgbcolor"<<endl;
+    *psfile<<fixed<<setprecision(3)<<r<<' '<<g<<' '<<b<<" col"<<endl;
     oldr=r;
     oldg=g;
     oldb=b;
@@ -297,7 +303,7 @@ void PostScript::circle(xy pnt,double radius)
   pnt=turn(pnt,orientation);
   if (isfinite(pnt.east()) && isfinite(pnt.north()))
     *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)
-    <<" newpath "<<ldecimal(scale*radius,PAPERRES)<<" 0 360 arc fill %"<<radius*radius<<endl;
+    <<" n "<<ldecimal(scale*radius,PAPERRES)<<" 0 360 af %"<<radius*radius<<endl;
 }
 
 void PostScript::line(edge lin,int num,bool colorfibaster,bool directed)
@@ -338,12 +344,12 @@ void PostScript::line(edge lin,int num,bool colorfibaster,bool directed)
     base=xy(disp.north()/40,disp.east()/-40);
     ab1=a+base;
     ab2=a-base;
-    *psfile<<"newpath "<<xscale(b.east())<<' '<<yscale(b.north())<<" moveto "<<xscale(ab1.east())<<' '<<yscale(ab1.north())<<" lineto "<<xscale(ab2.east())<<' '<<yscale(ab2.north())<<" lineto closepath fill"<<endl;
+    *psfile<<"n "<<xscale(b.east())<<' '<<yscale(b.north())<<" m "<<xscale(ab1.east())<<' '<<yscale(ab1.north())<<" l "<<xscale(ab2.east())<<' '<<yscale(ab2.north())<<" l closepath fill"<<endl;
   }
   else
     *psfile<<xscale(a.east())<<' '<<yscale(a.north())<<' '<<xscale(b.east())<<' '<<yscale(b.north())<<" -"<<endl;
   mid=(a+b)/2;
-  //fprintf(psfile,"%7.3f %7.3f moveto (%d) show\n",xscale(mid.east()),yscale(mid.north()),num);
+  //fprintf(psfile,"%7.3f %7.3f m (%d) show\n",xscale(mid.east()),yscale(mid.north()),num);
 }
 
 void PostScript::line2p(xy pnt1,xy pnt2)
@@ -358,14 +364,14 @@ void PostScript::line2p(xy pnt1,xy pnt2)
 void PostScript::startline()
 {
   assert(psfile);
-  *psfile<<"newpath"<<endl;
+  *psfile<<"n"<<endl;
 }
 
 void PostScript::lineto(xy pnt)
 {
   assert(psfile);
   pnt=turn(pnt,orientation);
-  *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<(inlin?" lineto":" moveto");
+  *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<(inlin?" l":" m");
   *psfile<<endl;
   inlin=true;
 }
@@ -386,14 +392,14 @@ void PostScript::spline(bezier3d spl,bool fill)
   xy pnt;
   n=spl.size();
   pnt=turn(xy(spl[0][0]),orientation);
-  *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<" moveto\n";
+  *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<" m\n";
   for (i=0;i<n;i++)
   {
     seg=spl[i];
     if (isstraight(seg))
     {
       pnt=turn(xy(seg[3]),orientation);
-      *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<' '<<"lineto\n";
+      *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<' '<<"l\n";
     }
     else
     {
@@ -404,7 +410,7 @@ void PostScript::spline(bezier3d spl,bool fill)
           cerr<<"NaN point"<<endl;
         *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)<<' ';
       }
-      *psfile<<"curveto\n";
+      *psfile<<"c\n";
     }
   }
   *psfile<<(fill?"fill":"stroke")<<endl;
@@ -419,14 +425,14 @@ void PostScript::write(xy pnt,string text)
 {
   pnt=turn(pnt,orientation);
   *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)
-  <<" moveto ("<<escape(text)<<") show"<<endl;
+  <<" m ("<<escape(text)<<") show"<<endl;
 }
 
 void PostScript::centerWrite(xy pnt,string text)
 {
   pnt=turn(pnt,orientation);
   *psfile<<ldecimal(xscale(pnt.east()),PAPERRES)<<' '<<ldecimal(yscale(pnt.north()),PAPERRES)
-  <<" moveto ("<<escape(text)<<") c."<<endl;
+  <<" m ("<<escape(text)<<") c."<<endl;
 }
 
 void PostScript::comment(string text)
