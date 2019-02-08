@@ -428,6 +428,18 @@ void plotErrorPeters(ellipsoid &ell,PostScript &ps,ostream &merctext)
       tallestbar=histo[i];
   ps.startpage();
   ps.setscale(0,0,42,28,0);
+  ps.setcolor(0,0,0);
+  for (i=0;i<4;i++)
+  {
+    ps.startline();
+    ps.lineto(xy(6+9*i,-1));
+    ps.lineto(xy(6+9*i,7));
+    ps.endline();
+  }
+  ps.centerWrite(xy(6,-2),"1 mm");
+  ps.centerWrite(xy(15,-2),"1 m");
+  ps.centerWrite(xy(24,-2),"1 km");
+  ps.centerWrite(xy(33,-2),"1 Mm");
   for (i=0;i<16;i++)
     if (histo[i])
     { // There are 14 bars, numbered 0 through 12 and 15.
