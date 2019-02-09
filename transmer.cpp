@@ -522,6 +522,7 @@ void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
   frame.insert(xy(3,2));
   frame.insert(xy(0,2));
   ps.startpage();
+  ps.comment(ell.getName());
   ps.setscale(0,0,EARTHRAD,EARTHRAD,0);
   for (i=0,nseg=1;i<5;i++,nseg*=7)
     apx7.push_back(psApprox(&ell,nseg));
