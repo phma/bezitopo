@@ -115,7 +115,7 @@ void SiteWindow::makeActions()
   openAction=new QAction(this);
   openAction->setIcon(QIcon::fromTheme("document-open"));
   openAction->setText(tr("Open"));
-  //fileMenu->addAction(openAction);
+  fileMenu->addAction(openAction);
   connect(openAction,SIGNAL(triggered(bool)),canvas,SLOT(open()));
   saveAction=new QAction(this);
   saveAction->setIcon(QIcon::fromTheme("document-save"));
