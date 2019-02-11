@@ -46,6 +46,7 @@ SiteWindow::SiteWindow(QWidget *parent):QMainWindow(parent)
   setCentralWidget(canvas);
   llDialog=new LatlongFactorDialog(this);
   grDialog=new GridFactorDialog(this);
+  canvas->setShowDelaunay(false);
   canvas->show();
   makeActions();
   canvas->setMeter();

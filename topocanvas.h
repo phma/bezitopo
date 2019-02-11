@@ -64,6 +64,7 @@ public slots:
   void zoomp1();
   void zoomp3();
   void zoomp10();
+  void setShowDelaunay(bool showd);
   void rotatecw();
   void rotateccw();
   void setButtonBits(int bits);
@@ -147,6 +148,7 @@ private:
   bool smoothContoursValid;
   bool trianglesAreCurvy,trianglesShouldBeCurvy;
   bool contoursAreCurvy,contoursShouldBeCurvy;
+  bool showDelaunay; // If true, edges change color and become dashed if not Delaunay.
   QTime lastPaintTime;
   int lastPaintDuration;
 };

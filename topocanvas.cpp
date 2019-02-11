@@ -198,6 +198,11 @@ void TopoCanvas::zoomp10()
   zoom(10);
 }
 
+void TopoCanvas::setShowDelaunay(bool showd)
+{
+  showDelaunay=showd;
+}
+
 void TopoCanvas::rotatecw()
 {
   rotation-=DEG45/4;
@@ -961,7 +966,7 @@ void TopoCanvas::paintEvent(QPaintEvent *event)
 	  seg=doc.pl[plnum].edges[i].getsegment();
 	  if (seg.length()>pixelScale() && fabs(pldist(worldCenter,seg.getstart(),seg.getend()))<viewableRadius())
 	  {
-	    if (doc.pl[plnum].edges[i].delaunay())
+	    if (!showDelaunay || doc.pl[plnum].edges[i].delaunay())
 	      if (doc.pl[plnum].edges[i].broken&1)
 		painter.setPen(breakEdgePen);
 	      else
@@ -977,7 +982,7 @@ void TopoCanvas::paintEvent(QPaintEvent *event)
 	  seg=(*e)->getsegment();
 	  if (seg.length()>pixelScale() && fabs(pldist(worldCenter,seg.getstart(),seg.getend()))<viewableRadius())
 	  {
-	    if ((*e)->delaunay())
+	    if (!showDelaunay || (*e)->delaunay())
 	      if ((*e)->broken&1)
 		painter.setPen(breakEdgePen);
 	      else

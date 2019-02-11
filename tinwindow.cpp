@@ -46,6 +46,7 @@ TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
   setCentralWidget(canvas);
   llDialog=new LatlongFactorDialog(this);
   grDialog=new GridFactorDialog(this);
+  canvas->setShowDelaunay(true);
   canvas->show();
   makeActions();
   canvas->setMeter();
