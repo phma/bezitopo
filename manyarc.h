@@ -22,6 +22,7 @@
 
 #include "polyline.h"
 
+segment spiralToCubic(spiralarc a);
 double manyArcTrimFunc(double p,double n);
 double manyArcTrimDeriv(double p,double n);
 double manyArcTrim(unsigned n);

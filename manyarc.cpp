@@ -152,6 +152,24 @@ double maxErrorCubic(int narcs)
   return -diff.station(vex[0]).elev();
 }
 
+segment spiralToCubic(spiralarc a)
+/* Returns a cubic with horizontal length equal to the length, slope equal
+ * to the bearing, second derivative equal to the curvature, and third
+ * derivative equal to the clothance of the given spiralarc.
+ */
+{
+  double length=a.length();
+  double curvature=a.curvature(length/2);
+  double clothance=a.clothance();
+  double midslope=bintorad(a.bearing(length/2));
+  double startz=-cub(length)*clothance/48+sqr(length)*curvature/8-length*midslope/2;
+  double endz=cub(length)*clothance/48+sqr(length)*curvature/8+length*midslope/2;
+  segment ret(xyz(-length/2,0,startz),xyz(length/2,0,endz));
+  ret.setslope(START,sqr(length)*clothance/8-length*curvature/2+midslope);
+  ret.setslope(END,sqr(length)*clothance/8+length*curvature/2+midslope);
+  return ret;
+}
+
 array<int,2> ends(polyarc apx)
 /* Returns the indices of the two arcs whose angle is closest to 90°.
  * For most spiralarcs in actual use, they are the first and the last.

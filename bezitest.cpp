@@ -2777,8 +2777,10 @@ void test1manyarc(spiralarc s,PostScript &ps)
   xy enddiff;
   bool showCenters=false;
   BoundRect br;
+  segment cubic=spiralToCubic(s);
   for (i=0;i<4;i++)
     crossingsPerArc[i]=0;
+  cout<<"Midslope of cubic "<<cubic.slope(cubic.length()/2)<<" Midbearing of spiral "<<bintorad(s.bearing(s.length()/2))<<endl;
   cout<<"Throw "<<s.sthrow();
   cout<<" Estimated throw "<<(s.curvature(s.length())-s.curvature(0))*sqr(s.length())/24<<'\n';
   for (narcs=2;narcs<9;narcs++)
