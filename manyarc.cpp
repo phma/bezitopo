@@ -170,6 +170,43 @@ segment spiralToCubic(spiralarc a)
   return ret;
 }
 
+vector<Circle> crossLines(spiralarc a,vector<segment> q)
+/* q is the piecewise quadratic approximation to the cubic corresponding to a.
+ * Returns a vector of lines that cross a perpendicularly. The arc distances
+ * between them equal the horizontal lengths of the elements of q.
+ */
+{
+  int i;
+  double along;
+  vector<Circle> ret;
+  for (i=0;i<q.size();i++)
+  {
+    along=q[i].getstart().getx()-q[0].getstart().getx();
+    ret.push_back(Circle(a.station(along),a.bearing(along)+DEG90));
+  }
+  ret.push_back(Circle(a.getend(),a.endbearing()+DEG90));
+  return ret;
+}
+
+vector<double> offsets(segment a,vector<segment> q)
+/* q is the piecewise quadratic approximation to a, the cubic corresponding
+ * to a spiralarc. Returns the offsets of the endpoints of the elements of q
+ * from a. These are used to offset points from the spiralarc along crossLines;
+ * the points must then be adjusted. The 0th and last numbers returned are 0.
+ */
+{
+  int i;
+  double along;
+  vector<double> ret;
+  for (i=0;i<q.size();i++)
+  {
+    along=q[i].getstart().getx()-q[0].getstart().getx();
+    ret.push_back(q[i].getstart().getz()-a.station(along).getz());
+  }
+  ret.push_back(0);
+  return ret;
+}
+
 array<int,2> ends(polyarc apx)
 /* Returns the indices of the two arcs whose angle is closest to 90°.
  * For most spiralarcs in actual use, they are the first and the last.
