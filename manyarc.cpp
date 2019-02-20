@@ -3,7 +3,7 @@
 /* manyarc.cpp - approximate spiral with many arcs    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018 Pierre Abbat.
+/* Copyright 2018,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <iostream>
+#include <cassert>
 #include "manyarc.h"
 #include "rootfind.h"
 #include "manysum.h"
@@ -170,7 +171,7 @@ segment spiralToCubic(spiralarc a)
   return ret;
 }
 
-vector<Circle> crossLines(spiralarc a,vector<segment> q)
+vector<Circle> crossLines(spiralarc &a,vector<segment> &q)
 /* q is the piecewise quadratic approximation to the cubic corresponding to a.
  * Returns a vector of lines that cross a perpendicularly. The arc distances
  * between them equal the horizontal lengths of the elements of q.
@@ -188,7 +189,7 @@ vector<Circle> crossLines(spiralarc a,vector<segment> q)
   return ret;
 }
 
-vector<double> offsets(segment a,vector<segment> q)
+vector<double> offsets(segment &a,vector<segment> &q)
 /* q is the piecewise quadratic approximation to a, the cubic corresponding
  * to a spiralarc. Returns the offsets of the endpoints of the elements of q
  * from a. These are used to offset points from the spiralarc along crossLines;
@@ -205,6 +206,27 @@ vector<double> offsets(segment a,vector<segment> q)
   }
   ret.push_back(0);
   return ret;
+}
+
+vector<xyz> pointSeq(vector<Circle> &cl,vector<double> &os)
+{
+  int i;
+  vector<xyz> ret;
+  assert(cl.size()==os.size());
+  for (i=0;i<cl.size();i++)
+    ret.push_back(cl[i].station(os[i]));
+  return ret;
+}
+
+int endDirectionError(spiralarc &a,vector<xyz> &ps)
+/* Starts at the startbearing of a, and returns how much a smooth polyarc
+ * would differ from the endbearing of a, without actually drawing arcs.
+ */
+{
+  int i,bear=a.startbearing();
+  for (i=1;i<ps.size();i++)
+    bear=2*dir(xy(ps[i-1]),xy(ps[i]))-bear;
+  return bear-a.endbearing();
 }
 
 array<int,2> ends(polyarc apx)
