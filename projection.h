@@ -72,6 +72,8 @@ public:
   virtual double scaleFactor(latlong ll)=0;
   ellipsoid *ellip;
   void setBoundary(g1boundary boundary);
+  void setFoot(int which); // see measure.h
+  int getFoot();
   bool in(xyz geoc); // geoc is on the sphere
   bool in(latlong ll);
   bool in(vball v);
@@ -80,6 +82,7 @@ protected:
   double scale;
   polyarc flatBdy;
   int areaSign;
+  int foot;
 };
 
 class LambertConicSphere: public Projection

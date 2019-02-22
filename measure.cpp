@@ -199,6 +199,17 @@ unsigned short basecodes[][2]=
 };
 #define nbasecodes (sizeof(basecodes)/sizeof(basecodes[0]))
 
+int parseFoot(std::string footstr)
+{
+  if (footstr=="INT")
+    return INTERNATIONAL;
+  else if (footstr=="IN")
+    return INSURVEY;
+  else if (footstr=="US")
+    return USSURVEY;
+  else
+    return -1;
+}
 BasePrecision basePrecision(int64_t unitp)
 {
   BasePrecision ret;

@@ -142,6 +142,7 @@ struct BasePrecision
   int power; // -1 means use precisionMagnitude
 };
 
+int parseFoot(std::string footstr);
 BasePrecision basePrecision(int64_t unitp);
 double precision(int64_t unitp);
 

@@ -70,6 +70,19 @@ void Projection::setBoundary(g1boundary boundary)
   areaSign=signbit(flatBdy.area());
 }
 
+void Projection::setFoot(int which)
+/* Sets the foot (international, US survey, or Indian survey)
+ * used in this projection.
+ */
+{
+  foot=which;
+}
+
+int Projection::getFoot()
+{
+  return foot;
+}
+
 bool Projection::in(xyz geoc)
 {
   xy pntproj=sphereStereoArabianSea.geocentricToGrid(geoc);
@@ -1003,12 +1016,37 @@ Projection *readProjection(istream &file)
       //ret=readObliqueMercator(file);
       break;
   }
-  line=getLineBackslash(file);
-  colonpos=line.find(':');
-  tag=line.substr(0,colonpos);
-  value=line.substr(colonpos+1);
-  if (ret && tag=="Boundary")
-    ret->setBoundary(parseBoundary(value));
+  fieldsSeen=0;
+  while (fieldsSeen!=3 && (fieldsSeen&0x10)==0)
+  {
+    line=getLineBackslash(file);
+    hashpos=line.find('#');
+    if (hashpos==0)
+      line="";
+    if (line=="")
+      fieldsSeen|=16; // blank line when some but not all fields are seen is invalid
+    else
+    {
+      colonpos=line.find(':');
+      if (colonpos>line.length())
+	fieldsSeen=-1;
+      else
+      {
+	tag=line.substr(0,colonpos);
+	value=line.substr(colonpos+1);
+	if (ret && tag=="Boundary")
+	{
+	  ret->setBoundary(parseBoundary(value));
+	  fieldsSeen|=1;
+	}
+	else if (ret && tag=="Foot")
+	{
+	  ret->setFoot(parseFoot(value));
+	  fieldsSeen|=3;
+	}
+      }
+    }
+  }
   return ret;
 }
 
