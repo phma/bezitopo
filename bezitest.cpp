@@ -3933,6 +3933,40 @@ void testderivs()
   tassert(paravertex(para1)==0.5);
 }
 
+void out1stlnum(int n)
+// Max length: 216 (7776000) 14 (including space).
+{
+  string nstr=to_string(n),snstr=to_string(stltable[n]);
+  while (nstr.length()<3)
+    nstr=' '+nstr;
+  snstr=" ("+snstr+')';
+  while (snstr.length()<11)
+    snstr=snstr+' ';
+  cout<<nstr<<snstr;
+}
+
+void test1adjstl(array<int,3> stlSplit,array<int,3> stlMin,array<int,3> stlAdj)
+{
+  array<int,3> result=adjustStlSplit(stlSplit,stlMin);
+  int i;
+  bool equal=true;
+  for (i=0;i<3;i++)
+    equal=equal && result[i]==stlAdj[i];
+  tassert(equal);
+  if (!equal)
+  {
+    cout<<"   stlSplit     stlMin     Actual result   Should be\n";
+    for (i=0;i<3;i++)
+    {
+      out1stlnum(stlSplit[i]);
+      out1stlnum(stlMin[i]);
+      out1stlnum(result[i]);
+      out1stlnum(stlAdj[i]);
+      cout<<endl;
+    }
+  }
+}
+
 void teststl()
 {
   stltriangle stltri;
@@ -3942,8 +3976,13 @@ void teststl()
   array<int,3> stlMin1={49,51,36}; // 243,256,125
   array<int,3> stlMin2={30,37,36}; // 81,128,125
   array<int,3> stlMin3={49,42,36}; // 243,162,125
+  array<int,3> stlMin4={49,43,36}; // 243,180,125
   array<int,3> stlSplit0={0,0,0}; // 1,1,1
-  array<int,3> stlAdj;
+  array<int,3> stlAdj00={18,18,18};
+  array<int,3> stlAdj01={51,51,51};
+  array<int,3> stlAdj02={37,37,37};
+  array<int,3> stlAdj03={56,42,42};
+  array<int,3> stlAdj04={49,49,49};
   for (i=0;i<216;i++)
   {
     stltablefile<<setw(9)<<stltable[i];
@@ -3960,14 +3999,11 @@ void teststl()
   doc.pl[1].setgradient();
   doc.pl[1].makeqindex();
   stltri=stltriangle(doc.pl[1].points[1],doc.pl[1].points[3],doc.pl[1].points[3]);
-  stlAdj=adjustStlSplit(stlSplit0,stlMin0);
-  cout<<stltable[stlAdj[0]]<<' '<<stltable[stlAdj[1]]<<' '<<stltable[stlAdj[2]]<<'\n';
-  stlAdj=adjustStlSplit(stlSplit0,stlMin1);
-  cout<<stltable[stlAdj[0]]<<' '<<stltable[stlAdj[1]]<<' '<<stltable[stlAdj[2]]<<'\n';
-  stlAdj=adjustStlSplit(stlSplit0,stlMin2);
-  cout<<stltable[stlAdj[0]]<<' '<<stltable[stlAdj[1]]<<' '<<stltable[stlAdj[2]]<<'\n';
-  stlAdj=adjustStlSplit(stlSplit0,stlMin3);
-  cout<<stltable[stlAdj[0]]<<' '<<stltable[stlAdj[1]]<<' '<<stltable[stlAdj[2]]<<'\n';
+  test1adjstl(stlSplit0,stlMin0,stlAdj00);
+  test1adjstl(stlSplit0,stlMin1,stlAdj01);
+  test1adjstl(stlSplit0,stlMin2,stlAdj02);
+  test1adjstl(stlSplit0,stlMin3,stlAdj03);
+  test1adjstl(stlSplit0,stlMin4,stlAdj04);
 }
 
 void testdirbound()
