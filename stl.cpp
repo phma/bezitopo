@@ -74,6 +74,44 @@ void initStlTable()
   }
 }
 
+int64_t stlProd(int i,int j,int k)
+/* Returns the number of STL triangles in a triangle so subdivided.
+ * Args are in [0..216). The maximum possible output is 0x36fe60f10000.
+ */
+{
+  if (i<k)
+    swap(i,k);
+  return (int64_t)stltable[i]*stltable[j];
+}
+
+bool stlValid(int i,int j,int k)
+{
+  if (i<j)
+    swap(i,j);
+  if (i<k)
+    swap(i,k);
+  return (j==k && stltable[i]%stltable[j]==0);
+}
+
+array<int,3> adjustStlSplit(array<int,3> stlSplit,array<int,3> stlMin)
+{
+  array<int,3> ret,inx;
+  int64_t meshFaces,leastMeshFaces=64000000000000;
+  for (inx[0]=stlMin[0];inx[0]<216;inx[0]++)
+    for (inx[1]=stlMin[1];inx[1]<216;inx[1]++)
+      for (inx[2]=max(min(inx[0],inx[1]),stlMin[2]);inx[2]<((inx[0]==inx[1])?216:max(inx[0],inx[1])+1);inx[2]++)
+	if (stlValid(inx[0],inx[1],inx[2]))
+	{
+	  meshFaces=stlProd(inx[0],inx[1],inx[2]);
+	  if (meshFaces<leastMeshFaces)
+	  {
+	    leastMeshFaces=meshFaces;
+	    ret=inx;
+	  }
+	}
+  return ret;
+}
+
 stltriangle::stltriangle()
 {
   normal=a=b=c=xyz(0,0,0);

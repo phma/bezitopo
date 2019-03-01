@@ -3936,6 +3936,11 @@ void testderivs()
 void teststl()
 {
   stltriangle stltri;
+  array<int,3> stlMin0={15,16,18}; // 25,27,32
+  array<int,3> stlMin1={49,51,36}; // 243,256,125
+  array<int,3> stlMin2={30,37,36}; // 81,128,125
+  array<int,3> stlSplit0={0,0,0}; // 1,1,1
+  array<int,3> stlAdj;
   doc.makepointlist(1);
   doc.pl[1].clear();
   setsurface(HYPAR);
@@ -3946,6 +3951,8 @@ void teststl()
   doc.pl[1].setgradient();
   doc.pl[1].makeqindex();
   stltri=stltriangle(doc.pl[1].points[1],doc.pl[1].points[3],doc.pl[1].points[3]);
+  stlAdj=adjustStlSplit(stlSplit0,stlMin0);
+  cout<<stltable[stlAdj[0]]<<' '<<stltable[stlAdj[1]]<<' '<<stltable[stlAdj[2]]<<'\n';
 }
 
 void testdirbound()
