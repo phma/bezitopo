@@ -28,7 +28,7 @@ using namespace std;
  * The bottom is a convex polygon which is triangulated. The sides are
  * trapezoids, each of which is drawn as two triangles. The top is the
  * TIN surface. Each edge is split into some number of pieces which is a
- * power of 2, enough to make it smooth at the printing scale, then some
+ * 5-smooth number, enough to make it smooth at the printing scale, then some
  * are split into more pieces because every triangle must have one side that
  * is split into a number of pieces that is a multiple of the number of
  * pieces that the other two sides are split into, which must be equal.
