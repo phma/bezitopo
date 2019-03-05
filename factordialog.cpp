@@ -3,7 +3,7 @@
 /* factordialog.cpp - scale factor dialog             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018 Pierre Abbat.
+/* Copyright 2018,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -307,7 +307,14 @@ void GridFactorDialog::updateGridCoordsStr(QString text)
 
 void GridFactorDialog::updateGridCoords()
 {
-  gridCoords=doc->ms.parseXy(gridCoordsStr);
+  try
+  {
+    gridCoords=doc->ms.parseXy(gridCoordsStr);
+  }
+  catch (...)
+  {
+    gridCoords=nanxy;
+  }
   cout<<doc->ms.formatMeasurementUnit(gridCoords.east(),LENGTH)<<','
       <<doc->ms.formatMeasurementUnit(gridCoords.north(),LENGTH)<<endl;
   updateOutput();
