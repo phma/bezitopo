@@ -3,7 +3,7 @@
 /* measure.cpp - measuring units                      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2018 Pierre Abbat.
+/* Copyright 2012,2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -261,6 +261,25 @@ double precision(int64_t unitp)
   for (p=1,i=0;i<exp;i++)
     p*=base;
   return p;
+}
+
+bool isUnitSubstring(std::string str,int64_t unit)
+/* Returns true if str is a substring of any unit symbol of the given
+ * physical quantity. Used in the validator for partially written
+ * grid coordinates.
+ */
+{
+  int i;
+  bool ret=false;
+  string symb;
+  for (i=0;i<nsymbols;i++)
+    if (unit==0 || compatibleUnits(unit,symbols[i].unitp))
+    {
+      symb=symbols[i].symb;
+      if (symb.find(str)<=symb.length())
+	ret=true;
+    }
+  return ret;
 }
 
 int64_t moreprecise(int64_t unitp1,int64_t unitp2)

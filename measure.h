@@ -3,7 +3,7 @@
 /* measure.h - measuring units                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2018 Pierre Abbat.
+/* Copyright 2012,2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -145,6 +145,7 @@ struct BasePrecision
 int parseFoot(std::string footstr);
 BasePrecision basePrecision(int64_t unitp);
 double precision(int64_t unitp);
+bool isUnitSubstring(std::string str,int64_t unit);
 
 struct Measurement
 {
