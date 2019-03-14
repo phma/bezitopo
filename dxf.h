@@ -67,6 +67,8 @@ public:
 
 GroupCode readDxfText(std::istream &file);
 GroupCode readDxfBinary(std::istream &file);
+void writeDxfText(std::ostream &file,GroupCode code);
+void writeDxfBinary(std::ostream &file,GroupCode code);
 std::vector<GroupCode> readDxfGroups(std::istream &file,bool mode);
 std::vector<GroupCode> readDxfGroups(std::string filename);
 std::vector<std::array<xyz,3> > extractTriangles(std::vector<GroupCode> dxfData);

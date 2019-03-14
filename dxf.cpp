@@ -24,6 +24,7 @@
 #include "dxf.h"
 #include "binio.h"
 #include "textfile.h"
+#include "ldecimal.h"
 using namespace std;
 
 TagRange tagTable[]=
@@ -188,10 +189,27 @@ long long hexDecodeInt(string str)
   {
     ch=str[i];
     if (ch>'_')
-      ch&=0xdf;
+      ch&=0xdf; // convert abcdef to ABCDEF
     if (ch>'9')
       ch-='A'-('9'+1);
     ret=(ret<<4)+(ch-'0');
+  }
+  return ret;
+}
+
+string hexEncodeInt(long long num)
+{
+  bool nonzero=false;
+  char nybble;
+  int i;
+  string ret;
+  for (i=28;i>=0;i-=4)
+  {
+    nybble=(num>>i)&15;
+    if (nybble)
+      nonzero=true;
+    if (nonzero || !i)
+      ret+=(nybble>9)?(nybble+'0'):(nybble+'A'-10);
   }
   return ret;
 }
@@ -211,6 +229,22 @@ string hexDecodeString(string str)
     byte=(byte<<4)+(ch-'0');
     if (i&1)
       ret+=byte;
+  }
+  return ret;
+}
+
+string hexEncodeString(string str)
+{
+  int i,ch;
+  char nybble;
+  string ret;
+  for (i=0;i<str.length();i++)
+  {
+    ch=str[i];
+    nybble=(ch>>4)&15;
+    ret+=(nybble>9)?(nybble+'0'):(nybble+'A'-10);
+    nybble=ch&15;
+    ret+=(nybble>9)?(nybble+'0'):(nybble+'A'-10);
   }
   return ret;
 }
@@ -268,7 +302,7 @@ GroupCode readDxfBinary(istream &file)
     ret=GroupCode(tag);
     switch (tagFormat(ret.tag))
     {
-      case 1: // bools are stored in text as numbers
+      case 1:
 	ret.flag=file.get();
 	break;
       case 2:
@@ -295,6 +329,68 @@ GroupCode readDxfBinary(istream &file)
     }
   }
   return ret;
+}
+
+void writeDxfText(std::ostream &file,GroupCode code)
+{
+  string tagstr,datastr;
+  tagstr=to_string(code.tag);
+  switch(tagFormat(code.tag))
+  {
+    case 1: // bools are stored in text as numbers
+      datastr=to_string((int)code.flag);
+      break;
+    case 2:
+    case 4:
+    case 8:
+      datastr=to_string(code.integer);
+      break;
+    case 72:
+      datastr=ldecimal(code.real);
+      break;
+    case 128:
+      datastr=code.str;
+      break;
+    case 129:
+      datastr=hexEncodeString(code.str);
+      break;
+    case 132:
+      datastr=hexEncodeInt(code.integer);
+      break;
+  }
+  file<<tagstr<<'\n'<<datastr<<'\n';
+}
+
+void writeDxfBinary(std::ostream &file,GroupCode code)
+{
+  writeleshort(file,code.tag);
+  switch(tagFormat(code.tag))
+  {
+    case 1:
+      file.put(code.flag);
+      break;
+    case 2:
+      writeleshort(file,code.integer);
+      break;
+    case 4:
+      writeleint(file,code.integer);
+      break;
+    case 8:
+      writelelong(file,code.integer);
+      break;
+    case 72:
+      writeledouble(file,code.real);
+      break;
+    case 128:
+      writeustring(file,code.str);
+      break;
+    case 129:
+      writeustring(file,hexEncodeString(code.str));
+      break;
+    case 132:
+      writeustring(file,hexEncodeInt(code.integer));
+      break;
+  }
 }
 
 bool readDxfMagic(istream &file)
