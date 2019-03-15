@@ -410,6 +410,11 @@ bool readDxfMagic(istream &file)
   return (file.good() && !strcmp(buf,"\r\n\032"));
 }
 
+void writeDxfMagic(ostream &file)
+{
+  file<<"DXF\r\n\032"<<'\0';
+}
+
 vector<GroupCode> readDxfGroups(istream &file,bool mode)
 // mode is true for text.
 {
@@ -435,6 +440,18 @@ vector<GroupCode> readDxfGroups(istream &file,bool mode)
     }
   }
   return ret;
+}
+
+void writeDxfGroups(ostream &file,vector<GroupCode> &codes,bool mode)
+{
+  int i;
+  if (!mode)
+    writeDxfMagic(file);
+  for (i=0;i<codes.size();i++)
+    if (mode)
+      writeDxfText(file,codes[i]);
+    else
+      writeDxfBinary(file,codes[i]);
 }
 
 vector<GroupCode> readDxfGroups(string filename)
