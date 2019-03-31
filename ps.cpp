@@ -308,9 +308,16 @@ void PostScript::circle(xy pnt,double radius)
     <<ldecimal(radius*radius,radius*radius/1000)<<endl;
 }
 
-void PostScript::line(edge lin,int num,bool colorfibaster,bool directed)
+void PostScript::line(edge lin,int num,int colorwhat,bool directed)
 /* Used in bezitest to show the 2D TIN before the 3D triangles are constructed on it.
  * In bezitopo, use spline(lin.getsegment().approx3d(x)) to show it in 3D.
+ *
+ * If colorwhat is
+ * 0: color is black if an edge needs to be flipped, else blue.
+ * 1: the difference between point numbers is a Fibonacci number, and line is
+ *    colored according to which Fibonacci number it is.
+ * 2: the line is colored as in 0, and orange (2), green (3), and blue (5) dots
+ *    are placed on it to show how many pieces it's split into for STL.
  */
 {
   xy mid,disp,base,ab1,ab2,a,b;
@@ -320,7 +327,7 @@ void PostScript::line(edge lin,int num,bool colorfibaster,bool directed)
   a=turn(a,orientation);
   b=turn(b,orientation);
   if (lin.delaunay())
-    if (colorfibaster)
+    if (colorwhat==1)
       switch (fibmod3(abs(pl->revpoints[lin.a]-pl->revpoints[lin.b])))
       {
 	case -1:
