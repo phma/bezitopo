@@ -4279,7 +4279,7 @@ bool before(xy a1,xy a2,xy a3,xy b1,xy b2,xy b3)
   int adir,bdir,avgdir,xdir;
   adir=dir(a1,a3);
   bdir=dir(b1,b3);
-  avgdir=adir+(bdir-adir)/2;
+  avgdir=adir+foldangle(bdir-adir)/2;
   xdir=dir(a2,b2);
   return cos(xdir-avgdir)>0;
 }
