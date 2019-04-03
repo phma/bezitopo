@@ -4270,6 +4270,14 @@ void testpolyline()
   bendlimit=DEG120;
 }
 
+void testalignment()
+{
+  alignment al0,al1;
+  tassert(al0.length()==0);
+  tassert(std::isnan(al0.startStation()));
+  tassert(std::isnan(al0.endStation()));
+}
+
 bool before(xy a1,xy a2,xy a3,xy b1,xy b2,xy b3)
 /* Returns true if a2 is nearer along than b2.
  * They are on different curves, so this isn't totally well-defined,
@@ -7579,6 +7587,8 @@ int main(int argc, char *argv[])
     testhalton(); // 2.5 s
   if (shoulddo("polyline"))
     testpolyline();
+  if (shoulddo("alignment"))
+    testalignment();
   if (shoulddo("bezier3d"))
     testbezier3d();
   if (shoulddo("angleconv"))

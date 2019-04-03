@@ -180,6 +180,7 @@ public:
   void clear();
   double startStation();
   double endStation();
+  double length();
   void appendPoint(xy pnt);
   void prependPoint(xy pnt);
   void appendTangentCurve(double startCurvature,double length,double endCurvature);

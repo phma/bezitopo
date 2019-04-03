@@ -1187,12 +1187,17 @@ void alignment::clear()
 
 double alignment::startStation()
 {
-  return cumLengths[0];
+  return cumLengths.size()?cumLengths[0]:NAN;
 }
 
 double alignment::endStation()
 {
-  return cumLengths.back();
+  return cumLengths.size()?cumLengths.back():NAN;
+}
+
+double alignment::length()
+{
+  return cumLengths.size()?cumLengths.back()-cumLengths[0]:0;
 }
 
 void alignment::appendPoint(xy pnt)
