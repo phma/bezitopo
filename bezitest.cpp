@@ -4276,6 +4276,14 @@ void testalignment()
   tassert(al0.length()==0);
   tassert(std::isnan(al0.startStation()));
   tassert(std::isnan(al0.endStation()));
+  al0.appendPoint(xy(3,4));
+  tassert(al0.length()==0);
+  tassert(al0.startStation()==0);
+  tassert(al0.endStation()==0);
+  al0.prependPoint(xy(0,0));
+  tassert(al0.length()==5);
+  tassert(al0.startStation()==-5);
+  tassert(al0.endStation()==0);
 }
 
 bool before(xy a1,xy a2,xy a3,xy b1,xy b2,xy b3)
