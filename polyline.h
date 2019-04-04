@@ -196,6 +196,8 @@ public:
   double slope(double along);
   double curvature(double along);
   double accel(double along);
+  double clothance(double along);
+  double jerk(double along);
 };
 
 #endif

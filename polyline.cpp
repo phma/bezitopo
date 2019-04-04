@@ -1454,3 +1454,21 @@ double alignment::accel(double along)
   else
     return getVerticalCurve(seg).accel(along-cumLengths[seg]);
 }
+
+double alignment::clothance(double along)
+{
+  int seg=xyStationSegment(along);
+  if (seg<0 || seg>=hLengths.size())
+    return NAN;
+  else
+    return getHorizontalCurve(seg).clothance();
+}
+
+double alignment::jerk(double along)
+{
+  int seg=zStationSegment(along);
+  if (seg<0 || seg>=hLengths.size())
+    return NAN;
+  else
+    return getVerticalCurve(seg).jerk();
+}

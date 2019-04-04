@@ -139,6 +139,11 @@ double segment::endslope()
   return (end.elev()-control2)*3/length();
 }
 
+double segment::jerk()
+{
+  return (endslope()-startslope())/length();
+}
+
 xyz segment::station(double along) const
 {
   double gnola,len;
