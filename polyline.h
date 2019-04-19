@@ -187,6 +187,7 @@ public:
   void prependTangentCurve(double startCurvature,double length,double endCurvature);
   spiralarc getHorizontalCurve(int i);
   segment getVerticalCurve(int i);
+  spiralarc getCurve(int i);
   void setStartStation(double along);
   void setHLengths();
   xy xyStation(double along);

@@ -1310,6 +1310,40 @@ segment alignment::getVerticalCurve(int i)
 		 xyz(vCumLengths[i+1],0,controlPoints[i*3+3]));
 }
 
+spiralarc alignment::getCurve(int i)
+{
+  xyz startpoint,midpoint,endpoint;
+  int bea;
+  double slo,cur,acc,clo,jer;
+  double midalong,len;
+  spiralarc ret;
+  i%=lengths.size();
+  if (i<0)
+    i+=lengths.size();
+  midalong=(cumLengths[i+1]+cumLengths[i])/2;
+  len=cumLengths[i+1]-cumLengths[i];
+  /* An alignment is continuous, and usually smooth, but it may be only
+   * piecewise smooth. A spiralarc has its bearing, curvature, and clothance
+   * set at its middle, but its slope, acceleration, and jerk are set with
+   * control points at 1/3 and 2/3 of its length. Since the slope at the ends
+   * may not be equal to the slope just past the ends, we must compute them
+   * from the derivatives at the middle.
+   */
+  bea=bearing(midalong);
+  slo=slope(midalong);
+  cur=curvature(midalong);
+  acc=accel(midalong);
+  clo=clothance(midalong);
+  jer=jerk(midalong);
+  startpoint=station(cumLengths[i]);
+  midpoint=station(midalong);
+  endpoint=station(cumLengths[i+1]);
+  ret=spiralarc(startpoint,midpoint,endpoint,bea,cur,clo,len);
+  ret.setslope(START,slo-acc*len/2+jer*sqr(len)/8);
+  ret.setslope(END,slo+acc*len/2+jer*sqr(len)/8);
+  return ret;
+}
+
 void alignment::setStartStation(double along)
 {
   int i;
