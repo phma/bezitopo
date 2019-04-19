@@ -181,6 +181,7 @@ public:
   double startStation();
   double endStation();
   double length();
+  virtual unsigned hash();
   void appendPoint(xy pnt);
   void prependPoint(xy pnt);
   void appendTangentCurve(double startCurvature,double length,double endCurvature);

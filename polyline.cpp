@@ -1200,6 +1200,19 @@ double alignment::length()
   return cumLengths.size()?cumLengths.back()-cumLengths[0]:0;
 }
 
+unsigned alignment::hash()
+{
+  return memHash(&cumLengths[0],cumLengths.size()*sizeof(double),
+         memHash(&controlPoints[0],controlPoints.size()*sizeof(double),
+         memHash(&curvatures[0],curvatures.size()*sizeof(double),
+         memHash(&clothances[0],clothances.size()*sizeof(double),
+         memHash(&midpoints[0],midpoints.size()*sizeof(xy),
+         memHash(&midbearings[0],midbearings.size()*sizeof(int),
+         memHash(&delta2s[0],delta2s.size()*sizeof(int),
+         memHash(&deltas[0],deltas.size()*sizeof(int),
+         memHash(&endpoints[0],endpoints.size()*sizeof(xy))))))))));
+}
+
 void alignment::appendPoint(xy pnt)
 {
   xy last;
