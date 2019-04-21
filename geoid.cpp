@@ -364,6 +364,16 @@ bool geoquad::isnan()
   return und[0]>8850*65536 || und[0]<-11000*65536;
 }
 
+bool geoquad::isValidLeaf()
+{
+  bool ret=true;
+  int i;
+  for (i=1;i<6;i++)
+    if (und[i]>8850*65536 || und[i]<-11000*65536)
+      ret=false;
+  return ret;
+}
+
 geoquad::geoquad()
 {
   int i;
@@ -833,6 +843,8 @@ void geoquad::readBinary(istream &ifile,int nesting)
     if (!isnan())
       for (i=1;i<6;i++)
 	und[i]=readgeint(ifile);
+    if (!isValidLeaf())
+      throw badData;
   }
 }
 

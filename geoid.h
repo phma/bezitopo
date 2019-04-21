@@ -83,6 +83,7 @@ public:
 #endif
   bool subdivided() const;
   bool isnan();
+  bool isValidLeaf();
   geoquad();
   ~geoquad();
   geoquad(const geoquad& b);
