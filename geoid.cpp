@@ -1143,6 +1143,21 @@ array<int,5> cubemap::undhisto()
   return ret;
 }
 
+bool geoheader::sane()
+/* Sanity check for some conditions, uncovered by fuzzing, that can result
+ * in outer-space loops when processing boldatni files.
+ */
+{
+  return planet==0 &&
+    dataType==0 &&
+    ncomponents==1 &&
+    xComponentBits==0 &&
+    logScale>-32 && logScale<16 &&
+    tolerance>ldexp(0.25,logScale) && tolerance<8850 &&
+    sublimit>=0.001 && sublimit<EARTHRAD &&
+    spacing>=0.001 && spacing<EARTHRAD;
+}
+
 void geoheader::writeBinary(std::ostream &ofile)
 {
   int i;
@@ -1187,6 +1202,8 @@ void geoheader::readBinary(std::istream &ifile)
   spacing=readbedouble(ifile);
   nstrings=readbeshort(ifile);
   namesFormats.clear();
+  if (!sane())
+    throw badHeader;
   for (i=0;i<nstrings;i++)
     namesFormats.push_back(readustring(ifile));
 }

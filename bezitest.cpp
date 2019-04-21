@@ -6940,6 +6940,7 @@ void testgeoid()
   hdr.dataType=BOL_UNDULATION;
   hdr.encoding=BOL_VARLENGTH;
   hdr.ncomponents=1;
+  hdr.xComponentBits=0;
   hdr.tolerance=0.1;
   hdr.sublimit=1000;
   hdr.spacing=1e5;

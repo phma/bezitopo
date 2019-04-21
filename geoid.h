@@ -167,6 +167,7 @@ struct geoheader
   double sublimit;
   double spacing;
   std::vector<std::string> namesFormats;
+  bool sane();
   void writeBinary(std::ostream &ofile);
   void readBinary(std::istream &ifile);
 };
