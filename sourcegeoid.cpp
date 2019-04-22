@@ -623,6 +623,7 @@ int readusngabin(geolattice &geo,string filename)
           if (j==0)
             firstund=und;
 	  geo.undula.push_back(und);
+	  file.peek();
         }
         geo.undula.push_back(firstund);
         linelen1=endian?readbeint(file):readleint(file);
