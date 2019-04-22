@@ -6527,6 +6527,7 @@ void testgeoidboundary()
   outgd.ghdr->dataType=BOL_UNDULATION;
   outgd.ghdr->encoding=BOL_VARLENGTH;
   outgd.ghdr->ncomponents=1;
+  outgd.ghdr->xComponentBits=0;
   outgd.ghdr->tolerance=0.003;
   outgd.ghdr->sublimit=1000;
   outgd.ghdr->spacing=1e5;
@@ -6622,6 +6623,7 @@ void testvballgeoid()
   outgd.ghdr->dataType=BOL_UNDULATION;
   outgd.ghdr->encoding=BOL_VARLENGTH;
   outgd.ghdr->ncomponents=1;
+  outgd.ghdr->xComponentBits=0;
   outgd.ghdr->tolerance=0.003;
   outgd.ghdr->sublimit=1000;
   outgd.ghdr->spacing=1e5;
