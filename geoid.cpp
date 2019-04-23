@@ -112,8 +112,8 @@ void cylinterval::round(int latfineness,int lonfineness)
  * result in extra columns or rows of NaN at the border.
  */
 {
-  sbd=rottobin(rint(bintorot(sbd)*2*latfineness)/2/latfineness);
-  nbd=rottobin(rint(bintorot(nbd)*2*latfineness)/2/latfineness);
+  sbd=rottobin(rint(bintorot(sbd+DEG90)*2*latfineness)/2/latfineness)-DEG90;
+  nbd=rottobin(rint(bintorot(nbd-DEG90)*2*latfineness)/2/latfineness)+DEG90;
   wbd=rottobin(rint(bintorot(wbd)*2*lonfineness)/2/lonfineness);
   ebd=rottobin(rint(bintorot(ebd)*2*lonfineness)/2/lonfineness);
 }
