@@ -314,7 +314,7 @@ bool sanitycheck(carlsongsfheader &hdr)
   latsane=hdr.south<hdr.north;
   nlatsane=hdr.nlat>0 && hdr.nlat<=2000000;
   nlongsane=hdr.nlong>0 && hdr.nlong<=4000000;
-  return ssane && wsane && latsane && nlatsane && nlongsane;
+  return ssane && wsane && nsane && esane && latsane && nlatsane && nlongsane;
 }
 
 bool sanitycheck(usngatxtheader &hdr)
@@ -326,7 +326,7 @@ bool sanitycheck(usngatxtheader &hdr)
   esane=hdr.east>-360.0001 && hdr.east<360.0001 && (hdr.east==0 || fabs(hdr.east)>0.000001);
   latsane=hdr.south<hdr.north && hdr.latspace>0.000001 && hdr.latspace<190;
   longsane=hdr.longspace>0.000001 && hdr.longspace<190;
-  return ssane && wsane && latsane && longsane;
+  return ssane && wsane && nsane && esane && latsane && longsane;
 }
 
 void geolattice::resize()
@@ -405,13 +405,17 @@ void geolattice::cvtheader(carlsongsfheader &hdr)
 
 void geolattice::setheader(usngatxtheader &hdr)
 {
+  double around=0;
   sbd=degtobin(hdr.south);
   wbd=degtobin(hdr.west);
   nbd=degtobin(hdr.north);
   ebd=degtobin(hdr.east);
   if (wbd-ebd>=0)
+  {
     ebd+=DEG360;
-  width=rint((hdr.east-hdr.west)/hdr.longspace);
+    around=360;
+  }
+  width=rint((around+hdr.east-hdr.west)/hdr.longspace);
   height=rint((hdr.north-hdr.south)/hdr.latspace);
   resize();
 }
