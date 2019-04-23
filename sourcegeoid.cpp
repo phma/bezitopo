@@ -331,6 +331,8 @@ bool sanitycheck(usngatxtheader &hdr)
 
 void geolattice::resize()
 {
+  if (((size_t)width+1)*((size_t)height+1)!=(width+1)*(height+1))
+    throw badHeader;
   undula.resize((width+1)*(height+1));
   eslope.resize((width+1)*(height+1));
   nslope.resize((width+1)*(height+1));
@@ -832,11 +834,19 @@ int readusngsbin(geolattice &geo,string filename)
       cout<<"South "<<hdr.south<<" West "<<hdr.west<<endl;
       cout<<"Latitude spacing "<<hdr.latspace<<" Longitude spacing "<<hdr.longspace<<endl;
       cout<<"Rows "<<hdr.nlat<<" Columns "<<hdr.nlong<<endl;
-      geo.setheader(hdr);
+      try
+      {
+	geo.setheader(hdr);
+      }
+      catch (...)
+      {
+	ret=1;
+	geo.height=geo.width=-1;
+      }
       for (i=0;i<geo.height+1;i++)
 	for (j=0;j<geo.width+1;j++)
 	  geo.undula[i*(geo.width+1)+j]=rint(65536*(bigendian?readbefloat(file):readlefloat(file)));
-      if (file.fail())
+      if (file.fail() || geo.height<0)
 	ret=1;
       else
       {
