@@ -76,7 +76,7 @@ public:
   void cvtheader(usngsheader &hdr);
   void setheader(carlsongsfheader &hdr,size_t dataSize);
   void cvtheader(carlsongsfheader &hdr);
-  void setheader(usngatxtheader &hdr);
+  void setheader(usngatxtheader &hdr,size_t dataSize);
   void cvtheader(usngatxtheader &hdr);
   void settest();
   void dump();

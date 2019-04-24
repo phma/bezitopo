@@ -408,7 +408,7 @@ void geolattice::cvtheader(carlsongsfheader &hdr)
   hdr.nlat=height;
 }
 
-void geolattice::setheader(usngatxtheader &hdr)
+void geolattice::setheader(usngatxtheader &hdr,size_t dataSize)
 {
   double around=0;
   sbd=degtobin(hdr.south);
@@ -533,9 +533,9 @@ int readusngatxt(geolattice &geo,string filename)
       cout<<"South "<<hdr.south<<" West "<<hdr.west<<endl;
       cout<<"North "<<hdr.north<<" East "<<hdr.east<<endl;
       cout<<"Latitude spacing "<<hdr.latspace<<" Longitude spacing "<<hdr.longspace<<endl;
-      geo.setheader(hdr);
       try
       {
+	geo.setheader(hdr,fileSize(file)/2);
         for (i=0;i<geo.height+1;i++)
           for (j=0;j<geo.width+1;j++)
             geo.undula[(geo.height-i)*(geo.width+1)+j]=rint(65536*(readdouble(file)));
