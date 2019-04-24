@@ -3,7 +3,7 @@
 /* binio.cpp - binary input/output                    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2018 Pierre Abbat.
+/* Copyright 2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -38,7 +38,17 @@ void endianflip(void *addr,int n)
   }
 }
 
-void writebeshort(std::ostream &file,short i)
+streamsize fileSize(istream &file)
+{
+  streamsize pos,ret;
+  pos=file.tellg();
+  file.seekg(0,file.end);
+  ret=file.tellg();
+  file.seekg(pos,file.beg);
+  return ret;
+}
+
+void writebeshort(ostream &file,short i)
 {
   char buf[2];
   *(short *)buf=i;

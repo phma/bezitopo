@@ -329,9 +329,12 @@ bool sanitycheck(usngatxtheader &hdr)
   return ssane && wsane && nsane && esane && latsane && longsane;
 }
 
-void geolattice::resize()
+void geolattice::resize(size_t dataSize)
+// dataSize is the largest number of data that can be in the file, given its size.
 {
   if (((size_t)width+1)*((size_t)height+1)!=(width+1)*(height+1))
+    throw badHeader;
+  if (dataSize<((size_t)width+1)*((size_t)height+1))
     throw badHeader;
   undula.resize((width+1)*(height+1));
   eslope.resize((width+1)*(height+1));
@@ -378,7 +381,7 @@ void geolattice::setbound(cylinterval bound)
   ebd=bound.ebd;
 }
 
-void geolattice::setheader(carlsongsfheader &hdr)
+void geolattice::setheader(carlsongsfheader &hdr,size_t dataSize)
 {
   sbd=degtobin(hdr.south);
   wbd=degtobin(hdr.west);
@@ -388,7 +391,7 @@ void geolattice::setheader(carlsongsfheader &hdr)
     ebd+=DEG360;
   width=hdr.nlong;
   height=hdr.nlat;
-  resize();
+  resize(dataSize);
 }
 
 void geolattice::cvtheader(carlsongsfheader &hdr)
@@ -737,9 +740,9 @@ int readcarlsongsf(geolattice &geo,string filename)
       cout<<"South "<<hdr.south<<" West "<<hdr.west<<endl;
       cout<<"North "<<hdr.north<<" East "<<hdr.east<<endl;
       cout<<"Rows "<<hdr.nlat<<" Columns "<<hdr.nlong<<endl;
-      geo.setheader(hdr);
       try
       {
+	geo.setheader(hdr,fileSize(file)/2);
         for (i=0;i<geo.height+1;i++)
           for (j=0;j<geo.width+1;j++)
             geo.undula[i*(geo.width+1)+j]=rint(65536*(readdouble(file)));

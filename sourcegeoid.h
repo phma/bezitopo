@@ -69,12 +69,12 @@ public:
   double elev(int lat,int lon);
   double elev(xyz dir);
   void setslopes();
-  void resize();
+  void resize(size_t dataSize=~(size_t)0);
   void setundula();
   void setbound(cylinterval bound);
   void setheader(usngsheader &hdr);
   void cvtheader(usngsheader &hdr);
-  void setheader(carlsongsfheader &hdr);
+  void setheader(carlsongsfheader &hdr,size_t dataSize);
   void cvtheader(carlsongsfheader &hdr);
   void setheader(usngatxtheader &hdr);
   void cvtheader(usngatxtheader &hdr);

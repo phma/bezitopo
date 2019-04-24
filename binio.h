@@ -3,7 +3,7 @@
 /* binio.h - binary input/output                      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2018 Pierre Abbat.
+/* Copyright 2015,2016,2018,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #include <fstream>
 #include <string>
 
+std::streamsize fileSize(std::istream &file);
 void writebeshort(std::ostream &file,short i);
 void writeleshort(std::ostream &file,short i);
 short readbeshort(std::istream &file);
