@@ -51,24 +51,24 @@ add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
             bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
             cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
             ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-            halton.cpp intloop.cpp latlong.cpp ldecimal.cpp
+            halton.cpp intloop.cpp latlong.cpp layer.cpp ldecimal.cpp
             leastsquares.cpp manyarc.cpp manysum.cpp
             matrix.cpp measure.cpp minquad.cpp objlist.cpp penwidth.cpp pnezd.cpp
             point.cpp pointlist.cpp polyline.cpp
             projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
             rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
-            tin.cpp vball.cpp vcurve.cpp)
+            stl.cpp tin.cpp vball.cpp vcurve.cpp)
 add_library(bezilib1 SHARED angle.cpp arc.cpp bezier.cpp
             bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
             cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
             ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-            halton.cpp intloop.cpp latlong.cpp ldecimal.cpp
+            halton.cpp intloop.cpp latlong.cpp layer.cpp ldecimal.cpp
             leastsquares.cpp manyarc.cpp manysum.cpp
             matrix.cpp measure.cpp minquad.cpp objlist.cpp penwidth.cpp pnezd.cpp
             point.cpp pointlist.cpp polyline.cpp
             projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
             rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
-            tin.cpp vball.cpp vcurve.cpp)
+            stl.cpp tin.cpp vball.cpp vcurve.cpp)
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitopo.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp closure.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp cvtmeas.cpp document.cpp
