@@ -4177,6 +4177,7 @@ void testpolyline()
   polyline p;
   polyarc q;
   polyspiral r;
+  PostScript ps;
   xy a(2,1.333),b(1.5,2),c(1.5000000001,2),d(1.499999999,2);
   xy e(3,0),f(3.5,0.5),g(0,4),mid;
   /* a: near centroid; b: center of circle, midpoint of hypot;
@@ -4184,6 +4185,8 @@ void testpolyline()
    * f and g: other points on circle
    */
   cout<<"testpolyline"<<endl;
+  ps.open("polyline.ps");
+  ps.prolog();
   r.smooth(); // sets the curvy flag
   bendlimit=DEG180+7;
   p.insert(xy(0,0));
@@ -4230,6 +4233,12 @@ void testpolyline()
   tassert(fabs(q.area()-M_PI*6.25)<0.0005);
   tassert(fabs(r.length()-M_PI*5)<0.0005);
   tassert(fabs(r.area()-M_PI*6.25)<0.0005);
+  ps.startpage();
+  ps.setscale(-1,-0.5,4,4.5);
+  ps.spline(p.approx3d(0.001));
+  ps.spline(q.approx3d(0.001));
+  ps.spline(r.approx3d(0.001));
+  ps.endpage();
   cout<<q.getarc(0).center().north()<<endl;
   cout<<q.length()<<endl;
   cout<<"p: a "<<p.in(a)<<" b "<<p.in(b)<<" c "<<p.in(c)<<" d "<<p.in(d)
