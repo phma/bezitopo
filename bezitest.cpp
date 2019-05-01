@@ -4174,6 +4174,7 @@ xy intersection(polyline &p,xy start,xy end)
 
 void testpolyline()
 {
+  int i;
   polyline p;
   polyarc q;
   polyspiral r;
@@ -4186,6 +4187,7 @@ void testpolyline()
    */
   cout<<"testpolyline"<<endl;
   ps.open("polyline.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
   r.smooth(); // sets the curvy flag
   bendlimit=DEG180+7;
@@ -4277,6 +4279,15 @@ void testpolyline()
   cout<<"r x b-g ("<<ldecimal(mid.getx())<<','<<ldecimal(mid.gety())<<')'<<endl;
   tassert(dist(g,mid)<1e-8);
   bendlimit=DEG120;
+  r=polyspiral();
+  for (i=0;i<600;i++)
+    r.insert(cossin(i*0xfc1ecd6));
+  r.open();
+  r.smooth();
+  ps.startpage();
+  ps.setscale(-1,-1,1,1);
+  ps.spline(r.approx3d(0.001));
+  ps.endpage();
 }
 
 void testalignment()
