@@ -341,7 +341,7 @@ void geolattice::resize(size_t dataSize)
   nslope.resize((width+1)*(height+1));
 }
 
-void geolattice::setheader(usngsheader &hdr)
+void geolattice::setheader(usngsheader &hdr,size_t dataSize)
 {
   sbd=degtobin(hdr.south);
   wbd=degtobin(hdr.west);
@@ -349,7 +349,7 @@ void geolattice::setheader(usngsheader &hdr)
   ebd=degtobin(hdr.west+(hdr.nlong-1)*hdr.longspace);
   width=hdr.nlong-1;
   height=hdr.nlat-1;
-  resize();
+  resize(dataSize);
 }
 
 void geolattice::cvtheader(usngsheader &hdr)
@@ -422,7 +422,7 @@ void geolattice::setheader(usngatxtheader &hdr,size_t dataSize)
   }
   width=rint((around+hdr.east-hdr.west)/hdr.longspace);
   height=rint((hdr.north-hdr.south)/hdr.latspace);
-  resize();
+  resize(dataSize);
 }
 
 void geolattice::cvtheader(usngatxtheader &hdr)
@@ -839,7 +839,7 @@ int readusngsbin(geolattice &geo,string filename)
       cout<<"Rows "<<hdr.nlat<<" Columns "<<hdr.nlong<<endl;
       try
       {
-	geo.setheader(hdr);
+	geo.setheader(hdr,fileSize(file)/4);
       }
       catch (...)
       {
