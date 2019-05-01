@@ -4281,8 +4281,11 @@ void testpolyline()
   bendlimit=DEG120;
   r=polyspiral();
   for (i=0;i<600;i++)
+  {
     r.insert(cossin(i*0xfc1ecd6));
-  r.open();
+    if (i==0)
+      r.open();
+  }
   r.smooth();
   ps.startpage();
   ps.setscale(-1,-1,1,1);
