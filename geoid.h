@@ -112,7 +112,7 @@ public:
   std::array<vball,4> bounds() const;
   gboundary gbounds();
   void writeBinary(std::ostream &ofile,int nesting=0);
-  void readBinary(std::istream &ifile,int nesting=-1);
+  void readBinary(std::istream &ifile,int nesting=-1,int depth=0);
   void dump(std::ostream &ofile,int nesting=0);
   std::array<int,6> undrange();
   std::array<int,5> undhisto();

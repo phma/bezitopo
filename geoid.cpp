@@ -817,7 +817,7 @@ void geoquad::writeBinary(ostream &ofile,int nesting)
   }
 }
 
-void geoquad::readBinary(istream &ifile,int nesting)
+void geoquad::readBinary(istream &ifile,int nesting,int depth)
 {
   int i;
   clear();
@@ -826,14 +826,14 @@ void geoquad::readBinary(istream &ifile,int nesting)
     nesting=ifile.get();
     //cout<<"Read nesting "<<nesting<<endl;
   }
-  if (nesting<0 || nesting>56)
+  if (nesting<0 || nesting>56 || depth>56)
     throw badData;
   if (nesting>0)
   {
     subdivide();
     for (i=0;i<4;i++)
     {
-      sub[i]->readBinary(ifile,nesting-1);
+      sub[i]->readBinary(ifile,nesting-1,depth+1);
       nesting=0;
     }
   }
