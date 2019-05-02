@@ -1185,8 +1185,10 @@ void geoheader::readBinary(std::istream &ifile)
   int i,nstrings;
   char magic[8]="ABCDEFG";
   ifile.read(magic,8);
+#if FUZZ!=boldatni
   if (memcmp(magic,"boldatni",8))
     throw badHeader;
+#endif
   hash[0]=readbeint(ifile);
   hash[1]=readbeint(ifile);
   origHash[0]=readbeint(ifile);

@@ -26,6 +26,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 set(SHARE_DIR ${CMAKE_INSTALL_PREFIX}/share/bezitopo)
 
+set(FUZZ boldatni)
+#Setting FUZZ to boldatni disables reading all geoid formats except boldatni
+#in convertgeoid and disables the boldatni hash check.
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
