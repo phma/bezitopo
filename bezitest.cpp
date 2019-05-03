@@ -4287,10 +4287,13 @@ void testpolyline()
       r.open();
   }
   r.smooth();
+  r.setlengths();
   ps.startpage();
   ps.setscale(-1,-1,1,1);
   ps.spline(r.approx3d(0.001));
   ps.endpage();
+  for (i=0;i<r.length();i++)
+    tassert(fabs(r.station(i).length()-1)<1e-15);
 }
 
 void testalignment()
