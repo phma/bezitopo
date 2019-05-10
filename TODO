@@ -59,3 +59,4 @@ For later:
 •Add cross-section windows (which require cross-sections) and line/curve/spiral tables (which require drawing text).
 •Add an interior point to a TIN. This will be used to approximate a road surface with a TIN.
 •Make a road intersection object. Its boundary consists of alternating straight lines (which have cross-sections that match those of the roads) and circular arcs (fillets between the roads).
+•Read shapefiles.
