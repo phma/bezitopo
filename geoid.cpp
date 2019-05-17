@@ -3,7 +3,7 @@
 /* geoid.cpp - geoidal undulation                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2018 Pierre Abbat.
+/* Copyright 2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -827,7 +827,7 @@ void geoquad::readBinary(istream &ifile,int nesting,int depth)
     //cout<<"Read nesting "<<nesting<<endl;
   }
   if (nesting<0 || nesting>56 || depth>56)
-    throw badData;
+    throw BeziExcept(badData);
   if (nesting>0)
   {
     subdivide();
@@ -844,7 +844,7 @@ void geoquad::readBinary(istream &ifile,int nesting,int depth)
       for (i=1;i<6;i++)
 	und[i]=readgeint(ifile);
     if (!isValidLeaf())
-      throw badData;
+      throw BeziExcept(badData);
   }
 }
 
@@ -1187,7 +1187,7 @@ void geoheader::readBinary(std::istream &ifile)
   ifile.read(magic,8);
 #if FUZZ!=boldatni
   if (memcmp(magic,"boldatni",8))
-    throw badHeader;
+    throw BeziExcept(badHeader);
 #endif
   hash[0]=readbeint(ifile);
   hash[1]=readbeint(ifile);
@@ -1205,7 +1205,7 @@ void geoheader::readBinary(std::istream &ifile)
   nstrings=readbeshort(ifile);
   namesFormats.clear();
   if (!sane())
-    throw badHeader;
+    throw BeziExcept(badHeader);
   for (i=0;i<nstrings;i++)
     namesFormats.push_back(readustring(ifile));
 }

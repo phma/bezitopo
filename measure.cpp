@@ -669,7 +669,7 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
       if (j<unitStr.size())
 	unitStr[j]+=(char)ch;
       else if (!isspace(ch))
-	throw badNumber;
+	throw BeziExcept(badNumber);
     }
     lastch=ch;
   }
@@ -684,7 +684,7 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
   }
   catch (...)
   {
-    throw badNumber;
+    throw BeziExcept(badNumber);
   }
   /* If the string has multiple unit symbols, like 34°27'18", and they belong
    * to the same physical quantity which does not disagree with quantity, it is
@@ -707,7 +707,7 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
   if (unit.size())
     ret.unit=unit.back();
   else
-    throw badNumber;
+    throw BeziExcept(badNumber);
   conversionFactor=valueInUnit;
   for (i=0;i<unit.size();i++)
     if (physicalUnit(unit[i]))
@@ -724,10 +724,10 @@ Measurement Measure::parseMeasurement(string measStr,int64_t quantity)
   {
     coherentValue.push_back(valueInUnit[i]*conversionFactor[i]);
     if (conversionFactor[i]==0 || (unit[i]>1 && !compatibleUnits(ret.unit,unit[i])))
-      throw badUnits;
+      throw BeziExcept(badUnits);
   }
   if (ret.unit==0 || (quantity>0 && !compatibleUnits(ret.unit,quantity)))
-    throw badUnits;
+    throw BeziExcept(badUnits);
   ret.magnitude=pairwisesum(coherentValue);
   return ret;
 }

@@ -3,7 +3,7 @@
 /* absorient.cpp - 2D absolute orientation            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2018 Pierre Abbat.
+/* Copyright 2015,2018,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -76,7 +76,7 @@ RoscatStruct absorient(vector<xy> a,vector<xy> b)
   double sqdist[4],newang;
   RoscatStruct ret;
   if (a.size()<2 || b.size()<2)
-    throw(badAbsOrient);
+    throw BeziExcept(badAbsOrient);
   ret.tfrom=pointCentroid(a);
   ret.tto=pointCentroid(b);
   for (i=0;i<a.size();i++)
@@ -103,7 +103,7 @@ RoscatStruct absorient(vector<xy> a,vector<xy> b)
   {
     newang=minquad(ang[1],sqdist[1],ang[0],sqdist[0],ang[2],sqdist[2]);
     if (!isfinite(newang))
-      throw badAbsOrient;
+      throw BeziExcept(badAbsOrient);
     ang[3]=rint(newang);
     if (ang[3]==ang[0])
       if (ang[1]+ang[2]-2*ang[0])

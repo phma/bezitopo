@@ -455,7 +455,7 @@ void TopoCanvas::importBreaklines()
           doc.pl[plnum].stringToBreakline(line);
         }
         if (!file.eof())
-          throw fileError;
+          throw BeziExcept(fileError);
         tinValid=surfaceValid=roughContoursValid=smoothContoursValid=false;
         doc.pl[plnum].whichBreak0Valid=1;
       }

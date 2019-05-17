@@ -43,7 +43,7 @@ void document::copytopopoints(int dst,int src)
 {
   ptlist::iterator i;
   if (dst==src || src<0 || src>=pl.size())
-    throw unsetSource;
+    throw BeziExcept(unsetSource);
   makepointlist(dst);
   pl[dst].clear();
   int j;

@@ -3,7 +3,7 @@
 /* sourcegeoid.cpp - geoidal undulation source data   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2018 Pierre Abbat.
+/* Copyright 2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -333,9 +333,9 @@ void geolattice::resize(size_t dataSize)
 // dataSize is the largest number of data that can be in the file, given its size.
 {
   if (((size_t)width+1)*((size_t)height+1)!=(width+1)*(height+1))
-    throw badHeader;
+    throw BeziExcept(badHeader);
   if (dataSize<((size_t)width+1)*((size_t)height+1))
-    throw badHeader;
+    throw BeziExcept(badHeader);
   undula.resize((width+1)*(height+1));
   eslope.resize((width+1)*(height+1));
   nslope.resize((width+1)*(height+1));
@@ -492,7 +492,7 @@ void readusngatxtheader(usngatxtheader &hdr,istream &file)
   }
   catch (...)
   {
-    throw badHeader;
+    throw BeziExcept(badHeader);
   }
 }
 
@@ -598,7 +598,7 @@ void writeusngatxt(geoid &geo,string filename)
   if (geo.glat)
     writeusngatxt(*geo.glat,filename);
   else
-    throw unsetGeoid;
+    throw BeziExcept(unsetGeoid);
 }
 
 int readusngabin(geolattice &geo,string filename)
@@ -701,10 +701,10 @@ void readcarlsongsfheader(carlsongsfheader &hdr,istream &file)
   }
   catch (...)
   {
-    throw badHeader;
+    throw BeziExcept(badHeader);
   }
   if (hdr.nlong!=dnlong || hdr.nlat!=dnlat)
-    throw badHeader;
+    throw BeziExcept(badHeader);
 }
 
 void writecarlsongsfheader(carlsongsfheader &hdr,ostream &file)
@@ -810,7 +810,7 @@ void writecarlsongsf(geoid &geo,string filename)
   if (geo.glat)
     writecarlsongsf(*geo.glat,filename);
   else
-    throw unsetGeoid;
+    throw BeziExcept(unsetGeoid);
 }
 
 int readusngsbin(geolattice &geo,string filename)
@@ -896,7 +896,7 @@ void writeusngsbin(geoid &geo,string filename)
   if (geo.glat)
     writeusngsbin(*geo.glat,filename);
   else
-    throw unsetGeoid;
+    throw BeziExcept(unsetGeoid);
 }
 
 int readboldatni(geoid &geo,string filename)
@@ -942,7 +942,7 @@ void writeboldatni(geoid &geo,string filename)
     geo.cmap->writeBinary(file);
   }
   else
-    throw unsetGeoid;
+    throw BeziExcept(unsetGeoid);
 }
 
 double avgelev(xyz dir)

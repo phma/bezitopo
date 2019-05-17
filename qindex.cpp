@@ -3,7 +3,7 @@
 /* qindex.cpp - quad index to tin                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2017,2018 Pierre Abbat.
+/* Copyright 2012,2013,2017-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -148,7 +148,7 @@ void qindex::insertPoint(point *pont,bool clip)
       if (!pnt[i] || xy(*pont)==xy(*pnt[i]))
       {
 	if (pnt[i] && pont->elev()!=pnt[i]->elev())
-	  throw samePoints;
+	  throw (samePoints);
 	else
 	  pnt[i]=pont;
 	break;

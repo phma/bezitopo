@@ -7526,7 +7526,7 @@ int main(int argc, char *argv[])
     args.push_back(argv[i]);
   doc.pl.resize(2);
   readTmCoefficients();
-  if (args[0]=="fuzz")
+  if (args.size() && args[0]=="fuzz")
   {
     fuzz();
     args.resize(1);

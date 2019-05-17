@@ -3,7 +3,7 @@
 /* ellipsoid.cpp - ellipsoids                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2018 Pierre Abbat.
+/* Copyright 2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -371,12 +371,12 @@ TmNameCoeff readTmCoefficients1(istream &tmfile)
   ret.name=readustring(tmfile);
   n=readgeint(tmfile);
   if (n<0 || n>255)
-    throw fileError;
+    throw BeziExcept(fileError);
   for (i=0;i<n;i++)
     ret.tmForward.push_back(readbedouble(tmfile));
   n=readgeint(tmfile);
   if (n<0 || n>255)
-    throw fileError;
+    throw BeziExcept(fileError);
   for (i=0;i<n;i++)
     ret.tmReverse.push_back(readbedouble(tmfile));
   return ret;

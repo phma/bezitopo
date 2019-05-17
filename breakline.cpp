@@ -3,7 +3,7 @@
 /* breakline.cpp - breaklines                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017-2018 Pierre Abbat.
+/* Copyright 2017-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -59,7 +59,7 @@ Breakline0::Breakline0(vector<string> numbers)
     i=-1;
   }
   if (i<2)
-    throw badBreaklineFormat;
+    throw BeziExcept(badBreaklineFormat);
 }
 
 /* The breakline () is empty and open, and thus can be joined with any

@@ -3,7 +3,7 @@
 /* matrix.cpp - matrices                              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016-2018 Pierre Abbat.
+/* Copyright 2016-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -91,7 +91,7 @@ void matrix::setidentity()
 {
   int i;
   if (rows!=columns)
-    throw matrixMismatch;
+    throw BeziExcept(matrixMismatch);
   setzero();
   for (i=0;i<rows;i++)
     (*this)[i][i]=1;
@@ -129,7 +129,7 @@ double *matrix::operator[](unsigned row)
 matrix matrix::operator+(matrix& b)
 {
   if (rows!=b.rows || columns!=b.columns)
-    throw matrixMismatch;
+    throw BeziExcept(matrixMismatch);
   matrix ret(*this);
   int i;
   for (i=0;i<rows*columns;i++)
@@ -140,7 +140,7 @@ matrix matrix::operator+(matrix& b)
 matrix matrix::operator-(matrix& b)
 {
   if (rows!=b.rows || columns!=b.columns)
-    throw matrixMismatch;
+    throw BeziExcept(matrixMismatch);
   matrix ret(*this);
   int i;
   for (i=0;i<rows*columns;i++)
@@ -151,7 +151,7 @@ matrix matrix::operator-(matrix& b)
 matrix matrix::operator*(matrix &b)
 {
   if (columns!=b.rows)
-    throw matrixMismatch;
+    throw BeziExcept(matrixMismatch);
   matrix ret(rows,b.columns);
   int h,i,j,k;
   double *sum;
@@ -170,7 +170,7 @@ matrix matrix::operator*(matrix &b)
 double matrix::trace()
 {
   if (columns!=rows)
-    throw matrixMismatch;
+    throw BeziExcept(matrixMismatch);
   manysum ret;
   int i;
   for (i=0;i<rows;i++)
@@ -423,7 +423,7 @@ matrix invert(matrix m)
 double matrix::determinant()
 {
   if (rows!=columns)
-    throw matrixMismatch;
+    throw BeziExcept(matrixMismatch);
   matrix b(*this);
   return b._determinant();
 }

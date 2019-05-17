@@ -554,7 +554,7 @@ void pointlist::readBreaklines(string filename)
     stringToBreakline(line);
   }
   if (!file.eof())
-    throw fileError;
+    throw BeziExcept(fileError);
 }
 
 string pointlist::hitTestString(triangleHit hit)
