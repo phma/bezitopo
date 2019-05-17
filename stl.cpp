@@ -43,8 +43,8 @@ void initStlTable()
   if (stltable.size()!=216)
   {
     stltable.clear();
-    for (i=1;i<=7776000;i++)
-      if (7776000%i==0 && smooth5(i))
+    for (i=1;i<=2788;i++)
+      if (7776000%i==0)
       {
 	stltable.push_back(i);
 	fac=0;
@@ -69,6 +69,11 @@ void initStlTable()
 	  }
 	stlfac.push_back(fac);
       }
+    for (i=107;i>=0;i--)
+    {
+      stltable.push_back(7776000/stltable[i]);
+      stlfac.push_back(0x358-stlfac[i]);
+    }
     stltable.shrink_to_fit();
     stlfac.shrink_to_fit();
   }
