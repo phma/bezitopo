@@ -7507,6 +7507,18 @@ void testlooseness()
   cout<<looseness<<endl;
 }
 
+void fuzz()
+{
+  geoid theGeoid;
+  if (args.size()>2 && args[1]=="bol")
+    readboldatni(theGeoid,args[2]);
+  if (args.size()>2 && args[1]=="pnezd")
+  {
+    doc.ms.addUnit(METER);
+    doc.readpnezd(args[2]);
+  }
+}
+
 int main(int argc, char *argv[])
 {
   int i;
@@ -7514,6 +7526,11 @@ int main(int argc, char *argv[])
     args.push_back(argv[i]);
   doc.pl.resize(2);
   readTmCoefficients();
+  if (args[0]=="fuzz")
+  {
+    fuzz();
+    args.resize(1);
+  }
   if (shoulddo("sizeof"))
     testsizeof();
   if (shoulddo("area3"))
