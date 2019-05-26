@@ -95,6 +95,7 @@ public:
   double gradmat[2][3]; // to compute gradient from three partial gradients
   triangle();
   void setneighbor(triangle *neigh);
+  void setnoneighbor(edge *neigh);
   double elevation(xy pnt);
   void setgradient(xy pnt,xy grad);
   double ctrlpt(xy pnt1,xy pnt2);
