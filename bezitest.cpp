@@ -1021,7 +1021,7 @@ void testmaketinring()
 void testmaketinwheel()
 {
   double totallength;
-  int i;
+  int i,edgerand;
   doc.makepointlist(1);
   doc.pl[1].clear();
   wheelwindow(doc,100);
@@ -1031,6 +1031,16 @@ void testmaketinwheel()
   totallength=doc.pl[1].totalEdgeLength();
   printf("wheel edges total length %f\n",totallength);
   tassert(fabs(totallength-1217.2716)<0.001);
+  doc.pl[1].maketriangles();
+  tassert(doc.pl[1].checkTinConsistency());
+  edgerand=rng.uirandom();
+  for (i=0;i<32;i++)
+    if ((edgerand&(1<<i)) && doc.pl[1].edges[i*5+200].isFlippable())
+    {
+      doc.pl[1].edges[i*5+200].flip(&doc.pl[1]);
+      doc.pl[1].edges[i*5+200].flip(&doc.pl[1]);
+    }
+  tassert(doc.pl[1].checkTinConsistency());
 }
 
 void testmaketinellipse()
