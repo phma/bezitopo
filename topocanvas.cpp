@@ -286,11 +286,12 @@ void TopoCanvas::open()
  * When I implement reading Bezitopo files, I'll duplicate it.
  */
 {
-  int i;
+  int i,j;
   int dialogResult;
   QStringList files;
   string fileName;
   ifstream file;
+  double unit;
   vector<array<xyz,3> > bareTriangles;
   fileDialog->setWindowTitle(tr("Load TIN"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
@@ -302,7 +303,12 @@ void TopoCanvas::open()
     fileName=files[0].toStdString();
     doc.pl.clear();
     doc.makepointlist(1);
+    unit=doc.ms.toCoherent(1,LENGTH);
     bareTriangles=extractTriangles(readDxfGroups(fileName));
+    if (unit!=1)
+      for (i=0;i<bareTriangles.size();i++)
+	for (j=0;j<3;j++)
+	  bareTriangles[i][j]*=unit;
     doc.pl[1].makeBareTriangles(bareTriangles);
     bareTriangles.clear();
     cout<<"Read "<<doc.pl[1].triangles.size()<<" triangles\n";
