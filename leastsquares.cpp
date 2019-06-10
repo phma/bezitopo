@@ -3,7 +3,7 @@
 /* leastsquares.cpp - least-squares adjustment        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016,2018 Pierre Abbat.
+/* Copyright 2016,2018,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
 #include "leastsquares.h"
 
 /* In a PuppetBar representing a total station setup, pole[0] is (0.0.0)
@@ -46,9 +47,13 @@ using namespace std;
 vector<double> linearLeastSquares(matrix m,vector<double> v)
 {
   matrix mtm,mt,vmat=columnvector(v),mtv;
+  int i;
   mt=m.transpose();
   mtm=mt*m;
   mtv=mt*vmat;
   mtm.gausselim(mtv);
+  for (i=0;i<mtm.getcolumns();i++)
+    if (mtm[i][i]==0)
+      mtv[i][0]=NAN;
   return mtv;
 }
