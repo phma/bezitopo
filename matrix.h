@@ -3,7 +3,7 @@
 /* matrix.h - matrices                                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016-2018 Pierre Abbat.
+/* Copyright 2016-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -69,6 +69,7 @@ public:
   matrix operator*(matrix& b);
   double trace();
   matrix transpose();
+  matrix transmult();
   void swaprows(unsigned r0,unsigned r1);
   void swapcolumns(unsigned c0,unsigned c1);
   void gausselim(matrix &b);
