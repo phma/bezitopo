@@ -154,7 +154,7 @@ unsigned polyspiral::hash()
 
 segment polyline::getsegment(int i)
 {
-  i%=lengths.size();
+  i%=(signed)lengths.size();
   if (i<0)
     i+=lengths.size();
   return segment(xyz(endpoints[i],elevation),xyz(endpoints[(i+1)%endpoints.size()],elevation));
@@ -162,7 +162,7 @@ segment polyline::getsegment(int i)
 
 arc polyarc::getarc(int i)
 {
-  i%=deltas.size();
+  i%=(signed)deltas.size();
   if (i<0)
     i+=deltas.size();
   return arc(xyz(endpoints[i],elevation),xyz(endpoints[(i+1)%endpoints.size()],elevation),deltas[i]);
@@ -170,7 +170,7 @@ arc polyarc::getarc(int i)
 
 spiralarc polyspiral::getspiralarc(int i)
 {
-  i%=deltas.size();
+  i%=(signed)deltas.size();
   if (i<0)
     i+=deltas.size();
   return spiralarc(xyz(endpoints[i],elevation),xyz(midpoints[i],elevation),
