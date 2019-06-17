@@ -51,7 +51,6 @@ protected:
   std::vector<xy> endpoints;
   std::vector<double> lengths,cumLengths;
   std::vector<bcir> boundCircles;
-  int stationSegment(double along);
 public:
   friend class polyarc;
   friend class polyspiral;
@@ -78,6 +77,7 @@ public:
   virtual double in(xy point);
   double length();
   double getCumLength(int i);
+  int stationSegment(double along);
   virtual xyz station(double along);
   virtual double closest(xy topoint,bool offends=false);
   virtual double area();
