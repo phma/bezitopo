@@ -16,6 +16,10 @@
 #not loxodromes. Be careful with the southern boundary of states like Colorado, or the
 #northern boundary of provinces like Chubut.
 
+#To check a boundary, install this file and run "bezitest projection". Bezitest will
+#produce, for each zone, a KML file containing the boundary of the zone. You can then
+#load the KML file into Google Earth or Marble and make sure that it covers all it should.
+
 #OriginXY is in meters unless followed by a unit symbol. "ft" means international feet.
 #The false easting of North Carolina is 2000000 US survey feet. "2000004ft" is within
 #a millimeter. Angles may be given in degrees and decimals or degrees and minutes;
