@@ -236,6 +236,7 @@ public:
     return projList.size();
   }
   Projection *operator[](int n);
+  ProjectionLabel nthLabel(int n);
   ProjectionList matches(ProjectionLabel pattern);
   ProjectionList cover(latlong ll);
   ProjectionList cover(vball v);

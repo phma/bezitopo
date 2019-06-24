@@ -5142,6 +5142,7 @@ void testTransMerc()
  */
 void testprojection()
 {
+  int i;
   latlong zll(0,0);
   xy zxy(0,0);
   LambertConicSphere sphereMercator,sphereConic10(0,degtorad(10)),
@@ -5180,6 +5181,9 @@ void testprojection()
   latlong ll;
   xy grid;
   ProjectionList plist,ncplist,pacplist;
+  ProjectionLabel plabel;
+  Projection *proj;
+  string projName;
   ifstream pfile(string(SHARE_DIR)+"/projections.txt");
   cout<<"projection"<<endl;
   testTransMerc();
@@ -5263,6 +5267,13 @@ void testprojection()
       distOldNewOakland=dist(ncplist[0]->latlongToGrid(llOakland),ncplist[1]->latlongToGrid(llOakland));
       cout<<"Distance from Oakland NAD27 to NAD83 is "<<distOldNewOakland<<endl;
       tassert(fabs(distOldNewOakland-7.868)<0.001);
+    }
+    for (i=0;i<plist.size();i++)
+    {
+      proj=plist[i];
+      plabel=plist.nthLabel(i);
+      projName=plabel.country+'-'+plabel.province+'-'+plabel.zone+'-'+plabel.version;
+      cout<<projName<<endl;
     }
   }
   else

@@ -1083,6 +1083,17 @@ Projection *ProjectionList::operator[](int n)
   return ret;
 }
 
+ProjectionLabel ProjectionList::nthLabel(int n)
+{
+  ProjectionLabel ret;
+  map<ProjectionLabel,shared_ptr<Projection> >::iterator i;
+  int j;
+  for (i=projList.begin(),j=0;i!=projList.end();i++,j++)
+    if (j==n)
+      ret=i->first;
+  return ret;
+}
+
 ProjectionList ProjectionList::matches(ProjectionLabel pattern)
 {
   ProjectionList ret;
