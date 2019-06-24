@@ -5145,6 +5145,7 @@ void testprojection()
   int i;
   latlong zll(0,0);
   xy zxy(0,0);
+  gboundary gb;
   LambertConicSphere sphereMercator,sphereConic10(0,degtorad(10)),
     sphereConic20(0,degtorad(20)),sphereConic80(0,degtorad(80)),
     sphereConicm80(0,degtorad(-80));
@@ -5274,6 +5275,9 @@ void testprojection()
       plabel=plist.nthLabel(i);
       projName=plabel.country+'-'+plabel.province+'-'+plabel.zone+'-'+plabel.version;
       cout<<projName<<endl;
+      gb.clear();
+      gb.push_back(proj->getBoundary());
+      outKml(gb,projName+".kml");
     }
   }
   else
