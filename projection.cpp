@@ -57,6 +57,15 @@ polyarc flatten(g1boundary g1)
   return ret;
 }
 
+g1boundary spherize(polyarc pa)
+{
+  int i;
+  g1boundary ret;
+  for (i=0;i<pa.size();i++)
+    ret.push_back(encodedir(sphereStereoArabianSea.gridToGeocentric(pa.getEndpoint(i))));
+  return ret;
+}
+
 Projection::Projection()
 {
   ellip=&Sphere;
@@ -68,6 +77,11 @@ void Projection::setBoundary(g1boundary boundary)
 {
   flatBdy=flatten(boundary);
   areaSign=signbit(flatBdy.area());
+}
+
+g1boundary Projection::getBoundary()
+{
+  return spherize(flatBdy);
 }
 
 void Projection::setFoot(int which)

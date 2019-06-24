@@ -72,6 +72,7 @@ public:
   virtual double scaleFactor(latlong ll)=0;
   ellipsoid *ellip;
   void setBoundary(g1boundary boundary);
+  g1boundary getBoundary();
   void setFoot(int which); // see measure.h
   int getFoot();
   bool in(xyz geoc); // geoc is on the sphere
