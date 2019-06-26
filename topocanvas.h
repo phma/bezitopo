@@ -65,6 +65,7 @@ public slots:
   void zoomp3();
   void zoomp10();
   void setShowDelaunay(bool showd);
+  void setTipXyz(bool tipxyz);
   void rotatecw();
   void rotateccw();
   void setButtonBits(int bits);
@@ -149,6 +150,10 @@ private:
   bool trianglesAreCurvy,trianglesShouldBeCurvy;
   bool contoursAreCurvy,contoursShouldBeCurvy;
   bool showDelaunay; // If true, edges change color and become dashed if not Delaunay.
+  bool tipXyz;
+  /* If true, tooltip shows xyz while cursor is in TIN.
+   * If false, shows point numbers.
+   */
   QTime lastPaintTime;
   int lastPaintDuration;
 };

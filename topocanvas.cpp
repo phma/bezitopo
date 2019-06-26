@@ -81,6 +81,8 @@ TopoCanvas::TopoCanvas(QWidget *parent):QWidget(parent)
   plnum=-1;
   goal=DONE;
   rotation=0;
+  tipXyz=false;
+  showDelaunay=true;
   //for (i=0;i<doc.pl[1].edges.size();i++)
     //doc.pl[1].edges[i].dump(&doc.pl[1]);
   show();
@@ -201,6 +203,11 @@ void TopoCanvas::zoomp10()
 void TopoCanvas::setShowDelaunay(bool showd)
 {
   showDelaunay=showd;
+}
+
+void TopoCanvas::setTipXyz(bool tipxyz)
+{
+  tipXyz=tipxyz;
 }
 
 void TopoCanvas::rotatecw()
@@ -1136,8 +1143,15 @@ void TopoCanvas::mouseMoveEvent(QMouseEvent *event)
     tri=doc.pl[plnum].findt(eventLoc,false);
     if (tri)
     {
-      hitRec=tri->hitTest(eventLoc);
-      tipString=doc.pl[plnum].hitTestString(hitRec);
+      if (tipXyz)
+	tipString=doc.ms.formatMeasurement(eventLoc.east(),LENGTH)+' '+
+	          doc.ms.formatMeasurement(eventLoc.north(),LENGTH)+' '+
+	          doc.ms.formatMeasurement(doc.pl[plnum].elevation(eventLoc),LENGTH);
+      else
+      {
+	hitRec=tri->hitTest(eventLoc);
+	tipString=doc.pl[plnum].hitTestString(hitRec);
+      }
     }
     else
     {
