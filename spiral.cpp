@@ -342,6 +342,7 @@ double spiralarc::tangentLength(int which)
     return distanceInDirection(start,pointOfIntersection(),startbearing());
   if (which==END)
     return distanceInDirection(pointOfIntersection(),end,endbearing());
+  return NAN;
 }
 
 double spiralarc::diffarea()

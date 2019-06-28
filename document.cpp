@@ -71,7 +71,7 @@ int document::writepnezd(string fname)
 {
   Measure mscopy=ms;
   mscopy.localize(false);
-  ::writepnezd(this,fname,mscopy);
+  return ::writepnezd(this,fname,mscopy);
 }
 
 int document::readpenzd(string fname,bool overwrite)
@@ -86,7 +86,7 @@ int document::writepenzd(string fname)
 {
   Measure mscopy=ms;
   mscopy.localize(false);
-  ::writepenzd(this,fname,mscopy);
+  return ::writepenzd(this,fname,mscopy);
 }
 
 void document::addobject(drawobj *obj)

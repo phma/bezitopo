@@ -3,7 +3,7 @@
 /* quaternion.cpp - quaternions                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016,2018 Pierre Abbat.
+/* Copyright 2016,2018,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -75,7 +75,7 @@ double Quaternion::getcomp(int n)
       return y;
     case 3:
       return z;
-  }
+  } // Ignore warning "control reaches end". n&3 cannot be anything else.
 }
 
 double Quaternion::getreal()

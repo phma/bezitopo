@@ -118,6 +118,7 @@ matrix &matrix::operator=(const matrix &b)
     swap(columns,c.columns);
     swap(entry,c.entry);
   }
+  return *this;
 }
 
 double *matrix::operator[](unsigned row)

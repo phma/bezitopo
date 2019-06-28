@@ -473,15 +473,18 @@ point::point(const point &rhs)
 }
 
 const point& point::operator=(const point &rhs)
-{if (this!=&rhs)
-    {x=rhs.x;
-     y=rhs.y;
-     z=rhs.z;
-     flags=rhs.flags;
-     line=rhs.line;
-     note=rhs.note;
-     }
- }
+{
+  if (this!=&rhs)
+  {
+    x=rhs.x;
+    y=rhs.y;
+    z=rhs.z;
+    flags=rhs.flags;
+    line=rhs.line;
+    note=rhs.note;
+  }
+  return *this;
+}
 
 //void point::dump(document doc)
 //{
