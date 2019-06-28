@@ -458,7 +458,7 @@ void plotErrorPeters(ellipsoid &ell,PostScript &ps,ostream &merctext)
 	merctext<<"floating-point overflow";
       else
       {
-	lo=exp10(i-5);
+	lo=pow(10,i-5);
 	hi=lo*10;
 	if (i<5)
 	  pre=0.001;
