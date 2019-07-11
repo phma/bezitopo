@@ -153,6 +153,7 @@ void SiteWindow::makeActions()
   contourMenu->addAction(curvyContourAction);
   connect(curvyContourAction,SIGNAL(triggered(bool)),this,SLOT(changeButtonBits()));
   curvyContourAction->setChecked(true);
+#ifndef FLATTRIANGLE
   curvyTriangleAction=new QAction(this);
   //curvyTriangleAction->setIcon(QIcon(":/curvytri.png"));
   curvyTriangleAction->setText(tr("Use curved triangular surfaces"));
@@ -161,6 +162,7 @@ void SiteWindow::makeActions()
   connect(curvyTriangleAction,SIGNAL(triggered(bool)),this,SLOT(changeButtonBits()));
   curvyTriangleAction->setChecked(true);
   connect(this,SIGNAL(buttonBitsChanged(int)),canvas,SLOT(setButtonBits(int)));
+#endif
   // Coordinate menu
   loadGeoidAction=new QAction(this);
   //loadGeoidAction->setIcon(QIcon(":/loadgeoid.png"));
@@ -244,12 +246,6 @@ void SiteWindow::unmakeActions()
     delete measureButtons[i];
   }
   measureButtons.clear();
-  fileMenu->removeAction(asterAction);
-  delete asterAction;
-  asterAction=nullptr;
-  fileMenu->removeAction(importPnezdAction);
-  delete importPnezdAction;
-  importPnezdAction=nullptr;
 }
 
 void SiteWindow::prepareZoomSteps(int steps)
