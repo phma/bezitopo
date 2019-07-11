@@ -450,7 +450,8 @@ void smooth1contour(pointlist &pl,double conterval,int i,bool spiral,PostScript 
   {
     sarc=pl.contours[i].getspiralarc(j);
     midptri=pl.qinx.findt((sarc.getstart()+sarc.getend())/2);
-    flatTriangles=flatTriangles&&midptri->isFlat();
+    if (midptri)
+      flatTriangles=flatTriangles&&midptri->isFlat();
   }
   for (k=0;k<2;k++)
   {
