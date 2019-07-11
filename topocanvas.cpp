@@ -83,6 +83,7 @@ TopoCanvas::TopoCanvas(QWidget *parent):QWidget(parent)
   rotation=0;
   tipXyz=false;
   showDelaunay=true;
+  allowFlip=true;
   //for (i=0;i<doc.pl[1].edges.size();i++)
     //doc.pl[1].edges[i].dump(&doc.pl[1]);
   show();
@@ -203,6 +204,11 @@ void TopoCanvas::zoomp10()
 void TopoCanvas::setShowDelaunay(bool showd)
 {
   showDelaunay=showd;
+}
+
+void TopoCanvas::setAllowFlip(bool allow)
+{
+  allowFlip=allow;
 }
 
 void TopoCanvas::setTipXyz(bool tipxyz)
@@ -1179,7 +1185,7 @@ void TopoCanvas::mouseReleaseEvent(QMouseEvent *event)
       if (tri)
       {
         hitRec=tri->hitTest(eventLoc);
-        if (hitRec.edg && hitRec.edg->isFlippable() && mouseCheckImported())
+        if (allowFlip && hitRec.edg && hitRec.edg->isFlippable() && mouseCheckImported())
         {
           hitRec.edg->flip(&doc.pl[plnum]);
           updateEdgeNeighbors(hitRec.edg);
@@ -1195,7 +1201,7 @@ void TopoCanvas::mouseReleaseEvent(QMouseEvent *event)
       if (tri)
       {
         hitRec=tri->hitTest(eventLoc);
-        if (hitRec.edg && mouseCheckImported())
+        if (allowFlip && hitRec.edg && mouseCheckImported())
         {
           hitRec.edg->broken^=1;
           updateEdge(hitRec.edg);

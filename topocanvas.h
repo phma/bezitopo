@@ -65,6 +65,7 @@ public slots:
   void zoomp3();
   void zoomp10();
   void setShowDelaunay(bool showd);
+  void setAllowFlip(bool allow);
   void setTipXyz(bool tipxyz);
   void rotatecw();
   void rotateccw();
@@ -150,6 +151,7 @@ private:
   bool trianglesAreCurvy,trianglesShouldBeCurvy;
   bool contoursAreCurvy,contoursShouldBeCurvy;
   bool showDelaunay; // If true, edges change color and become dashed if not Delaunay.
+  bool allowFlip; // If true, clicking on an edge toggles breakline or flips it.
   bool tipXyz;
   /* If true, tooltip shows xyz while cursor is in TIN.
    * If false, shows point numbers.
