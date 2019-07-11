@@ -271,6 +271,21 @@ void triangle::flatten()
   setgradmat();
 }
 
+bool triangle::isFlat()
+{
+#ifdef FLATTRIANGLE
+  return true;
+#else
+  return ctrl[0]==(2*a->z+b->z)/3 &&
+	 ctrl[1]==(2*a->z+c->z)/3 &&
+	 ctrl[2]==(2*b->z+a->z)/3 &&
+	 ctrl[3]==(a->z+b->z+c->z)/3 &&
+	 ctrl[4]==(2*c->z+a->z)/3 &&
+	 ctrl[5]==(2*b->z+c->z)/3 &&
+	 ctrl[6]==(2*c->z+b->z)/3;
+#endif
+}
+
 void triangle::setgradient(xy pnt,xy grad)
 // Sets the gradient at corner pnt to grad. If pnt is not a corner,
 // either sets the nearest corner or does nothing.

@@ -100,6 +100,7 @@ public:
   void setgradient(xy pnt,xy grad);
   double ctrlpt(xy pnt1,xy pnt2);
   void flatten();
+  bool isFlat();
   xyz gradient3(xy pnt);
   xy gradient(xy pnt);
   triangleHit hitTest(xy pnt);

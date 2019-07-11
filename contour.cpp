@@ -434,6 +434,7 @@ void smooth1contour(pointlist &pl,double conterval,int i,bool spiral,PostScript 
   xy spt;
   spiralarc sarc;
   bool nanseg;
+  bool flatTriangles=true;
   xyz lpt,rpt,newpt;
   segment splitseg,part0,part1,part2,parta;
   vector<double> vex;
@@ -443,8 +444,14 @@ void smooth1contour(pointlist &pl,double conterval,int i,bool spiral,PostScript 
   /* Smooth the contours in two passes. The first works with straight lines
     * and uses 1/2 the conterval for tolerance. The second works with spiral
     * curves (if spiral is true, which is the default) and uses 1/10 the
-    * conterval for tolerance.
+    * conterval for tolerance, or 1/3 the conterval if triangles are flat.
     */
+  for (j=0;flatTriangles && j<pl.contours[i].size();j+=lrint(sqrt(pl.contours[i].size())))
+  {
+    sarc=pl.contours[i].getspiralarc(j);
+    midptri=pl.qinx.findt((sarc.getstart()+sarc.getend())/2);
+    flatTriangles=flatTriangles&&midptri->isFlat();
+  }
   for (k=0;k<2;k++)
   {
     if (k && spiral)
@@ -453,7 +460,7 @@ void smooth1contour(pointlist &pl,double conterval,int i,bool spiral,PostScript 
     for (j=0;j<=sz;j++)
     {
       n=(n+relprime(sz))%sz;
-      wide=((sz>2*(origsz+27))?(sz/(origsz+27.0)-1):1)*(k?0.1:0.5);
+      wide=((sz>2*(origsz+27))?(sz/(origsz+27.0)-1):1.)/(k?(flatTriangles?3:10):2);
       sarc=pl.contours[i].getspiralarc(n);
       nanseg=!sarc.valid();
       if (nanseg)
