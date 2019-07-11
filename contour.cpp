@@ -433,7 +433,7 @@ void smooth1contour(pointlist &pl,double conterval,int i,bool spiral,PostScript 
   double sp,wide,thisElev;
   xy spt;
   spiralarc sarc;
-  bool nanseg;
+  bool nanseg,allin;
   bool flatTriangles=true;
   xyz lpt,rpt,newpt;
   segment splitseg,part0,part1,part2,parta;
@@ -464,6 +464,7 @@ void smooth1contour(pointlist &pl,double conterval,int i,bool spiral,PostScript 
       wide=((sz>2*(origsz+27))?(sz/(origsz+27.0)-1):1.)/(k?(flatTriangles?3:10):2);
       sarc=pl.contours[i].getspiralarc(n);
       nanseg=!sarc.valid();
+      allin=true;
       if (nanseg)
         sarc.setdelta(0,0);
       lpt=sarc.station(sarc.length()*CCHALONG);
@@ -472,8 +473,8 @@ void smooth1contour(pointlist &pl,double conterval,int i,bool spiral,PostScript 
       {
         midptri=pl.qinx.findt((sarc.getstart()+sarc.getend())/2);
         if (midptri)
-          if (midptri->in(sarc.getstart()) && midptri->in(sarc.getend()) &&
-            !(midptri->in(lpt) && midptri->in(rpt)))
+          if (allin=(midptri->in(sarc.getstart()) && midptri->in(sarc.getend()) &&
+            !(midptri->in(lpt) && midptri->in(rpt))))
             sp=splitpoint(lpt.elev()-pl.elevation(lpt),rpt.elev()-pl.elevation(rpt),0);
           else
             sp=splitpoint(lpt.elev()-midptri->elevation(lpt),rpt.elev()-midptri->elevation(rpt),conterval*wide);
@@ -482,7 +483,7 @@ void smooth1contour(pointlist &pl,double conterval,int i,bool spiral,PostScript 
           sp=0.5;
           cerr<<"can't happen: midptri is null"<<endl;
         }
-        if (sp==0 && nanseg)
+        if (sp==0 && (nanseg || !allin))
           sp=0.5; // if the segment is NaN, it must be split, to produce non-NaN segments
         if (sp && sarc.length()>conterval)
         {
