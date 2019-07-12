@@ -5534,7 +5534,7 @@ void testcontour()
   moveup(doc,-0.001);
   doc.changeOffset(offset);
   // The triangle with center (0.6438,3.85625) had a spike in a contour.
-  test1contour("contouraster",offset,xy(100.6438,3.85625),0.03,2490.48);
+  test1contour("contouraster",offset,xy(100.6438,3.85625),0.03,2490.24);
   doc.pl[1].clear();
   doc.changeOffset(xyz(0,0,0));
   setsurface(HASH);
@@ -5561,7 +5561,7 @@ void testcontour()
    * instead of between D and F. One of the three possible values for point I
    * caused the problem.
    */
-  test1contour("contourwheel",offset,xy(-106.677,-0.21),0.3,-1836.62);
+  test1contour("contourwheel",offset,xy(-106.677,-0.21),0.3,-1838.6);
 }
 
 void testfoldcontour()
