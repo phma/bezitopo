@@ -98,7 +98,8 @@
 #define DEC4 0x0284
 #define DEC5 0x0285
 #define DEC6 0x0286
-#define DECIMAL 0x02bf
+#define DECYMAL 0x02bf
+// DECIMAL conflicts with something in wtypes.h on Windows
 #define HALF 0x0101
 #define QUARTER 0x0102
 #define EIGHTH 0x0103

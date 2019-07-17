@@ -3312,10 +3312,10 @@ void testmeasure()
   meas.addUnit(POUND);
   meas.addUnit(DEGREE);
   meas.addUnit(GON);
-  meas.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
+  meas.addUnit(ARCSECOND+DECYMAL+FIXLARGER);
   meas.addUnit(DEGREE_B);
   meas.addUnit(GON_B);
-  meas.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
+  meas.addUnit(ARCSECOND_B+DECYMAL+FIXLARGER);
   tassert(meas.findUnit(LENGTH)==FOOT);
   tassert(meas.findUnit(MASS)==POUND);
   tassert(meas.findPrecision(LENGTH)==2);

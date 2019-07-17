@@ -3,7 +3,7 @@
 /* clotilde.cpp - tables of approximations to spirals */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018 Pierre Abbat.
+/* Copyright 2018,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -360,8 +360,8 @@ void setUnits(Measure &ms,int unit)
       ms.addUnit(DEGREE_B);
       break;
     case 5400:
-      ms.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
-      ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
+      ms.addUnit(ARCSECOND+DECYMAL+FIXLARGER);
+      ms.addUnit(ARCSECOND_B+DECYMAL+FIXLARGER);
       break;
     default:
       ms.setCustomary();
@@ -405,8 +405,8 @@ int main(int argc, char *argv[])
     setUnits(ms,angleUnits[0]);
   else
   {
-    ms.addUnit(ARCSECOND+DECIMAL+FIXLARGER);
-    ms.addUnit(ARCSECOND_B+DECIMAL+FIXLARGER);
+    ms.addUnit(ARCSECOND+DECYMAL+FIXLARGER);
+    ms.addUnit(ARCSECOND_B+DECYMAL+FIXLARGER);
   }
   if (!commandError && !helporversion)
     argpass3(ms);

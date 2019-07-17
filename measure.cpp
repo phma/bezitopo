@@ -217,7 +217,7 @@ BasePrecision basePrecision(int64_t unitp)
   ret.notation=(unitp&0xf000)>>12;
   basecode=unitp&0xfff;
   if (basecode==0)
-    basecode=DECIMAL;
+    basecode=DECYMAL;
   for (i=0;i<nbasecodes;i++)
   {
     if (basecodes[i][1]<=basecode)
