@@ -31,10 +31,7 @@ set(FUZZ none)
 #in convertgeoid and disables the boldatni magic string check.
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-find_package(Qt5Core REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5Gui REQUIRED)
-find_package(Qt5LinguistTools REQUIRED)
+find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
 find_package(FFTW)
 qt5_add_resources(lib_resources viewtin.qrc)
 qt5_add_translation(qm_files bezitopo_en.ts bezitopo_es.ts)
