@@ -168,6 +168,7 @@ GroupCode& GroupCode::operator=(const GroupCode &b)
       str=b.str;
       break;
   }
+  return *this;
 }
 
 GroupCode::~GroupCode()
@@ -412,7 +413,7 @@ bool readDxfMagic(istream &file)
 
 void writeDxfMagic(ostream &file)
 {
-  file<<"DXF\r\n\032"<<'\0';
+  file<<"AutoCAD Binary DXF\r\n\032"<<'\0';
 }
 
 vector<GroupCode> readDxfGroups(istream &file,bool mode)
