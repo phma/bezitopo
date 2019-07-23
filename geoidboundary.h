@@ -3,7 +3,7 @@
 /* geoidboundary.h - geoid boundaries                 */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016,2017 Pierre Abbat.
+/* Copyright 2016,2017,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -106,4 +106,22 @@ public:
   unsigned int in(latlong pnt);
   unsigned int in(vball pnt);
 };
+
+class gpolyline
+{
+private:
+  std::vector<vball> pln;
+public:
+  bool isempty();
+  int size();
+  void clear();
+  void push_back(vball v);
+  vball operator[](int n);
+  vsegment seg(int n);
+  std::vector<xyz> surfaceCorners();
+  std::vector<xyz> surfaceMidpoints();
+  double perimeter(bool midpt=false);
+  friend bool operator==(const g1boundary l,const g1boundary r);
+};
+
 #endif
