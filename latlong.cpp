@@ -351,3 +351,15 @@ bool partialLatlong(string angstr)
   }
   return ret;
 }
+
+latlongelev::latlongelev()
+{
+  lat=lon=elev=NAN;
+}
+
+latlongelev::latlongelev(latlong ll,double e)
+{
+  lat=ll.lat;
+  lon=ll.lon;
+  elev=e;
+}
