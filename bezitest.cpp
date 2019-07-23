@@ -4923,11 +4923,20 @@ void testellipsoid()
   athens.elev=200;
   gh=GRS80.geoc(greenhill);
   greenhill2=GRS80.geod(gh);
-  cout<<"Green Hill "<<radtodeg(greenhill2.lat)<<' '<<radtodeg(greenhill2.lon)<<' '<<greenhill2.elev<<endl;
+  cout<<"Green Hill (GRS80) "<<radtodeg(greenhill2.lat)<<' '<<radtodeg(greenhill2.lon)<<' '<<greenhill2.elev<<endl;
   tassert(fabs(greenhill2.lat-greenhill.lat)<1e-3/EARTHRAD);
   tassert(fabs(greenhill2.lon-greenhill.lon)<1e-3/EARTHRAD);
   tassert(fabs(greenhill2.elev-greenhill.elev)<1e-3);
-  greenhill2=GRS80.geod(gh/1000);
+  greenhill2=GRS80.geod(gh/1000); // This produces NaN; when first tried, it hung.
+  greenhill2=transpose(greenhill,&GRS80,&HGRS87);
+  /* The difference between Green Hill's coordinates in GRS80 and WGS84 is
+   * 35 µm in elevation and less than 1 mas in latitude. The difference between
+   * GRS80 and HGRS87 is much larger, since HGRS87 is eccentric.
+   */
+  cout<<"Green Hill (HGRS87)"<<radtodeg(greenhill2.lat)<<' '<<radtodeg(greenhill2.lon)<<' '<<greenhill2.elev<<endl;
+  tassert(fabs(greenhill2.lat-0.617805663838)<1e-3/EARTHRAD);
+  tassert(fabs(greenhill2.lon+1.432006609431)<1e-3/EARTHRAD);
+  tassert(fabs(greenhill2.elev-250.056)<1e-3);
   ath=HGRS87.geoc(athens);
   athens2=HGRS87.geod(ath);
   cout<<"Athens "<<radtodeg(athens2.lat)<<' '<<radtodeg(athens2.lon)<<' '<<athens2.elev<<endl;
