@@ -399,3 +399,18 @@ void readTmCoefficients()
     tmfile.peek(); // set tmfile.eof if at end of file
   }
 }
+
+latlongelev transpose(latlongelev lle,ellipsoid *from,ellipsoid *to)
+{
+  return to->geod(from->geoc(lle));
+}
+
+latlong transpose(latlong ll,ellipsoid *from,ellipsoid *to)
+{
+  return transpose(latlongelev(ll,0.),from,to);
+}
+
+vball transpose(vball v,ellipsoid *from,ellipsoid *to)
+{
+  return encodedir(Sphere.geoc(transpose(Sphere.geod(decodedir(v)),from,to)));
+}

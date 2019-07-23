@@ -3,7 +3,7 @@
 /* ellipsoid.h - ellipsoids                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2018 Pierre Abbat.
+/* Copyright 2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -27,6 +27,7 @@
 #include "point.h"
 #include "angle.h"
 #include "latlong.h"
+#include "vball.h"
 
 class ellipsoid
 {
@@ -94,4 +95,7 @@ int countEllipsoids();
 ellipsoid& getEllipsoid(int n);
 ellipsoid *getEllipsoid(std::string name);
 void readTmCoefficients();
+latlongelev transpose(latlongelev lle,ellipsoid *from,ellipsoid *to);
+latlong transpose(latlong ll,ellipsoid *from,ellipsoid *to);
+vball transpose(vball v,ellipsoid *from,ellipsoid *to);
 #endif
