@@ -113,7 +113,7 @@ private:
   std::vector<vball> pln;
 public:
   bool isempty();
-  int size();
+  int size(); // number of points, not segments
   void clear();
   void push_back(vball v);
   vball operator[](int n);

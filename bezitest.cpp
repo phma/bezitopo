@@ -6621,10 +6621,13 @@ void testgpolyline()
   latlong atl(degtobin(33.6367),degtobin( -84.4281));
   latlong slc(degtobin(40.7883),degtobin(-111.9778));
   latlong oak(degtobin(37.7214),degtobin(-122.2208));
+  tassert(p1.isempty());
   p1.push_back(encodedir(WGS84.sphere->geoc(oak,0)));
   p1.push_back(encodedir(WGS84.sphere->geoc(slc,0)));
   p1.push_back(encodedir(WGS84.sphere->geoc(atl,0)));
   p1.push_back(encodedir(WGS84.sphere->geoc(clt,0)));
+  tassert(!p1.isempty());
+  tassert(p1.size()==4);
 }
 
 void testvballgeoid()

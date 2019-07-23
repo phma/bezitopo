@@ -819,7 +819,43 @@ unsigned int gboundary::in(vball pnt)
   return in(decodedir(pnt));
 }
 
+bool gpolyline::isempty()
+{
+  return pln.size()==0;
+}
+
+int gpolyline::size()
+{
+  return pln.size();
+}
+
+void gpolyline::clear()
+{
+  pln.clear();
+}
+
 void gpolyline::push_back(vball v)
 {
   pln.push_back(v);
+}
+
+vball gpolyline::operator[](int n)
+{
+  assert(pln.size());
+  n%=pln.size();
+  if (n<0)
+    n+=pln.size();
+  return pln[n];
+}
+
+vsegment gpolyline::seg(int n)
+{
+  vsegment ret;
+  assert(pln.size()>1);
+  n%=(signed)pln.size()-1;
+  if (n<0)
+    n+=pln.size()-1;
+  ret.start=pln[n];
+  ret.end=pln[n+1];
+  return ret;
 }
