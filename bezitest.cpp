@@ -6614,6 +6614,19 @@ void testgeoidboundary()
   // The area is a little bigger so that it covers all the circles completely.
 }
 
+void testgpolyline()
+{
+  gpolyline p1;
+  latlong clt(degtobin(35.2139),degtobin( -80.9431));
+  latlong atl(degtobin(33.6367),degtobin( -84.4281));
+  latlong slc(degtobin(40.7883),degtobin(-111.9778));
+  latlong oak(degtobin(37.7214),degtobin(-122.2208));
+  p1.push_back(encodedir(WGS84.sphere->geoc(oak,0)));
+  p1.push_back(encodedir(WGS84.sphere->geoc(slc,0)));
+  p1.push_back(encodedir(WGS84.sphere->geoc(atl,0)));
+  p1.push_back(encodedir(WGS84.sphere->geoc(clt,0)));
+}
+
 void testvballgeoid()
   /* Make a geoid file showing the numerals 1-6 on their faces. The KML file
    * will be for developers to see how volleyball coordinates work.
@@ -7720,6 +7733,8 @@ int main(int argc, char *argv[])
     testgeoid();
   if (shoulddo("geoidboundary"))
     testgeoidboundary(); // 45 s
+  if (shoulddo("gpolyline"))
+    testgpolyline();
   if (shoulddo("vballgeoid"))
     testvballgeoid(); // 206 s
   if (shoulddo("kml"))

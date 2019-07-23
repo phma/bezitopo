@@ -818,3 +818,8 @@ unsigned int gboundary::in(vball pnt)
 {
   return in(decodedir(pnt));
 }
+
+void gpolyline::push_back(vball v)
+{
+  pln.push_back(v);
+}
