@@ -118,10 +118,7 @@ public:
   void push_back(vball v);
   vball operator[](int n);
   vsegment seg(int n);
-  std::vector<xyz> surfaceCorners();
-  std::vector<xyz> surfaceMidpoints();
-  double perimeter(bool midpt=false);
-  friend bool operator==(const g1boundary l,const g1boundary r);
+  void transpose(ellipsoid *from,ellipsoid *to);
 };
 
 #endif

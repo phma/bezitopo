@@ -27,6 +27,7 @@
 #include "manysum.h"
 #include "projection.h"
 #include "random.h"
+#include "ellipsoid.h"
 #include "relprime.h"
 using namespace std;
 
@@ -858,4 +859,11 @@ vsegment gpolyline::seg(int n)
   ret.start=pln[n];
   ret.end=pln[n+1];
   return ret;
+}
+
+void gpolyline::transpose(ellipsoid *from,ellipsoid *to)
+{
+  int i;
+  for (i=0;i<pln.size();i++)
+    pln[i]=::transpose(pln[i],from,to);
 }
