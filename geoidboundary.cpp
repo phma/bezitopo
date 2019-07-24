@@ -527,6 +527,13 @@ bool overlap(vsegment a,vsegment b)
   return ret;
 }
 
+void g1boundary::transpose(ellipsoid *from,ellipsoid *to)
+{
+  int i;
+  for (i=0;i<bdy.size();i++)
+    bdy[i]=::transpose(bdy[i],from,to);
+}
+
 void gboundary::push_back(g1boundary g1)
 {
   bdy.push_back(g1);
@@ -818,6 +825,13 @@ unsigned int gboundary::in(latlong pnt)
 unsigned int gboundary::in(vball pnt)
 {
   return in(decodedir(pnt));
+}
+
+void gboundary::transpose(ellipsoid *from,ellipsoid *to)
+{
+  int i;
+  for (i=0;i<bdy.size();i++)
+    bdy[i].transpose(from,to);
 }
 
 bool gpolyline::isempty()

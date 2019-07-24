@@ -68,6 +68,7 @@ public:
   int area();
   double cubeArea();
   friend bool operator==(const g1boundary l,const g1boundary r);
+  void transpose(ellipsoid *from,ellipsoid *to);
 };
 
 bool overlap(vsegment a,vsegment b);
@@ -105,6 +106,7 @@ public:
   unsigned int in(xyz pnt);
   unsigned int in(latlong pnt);
   unsigned int in(vball pnt);
+  void transpose(ellipsoid *from,ellipsoid *to);
 };
 
 class gpolyline
