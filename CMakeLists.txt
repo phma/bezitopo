@@ -46,7 +46,7 @@ set(header_files angle.h arc.h bezier.h
     matrix.h measure.h minquad.h objlist.h penwidth.h pnezd.h point.h pointlist.h polyline.h
     projection.h ps.h qindex.h quaternion.h random.h relprime.h
     rootfind.h roscat.h segment.h spiral.h spolygon.h
-    tin.h vball.h vcurve.h xyz.h zoom.h)
+    tin.h vball.h vcurve.h xml.h xyz.h zoom.h)
 
 add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
             bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
@@ -58,7 +58,7 @@ add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
             point.cpp pointlist.cpp polyline.cpp
             projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
             rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
-            stl.cpp tin.cpp vball.cpp vcurve.cpp)
+            stl.cpp tin.cpp vball.cpp vcurve.cpp xml.cpp)
 add_library(bezilib1 SHARED angle.cpp arc.cpp bezier.cpp
             bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
             cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
@@ -69,7 +69,7 @@ add_library(bezilib1 SHARED angle.cpp arc.cpp bezier.cpp
             point.cpp pointlist.cpp polyline.cpp
             projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
             rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
-            stl.cpp tin.cpp vball.cpp vcurve.cpp)
+            stl.cpp tin.cpp vball.cpp vcurve.cpp xml.cpp)
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitopo.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp closure.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp cvtmeas.cpp document.cpp

@@ -19,3 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <string>
+#include <vector>
+#include <map>
+
+class XmlElement
+{
+public:
+  std::string name;
+  std::map<std::string,std::string> attributes;
+  std::vector<XmlElement> subElements;
+  std::string content;
+};

@@ -23,3 +23,4 @@
  * The files are less than 200 kB, small enough to read into RAM and
  * parse there.
  */
+#include "xml.h"
