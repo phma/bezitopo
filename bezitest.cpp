@@ -5286,6 +5286,7 @@ void testprojection()
       cout<<projName<<endl;
       gb.clear();
       gb.push_back(proj->getBoundary());
+      gb.transpose(proj->ellip,&WGS84);
       outKml(gb,projName+".kml");
     }
   }
