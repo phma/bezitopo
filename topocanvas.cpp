@@ -308,6 +308,7 @@ void TopoCanvas::open()
   vector<array<xyz,3> > bareTriangles;
   fileDialog->setWindowTitle(tr("Load TIN"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
   fileDialog->setNameFilter(tr("(*.dxf);;(*)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
@@ -390,6 +391,7 @@ void TopoCanvas::importPnezd()
   string fileName;
   fileDialog->setWindowTitle(tr("Open PNEZD File"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
   fileDialog->setNameFilter(tr("(*.asc);;(*)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
@@ -416,6 +418,7 @@ void TopoCanvas::importCriteria()
   string fileName;
   fileDialog->setWindowTitle(tr("Open Criteria File"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
   fileDialog->setNameFilter(tr("(*.crit);;(*)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
@@ -443,6 +446,7 @@ void TopoCanvas::importBreaklines()
   vector<Breakline0> saveBreaklines0;
   fileDialog->setWindowTitle(tr("Open Breakline File"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
   fileDialog->setNameFilter(tr("(*.brk);;(*)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
@@ -908,6 +912,7 @@ void TopoCanvas::loadGeoid()
   string fileName;
   fileDialog->setWindowTitle(tr("Load Geoid File"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
   fileDialog->setNameFilter(tr("(*.bol);;(*)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
