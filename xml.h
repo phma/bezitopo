@@ -23,6 +23,12 @@
 #include <vector>
 #include <map>
 
+struct EntityReference
+{
+  char name[32]; // The longest is CounterClockwiseContourIntegral.
+  int number;
+};
+
 class XmlElement
 {
 public:
