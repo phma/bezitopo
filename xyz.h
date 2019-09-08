@@ -28,7 +28,7 @@
 #include <fstream>
 
 class xyz;
-class latlong;
+struct latlong;
 
 #include "quaternion.h"
 #include "latlong.h"
