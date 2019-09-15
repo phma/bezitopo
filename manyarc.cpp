@@ -29,6 +29,14 @@
 #include "cogospiral.h"
 
 #define METHOD 2
+/* Method 1: Adjust the length of each arc so that the sum of their displacements
+ * equals the displacement of the spiralarc.
+ * Method 2: Adjust the lengths of all but two of the arcs to minimize the squared
+ * distance from the spiralarcs. The two arcs are used to make the sum of the
+ * displacements equal to the displacement of the spiralarc.
+ * Method 3: Adjust the ends of the arcs along lines perpendicular to the
+ * spiralarc so that the bearing at the end matches that of the spiralarc.
+ */
 
 using namespace std;
 
@@ -582,6 +590,12 @@ polyarc adjustManyArc(polyarc apx,spiralarc a)
 
 polyarc manyArc(spiralarc a,int narcs)
 {
+#if METHOD==1
+  polyarc ret;
+  ret=manyArcUnadjusted(a,narcs);
+  ret=adjustManyArcOld(ret,a);
+#endif
+#if METHOD==2
   polyarc ret;
   if (narcs>2)
   {
@@ -590,6 +604,7 @@ polyarc manyArc(spiralarc a,int narcs)
   }
   else
     ret=twoArcs(a);
+#endif
   return ret;
 }
 
