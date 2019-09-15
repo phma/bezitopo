@@ -27,6 +27,9 @@
 #include "ldecimal.h"
 #include "leastsquares.h"
 #include "cogospiral.h"
+
+#define METHOD 2
+
 using namespace std;
 
 /* Spiralarcs are used for centerlines of highways. A property line or easement
