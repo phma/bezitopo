@@ -431,7 +431,7 @@ polyarc adjustEnds(polyarc apx,spiralarc a,int n0,int n1)
   return ret;
 }
 
-polyarc adjustManyArcOld(polyarc apx,spiralarc a)
+polyarc adjustManyArc1(polyarc apx,spiralarc a)
 {
   int narcs=apx.size();
   int i;
@@ -575,7 +575,7 @@ polyarc adjust1step(polyarc apx,spiralarc a,int n0,int n1,double &adjsq)
   return ret;
 }
 
-polyarc adjustManyArc(polyarc apx,spiralarc a)
+polyarc adjustManyArc2(polyarc apx,spiralarc a)
 {
   double adjsq;
   int i=0;
@@ -593,14 +593,14 @@ polyarc manyArc(spiralarc a,int narcs)
 #if METHOD==1
   polyarc ret;
   ret=manyArcUnadjusted(a,narcs);
-  ret=adjustManyArcOld(ret,a);
+  ret=adjustManyArc1(ret,a);
 #endif
 #if METHOD==2
   polyarc ret;
   if (narcs>2)
   {
     ret=manyArcUnadjusted(a,narcs);
-    ret=adjustManyArc(ret,a);
+    ret=adjustManyArc2(ret,a);
   }
   else
     ret=twoArcs(a);
