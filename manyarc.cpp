@@ -605,6 +605,15 @@ polyarc manyArc(spiralarc a,int narcs)
   else
     ret=twoArcs(a);
 #endif
+#if METHOD==3
+  polyarc ret;
+  segment cubic=spiralToCubic(a);
+  vector<segment> quads=manyQuad(a,narcs);
+  vector<Circle> lines=crossLines(a,quads);
+  vector<double> offs=offsets(cubic,quads);
+  ret=manyArcUnadjusted(a,narcs);
+  ret=adjustManyArc1(ret,a);
+#endif
   return ret;
 }
 
