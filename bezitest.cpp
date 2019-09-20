@@ -2523,6 +2523,7 @@ void testcogospiral()
   spiralarc s(xyz(0,0,0),0.5,0.,0,-M_PI,M_PI);
   spiralarc t(xyz(0,0,0),0.5,0.,DEG180,-M_PI,M_PI);
   PostScript ps;
+  doc.makepointlist(1);
   ps.open("cogospiral.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();

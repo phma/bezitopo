@@ -3,7 +3,7 @@
 /* vcurve.cpp - vertical curve arithmetic             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015 Pierre Abbat.
+/* Copyright 2012,2015.2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -60,7 +60,7 @@ double vaccel(double a,double b,double c,double d,double p)
 
 double vlength_estimate(double a,double b,double c,double d,double hlength,int n)
 {
-  double sum,prev,curr;
+  double sum,prev,curr=0;
   int i;
   for (sum=i=0;i<=n;i++)
   {

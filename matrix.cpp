@@ -394,7 +394,7 @@ bool matrix::findpivot(matrix &b,int row,int column)
 
 double matrix::_determinant()
 {
-  int i,j,lastpivot,runlen;
+  int i,j,lastpivot=-1,runlen;
   vector<double> factors;
   rowsult rsult;
   for (i=0;i<rows;i++)

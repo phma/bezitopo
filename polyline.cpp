@@ -560,7 +560,7 @@ double polyline::getCumLength(int i)
 int polyline::stationSegment(double along)
 {
   int before=-1,after=cumLengths.size();
-  int middle,i;
+  int middle,i=0;
   double midalong;
   while (before<after-1)
   {
