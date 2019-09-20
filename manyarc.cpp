@@ -21,6 +21,7 @@
  */
 #include <iostream>
 #include <cassert>
+#include <array>
 #include "manyarc.h"
 #include "rootfind.h"
 #include "manysum.h"

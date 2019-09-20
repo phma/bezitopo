@@ -30,7 +30,6 @@
 #include <string>
 #include <cassert>
 #include <iomanip>
-#include <unistd.h>
 #include "ldecimal.h"
 #include "config.h"
 #include "ps.h"

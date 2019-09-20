@@ -3,7 +3,7 @@
 /* pointlist.h - list of points                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2018 Pierre Abbat.
+/* Copyright 2012-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -35,6 +35,10 @@
 #include "contour.h"
 #include "breakline.h"
 #include "intloop.h"
+
+#ifdef _MSC_VER
+typedef long long ssize_t;
+#endif
 
 typedef std::map<int,point> ptlist;
 typedef std::map<point*,int> revptlist;

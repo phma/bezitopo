@@ -28,7 +28,6 @@
 #include <csignal>
 #include <cfloat>
 #include <cstring>
-#include <unistd.h>
 #include <QTime>
 #include "config.h"
 #include "point.h"

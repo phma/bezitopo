@@ -3,7 +3,7 @@
 /* cogospiral.h - intersections of spirals            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2017-2018 Pierre Abbat.
+/* Copyright 2015,2017-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -38,6 +38,7 @@
  * of very small delta should be done iteratively, to avoid loss of precision.
  */
 #include <vector>
+#include <array>
 #include "point.h"
 #include "spiral.h"
 #include "circle.h"
