@@ -3,7 +3,7 @@
 /* raster.cpp - raster image output                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2013,2015,2016,2017 Pierre Abbat.
+/* Copyright 2013,2015,2016,2017,2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -19,7 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
-#define _USE_MATH_DEFINES
 #include <cstdio>
 #include <fstream>
 #include <iostream>
