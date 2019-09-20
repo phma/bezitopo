@@ -20,7 +20,6 @@
  * along with Bezitopo. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define _USE_MATH_DEFINES
 #include <iostream>
 #include <fstream>
 #include <iomanip>

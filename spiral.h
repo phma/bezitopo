@@ -22,7 +22,6 @@
 #ifndef SPIRAL_H
 #define SPIRAL_H
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include "point.h"
 #include "xyz.h"

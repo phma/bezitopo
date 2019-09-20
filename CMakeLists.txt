@@ -57,6 +57,22 @@ set(header_files angle.h arc.h bezier.h
     rootfind.h roscat.h segment.h spiral.h spolygon.h
     tin.h vball.h vcurve.h xml.h xyz.h zoom.h)
 
+# MS Visual C++ cannot build both static and shared libraries with the same name.
+# If you ask for a static library, it makes bezitopo.lib. If you ask for a
+# shared library, it makes bezitopo.dll, which is the shared library, and
+# bezitopo.lib, the import library for the DLL.
+# This is not a problem for MinGW, which makes three files: libbezitopo.a,
+# the static library; libbezitopo.dll, the shared library; and libbezitopo.dll.a,
+# the import library for the DLL.
+set(MAKE_STATIC bezilib0)
+set(MAKE_SHARED bezilib1)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC" AND DEFINED MSVC_STATIC)
+  set(MAKE_SHARED "")
+endif ()
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC" AND NOT DEFINED MSVC_STATIC)
+  set(MAKE_STATIC "")
+endif ()
+if (MAKE_STATIC)
 add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
             bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
             cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
@@ -68,6 +84,8 @@ add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
             projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
             rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
             stl.cpp tin.cpp vball.cpp vcurve.cpp xml.cpp)
+endif ()
+if (MAKE_SHARED)
 add_library(bezilib1 SHARED angle.cpp arc.cpp bezier.cpp
             bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
             cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
@@ -79,6 +97,7 @@ add_library(bezilib1 SHARED angle.cpp arc.cpp bezier.cpp
             projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
             rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
             stl.cpp tin.cpp vball.cpp vcurve.cpp xml.cpp)
+endif ()
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitopo.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp closure.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp cvtmeas.cpp document.cpp
@@ -167,24 +186,42 @@ add_executable(transmer angle.cpp arc.cpp bezier.cpp
                rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
                stl.cpp tin.cpp transmer.cpp vball.cpp vcurve.cpp)
 endif (${FFTW_FOUND})
+if (MAKE_STATIC)
 target_link_libraries(bezilib0 Qt5::Widgets Qt5::Core)
+target_compile_definitions(bezilib0 PUBLIC _USE_MATH_DEFINES)
+endif ()
+if (MAKE_SHARED)
 target_link_libraries(bezilib1 Qt5::Widgets Qt5::Core)
+target_compile_definitions(bezilib1 PUBLIC _USE_MATH_DEFINES)
+endif ()
 target_link_libraries(bezitopo Qt5::Widgets Qt5::Core)
+target_compile_definitions(bezitopo PUBLIC _USE_MATH_DEFINES)
 target_link_libraries(bezitest Qt5::Widgets Qt5::Core)
+target_compile_definitions(bezitest PUBLIC _USE_MATH_DEFINES)
 target_link_libraries(clotilde Qt5::Widgets Qt5::Core)
+target_compile_definitions(clotilde PUBLIC _USE_MATH_DEFINES)
 target_link_libraries(convertgeoid Qt5::Widgets Qt5::Core)
+target_compile_definitions(convertgeoid PUBLIC _USE_MATH_DEFINES)
 target_link_libraries(viewtin Qt5::Widgets Qt5::Core)
+target_compile_definitions(viewtin PUBLIC _USE_MATH_DEFINES)
 target_link_libraries(sitecheck Qt5::Widgets Qt5::Core)
+target_compile_definitions(sitecheck PUBLIC _USE_MATH_DEFINES)
 target_link_libraries(pangeoid Qt5::Widgets Qt5::Core)
+target_compile_definitions(pangeoid PUBLIC _USE_MATH_DEFINES)
 if (${FFTW_FOUND})
 target_link_libraries(transmer Qt5::Widgets Qt5::Core ${FFTW_LIBRARIES})
+target_compile_definitions(transmer PUBLIC _USE_MATH_DEFINES)
 endif (${FFTW_FOUND})
 # POINTLIST: the program uses pointlists. Affects BoundRect.
 # CONVERTGEOID: the program reads source geoid files. Allows raster output of source geoids.
 # NUMSGEOID: the geoquad class needs to count points that are in and out of source geoids.
 # FLATTRIANGLE: the program handles only flat triangles.
+if (MAKE_STATIC)
 target_compile_definitions(bezilib0 PUBLIC POINTLIST)
+endif ()
+if (MAKE_SHARED)
 target_compile_definitions(bezilib1 PUBLIC POINTLIST)
+endif ()
 target_compile_definitions(convertgeoid PUBLIC CONVERTGEOID NUMSGEOID)
 target_compile_definitions(bezitest PUBLIC NUMSGEOID POINTLIST)
 target_compile_definitions(bezitopo PUBLIC POINTLIST)
@@ -199,7 +236,7 @@ check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_files(windows.h HAVE_WINDOWS_H)
 
 install(TARGETS bezitopo convertgeoid viewtin DESTINATION bin)
-install(TARGETS bezilib0 bezilib1 DESTINATION lib)
+install(TARGETS ${MAKE_SHARED} ${MAKE_STATIC} DESTINATION lib)
 install(FILES ${PROJECT_BINARY_DIR}/config.h DESTINATION include/bezitopo)
 install(FILES ${qm_files} projections.txt transmer.dat DESTINATION share/bezitopo)
 install(FILES ${header_files} DESTINATION include/bezitopo)
@@ -215,8 +252,12 @@ set(BEZITOPO_PATCH_VERSION 4)
 set(BEZITOPO_VERSION ${BEZITOPO_MAJOR_VERSION}.${BEZITOPO_MINOR_VERSION}.${BEZITOPO_PATCH_VERSION})
 set(COPY_YEAR 2019)
 
+if (MAKE_STATIC)
 set_target_properties(bezilib0 PROPERTIES OUTPUT_NAME "bezitopo" VERSION ${BEZITOPO_VERSION})
+endif ()
+if (MAKE_SHARED)
 set_target_properties(bezilib1 PROPERTIES OUTPUT_NAME "bezitopo" VERSION ${BEZITOPO_VERSION})
+endif ()
 
 include_directories(${PROJECT_BINARY_DIR})
 if (${FFTW_FOUND})
