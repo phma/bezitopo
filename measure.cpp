@@ -252,6 +252,8 @@ double precision(int64_t unitp)
   double base,p;
   int exp,basecode,i;
   basecode=unitp&0xfff; // Nybble 0xf000 indicates whether to use bigger units
+  if (basecode==0)
+    basecode=DECYMAL;
   for (i=0;i<nbasecodes;i++)
     if (basecodes[i][1]<=basecode)
     {
