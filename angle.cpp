@@ -245,7 +245,7 @@ string radtoangle(double angle,int64_t unitp)
 {
   double angmult,prec;
   string ret,unitsign;
-  char digit[8];
+  char digit[16];
   int i,base,sign,dig;
   BasePrecision basep;
   if (!compatibleUnits(unitp,ANGLE))
@@ -275,7 +275,10 @@ string radtoangle(double angle,int64_t unitp)
     default:
       throw BeziExcept(badUnits);
   }
-  angmult=rint((prec=precision(unitp))*angmult);
+  prec=precision(unitp);
+  if (std::isnan(prec))
+    prec=1;
+  angmult=rint(prec*angmult);
   sign=1;
   if (angmult<0)
   {

@@ -255,13 +255,19 @@ double precision(int64_t unitp)
   if (basecode==0)
     basecode=DECYMAL;
   for (i=0;i<nbasecodes;i++)
+  {
     if (basecodes[i][1]<=basecode)
     {
       base=basecodes[i][0];
       exp=basecode-basecodes[i][1];
     }
+    if (basecodes[i][1]==basecode+1)
+      exp=-1;
+  }
   for (p=1,i=0;i<exp;i++)
     p*=base;
+  if (exp<0)
+    p=NAN;
   return p;
 }
 
