@@ -4750,7 +4750,7 @@ void testldecimal()
   tassert(ldecimal(1)=="1");
   tassert(ldecimal(-1)=="-1");
   tassert(isalpha(ldecimal(INFINITY)[0]));
-  tassert(isalpha(ldecimal(NAN)[0]));
+  tassert(isalpha(ldecimal(NAN)[1])); // on MSVC is negative, skip the minus sign
   tassert(ldecimal(1.7320508)=="1.7320508");
   tassert(ldecimal(1.7320508,0.0005)=="1.732");
   tassert(ldecimal(-0.00064516)=="-.00064516");
