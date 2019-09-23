@@ -2684,7 +2684,7 @@ void testcurly()
 {
   int i;
   double curvature,clothance;
-  spiralarc s(xyz(0,0,0),0,28.25,0,-1.5,1.5); // works in GCC, fails in MSVC
+  spiralarc s(xyz(0,0,0),0.0,28.25,0,-1.5,1.5); // works in GCC, fails in MSVC
   PostScript ps;
   ps.open("curly.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
