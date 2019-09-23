@@ -2580,7 +2580,13 @@ void testcogospiral()
   testcogospiral2(s,t,ps,expected,5.1e-5,7);
 }
 
-void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLength,double tTooCurlyLength,double tMaxLength)
+void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLength,double tTooCurlyLength,double tMaxLength64,double tMaxLength80,double tMaxLength128)
+/* The maximum length depends on the number of bits in a long double,
+ * used in cornu to compute spirals.
+ * 64: ARM/GCC, Intel/MSVC
+ * 80: Intel/GCC
+ * 128: POWER9/GCC (I haven't tried it yet).
+ */
 {
   double curlyLength,tooCurlyLength,maxLength;
   spiralarc s;
@@ -2670,9 +2676,12 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
   ps.setcolor(0,0,0);
   ps.write(xy(-0.5,-0.3),"Curvature "+ldecimal(curvature));
   ps.write(xy(-0.5,-0.325),"Clothance "+ldecimal(clothance));
-  ps.write(xy(-0.5,-0.35),"Too curly length "+ldecimal(tooCurlyLength));
+  ps.write(xy(-0.5,-0.35),"Maximum length "+ldecimal(maxLength));
+  ps.write(xy(-0.5,-0.375),"Too curly length "+ldecimal(tooCurlyLength));
   ps.endpage();
-  tassert(std::isnan(tMaxLength) || fabs(log(maxLength/tMaxLength))<1e-9);
+  tassert(std::isnan(tMaxLength64)  || fabs(log(maxLength/tMaxLength64))<1e-9 ||
+          std::isnan(tMaxLength80)  || fabs(log(maxLength/tMaxLength80))<1e-9 ||
+          std::isnan(tMaxLength128) || fabs(log(maxLength/tMaxLength128))<1e-9);
   tassert(std::isnan(tCurlyLength) || fabs(log(curlyLength/tCurlyLength))<1e-9);
   tassert(std::isnan(tTooCurlyLength) || fabs(log(tooCurlyLength/tTooCurlyLength))<1e-9);
 }
@@ -2693,11 +2702,11 @@ void testcurly()
   {
     curvature=(rng.usrandom()-32767.5)/2896.31;
     clothance=(rng.usrandom()-32767.5)/1024;
-    test1curly(curvature,clothance,ps,NAN,NAN,NAN);
+    test1curly(curvature,clothance,ps,NAN,NAN,NAN,NAN,NAN);
   }
-  test1curly(0,28.25,ps,0.761013024660324,NAN,3.238467135241204);
-  test1curly(10,0,ps,M_PI/10,M_PI/5,NAN);
-  test1curly(10,0.4,ps,NAN,NAN,NAN);
+  test1curly(0,28.25,ps,0.761013024660324,NAN,2.8739179158024846,3.238467135241204,-1);
+  test1curly(10,0,ps,M_PI/10,M_PI/5, 5.55135950399001,7.100728753904528,-1);
+  test1curly(10,0.4,ps,NAN,NAN,5.482702939874759,6.91072571252652,-1);
 }
 
 void testcurvefit()
