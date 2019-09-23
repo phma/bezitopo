@@ -4,7 +4,7 @@
 /* point-northing-easting-z-description format        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2018 Pierre Abbat.
+/* Copyright 2012,2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -55,7 +55,7 @@ int readpnezd(document *doc,string fname,Measure ms,bool overwrite)
     do
     {
       getline(infile,line);
-      while (line.back()=='\n' || line.back()=='\r')
+      while (line.length() && (line.back()=='\n' || line.back()=='\r'))
 	line.pop_back();
       words=parsecsvline(line);
       if (words.size()==5)
