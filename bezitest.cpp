@@ -6080,7 +6080,7 @@ void testhistogram()
 
 void testsmooth5()
 {
-  unsigned int i,lasti,previ;
+  unsigned int i,lasti=0,previ;
   int nsmooth=0,recip=2,lastrecip=1,prevrecip;
   for (i=17711;i<=28657;i++)
   {
