@@ -308,6 +308,8 @@ double spiralarc::in(xy pnt)
   if ((dist(pnt,start)>len && dist(pnt,end)>len) || 
       maxcur*len*len<(xy(start).length()+xy(end).length())*1e-12)
     return 0;
+  else if (std::isnan(maxcur*len) || mid.isnan())
+    return NAN;
   else if (maxcur*len<2 && pnt==xy(start))
     return bintorot(foldangle(chordbearing()-startbearing()));
   else if (maxcur*len<2 && pnt==xy(end))
