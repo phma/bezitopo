@@ -172,16 +172,18 @@ void arc::split(double along,arc &a,arc &b)
 double arc::in(xy pnt)
 {
   int beardiff;
+  double ret=NAN;
   beardiff=2*(foldangle(dir(pnt,end)-dir(start,pnt)));
   if (pnt==start || pnt==end)
-    return bintorot(delta)/2;
-  else if (delta && (abs(foldangle(beardiff-delta))<2 || beardiff==0))
+    ret=bintorot(delta)/2;
+  if (std::isnan(ret) && delta && (abs(foldangle(beardiff-delta))<2 || beardiff==0))
   {
     spiralarc spi(*this);
-    return spi.in(pnt);
+    ret=spi.in(pnt); // This can return NaN on MSVC
   }
-  else
-    return 2*((beardiff>0)-(beardiff>delta));
+  if (std::isnan(ret))
+    ret=(beardiff>0)+(beardiff>=0)-(beardiff>delta)-(beardiff>=delta);
+  return ret;
 }
 
 /*xyz arc::midpoint()
