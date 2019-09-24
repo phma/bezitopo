@@ -175,7 +175,7 @@ double arc::in(xy pnt)
   beardiff=2*(foldangle(dir(pnt,end)-dir(start,pnt)));
   if (pnt==start || pnt==end)
     return bintorot(delta)/2;
-  else if (delta && (abs(beardiff-delta)<2 || beardiff==0))
+  else if (delta && (abs(foldangle(beardiff-delta))<2 || beardiff==0))
   {
     spiralarc spi(*this);
     return spi.in(pnt);
