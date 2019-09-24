@@ -2075,6 +2075,7 @@ void testarc()
   xy ctr;
   xy kmlpnt(-337.97179595901059,364.38542430496875);
   arc a(beg,end),b,c,kmlarc(begk,endk);
+  spiralarc kmlspi;
   tassert(fabs(a.length()-500)<0.001);
   tassert(a.chordlength()==500);
   a.setdelta(degtobin(60));
@@ -2148,6 +2149,12 @@ void testarc()
   a.setcurvature(0.01,0.01);
   cout<<"setcurvature: radius="<<a.radius(0)<<endl;
   tassert(abs(a.radius(0)-100)<0.0001);
+  /* beardiff-delta=DEG360, which results in different code flow by MSVC than
+   * by GCC. The problem is that the spiralarc equivalent of this arc, when
+   * split by the code compiled by MSVC, produces NaN.
+   */
+  kmlspi=spiralarc(kmlarc);
+  cout<<"kmlpnt is "<<(kmlspi.in(kmlpnt)?"":"not ")<<"in kmlspi\n";
   cout<<"kmlpnt is "<<(kmlarc.in(kmlpnt)?"":"not ")<<"in kmlarc\n";
   tassert(!kmlarc.in(kmlpnt));
 }
