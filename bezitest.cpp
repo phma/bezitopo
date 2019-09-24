@@ -7753,12 +7753,12 @@ int main(int argc, char *argv[])
     testvball();
   if (shoulddo("geoid"))
     testgeoid();
-  if (shoulddo("geoidboundary"))
-    testgeoidboundary(); // 45 s
+  //if (shoulddo("geoidboundary"))
+    //testgeoidboundary(); // 45 s
   if (shoulddo("gpolyline"))
     testgpolyline();
-  if (shoulddo("vballgeoid"))
-    testvballgeoid(); // 206 s
+  //if (shoulddo("vballgeoid"))
+    //testvballgeoid(); // 206 s
   if (shoulddo("kml"))
     testkml(); // 19.5 s
   if (shoulddo("geint"))
