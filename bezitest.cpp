@@ -2071,11 +2071,15 @@ void testarc()
   double xx;
   vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),beg1(0,-15,0),end1(0,15,0),sta,sta1,sta2;
+  xyz begk(6024724080.6769285,135556291815.4817,0),endk(82597158811.140015,-1116177821.7897496,0);
   xy ctr;
-  arc a(beg,end),b,c;
+  xy kmlpnt(-337.97179595901059,364.38542430496875);
+  arc a(beg,end),b,c,kmlarc(begk,endk);
   tassert(fabs(a.length()-500)<0.001);
   tassert(a.chordlength()==500);
   a.setdelta(degtobin(60));
+  kmlarc.setdelta(-1052617934);
+  // This arc arises in the KML test, and the program blew its stack when compiled with MSVC.
   tassert(fabs(a.length()-523.599)<0.001);
   tassert(a.chordlength()==500);
   tassert(fabs(a.diffarea()-(M_PI*sqr(500)/6-250*500*M_SQRT_3_4))<1e-4);
@@ -2144,6 +2148,8 @@ void testarc()
   a.setcurvature(0.01,0.01);
   cout<<"setcurvature: radius="<<a.radius(0)<<endl;
   tassert(abs(a.radius(0)-100)<0.0001);
+  cout<<"kmlpnt is "<<(kmlarc.in(kmlpnt)?"":"not ")<<"in kmlarc\n";
+  tassert(!kmlarc.in(kmlpnt));
 }
 
 void testspiralarc()
