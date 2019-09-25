@@ -2071,16 +2071,11 @@ void testarc()
   double xx;
   vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),beg1(0,-15,0),end1(0,15,0),sta,sta1,sta2;
-  xyz begk(6024724080.6769285,135556291815.4817,0),endk(82597158811.140015,-1116177821.7897496,0);
   xy ctr;
-  xy kmlpnt(-337.97179595901059,364.38542430496875);
-  arc a(beg,end),b,c,kmlarc(begk,endk);
-  spiralarc kmlspi;
+  arc a(beg,end),b,c;
   tassert(fabs(a.length()-500)<0.001);
   tassert(a.chordlength()==500);
   a.setdelta(degtobin(60));
-  kmlarc.setdelta(-1052617934);
-  // This arc arises in the KML test, and the program blew its stack when compiled with MSVC.
   tassert(fabs(a.length()-523.599)<0.001);
   tassert(a.chordlength()==500);
   tassert(fabs(a.diffarea()-(M_PI*sqr(500)/6-250*500*M_SQRT_3_4))<1e-4);
@@ -2149,14 +2144,6 @@ void testarc()
   a.setcurvature(0.01,0.01);
   cout<<"setcurvature: radius="<<a.radius(0)<<endl;
   tassert(abs(a.radius(0)-100)<0.0001);
-  /* beardiff-delta=DEG360, which results in different code flow by MSVC than
-   * by GCC. The problem is that the spiralarc equivalent of this arc, when
-   * split by the code compiled by MSVC, produces NaN.
-   */
-  kmlspi=spiralarc(kmlarc);
-  cout<<"kmlpnt is "<<(kmlspi.in(kmlpnt)?"":"not ")<<"in kmlspi\n";
-  cout<<"kmlpnt is "<<(kmlarc.in(kmlpnt)?"":"not ")<<"in kmlarc\n";
-  tassert(!kmlarc.in(kmlpnt));
 }
 
 void testspiralarc()
@@ -2165,13 +2152,19 @@ void testspiralarc()
   double bear[3],len,begcur,endcur,arcarea,spiralarea;
   vector<double> extrema;
   xyz beg(0,0,3),end(300,400,7),sta,pi;
+  xyz begk(6024724080.6769285,135556291815.4817,0),endk(82597158811.140015,-1116177821.7897496,0);
   xy ctr;
+  xy kmlpnt(-337.97179595901059,364.38542430496875);
+  arc kmlarc(begk,endk);
   spiralarc a(beg,end),b(beg,0.001,0.001,end),c,arch[10];
   spiralarc az0(xyz(189794.012,496960.750,0),1531654601,0,1145.229168e-6,60.96,0); // From a road in Arizona
+  spiralarc kmlspi;
   arc aarc(beg,end);
   bezier3d a3d;
   PostScript ps;
   BoundRect br;
+  kmlarc.setdelta(-1052617934);
+  // This arc arises in the KML test, and the program blew its stack when compiled with MSVC.
   ps.open("spiralarc.ps");
   ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
@@ -2299,6 +2292,14 @@ void testspiralarc()
   ps.endpage();
   ps.trailer();
   ps.close();
+  /* beardiff-delta=DEG360, which results in different code flow by MSVC than
+   * by GCC. The problem is that the spiralarc equivalent of this arc, when
+   * split by the code compiled by MSVC, produces NaN.
+   */
+  kmlspi=spiralarc(kmlarc);
+  cout<<"kmlpnt is "<<(kmlspi.in(kmlpnt)?"":"not ")<<"in kmlspi\n";
+  cout<<"kmlpnt is "<<(kmlarc.in(kmlpnt)?"":"not ")<<"in kmlarc\n";
+  tassert(!kmlarc.in(kmlpnt));
 }
 
 void spiralmicroscope(segment *a,double aalong,segment *b,double balong,string fname,int scale=1)
