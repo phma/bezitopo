@@ -235,7 +235,7 @@ check_include_files(sys/time.h HAVE_SYS_TIME_H)
 check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_files(windows.h HAVE_WINDOWS_H)
 
-install(TARGETS bezitopo convertgeoid viewtin DESTINATION bin)
+install(TARGETS bezitopo convertgeoid viewtin clotilde DESTINATION bin)
 install(TARGETS ${MAKE_SHARED} ${MAKE_STATIC} DESTINATION lib)
 install(FILES ${PROJECT_BINARY_DIR}/config.h DESTINATION include/bezitopo)
 install(FILES ${qm_files} projections.txt transmer.dat DESTINATION share/bezitopo)
