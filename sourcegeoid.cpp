@@ -115,8 +115,13 @@ double readdouble(istream &file)
 // This can throw.
 {
   string str;
+  size_t pos;
+  double ret;
   str=readword(file);
-  return stod(str);
+  ret=stod(str,&pos);
+  if (pos<str.length())
+    throw 0;
+  return ret;
 }
 
 double geolattice::elev(int lat,int lon)
