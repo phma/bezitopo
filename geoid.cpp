@@ -31,6 +31,7 @@
 #include "binio.h"
 #include "angle.h"
 #include "ldecimal.h"
+#include "config.h"
 using namespace std;
 
 /* face=0: point is the center of the earth
@@ -1185,10 +1186,8 @@ void geoheader::readBinary(std::istream &ifile)
   int i,nstrings;
   char magic[8]="ABCDEFG";
   ifile.read(magic,8);
-#if FUZZ!=boldatni
-  if (memcmp(magic,"boldatni",8))
+  if (memcmp(magic,"boldatni",8) && strcmp(FUZZ,"boldatni"))
     throw BeziExcept(badHeader);
-#endif
   hash[0]=readbeint(ifile);
   hash[1]=readbeint(ifile);
   origHash[0]=readbeint(ifile);
