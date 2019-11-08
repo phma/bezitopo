@@ -21,7 +21,7 @@
 #cmakedefine HAVE_WINDOWS_H
 #cmakedefine HAVE_SYS_TIME_H
 #cmakedefine HAVE_SYS_RESOURCE_H
-#define FUZZ @FUZZ@
+#define FUZZ "@FUZZ@"
 #define VERSION "@BEZITOPO_VERSION@"
 #define COPY_YEAR @COPY_YEAR@
 #define SHARE_DIR "@SHARE_DIR@"

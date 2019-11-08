@@ -608,12 +608,13 @@ int main(int argc, char *argv[])
   int fineness=10800;
   setEndian(ENDIAN_NATIVE);
   initformat("bol","bol","Bezitopo Boldatni",readboldatni,writeboldatni);
-#if FUZZ!=boldatni
-  initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin,writeusngsbin);
-  initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf,writecarlsongsf);
-  initformat("ngatxt","grd","US National Geospatial-Intelligence Agency text",readusngatxt,writeusngatxt);
-  initformat("ngabin","","US National Geospatial-Intelligence Agency binary",readusngabin,nullptr);
-#endif
+  if (strcmp(FUZZ,"boldatni"))
+  {
+    initformat("ngs","bin","US National Geodetic Survey binary",readusngsbin,writeusngsbin);
+    initformat("gsf","gsf","Carlson Geoid Separation File",readcarlsongsf,writecarlsongsf);
+    initformat("ngatxt","grd","US National Geospatial-Intelligence Agency text",readusngatxt,writeusngatxt);
+    initformat("ngabin","","US National Geospatial-Intelligence Agency binary",readusngabin,nullptr);
+  }
   outputgeoid.cmap=new cubemap;
   outputgeoid.ghdr=new geoheader;
   outputgeoid.glat=new geolattice;
