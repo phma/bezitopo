@@ -31,7 +31,7 @@
 #include "leastsquares.h"
 #include "cogospiral.h"
 
-#define METHOD 2
+#define METHOD 3
 /* Method 1: Adjust the length of each arc so that the sum of their displacements
  * equals the displacement of the spiralarc.
  * Method 2: Adjust the lengths of all but two of the arcs to minimize the squared
@@ -611,7 +611,7 @@ polyarc manyArc(spiralarc a,int narcs)
 #if METHOD==3
   polyarc ret;
   segment cubic=spiralToCubic(a);
-  vector<segment> quads=manyQuad(a,narcs);
+  vector<segment> quads=manyQuad(cubic,narcs);
   vector<Circle> lines=crossLines(a,quads);
   vector<double> offs=offsets(cubic,quads);
   ret=manyArcUnadjusted(a,narcs);
