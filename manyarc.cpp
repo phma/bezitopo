@@ -243,6 +243,23 @@ int endDirectionError(spiralarc &a,vector<xyz> &ps)
   return bear-a.endbearing();
 }
 
+polyarc manyArcUnadjusted3(spiralarc a,vector<Circle> lines,vector<double> offs)
+{
+  polyarc ret;
+  vector<xyz> ps=pointSeq(lines,offs);
+  int i,bear=a.startbearing(),lastbear;
+  ret.insert(a.getstart());
+  for (i=1;i<ps.size();i++)
+  {
+    lastbear=bear;
+    bear=2*dir(xy(ps[i-1]),xy(ps[i]))-bear;
+    ret.insert(ps[i]);
+    ret.setdelta(i-1,bear-lastbear);
+  }
+  ret.open();
+  return ret;
+}
+
 array<int,2> ends(polyarc apx)
 /* Returns the indices of the two arcs whose angle is closest to 90°.
  * For most spiralarcs in actual use, they are the first and the last.
@@ -614,8 +631,8 @@ polyarc manyArc(spiralarc a,int narcs)
   vector<segment> quads=manyQuad(cubic,narcs);
   vector<Circle> lines=crossLines(a,quads);
   vector<double> offs=offsets(cubic,quads);
-  ret=manyArcUnadjusted(a,narcs);
-  ret=adjustManyArc1(ret,a);
+  ret=manyArcUnadjusted3(a,lines,offs);
+  //ret=adjustManyArc1(ret,a);
 #endif
   return ret;
 }
