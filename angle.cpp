@@ -96,9 +96,19 @@ int atan2i(double y,double x)
   return rint(atan2(y,x)/M_PIl*1073741824.);
 }
 
+int twiceatan2i(double y,double x)
+{
+  return rint(atan2(y,x)/M_PIl*2147483648.);
+}
+
 int atan2i(xy vect)
 {
   return atan2i(vect.north(),vect.east());
+}
+
+int twiceatan2i(xy vect)
+{
+  return twiceatan2i(vect.north(),vect.east());
 }
 
 int twiceasini(double x)

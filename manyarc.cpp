@@ -239,7 +239,7 @@ int endDirectionError(spiralarc &a,vector<xyz> &ps)
 {
   int i,bear=a.startbearing();
   for (i=1;i<ps.size();i++)
-    bear=2*dir(xy(ps[i-1]),xy(ps[i]))-bear;
+    bear=twicedir(xy(ps[i-1]),xy(ps[i]))-bear;
   return bear-a.endbearing();
 }
 
@@ -252,7 +252,7 @@ polyarc manyArcUnadjusted3(spiralarc a,vector<Circle> lines,vector<double> offs)
   for (i=1;i<ps.size();i++)
   {
     lastbear=bear;
-    bear=2*dir(xy(ps[i-1]),xy(ps[i]))-bear;
+    bear=twicedir(xy(ps[i-1]),xy(ps[i]))-bear;
     ret.insert(ps[i]);
     ret.setdelta(i-1,bear-lastbear);
   }

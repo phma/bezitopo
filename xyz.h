@@ -67,6 +67,7 @@ public:
   friend xy turn(xy a,int angle);
   friend double dist(xy a,xy b);
   friend int dir(xy a,xy b);
+  friend int twicedir(xy a,xy b);
   friend double dot(xy a,xy b);
   friend double area3(xy a,xy b,xy c);
   friend class triangle;

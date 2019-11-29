@@ -206,6 +206,11 @@ int dir(xy a,xy b)
   return atan2i(b-a);
 }
 
+int twicedir(xy a,xy b)
+{
+  return twiceatan2i(b-a);
+}
+
 double dot(xy a,xy b)
 {
   return (a.y*b.y+a.x*b.x);
