@@ -243,7 +243,7 @@ int endDirectionError(spiralarc &a,vector<xyz> &ps)
   return bear-a.endbearing();
 }
 
-polyarc manyArcUnadjusted3(spiralarc a,vector<Circle> lines,vector<double> offs)
+polyarc manyArcApprox3(spiralarc a,vector<Circle> lines,vector<double> offs)
 {
   polyarc ret;
   vector<xyz> ps=pointSeq(lines,offs);
@@ -632,7 +632,7 @@ polyarc manyArc(spiralarc a,int narcs)
   vector<segment> quads=manyQuad(cubic,narcs);
   vector<Circle> lines=crossLines(a,quads);
   vector<double> offs=offsets(cubic,quads);
-  ret=manyArcUnadjusted3(a,lines,offs);
+  ret=manyArcApprox3(a,lines,offs);
   //ret=adjustManyArc1(ret,a);
 #endif
   return ret;
