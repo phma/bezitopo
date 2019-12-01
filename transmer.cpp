@@ -29,6 +29,7 @@
 #include <iomanip>
 #include <cassert>
 #include <fftw3.h>
+#include "config.h"
 #include "polyline.h"
 #include "ldecimal.h"
 #include "projection.h"
@@ -721,6 +722,8 @@ int main(int argc, char *argv[])
   ofstream merctext("transmer.txt");
   for (i=1;i<argc;i++)
     args.push_back(argv[i]);
+  cout<<"Transmer, part of Bezitopo version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat\n"
+      <<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
   ps.open("transmer.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
