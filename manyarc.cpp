@@ -232,7 +232,7 @@ vector<xyz> pointSeq(vector<Circle> &cl,vector<double> &os)
   return ret;
 }
 
-int endDirectionError(spiralarc &a,vector<xyz> &ps)
+int endDirectionError(spiralarc &a,const vector<xyz> &ps)
 /* Starts at the startbearing of a, and returns how much a smooth polyarc
  * would differ from the endbearing of a, without actually drawing arcs.
  */
@@ -258,6 +258,39 @@ polyarc manyArcApprox3(spiralarc a,vector<Circle> lines,vector<double> offs)
   }
   ret.open();
   ret.setlengths();
+  return ret;
+}
+
+vector<double> adjust1step3(polyarc apx,spiralarc a,vector<Circle> lines,vector<double> offs)
+{
+  int nlines=lines.size();
+  int i,j;
+  double sidepull=a.length()/(nlines+1)/2e3;
+  vector<double> plusoffsets,minusoffsets,adjustment,ret;
+  vector<double> deflection;
+  matrix sidedefl(1,nlines);
+  for (i=0;i<nlines;i++)
+  {
+    plusoffsets.clear();
+    minusoffsets.clear();
+    for (j=0;j<nlines;j++)
+      if (j==i)
+      {
+	plusoffsets.push_back(offs[j]+sidepull);
+	minusoffsets.push_back(offs[j]-sidepull);
+      }
+      else
+      {
+	plusoffsets.push_back(offs[j]);
+	minusoffsets.push_back(offs[j]);
+      }
+    sidedefl[0][i]=1000*(endDirectionError(a,pointSeq(lines,plusoffsets))-
+			 endDirectionError(a,pointSeq(lines,minusoffsets)));
+  }
+  deflection.push_back(endDirectionError(a,pointSeq(lines,offs)));
+  adjustment=linearLeastSquares(sidedefl,deflection);
+  for (i=0;i<nlines;i++)
+    ret.push_back(offs[i]+adjustment[i]);
   return ret;
 }
 
