@@ -470,7 +470,7 @@ int main(int argc, char *argv[])
   readTmCoefficients();
   readAllProjections();
   cout<<"Bezitopo version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat\n"
-  <<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
+  <<"Distributed under LGPL v3 or later. This is free software with no warranty."<<endl;
   while (cont)
   {
     cout<<"? ";

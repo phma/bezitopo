@@ -162,7 +162,7 @@ void argpass2()
       case 1:
 	helporversion=true;
 	cout<<"Clotilde, part of Bezitopo version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat\n"
-	<<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
+	<<"Distributed under LGPL v3 or later. This is free software with no warranty."<<endl;
 	break;
       case 2: // arc length
         if (i+1<cmdline.size() && cmdline[i+1].optnum<0)

@@ -321,7 +321,7 @@ void TinWindow::aboutProgram()
 {
   QString progName=tr("Bezitopo");
   QMessageBox::about(this,tr("ViewTIN"),
-		     tr("%1\nVersion %2\nCopyright %3 Pierre Abbat\nLicense GPL 3 or later")
+		     tr("%1\nVersion %2\nCopyright %3 Pierre Abbat\nLicense LGPL 3 or later")
 		     .arg(progName).arg(QString(VERSION)).arg(COPY_YEAR));
 }
 
