@@ -62,8 +62,8 @@ void ProjListWidget::setPoint(vball v)
 {
   point=v;
   containingProjections=allProjections.cover(v);
-  cout<<allProjections.size()<<" projections total\n";
-  cout<<containingProjections.size()<<" projections contain the point\n";
+  //cout<<allProjections.size()<<" projections total\n";
+  //cout<<containingProjections.size()<<" projections contain the point\n";
   updateComboBoxes();
 }
 
