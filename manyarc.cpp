@@ -510,7 +510,7 @@ polyarc adjustManyArc1(polyarc apx,spiralarc a)
  * spiralarc, while the rest of the arcs are the variables for least squares.
  */
 
-polyarc adjust1step(polyarc apx,spiralarc a,int n0,int n1,double &adjsq)
+polyarc adjust1step2(polyarc apx,spiralarc a,int n0,int n1,double &adjsq)
 {
   int narcs=apx.size();
   int i,i2,j;
@@ -603,7 +603,7 @@ polyarc adjustManyArc2(polyarc apx,spiralarc a)
   array<int,2> theEnds=ends(apx);
   do
   {
-    apx=adjust1step(apx,a,theEnds[0],theEnds[1],adjsq);
+    apx=adjust1step2(apx,a,theEnds[0],theEnds[1],adjsq);
     i++;
   } while (i<5 && adjsq>1e-7);
   return apx;
