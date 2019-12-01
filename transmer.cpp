@@ -20,6 +20,9 @@
  * You should have received a copy of the GNU General Public License
  * and Lesser General Public License along with Bezitopo. If not, see
  * <http://www.gnu.org/licenses/>.
+ *
+ * This file is distributed under the terms of the GNU General Public
+ * License, because it uses FFTW.
  */
 #include <string>
 #include <iostream>
