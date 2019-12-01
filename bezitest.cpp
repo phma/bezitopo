@@ -2810,6 +2810,7 @@ void test1manyarc(spiralarc s,PostScript &ps)
   int crossingsPerArc[4];
   vector<array<alosta,2> > crossings1;
   xy enddiff;
+  int endbeardiff;
   bool showCenters=false;
   BoundRect br;
   segment cubic=spiralToCubic(s);
@@ -2822,8 +2823,10 @@ void test1manyarc(spiralarc s,PostScript &ps)
   {
     approx=manyArc(s,narcs);
     enddiff=approx.getend()-s.getend();
+    endbeardiff=approx.getarc(narcs-1).endbearing()-s.endbearing();
     cout<<narcs<<" arcs, ";
     tassert(enddiff.length()==0);
+    //cout<<"end bearing error "<<endbeardiff;
     cout<<"mean square error "<<meanSquareDistance(approx,s);
     cout<<" linear error "<<maxError(approx,s)<<endl;
     crossings.clear();
