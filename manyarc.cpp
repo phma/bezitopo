@@ -257,6 +257,7 @@ polyarc manyArcUnadjusted3(spiralarc a,vector<Circle> lines,vector<double> offs)
     ret.setdelta(i-1,bear-lastbear);
   }
   ret.open();
+  ret.setlengths();
   return ret;
 }
 
