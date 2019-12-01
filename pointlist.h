@@ -97,6 +97,7 @@ public:
   qindex qinx;
   pointlist();
   void addpoint(int numb,point pnt,bool overwrite=false);
+  int addtriangle(int n=1);
   void clear();
   int size();
   void clearmarks();

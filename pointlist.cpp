@@ -379,6 +379,18 @@ void pointlist::addpoint(int numb,point pnt,bool overwrite)
  revpoints[&(points[a])]=a;
  }
 
+int pointlist::addtriangle(int n)
+{
+  int i;
+  int newTriNum=triangles.size();
+  for (i=0;i<n;i++)
+  {
+    triangles[newTriNum+i].sarea=0;
+    //revtriangles[&triangles[newTriNum+i]]=newTriNum+i;
+  }
+  return newTriNum;
+}
+
 void pointlist::makeqindex()
 {
   vector<xy> plist;
