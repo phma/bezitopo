@@ -312,12 +312,10 @@ vector<double> adjustManyArc3(spiralarc a,vector<Circle> lines,vector<double> of
   for (i=0;i<55;i++)
   {
     err=endDirectionError(a,pointSeq(lines,offs));
-    cout<<err<<' ';
     if (err==0)
       break;
     offs=adjust1step3(a,lines,offs);
   }
-  cout<<endl;
   return offs;
 }
 
