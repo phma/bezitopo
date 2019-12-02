@@ -284,13 +284,13 @@ vector<double> adjust1step3(spiralarc a,vector<Circle> lines,vector<double> offs
 	plusoffsets.push_back(offs[j]);
 	minusoffsets.push_back(offs[j]);
       }
-    sidedefl[0][i]=1000*(endDirectionError(a,pointSeq(lines,plusoffsets))-
-			 endDirectionError(a,pointSeq(lines,minusoffsets)));
+    sidedefl[0][i]=(endDirectionError(a,pointSeq(lines,plusoffsets))-
+		    endDirectionError(a,pointSeq(lines,minusoffsets)))/sidepull;
   }
   deflection.push_back(endDirectionError(a,pointSeq(lines,offs)));
-  adjustment=linearLeastSquares(sidedefl,deflection);
+  adjustment=minimumNorm(sidedefl,deflection);
   for (i=0;i<nlines;i++)
-    ret.push_back(offs[i]+adjustment[i]*sidepull);
+    ret.push_back(offs[i]-adjustment[i]);
   return ret;
 }
 
