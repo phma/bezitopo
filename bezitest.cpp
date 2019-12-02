@@ -2826,8 +2826,8 @@ void test1manyarc(spiralarc s,PostScript &ps)
     endbeardiff=approx.getarc(narcs-1).endbearing()-s.endbearing();
     cout<<narcs<<" arcs, ";
     tassert(enddiff.length()==0);
-    //cout<<"end bearing error "<<endbeardiff;
-    cout<<"mean square error "<<meanSquareDistance(approx,s);
+    cout<<"end bearing error "<<endbeardiff;
+    //cout<<"mean square error "<<meanSquareDistance(approx,s);
     cout<<" linear error "<<maxError(approx,s)<<endl;
     crossings.clear();
     tickmarks.clear();

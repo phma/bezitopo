@@ -261,7 +261,7 @@ polyarc manyArcApprox3(spiralarc a,vector<Circle> lines,vector<double> offs)
   return ret;
 }
 
-vector<double> adjust1step3(polyarc apx,spiralarc a,vector<Circle> lines,vector<double> offs)
+vector<double> adjust1step3(spiralarc a,vector<Circle> lines,vector<double> offs)
 {
   int nlines=lines.size();
   int i,j;
@@ -290,8 +290,20 @@ vector<double> adjust1step3(polyarc apx,spiralarc a,vector<Circle> lines,vector<
   deflection.push_back(endDirectionError(a,pointSeq(lines,offs)));
   adjustment=linearLeastSquares(sidedefl,deflection);
   for (i=0;i<nlines;i++)
-    ret.push_back(offs[i]+adjustment[i]);
+    ret.push_back(offs[i]+adjustment[i]*sidepull);
   return ret;
+}
+
+vector<double> adjustManyArc3(spiralarc a,vector<Circle> lines,vector<double> offs)
+{
+  int i;
+  for (i=0;i<5;i++)
+  {
+    if (endDirectionError(a,pointSeq(lines,offs))==0)
+      break;
+    offs=adjust1step3(a,lines,offs);
+  }
+  return offs;
 }
 
 array<int,2> ends(polyarc apx)
@@ -665,8 +677,8 @@ polyarc manyArc(spiralarc a,int narcs)
   vector<segment> quads=manyQuad(cubic,narcs);
   vector<Circle> lines=crossLines(a,quads);
   vector<double> offs=offsets(cubic,quads);
+  offs=adjustManyArc3(a,lines,offs);
   ret=manyArcApprox3(a,lines,offs);
-  //ret=adjustManyArc1(ret,a);
 #endif
   return ret;
 }
