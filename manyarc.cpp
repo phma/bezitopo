@@ -265,11 +265,11 @@ vector<double> adjust1step3(spiralarc a,vector<Circle> lines,vector<double> offs
 {
   int nlines=lines.size();
   int i,j;
-  double sidepull=a.length()/(nlines+1)/2e3;
+  double sidepull=a.length()/(nlines-1)/2e3;
   vector<double> plusoffsets,minusoffsets,adjustment,ret;
   vector<double> deflection;
-  matrix sidedefl(1,nlines);
-  for (i=0;i<nlines;i++)
+  matrix sidedefl(1,nlines-2);
+  for (i=1;i<nlines-1;i++)
   {
     plusoffsets.clear();
     minusoffsets.clear();
@@ -284,25 +284,30 @@ vector<double> adjust1step3(spiralarc a,vector<Circle> lines,vector<double> offs
 	plusoffsets.push_back(offs[j]);
 	minusoffsets.push_back(offs[j]);
       }
-    sidedefl[0][i]=(endDirectionError(a,pointSeq(lines,plusoffsets))-
-		    endDirectionError(a,pointSeq(lines,minusoffsets)))/sidepull;
+    sidedefl[0][i-1]=(endDirectionError(a,pointSeq(lines,plusoffsets))-
+		      endDirectionError(a,pointSeq(lines,minusoffsets)))/sidepull/2;
   }
   deflection.push_back(endDirectionError(a,pointSeq(lines,offs)));
   adjustment=minimumNorm(sidedefl,deflection);
-  for (i=0;i<nlines;i++)
-    ret.push_back(offs[i]-adjustment[i]);
+  ret.push_back(offs[0]);
+  for (i=1;i<nlines-1;i++)
+    ret.push_back(offs[i]-adjustment[i-1]);
+  ret.push_back(offs.back());
   return ret;
 }
 
 vector<double> adjustManyArc3(spiralarc a,vector<Circle> lines,vector<double> offs)
 {
-  int i;
+  int i,err;
   for (i=0;i<5;i++)
   {
-    if (endDirectionError(a,pointSeq(lines,offs))==0)
+    err=endDirectionError(a,pointSeq(lines,offs));
+    cout<<err<<' ';
+    if (err==0)
       break;
     offs=adjust1step3(a,lines,offs);
   }
+  cout<<endl;
   return offs;
 }
 
