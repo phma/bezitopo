@@ -28,6 +28,7 @@
 #include "rootfind.h"
 #include "manysum.h"
 #include "ldecimal.h"
+#include "random.h"
 #include "leastsquares.h"
 #include "cogospiral.h"
 
@@ -264,7 +265,8 @@ polyarc manyArcApprox3(spiralarc a,vector<Circle> lines,vector<double> offs)
 vector<double> adjust1step3(spiralarc a,vector<Circle> lines,vector<double> offs)
 {
   int nlines=lines.size();
-  int i,j;
+  int i,j,ederr;
+  double randmul;
   double sidepull=a.length()/(nlines-1)/2e3;
   vector<double> plusoffsets,minusoffsets,adjustment,ret;
   vector<double> deflection;
@@ -287,9 +289,17 @@ vector<double> adjust1step3(spiralarc a,vector<Circle> lines,vector<double> offs
     sidedefl[0][i-1]=(endDirectionError(a,pointSeq(lines,plusoffsets))-
 		      endDirectionError(a,pointSeq(lines,minusoffsets)))/sidepull/2;
   }
-  deflection.push_back(endDirectionError(a,pointSeq(lines,offs)));
+  ederr=endDirectionError(a,pointSeq(lines,offs));
+  deflection.push_back(ederr);
   adjustment=minimumNorm(sidedefl,deflection);
   ret.push_back(offs[0]);
+  if (ederr>-3 && ederr<3)
+  for (i=1;i<nlines-1;i++)
+  {
+    randmul=(rng.ucrandom()+0.5)/256;
+    ret.push_back(offs[i]-adjustment[i-1]*randmul);
+  }
+  else
   for (i=1;i<nlines-1;i++)
     ret.push_back(offs[i]-adjustment[i-1]);
   ret.push_back(offs.back());
@@ -299,7 +309,7 @@ vector<double> adjust1step3(spiralarc a,vector<Circle> lines,vector<double> offs
 vector<double> adjustManyArc3(spiralarc a,vector<Circle> lines,vector<double> offs)
 {
   int i,err;
-  for (i=0;i<5;i++)
+  for (i=0;i<55;i++)
   {
     err=endDirectionError(a,pointSeq(lines,offs));
     cout<<err<<' ';
