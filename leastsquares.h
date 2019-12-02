@@ -48,3 +48,4 @@ public:
 };
 
 std::vector<double> linearLeastSquares(matrix m,std::vector<double> v);
+std::vector<double> minimumNorm(matrix m,std::vector<double> v);
