@@ -33,14 +33,17 @@ void readTinFile(pointlist &pl,string fileName,double unit)
   vector<array<xyz,3> > bareTriangles;
   ifstream file;
   bareTriangles=extractTriangles(readDxfGroups(fileName));
-  if (unit!=1)
-    for (i=0;i<bareTriangles.size();i++)
-      for (j=0;j<3;j++)
-	bareTriangles[i][j]*=unit;
-  pl.makeBareTriangles(bareTriangles);
-  bareTriangles.clear();
-  cout<<"Read "<<pl.triangles.size()<<" triangles\n";
-  pl.fillInBareTin();
-  cout<<pl.triangles.size()<<" triangles after filling in\n";
-  pl.addperimeter();
+  if (bareTriangles.size())
+  {
+    if (unit!=1)
+      for (i=0;i<bareTriangles.size();i++)
+	for (j=0;j<3;j++)
+	  bareTriangles[i][j]*=unit;
+    pl.makeBareTriangles(bareTriangles);
+    bareTriangles.clear();
+    cout<<"Read "<<pl.triangles.size()<<" triangles\n";
+    pl.fillInBareTin();
+    cout<<pl.triangles.size()<<" triangles after filling in\n";
+    pl.addperimeter();
+  }
 }
