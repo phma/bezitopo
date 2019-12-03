@@ -705,156 +705,160 @@ Licencia GPL 3 o posterior</translation>
 <context>
     <name>TopoCanvas</name>
     <message>
-        <location filename="topocanvas.cpp" line="311"/>
+        <location filename="topocanvas.cpp" line="309"/>
         <source>Load TIN</source>
         <translation>Cargar TIN</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="314"/>
         <source>(*.dxf);;(*)</source>
-        <translation>Ficheros de intercambio de dibujos (*.dxf);;Todos los ficheros (*)</translation>
+        <translation type="vanished">Ficheros de intercambio de dibujos (*.dxf);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="350"/>
+        <location filename="topocanvas.cpp" line="312"/>
+        <source>(*.dxf);;(*.ptin);;(*)</source>
+        <translation>Ficheros de intercambio de dibujos (*.dxf);;Ficheros PerfectTIN (*.ptin);;Todos los ficheros (*)</translation>
+    </message>
+    <message>
+        <location filename="topocanvas.cpp" line="338"/>
         <source>Save Drawing</source>
         <translation>Guardar Dibujo</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="353"/>
+        <location filename="topocanvas.cpp" line="341"/>
         <source>(*.bez);;(*)</source>
         <translation>Ficheros de Bezitopo (*.bez);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="394"/>
+        <location filename="topocanvas.cpp" line="382"/>
         <source>Open PNEZD File</source>
         <translation>Abrir fichero PNEZD</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="397"/>
+        <location filename="topocanvas.cpp" line="385"/>
         <source>(*.asc);;(*)</source>
         <translation>Ficheros PNEZD (*.asc);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="421"/>
+        <location filename="topocanvas.cpp" line="409"/>
         <source>Open Criteria File</source>
         <translation>Abrir fichero de criterios</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="424"/>
+        <location filename="topocanvas.cpp" line="412"/>
         <source>(*.crit);;(*)</source>
         <translation>Ficheros de criterios (*.crit);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="449"/>
+        <location filename="topocanvas.cpp" line="437"/>
         <source>Open Breakline File</source>
         <translation>Abrir fichero de líneas de rotura</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="452"/>
-        <location filename="topocanvas.cpp" line="512"/>
+        <location filename="topocanvas.cpp" line="440"/>
+        <location filename="topocanvas.cpp" line="500"/>
         <source>(*.brk);;(*)</source>
         <translation>Ficheros de líneas de rotura (*.brk);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="459"/>
-        <location filename="topocanvas.cpp" line="539"/>
+        <location filename="topocanvas.cpp" line="447"/>
+        <location filename="topocanvas.cpp" line="527"/>
         <source>You have edited breaklines.</source>
         <translation>Has editado líneas de rotura.</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="460"/>
+        <location filename="topocanvas.cpp" line="448"/>
         <source>Do you want to load?</source>
         <translation>Me pides importar líneas de rotura, pero las líneas de rotura en el TIN están más nuevas que las leídas de fichero. ¿Quieres leerlas de un fichero?</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="494"/>
+        <location filename="topocanvas.cpp" line="482"/>
         <source>Can&apos;t read breaklines. Error: </source>
         <translation>No puedo leer líneas de rotura. Error: </translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="509"/>
+        <location filename="topocanvas.cpp" line="497"/>
         <source>Save Breakline File</source>
         <translation>Guardar fichero de líneas de rotura</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="540"/>
+        <location filename="topocanvas.cpp" line="528"/>
         <source>Do you want to make TIN?</source>
         <translation>Me pides hacer un TIN, pero has editado las líneas de rotura en el TIN después que las has leídas de un fichero. ¿Quieres hacer un nuevo TIN?</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="586"/>
-        <location filename="topocanvas.cpp" line="621"/>
+        <location filename="topocanvas.cpp" line="574"/>
+        <location filename="topocanvas.cpp" line="609"/>
         <source>Making TIN</source>
         <translation>Haciendo TIN</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="587"/>
+        <location filename="topocanvas.cpp" line="575"/>
         <source>Sweeping convex hull...</source>
         <translation>Barriendo cápsula convexa...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="622"/>
+        <location filename="topocanvas.cpp" line="610"/>
         <source>Flipping edges...</source>
         <translation>Girando aristas...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="645"/>
+        <location filename="topocanvas.cpp" line="633"/>
         <source>Took too long to make TIN</source>
         <translation>Hacer TIN duró demasiado tiempo</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="686"/>
+        <location filename="topocanvas.cpp" line="674"/>
         <source>Making surface</source>
         <translation>Haciendo superficie</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="687"/>
+        <location filename="topocanvas.cpp" line="675"/>
         <source>Finding critical points...</source>
         <translation>Hallando puntos críticos...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="730"/>
+        <location filename="topocanvas.cpp" line="718"/>
         <source>Can&apos;t make TIN. Error: </source>
         <translation>No puedo hacer TIN. Error: </translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="797"/>
-        <location filename="topocanvas.cpp" line="863"/>
+        <location filename="topocanvas.cpp" line="785"/>
+        <location filename="topocanvas.cpp" line="851"/>
         <source>Drawing contours</source>
         <translation>Dibujando contornos</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="798"/>
+        <location filename="topocanvas.cpp" line="786"/>
         <source>Drawing rough contours...</source>
         <translation>Dibujando contornos ásperos...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="864"/>
+        <location filename="topocanvas.cpp" line="852"/>
         <source>Drawing smooth contours...</source>
         <translation>Dibujando contornos lisos</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="915"/>
+        <location filename="topocanvas.cpp" line="903"/>
         <source>Load Geoid File</source>
         <translation>Cargar Fichero Geoide</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="918"/>
+        <location filename="topocanvas.cpp" line="906"/>
         <source>(*.bol);;(*)</source>
         <translation>Ficheros de Boldatni (*.bol);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="941"/>
+        <location filename="topocanvas.cpp" line="929"/>
         <source>Can&apos;t read geoid. Error: </source>
         <translation>No puedo leer geoide. Error: </translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="1115"/>
+        <location filename="topocanvas.cpp" line="1103"/>
         <source>You have imported breaklines.</source>
         <translation>Has importado líneas de rotura.</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="1116"/>
+        <location filename="topocanvas.cpp" line="1104"/>
         <source>Do you want to edit?</source>
         <translation>Tientas editar una línea de rotura, pero las líneas de rotura leídas de fichero están más nuevas que las en el TIN. ¿Quieres editar líneas de rotura?</translation>
     </message>

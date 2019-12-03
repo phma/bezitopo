@@ -298,7 +298,7 @@ void TopoCanvas::updateEdgeNeighbors(edge *e)
 }
 
 void TopoCanvas::open()
-/* For now, this reads a bare TIN from a DXF file.
+/* For now, this reads a bare TIN from a DXF or PerfectTIN file.
  * When I implement reading Bezitopo files, I'll duplicate it.
  */
 {
@@ -309,7 +309,7 @@ void TopoCanvas::open()
   fileDialog->setWindowTitle(tr("Load TIN"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
-  fileDialog->setNameFilter(tr("(*.dxf);;(*)"));
+  fileDialog->setNameFilter(tr("(*.dxf);;(*.ptin);;(*)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
