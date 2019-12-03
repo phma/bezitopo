@@ -270,6 +270,7 @@ void triangle::flatten()
   critpoints.clear();
 #endif
   sarea=area();
+  peri=perimeter();
   setgradmat();
 }
 
