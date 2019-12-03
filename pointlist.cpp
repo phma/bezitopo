@@ -31,6 +31,7 @@
 #include "ldecimal.h"
 #include "except.h"
 #include "stl.h"
+#include "dxf.h"
 
 using namespace std;
 

@@ -25,6 +25,7 @@
 #include <cmath>
 #include "except.h"
 #include "topocanvas.h"
+#include "readtin.h"
 #include "zoom.h"
 #include "test.h"
 #include "ldecimal.h"
@@ -301,13 +302,10 @@ void TopoCanvas::open()
  * When I implement reading Bezitopo files, I'll duplicate it.
  */
 {
-  int i,j;
   int dialogResult;
   QStringList files;
   string fileName;
-  ifstream file;
   double unit;
-  vector<array<xyz,3> > bareTriangles;
   fileDialog->setWindowTitle(tr("Load TIN"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
@@ -320,17 +318,7 @@ void TopoCanvas::open()
     doc.pl.clear();
     doc.makepointlist(1);
     unit=doc.ms.toCoherent(1,LENGTH);
-    bareTriangles=extractTriangles(readDxfGroups(fileName));
-    if (unit!=1)
-      for (i=0;i<bareTriangles.size();i++)
-	for (j=0;j<3;j++)
-	  bareTriangles[i][j]*=unit;
-    doc.pl[1].makeBareTriangles(bareTriangles);
-    bareTriangles.clear();
-    cout<<"Read "<<doc.pl[1].triangles.size()<<" triangles\n";
-    doc.pl[1].fillInBareTin();
-    cout<<doc.pl[1].triangles.size()<<" triangles after filling in\n";
-    doc.pl[1].addperimeter();
+    readTinFile(doc.pl[1],fileName,unit);
     plnum=1;
     sizeToFit();
     pointsValid=true;
