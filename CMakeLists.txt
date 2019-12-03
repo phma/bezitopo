@@ -155,7 +155,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
                manysum.cpp matrix.cpp measure.cpp measurebutton.cpp
                minquad.cpp objlist.cpp penwidth.cpp
                plwidget.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
-               ps.cpp qindex.cpp quaternion.cpp random.cpp
+               ps.cpp ptin.cpp qindex.cpp quaternion.cpp random.cpp
                readtin.cpp relprime.cpp rendercache.cpp
                rootfind.cpp segment.cpp smooth5.cpp
                spiral.cpp spolygon.cpp stl.cpp test.cpp textfile.cpp tin.cpp

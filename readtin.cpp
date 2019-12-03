@@ -24,6 +24,7 @@
 
 #include "readtin.h"
 #include "dxf.h"
+#include "ptin.h"
 
 using namespace std;
 
@@ -46,4 +47,6 @@ void readTinFile(pointlist &pl,string fileName,double unit)
     cout<<pl.triangles.size()<<" triangles after filling in\n";
     pl.addperimeter();
   }
+  else
+    readPtin(fileName,pl);
 }
