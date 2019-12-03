@@ -48,5 +48,9 @@ void readTinFile(pointlist &pl,string fileName,double unit)
     pl.addperimeter();
   }
   else
+  {
     readPtin(fileName,pl);
+    pl.addperimeter();
+    pl.makeqindex();
+  }
 }
