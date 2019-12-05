@@ -318,9 +318,11 @@ void TopoCanvas::open()
     doc.pl.clear();
     doc.makepointlist(1);
     unit=doc.ms.toCoherent(1,LENGTH);
+    setCursor(Qt::WaitCursor);
     readTinFile(doc.pl[1],fileName,unit);
     plnum=1;
     sizeToFit();
+    setCursor(Qt::ArrowCursor);
     pointsValid=true;
     tinValid=true;
     surfaceValid=true;
