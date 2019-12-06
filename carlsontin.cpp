@@ -81,6 +81,8 @@ bool readCarlsonTin(std::string inputFile,pointlist &pl,double unit)
 	break;
       default:
 	if (tinFile.good())
+	  good=false; // garbage tag, not end of file
+	if (pl.triangles.size()==0)
 	  good=false;
 	cont=false;
     }
