@@ -163,7 +163,8 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
                viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources} ${qm_files})
 add_executable(sitecheck angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp boundrect.cpp
-               breakline.cpp cidialog.cpp circle.cpp cogo.cpp cogospiral.cpp color.cpp
+               breakline.cpp carlsontin.cpp cidialog.cpp
+               circle.cpp cogo.cpp cogospiral.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp dxf.cpp ellipsoid.cpp
                except.cpp factordialog.cpp geoid.cpp geoidboundary.cpp
                halton.cpp intloop.cpp kml.cpp
