@@ -67,6 +67,7 @@ bool readCarlsonTin(std::string inputFile,pointlist &pl,double unit)
 	  if (pl.points.count(corners[i])==0)
 	    good=cont=false;
 	}
+	tinFile.get(); // this is a 0 written for an unknown reason
 	n=pl.addtriangle();
 	tri=&pl.triangles[n];
 	tri->a=&pl.points[corners[0]];

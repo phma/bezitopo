@@ -24,4 +24,4 @@
 
 #include "pointlist.h"
 
-void readTinFile(pointlist &pl,std::string fileName,double unit);
+int readTinFile(pointlist &pl,std::string fileName,double unit);

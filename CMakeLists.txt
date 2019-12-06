@@ -147,7 +147,8 @@ add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cp
                refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp smooth5.cpp
                sourcegeoid.cpp spiral.cpp spolygon.cpp stl.cpp tin.cpp vball.cpp vcurve.cpp)
 add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp boundrect.cpp
-               breakline.cpp cidialog.cpp circle.cpp cogo.cpp cogospiral.cpp color.cpp
+               breakline.cpp carlsontin.cpp cidialog.cpp
+               circle.cpp cogo.cpp cogospiral.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp dxf.cpp ellipsoid.cpp
                except.cpp factordialog.cpp geoid.cpp geoidboundary.cpp
                halton.cpp intloop.cpp kml.cpp

@@ -25,16 +25,23 @@
 #include "readtin.h"
 #include "dxf.h"
 #include "ptin.h"
+#include "carlsontin.h"
 
 using namespace std;
 
-void readTinFile(pointlist &pl,string fileName,double unit)
+int readTinFile(pointlist &pl,string fileName,double unit)
 {
   int i,j;
   vector<array<xyz,3> > bareTriangles;
   ifstream file;
-  bareTriangles=extractTriangles(readDxfGroups(fileName));
-  if (bareTriangles.size())
+  int status=0;
+  PtinHeader ptinHeader;
+  if (status==0)
+  {
+    bareTriangles=extractTriangles(readDxfGroups(fileName));
+    status=bareTriangles.size()>0;
+  }
+  if (status==1)
   {
     if (unit!=1)
       for (i=0;i<bareTriangles.size();i++)
@@ -46,11 +53,30 @@ void readTinFile(pointlist &pl,string fileName,double unit)
     pl.fillInBareTin();
     cout<<pl.triangles.size()<<" triangles after filling in\n";
     pl.addperimeter();
+    status=2;
   }
-  else
+  if (status==0)
   {
-    readPtin(fileName,pl);
+    ptinHeader=readPtin(fileName,pl);
+    status=ptinHeader.tolRatio>0;
+  }
+  if (status==1)
+  {
     pl.addperimeter();
     pl.makeqindex();
+    status=2;
   }
+  if (status==0)
+  {
+    status=readCarlsonTin(fileName,pl,unit);
+  }
+  if (status==1)
+  {
+    pl.fillInBareTin();
+    cout<<pl.triangles.size()<<" triangles after filling in\n";
+    pl.addperimeter();
+    pl.makeqindex();
+    status=2;
+  }
+  return status;
 }
