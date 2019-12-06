@@ -52,7 +52,7 @@ bool readCarlsonTin(std::string inputFile,pointlist &pl,double unit)
 	z=readledouble(tinFile)*unit;
 	if (pl.points.count(ptnum))
 	  good=cont=false; // point number repeated
-	else if (!(fabs(x)<4e7 && fabs(y)<4e7 && fabs(z)<4e7))
+	else if (!(fabs(x)<4e7 && fabs(y)<4e7 && fabs(z)<12000))
 	  good=cont=false; // point is bigger than Earth, or is NaN
 	else
 	{
