@@ -113,15 +113,17 @@ add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                scalefactor.cpp smooth5.cpp spiral.cpp spolygon.cpp stl.cpp test.cpp segment.cpp
                tin.cpp vball.cpp vcurve.cpp)
 add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitest.cpp bicubic.cpp binio.cpp breakline.cpp boundrect.cpp circle.cpp cogo.cpp
+               bezitest.cpp bicubic.cpp binio.cpp breakline.cpp
+               boundrect.cpp carlsontin.cpp circle.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp crosssection.cpp
                csv.cpp document.cpp drawobj.cpp
                dxf.cpp ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
                halton.cpp histogram.cpp hlattice.cpp hnum.cpp intloop.cpp kml.cpp
                latlong.cpp layer.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp
                matrix.cpp measure.cpp minquad.cpp objlist.cpp plot.cpp pnezd.cpp point.cpp
-               pointlist.cpp polyline.cpp projection.cpp ps.cpp qindex.cpp quaternion.cpp
-               random.cpp raster.cpp refinegeoid.cpp relprime.cpp rootfind.cpp
+               pointlist.cpp polyline.cpp projection.cpp
+               ps.cpp ptin.cpp qindex.cpp quaternion.cpp
+               random.cpp raster.cpp readtin.cpp refinegeoid.cpp relprime.cpp rootfind.cpp
                segment.cpp smooth5.cpp sourcegeoid.cpp spiral.cpp spolygon.cpp
                stl.cpp test.cpp textfile.cpp tin.cpp vball.cpp vcurve.cpp zoom.cpp)
 add_executable(clotilde angle.cpp arc.cpp bezier.cpp

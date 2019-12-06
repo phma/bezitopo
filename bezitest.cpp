@@ -87,6 +87,7 @@
 #include "manyarc.h"
 #include "leastsquares.h"
 #include "smooth5.h"
+#include "readtin.h"
 
 #define psoutput true
 // affects only maketin
@@ -7609,6 +7610,11 @@ void fuzz()
   {
     doc.ms.addUnit(METER);
     doc.readpnezd(args[2]);
+  }
+  if (args.size()>2 && args[1]=="tin")
+  {
+    doc.makepointlist(1);
+    readTinFile(doc.pl[1],args[2],1);
   }
 }
 
