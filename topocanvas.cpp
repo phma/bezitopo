@@ -309,7 +309,7 @@ void TopoCanvas::open()
   fileDialog->setWindowTitle(tr("Load TIN"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
   fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
-  fileDialog->setNameFilter(tr("(*.dxf);;(*.ptin);;(*)"));
+  fileDialog->setNameFilter(tr("(*.dxf);;(*.tin);;(*.ptin);;(*)"));
   dialogResult=fileDialog->exec();
   if (dialogResult)
   {
