@@ -74,6 +74,8 @@ bool readCarlsonTin(std::string inputFile,pointlist &pl,double unit)
 	tri->b=&pl.points[corners[1]];
 	tri->c=&pl.points[corners[2]];
 	tri->flatten();
+	if (tri->sarea<=0)
+	  good=false;
 	break;
       default:
 	if (tinFile.good())
