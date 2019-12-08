@@ -30,6 +30,7 @@
 #include "tin.h"
 #include "pointlist.h"
 #include "ldecimal.h"
+#include "except.h"
 #include "angle.h"
 #include "document.h"
 using namespace std;
@@ -588,7 +589,15 @@ void point::insertEdge(edge *edg)
       cerr<<"Point at ("<<ldecimal(x)<<','<<ldecimal(y)<<','<<ldecimal(z)
           <<") is trying to insert edge with bearing "<<newBearing<<" ("
 	  <<ldecimal(bintodeg(newBearing),bintodeg(1))<<"), but one already exists.\n";
-    assert(minAngle);
+    if (minAngle==0)
+    {
+      throw BeziExcept(flatTriangle);
+      /* This does not necessarily mean that there's a flat triangle.
+       * It is possible, if a TIN is made from a point cloud and then corrupted,
+       * that three points are in line and it's trying to connect a point in line
+       * with an already connected point.
+       */
+    }
     assert(minAnglePos==(maxAnglePos+1)%angles.size());
     edges[maxAnglePos]->setnext(this,edg);
     edg->setnext(this,edges[minAnglePos]);

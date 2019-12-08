@@ -72,16 +72,23 @@ int readTinFile(pointlist &pl,string fileName,double unit)
   }
   if (status==1)
   {
-    pl.fillInBareTin();
-    if (pl.checkTinConsistency())
+    try
     {
-      cout<<pl.triangles.size()<<" triangles after filling in\n";
-      pl.addperimeter();
-      pl.makeqindex();
-      status=2;
+      pl.fillInBareTin();
+      if (pl.checkTinConsistency())
+      {
+	cout<<pl.triangles.size()<<" triangles after filling in\n";
+	pl.addperimeter();
+	pl.makeqindex();
+	status=2;
+      }
+      else
+	status=0;
     }
-    else
+    catch (...)
+    {
       status=0;
+    }
   }
   return status;
 }
