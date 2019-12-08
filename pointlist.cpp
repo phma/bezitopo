@@ -96,14 +96,34 @@ void pointlist::clearmarks()
     e->second.clearmarks();
 }
 
+int symhash(int a,int b)
+/* symhash(a,b)=symhash(b,a). Otherwise similar to skewsym.
+ */
+{
+  int a1,a2,b1,b2;
+  a1=a*0x69969669;
+  a2=a*PHITURN;
+  b1=b*0x69969669;
+  b2=b*PHITURN;
+  a1=((a1&0xffe00000)>>21)|(a1&0x1ff800)|((a1&0x7ff)<<21);
+  a2=((a2&0xffff0000)>>16)|((a2&0xffff)<<16);
+  b1=((b1&0xffe00000)>>21)|(b1&0x1ff800)|((b1&0x7ff)<<21);
+  b2=((b2&0xffff0000)>>16)|((b2&0xffff)<<16);
+  return (a*b1*a2)^(b*a1*b2);
+}
+
+
 bool pointlist::checkTinConsistency()
 {
   bool ret=true;
-  int i,n,nInteriorEdges=0,nNeighborTriangles=0,turn1;
+  int i,j,n,nInteriorEdges=0,nNeighborTriangles=0,turn1;
   double a;
   long long totturn;
   ptlist::iterator p;
   vector<int> edgebearings;
+  array<int,2> orderedEdge;
+  map<int,vector<array<int,2> > > edgeHash;
+  map<int,vector<array<int,2> > >::iterator eh;
   edge *ed;
   for (p=points.begin();p!=points.end();p++)
   {
@@ -239,7 +259,32 @@ bool pointlist::checkTinConsistency()
         cerr<<"Triangle "<<i<<" neighbor c is wrong.\n";
       }
     }
+    /* Checks whether two triangles share an edge in the same direction.
+     * This is less stringent than the edge check in readPtin, which requires
+     * that another triangle have the same edge in the opposite direction,
+     * unless the edge is in the convex hull.
+     * It is possible for this to fail even if the rest of checkTinConsistency passes.
+     * For example, arrange points 1-8 counterclockwise and make these triangles:
+     * (1 2 3), (1 2 4), (1 4 5), (1 5 6), (1 6 7), (1 7 8).
+     */
+    orderedEdge[0]=revpoints[triangles[i].a];
+    orderedEdge[1]=revpoints[triangles[i].b];
+    edgeHash[symhash(orderedEdge[0],orderedEdge[1])].push_back(orderedEdge);
+    orderedEdge[0]=revpoints[triangles[i].b];
+    orderedEdge[1]=revpoints[triangles[i].c];
+    edgeHash[symhash(orderedEdge[0],orderedEdge[1])].push_back(orderedEdge);
+    orderedEdge[0]=revpoints[triangles[i].c];
+    orderedEdge[1]=revpoints[triangles[i].a];
+    edgeHash[symhash(orderedEdge[0],orderedEdge[1])].push_back(orderedEdge);
   }
+  for (eh=edgeHash.begin();eh!=edgeHash.end();eh++)
+    for (i=1;i<eh->second.size();i++)
+      for (j=0;j<i;j++)
+	if (eh->second[i][0]==eh->second[j][0] && eh->second[i][1]==eh->second[j][1])
+	{
+	  ret=false;
+	  cerr<<"Two triangles have edge "<<eh->second[i][0]<<"->"<<eh->second[i][1]<<" in common.\n";
+	}
   if (nInteriorEdges*2!=nNeighborTriangles)
   {
     ret=false;
