@@ -50,10 +50,22 @@ int readTinFile(pointlist &pl,string fileName,double unit)
     pl.makeBareTriangles(bareTriangles);
     bareTriangles.clear();
     cout<<"Read "<<pl.triangles.size()<<" triangles\n";
-    pl.fillInBareTin();
-    cout<<pl.triangles.size()<<" triangles after filling in\n";
-    pl.addperimeter();
-    status=2;
+    try
+    {
+      pl.fillInBareTin();
+      if (pl.checkTinConsistency())
+      {
+	cout<<pl.triangles.size()<<" triangles after filling in\n";
+	pl.addperimeter();
+	status=2;
+      }
+      else
+	status=0;
+    }
+    catch (...)
+    {
+      status=0;
+    }
   }
   if (status==0)
   {
