@@ -1201,7 +1201,7 @@ void pointlist::triangulatePolygon(vector<point *> poly)
   ymean=pairwisesum(coords);
   coords.clear();
   startpnt=xy(xmean,ymean);
-  while (sz>2)
+  while (sz>2 && startpnt.isfinite())
   {
     for (isInside=i=0;i<sz;i++)
       isInside+=foldangle(dir(startpnt,*poly[(i+1)%sz])-dir(startpnt,*poly[i]));
