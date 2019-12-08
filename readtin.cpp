@@ -47,11 +47,11 @@ int readTinFile(pointlist &pl,string fileName,double unit)
       for (i=0;i<bareTriangles.size();i++)
 	for (j=0;j<3;j++)
 	  bareTriangles[i][j]*=unit;
-    pl.makeBareTriangles(bareTriangles);
-    bareTriangles.clear();
-    cout<<"Read "<<pl.triangles.size()<<" triangles\n";
     try
     {
+      pl.makeBareTriangles(bareTriangles);
+      bareTriangles.clear();
+      cout<<"Read "<<pl.triangles.size()<<" triangles\n";
       pl.fillInBareTin();
       if (pl.checkTinConsistency())
       {

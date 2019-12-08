@@ -50,6 +50,8 @@ extern const xy beforestart,afterend;
 
 farna perp(farna dir);*/
 
+bool outOfGeoRange(double x,double y,double z);
+
 class point: public xyz, public drawobj
 /* No render3d method. A point is drawn as three concentric circles when
  * there are no edges and you're viewing a pointlist.

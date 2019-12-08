@@ -1139,7 +1139,7 @@ void pointlist::maketriangles()
 
 void pointlist::makeBareTriangles(vector<array<xyz,3> > bareTriangles)
 /* Assigns point numbers to the corners of the triangles. Makes a qindex and
- * a map of triangles, but no edges. Can throw samePoints.
+ * a map of triangles, but no edges. Can throw samePoints or badData.
  */
 {
   int i,j;
@@ -1149,7 +1149,13 @@ void pointlist::makeBareTriangles(vector<array<xyz,3> > bareTriangles)
   clear();
   for (i=0;i<bareTriangles.size();i++)
     for (j=0;j<3;j++)
+    {
+      if (outOfGeoRange(bareTriangles[i][j].east(),
+			bareTriangles[i][j].north(),
+			bareTriangles[i][j].elev()))
+	throw BeziExcept(badData);
       corners.push_back(bareTriangles[i][j]);
+    }
   qinx.sizefit(corners);
   qinx.split(corners);
   for (i=0;i<bareTriangles.size();i++)

@@ -35,6 +35,15 @@
 #include "document.h"
 using namespace std;
 
+bool outOfGeoRange(double x,double y,double z)
+/* Sanity check on coordinates read from a file.
+ * 4e7 is the circumference of the earth; 12000 is the depth of Mariana
+ * plus a kilometer.
+ */
+{
+  return !(fabs(x)<4e7 && fabs(y)<4e7 && fabs(z)<12000);
+}
+
 xy::xy(double e,double n)
 {
   x=e;
