@@ -878,7 +878,7 @@ int1loop pointlist::convexHull()
     }
     val=--n; // subtract one for the point itself
     // Now delete old convex hull points that are now in the interior.
-    for (m=1;m<visible.size()-1;m++)
+    for (m=1;m+1<visible.size();m++)
       convexhull.erase(dir(startpnt,*visible[m]));
   }
   for (j=convexhull.begin();j!=convexhull.end();j++)
