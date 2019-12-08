@@ -1207,13 +1207,15 @@ void pointlist::triangulatePolygon(vector<point *> poly)
   ymean=pairwisesum(coords);
   coords.clear();
   startpnt=xy(xmean,ymean);
-  while (sz>2 && startpnt.isfinite())
+  j=0;
+  while (sz>2 && startpnt.isfinite() && j<sz*7)
   {
     for (isInside=i=0;i<sz;i++)
       isInside+=foldangle(dir(startpnt,*poly[(i+1)%sz])-dir(startpnt,*poly[i]));
     if (isInside)
       break;
     startpnt=(startpnt+*poly[rng.usrandom()%sz])/2;
+    j++;
   }
   for (i=0;i<sz;i++)
     outwardMap.insert(pair<double,int>(dist(startpnt,*poly[i]),i));
