@@ -129,6 +129,7 @@ private:
   void dumpnext_ps(PostScript &ps);
 public:
   void dumpedges_ps(PostScript &ps,bool colorfibaster);
+  void dumptriangles();
   void splitBreaklines();
   int checkBreak0(edge &e);
   bool shouldFlip(edge &e);

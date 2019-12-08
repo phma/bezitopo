@@ -333,6 +333,19 @@ void dumphull_ps(PostScript &ps)
   ps.widen(0.2);
 }
 
+void pointlist::dumptriangles()
+{
+  map<int,triangle>::iterator i;
+  for (i=triangles.begin();i!=triangles.end();i++)
+  {
+    cout<<i->first<<": ";
+    cout<<revpoints[i->second.a]<<' ';
+    cout<<revpoints[i->second.b]<<' ';
+    cout<<revpoints[i->second.c]<<' ';
+    cout<<i->second.sarea<<endl;
+  }
+}
+
 void pointlist::splitBreaklines()
 // Split the breaklines, which are lists of points, into individual line segments.
 {
@@ -1271,6 +1284,7 @@ void pointlist::makeEdges()
   int i;
   edge newedge;
   edge *edg;
+  dumptriangles();
   for (i=0;i<triangles.size();i++)
   {
     if (triangles[i].sarea<1e-6)
