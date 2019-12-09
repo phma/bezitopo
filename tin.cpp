@@ -1292,7 +1292,7 @@ void pointlist::makeEdges()
   int i;
   edge newedge;
   edge *edg;
-  dumptriangles();
+  //dumptriangles();
   for (i=0;i<triangles.size();i++)
   {
     if (triangles[i].sarea<1e-6)
@@ -1377,7 +1377,10 @@ void pointlist::fillInBareTin()
   holes.push_back(convexHull());
   holes.consolidate();
   for (i=0;i<holes.size();i++)
+  {
+    cout<<holes[i].size()<<' ';
     triangulatePolygon(fromInt1loop(holes[i]));
+  }
   makeEdges();
   updateqindex();
 }
