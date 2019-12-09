@@ -1200,11 +1200,11 @@ void pointlist::triangulatePolygon(vector<point *> poly)
   triangle newtri;
   for (i=0;i<sz;i++)
     coords.push_back(poly[i]->getx());
-  xmean=pairwisesum(coords);
+  xmean=pairwisesum(coords)/sz;
   coords.clear();
   for (i=0;i<sz;i++)
     coords.push_back(poly[i]->gety());
-  ymean=pairwisesum(coords);
+  ymean=pairwisesum(coords)/sz;
   coords.clear();
   startpnt=xy(xmean,ymean);
   j=0;
