@@ -1059,6 +1059,46 @@ void testmaketinellipse()
   tassert(fabs(totallength-1329.4675)<0.001);
 }
 
+void testintloop()
+{
+  int1loop loop1;
+  intloop loop;
+  int startpts[]={0,1,2,4,5,23,30,62,117,213};
+  char tally[256];
+  int i,j,n;
+  memset(tally,0,256);
+  for (i=0;i<sizeof(startpts)/sizeof(int);i++)
+  {
+    loop1.clear();
+    for (j=0,n=startpts[i];(j==0 || n!=startpts[i]) && j<4096;j++)
+    {
+      loop1.push_back(n);
+      n=n*105;
+      n=((n&0xf0)>>4)+((n&0x0f)<<4);
+    }
+    if (j<4096)
+      loop.push_back(loop1);
+    else
+      cout<<startpts[i]<<" isn't on a loop\n";
+  }
+  for (i=0;i<loop.size();i++)
+  {
+    loop1=loop[i];
+    for (j=0;j<loop1.size();j++)
+    {
+      tally[loop1[j]]++;
+      cout<<loop1[j]<<' ';
+    }
+    cout<<endl;
+  }
+  for (i=0;i<256;i++)
+    if (tally[i]==0)
+    {
+      cout<<i<<" is missing\n";
+      break;
+    }
+}
+
 void test1tripolygon(int points,int petals,PostScript &ps)
 {
   int i;
@@ -7678,6 +7718,8 @@ int main(int argc, char *argv[])
     testmaketinwheel();
   if (shoulddo("maketinellipse"))
     testmaketinellipse();
+  if (shoulddo("intloop"))
+    testintloop();
   if (shoulddo("tripolygon"))
     testtripolygon();
   if (shoulddo("tindxf"))
