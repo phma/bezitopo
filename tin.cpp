@@ -1342,6 +1342,25 @@ void pointlist::makeEdges()
   }
 }
 
+void pointlist::deleteOrphanPoints()
+/* In a TIN exported by PerfectTIN, there may be points which are not the
+ * corner of any triangle. This function deletes them. Call it after
+ * making edges, since it deletes points with no edges.
+ */
+{
+  vector<int> delenda;
+  ptlist::iterator j;
+  int i;
+  for (j=points.begin();j!=points.end();j++)
+    if (j->second.line==nullptr)
+    {
+      delenda.push_back(j->first);
+      revpoints.erase(&j->second);
+    }
+  for (i=0;i<delenda.size();i++)
+    points.erase(delenda[i]);
+}
+
 void pointlist::fillInBareTin()
 /* Call this after makeBareTriangles or reading in a TIN from a .bez file.
  * It makes edges, fills in any gaps with arbitrary triangles, makes edges
@@ -1353,6 +1372,7 @@ void pointlist::fillInBareTin()
   intloop holes;
   int i;
   makeEdges();
+  deleteOrphanPoints();
   holes=boundary();
   holes.push_back(convexHull());
   holes.consolidate();

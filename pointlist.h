@@ -144,6 +144,7 @@ public:
   void makeBareTriangles(std::vector<std::array<xyz,3> > bareTriangles);
   void triangulatePolygon(std::vector<point *> poly);
   void makeEdges();
+  void deleteOrphanPoints();
   void fillInBareTin();
   double totalEdgeLength();
   double elevation(xy location);
