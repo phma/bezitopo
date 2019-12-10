@@ -1070,7 +1070,7 @@ void testintloop()
  * 123 55 248 139 48 11 56 143 122 160 10 161 144).
  * It is used as the outer boundary. There is no actual geometry in this test;
  * it's just a test of processing intloops.
- * Pinch points: 40, 130.
+ * Pinch points: 40, 123, 130.
  */
 {
   int1loop loop1;
@@ -1084,7 +1084,7 @@ void testintloop()
   };
   char tally[512];
   int i,j,n;
-  memset(tally,0,256);
+  memset(tally,0,512);
   for (i=0;i<sizeof(startpts)/sizeof(int);i++)
   {
     loop1.clear();
@@ -1114,12 +1114,40 @@ void testintloop()
     }
     cout<<endl;
   }
-  for (i=0;i<256;i++)
-    if (tally[i]==0)
-    {
-      cout<<i<<" is missing\n";
-      break;
-    }
+  for (i=0;i<512;i++)
+  {
+    cout<<(int)tally[i];
+    if (i%64==63)
+      cout<<endl;
+    else if (i%8==7)
+      cout<<' ';
+  }
+  tassert(tally[0]==0); // singleton
+  tassert(tally[213]==0); // singleton
+  tassert(tally[5]+tally[208]==0); // twins
+  tassert(tally[40]==2); // pinch point
+  tassert(tally[123]==2); // pinch point
+  tassert(tally[130]==2); // pinch point
+  tassert(tally[144]==1); // hull kept
+  tassert(tally[161]==0); // hull deleted
+  tassert(tally[10]==0); // hull deleted
+  tassert(tally[160]==0); // hull deleted
+  tassert(tally[122]==1); // hull kept
+  tassert(tally[188]==1); // hull kept
+  tassert(tally[19]==0); // hull deleted
+  tassert(tally[137]==0); // hull deleted
+  tassert(tally[216]==1); // hull kept
+  tassert(tally[217]==1); // hull kept
+  tassert(tally[21]==0); // hull deleted
+  tassert(tally[169]==0); // hull deleted
+  tassert(tally[138]==1); // hull kept
+  for (i=240;i<256;i++)
+    tassert(tally[i]==1);
+  for (i=300;i<308;i++)
+    tassert(tally[i]==1);
+  for (i=260;i<300;i++)
+    tassert(tally[i]==0);
+  tassert(loop.size()==18); // 15 before splitting pinch points
 }
 
 void test1tripolygon(int points,int petals,PostScript &ps)
