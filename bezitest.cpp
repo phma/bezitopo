@@ -1060,11 +1060,29 @@ void testmaketinellipse()
 }
 
 void testintloop()
+/* The biggest loop is
+ * (1 150 104 138 169 21 217 16 9 27 49 145 151 254 226 43 58 172 200 128
+ * 8 132 66 33 152 133 216 137 19 188 193 146 46 237 83 176 3 179 182 106
+ * 167 247 244 65 154 162 39 255 121 26 170 171 50 40 134 111 120 131 187 59
+ * 51 190 238 233 25 20 67 183 240 7 253 92 203 52 69 212 79 118 102 109
+ * 91 53 219 61 80 13 85 221 90 174 229 222 224 14 235 54 98 35 181 211
+ * 184 135 245 215 242 36 76 194 41 29 94 232 130 37 210 34 47 116 73 31
+ * 123 55 248 139 48 11 56 143 122 160 10 161 144).
+ * It is used as the outer boundary. There is no actual geometry in this test;
+ * it's just a test of processing intloops.
+ * Pinch points: 40, 130.
+ */
 {
   int1loop loop1;
   intloop loop;
   int startpts[]={0,1,2,4,5,23,30,62,117,213};
-  char tally[256];
+  int hull[]=
+  {
+    144,161,10,160,122,123,300,301,130,302,135,184,211,181,203,92,303,67,20,
+    59,187,131,40,255,39,162,154,65,304,305,306,188,19,137,216,128,200,307,
+    217,21,169,138
+  };
+  char tally[512];
   int i,j,n;
   memset(tally,0,256);
   for (i=0;i<sizeof(startpts)/sizeof(int);i++)
@@ -1081,6 +1099,11 @@ void testintloop()
     else
       cout<<startpts[i]<<" isn't on a loop\n";
   }
+  loop1.clear();
+  for (i=0;i<sizeof(hull)/sizeof(int);i++)
+    loop1.push_back(hull[i]);
+  loop.push_back(loop1);
+  loop.consolidate();
   for (i=0;i<loop.size();i++)
   {
     loop1=loop[i];
