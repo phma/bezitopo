@@ -1378,7 +1378,7 @@ void pointlist::fillInBareTin()
   holes.consolidate();
   for (i=0;i<holes.size();i++)
   {
-    cout<<holes[i].size()<<' ';
+    //cout<<holes[i].size()<<' ';
     triangulatePolygon(fromInt1loop(holes[i]));
   }
   makeEdges();
