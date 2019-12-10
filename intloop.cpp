@@ -315,6 +315,44 @@ array<int,4> intloop::dupSeg()
   return ret;
 }
 
+array<int,4> intloop::pinchPoint()
+/* Returns the loop and segment numbers of two segments in the same loop which
+ * have the same head but different tails, or {-1,-1,-1,-1} if there are none.
+ * Used by consolidate.
+ * This catches the case where the outer boundary touches the convex hull in
+ * one point, then moves back in, which previously resulted in a pinched polygon,
+ * which triangulatePolygon choked on.
+ */
+{
+  map<int,vector<array<int,4> > > pointTable;
+  int i,j,point;
+  array<int,4> aseg,ret;
+  bool found=false,exhausted=false;
+  while (!found && !exhausted)
+  {
+    aseg=someSeg();
+    point=aseg[0];
+    for (i=0;i<pointTable[point].size();i++)
+    {
+      if (pointTable[point][i][1]==aseg[1])
+      {
+	ret[0]=ret[1]=ret[2]=ret[3]=-1;
+	exhausted=true;
+      }
+      if (pointTable[point][i][1]!=aseg[1] && pointTable[point][i][2]==aseg[2])
+      {
+	ret[0]=pointTable[point][i][2];
+	ret[1]=pointTable[point][i][3];
+	ret[2]=aseg[2];
+	ret[3]=aseg[3];
+	found=true;
+      }
+    }
+    pointTable[point].push_back(aseg);
+  }
+  return ret;
+}
+
 void intloop::clear()
 {
   bdy.clear();
@@ -381,6 +419,16 @@ void intloop::consolidate()
       bdy[matchingSegs[0]].deleteRetrace();
       bdy[matchingSegs[2]].deleteRetrace();
     }
+  }
+  while (true)
+  {
+    matchingSegs=pinchPoint();
+    if (matchingSegs[0]==matchingSegs[2] && matchingSegs[1]==matchingSegs[3])
+      break;
+    bdy.resize(bdy.size()+1);
+    bdy[matchingSegs[0]].split(matchingSegs[1],matchingSegs[3],bdy.back());
+    bdy[matchingSegs[0]].deleteRetrace();
+    bdy.back().deleteRetrace();
   }
   deleteNullSegments();
   deleteEmpty();

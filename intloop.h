@@ -63,6 +63,7 @@ public:
   std::array<int,4> seg(int n);
   std::array<int,4> someSeg();
   std::array<int,4> dupSeg();
+  std::array<int,4> pinchPoint();
   void clear();
   void deleteRetrace();
   void deleteNullSegments();
