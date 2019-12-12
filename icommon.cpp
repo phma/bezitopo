@@ -3,7 +3,7 @@
 /* icommon.cpp - common interactive routines          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2018 Pierre Abbat.
+/* Copyright 2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@
  */
 
 #include <iostream>
+#include "firstarg.h"
 #include "icommon.h"
 #include "measure.h"
 #include "globals.h"
@@ -30,40 +31,6 @@
 using namespace std;
 
 bool subcont;
-
-string firstarg(string &args)
-{
-  size_t pos;
-  string ret;
-  pos=args.find_first_not_of(' ');
-  if (pos==string::npos)
-    pos=0;
-  args.erase(0,pos);
-  pos=args.find(' ');
-  ret=args.substr(0,pos);
-  args.erase(0,pos);
-  pos=args.find_first_not_of(' ');
-  if (pos==string::npos)
-    pos=0;
-  args.erase(0,pos);
-  return ret;
-}
-
-string trim(string word)
-{
-  size_t pos;
-  pos=word.find_first_not_of(' ');
-  if (pos==string::npos)
-    pos=0;
-  word.erase(0,pos);
-  pos=word.find_last_not_of(' ');
-  if (pos==string::npos)
-    pos=0;
-  else
-    pos++;
-  word.erase(pos,string::npos);
-  return word;
-}
 
 void setfoot_i(string args)
 {

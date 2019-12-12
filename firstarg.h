@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* icommon.h - common interactive routines            */
+/* firstarg.h - first word of a string                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2017,2019 Pierre Abbat.
+/* Copyright 2019 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -23,31 +23,6 @@
  */
 
 #include <string>
-#include "angle.h"
 
-struct command
-{
-  std::string word;
-  void (*fun)(std::string args);
-  std::string desc;
-  command(std::string w,void (*f)(std::string args),std::string d)
-  {
-    word=w;
-    fun=f;
-    desc=d;
-  }
-};
-
-struct arangle // absolute or relative angle
-{
-  int ang;
-  bool rel;
-};
-
-extern bool subcont; // continue flag within commands
-
-void setfoot_i(std::string args);
-void setlengthunit_i(std::string args);
-arangle parsearangle(std::string angstr,int unitp);
-xy parsexy(std::string xystr);
-void subexit(std::string args);
+std::string firstarg(std::string &args);
+std::string trim(std::string word);

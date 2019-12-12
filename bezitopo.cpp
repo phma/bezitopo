@@ -3,7 +3,7 @@
 /* bezitopo.cpp - main program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2015-2018 Pierre Abbat.
+/* Copyright 2012,2013,2015-2019 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -39,6 +39,7 @@
 #include "raster.h"
 #include "ps.h"
 #include "icommon.h"
+#include "firstarg.h"
 #include "mkpoint.h"
 #include "closure.h"
 #include "cvtmeas.h"

@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* icommon.h - common interactive routines            */
+/* firstarg.cpp - first word of a string              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2017,2019 Pierre Abbat.
+/* Copyright 2019 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -22,32 +22,40 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-#include <string>
-#include "angle.h"
+#include "firstarg.h"
 
-struct command
+using namespace std;
+
+string firstarg(string &args)
 {
-  std::string word;
-  void (*fun)(std::string args);
-  std::string desc;
-  command(std::string w,void (*f)(std::string args),std::string d)
-  {
-    word=w;
-    fun=f;
-    desc=d;
-  }
-};
+  size_t pos;
+  string ret;
+  pos=args.find_first_not_of(' ');
+  if (pos==string::npos)
+    pos=0;
+  args.erase(0,pos);
+  pos=args.find(' ');
+  ret=args.substr(0,pos);
+  args.erase(0,pos);
+  pos=args.find_first_not_of(' ');
+  if (pos==string::npos)
+    pos=0;
+  args.erase(0,pos);
+  return ret;
+}
 
-struct arangle // absolute or relative angle
+string trim(string word)
 {
-  int ang;
-  bool rel;
-};
-
-extern bool subcont; // continue flag within commands
-
-void setfoot_i(std::string args);
-void setlengthunit_i(std::string args);
-arangle parsearangle(std::string angstr,int unitp);
-xy parsexy(std::string xystr);
-void subexit(std::string args);
+  size_t pos;
+  pos=word.find_first_not_of(' ');
+  if (pos==string::npos)
+    pos=0;
+  word.erase(0,pos);
+  pos=word.find_last_not_of(' ');
+  if (pos==string::npos)
+    pos=0;
+  else
+    pos++;
+  word.erase(pos,string::npos);
+  return word;
+}

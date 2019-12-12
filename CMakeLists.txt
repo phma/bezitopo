@@ -103,7 +103,7 @@ endif ()
 add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                bezitopo.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp closure.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp csv.cpp cvtmeas.cpp document.cpp
-               drawobj.cpp ellipsoid.cpp except.cpp
+               drawobj.cpp ellipsoid.cpp except.cpp firstarg.cpp
                geoid.cpp geoidboundary.cpp halton.cpp
                icommon.cpp intloop.cpp kml.cpp latlong.cpp layer.cpp ldecimal.cpp
                manysum.cpp matrix.cpp measure.cpp minquad.cpp
@@ -152,7 +152,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
                breakline.cpp carlsontin.cpp cidialog.cpp
                circle.cpp cogo.cpp cogospiral.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp dxf.cpp ellipsoid.cpp
-               except.cpp factordialog.cpp geoid.cpp geoidboundary.cpp
+               except.cpp factordialog.cpp firstarg.cpp geoid.cpp geoidboundary.cpp
                halton.cpp intloop.cpp kml.cpp
                latlong.cpp layer.cpp ldecimal.cpp linetype.cpp llvalidator.cpp
                manysum.cpp matrix.cpp measure.cpp measurebutton.cpp
@@ -162,7 +162,7 @@ add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bound
                readtin.cpp relprime.cpp rendercache.cpp
                rootfind.cpp segment.cpp smooth5.cpp
                spiral.cpp spolygon.cpp stl.cpp test.cpp textfile.cpp tin.cpp
-               tinwindow.cpp topocanvas.cpp vball.cpp vcurve.cpp
+               tintext.cpp tinwindow.cpp topocanvas.cpp vball.cpp vcurve.cpp
                viewtin.cpp zoom.cpp zoombutton.cpp
                ${lib_resources} ${qm_files})
 add_executable(sitecheck angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp boundrect.cpp
