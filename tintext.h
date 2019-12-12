@@ -22,4 +22,6 @@
  * <http://www.gnu.org/licenses/>.
  */
 
-bool readTinText(std::string inputFile,pointlist &pl,double unit)
+#include "pointlist.h"
+
+bool readTinText(std::string inputFile,pointlist &pl,double unit);

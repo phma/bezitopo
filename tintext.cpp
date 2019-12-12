@@ -28,6 +28,7 @@
 #include "binio.h"
 #include "textfile.h"
 #include "ldecimal.h"
+#include "firstarg.h"
 using namespace std;
 
 bool readTinText(string inputFile,pointlist &pl,double unit)
@@ -35,7 +36,33 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
   ifstream file(inputFile);
   TextFile tfile(file);
   int i,n,tag,ptnum,corners[3];
+  int offset; // in case one TIN file contains multiple TINs
   double x,y,z;
   bool good=false,cont=true;
   triangle *tri;
+  string line,cardType;
+  pl.clear();
+  while (cont)
+  {
+    line=tfile.getline();
+    cardType=firstarg(line);
+    if (cardType=="TIN")
+      ;
+    else if (cardType=="BEGT")
+      ;
+    else if (cardType=="TNAM")
+      ;
+    else if (cardType=="TCOL")
+      ;
+    else if (cardType=="MAT")
+      ;
+    else if (cardType=="VERT")
+      ;
+    else if (cardType=="TRI")
+      ;
+    else if (cardType=="ENDT")
+      ;
+    else
+      good=cont=false;
+  }
 }
