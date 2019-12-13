@@ -32,7 +32,10 @@ string firstarg(string &args)
   string ret;
   pos=args.find_first_not_of(' ');
   if (pos==string::npos)
+  {
     pos=0;
+    args="";
+  }
   args.erase(0,pos);
   pos=args.find(' ');
   ret=args.substr(0,pos);
