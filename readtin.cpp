@@ -105,7 +105,14 @@ int readTinFile(pointlist &pl,string fileName,double unit)
   }
   if (status==0)
   {
-    status=readTinText(fileName,pl,unit);
+    try
+    {
+      status=readTinText(fileName,pl,unit);
+    }
+    catch (...)
+    {
+      status=0;
+    }
   }
   if (status==1)
   {
