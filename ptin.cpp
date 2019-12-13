@@ -247,6 +247,8 @@ PtinHeader readPtin(std::string inputFile,pointlist &pl)
     {
       pl.points[i]=point(readPoint(ptinFile),"");
       pl.revpoints[&pl.points[i]]=i;
+      if (outOfGeoRange(pl.points[i].getx(),pl.points[i].gety(),pl.points[i].getz()))
+	header.tolRatio=PT_OUT_OF_RANGE;
       if (ptinFile.eof())
       {
 	header.tolRatio=PT_EOF;
