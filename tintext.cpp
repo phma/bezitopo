@@ -64,7 +64,7 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
       if (words.size()==1)
       {
 	numPoints=stoi(words[0]);
-	for (i=0;i<numPoints;i++)
+	for (i=0;cont && i<numPoints;i++)
 	{
 	  line=tfile.getline();
 	  words=splitWords(line);
@@ -89,7 +89,7 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
       if (words.size()==1)
       {
 	numTriangles=stoi(words[0]);
-	for (i=0;i<numTriangles;i++)
+	for (i=0;cont && i<numTriangles;i++)
 	{
 	  line=tfile.getline();
 	  words=splitWords(line);
@@ -111,7 +111,7 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
 	    good=cont=false;
 	}
       }
-      if (numTriangles>0 && numPoints>0)
+      if (i==numTriangles && numTriangles>0 && numPoints>0)
 	good=true;
     }
     else if (cardType=="ENDT")
