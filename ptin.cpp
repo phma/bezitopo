@@ -346,6 +346,8 @@ PtinHeader readPtin(std::string inputFile,pointlist &pl)
     n=ptinFile.get()&255;
     for (i=0;i<n;i++)
       zcheck.push_back(readledouble(ptinFile));
+    if (n==0)
+      zcheck.push_back(0);
     while (zcheck.size()<64)
       zcheck.push_back(zcheck.back());
     //cout<<header.tolRatio*header.tolerance*sqrt(zCheck.getCount())<<endl;
