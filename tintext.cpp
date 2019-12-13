@@ -38,7 +38,6 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
   int i,n,tag,ptnum,corners[3];
   int offset; // in case one TIN file contains multiple TINs
   int numPoints,numTriangles;
-  int a,b,c;
   vector<string> words;
   double x,y,z;
   bool good=false,cont=true;
@@ -74,6 +73,10 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
 	    x=stod(words[0])*unit;
 	    y=stod(words[1])*unit;
 	    z=stod(words[2])*unit;
+	    if (outOfGeoRange(x,y,z))
+	      good=cont=false; // point is bigger than Earth, or is NaN
+	    else
+	      pl.addpoint(i+1,point(x,y,z,""));
 	  }
 	  else
 	    good=cont=false;
@@ -93,9 +96,17 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
 	  words=splitWords(line);
 	  if (words.size()==3)
 	  {
-	    a=stoi(words[0]);
-	    b=stoi(words[1]);
-	    c=stoi(words[2]);
+	    corners[0]=stoi(words[0]);
+	    corners[1]=stoi(words[1]);
+	    corners[2]=stoi(words[2]);
+	    n=pl.addtriangle();
+	    tri=&pl.triangles[n];
+	    tri->a=&pl.points[corners[0]];
+	    tri->b=&pl.points[corners[1]];
+	    tri->c=&pl.points[corners[2]];
+	    tri->flatten();
+	    if (tri->sarea<=0)
+	      good=cont=false;
 	  }
 	  else
 	    good=cont=false;
@@ -107,7 +118,10 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
     }
     else if (cardType=="ENDT")
       cout<<"ENDT card\n";
+    else if (tfile.good())
+      good=cont=false; // read a garbage line
     else
-      good=cont=false;
+      cont=false;
   }
+  return good;
 }
