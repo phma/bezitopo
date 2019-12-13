@@ -49,15 +49,15 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
     line=tfile.getline();
     cardType=firstarg(line);
     if (cardType=="TIN")
-      cout<<"TIN card\n";
+      ;
     else if (cardType=="BEGT")
-      cout<<"BEGT card\n";
+      ;
     else if (cardType=="TNAM")
-      cout<<"TNAM card\n";
+      ;
     else if (cardType=="TCOL")
-      cout<<"TCOL card\n";
+      ;
     else if (cardType=="MAT")
-      cout<<"MAT card\n";
+      ;
     else if (cardType=="VERT")
     {
       words=splitWords(line);
@@ -82,7 +82,6 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
 	    good=cont=false;
 	}
       }
-      cout<<"VERT card "<<numPoints<<endl;;
     }
     else if (cardType=="TRI")
     {
@@ -114,10 +113,9 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
       }
       if (numTriangles>0 && numPoints>0)
 	good=true;
-      cout<<"TRI card "<<numTriangles<<endl;
     }
     else if (cardType=="ENDT")
-      cout<<"ENDT card\n";
+      ;
     else if (tfile.good())
       good=cont=false; // read a garbage line
     else
