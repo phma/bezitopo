@@ -35,7 +35,7 @@ bool readCarlsonTin(std::string inputFile,pointlist &pl,double unit)
   ifstream tinFile(inputFile,ios::binary);
   int i,n,tag,ptnum,corners[3];
   double x,y,z;
-  bool good=false,cont=true;
+  bool good=true,cont=true;
   triangle *tri;
   for (i=0;i<0x43;i++) // Skip 0x10c bytes of header. I have no idea what any
     readleint(tinFile); // of it means, except the string at the start.
@@ -59,8 +59,6 @@ bool readCarlsonTin(std::string inputFile,pointlist &pl,double unit)
 	  pl.points[ptnum]=point(x,y,z,"");
 	  pl.revpoints[&pl.points[ptnum]]=ptnum;
 	}
-	if (pl.points.size()==3)
-	  good=true;
 	break;
       case CA_TRIANGLE:
 	for (i=0;i<3;i++)
