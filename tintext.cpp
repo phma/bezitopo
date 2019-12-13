@@ -37,6 +37,9 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
   TextFile tfile(file);
   int i,n,tag,ptnum,corners[3];
   int offset; // in case one TIN file contains multiple TINs
+  int numPoints,numTriangles;
+  int a,b,c;
+  vector<string> words;
   double x,y,z;
   bool good=false,cont=true;
   triangle *tri;
@@ -47,21 +50,63 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
     line=tfile.getline();
     cardType=firstarg(line);
     if (cardType=="TIN")
-      ;
+      cout<<"TIN card\n";
     else if (cardType=="BEGT")
-      ;
+      cout<<"BEGT card\n";
     else if (cardType=="TNAM")
-      ;
+      cout<<"TNAM card\n";
     else if (cardType=="TCOL")
-      ;
+      cout<<"TCOL card\n";
     else if (cardType=="MAT")
-      ;
+      cout<<"MAT card\n";
     else if (cardType=="VERT")
-      ;
+    {
+      words=splitWords(line);
+      if (words.size()==1)
+      {
+	numPoints=stoi(words[0]);
+	for (i=0;i<numPoints;i++)
+	{
+	  line=tfile.getline();
+	  words=splitWords(line);
+	  if (words.size()==3 || words.size()==4)
+	  {
+	    x=stod(words[0])*unit;
+	    y=stod(words[1])*unit;
+	    z=stod(words[2])*unit;
+	  }
+	  else
+	    good=cont=false;
+	}
+      }
+      cout<<"VERT card "<<numPoints<<endl;;
+    }
     else if (cardType=="TRI")
-      ;
+    {
+      words=splitWords(line);
+      if (words.size()==1)
+      {
+	numTriangles=stoi(words[0]);
+	for (i=0;i<numTriangles;i++)
+	{
+	  line=tfile.getline();
+	  words=splitWords(line);
+	  if (words.size()==3)
+	  {
+	    a=stoi(words[0]);
+	    b=stoi(words[1]);
+	    c=stoi(words[2]);
+	  }
+	  else
+	    good=cont=false;
+	}
+      }
+      if (numTriangles>0 && numPoints>0)
+	good=true;
+      cout<<"TRI card "<<numTriangles<<endl;
+    }
     else if (cardType=="ENDT")
-      ;
+      cout<<"ENDT card\n";
     else
       good=cont=false;
   }

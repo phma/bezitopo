@@ -23,6 +23,8 @@
  */
 
 #include <string>
+#include <vector>
 
 std::string firstarg(std::string &args);
 std::string trim(std::string word);
+std::vector<std::string> splitWords(std::string word);

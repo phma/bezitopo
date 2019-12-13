@@ -59,3 +59,11 @@ string trim(string word)
   word.erase(pos,string::npos);
   return word;
 }
+
+vector<string> splitWords(string word)
+{
+  vector<string> ret;
+  while (word.length())
+    ret.push_back(firstarg(word));
+  return ret;
+}
