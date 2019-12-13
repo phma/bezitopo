@@ -117,7 +117,7 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                boundrect.cpp carlsontin.cpp circle.cpp cogo.cpp
                cogospiral.cpp color.cpp contour.cpp crosssection.cpp
                csv.cpp document.cpp drawobj.cpp
-               dxf.cpp ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
+               dxf.cpp ellipsoid.cpp except.cpp firstarg.cpp geoid.cpp geoidboundary.cpp
                halton.cpp histogram.cpp hlattice.cpp hnum.cpp intloop.cpp kml.cpp
                latlong.cpp layer.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp
                matrix.cpp measure.cpp minquad.cpp objlist.cpp plot.cpp pnezd.cpp point.cpp
@@ -125,7 +125,7 @@ add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
                ps.cpp ptin.cpp qindex.cpp quaternion.cpp
                random.cpp raster.cpp readtin.cpp refinegeoid.cpp relprime.cpp rootfind.cpp
                segment.cpp smooth5.cpp sourcegeoid.cpp spiral.cpp spolygon.cpp
-               stl.cpp test.cpp textfile.cpp tin.cpp vball.cpp vcurve.cpp zoom.cpp)
+               stl.cpp test.cpp textfile.cpp tin.cpp tintext.cpp vball.cpp vcurve.cpp zoom.cpp)
 add_executable(clotilde angle.cpp arc.cpp bezier.cpp
 	       bezier3d.cpp binio.cpp breakline.cpp boundrect.cpp
 	       circle.cpp clotilde.cpp cmdopt.cpp cogo.cpp
@@ -169,7 +169,7 @@ add_executable(sitecheck angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bou
                breakline.cpp carlsontin.cpp cidialog.cpp
                circle.cpp cogo.cpp cogospiral.cpp color.cpp
                contour.cpp csv.cpp document.cpp drawobj.cpp dxf.cpp ellipsoid.cpp
-               except.cpp factordialog.cpp geoid.cpp geoidboundary.cpp
+               except.cpp factordialog.cpp firstarg.cpp geoid.cpp geoidboundary.cpp
                halton.cpp intloop.cpp kml.cpp
                latlong.cpp layer.cpp ldecimal.cpp linetype.cpp llvalidator.cpp
                manysum.cpp matrix.cpp measure.cpp measurebutton.cpp
@@ -179,7 +179,7 @@ add_executable(sitecheck angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp bou
                readtin.cpp relprime.cpp rendercache.cpp
                rootfind.cpp segment.cpp sitecheck.cpp sitewindow.cpp smooth5.cpp
                spiral.cpp spolygon.cpp stl.cpp test.cpp textfile.cpp tin.cpp
-               topocanvas.cpp vball.cpp vcurve.cpp
+               tintext.cpp topocanvas.cpp vball.cpp vcurve.cpp
                zoom.cpp zoombutton.cpp
                ${lib_resources} ${qm_files})
 add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)

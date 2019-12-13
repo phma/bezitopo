@@ -25,6 +25,7 @@
 #include "readtin.h"
 #include "dxf.h"
 #include "ptin.h"
+#include "tintext.h"
 #include "carlsontin.h"
 
 using namespace std;
@@ -81,6 +82,30 @@ int readTinFile(pointlist &pl,string fileName,double unit)
   if (status==0)
   {
     status=readCarlsonTin(fileName,pl,unit);
+  }
+  if (status==1)
+  {
+    try
+    {
+      pl.fillInBareTin();
+      if (pl.checkTinConsistency())
+      {
+	cout<<pl.triangles.size()<<" triangles after filling in\n";
+	pl.addperimeter();
+	pl.makeqindex();
+	status=2;
+      }
+      else
+	status=0;
+    }
+    catch (...)
+    {
+      status=0;
+    }
+  }
+  if (status==0)
+  {
+    status=readTinText(fileName,pl,unit);
   }
   if (status==1)
   {
