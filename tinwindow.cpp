@@ -212,7 +212,7 @@ void TinWindow::makeActions()
   // Help menu
   aboutProgramAction=new QAction(this);
   //aboutProgramAction->setIcon(QIcon(":/.png"));
-  aboutProgramAction->setText(tr("About Bezitopo"));
+  aboutProgramAction->setText(tr("About ViewTIN"));
   helpMenu->addAction(aboutProgramAction);
   connect(aboutProgramAction,SIGNAL(triggered(bool)),this,SLOT(aboutProgram()));
   aboutQtAction=new QAction(this);
@@ -319,7 +319,7 @@ void TinWindow::latlongToGrid()
 
 void TinWindow::aboutProgram()
 {
-  QString progName=tr("Bezitopo");
+  QString progName=tr("ViewTIN, a Bezitopo program");
   QMessageBox::about(this,tr("ViewTIN"),
 		     tr("%1\nVersion %2\nCopyright %3 Pierre Abbat\nLicense LGPL 3 or later")
 		     .arg(progName).arg(QString(VERSION)).arg(COPY_YEAR));

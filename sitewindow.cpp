@@ -184,7 +184,7 @@ void SiteWindow::makeActions()
   // Help menu
   aboutProgramAction=new QAction(this);
   //aboutProgramAction->setIcon(QIcon(":/.png"));
-  aboutProgramAction->setText(tr("About Bezitopo"));
+  aboutProgramAction->setText(tr("About SiteCheck"));
   helpMenu->addAction(aboutProgramAction);
   connect(aboutProgramAction,SIGNAL(triggered(bool)),this,SLOT(aboutProgram()));
   aboutQtAction=new QAction(this);
@@ -285,13 +285,13 @@ void SiteWindow::latlongToGrid()
 
 void SiteWindow::aboutProgram()
 {
-  QString progName=tr("Bezitopo");
-  QMessageBox::about(this,tr("ViewTIN"),
+  QString progName=tr("SiteCheck, a Bezitopo program");
+  QMessageBox::about(this,tr("SiteCheck"),
 		     tr("%1\nVersion %2\nCopyright %3 Pierre Abbat\nLicense LGPL 3 or later")
 		     .arg(progName).arg(QString(VERSION)).arg(COPY_YEAR));
 }
 
 void SiteWindow::aboutQt()
 {
-  QMessageBox::aboutQt(this,tr("ViewTIN"));
+  QMessageBox::aboutQt(this,tr("SiteCheck"));
 }
