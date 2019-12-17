@@ -31,16 +31,22 @@
 using namespace std;
 
 int readTinFile(pointlist &pl,string fileName,double unit)
+/* Returns 0 if no TIN was found, 1 if an invalid TIN was found,
+ * and 2 if a valid TIN was found.
+ */
 {
   int i,j;
   vector<array<xyz,3> > bareTriangles;
   ifstream file;
   int status=0;
+  bool anytin=false;
   PtinHeader ptinHeader;
   if (status==0)
   {
     bareTriangles=extractTriangles(readDxfGroups(fileName));
     status=bareTriangles.size()>0;
+    if (status)
+      anytin=true;
   }
   if (status==1)
   {
@@ -72,6 +78,12 @@ int readTinFile(pointlist &pl,string fileName,double unit)
   {
     ptinHeader=readPtin(fileName,pl);
     status=ptinHeader.tolRatio>0;
+    if (ptinHeader.tolRatio!=PT_UNKNOWN_HEADER_FORMAT &&
+        ptinHeader.tolRatio!=PT_NOT_PTIN_FILE &&
+        ptinHeader.tolRatio!=PT_COUNT_MISMATCH)
+      anytin=true;
+    if (!ptinHeader.tolerance>0)
+      status=0;
   }
   if (status==1)
   {
@@ -85,6 +97,7 @@ int readTinFile(pointlist &pl,string fileName,double unit)
   }
   if (status==1)
   {
+    anytin=true;
     try
     {
       pl.fillInBareTin();
@@ -116,6 +129,7 @@ int readTinFile(pointlist &pl,string fileName,double unit)
   }
   if (status==1)
   {
+    anytin=true;
     try
     {
       pl.fillInBareTin();
@@ -134,5 +148,7 @@ int readTinFile(pointlist &pl,string fileName,double unit)
       status=0;
     }
   }
+  if (status==0 && anytin)
+    status=1;
   return status;
 }
