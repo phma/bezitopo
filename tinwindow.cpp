@@ -39,7 +39,7 @@ using namespace std;
 TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
 {
   resize(707,500);
-  setWindowTitle(QApplication::translate("main", "ViewTIN"));
+  showFileLoaded("");
   show();
   toolbar=new QToolBar(this);
   addToolBar(Qt::TopToolBarArea,toolbar);
@@ -52,6 +52,7 @@ TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
   canvas->show();
   makeActions();
   canvas->setMeter();
+  connect(canvas,SIGNAL(fileChanged(string)),this,SLOT(showFileLoaded(string)));
   connect(this,SIGNAL(zoomCanvas(int)),canvas,SLOT(zoom(int)));
 }
 
@@ -287,6 +288,13 @@ void TinWindow::unmakeActions()
   fileMenu->removeAction(importPnezdAction);
   delete importPnezdAction;
   importPnezdAction=nullptr;
+}
+
+void TinWindow::showFileLoaded(string fileName)
+{
+  if (fileName.length())
+    fileName+=" — ";
+  setWindowTitle(QString::fromStdString(fileName)+tr("ViewTIN"));
 }
 
 void TinWindow::prepareZoomSteps(int steps)

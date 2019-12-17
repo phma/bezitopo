@@ -52,6 +52,7 @@ signals:
   void zoomCanvas(int steps);
   void buttonBitsChanged(int bits);
 public slots:
+  void showFileLoaded(std::string fileName);
   void prepareZoomSteps(int steps);
   void zoomSteps(bool checked);
   void changeButtonBits();

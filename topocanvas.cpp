@@ -325,6 +325,7 @@ void TopoCanvas::open()
     setCursor(Qt::ArrowCursor);
     if (readResult<2)
     {
+      fileChanged("");
       QMessageBox msgBox(this);
       if (readResult)
 	msgBox.setText(tr("The TIN file is corrupt."));
@@ -334,6 +335,8 @@ void TopoCanvas::open()
       msgBox.setIcon(QMessageBox::Warning);
       msgBox.exec();
     }
+    else
+      fileChanged(fileName);
     pointsValid=true;
     tinValid=true;
     surfaceValid=true;

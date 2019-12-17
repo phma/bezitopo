@@ -57,6 +57,7 @@ public:
   document *getDoc();
 signals:
   void measureChanged(Measure newMeasure);
+  void fileChanged(std::string fileName);
 public slots:
   void sizeToFit();
   void zoom(int steps);

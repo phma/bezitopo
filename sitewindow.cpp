@@ -39,7 +39,7 @@ using namespace std;
 SiteWindow::SiteWindow(QWidget *parent):QMainWindow(parent)
 {
   resize(707,500);
-  setWindowTitle(QApplication::translate("main", "SiteCheck"));
+  showFileLoaded("");
   show();
   toolbar=new QToolBar(this);
   addToolBar(Qt::TopToolBarArea,toolbar);
@@ -55,6 +55,7 @@ SiteWindow::SiteWindow(QWidget *parent):QMainWindow(parent)
   makeActions();
   canvas->setMeter();
   connect(this,SIGNAL(zoomCanvas(int)),canvas,SLOT(zoom(int)));
+  connect(canvas,SIGNAL(fileChanged(std::string)),this,SLOT(showFileLoaded(std::string)));
 }
 
 SiteWindow::~SiteWindow()
@@ -253,6 +254,13 @@ void SiteWindow::unmakeActions()
     delete measureButtons[i];
   }
   measureButtons.clear();
+}
+
+void SiteWindow::showFileLoaded(string fileName)
+{
+  if (fileName.length())
+    fileName+=" — ";
+  setWindowTitle(QString::fromStdString(fileName)+tr("SiteCheck"));
 }
 
 void SiteWindow::prepareZoomSteps(int steps)
