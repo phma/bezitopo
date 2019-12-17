@@ -132,6 +132,11 @@ void SiteWindow::makeActions()
   saveAsAction->setText(tr("Save As"));
   fileMenu->addAction(saveAsAction);
   connect(saveAsAction,SIGNAL(triggered(bool)),canvas,SLOT(saveAs()));
+  exitAction=new QAction(this);
+  exitAction->setIcon(QIcon::fromTheme("application-exit"));
+  exitAction->setText(tr("Exit"));
+  fileMenu->addAction(exitAction);
+  connect(exitAction,SIGNAL(triggered(bool)),this,SLOT(close()));
   // Contour menu
   selectContourIntervalAction=new QAction(this);
   //makeTinAction->setIcon(QIcon(":/selectci.png"));

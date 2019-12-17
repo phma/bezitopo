@@ -69,7 +69,7 @@ private:
   LatlongFactorDialog *llDialog;
   GridFactorDialog *grDialog;
   QAction *sizeToFitAction;
-  QAction *openAction,*saveAction,*saveAsAction;
+  QAction *openAction,*saveAction,*saveAsAction,*exitAction;
   QAction *asterAction,*importPnezdAction,*importCriteriaAction;
   QAction *makeTinAction,*selectContourIntervalAction;
   QAction *roughContoursAction,*smoothContoursAction;

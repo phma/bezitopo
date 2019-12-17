@@ -155,6 +155,11 @@ void TinWindow::makeActions()
   exportBreaklinesAction->setText(tr("Export Breaklines file"));
   fileMenu->addAction(exportBreaklinesAction);
   connect(exportBreaklinesAction,SIGNAL(triggered(bool)),canvas,SLOT(exportBreaklines()));
+  exitAction=new QAction(this);
+  exitAction->setIcon(QIcon::fromTheme("application-exit"));
+  exitAction->setText(tr("Exit"));
+  fileMenu->addAction(exitAction);
+  connect(exitAction,SIGNAL(triggered(bool)),this,SLOT(close()));
   // Contour menu
   makeTinAction=new QAction(this);
   //makeTinAction->setIcon(QIcon(":/maketin.png"));
