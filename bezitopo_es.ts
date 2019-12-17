@@ -326,7 +326,23 @@
         <translation>Guardar Como</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="290"/>
+        <location filename="sitewindow.cpp" line="137"/>
+        <source>Exit</source>
+        <translation>Salir</translation>
+    </message>
+    <message>
+        <location filename="sitewindow.cpp" line="293"/>
+        <source>SiteCheck, a Bezitopo program</source>
+        <translation>SiteCheck, un programa de Bezitopo</translation>
+    </message>
+    <message>
+        <location filename="sitewindow.cpp" line="294"/>
+        <location filename="sitewindow.cpp" line="301"/>
+        <source>SiteCheck</source>
+        <translation>SiteCheck</translation>
+    </message>
+    <message>
+        <location filename="sitewindow.cpp" line="295"/>
         <source>%1
 Version %2
 Copyright %3 Pierre Abbat
@@ -361,95 +377,93 @@ Licencia LGPL 3 o posterior</translation>
         <translation type="vanished">Hacer TIN</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="138"/>
+        <location filename="sitewindow.cpp" line="143"/>
         <source>Select contour interval</source>
         <translation>Escoger intervalo de contorno</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="143"/>
+        <location filename="sitewindow.cpp" line="148"/>
         <source>Draw rough contours</source>
         <translation>Dibujar contornos ásperos...</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="148"/>
+        <location filename="sitewindow.cpp" line="153"/>
         <source>Draw smooth contours</source>
         <translation>Dibujar contornos lisos</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="153"/>
+        <location filename="sitewindow.cpp" line="158"/>
         <source>Draw smooth contours with curves</source>
         <translation>Dibujar contornos lisos con curvas</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="161"/>
+        <location filename="sitewindow.cpp" line="166"/>
         <source>Use curved triangular surfaces</source>
         <translation>Usar superficies triangulares curvas</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="171"/>
+        <location filename="sitewindow.cpp" line="176"/>
         <source>Load geoid file</source>
         <translation>Cargar fichero geoide</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="176"/>
+        <location filename="sitewindow.cpp" line="181"/>
         <source>Grid to lat/long</source>
         <translation>Grilla a lat/long</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="181"/>
+        <location filename="sitewindow.cpp" line="186"/>
         <source>Lat/long to grid</source>
         <translation>Lat/long a grilla</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="187"/>
-        <source>About Bezitopo</source>
-        <translation>Acerca de Bezitopo</translation>
+        <location filename="sitewindow.cpp" line="192"/>
+        <source>About SiteCheck</source>
+        <oldsource>About Bezitopo</oldsource>
+        <translation>Acerca de SiteCheck</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="192"/>
+        <location filename="sitewindow.cpp" line="197"/>
         <source>About Qt</source>
         <translation>Acerca de Qt</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="197"/>
+        <location filename="sitewindow.cpp" line="202"/>
         <source>Dump</source>
         <translation>Volcar</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="202"/>
+        <location filename="sitewindow.cpp" line="207"/>
         <source>Meter</source>
         <translation>Metro</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="208"/>
+        <location filename="sitewindow.cpp" line="213"/>
         <source>Foot</source>
         <translation>Pie</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="214"/>
+        <location filename="sitewindow.cpp" line="219"/>
         <source>International foot</source>
         <translation>Pie internacional</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="220"/>
+        <location filename="sitewindow.cpp" line="225"/>
         <source>US survey foot</source>
         <translation>Pie agrimensural EE.UU.</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="226"/>
+        <location filename="sitewindow.cpp" line="231"/>
         <source>Indian survey foot</source>
         <translation>Pie agrimensural indio</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="288"/>
         <source>Bezitopo</source>
-        <translation>Bezitopo</translation>
+        <translation type="vanished">Bezitopo</translation>
     </message>
     <message>
-        <location filename="sitewindow.cpp" line="289"/>
-        <location filename="sitewindow.cpp" line="296"/>
         <source>ViewTIN</source>
-        <translation>ViewTIN</translation>
+        <translation type="vanished">ViewTIN</translation>
     </message>
     <message>
         <source>%1
@@ -585,97 +599,107 @@ Licencia GPL 3 o posterior</translation>
         <translation>Exportar fichero de líneas de rotura</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="161"/>
+        <location filename="tinwindow.cpp" line="160"/>
+        <source>Exit</source>
+        <translation>Salir</translation>
+    </message>
+    <message>
+        <location filename="tinwindow.cpp" line="166"/>
         <source>Make TIN</source>
         <translation>Hacer TIN</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="166"/>
+        <location filename="tinwindow.cpp" line="171"/>
         <source>Select contour interval</source>
         <translation>Escoger intervalo de contorno</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="171"/>
+        <location filename="tinwindow.cpp" line="176"/>
         <source>Draw rough contours</source>
         <translation>Dibujar contornos ásperos...</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="176"/>
+        <location filename="tinwindow.cpp" line="181"/>
         <source>Draw smooth contours</source>
         <translation>Dibujar contornos lisos</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="181"/>
+        <location filename="tinwindow.cpp" line="186"/>
         <source>Draw smooth contours with curves</source>
         <translation>Dibujar contornos lisos con curvas</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="189"/>
+        <location filename="tinwindow.cpp" line="194"/>
         <source>Use curved triangular surfaces</source>
         <translation>Usar superficies triangulares curvas</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="199"/>
+        <location filename="tinwindow.cpp" line="204"/>
         <source>Load geoid file</source>
         <translation>Cargar fichero geoide</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="204"/>
+        <location filename="tinwindow.cpp" line="209"/>
         <source>Grid to lat/long</source>
         <translation>Grilla a lat/long</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="209"/>
+        <location filename="tinwindow.cpp" line="214"/>
         <source>Lat/long to grid</source>
         <translation>Lat/long a grilla</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="215"/>
-        <source>About Bezitopo</source>
-        <translation>Acerca de Bezitopo</translation>
+        <location filename="tinwindow.cpp" line="220"/>
+        <source>About ViewTIN</source>
+        <oldsource>About Bezitopo</oldsource>
+        <translation>Acerca de ViewTIN</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="220"/>
+        <location filename="tinwindow.cpp" line="225"/>
         <source>About Qt</source>
         <translation>Acerca de Qt</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="225"/>
+        <location filename="tinwindow.cpp" line="230"/>
         <source>Dump</source>
         <translation>Volcar</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="230"/>
+        <location filename="tinwindow.cpp" line="235"/>
         <source>Meter</source>
         <translation>Metro</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="236"/>
+        <location filename="tinwindow.cpp" line="241"/>
         <source>Foot</source>
         <translation>Pie</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="242"/>
+        <location filename="tinwindow.cpp" line="247"/>
         <source>International foot</source>
         <translation>Pie internacional</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="248"/>
+        <location filename="tinwindow.cpp" line="253"/>
         <source>US survey foot</source>
         <translation>Pie agrimensural EE.UU.</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="254"/>
+        <location filename="tinwindow.cpp" line="259"/>
         <source>Indian survey foot</source>
         <translation>Pie agrimensural indio</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="322"/>
-        <source>Bezitopo</source>
-        <translation>Bezitopo</translation>
+        <location filename="tinwindow.cpp" line="327"/>
+        <source>ViewTIN, a Bezitopo program</source>
+        <translation>ViewTIN, un programa de Bezitopo</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="324"/>
+        <source>Bezitopo</source>
+        <translation type="vanished">Bezitopo</translation>
+    </message>
+    <message>
+        <location filename="tinwindow.cpp" line="329"/>
         <source>%1
 Version %2
 Copyright %3 Pierre Abbat
@@ -696,8 +720,8 @@ Copyright %3 Pierre Abbat
 Licencia GPL 3 o posterior</translation>
     </message>
     <message>
-        <location filename="tinwindow.cpp" line="323"/>
-        <location filename="tinwindow.cpp" line="330"/>
+        <location filename="tinwindow.cpp" line="328"/>
+        <location filename="tinwindow.cpp" line="335"/>
         <source>ViewTIN</source>
         <translation>ViewTIN</translation>
     </message>
@@ -720,146 +744,156 @@ Licencia GPL 3 o posterior</translation>
         <translation>Ficheros de intercambio de dibujos (*.dxf);;Ficheros TIN (*.tin);;Ficheros PerfectTIN (*.ptin);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="340"/>
+        <location filename="topocanvas.cpp" line="330"/>
+        <source>The TIN file is corrupt.</source>
+        <translation>El fichero TIN es corrupto.</translation>
+    </message>
+    <message>
+        <location filename="topocanvas.cpp" line="332"/>
+        <source>The file does not appear to contain a TIN.</source>
+        <translation>El fichero no parece contener un TIN.</translation>
+    </message>
+    <message>
+        <location filename="topocanvas.cpp" line="351"/>
         <source>Save Drawing</source>
         <translation>Guardar Dibujo</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="343"/>
+        <location filename="topocanvas.cpp" line="354"/>
         <source>(*.bez);;(*)</source>
         <translation>Ficheros de Bezitopo (*.bez);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="384"/>
+        <location filename="topocanvas.cpp" line="395"/>
         <source>Open PNEZD File</source>
         <translation>Abrir fichero PNEZD</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="387"/>
+        <location filename="topocanvas.cpp" line="398"/>
         <source>(*.asc);;(*)</source>
         <translation>Ficheros PNEZD (*.asc);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="411"/>
+        <location filename="topocanvas.cpp" line="422"/>
         <source>Open Criteria File</source>
         <translation>Abrir fichero de criterios</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="414"/>
+        <location filename="topocanvas.cpp" line="425"/>
         <source>(*.crit);;(*)</source>
         <translation>Ficheros de criterios (*.crit);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="439"/>
+        <location filename="topocanvas.cpp" line="450"/>
         <source>Open Breakline File</source>
         <translation>Abrir fichero de líneas de rotura</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="442"/>
-        <location filename="topocanvas.cpp" line="502"/>
+        <location filename="topocanvas.cpp" line="453"/>
+        <location filename="topocanvas.cpp" line="513"/>
         <source>(*.brk);;(*)</source>
         <translation>Ficheros de líneas de rotura (*.brk);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="449"/>
-        <location filename="topocanvas.cpp" line="529"/>
+        <location filename="topocanvas.cpp" line="460"/>
+        <location filename="topocanvas.cpp" line="540"/>
         <source>You have edited breaklines.</source>
         <translation>Has editado líneas de rotura.</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="450"/>
+        <location filename="topocanvas.cpp" line="461"/>
         <source>Do you want to load?</source>
         <translation>Me pides importar líneas de rotura, pero las líneas de rotura en el TIN están más nuevas que las leídas de fichero. ¿Quieres leerlas de un fichero?</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="484"/>
+        <location filename="topocanvas.cpp" line="495"/>
         <source>Can&apos;t read breaklines. Error: </source>
         <translation>No puedo leer líneas de rotura. Error: </translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="499"/>
+        <location filename="topocanvas.cpp" line="510"/>
         <source>Save Breakline File</source>
         <translation>Guardar fichero de líneas de rotura</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="530"/>
+        <location filename="topocanvas.cpp" line="541"/>
         <source>Do you want to make TIN?</source>
         <translation>Me pides hacer un TIN, pero has editado las líneas de rotura en el TIN después que las has leídas de un fichero. ¿Quieres hacer un nuevo TIN?</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="576"/>
-        <location filename="topocanvas.cpp" line="611"/>
+        <location filename="topocanvas.cpp" line="587"/>
+        <location filename="topocanvas.cpp" line="622"/>
         <source>Making TIN</source>
         <translation>Haciendo TIN</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="577"/>
+        <location filename="topocanvas.cpp" line="588"/>
         <source>Sweeping convex hull...</source>
         <translation>Barriendo cápsula convexa...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="612"/>
+        <location filename="topocanvas.cpp" line="623"/>
         <source>Flipping edges...</source>
         <translation>Girando aristas...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="635"/>
+        <location filename="topocanvas.cpp" line="646"/>
         <source>Took too long to make TIN</source>
         <translation>Hacer TIN duró demasiado tiempo</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="676"/>
+        <location filename="topocanvas.cpp" line="687"/>
         <source>Making surface</source>
         <translation>Haciendo superficie</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="677"/>
+        <location filename="topocanvas.cpp" line="688"/>
         <source>Finding critical points...</source>
         <translation>Hallando puntos críticos...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="720"/>
+        <location filename="topocanvas.cpp" line="731"/>
         <source>Can&apos;t make TIN. Error: </source>
         <translation>No puedo hacer TIN. Error: </translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="787"/>
-        <location filename="topocanvas.cpp" line="853"/>
+        <location filename="topocanvas.cpp" line="798"/>
+        <location filename="topocanvas.cpp" line="864"/>
         <source>Drawing contours</source>
         <translation>Dibujando contornos</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="788"/>
+        <location filename="topocanvas.cpp" line="799"/>
         <source>Drawing rough contours...</source>
         <translation>Dibujando contornos ásperos...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="854"/>
+        <location filename="topocanvas.cpp" line="865"/>
         <source>Drawing smooth contours...</source>
         <translation>Dibujando contornos lisos</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="905"/>
+        <location filename="topocanvas.cpp" line="916"/>
         <source>Load Geoid File</source>
         <translation>Cargar Fichero Geoide</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="908"/>
+        <location filename="topocanvas.cpp" line="919"/>
         <source>(*.bol);;(*)</source>
         <translation>Ficheros de Boldatni (*.bol);;Todos los ficheros (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="931"/>
+        <location filename="topocanvas.cpp" line="942"/>
         <source>Can&apos;t read geoid. Error: </source>
         <translation>No puedo leer geoide. Error: </translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="1105"/>
+        <location filename="topocanvas.cpp" line="1116"/>
         <source>You have imported breaklines.</source>
         <translation>Has importado líneas de rotura.</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="1106"/>
+        <location filename="topocanvas.cpp" line="1117"/>
         <source>Do you want to edit?</source>
         <translation>Tientas editar una línea de rotura, pero las líneas de rotura leídas de fichero están más nuevas que las en el TIN. ¿Quieres editar líneas de rotura?</translation>
     </message>
