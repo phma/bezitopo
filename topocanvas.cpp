@@ -302,7 +302,7 @@ void TopoCanvas::open()
  * When I implement reading Bezitopo files, I'll duplicate it.
  */
 {
-  int dialogResult;
+  int dialogResult,readResult;
   QStringList files;
   string fileName;
   double unit;
@@ -319,10 +319,21 @@ void TopoCanvas::open()
     doc.makepointlist(1);
     unit=doc.ms.toCoherent(1,LENGTH);
     setCursor(Qt::WaitCursor);
-    readTinFile(doc.pl[1],fileName,unit);
+    readResult=readTinFile(doc.pl[1],fileName,unit);
     plnum=1;
     sizeToFit();
     setCursor(Qt::ArrowCursor);
+    if (readResult<2)
+    {
+      QMessageBox msgBox(this);
+      if (readResult)
+	msgBox.setText(tr("The TIN file is corrupt."));
+      else
+	msgBox.setText(tr("The file does not appear to contain a TIN."));
+      msgBox.setStandardButtons(QMessageBox::Ok);
+      msgBox.setIcon(QMessageBox::Warning);
+      msgBox.exec();
+    }
     pointsValid=true;
     tinValid=true;
     surfaceValid=true;
