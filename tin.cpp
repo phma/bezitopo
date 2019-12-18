@@ -1372,6 +1372,15 @@ void pointlist::fillInBareTin()
   intloop holes;
   int1loop hole;
   int i,j;
+  PostScript ps;
+  BoundRect br;
+  ps.open("fillInBareTin.ps");
+  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.prolog();
+  ps.setPointlist(*this);
+  br.include(this);
+  ps.startpage();
+  ps.setscale(br);
   makeEdges();
   deleteOrphanPoints();
   holes=boundary();
@@ -1380,11 +1389,16 @@ void pointlist::fillInBareTin()
   for (i=0;i<holes.size();i++)
   {
     cout<<holes[i].size()<<' ';
-    if (holes[i].hasMember(630) || holes[i].hasMember(5287) || holes[i].hasMember(5287))
+    if (holes[i].hasMember(630) || holes[i].hasMember(5287) || holes[i].hasMember(51743))
     {
       hole=holes[i];
+      ps.startline();
       for (j=0;j<hole.size();j++)
+      {
+	ps.lineto(points[hole[j]]);
 	cout<<' '<<hole[j];
+      }
+      ps.endline(true);
     }
     cout<<endl;
     triangulatePolygon(fromInt1loop(holes[i]));
