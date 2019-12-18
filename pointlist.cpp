@@ -168,8 +168,11 @@ bool pointlist::checkTinConsistency()
       nInteriorEdges++;
     if ((edges[i].tria!=nullptr)+(edges[i].trib!=nullptr)!=1+edges[i].isinterior())
     {
+      ed=&edges[i];
       ret=false;
       cerr<<"Edge "<<i<<" has wrong number of adjacent triangles.\n";
+      cerr<<"a "<<revpoints[ed->a]<<" b "<<revpoints[ed->b]<<endl;
+      cerr<<"tria "<<ed->tria<<" trib "<<ed->trib<<" isinterior "<<ed->isinterior()<<endl;
     }
     if (edges[i].tria)
     {
