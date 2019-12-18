@@ -38,6 +38,7 @@ public:
   void clear();
   void push_back(int x);
   int operator[](int n);
+  bool hasMember(int n);
   std::array<int,2> seg(int n);
   std::vector<int> nullSegments();
   void positionSegment(int n);

@@ -94,6 +94,16 @@ int int1loop::operator[](int n)
   return bdy[n];
 }
 
+bool int1loop::hasMember(int n)
+{
+  int i;
+  bool ret=false;
+  for (i=0;!ret && i<bdy.size();i++)
+    if (bdy[i]==n)
+      ret=true;
+ return ret;
+}
+
 array<int,2> int1loop::seg(int n)
 {
   array<int,2> ret;
