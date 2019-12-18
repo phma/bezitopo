@@ -430,7 +430,7 @@ void intloop::consolidate()
       bdy[matchingSegs[2]].deleteRetrace();
     }
   }
-  while (true)
+  while (false)
   {
     matchingSegs=pinchPoint();
     if (matchingSegs[0]==matchingSegs[2] && matchingSegs[1]==matchingSegs[3])
