@@ -1154,6 +1154,7 @@ void test1tripolygon(int points,int petals,PostScript &ps)
 {
   int i;
   vector<point *> poly,hull;
+  intloop holes;
   manysum area;
   polyline pl;
   doc.makepointlist(1);
@@ -1193,6 +1194,17 @@ void test1tripolygon(int points,int petals,PostScript &ps)
   tassert(fabs(area.total()-pl.area())<1e-12);
   doc.pl[1].makeEdges();
   tassert(doc.pl[1].checkTinConsistency());
+  holes=doc.pl[1].boundary();
+  holes.push_back(doc.pl[1].convexHull());
+  holes.consolidate();
+  for (i=0;i<holes.size();i++)
+    doc.pl[1].triangulatePolygon(doc.pl[1].fromInt1loop(holes[i]));
+  doc.pl[1].makeEdges();
+  ps.startpage();
+  ps.setscale(-2,-2,2,2,0);
+  for (i=0;i<doc.pl[1].edges.size();i++)
+    ps.line(doc.pl[1].edges[i],i,false);
+  ps.endpage();
 }
 
 #define EHF 89
