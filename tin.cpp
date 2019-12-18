@@ -1370,7 +1370,8 @@ void pointlist::fillInBareTin()
  */
 {
   intloop holes;
-  int i;
+  int1loop hole;
+  int i,j;
   makeEdges();
   deleteOrphanPoints();
   holes=boundary();
@@ -1378,7 +1379,14 @@ void pointlist::fillInBareTin()
   holes.consolidate();
   for (i=0;i<holes.size();i++)
   {
-    //cout<<holes[i].size()<<' ';
+    cout<<holes[i].size()<<' ';
+    if (holes[i].hasMember(630) || holes[i].hasMember(5287) || holes[i].hasMember(5287))
+    {
+      hole=holes[i];
+      for (j=0;j<hole.size();j++)
+	cout<<' '<<hole[j];
+    }
+    cout<<endl;
     triangulatePolygon(fromInt1loop(holes[i]));
   }
   makeEdges();
