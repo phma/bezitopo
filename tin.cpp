@@ -1198,6 +1198,12 @@ void pointlist::triangulatePolygon(vector<point *> poly)
   xy startpnt;
   bool found=false;
   triangle newtri;
+  if (sz==22)
+  {
+    for (i=0;i<sz;i++)
+      cout<<revpoints[poly[i]]<<((i+1<sz)?' ':'\n');
+    cout<<"8 petals?\n";
+  }
   for (i=0;i<sz;i++)
     coords.push_back(poly[i]->getx());
   xmean=pairwisesum(coords)/sz;
