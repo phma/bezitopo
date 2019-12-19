@@ -1214,6 +1214,9 @@ void pointlist::triangulatePolygon(vector<point *> poly)
   coords.clear();
   startpnt=xy(xmean,ymean);
   j=0;
+  /* Try to find a start point that is inside the polygon. It doesn't have to be,
+   * but it is likely to speed up the search for a triangle.
+   */
   while (sz>2 && startpnt.isfinite() && j<sz*7)
   {
     for (isInside=i=0;i<sz;i++)
@@ -1223,12 +1226,22 @@ void pointlist::triangulatePolygon(vector<point *> poly)
     startpnt=(startpnt+*poly[rng.usrandom()%sz])/2;
     j++;
   }
+  // List the points in order of distance from the start point.
   for (i=0;i<sz;i++)
     outwardMap.insert(pair<double,int>(dist(startpnt,*poly[i]),i));
   for (k=outwardMap.begin();k!=outwardMap.end();++k)
     outwardVec.push_back(k->second);
   outwardMap.clear();
   assert(outwardVec.size()==sz);
+  /* Find a triangle with these properties:
+   * • Its corners are in order around the polygon.
+   * • Its area is positive.
+   * • The other points are outside the triangle or coincide with the corners.
+   *   (It can happen that two points of the polygon are equal; that's called
+   *    a pinch point.)
+   * • The three remainders all have nonnegative area.
+   * • No side of the polygon crosses the triangle.
+   */
   for (ai=0;ai<sz && !found;ai++)
     for (bi=0;bi<ai && !found;bi++)
       for (ci=0;ci<bi && !found;ci++)
@@ -1266,7 +1279,7 @@ void pointlist::triangulatePolygon(vector<point *> poly)
 	}
       }
   if (found)
-  {
+  { // Add the triangle to the pointlist and call yourself recursively on the remainders.
     newtri.a=poly[a];
     newtri.b=poly[b];
     newtri.c=poly[c];
