@@ -1281,6 +1281,12 @@ void pointlist::triangulatePolygon(vector<point *> poly)
     subpoly.push_back(poly[a]);
     triangulatePolygon(subpoly);
   }
+  else if (sz>2)
+  {
+    cout<<"No triangle found\n";
+    for (i=0;i<sz;i++)
+      cout<<revpoints[poly[i]]<<((i+1<sz)?' ':'\n');
+  }
 }
 
 void pointlist::makeEdges()
