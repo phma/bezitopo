@@ -29,6 +29,7 @@
 #include "cogo.h"
 #include "globals.h"
 #include "random.h"
+#include "manysum.h"
 using namespace std;
 
 int debugdel;
@@ -237,6 +238,16 @@ bool crossTriangle(xy p,xy q,xy a,xy b,xy c)
   return intersection_type(p,q,a,b)==ACXBD
       || intersection_type(p,q,b,c)==ACXBD
       || intersection_type(p,q,c,a)==ACXBD;
+}
+
+double polyPartArea(vector<point *> poly,int first,int last)
+{
+  vector<double> areas;
+  int i,sz=poly.size();
+  int len=(last+sz-first)%sz;
+  for (i=1;i<len-1;i++)
+    areas.push_back(area3(*poly[first],*poly[(first+i)%sz],*poly[(first+i+1)%sz]));
+  return pairwisesum(areas);
 }
 
 double pldist(xy a,xy b,xy c)
