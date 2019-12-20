@@ -1265,7 +1265,7 @@ void pointlist::triangulatePolygon(vector<point *> poly)
 	found=true;
 	for (i=0;found && i<sz;i++)
 	{
-	  if (i!=a && i!=b && i!=c)
+	  if (poly[i]!=poly[a] && poly[i]!=poly[b] && poly[i]!=poly[c])
 	  {
 	    if (in3(*poly[i],*poly[a],*poly[b],*poly[c]))
 	      found=false;
