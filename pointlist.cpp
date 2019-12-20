@@ -296,6 +296,31 @@ bool pointlist::checkTinConsistency()
   return ret;
 }
 
+bool pointlist::checkFlower()
+/* Checks whether the points are in a flower used in the tripolygon test.
+ * Something has been messing with the points during the test.
+ */
+{
+  int i,sz=points.size(),bear;
+  point *pnt;
+  double mulbear;
+  bool ret=true;
+  for (i=0;i<sz;i++)
+  {
+    pnt=&points[i+1];
+    bear=atan2i(*pnt);
+    mulbear=bintorot(bear)*sz;
+    if (mulbear<0)
+      mulbear+=sz;
+    if (fabs(mulbear-i)>0.01)
+    {
+      cout<<"Point "<<i+1<<" of "<<sz<<" bearing is "<<bintodeg(bear)<<" ("<<mulbear<<"), should be "<<36e1*i/sz<<endl;
+      ret=false;
+    }
+  }
+  return ret;
+}
+
 int1loop pointlist::toInt1loop(vector<point *> ptrLoop)
 {
   int i;

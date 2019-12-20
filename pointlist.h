@@ -103,6 +103,7 @@ public:
   void clearmarks();
   void clearTin();
   bool checkTinConsistency();
+  bool checkFlower();
   int1loop toInt1loop(std::vector<point *> ptrLoop);
   std::vector<point *> fromInt1loop(int1loop intLoop);
   intloop boundary();
