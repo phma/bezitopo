@@ -233,6 +233,11 @@ bool operator==(const int1loop l,const int1loop r)
   return i==l.bdy.size() && i==r.bdy.size();
 }
 
+intloop::intloop()
+{
+  segNum=0;
+}
+
 void intloop::push_back(int1loop g1)
 {
   bdy.push_back(g1);

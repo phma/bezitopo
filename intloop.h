@@ -57,6 +57,7 @@ private:
   std::vector<int1loop> bdy;
   int segNum;
 public:
+  intloop();
   void push_back(int1loop g1);
   int1loop operator[](int n);
   int size() const;
