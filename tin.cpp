@@ -1189,6 +1189,7 @@ void pointlist::triangulatePolygon(vector<point *> poly)
  */
 {
   int h,i,j,a,b,c,ai,bi,ci,sz=poly.size(),ba,bb,bc,isInside;
+  double da,db,dc;
   vector<point *> subpoly;
   vector<double> coords;
   multimap<double,int> outwardMap;
@@ -1259,6 +1260,8 @@ void pointlist::triangulatePolygon(vector<point *> poly)
 	    abs(foldangle(bb-bc+DEG180))<2 ||
 	    abs(foldangle(bc-ba+DEG180))<2)
 	  continue;
+	if (polyPartArea(poly,a,b)<0 || polyPartArea(poly,b,c)<0 || polyPartArea(poly,c,a)<0)
+	  continue;
 	found=true;
 	for (i=0;found && i<sz;i++)
 	{
@@ -1269,9 +1272,13 @@ void pointlist::triangulatePolygon(vector<point *> poly)
 	    ba=dir(xy(*poly[i]),xy(*poly[a]));
 	    bb=dir(xy(*poly[i]),xy(*poly[b]));
 	    bc=dir(xy(*poly[i]),xy(*poly[c]));
-	    if (abs(foldangle(ba-bb+DEG180))<2 ||
-		abs(foldangle(bb-bc+DEG180))<2 ||
-		abs(foldangle(bc-ba+DEG180))<2)
+	    da=dist(xy(*poly[i]),xy(*poly[a]));
+	    db=dist(xy(*poly[i]),xy(*poly[b]));
+	    dc=dist(xy(*poly[i]),xy(*poly[c]));
+	    if ((abs(foldangle(ba-bb+DEG180))<2 ||
+		 abs(foldangle(bb-bc+DEG180))<2 ||
+		 abs(foldangle(bc-ba+DEG180))<2) &&
+	        da>0 && db>0 && dc>0)
 	      found=false;
 	  }
 	  if (crossTriangle(*poly[i],*poly[(i+1)%sz],*poly[a],*poly[b],*poly[c]))
