@@ -245,7 +245,7 @@ double polyPartArea(vector<point *> poly,int first,int last)
   vector<double> areas;
   int i,sz=poly.size();
   int len=(last+sz-first)%sz;
-  for (i=1;i<len-1;i++)
+  for (i=1;i<len;i++)
     areas.push_back(area3(*poly[first],*poly[(first+i)%sz],*poly[(first+i+1)%sz]));
   return pairwisesum(areas);
 }
