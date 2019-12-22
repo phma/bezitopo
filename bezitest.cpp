@@ -1147,7 +1147,7 @@ void testintloop()
     tassert(tally[i]==1);
   for (i=260;i<300;i++)
     tassert(tally[i]==0);
-  tassert(loop.size()==15); // 18 if pinch points were split
+  tassert(loop.size()==16); // 18 if all pinch points were split, 15 if none
 }
 
 void test1tripolygon(int points,int petals,PostScript &ps)
