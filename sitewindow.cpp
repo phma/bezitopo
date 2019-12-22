@@ -36,6 +36,13 @@
 
 using namespace std;
 
+string baseName(string fileName)
+{
+  long long slashPos;
+  slashPos=fileName.rfind('/');
+  return fileName.substr(slashPos+1);
+}
+
 SiteWindow::SiteWindow(QWidget *parent):QMainWindow(parent)
 {
   resize(707,500);
@@ -259,7 +266,7 @@ void SiteWindow::unmakeActions()
 void SiteWindow::showFileLoaded(string fileName)
 {
   if (fileName.length())
-    fileName+=" — ";
+    fileName=baseName(fileName)+" — ";
   setWindowTitle(QString::fromStdString(fileName)+tr("SiteCheck"));
 }
 
