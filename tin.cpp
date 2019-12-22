@@ -1410,19 +1410,6 @@ void pointlist::fillInBareTin()
   holes.consolidate();
   for (i=0;i<holes.size();i++)
   {
-    cout<<holes[i].size()<<' ';
-    if (holes[i].hasMember(630) || holes[i].hasMember(5287) || holes[i].hasMember(51743))
-    {
-      hole=holes[i];
-      ps.startline();
-      for (j=0;j<hole.size();j++)
-      {
-	ps.lineto(points[hole[j]]);
-	cout<<' '<<hole[j];
-      }
-      ps.endline(true);
-    }
-    cout<<endl;
     triangulatePolygon(fromInt1loop(holes[i]));
   }
   makeEdges();
