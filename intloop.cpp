@@ -523,6 +523,8 @@ void intloop::consolidate()
   }
   deleteNullSegments();
   deleteEmpty();
+  if (manyPetals)
+    dump();
 }
 
 void intloop::erase(int n)
