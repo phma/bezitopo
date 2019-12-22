@@ -94,6 +94,19 @@ int int1loop::operator[](int n)
   return bdy[n];
 }
 
+void int1loop::dump()
+{
+  int i;
+  cout<<'(';
+  for (i=0;i<bdy.size();i++)
+  {
+    if (i)
+      cout<<' ';
+    cout<<bdy[i];
+  }
+  cout<<")\n";
+}
+
 bool int1loop::hasMember(int n)
 {
   int i;
@@ -259,6 +272,14 @@ int intloop::totalSegments()
   for (i=total=0;i<bdy.size();i++)
     total+=bdy[i].size();
   return total;
+}
+
+void intloop::dump()
+{
+  int i;
+  cout<<bdy.size()<<":\n";
+  for (i=0;i<bdy.size();i++)
+    bdy[i].dump();
 }
 
 array<int,4> intloop::seg(int n)
@@ -452,14 +473,25 @@ void intloop::deleteEmpty()
 
 void intloop::consolidate()
 {
+  bool manyPetals=false;
+  int i;
   array<int,4> matchingSegs;
-  /*matchingSegs=hullTouchPoint();
+  matchingSegs=hullTouchPoint();
+  if (bdy.size()==2 && bdy[0].size()==89 && bdy[1].size()<=17)
+  {
+    manyPetals=true;
+    for (i=0;i<4;i++)
+      cout<<matchingSegs[i]<<' ';
+    dump();
+  }
   if (matchingSegs[0]>=0)
   {
     bdy[matchingSegs[0]].splice(matchingSegs[1],bdy[matchingSegs[2]],matchingSegs[3]);
     bdy[matchingSegs[0]].deleteRetrace();
     bdy[matchingSegs[2]].deleteRetrace();
-  }*/
+  }
+  if (manyPetals)
+    dump();
   while (true)
   {
     matchingSegs=dupSeg();
