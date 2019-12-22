@@ -1199,12 +1199,6 @@ void pointlist::triangulatePolygon(vector<point *> poly)
   xy startpnt,centroid;
   bool found=false;
   triangle newtri;
-  if (sz==22)
-  {
-    for (i=0;i<sz;i++)
-      cout<<revpoints[poly[i]]<<((i+1<sz)?' ':'\n');
-    cout<<"8 petals?\n";
-  }
   for (i=0;i<sz;i++)
     coords.push_back(poly[i]->getx());
   xmean=pairwisesum(coords)/sz;
@@ -1286,11 +1280,8 @@ void pointlist::triangulatePolygon(vector<point *> poly)
 	    found=false;
 	}
       }
-  if (sz>2)
-    cout<<'{';
   if (found)
   { // Add the triangle to the pointlist and call yourself recursively on the remainders.
-    cout<<'('<<revpoints[poly[a]]<<' '<<revpoints[poly[b]]<<' '<<revpoints[poly[c]]<<") ";
     logTriPoly(poly,a,b,c);
     newtri.a=poly[a];
     newtri.b=poly[b];
@@ -1312,14 +1303,6 @@ void pointlist::triangulatePolygon(vector<point *> poly)
     subpoly.push_back(poly[a]);
     triangulatePolygon(subpoly);
   }
-  else if (sz>2)
-  {
-    cout<<"No triangle found\n";
-    for (i=0;i<sz;i++)
-      cout<<revpoints[poly[i]]<<((i+1<sz)?' ':'\n');
-  }
-  if (sz>2)
-    cout<<'}';
 }
 
 void pointlist::makeEdges()
