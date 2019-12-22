@@ -1213,7 +1213,7 @@ void test1tripolygon(int points,int petals,PostScript &ps)
     ps.setcolor(0,0,1);
     ps.startline();
     entry=doc.pl[1].triPolyLog[i];
-    for (j=0;j<poly.size();j++)
+    for (j=0;j<entry.loop.size();j++)
       ps.lineto(*entry.loop[j]);
     ps.endline(true);
     ps.setcolor(0,0,0);
