@@ -473,25 +473,15 @@ void intloop::deleteEmpty()
 
 void intloop::consolidate()
 {
-  bool manyPetals=false;
   int i;
   array<int,4> matchingSegs;
   matchingSegs=hullTouchPoint();
-  if (bdy.size()==2 && bdy[0].size()==89 && bdy[1].size()<=17)
-  {
-    manyPetals=true;
-    for (i=0;i<4;i++)
-      cout<<matchingSegs[i]<<' ';
-    dump();
-  }
   if (matchingSegs[0]>=0)
   {
     bdy[matchingSegs[0]].splice(matchingSegs[1],bdy[matchingSegs[2]],matchingSegs[3]);
     bdy[matchingSegs[0]].deleteRetrace();
     bdy[matchingSegs[2]].deleteRetrace();
   }
-  if (manyPetals)
-    dump();
   while (true)
   {
     matchingSegs=dupSeg();
@@ -523,8 +513,6 @@ void intloop::consolidate()
   }
   deleteNullSegments();
   deleteEmpty();
-  if (manyPetals)
-    dump();
 }
 
 void intloop::erase(int n)
