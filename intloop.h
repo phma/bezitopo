@@ -66,6 +66,7 @@ public:
   std::array<int,4> someSeg();
   std::array<int,4> dupSeg();
   std::array<int,4> pinchPoint();
+  std::array<int,4> hullTouchPoint();
   void clear();
   void deleteRetrace();
   void deleteNullSegments();

@@ -368,6 +368,43 @@ array<int,4> intloop::pinchPoint()
   return ret;
 }
 
+array<int,4> intloop::hullTouchPoint()
+/* Finds a point which is on both the convex hull (which is the last int1loop
+ * in the intloop) and one of the other intloops. This has to be done first
+ * in case there are no segments in common between the convex hull
+ * and the outer boundary.
+ */
+{
+  map<int,vector<array<int,4> > > pointTable;
+  int i,j,point;
+  int hull=bdy.size()-1;
+  array<int,4> aseg,ret;
+  bool found=false,exhausted=false;
+  while (!found && !exhausted)
+  {
+    aseg=someSeg();
+    point=aseg[0];
+    for (i=0;i<pointTable[point].size();i++)
+    {
+      if (pointTable[point][i][1]==aseg[1])
+      {
+	ret[0]=ret[1]=ret[2]=ret[3]=-1;
+	exhausted=true;
+      }
+      if (pointTable[point][i][1]!=aseg[1] && ((pointTable[point][i][2]==hull) ^ (aseg[2]==hull)))
+      {
+	ret[0]=pointTable[point][i][2];
+	ret[1]=pointTable[point][i][3];
+	ret[2]=aseg[2];
+	ret[3]=aseg[3];
+	found=true;
+      }
+    }
+    pointTable[point].push_back(aseg);
+  }
+  return ret;
+}
+
 void intloop::clear()
 {
   bdy.clear();
@@ -416,6 +453,13 @@ void intloop::deleteEmpty()
 void intloop::consolidate()
 {
   array<int,4> matchingSegs;
+  /*matchingSegs=hullTouchPoint();
+  if (matchingSegs[0]>=0)
+  {
+    bdy[matchingSegs[0]].splice(matchingSegs[1],bdy[matchingSegs[2]],matchingSegs[3]);
+    bdy[matchingSegs[0]].deleteRetrace();
+    bdy[matchingSegs[2]].deleteRetrace();
+  }*/
   while (true)
   {
     matchingSegs=dupSeg();
