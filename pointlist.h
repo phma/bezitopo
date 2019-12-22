@@ -63,6 +63,12 @@ typedef std::vector<criterion> criteria;
  * is included in the topo. If none matches, it is not included.
  */
 
+struct TriPolyLogEntry
+{
+  std::vector<point *> loop;
+  std::array<int,3> tri; // indices to loop
+};
+
 class pointlist
 {
 private:
@@ -95,6 +101,7 @@ public:
    * 3: both are valid (you just made a TIN, or you just saved breaklines to a file).
    */
   qindex qinx;
+  std::vector<TriPolyLogEntry> triPolyLog;
   pointlist();
   void addpoint(int numb,point pnt,bool overwrite=false);
   int addtriangle(int n=1);
@@ -104,6 +111,7 @@ public:
   void clearTin();
   bool checkTinConsistency();
   bool checkFlower();
+  void logTriPoly(std::vector<point *> loop,int a,int b,int c);
   int1loop toInt1loop(std::vector<point *> ptrLoop);
   std::vector<point *> fromInt1loop(int1loop intLoop);
   intloop boundary();

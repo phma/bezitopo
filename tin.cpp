@@ -1290,6 +1290,7 @@ void pointlist::triangulatePolygon(vector<point *> poly)
   if (found)
   { // Add the triangle to the pointlist and call yourself recursively on the remainders.
     cout<<'('<<revpoints[poly[a]]<<' '<<revpoints[poly[b]]<<' '<<revpoints[poly[c]]<<") ";
+    logTriPoly(poly,a,b,c);
     newtri.a=poly[a];
     newtri.b=poly[b];
     newtri.c=poly[c];

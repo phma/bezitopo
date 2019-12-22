@@ -76,6 +76,7 @@ void pointlist::clear()
   edges.clear();
   points.clear();
   revpoints.clear();
+  triPolyLog.clear();
 }
 
 void pointlist::clearTin()
@@ -319,6 +320,16 @@ bool pointlist::checkFlower()
     }
   }
   return ret;
+}
+
+void pointlist::logTriPoly(vector<point *> loop,int a,int b,int c)
+{
+  TriPolyLogEntry entry;
+  entry.loop=loop;
+  entry.tri[0]=a;
+  entry.tri[1]=b;
+  entry.tri[2]=c;
+  triPolyLog.push_back(entry);
 }
 
 int1loop pointlist::toInt1loop(vector<point *> ptrLoop)

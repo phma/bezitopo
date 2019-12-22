@@ -1152,8 +1152,9 @@ void testintloop()
 
 void test1tripolygon(int points,int petals,PostScript &ps)
 {
-  int i;
+  int i,j;
   vector<point *> poly,hull;
+  TriPolyLogEntry entry;
   intloop holes;
   manysum area;
   polyline pl;
@@ -1205,6 +1206,23 @@ void test1tripolygon(int points,int petals,PostScript &ps)
   for (i=0;i<doc.pl[1].edges.size();i++)
     ps.line(doc.pl[1].edges[i],i,false);
   ps.endpage();
+  for (i=0;i<doc.pl[1].triPolyLog.size();i++)
+  {
+    ps.startpage();
+    ps.setscale(-2,-2,2,2,0);
+    ps.setcolor(0,0,1);
+    ps.startline();
+    entry=doc.pl[1].triPolyLog[i];
+    for (j=0;j<poly.size();j++)
+      ps.lineto(*entry.loop[j]);
+    ps.endline(true);
+    ps.setcolor(0,0,0);
+    ps.startline();
+    for (j=0;j<3;j++)
+      ps.lineto(*entry.loop[entry.tri[j]]);
+    ps.endline(true);
+    ps.endpage();
+  }
   tassert(doc.pl[1].checkFlower());
 }
 
@@ -1280,7 +1298,7 @@ void testtripolygon()
 {
   PostScript ps;
   ps.open("tripolygon.ps");
-  ps.setpaper(papersizes["A4 portrait"],0);
+  ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
   test1tripolygon(89,1,ps);
   test1tripolygon(89,2,ps);
