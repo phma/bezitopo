@@ -1206,6 +1206,7 @@ void test1tripolygon(int points,int petals,PostScript &ps)
   for (i=0;i<doc.pl[1].edges.size();i++)
     ps.line(doc.pl[1].edges[i],i,false);
   ps.endpage();
+  tassert(doc.pl[1].checkTinConsistency());
   tassert(doc.pl[1].checkFlower());
 }
 
