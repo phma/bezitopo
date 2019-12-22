@@ -250,6 +250,14 @@ double polyPartArea(vector<point *> poly,int first,int last)
   return pairwisesum(areas);
 }
 
+bool isInside(xy pnt,std::vector<point *> poly)
+{
+  int i,wind,sz=poly.size();
+  for (wind=i=0;i<sz;i++)
+    wind+=foldangle(dir(pnt,*poly[(i+1)%sz])-dir(pnt,*poly[i]));
+  return wind!=0;
+}
+
 double pldist(xy a,xy b,xy c)
 /* Signed distance from a to the line bc. */
 {

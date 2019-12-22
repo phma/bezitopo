@@ -69,6 +69,7 @@ bool crossTriangle(xy p,xy q,xy a,xy b,xy c);
  */
 double polyPartArea(std::vector<point *> poly,int first,int last);
 // Returns the area of the part of the polygon from first to last, inclusive.
+bool isInside(xy pnt,std::vector<point *> poly);
 double pldist(xy a,xy b,xy c);
 // Signed distance from a to the line bc.
 bool delaunay(xy a,xy c,xy b,xy d);

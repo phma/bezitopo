@@ -1188,7 +1188,7 @@ void pointlist::triangulatePolygon(vector<point *> poly)
  * if not simply connected.
  */
 {
-  int h,i,j,a,b,c,ai,bi,ci,sz=poly.size(),ba,bb,bc,isInside;
+  int h,i,j,a,b,c,ai,bi,ci,sz=poly.size(),ba,bb,bc;
   double da,db,dc;
   vector<point *> subpoly;
   vector<double> coords;
@@ -1196,7 +1196,7 @@ void pointlist::triangulatePolygon(vector<point *> poly)
   vector<int> outwardVec;
   multimap<double,int>::iterator k;
   double xmean,ymean;
-  xy startpnt;
+  xy startpnt,centroid;
   bool found=false;
   triangle newtri;
   if (sz==22)
@@ -1220,9 +1220,7 @@ void pointlist::triangulatePolygon(vector<point *> poly)
    */
   while (sz>2 && startpnt.isfinite() && j<sz*7)
   {
-    for (isInside=i=0;i<sz;i++)
-      isInside+=foldangle(dir(startpnt,*poly[(i+1)%sz])-dir(startpnt,*poly[i]));
-    if (isInside)
+    if (isInside(startpnt,poly))
       break;
     startpnt=(startpnt+*poly[rng.usrandom()%sz])/2;
     j++;
@@ -1261,6 +1259,9 @@ void pointlist::triangulatePolygon(vector<point *> poly)
 	    abs(foldangle(bc-ba+DEG180))<2)
 	  continue;
 	if (polyPartArea(poly,a,b)<0 || polyPartArea(poly,b,c)<0 || polyPartArea(poly,c,a)<0)
+	  continue;
+	centroid=(xy(*poly[a])+xy(*poly[b])+xy(*poly[c]))/3;
+	if (!isInside(centroid,poly))
 	  continue;
 	found=true;
 	for (i=0;found && i<sz;i++)
