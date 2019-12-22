@@ -1285,6 +1285,8 @@ void pointlist::triangulatePolygon(vector<point *> poly)
 	    found=false;
 	}
       }
+  if (sz>2)
+    cout<<'{';
   if (found)
   { // Add the triangle to the pointlist and call yourself recursively on the remainders.
     cout<<'('<<revpoints[poly[a]]<<' '<<revpoints[poly[b]]<<' '<<revpoints[poly[c]]<<") ";
@@ -1314,6 +1316,8 @@ void pointlist::triangulatePolygon(vector<point *> poly)
     for (i=0;i<sz;i++)
       cout<<revpoints[poly[i]]<<((i+1<sz)?' ':'\n');
   }
+  if (sz>2)
+    cout<<'}';
 }
 
 void pointlist::makeEdges()
