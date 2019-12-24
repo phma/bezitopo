@@ -287,6 +287,7 @@ array<int,4> intloop::seg(int n)
   array<int,4> ret;
   array<int,2> seg1;
   int i;
+  ret.fill(-1);
   for (i=0;i<bdy.size() && n>=0;i++)
   {
     if (n>=0 && n<bdy[i].size())
