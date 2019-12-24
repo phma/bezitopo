@@ -1284,6 +1284,7 @@ void testtripolygon()
   ps.open("tripolygon.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
+  test1tripolygon(89,0,ps);
   test1tripolygon(89,1,ps);
   test1tripolygon(89,2,ps);
   test1tripolygon(89,3,ps);
