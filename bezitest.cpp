@@ -2800,8 +2800,7 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
   ps.setcolor(0,0,0);
   ps.write(xy(-0.5,-0.3),"Curvature "+ldecimal(curvature));
   ps.write(xy(-0.5,-0.325),"Clothance "+ldecimal(clothance));
-  ps.write(xy(-0.5,-0.35),"Maximum length "+ldecimal(maxLength));
-  ps.write(xy(-0.5,-0.375),"Too curly length "+ldecimal(tooCurlyLength));
+  ps.write(xy(-0.5,-0.35),"Too curly length "+ldecimal(tooCurlyLength));
   ps.endpage();
   tassert(std::isnan(tMaxLength64)  || fabs(log(maxLength/tMaxLength64))<1e-9 ||
           std::isnan(tMaxLength80)  || fabs(log(maxLength/tMaxLength80))<1e-9 ||
