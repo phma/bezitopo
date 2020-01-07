@@ -1,12 +1,14 @@
-Bezitopo is a land surveying program using Bézier triangles. The sample data file topo0.asc is a survey of Independence Park in Charlotte, North Carolina.
+Bezitopo is a land surveying program using Bézier triangles. The sample data file `topo0.asc` is a survey of Independence Park in Charlotte, North Carolina.
 
 To compile, if you're not developing the program:
+
 1. Create a subdirectory build/ inside the directory where you untarred the source code.
 2. cd build
 3. cmake ..
 4. make
 
 If you are developing the program:
+
 1. Create a directory build/bezitopo outside the directory where you cloned the source code.
 2. cd build/bezitopo
 3. cmake <directory where the source code is>
