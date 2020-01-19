@@ -388,7 +388,7 @@ bool checkTmHeader(istream &tmfile)
 {
   bool ret;
   ret=readleint(tmfile)==0x6e617254;   // Identifies file as transverse
-  ret&=readleint(tmfile)==0x72654d46;  // Mercator coefficients computed
+  ret&=readleint(tmfile)==0x72654d73;  // Mercator coefficients computed
   ret&=readleint(tmfile)==0x544646;    // by Fourier transform,
   ret&=readleshort(tmfile)==0;         // file version 0,
   ret&=readleshort(tmfile)==FP_IEEE;   // in IEEE 754
