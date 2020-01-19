@@ -3,7 +3,7 @@
 /* ellipsoid.cpp - ellipsoids                         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2019 Pierre Abbat.
+/* Copyright 2015-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -384,15 +384,33 @@ TmNameCoeff readTmCoefficients1(istream &tmfile)
   return ret;
 }
 
+bool checkTmHeader(istream &tmfile)
+{
+  bool ret;
+  ret=readleint(tmfile)==0x6e617254;   // Identifies file as transverse
+  ret&=readleint(tmfile)==0x72654d46;  // Mercator coefficients computed
+  ret&=readleint(tmfile)==0x544646;    // by Fourier transform,
+  ret&=readleshort(tmfile)==FP_IEEE;   // in IEEE 754
+  ret&=readleshort(tmfile)==64;        // 8-byte floating-point format.
+  return ret;
+}
+
 void readTmCoefficients()
 {
   ifstream tmfile;
+  bool goodHeader=false;
   TmNameCoeff tmNameCoeff;
   ellipsoid *ell;
   tmfile.open(string(SHARE_DIR)+"/transmer.dat",ios::binary);
   if (!tmfile.is_open())
       tmfile.open("transmer.dat",ios::binary);
-  while (tmfile.good())
+  if (tmfile.good())
+  {
+    goodHeader=checkTmHeader(tmfile);
+    if (!goodHeader)
+      cerr<<"transmer.dat is in wrong format\n";
+  }
+  while (goodHeader && tmfile.good())
   {
     tmNameCoeff=readTmCoefficients1(tmfile);
     ell=getEllipsoid(tmNameCoeff.name);
