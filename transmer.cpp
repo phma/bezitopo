@@ -484,6 +484,7 @@ void plotErrorPeters(ellipsoid &ell,PostScript &ps,ostream &merctext)
 void header(ostream &merc)
 {
   writeustring(merc,"TransMerFFT");
+  writeleshort(merc,0); // version
   writeleshort(merc,FP_IEEE);
   writeleshort(merc,64);
 }
