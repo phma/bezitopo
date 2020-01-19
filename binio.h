@@ -3,7 +3,7 @@
 /* binio.h - binary input/output                      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2018,2019 Pierre Abbat.
+/* Copyright 2015,2016,2018-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  * 
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -23,6 +23,16 @@
  */
 #include <fstream>
 #include <string>
+
+#define FP_IEEE 754
+/* Used in the header of transmer.dat.
+ * Other values are:
+ * 1876 (0x754): IEEE decimal
+ * 1508: Fake double precision (e.g. 1508,128 means two 64-bit numbers encode
+ * one number with greater precision, but no greater range, called double-double)
+ * 387: 387,80 is the ten-byte float (long double) endemic to Intel-compatible
+ * processors, named for the floating-point coprocessor
+ */
 
 std::streamsize fileSize(std::istream &file);
 void writebeshort(std::ostream &file,short i);

@@ -3,7 +3,7 @@
 /* transmer.cpp - series for transverse Mercator      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018,2019 Pierre Abbat.
+/* Copyright 2018-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -481,6 +481,13 @@ void plotErrorPeters(ellipsoid &ell,PostScript &ps,ostream &merctext)
   ps.endpage();
 }
 
+void header(ostream &merc)
+{
+  writeustring(merc,"TransMerFFT");
+  writeleshort(merc,FP_IEEE);
+  writeleshort(merc,64);
+}
+
 void doEllipsoid(ellipsoid &ell,PostScript &ps,ostream &merc,ostream &merctext)
 /* Computes approximations to the meridian of the ellipsoid. Projects
  * equidistant points along the meridian of the ellipsoid to the sphere,
@@ -724,6 +731,7 @@ int main(int argc, char *argv[])
     args.push_back(argv[i]);
   cout<<"Transmer, part of Bezitopo version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat\n"
       <<"Distributed under GPL v3 or later. This is free software with no warranty."<<endl;
+  header(merc);
   ps.open("transmer.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
