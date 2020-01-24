@@ -3010,10 +3010,11 @@ void testmanyarc()
  */
 {
   segment cubic(xyz(-30,0,-27),27,-27,xyz(30,0,27));
-  vector<segment> approx;
+  vector<segment> approx,approxDeriv;
+  segment cubicDeriv(xyz(-30,0,27),-9,-9,xyz(30,0,27)); // 10×vertical
   segment diff;
   double abscissa,lastabscissa,ordinate,lastordinate;
-  double startslope,endslope;
+  double startslope,endslope,startx,endx;
   double x,length,accel,firstlength,maxerror;
   vector<double> vex;
   spiralarc trans(xyz(0,0,0),0,0.003,xyz(500,0,0));
@@ -3068,6 +3069,27 @@ void testmanyarc()
      * The difference in curvature times the square of the length divided by 24
      * is the estimate of throw. This cubic's estimated (and exact) throw is 54.
      */
+    ps.endpage();
+    ps.startpage();
+    ps.setscale(-30,-9,30,27);
+    spl=cubicDeriv.approx3d(1);
+    spl.rotate(flip);
+    approxDeriv.clear();
+    ps.setcolor(0,0,1);
+    ps.spline(spl);
+    spl=bezier3d();
+    for (i=0;i<narcs;i++)
+    {
+      startx=approx[i].getstart().getx();
+      endx=approx[i].getend().getx();
+      startslope=approx[i].startslope();
+      endslope=approx[i].endslope();
+      approxDeriv.push_back(segment(xyz(startx,0,startslope*10),xyz(endx,0,endslope*10)));
+      spl+=approxDeriv[i].approx3d(1);
+    }
+    spl.rotate(flip);
+    ps.setcolor(0,0,0);
+    ps.spline(spl);
     ps.endpage();
   }
   for (narcs=2;narcs<21;narcs++)
