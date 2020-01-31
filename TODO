@@ -40,7 +40,7 @@ Before 0.3.0:
 •Save and open a file containing a scene.
 •Define paper sizes and layouts with paper space and model space windows (initially without clipping).
 •Print a scene, inverting the brightness while preserving (approximately) the hue.
-•Implement a GUI for CAD, which may be rudimentary (a visual display, but without hit-testing, and manipulated by typed commands).
+•Implement a GUI for CAD, which may be rudimentary (a visual display, but without hit-testing, and manipulated by typed commands), allowing to enter at least points and line segments.
 •Given two pointlists and a list of points in one pointlist and corresponding points in the other pointlist, rotate and translate one pointlist to match the other.
 •Output an STL file.
 •Find the volume of a surface in a boundary, using a quadtree of Halton generators. The test surface is a hemisphere; its boundary is a circle.
