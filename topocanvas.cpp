@@ -3,7 +3,7 @@
 /* topocanvas.cpp - canvas for drawing topography     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017-2019 Pierre Abbat.
+/* Copyright 2017-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
