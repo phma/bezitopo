@@ -337,6 +337,7 @@ void TopoCanvas::open()
     }
     else
       fileChanged(fileName);
+    tinerror=startPointTries=passCount=0;
     pointsValid=true;
     tinValid=true;
     surfaceValid=true;
