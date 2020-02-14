@@ -3084,7 +3084,10 @@ void testmanyarc()
     }
     ps.setcolor(0.8,0.8,0);
     for (i=0;i<crossings.size();i++)
+    {
+      cout<<ldecimal(crossings[i]/30-1)<<endl;
       ps.circle(xy(crossings[i]-30,cubic.elev(crossings[i])),cubic.length()/100);
+    }
     ps.setcolor(0,0,1);
     ps.spline(spl);
     spl=bezier3d();
