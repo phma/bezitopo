@@ -3002,6 +3002,40 @@ void test1manyarc(spiralarc s,PostScript &ps)
   }
 }
 
+vector<double> cubicIntersections(segment cubic,segment apx)
+{
+  double start=apx.getstart().getx(),end=apx.getend().getx();
+  double cstart=cubic.getstart().getx();
+  segment diff(xyz(start,0,apx.elev(0)-cubic.elev(start-cstart)),
+	       xyz(end,0,apx.elev(end-start)-cubic.elev(end-cstart)));
+  vector<double> extrema;
+  vector<segment> parts;
+  vector<double> ret;
+  int i;
+  diff.setslope(START,apx.startslope()-cubic.slope(start-cstart));
+  diff.setslope(END,apx.endslope()-cubic.slope(end-cstart));
+  extrema=diff.vextrema(false);
+  switch (extrema.size())
+  {
+    case 0:
+      parts.push_back(diff);
+      break;
+    case 1:
+      parts.resize(2);
+      diff.split(extrema[0],parts[0],parts[1]);
+      break;
+    case 2:
+      parts.resize(4);
+      diff.split(extrema[1],parts[3],parts[2]);
+      parts[3].split(extrema[0],parts[0],parts[1]);
+      parts.resize(3);
+      break;
+  }
+  for (i=0;i<parts.size();i++)
+    ret.push_back(parts[i].contourcept(0));
+  return ret;
+}
+
 void testmanyarc()
 /* Approximating a spiralarc by a smooth sequence of arcs.
  * In the approximation where the difference in curvature times the length is
