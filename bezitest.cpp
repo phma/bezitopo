@@ -3032,7 +3032,7 @@ vector<double> cubicIntersections(segment cubic,segment apx)
       break;
   }
   for (i=0;i<parts.size();i++)
-    ret.push_back(parts[i].contourcept(0));
+    ret.push_back(parts[i].contourcept(0)+parts[i].getstart().getx()-cstart);
   return ret;
 }
 
@@ -3050,7 +3050,7 @@ void testmanyarc()
   double abscissa,lastabscissa,ordinate,lastordinate;
   double startslope,endslope,startx,endx;
   double x,length,accel,firstlength,maxerror;
-  vector<double> vex;
+  vector<double> vex,crossings,crossings1;
   spiralarc trans(xyz(0,0,0),0,0.003,xyz(500,0,0));
   spiralarc trans43(xyz(0,0,0),0,0.003,xyz(400,300,0));
   spiralarc trans34(xyz(0,0,0),0,0.003,xyz(300,400,0));
@@ -3073,10 +3073,21 @@ void testmanyarc()
     spl=cubic.approx3d(1);
     spl.rotate(flip);
     approx.clear();
+    approx=manyQuad(cubic,narcs);
+    crossings.clear();
+    for (i=1;i<narcs-1;i++)
+    {
+      crossings1=cubicIntersections(cubic,approx[i]);
+      for (j=0;j<crossings1.size();j++)
+	if (crossings.size()==0 || crossings1[j]>crossings.back())
+	  crossings.push_back(crossings1[j]);
+    }
+    ps.setcolor(0.8,0.8,0);
+    for (i=0;i<crossings.size();i++)
+      ps.circle(xy(crossings[i]-30,cubic.elev(crossings[i])),cubic.length()/100);
     ps.setcolor(0,0,1);
     ps.spline(spl);
     spl=bezier3d();
-    approx=manyQuad(cubic,narcs);
     for (i=0;i<narcs;i++)
       spl+=approx[i].approx3d(1);
     spl.rotate(flip);
