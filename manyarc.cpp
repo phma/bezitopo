@@ -3,7 +3,7 @@
 /* manyarc.cpp - approximate spiral with many arcs    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018,2019 Pierre Abbat.
+/* Copyright 2018-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@
 #include "leastsquares.h"
 #include "cogospiral.h"
 
-#define METHOD 3
+#define METHOD 1
 /* Method 1: Adjust the length of each arc so that the sum of their displacements
  * equals the displacement of the spiralarc.
  * Method 2: Adjust the lengths of all but two of the arcs to minimize the squared
@@ -539,7 +539,7 @@ polyarc adjustManyArc1(polyarc apx,spiralarc a)
   enddiff=a.getend()-apx.station(apx.length());
   shortfall.push_back(enddiff.getx());
   shortfall.push_back(enddiff.gety());
-  adjustment=linearLeastSquares(arcdisp,shortfall);
+  adjustment=minimumNorm(arcdisp,shortfall);
   thispoint=a.getstart();
   ret.insert(thispoint);
   for (i=0;i<narcs;i++)
