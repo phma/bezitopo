@@ -3,7 +3,7 @@
 /* ptin.cpp - PerfectTIN files                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -184,6 +184,16 @@ PtinHeader readPtinHeader(istream &inputFile)
 	ret.conversionTime=readlelong(inputFile);
 	ret.tolRatio=readleint(inputFile);
 	ret.tolerance=readledouble(inputFile);
+	ret.density=1/sqr(ret.tolerance);
+	ret.numPoints=readleint(inputFile);
+	ret.numConvexHull=readleint(inputFile);
+	ret.numTriangles=readleint(inputFile);
+	break;
+      case 0x00000028:
+	ret.conversionTime=readlelong(inputFile);
+	ret.tolRatio=readleint(inputFile);
+	ret.tolerance=readledouble(inputFile);
+	ret.density=readledouble(inputFile);
 	ret.numPoints=readleint(inputFile);
 	ret.numConvexHull=readleint(inputFile);
 	ret.numTriangles=readleint(inputFile);
