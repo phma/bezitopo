@@ -4946,6 +4946,7 @@ void testldecimal()
   }
   cout<<ldecimal(0)<<' '<<ldecimal(INFINITY)<<' '<<ldecimal(NAN)<<' '<<ldecimal(-5.67)<<endl;
   cout<<ldecimal(3628800)<<' '<<ldecimal(1296000)<<' '<<ldecimal(0.000016387064)<<endl;
+  cout<<ldecimal(3628800,0,true)<<' '<<ldecimal(1296000,0,true)<<' '<<ldecimal(0.000016387064,0,true)<<endl;
   tassert(ldecimal(0)=="0");
   tassert(ldecimal(1)=="1");
   tassert(ldecimal(-1)=="-1");
@@ -4957,6 +4958,9 @@ void testldecimal()
   tassert(ldecimal(3628800)=="3628800");
   tassert(ldecimal(1296000)=="1296e3");
   tassert(ldecimal(0.000016387064)=="1.6387064e-5");
+  tassert(ldecimal(3628800,0,true)=="3628800");
+  tassert(ldecimal(1296000,0,true)=="1296000");
+  tassert(ldecimal(0.000016387064,0,true)==".00016387064");
   tassert(ldecimal(-64664./65536,1./131072)=="-.9867");
 }
 
