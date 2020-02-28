@@ -103,12 +103,12 @@ string ldecimal(double x,double toler,bool noexp)
       antissa.erase(0,chexp);
       iexp-=chexp;
     }
-    while (iexp>-5 && iexp<0 && m.length()==0)
+    while ((noexp || iexp>-5) && iexp<0 && m.length()==0)
     {
       antissa="0"+antissa;
       iexp++;
     }
-    while (iexp<3 && iexp>0 && antissa.length()==0)
+    while ((noexp || iexp<3) && iexp>0 && antissa.length()==0)
     {
       m+='0';
       iexp--;
