@@ -84,7 +84,6 @@ string ldecimal(double x,double toler,bool noexp)
       s=m.substr(0,1);
       m.erase(0,1);
     }
-    iexp=atoi(exponent.c_str());
     zpos=antissa.find_last_not_of('0');
     antissa.erase(zpos+1);
     iexp=stoi(exponent);
