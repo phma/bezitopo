@@ -4876,6 +4876,8 @@ void testpnezd()
   doc.pl[0].clear();
   doc.pl[1].clear();
   aster(doc,3);
+  doc.pl[1].addpoint(4,point(7776000,2370124.8,1,"test"));
+  doc.pl[1].addpoint(5,point(0.00000762939453125,0.000000512,0,"test"));
   doc.copytopopoints(0,1);
   doc.ms.clearUnits();
   doc.ms.addUnit(FOOT);
