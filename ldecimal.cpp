@@ -32,6 +32,11 @@
 using namespace std;
 
 string ldecimal(double x,double toler,bool noexp)
+/* Returns a string which represents x in decimal to within toler and is
+ * as short as possible. If toler is 0, the result of converting
+ * the string back to double is exactly x. If noexp is true, returns
+ * the shortest string which represents x without exponential notation.
+ */
 {
   double x2;
   int h,i,iexp,chexp;
