@@ -246,12 +246,18 @@ check_include_files(sys/time.h HAVE_SYS_TIME_H)
 check_include_files(sys/resource.h HAVE_SYS_RESOURCE_H)
 check_include_files(windows.h HAVE_WINDOWS_H)
 
+# Define NO_INSTALL when compiling for fuzzing. This avoids the error
+# "The install of the perfecttin target requires changing an RPATH", which
+# occurs when using the AFL compiler wrapper with the Ninja generator.
+# There is no need to install a binary built for fuzzing.
+if (NOT DEFINED NO_INSTALL)
 install(TARGETS bezitopo convertgeoid viewtin clotilde DESTINATION bin)
 install(TARGETS ${MAKE_SHARED} ${MAKE_STATIC} DESTINATION lib)
 install(FILES ${PROJECT_BINARY_DIR}/config.h DESTINATION include/bezitopo)
 install(FILES ${qm_files} projections.txt transmer.dat DESTINATION share/bezitopo)
 install(FILES ${header_files} DESTINATION include/bezitopo)
 install(FILES bezitopo.h DESTINATION include)
+endif ()
 
 if (WIN32)
 include(windeployqt)
