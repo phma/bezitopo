@@ -3,7 +3,7 @@
 /* tinwindow.cpp - window for viewing TIN             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017-2019 Pierre Abbat.
+/* Copyright 2017-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -52,7 +52,7 @@ TinWindow::TinWindow(QWidget *parent):QMainWindow(parent)
   canvas->show();
   makeActions();
   canvas->setMeter();
-  connect(canvas,SIGNAL(fileChanged(string)),this,SLOT(showFileLoaded(string)));
+  connect(canvas,SIGNAL(fileChanged(std::string)),this,SLOT(showFileLoaded(std::string)));
   connect(this,SIGNAL(zoomCanvas(int)),canvas,SLOT(zoom(int)));
 }
 
