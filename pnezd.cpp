@@ -4,7 +4,7 @@
 /* point-northing-easting-z-description format        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2019 Pierre Abbat.
+/* Copyright 2012,2015-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -110,9 +110,9 @@ int writepnezd(document *doc,string fname,Measure ms)
       z=i->second.elev();
       d=i->second.note;
       pstr=to_string(p);
-      nstr=ldecimal(ms.fromCoherent(n,LENGTH));
-      estr=ldecimal(ms.fromCoherent(e,LENGTH));
-      zstr=ldecimal(ms.fromCoherent(z,LENGTH));
+      nstr=ldecimal(ms.fromCoherent(n,LENGTH),0,true);
+      estr=ldecimal(ms.fromCoherent(e,LENGTH),0,true);
+      zstr=ldecimal(ms.fromCoherent(z,LENGTH),0,true);
       words.clear();
       words.push_back(pstr);
       words.push_back(nstr);
