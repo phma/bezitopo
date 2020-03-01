@@ -4960,7 +4960,7 @@ void testldecimal()
   tassert(ldecimal(0.000016387064)=="1.6387064e-5");
   tassert(ldecimal(3628800,0,true)=="3628800");
   tassert(ldecimal(1296000,0,true)=="1296000");
-  tassert(ldecimal(0.000016387064,0,true)==".00016387064");
+  tassert(ldecimal(0.000016387064,0,true)==".000016387064");
   tassert(ldecimal(-64664./65536,1./131072)=="-.9867");
 }
 

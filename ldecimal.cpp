@@ -88,7 +88,7 @@ string ldecimal(double x,double toler,bool noexp)
     zpos=antissa.find_last_not_of('0');
     antissa.erase(zpos+1);
     iexp=stoi(exponent);
-    if (iexp<0 && iexp>-5)
+    if (iexp<0 && (noexp || iexp>-5))
     {
       antissa=m+antissa;
       m="";
