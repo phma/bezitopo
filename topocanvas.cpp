@@ -393,8 +393,9 @@ void TopoCanvas::testPatternAster()
 
 void TopoCanvas::importPnezd()
 {
-  int dialogResult;
+  int dialogResult,err=0;
   QStringList files;
+  QString errMsg;
   string fileName;
   fileDialog->setWindowTitle(tr("Open PNEZD File"));
   fileDialog->setFileMode(QFileDialog::ExistingFile);
@@ -408,13 +409,26 @@ void TopoCanvas::importPnezd()
     // TODO check whether there are unsaved changes to breaklines
     doc.pl.clear();
     doc.makepointlist(0);
-    doc.readpnezd(fileName);
+    try
+    {
+      doc.readpnezd(fileName);
+    }
+    catch (BeziExcept e)
+    {
+      err=e.getNumber();
+      errMsg=e.message();
+    }
     plnum=0;
     sizeToFit();
     pointsValid=false;
     tinValid=false;
     surfaceValid=false;
     roughContoursValid=false;
+  }
+  if (err)
+  {
+    QString msg=tr("Can't read points. Error: ")+errMsg;
+    errorMessage->showMessage(msg);
   }
 }
 
