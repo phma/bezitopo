@@ -39,6 +39,10 @@ using namespace std;
  * labels, which must be ignored. It is in CSV format; the quotation marks need
  * to be stripped. The file downloaded from the Nikon total station has a last line
  * consisting of ^Z; it must be ignored.
+ *
+ * The read routines call parseMeasurement, which can throw badNumber if a string
+ * is empty or badUnits if there are garbage characters or exponents (e.g. 7776e3)
+ * in a number.
  */
 
 int readpnezd(document *doc,string fname,Measure ms,bool overwrite)
