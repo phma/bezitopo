@@ -7794,7 +7794,14 @@ void fuzz()
   if (args.size()>2 && args[1]=="pnezd")
   {
     doc.ms.addUnit(METER);
-    doc.readpnezd(args[2]);
+    try
+    {
+      doc.readpnezd(args[2]);
+    }
+    catch (BeziExcept e)
+    {
+      cerr<<"Error "<<e.getNumber()<<endl;
+    }
   }
   if (args.size()>2 && args[1]=="tin")
   {
