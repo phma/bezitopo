@@ -32,6 +32,10 @@
 #include "leastsquares.h"
 #include "cogospiral.h"
 
+#define SHOW_METHOD true
+/* If true, outputs some extra drawing when approximating with five arcs
+ * an east-west spiralarc with curvature from 0 to positive.
+ */
 #define METHOD 3
 /* Method 1: Adjust the length of each arc so that the sum of their displacements
  * equals the displacement of the spiralarc.
@@ -43,6 +47,7 @@
  */
 
 using namespace std;
+bool showThisMethod=false;
 
 /* Spiralarcs are used for centerlines of highways. A property line or easement
  * may be defined as a distance offset from the centerline of a highway or
@@ -669,6 +674,9 @@ polyarc adjustManyArc2(polyarc apx,spiralarc a)
 
 polyarc manyArc(spiralarc a,int narcs)
 {
+  showThisMethod=SHOW_METHOD && narcs==5 && a.chordbearing()==0 && a.getdelta()>DEG30;
+  if (showThisMethod)
+    cout<<"This is the curve to show the method of\n";
 #if METHOD==1
   polyarc ret;
   ret=manyArcUnadjusted(a,narcs);
