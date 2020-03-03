@@ -3,7 +3,7 @@
 /* cogo.cpp - coordinate geometry                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2019 Pierre Abbat.
+/* Copyright 2012,2015-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -322,3 +322,24 @@ double distanceInDirection(xy a,xy b,int dir)
 {
   return dot(b-a,cossin(dir));
 }
+
+/* p*p*p
+ * ∫(0..1) ∫(0..1-x) x³ dy dx = 1/20
+ *
+ * p*p*q
+ * ∫(0..1) ∫(0..1-x) x²y dy dx =
+ * ∫(0..1) x²(1-x)²/2 dx =
+ * ∫(0..1) (x⁴/2-x³+x²/2) dx = 1/10-1/4+1/6 = (6-15+10)/60 = 1/60
+ *
+ * p*q*r
+ * ∫(0..1) ∫(0..1-x) xy(1-x-y) dy dx =
+ * ∫(0..1) ∫(0..1-x) (xy-x²y-xy²) dy dx =
+ * ∫(0..1) (x(1-x)²/2-x²(1-x)²/2-x(1-x)³/3) dx =
+ * ∫(0..1) (x/2-x²+x³/2-x²/2+x³-x⁴/2-x/3+x²-x³+x⁴/3) dx =
+ * ∫(0..1) (-x⁴/6+x³/2-x²/2+x/6) dx =
+ * -1/30+1/8-1/6+1/12 = (-4+15-20+10)/120 = 1/120
+ *
+ * 10x³
+ * 30x²y
+ * 60xy(1-x-y)
+ */
