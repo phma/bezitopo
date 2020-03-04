@@ -676,6 +676,7 @@ polyarc adjustManyArc2(polyarc apx,spiralarc a)
 void showMethod3(spiralarc a,vector<Circle> lines,vector<double> offs)
 {
   int i,j;
+  double l=a.length()/50;
   PostScript ps;
   BoundRect br;
   ps.open("manyarcMethod.ps");
@@ -688,7 +689,14 @@ void showMethod3(spiralarc a,vector<Circle> lines,vector<double> offs)
   ps.spline(a.approx3d(0.01));
   for (i=0;i<lines.size();i++)
   {
+    ps.setcolor(0,0,1);
     ps.spline(lines[i].approx3d(0.01));
+    if (i>0 && i<lines.size()-1)
+    {
+      ps.setcolor(0,0,0);
+      for (j=-2;j<3;j++)
+	ps.circle(lines[i].station(j*l+offs[i]),l/5);
+    }
   }
 }
 
