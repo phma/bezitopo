@@ -26,6 +26,7 @@
 #include <array>
 #include "manyarc.h"
 #include "rootfind.h"
+#include "ps.h"
 #include "manysum.h"
 #include "ldecimal.h"
 #include "random.h"
@@ -672,6 +673,25 @@ polyarc adjustManyArc2(polyarc apx,spiralarc a)
   return apx;
 }
 
+void showMethod3(spiralarc a,vector<Circle> lines,vector<double> offs)
+{
+  int i,j;
+  PostScript ps;
+  BoundRect br;
+  ps.open("manyarcMethod.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  br.include(&a);
+  ps.startpage();
+  ps.setscale(br);
+  ps.setcolor(0,0,1);
+  ps.spline(a.approx3d(0.01));
+  for (i=0;i<lines.size();i++)
+  {
+    ps.spline(lines[i].approx3d(0.01));
+  }
+}
+
 polyarc manyArc(spiralarc a,int narcs)
 {
   showThisMethod=SHOW_METHOD && narcs==5 && a.chordbearing()==0 && a.getdelta()>DEG30;
@@ -698,6 +718,8 @@ polyarc manyArc(spiralarc a,int narcs)
   vector<segment> quads=manyQuad(cubic,narcs);
   vector<Circle> lines=crossLines(a,quads);
   vector<double> offs=offsets(cubic,quads);
+  if (showThisMethod)
+    showMethod3(a,lines,offs);
   offs=adjustManyArc3(a,lines,offs);
   ret=manyArcApprox3(a,lines,offs);
 #endif
