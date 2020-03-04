@@ -342,4 +342,14 @@ double distanceInDirection(xy a,xy b,int dir)
  * 10x³
  * 30x²y
  * 60xy(1-x-y)
+ *
+ * a=2(p³+q³+r³)
+ * b=3(p²q+q²r+r²p+p²r+r²q+q²p)
+ * c=36pqr
+ * a=b=c
+ * p+q+r=1
+ *   1,0,0 1/2,1/2,0 1/3,1/3,1/3 1/2,1/3,1/6
+ * a   2      1/2        2/9         1/3
+ * b   0      3/4        2/3         2/3
+ * c   0       0         4/3          1
  */
