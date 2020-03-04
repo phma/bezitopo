@@ -37,7 +37,7 @@
 /* If true, outputs some extra drawing when approximating with five arcs
  * an east-west spiralarc with curvature from 0 to positive.
  */
-#define METHOD 3
+#define METHOD 2
 /* Method 1: Adjust the length of each arc so that the sum of their displacements
  * equals the displacement of the spiralarc.
  * Method 2: Adjust the lengths of all but two of the arcs to minimize the squared
@@ -673,6 +673,36 @@ polyarc adjustManyArc2(polyarc apx,spiralarc a)
   return apx;
 }
 
+void showMethod12(spiralarc a,polyarc apx)
+{
+  int i,j;
+  double l=a.length()/50;
+  arc arc1;
+  segment seg;
+  PostScript ps;
+  BoundRect br;
+  ps.open("manyarcMethod.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  br.include(&a);
+  ps.startpage();
+  ps.setscale(br);
+  //ps.spline(a.approx3d(0.01));
+  for (i=0;i<apx.size();i++)
+  {
+    if (METHOD==2 && (i==0 || i==apx.size()-1))
+      ps.setcolor(0,0.7,0);
+    else
+      ps.setcolor(0,0,1);
+    arc1=apx.getarc(i);
+    seg=arc1;
+    ps.spline(arc1.approx3d(0.01));
+    ps.setcolor(0,0,0);
+    for (j=18;j<23;j++)
+      ps.circle(seg.station(seg.length()*j/20.),l/5);
+  }
+}
+
 void showMethod3(spiralarc a,vector<Circle> lines,vector<double> offs)
 {
   int i,j;
@@ -708,6 +738,8 @@ polyarc manyArc(spiralarc a,int narcs)
 #if METHOD==1
   polyarc ret;
   ret=manyArcUnadjusted(a,narcs);
+  if (showThisMethod)
+    showMethod12(a,ret);
   ret=adjustManyArc1(ret,a);
 #endif
 #if METHOD==2
@@ -715,6 +747,8 @@ polyarc manyArc(spiralarc a,int narcs)
   if (narcs>2)
   {
     ret=manyArcUnadjusted(a,narcs);
+    if (showThisMethod)
+      showMethod12(a,ret);
     ret=adjustManyArc2(ret,a);
   }
   else
