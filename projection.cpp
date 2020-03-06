@@ -3,7 +3,7 @@
 /* projection.cpp - map projections                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016-2019 Pierre Abbat.
+/* Copyright 2016-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -314,7 +314,7 @@ LambertConicEllipsoid::LambertConicEllipsoid(ellipsoid *e,double Meridian,double
   poleY=-latlongToGrid(maporigin).gety();
 }
 
-LambertConicEllipsoid::LambertConicEllipsoid(ellipsoid *e,double Meridian,double Parallel0,double Parallel1,latlong zll,xy zxy):Projection()
+LambertConicEllipsoid::LambertConicEllipsoid(ellipsoid *e,double Meridian,double Parallel0,double Parallel1,double Scale,latlong zll,xy zxy):Projection()
 {
   latlong maporigin;
   brent br;
@@ -356,7 +356,7 @@ LambertConicEllipsoid::LambertConicEllipsoid(ellipsoid *e,double Meridian,double
     setParallel(Parallel);
     ll.lon=centralMeridian;
     ll.lat=Parallel0;
-    scale=1/scaleFactor(ll);
+    scale=Scale/scaleFactor(ll);
     poleY=0;
     maporigin=latlong(Meridian,Parallel);
     poleY=-latlongToGrid(maporigin).gety();
@@ -507,7 +507,7 @@ LambertConicEllipsoid *readConformalConic(istream &file)
   size_t hashpos,colonpos;
   string line,tag,value,ellipsoidStr;
   vector<double> parallels;
-  double meridian;
+  double scale,meridian;
   latlong ll,origll;
   xy origxy;
   Measure metric;
@@ -565,7 +565,7 @@ LambertConicEllipsoid *readConformalConic(istream &file)
     }
   }
   if ((fieldsSeen==0x295 || fieldsSeen==0x2a5) && ellip)
-    ret=new LambertConicEllipsoid(ellip,meridian,parallels[0],parallels.back(),origll,origxy);
+    ret=new LambertConicEllipsoid(ellip,meridian,parallels[0],parallels.back(),1,origll,origxy);
   return ret;
 }
 

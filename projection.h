@@ -3,7 +3,7 @@
 /* projection.h - map projections                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2016-2018 Pierre Abbat.
+/* Copyright 2012,2016-2018,2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -115,7 +115,7 @@ class LambertConicEllipsoid: public Projection
 public:
   LambertConicEllipsoid();
   LambertConicEllipsoid(ellipsoid *e,double Meridian,double Parallel);
-  LambertConicEllipsoid(ellipsoid *e,double Meridian,double Parallel0,double Parallel1,latlong zll,xy zxy);
+  LambertConicEllipsoid(ellipsoid *e,double Meridian,double Parallel0,double Parallel1,double Scale,latlong zll,xy zxy);
   virtual latlong gridToLatlong(xy grid);
   virtual xyz gridToGeocentric(xy grid);
   virtual xy geocentricToGrid(xyz geoc);

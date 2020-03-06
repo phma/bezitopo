@@ -5383,12 +5383,12 @@ void testprojection()
   LambertConicEllipsoid ellipsoidMercator(&WGS84,0,0),ellipsoidConic10(&WGS84,0,degtorad(10)),
     ellipsoidConic20(&WGS84,0,degtorad(20)),ellipsoidConic80(&WGS84,0,degtorad(80)),
     ellipsoidConicm80(&WGS84,0,degtorad(-80));
-  LambertConicEllipsoid ellipsoidConicBenin(&WGS84,degtorad(8/3.),degtorad(7.5),degtorad(11.5),zll,zxy);
+  LambertConicEllipsoid ellipsoidConicBenin(&WGS84,degtorad(8/3.),degtorad(7.5),degtorad(11.5),1,zll,zxy);
   TransverseMercatorEllipsoid ellipsoidTransverse0(&WGS84,0),ellipsoidTransverse90W(&WGS84,degtorad(-90),0.9999);
   StereographicSphere sphereStereoNorthPole;
   latlong ncll(degtorad(33.75),degtorad(-79.));
   xy ncxy(609601.219202438405,0);
-  LambertConicEllipsoid NorthCarolina(&GRS80,degtorad(-79),degtorad(103/3.),degtorad(217/6.),ncll,ncxy);
+  LambertConicEllipsoid NorthCarolina(&GRS80,degtorad(-79),degtorad(103/3.),degtorad(217/6.),1,ncll,ncxy);
   latlong llOakland(degtorad(35.3415108),degtorad(-81.9198178028));
   xy xyOakland(344240.332,180449.168);
   // Benchmark on Oakland Road overpass over 74A, Spindale, North Carolina.
