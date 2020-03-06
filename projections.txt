@@ -60,6 +60,23 @@ Boundary:81.8W 36.7N 82.2W 36.4N 84.05W 35.6N 84.63W 34.86N 82.94W 34.86N \
 35.12N 75.55W 36.7N
 Foot: US
 
+#Preliminary
+Country:US
+State:NC
+Zone:
+Version:NATRF2022
+Projection:CC
+Ellipsoid:GRS80
+Meridian:79W
+Parallel:35°15'N
+Scale:0.99995
+OriginLL:35°15'N 79°W
+OriginXY:1000000,200000
+Boundary:81.8W 36.7N 82.2W 36.4N 84.05W 35.6N 84.63W 34.86N 82.94W 34.86N \
+82.35W 35.05N 81.14W 35.05N 80.89W 34.74N 79.73W 34.67N 78.22W 33.39N 75.22W \
+35.12N 75.55W 36.7N
+Foot: INT
+
 Country:US
 State:GA
 Zone:1
