@@ -755,146 +755,151 @@ License GPL 3 or later</translation>
         <translation>The file does not appear to contain a TIN.</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="354"/>
+        <location filename="topocanvas.cpp" line="355"/>
         <source>Save Drawing</source>
         <translation>Save Drawing</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="357"/>
+        <location filename="topocanvas.cpp" line="358"/>
         <source>(*.bez);;(*)</source>
         <translation>Bezitopo files (*.bez);;All files (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="398"/>
+        <location filename="topocanvas.cpp" line="400"/>
         <source>Open PNEZD File</source>
         <translation>Open PNEZD File</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="401"/>
+        <location filename="topocanvas.cpp" line="403"/>
         <source>(*.asc);;(*)</source>
         <translation>PNEZD files (*.asc);;All files (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="425"/>
+        <location filename="topocanvas.cpp" line="430"/>
+        <source>Can&apos;t read points. Error: </source>
+        <translation>Can&apos;t read points. Error: </translation>
+    </message>
+    <message>
+        <location filename="topocanvas.cpp" line="440"/>
         <source>Open Criteria File</source>
         <translation>Open Criteria File</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="428"/>
+        <location filename="topocanvas.cpp" line="443"/>
         <source>(*.crit);;(*)</source>
         <translation>Criteria files (*.crit);;All files (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="453"/>
+        <location filename="topocanvas.cpp" line="468"/>
         <source>Open Breakline File</source>
         <translation>Open Breakline File</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="456"/>
-        <location filename="topocanvas.cpp" line="516"/>
+        <location filename="topocanvas.cpp" line="471"/>
+        <location filename="topocanvas.cpp" line="531"/>
         <source>(*.brk);;(*)</source>
         <translation>Breakline files (*.brk);;All files (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="463"/>
-        <location filename="topocanvas.cpp" line="543"/>
+        <location filename="topocanvas.cpp" line="478"/>
+        <location filename="topocanvas.cpp" line="558"/>
         <source>You have edited breaklines.</source>
         <translation>You have edited breaklines.</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="464"/>
+        <location filename="topocanvas.cpp" line="479"/>
         <source>Do you want to load?</source>
         <translation>You are asking to import breaklines, but the breaklines in the TIN are newer than the ones read from file. Do you want to read breaklines from a file?</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="498"/>
+        <location filename="topocanvas.cpp" line="513"/>
         <source>Can&apos;t read breaklines. Error: </source>
         <translation>Can&apos;t read breaklines. Error:</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="513"/>
+        <location filename="topocanvas.cpp" line="528"/>
         <source>Save Breakline File</source>
         <translation>Save Breakline File</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="544"/>
+        <location filename="topocanvas.cpp" line="559"/>
         <source>Do you want to make TIN?</source>
         <translation>You are asking to make a TIN, but you have edited the breaklines in the TIN since you last read them from a file. Do you want to make a new TIN?</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="590"/>
-        <location filename="topocanvas.cpp" line="625"/>
+        <location filename="topocanvas.cpp" line="605"/>
+        <location filename="topocanvas.cpp" line="640"/>
         <source>Making TIN</source>
         <translation>Making TIN</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="591"/>
+        <location filename="topocanvas.cpp" line="606"/>
         <source>Sweeping convex hull...</source>
         <translation>Sweeping convex hull...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="626"/>
+        <location filename="topocanvas.cpp" line="641"/>
         <source>Flipping edges...</source>
         <translation>Flipping edges...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="649"/>
+        <location filename="topocanvas.cpp" line="664"/>
         <source>Took too long to make TIN</source>
         <translation>Took too long to make TIN</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="690"/>
+        <location filename="topocanvas.cpp" line="705"/>
         <source>Making surface</source>
         <translation>Making surface</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="691"/>
+        <location filename="topocanvas.cpp" line="706"/>
         <source>Finding critical points...</source>
         <translation>Finding critical points...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="734"/>
+        <location filename="topocanvas.cpp" line="749"/>
         <source>Can&apos;t make TIN. Error: </source>
         <translation>Can&apos;t make TIN. Error:</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="801"/>
-        <location filename="topocanvas.cpp" line="867"/>
+        <location filename="topocanvas.cpp" line="816"/>
+        <location filename="topocanvas.cpp" line="882"/>
         <source>Drawing contours</source>
         <translation>Drawing contours</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="802"/>
+        <location filename="topocanvas.cpp" line="817"/>
         <source>Drawing rough contours...</source>
         <translation>Drawing rough contours...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="868"/>
+        <location filename="topocanvas.cpp" line="883"/>
         <source>Drawing smooth contours...</source>
         <translation>Drawing smooth contours...</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="919"/>
+        <location filename="topocanvas.cpp" line="934"/>
         <source>Load Geoid File</source>
         <translation>Load Geoid File</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="922"/>
+        <location filename="topocanvas.cpp" line="937"/>
         <source>(*.bol);;(*)</source>
         <translation>Boldatni files (*.bol);;All files (*)</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="945"/>
+        <location filename="topocanvas.cpp" line="960"/>
         <source>Can&apos;t read geoid. Error: </source>
         <translation>Can&apos;t read geoid. Error: </translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="1119"/>
+        <location filename="topocanvas.cpp" line="1134"/>
         <source>You have imported breaklines.</source>
         <translation>You have imported breaklines.</translation>
     </message>
     <message>
-        <location filename="topocanvas.cpp" line="1120"/>
+        <location filename="topocanvas.cpp" line="1135"/>
         <source>Do you want to edit?</source>
         <translation>You are trying to edit a breakline, but the breaklines read from file are newer than the ones in the TIN. Do you want to edit breaklines?</translation>
     </message>
