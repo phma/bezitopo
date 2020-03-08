@@ -5484,7 +5484,7 @@ void testprojection()
     ncplist=plist.cover(EWN);
     pacplist=plist.cover(ll196);
     cout<<"New Bern is in "<<ncplist.size()<<" projections\n";
-    tassert(ncplist.size()==2);
+    tassert(ncplist.size()==3);
     cout<<"Point 196 is in "<<pacplist.size()<<" projections\n";
     tassert(pacplist.size()==0);
     if (ncplist.size()>=2)

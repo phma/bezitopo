@@ -484,18 +484,23 @@ string getLineBackslash(istream &file)
 LambertConicEllipsoid *readConformalConic(istream &file)
 /* Reads data such as the following from a file and returns a pointer to a
  * new projection.
- * 
+ *
  * Ellipsoid:Clarke
  * Meridian:79W
  * Parallel:34°20'N
  * Parallel:36°10'N
+ * Scale:1
  * OriginLL:33°45'N 79°W
  * OriginXY:609601.219202438405,0
- * 
+ *
  * If there are two parallels, there must be at least one line after the parallels,
  * else it will return without reading the second parallel. The order of parallels
  * does not matter.
- * 
+ *
+ * The scale is optional. It is normally included if and only if there is only
+ * one parallel. If it is omitted, it defaults to 1. There must be at least one
+ * line after the scale.
+ *
  * If the parallels are equal except that one is north and the other south, or there
  * is only one parallel which is the equator, the result is a Mercator projection.
  * If the parallel is 90°, the result is a stereographic projection. If one is
@@ -507,7 +512,7 @@ LambertConicEllipsoid *readConformalConic(istream &file)
   size_t hashpos,colonpos;
   string line,tag,value,ellipsoidStr;
   vector<double> parallels;
-  double scale,meridian;
+  double scale=1,meridian;
   latlong ll,origll;
   xy origxy;
   Measure metric;
@@ -549,6 +554,11 @@ LambertConicEllipsoid *readConformalConic(istream &file)
 	  parallels.push_back(ll.lat);
 	  fieldsSeen+=16;
 	}
+	else if (tag=="Scale")
+	{
+	  scale=stod(value);
+	  fieldsSeen+=128;
+	}
 	else if (tag=="OriginLL")
 	{
 	  origll=parselatlong(value,DEGREE);
@@ -564,8 +574,8 @@ LambertConicEllipsoid *readConformalConic(istream &file)
       }
     }
   }
-  if ((fieldsSeen==0xa15 || fieldsSeen==0xa25) && ellip)
-    ret=new LambertConicEllipsoid(ellip,meridian,parallels[0],parallels.back(),1,origll,origxy);
+  if (((fieldsSeen&0x3e7f)==0xa15 || (fieldsSeen&0x3e7f)==0xa25) && ellip)
+    ret=new LambertConicEllipsoid(ellip,meridian,parallels[0],parallels.back(),scale,origll,origxy);
   return ret;
 }
 
