@@ -514,14 +514,14 @@ LambertConicEllipsoid *readConformalConic(istream &file)
   LambertConicEllipsoid *ret=nullptr;
   metric.setMetric();
   metric.setDefaultUnit(LENGTH,1);
-  while (fieldsSeen!=0x295 && fieldsSeen!=0x2a5 && (fieldsSeen&0xd4a)==0)
+  while ((fieldsSeen&0x3e7f)!=0x0a15 && (fieldsSeen&0x3e7f)!=0xa25 && (fieldsSeen&0x354a)==0)
   {
     line=getLineBackslash(file);
     hashpos=line.find('#');
     if (hashpos==0)
       line="";
     if (line=="")
-      fieldsSeen|=0x800; // blank line is invalid
+      fieldsSeen|=0x2000; // blank line is invalid
     else
     {
       colonpos=line.find(':');
@@ -552,19 +552,19 @@ LambertConicEllipsoid *readConformalConic(istream &file)
 	else if (tag=="OriginLL")
 	{
 	  origll=parselatlong(value,DEGREE);
-	  fieldsSeen+=128;
+	  fieldsSeen+=512;
 	}
 	else if (tag=="OriginXY")
 	{
 	  origxy=metric.parseXy(value);
-	  fieldsSeen+=512;
+	  fieldsSeen+=2048;
 	}
 	else
-	  fieldsSeen+=2048;
+	  fieldsSeen+=8192;
       }
     }
   }
-  if ((fieldsSeen==0x295 || fieldsSeen==0x2a5) && ellip)
+  if ((fieldsSeen==0xa15 || fieldsSeen==0xa25) && ellip)
     ret=new LambertConicEllipsoid(ellip,meridian,parallels[0],parallels.back(),1,origll,origxy);
   return ret;
 }
