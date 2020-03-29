@@ -29,10 +29,11 @@
 #include "vball.h"
 #include "cmdopt.h"
 #include "config.h"
+#include "ps.h"
 using namespace std;
 
 int verbosity=1;
-bool helporversion=false,commandError=false,drawlogo=false;
+bool helporversion=false,commandError=false;
 double arcLength=NAN,chordLength=NAN;
 vector<double> curvature;
 vector<int> lengthUnits,angleUnits;
@@ -74,6 +75,26 @@ void outhelp()
       cout<<' ';
     cout<<options[i].desc<<endl;
   }
+}
+
+void drawLogo()
+{
+  PostScript ps;
+  int i;
+  vector<spiralarc> strokes;
+  BoundRect br;
+  ps.open("clotilde.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  strokes.push_back(spiralarc(xyz(0,0,0),xyz(10,0,0))); // lines of writing
+  strokes.push_back(spiralarc(xyz(0,1,0),xyz(10,1,0)));
+  for (i=0;i<strokes.size();i++)
+    br.include(&strokes[i]);
+  ps.startpage();
+  ps.setscale(br);
+  for (i=0;i<strokes.size();i++)
+    ps.spline(strokes[i].approx3d(0.01));
+  ps.close();
 }
 
 void startHtml(spiralarc s,Measure ms)
@@ -224,7 +245,8 @@ void argpass2()
 	}
 	break;
       case 7: // logo
-	drawlogo=true;
+	helporversion=true;
+	drawLogo();
 	break;
       default:
 	;
