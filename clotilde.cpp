@@ -3,7 +3,7 @@
 /* clotilde.cpp - tables of approximations to spirals */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018,2019 Pierre Abbat.
+/* Copyright 2018-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -32,7 +32,7 @@
 using namespace std;
 
 int verbosity=1;
-bool helporversion=false,commandError=false;
+bool helporversion=false,commandError=false,drawlogo=false;
 double arcLength=NAN,chordLength=NAN;
 vector<double> curvature;
 vector<int> lengthUnits,angleUnits;
@@ -45,7 +45,8 @@ vector<option> options(
     {'C',"chordlength","length","Chord length"},
     {'c',"curvature","cur cur","Start and end curvatures"},
     {'r',"radius","length length","Start and end radii"},
-    {'u',"unit","m/ft/deg/dms","Length or angle unit"}
+    {'u',"unit","m/ft/deg/dms","Length or angle unit"},
+    {'\0',"logo","","Draw logo"}
   });
 
 vector<token> cmdline;
@@ -192,7 +193,7 @@ void argpass2()
 	    i++;
 	}
 	break;
-      case 6:
+      case 6: // unit
         if (i+1<cmdline.size() && cmdline[i+1].optnum<0)
 	{
 	  i++;
@@ -221,6 +222,9 @@ void argpass2()
 	  cerr<<"--unit requires an argument, one of m, ft, usft, inft, deg, dms, and gon.\n";
 	  commandError=true;
 	}
+	break;
+      case 7: // logo
+	drawlogo=true;
 	break;
       default:
 	;
