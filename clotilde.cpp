@@ -88,12 +88,20 @@ void drawLogo()
   ps.prolog();
   strokes.push_back(spiralarc(xyz(0,0,0),xyz(10,0,0))); // lines of writing
   strokes.push_back(spiralarc(xyz(0,1,0),xyz(10,1,0)));
+  strokes.push_back(spiralarc(xyz(1,0.72,0),xyz(1,0.22,0)));
+  strokes.back().setdelta(degtobin(300),degtobin(-10));
+  strokes.push_back(spiralarc(xyz(1.3,2,0),xyz(2,0,0)));
+  strokes.back().setdelta(degtobin(90),degtobin(50));
   for (i=0;i<strokes.size();i++)
     br.include(&strokes[i]);
   ps.startpage();
   ps.setscale(br);
   for (i=0;i<strokes.size();i++)
+  {
+    cout<<i<<" Bearing "<<bintodeg(strokes[i].startbearing())<<' '<<bintodeg(strokes[i].endbearing());
+    cout<<" Curvature "<<strokes[i].curvature(0)<<' '<<strokes[i].curvature(strokes[i].length())<<endl;
     ps.spline(strokes[i].approx3d(0.01));
+  }
   ps.close();
 }
 
