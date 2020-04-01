@@ -82,6 +82,7 @@ void drawLogo()
   PostScript ps;
   int i;
   vector<spiralarc> strokes;
+  polyarc approx;
   BoundRect br;
   ps.open("clotilde.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
@@ -104,6 +105,15 @@ void drawLogo()
     br.include(&strokes[i]);
   ps.startpage();
   ps.setscale(br);
+  ps.setcolor(0.7,0.7,1);
+  ps.widen(5);
+  for (i=0;i<strokes.size();i++)
+  {
+    approx=manyArc(strokes[i],3);
+    ps.spline(approx.approx3d(0.01));
+  }
+  ps.setcolor(0,0,0);
+  ps.widen(1/5.);
   for (i=0;i<strokes.size();i++)
   {
     cout<<i<<" Bearing "<<bintodeg(strokes[i].startbearing())<<' '<<bintodeg(strokes[i].endbearing());
