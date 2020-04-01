@@ -101,6 +101,12 @@ void drawLogo()
   strokes.back().setdelta(degtobin(90),degtobin(50));
   strokes.push_back(spiralarc(xyz(3.1,1,0),xyz(3.5,1,0)));
   strokes.back().setdelta(degtobin(0),degtobin(30));
+  strokes.push_back(spiralarc(xyz(4,1,0),xyz(4.35,0,0)));
+  strokes.back().setdelta(degtobin(90),degtobin(50));
+  strokes.push_back(spiralarc(xyz(3.9,1.4,0),xyz(4.1,1.6,0)));
+  strokes.back().setdelta(degtobin(90),degtobin(50));
+  strokes.push_back(spiralarc(xyz(4.7,2,0),xyz(5.4,0,0)));
+  strokes.back().setdelta(degtobin(90),degtobin(50));
   for (i=0;i<strokes.size();i++)
     br.include(&strokes[i]);
   ps.startpage();
