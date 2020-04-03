@@ -89,27 +89,27 @@ void drawLogo()
   ps.prolog();
   strokes.push_back(spiralarc(xyz(0,0,0),xyz(10,0,0))); // lines of writing
   strokes.push_back(spiralarc(xyz(0,1,0),xyz(10,1,0)));
-  strokes.push_back(spiralarc(xyz(1,0.75,0),xyz(1,0.25,0)));
+  strokes.push_back(spiralarc(xyz(1,0.75,0),xyz(1,0.25,0))); // c
   strokes.back().setdelta(degtobin(300),degtobin(0));
-  strokes.push_back(spiralarc(xyz(1.3,2,0),xyz(2,0,0)));
+  strokes.push_back(spiralarc(xyz(1.3,2,0),xyz(2,0,0))); // l
   strokes.back().setdelta(degtobin(90),degtobin(50));
-  strokes.push_back(spiralarc(xyz(2.5,0,0),xyz(2.5,1,0)));
+  strokes.push_back(spiralarc(xyz(2.5,0,0),xyz(2.5,1,0))); // o
   strokes.back().setdelta(degtobin(180),degtobin(0));
   strokes.push_back(spiralarc(xyz(2.5,1,0),xyz(2.5,0,0)));
   strokes.back().setdelta(degtobin(180),degtobin(0));
-  strokes.push_back(spiralarc(xyz(3.3,1.5,0),xyz(3.825,0,0)));
+  strokes.push_back(spiralarc(xyz(3.3,1.5,0),xyz(3.825,0,0))); // t
   strokes.back().setdelta(degtobin(90),degtobin(50));
   strokes.push_back(spiralarc(xyz(3.1,1,0),xyz(3.5,1,0)));
   strokes.back().setdelta(degtobin(0),degtobin(30));
-  strokes.push_back(spiralarc(xyz(4,1,0),xyz(4.35,0,0)));
+  strokes.push_back(spiralarc(xyz(4,1,0),xyz(4.35,0,0))); // i
   strokes.back().setdelta(degtobin(90),degtobin(50));
-  strokes.push_back(spiralarc(xyz(3.9,1.4,0),xyz(4.1,1.6,0)));
+  strokes.push_back(spiralarc(xyz(4,1.4,0),xyz(4,1.6,0)));
+  strokes.back().setdelta(degtobin(330),degtobin(210));
+  strokes.push_back(spiralarc(xyz(4.7,2,0),xyz(5.4,0,0))); // l
   strokes.back().setdelta(degtobin(90),degtobin(50));
-  strokes.push_back(spiralarc(xyz(4.7,2,0),xyz(5.4,0,0)));
-  strokes.back().setdelta(degtobin(90),degtobin(50));
-  strokes.push_back(spiralarc(xyz(5.9,0.88,0),xyz(6.4,2,0)));
+  strokes.push_back(spiralarc(xyz(5.9,0.88,0),xyz(6.4,2,0))); // d
   strokes.back().setdelta(degtobin(300),degtobin(-210));
-  strokes.push_back(spiralarc(xyz(7.5,0.5,0),xyz(8,0.1,0)));
+  strokes.push_back(spiralarc(xyz(7.5,0.5,0),xyz(8,0.1,0))); // e
   strokes.back().setdelta(degtobin(330),degtobin(-210));
   for (i=0;i<strokes.size();i++)
     br.include(&strokes[i]);
