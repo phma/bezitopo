@@ -89,8 +89,8 @@ void drawLogo()
   ps.prolog();
   strokes.push_back(spiralarc(xyz(0,0,0),xyz(10,0,0))); // lines of writing
   strokes.push_back(spiralarc(xyz(0,1,0),xyz(10,1,0)));
-  strokes.push_back(spiralarc(xyz(1,0.72,0),xyz(1,0.22,0)));
-  strokes.back().setdelta(degtobin(300),degtobin(-10));
+  strokes.push_back(spiralarc(xyz(1,0.75,0),xyz(1,0.25,0)));
+  strokes.back().setdelta(degtobin(300),degtobin(0));
   strokes.push_back(spiralarc(xyz(1.3,2,0),xyz(2,0,0)));
   strokes.back().setdelta(degtobin(90),degtobin(50));
   strokes.push_back(spiralarc(xyz(2.5,0,0),xyz(2.5,1,0)));
