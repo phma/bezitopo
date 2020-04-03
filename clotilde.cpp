@@ -87,8 +87,8 @@ void drawLogo()
   ps.open("clotilde.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
-  strokes.push_back(spiralarc(xyz(0,0,0),xyz(10,0,0))); // lines of writing
-  strokes.push_back(spiralarc(xyz(0,1,0),xyz(10,1,0)));
+  //strokes.push_back(spiralarc(xyz(0,0,0),xyz(10,0,0))); // lines of writing
+  //strokes.push_back(spiralarc(xyz(0,1,0),xyz(10,1,0)));
   strokes.push_back(spiralarc(xyz(1,0.75,0),xyz(1,0.25,0))); // c
   strokes.back().setdelta(degtobin(300),degtobin(0));
   strokes.push_back(spiralarc(xyz(1.3,2,0),xyz(2,0,0))); // l
