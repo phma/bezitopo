@@ -44,20 +44,66 @@ set(FUZZ none)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
 find_package(FFTW)
-qt5_add_resources(lib_resources viewtin.qrc)
-qt5_add_translation(qm_files bezitopo_en.ts bezitopo_es.ts)
+qt5_add_resources(lib_resources src/viewtin.qrc)
+qt5_add_translation(qm_files src/bezitopo_en.ts
+                             src/bezitopo_es.ts)
 # To update translations, run "lupdate *.cpp -ts *.ts" in the source directory.
 
-set(header_files angle.h arc.h bezier.h
-    bezier3d.h binio.h boundrect.h breakline.h circle.h cogo.h cogospiral.h 
-    color.h contour.h csv.h document.h drawobj.h
-    ellipsoid.h except.h geoid.h geoidboundary.h
-    globals.h halton.h intloop.h latlong.h layer.h ldecimal.h leastsquares.h
-    linetype.h manyarc.h manysum.h
-    matrix.h measure.h minquad.h objlist.h penwidth.h pnezd.h point.h pointlist.h polyline.h
-    projection.h ps.h qindex.h quaternion.h random.h relprime.h
-    rootfind.h roscat.h segment.h spiral.h spolygon.h
-    tin.h vball.h vcurve.h xml.h xyz.h zoom.h)
+set(header_files src/angle.h
+                 src/arc.h
+                 src/bezier.h
+                 src/bezier3d.h
+                 src/binio.h
+                 src/boundrect.h
+                 src/breakline.h
+                 src/circle.h
+                 src/cogo.h
+                 src/cogospiral.h
+                 src/color.h
+                 src/contour.h
+                 src/csv.h
+                 src/document.h
+                 src/drawobj.h
+                 src/ellipsoid.h
+                 src/except.h
+                 src/geoid.h
+                 src/geoidboundary.h
+                 src/globals.h
+                 src/halton.h
+                 src/intloop.h
+                 src/latlong.h
+                 src/layer.h
+                 src/ldecimal.h
+                 src/leastsquares.h
+                 src/linetype.h
+                 src/manyarc.h
+                 src/manysum.h
+                 src/matrix.h
+                 src/measure.h
+                 src/minquad.h
+                 src/objlist.h
+                 src/penwidth.h
+                 src/pnezd.h
+                 src/point.h
+                 src/pointlist.h
+                 src/polyline.h
+                 src/projection.h
+                 src/ps.h
+                 src/qindex.h
+                 src/quaternion.h
+                 src/random.h
+                 src/relprime.h
+                 src/rootfind.h
+                 src/roscat.h
+                 src/segment.h
+                 src/spiral.h
+                 src/spolygon.h
+                 src/tin.h
+                 src/vball.h
+                 src/vcurve.h
+                 src/xml.h
+                 src/xyz.h
+                 src/zoom.h)
 
 # MS Visual C++ cannot build both static and shared libraries with the same name.
 # If you ask for a static library, it makes bezitopo.lib. If you ask for a
@@ -74,125 +120,164 @@ endif ()
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC" AND NOT DEFINED MSVC_STATIC)
   set(MAKE_STATIC "")
 endif ()
+set(sourcelib src/angle.cpp
+              src/arc.cpp
+              src/bezier.cpp
+              src/bezier3d.cpp
+              src/binio.cpp
+              src/boundrect.cpp
+              src/breakline.cpp
+              src/circle.cpp
+              src/cogo.cpp 
+              src/cogospiral.cpp
+              src/color.cpp
+              src/contour.cpp
+              src/csv.cpp
+              src/document.cpp
+              src/drawobj.cpp
+              src/ellipsoid.cpp
+              src/except.cpp
+              src/geoid.cpp
+              src/geoidboundary.cpp
+              src/halton.cpp
+              src/intloop.cpp
+              src/latlong.cpp
+              src/layer.cpp
+              src/ldecimal.cpp
+              src/leastsquares.cpp
+              src/manyarc.cpp
+              src/manysum.cpp
+              src/matrix.cpp
+              src/measure.cpp
+              src/minquad.cpp
+              src/objlist.cpp
+              src/penwidth.cpp
+              src/pnezd.cpp
+              src/point.cpp
+              src/pointlist.cpp
+              src/polyline.cpp
+              src/projection.cpp
+              src/ps.cpp
+              src/qindex.cpp
+              src/quaternion.cpp
+              src/random.cpp
+              src/relprime.cpp
+              src/rootfind.cpp
+              src/segment.cpp
+              src/smooth5.cpp
+              src/spiral.cpp
+              src/spolygon.cpp
+              src/stl.cpp
+              src/tin.cpp
+              src/vball.cpp
+              src/vcurve.cpp
+              src/xml.cpp)
 if (MAKE_STATIC)
-add_library(bezilib0 STATIC angle.cpp arc.cpp bezier.cpp
-            bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
-            cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
-            ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-            halton.cpp intloop.cpp latlong.cpp layer.cpp ldecimal.cpp
-            leastsquares.cpp manyarc.cpp manysum.cpp
-            matrix.cpp measure.cpp minquad.cpp objlist.cpp penwidth.cpp pnezd.cpp
-            point.cpp pointlist.cpp polyline.cpp
-            projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
-            rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
-            stl.cpp tin.cpp vball.cpp vcurve.cpp xml.cpp)
+add_library(bezilib0 STATIC ${sourcelib})
 endif ()
 if (MAKE_SHARED)
-add_library(bezilib1 SHARED angle.cpp arc.cpp bezier.cpp
-            bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp 
-            cogospiral.cpp color.cpp contour.cpp csv.cpp document.cpp drawobj.cpp
-            ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-            halton.cpp intloop.cpp latlong.cpp layer.cpp ldecimal.cpp
-            leastsquares.cpp manyarc.cpp manysum.cpp
-            matrix.cpp measure.cpp minquad.cpp objlist.cpp penwidth.cpp pnezd.cpp
-            point.cpp pointlist.cpp polyline.cpp
-            projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
-            rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
-            stl.cpp tin.cpp vball.cpp vcurve.cpp xml.cpp)
+add_library(bezilib1 SHARED ${sourcelib})
 endif ()
-add_executable(bezitopo absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitopo.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp closure.cpp cogo.cpp
-               cogospiral.cpp color.cpp contour.cpp csv.cpp cvtmeas.cpp document.cpp
-               drawobj.cpp ellipsoid.cpp except.cpp firstarg.cpp
-               geoid.cpp geoidboundary.cpp halton.cpp
-               icommon.cpp intloop.cpp kml.cpp latlong.cpp layer.cpp ldecimal.cpp
-               manysum.cpp matrix.cpp measure.cpp minquad.cpp
-               mkpoint.cpp objlist.cpp plot.cpp pnezd.cpp
-               point.cpp pointlist.cpp polyline.cpp projection.cpp ps.cpp qindex.cpp
-               quaternion.cpp random.cpp raster.cpp relprime.cpp rootfind.cpp
-               scalefactor.cpp smooth5.cpp spiral.cpp spolygon.cpp stl.cpp test.cpp segment.cpp
-               tin.cpp vball.cpp vcurve.cpp)
-add_executable(bezitest absorient.cpp angle.cpp arc.cpp bezier3d.cpp bezier.cpp
-               bezitest.cpp bicubic.cpp binio.cpp breakline.cpp
-               boundrect.cpp carlsontin.cpp circle.cpp cogo.cpp
-               cogospiral.cpp color.cpp contour.cpp crosssection.cpp
-               csv.cpp document.cpp drawobj.cpp
-               dxf.cpp ellipsoid.cpp except.cpp firstarg.cpp geoid.cpp geoidboundary.cpp
-               halton.cpp histogram.cpp hlattice.cpp hnum.cpp intloop.cpp kml.cpp
-               latlong.cpp layer.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp
-               matrix.cpp measure.cpp minquad.cpp objlist.cpp plot.cpp pnezd.cpp point.cpp
-               pointlist.cpp polyline.cpp projection.cpp
-               ps.cpp ptin.cpp qindex.cpp quaternion.cpp
-               random.cpp raster.cpp readtin.cpp refinegeoid.cpp relprime.cpp rootfind.cpp
-               segment.cpp smooth5.cpp sourcegeoid.cpp spiral.cpp spolygon.cpp
-               stl.cpp test.cpp textfile.cpp tin.cpp tintext.cpp vball.cpp vcurve.cpp zoom.cpp)
-add_executable(clotilde angle.cpp arc.cpp bezier.cpp
-	       bezier3d.cpp binio.cpp breakline.cpp boundrect.cpp
-	       circle.cpp clotilde.cpp cmdopt.cpp cogo.cpp
-	       cogospiral.cpp contour.cpp csv.cpp drawobj.cpp
-               ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-               intloop.cpp latlong.cpp ldecimal.cpp leastsquares.cpp manyarc.cpp manysum.cpp 
-	       matrix.cpp measure.cpp minquad.cpp point.cpp pointlist.cpp polyline.cpp
-	       projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
-	       rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
-	       stl.cpp tin.cpp vball.cpp vcurve.cpp)
-add_executable(convertgeoid angle.cpp arc.cpp bezier.cpp bezier3d.cpp bicubic.cpp
-               binio.cpp boundrect.cpp breakline.cpp circle.cpp
-               cmdopt.cpp cogo.cpp cogospiral.cpp contour.cpp
-               convertgeoid.cpp csv.cpp document.cpp drawobj.cpp
-               ellipsoid.cpp except.cpp
-               geoid.cpp geoidboundary.cpp halton.cpp histogram.cpp
-               hlattice.cpp intloop.cpp kml.cpp latlong.cpp layer.cpp
-               ldecimal.cpp manysum.cpp matrix.cpp measure.cpp minquad.cpp objlist.cpp
-               pnezd.cpp point.cpp pointlist.cpp polyline.cpp
-               projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp raster.cpp
-               refinegeoid.cpp relprime.cpp rootfind.cpp segment.cpp smooth5.cpp
-               sourcegeoid.cpp spiral.cpp spolygon.cpp stl.cpp tin.cpp vball.cpp vcurve.cpp)
-add_executable(viewtin angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp boundrect.cpp
-               breakline.cpp carlsontin.cpp cidialog.cpp
-               circle.cpp cogo.cpp cogospiral.cpp color.cpp
-               contour.cpp csv.cpp document.cpp drawobj.cpp dxf.cpp ellipsoid.cpp
-               except.cpp factordialog.cpp firstarg.cpp geoid.cpp geoidboundary.cpp
-               halton.cpp intloop.cpp kml.cpp
-               latlong.cpp layer.cpp ldecimal.cpp linetype.cpp llvalidator.cpp
-               manysum.cpp matrix.cpp measure.cpp measurebutton.cpp
-               minquad.cpp objlist.cpp penwidth.cpp
-               plwidget.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
-               ps.cpp ptin.cpp qindex.cpp quaternion.cpp random.cpp
-               readtin.cpp relprime.cpp rendercache.cpp
-               rootfind.cpp segment.cpp smooth5.cpp
-               spiral.cpp spolygon.cpp stl.cpp test.cpp textfile.cpp tin.cpp
-               tintext.cpp tinwindow.cpp topocanvas.cpp vball.cpp vcurve.cpp
-               viewtin.cpp zoom.cpp zoombutton.cpp
-               ${lib_resources} ${qm_files})
-add_executable(sitecheck angle.cpp arc.cpp bezier.cpp bezier3d.cpp binio.cpp boundrect.cpp
-               breakline.cpp carlsontin.cpp cidialog.cpp
-               circle.cpp cogo.cpp cogospiral.cpp color.cpp
-               contour.cpp csv.cpp document.cpp drawobj.cpp dxf.cpp ellipsoid.cpp
-               except.cpp factordialog.cpp firstarg.cpp geoid.cpp geoidboundary.cpp
-               halton.cpp intloop.cpp kml.cpp
-               latlong.cpp layer.cpp ldecimal.cpp linetype.cpp llvalidator.cpp
-               manysum.cpp matrix.cpp measure.cpp measurebutton.cpp
-               minquad.cpp objlist.cpp penwidth.cpp
-               plwidget.cpp pnezd.cpp point.cpp pointlist.cpp polyline.cpp projection.cpp
-               ps.cpp ptin.cpp qindex.cpp quaternion.cpp random.cpp
-               readtin.cpp relprime.cpp rendercache.cpp
-               rootfind.cpp segment.cpp sitecheck.cpp sitewindow.cpp smooth5.cpp
-               spiral.cpp spolygon.cpp stl.cpp test.cpp textfile.cpp tin.cpp
-               tintext.cpp topocanvas.cpp vball.cpp vcurve.cpp
-               zoom.cpp zoombutton.cpp
-               ${lib_resources} ${qm_files})
-add_executable(pangeoid geoidwindow.cpp pangeoid.cpp zoom.cpp)
+add_executable(bezitopo ${sourcelib}
+                        src/absorient.cpp
+                        src/bezitopo.cpp
+                        src/closure.cpp
+                        src/cvtmeas.cpp
+                        src/firstarg.cpp
+                        src/icommon.cpp
+                        src/kml.cpp
+                        src/mkpoint.cpp
+                        src/plot.cpp
+                        src/raster.cpp
+                        src/scalefactor.cpp
+                        src/test.cpp)
+add_executable(bezitest ${sourcelib}
+                        src/absorient.cpp
+                        src/bezitest.cpp
+                        src/bicubic.cpp
+                        src/carlsontin.cpp
+                        src/crosssection.cpp
+                        src/dxf.cpp
+                        src/firstarg.cpp
+                        src/histogram.cpp
+                        src/hlattice.cpp
+                        src/hnum.cpp
+                        src/kml.cpp
+                        src/plot.cpp
+                        src/ptin.cpp
+                        src/raster.cpp
+                        src/readtin.cpp
+                        src/refinegeoid.cpp
+                        src/sourcegeoid.cpp
+                        src/test.cpp
+                        src/textfile.cpp
+                        src/tintext.cpp
+                        src/zoom.cpp)
+add_executable(clotilde ${sourcelib}
+                        src/clotilde.cpp
+                        src/cmdopt.cpp)
+add_executable(convertgeoid ${sourcelib}
+                            src/bicubic.cpp
+                            src/cmdopt.cpp
+                            src/convertgeoid.cpp
+                            src/histogram.cpp
+                            src/hlattice.cpp
+                            src/kml.cpp
+                            src/raster.cpp
+                            src/refinegeoid.cpp
+                            src/sourcegeoid.cpp)
+add_executable(viewtin ${sourcelib}
+                       src/carlsontin.cpp
+                       src/cidialog.cpp
+                       src/dxf.cpp
+                       src/factordialog.cpp
+                       src/firstarg.cpp
+                       src/kml.cpp
+                       src/linetype.cpp
+                       src/llvalidator.cpp
+                       src/measurebutton.cpp
+                       src/plwidget.cpp
+                       src/ptin.cpp
+                       src/readtin.cpp
+                       src/rendercache.cpp
+                       src/test.cpp
+                       src/textfile.cpp
+                       src/tintext.cpp
+                       src/tinwindow.cpp
+                       src/topocanvas.cpp
+                       src/viewtin.cpp
+                       src/zoom.cpp
+                       src/zoombutton.cpp
+                      ${lib_resources}
+                      ${qm_files})
+add_executable(sitecheck ${sourcelib}
+                         src/carlsontin.cpp
+                         src/cidialog.cpp
+                         src/dxf.cpp
+                         src/factordialog.cpp
+                         src/firstarg.cpp
+                         src/kml.cpp
+                         src/linetype.cpp
+                         src/llvalidator.cpp
+                         src/measurebutton.cpp
+                         src/plwidget.cpp
+                         src/ptin.cpp
+                         src/readtin.cpp
+                         src/rendercache.cpp
+                         src/sitecheck.cpp
+                         src/sitewindow.cpp
+                         src/test.cpp
+                         src/textfile.cpp
+                         src/tintext.cpp
+                         src/topocanvas.cpp
+                         src/zoom.cpp
+                         src/zoombutton.cpp
+                         ${lib_resources}
+                         ${qm_files})
+add_executable(pangeoid src/geoidwindow.cpp src/pangeoid.cpp src/zoom.cpp)
 if (${FFTW_FOUND})
-add_executable(transmer angle.cpp arc.cpp bezier.cpp
-               bezier3d.cpp binio.cpp boundrect.cpp breakline.cpp circle.cpp cogo.cpp
-               cogospiral.cpp contour.cpp csv.cpp drawobj.cpp
-               ellipsoid.cpp except.cpp geoid.cpp geoidboundary.cpp
-               intloop.cpp latlong.cpp ldecimal.cpp manysum.cpp matrix.cpp
-               measure.cpp minquad.cpp point.cpp pointlist.cpp polyline.cpp
-               projection.cpp ps.cpp qindex.cpp quaternion.cpp random.cpp relprime.cpp
-               rootfind.cpp segment.cpp smooth5.cpp spiral.cpp spolygon.cpp
-               stl.cpp tin.cpp transmer.cpp vball.cpp vcurve.cpp)
+add_executable(transmer ${sourcelib}
+                        src/transmer.cpp)
 endif (${FFTW_FOUND})
 if (MAKE_STATIC)
 target_link_libraries(bezilib0 Qt5::Widgets Qt5::Core)
