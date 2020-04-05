@@ -341,7 +341,7 @@ install(TARGETS ${MAKE_SHARED} ${MAKE_STATIC} DESTINATION lib)
 install(FILES ${PROJECT_BINARY_DIR}/config.h DESTINATION include/bezitopo)
 install(FILES ${qm_files} projections.txt transmer.dat DESTINATION share/bezitopo)
 install(FILES ${header_files} DESTINATION include/bezitopo)
-install(FILES bezitopo.h DESTINATION include)
+install(FILES src/bezitopo.h DESTINATION include)
 endif ()
 
 if (WIN32)
