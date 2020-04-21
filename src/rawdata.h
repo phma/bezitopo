@@ -21,3 +21,34 @@
  * and Lesser General Public License along with Bezitopo. If not, see
  * <http://www.gnu.org/licenses/>.
  */
+
+#include <vector>
+#include <string>
+
+class RawField
+{
+public:
+  std::string fieldString;
+  union
+  {
+    double fieldReal;
+    int64_t fieldInt;
+  };
+  int tag;
+};
+
+/* Tags are 2 bytes with the high nybble meaning the following:
+ * 0	1 byte integer
+ * 1	2 byte integer
+ * 2	4 byte integer
+ * 3	8 byte integer
+ * 4	double
+ * 5	string
+ */
+
+class RawRecord
+{
+public:
+  int recType;
+  std::vector<RawField> fields;
+};

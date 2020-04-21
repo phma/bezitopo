@@ -207,6 +207,7 @@ add_executable(bezitest ${sourcelib}
                         src/plot.cpp
                         src/ptin.cpp
                         src/raster.cpp
+                        src/rawdata.cpp
                         src/readtin.cpp
                         src/refinegeoid.cpp
                         src/sourcegeoid.cpp

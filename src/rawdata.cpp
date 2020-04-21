@@ -21,3 +21,4 @@
  * and Lesser General Public License along with Bezitopo. If not, see
  * <http://www.gnu.org/licenses/>.
  */
+#include "rawdata.h"
