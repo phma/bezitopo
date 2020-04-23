@@ -3,7 +3,7 @@
 /* spiral.cpp - Cornu or Euler spirals                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2019 Pierre Abbat.
+/* Copyright 2012-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -440,12 +440,12 @@ bool spiralarc::isTooCurly()
     ret=lessDelta>0.67092325837 && moreDelta>3.81251591196;
   /* A spiralarc with 0.67092325837 rad on one side of the inflection point
    * and 3.81251591196 rad on the other has the tangents at both ends
-   * coincident in opposite directcions. If it exceeds both of these, it is
+   * coincident in opposite directions. If it exceeds both of these, it is
    * too curly, even if the distanceInDirection criterion says it isn't.
    * See testspiral.
    */
-  //if (!ret)
-    //ret=distanceInDirection(start,end,startbearing())<=0 || distanceInDirection(start,end,endbearing())<=0;
+  if (!ret && startCur*endCur>0)
+    ret=distanceInDirection(start,end,startbearing()+DEG90)*cur<0 || distanceInDirection(start,end,endbearing()-DEG90)*cur<0;
   return ret;
 }
 
