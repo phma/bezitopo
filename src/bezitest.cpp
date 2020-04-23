@@ -3,7 +3,7 @@
 /* bezitest.cpp - test program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2019 Pierre Abbat.
+/* Copyright 2012-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -2830,6 +2830,8 @@ void testcurly()
   test1curly(0,28.25,ps,0.761013024660324,NAN,2.8739179158024846,3.238467135241204,-1);
   test1curly(10,0,ps,M_PI/10,M_PI/5, 5.55135950399001,7.100728753904528,-1);
   test1curly(10,0.4,ps,NAN,NAN,5.482702939874759,6.91072571252652,-1);
+  test1curly(10,55,ps,NAN,NAN,NAN,NAN,NAN);
+  test1curly(10,36,ps,NAN,NAN,NAN,NAN,NAN);
 }
 
 void testcurvefit()
