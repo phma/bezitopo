@@ -449,9 +449,9 @@ bool spiralarc::isTooCurly()
    */
   if (!ret && startCur*endCur>0)
     ret=distanceInDirection(start,end,startbearing()+DEG90)*cur<0 || distanceInDirection(start,end,endbearing()-DEG90)*cur<0;
-  for (i=0;!ret && i<CURLTEST;i++)
+  for (i=0;!ret && i<=CURLTEST;i++)
   {
-    regions|=tooCurlyRegion(station(len*(i+0.5)/CURLTEST));
+    regions|=tooCurlyRegion(station(len*i/CURLTEST));
     if (((regions&18)==18) || ((regions&36)==36))
       ret=true;
   }

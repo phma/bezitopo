@@ -348,6 +348,10 @@ int segment::tooCurlyRegion(xy pnt)
  */
 {
   int a=chordbearing(),b=dir(end,pnt),c=dir(pnt,start);
+  if (dist(end,pnt)<chordlength()/16777216)
+    b=endbearing()+DEG180;
+  if (dist(pnt,start)<chordlength()/16777216)
+    c=startbearing()+DEG180;
   int A=foldangle(c-b+DEG180),B=foldangle(a-c+DEG180),C=foldangle(b-a+DEG180);
   return 1*( A>DEG90 &&  A<DEG180)+
 	 2*( B>DEG90 &&  B<DEG180)+
