@@ -4,7 +4,7 @@
 /* base class of arc and spiral                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2019 Pierre Abbat.
+/* Copyright 2012,2014-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -147,6 +147,7 @@ public:
   {
     return 0;
   }
+  int tooCurlyRegion(xy pnt);
   virtual bool isCurly();
   virtual bool isTooCurly();
   double closest(xy topoint,double closesofar=INFINITY,bool offends=false);

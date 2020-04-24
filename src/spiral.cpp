@@ -70,6 +70,8 @@ using namespace std;
 #define MAXTOTCUR 0.05
 #define MAXTOTCLO 0.01
 // When computing area, if the curve exceeds either of these, it will split it.
+#define CURLTEST 5
+// Number of points to try in the too curly test
 vector<int> cornuhisto;
 
 xy cornu(double t)
@@ -422,6 +424,7 @@ bool spiralarc::isTooCurly()
 {
   xy inflect(NAN,NAN);
   bool ret;
+  int i,regions=0;
   double inflpos=NAN;
   double startCur=curvature(0),endCur=curvature(len);
   double lessDelta=0,moreDelta=0;
@@ -446,6 +449,12 @@ bool spiralarc::isTooCurly()
    */
   if (!ret && startCur*endCur>0)
     ret=distanceInDirection(start,end,startbearing()+DEG90)*cur<0 || distanceInDirection(start,end,endbearing()-DEG90)*cur<0;
+  for (i=0;!ret && i<CURLTEST;i++)
+  {
+    regions|=tooCurlyRegion(station(len*(i+0.5)/CURLTEST));
+    if (((regions&18)==18) || ((regions&36)==36))
+      ret=true;
+  }
   return ret;
 }
 

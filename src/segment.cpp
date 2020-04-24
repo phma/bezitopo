@@ -4,7 +4,7 @@
 /* base class of arc and spiral                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2019 Pierre Abbat.
+/* Copyright 2012,2015-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -340,6 +340,21 @@ bool sameXyz(segment seg1,segment seg2)
 double missDistance(segment seg1,segment seg2)
 {
   return missDistance(seg1.start,seg1.end,seg2.start,seg2.end);
+}
+
+int segment::tooCurlyRegion(xy pnt)
+/* Returns a bit set if xy is in one of six regions relative to start and end
+ * defined by which angle is obtuse and its sign. Used in spiralarc::isTooCurly.
+ */
+{
+  int a=chordbearing(),b=dir(end,pnt),c=dir(pnt,start);
+  int A=foldangle(c-b+DEG180),B=foldangle(a-c+DEG180),C=foldangle(b-a+DEG180);
+  return 1*( A>DEG90 &&  A<DEG180)+
+	 2*( B>DEG90 &&  B<DEG180)+
+	 4*( C>DEG90 &&  C<DEG180)+
+	 8*(-A>DEG90 && -A<DEG180)+
+	16*(-B>DEG90 && -B<DEG180)+
+	32*(-C>DEG90 && -C<DEG180);
 }
 
 bool segment::isCurly()
