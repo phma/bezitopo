@@ -26,7 +26,7 @@ Before 0.2.0:
 •Compute all intersections of two spirals. ✓
 •Decide whether a point is inside a polyline/arc/spiral. ✓
 •Compute the area of a polyline/arc/spiral. ✓
-•Tell whether a spiralarc is too curly, i.e. there is a line that intersects it three times out of order; or curly, i.e. there is a line perpendicular to it that intersects it somewhere else.
+•Tell whether a spiralarc is too curly, i.e. there is a line that intersects it three times out of order; or curly, i.e. there is a line perpendicular to it that intersects it somewhere else. ✓
 •Make a list of drawing objects, with layers, and a way for drawing objects to refer to other drawing objects so that it can easily find out what refers to an object (e.g. a dimension label refers to a segment or arc).
 •Make the PostScript output routine a class. ✓
 •Make a GUI program for viewing geoid files.
