@@ -2704,7 +2704,7 @@ void testcogospiral()
   testcogospiral2(s,t,ps,expected,5.1e-5,7);
 }
 
-void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLength,double tTooCurlyLength,double tMaxLength64,double tMaxLength80,double tMaxLength128)
+void test1curly(double curvature,double clothance,PostScript &ps,array<int,3> &times,double tCurlyLength,double tTooCurlyLength,double tMaxLength64,double tMaxLength80,double tMaxLength128)
 /* The maximum length depends on the number of bits in a long double,
  * used in cornu to compute spirals.
  * 64: ARM/GCC, Intel/MSVC
@@ -2714,6 +2714,9 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
 {
   double curlyLength,tooCurlyLength,maxLength;
   spiralarc s;
+  int i;
+  QTime starttime;
+  const int niter=1000;
   double lo=0,hi=1,mid;
   BoundRect br;
   while (s.getstart().isfinite() && s.getend().isfinite())
@@ -2807,6 +2810,18 @@ void test1curly(double curvature,double clothance,PostScript &ps,double tCurlyLe
           std::isnan(tMaxLength128) || fabs(log(maxLength/tMaxLength128))<1e-9);
   tassert(std::isnan(tCurlyLength) || fabs(log(curlyLength/tCurlyLength))<1e-9);
   tassert(std::isnan(tTooCurlyLength) || fabs(log(tooCurlyLength/tTooCurlyLength))<1e-9);
+  starttime.start();
+  for (i=0;i<niter;i++)
+  {
+    s=spiralarc(xyz(0,0,0),curvature,clothance,0,-tooCurlyLength*i/niter,tooCurlyLength*i/niter);
+    times[1]=starttime.elapsed()-times[1];
+    s.isCurly();
+    times[1]=starttime.elapsed()-times[1];
+    times[2]=starttime.elapsed()-times[2];
+    s.isTooCurly();
+    times[2]=starttime.elapsed()-times[2];
+  }
+  times[0]+=niter;
 }
 
 void testcurly()
@@ -2818,20 +2833,24 @@ void testcurly()
   double curvature,clothance;
   spiralarc s(xyz(0,0,0),0.0,28.25,0,-1.5,1.5); // works in GCC, fails in MSVC
   PostScript ps;
+  array<int,3> times;
   ps.open("curly.ps");
+  times[0]=times[1]=times[3]=0;
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
   for (i=0;i<10;i++)
   {
     curvature=(rng.usrandom()-32767.5)/2896.31;
     clothance=(rng.usrandom()-32767.5)/1024;
-    test1curly(curvature,clothance,ps,NAN,NAN,NAN,NAN,NAN);
+    test1curly(curvature,clothance,ps,times,NAN,NAN,NAN,NAN,NAN);
   }
-  test1curly(0,28.25,ps,0.761013024660324,1.039062329093344, 2.8739179158024846,3.238467135241204,-1);
-  test1curly(10,0,ps,M_PI/10,M_PI/5, 5.55135950399001,7.100728753904528,-1);
-  test1curly(10,0.4,ps,0.31336424804058616,0.6059776006703468, 5.482702939874759,6.91072571252652,-1);
-  test1curly(10,55,ps,0.24987184178648592,0.40780786562063787, -1,2.0567381143999013,-1);
-  test1curly(10,36,ps,0.2657568235453367,0.44184285847891247, -1,2.448113766254228,-1);
+  test1curly(0,28.25,ps,times,0.761013024660324,1.039062329093344, 2.8739179158024846,3.238467135241204,-1);
+  test1curly(10,0,ps,times,M_PI/10,M_PI/5, 5.55135950399001,7.100728753904528,-1);
+  test1curly(10,0.4,ps,times,0.31336424804058616,0.6059776006703468, 5.482702939874759,6.91072571252652,-1);
+  test1curly(10,55,ps,times,0.24987184178648592,0.40780786562063787, -1,2.0567381143999013,-1);
+  test1curly(10,36,ps,times,0.2657568235453367,0.44184285847891247, -1,2.448113766254228,-1);
+  cout<<ldecimal(1e3*times[1]/times[0],0.01)<<" µs per curly test\n";
+  cout<<ldecimal(1e3*times[2]/times[0],0.01)<<" µs per too curly test\n";
 }
 
 void testcurvefit()
