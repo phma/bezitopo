@@ -70,8 +70,8 @@ using namespace std;
 #define MAXTOTCUR 0.05
 #define MAXTOTCLO 0.01
 // When computing area, if the curve exceeds either of these, it will split it.
-#define CURLTEST 5
-// Number of points to try in the too curly test
+#define CURLTEST 8
+// Number of points to try in the too curly test. 2 doesn't work, but 4 may.
 vector<int> cornuhisto;
 
 xy cornu(double t)
