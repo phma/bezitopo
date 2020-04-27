@@ -2773,6 +2773,13 @@ void test1curly(double curvature,double clothance,PostScript &ps,array<int,3> &t
   s=spiralarc(xyz(0,0,0),curvature,clothance,0,-maxLength/2,maxLength/2);
   br.include(s.getstart()); // Including the whole curve would take too long
   br.include(s.getend());   // because it has many spiral turns.
+  if (br.left()<-100 || br.right()>100 || br.bottom()<-100 || br.top()>100)
+  { // Running under Valgrind results in huge numbers
+    br.clear();
+    cerr<<"Huge bounds, boundrect truncated\n";
+    br.include(xy(-5,-4.3));
+    br.include(xy(5,4.3));
+  }
   ps.startpage();
   ps.setscale(br);
   ps.spline(s.approx3d(0.001/ps.getscale()));
