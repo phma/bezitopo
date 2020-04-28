@@ -167,6 +167,7 @@ xy cornu(double t,double curvature,double clothance)
     cornuhisto.resize(i+1);
   cornuhisto[i]++;*/
   precision=nextafterl(bigpart,2*bigpart)-bigpart;
+  // precision is 0 in Valgrind. https://bugs.kde.org/show_bug.cgi?id=197915
   //printf("precision %e\n",precision);
   if (i>=MAXITER-1 && precision<=1e-6)
     cerr<<"cornu needs more iterations"<<endl;
