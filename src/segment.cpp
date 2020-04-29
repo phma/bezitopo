@@ -538,6 +538,72 @@ bool segment::hasProperty(int prop)
          (prop>=PROP_STARTPOINT && prop<=PROP_ENDPOINT);
 }
 
+int segment::getIntProperty(int prop)
+{
+  int ret=0;
+  switch (prop)
+  {
+    case PROP_DELTA:
+      ret=getdelta();
+      break;
+    case PROP_DELTA2:
+      ret=getdelta2();
+      break;
+  }
+  return ret;
+}
+
+double segment::getDoubleProperty(int prop)
+{
+  double ret=NAN;
+  switch (prop)
+  {
+    case PROP_LENGTH:
+      ret=length();
+      break;
+    case PROP_DELTA:
+      ret=bintorad(getdelta()); // TODO for spiralarcs, there should be a real delta method
+      break;
+    case PROP_DELTA2:
+      ret=bintorad(getdelta2());
+      break;
+  }
+  return ret;
+}
+
+xy segment::getXyProperty(int prop)
+{
+  xy ret=nanxy;
+  switch (prop)
+  {
+    case PROP_CENTER:
+      ret=center();
+      break;
+    case PROP_MIDPOINT_XY:
+      ret=midpoint();
+      break;
+  }
+  return ret;
+}
+
+xyz segment::getXyzProperty(int prop)
+{
+  xyz ret=nanxyz;
+  switch (prop)
+  {
+    case PROP_STARTPOINT:
+      ret=start;
+      break;
+    case PROP_ENDPOINT:
+      ret=end;
+      break;
+    case PROP_MIDPOINT_XYZ:
+      ret=midpoint();
+      break;
+  }
+  return ret;
+}
+
 void segment::writeXml(ofstream &ofile)
 {
   ofile<<"<segment c1=\""<<ldecimal(control1)<<"\" c2=\""<<ldecimal(control2)<<"\">";

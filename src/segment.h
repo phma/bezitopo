@@ -162,6 +162,10 @@ public:
   friend class arc;
   friend class spiralarc;
   virtual bool hasProperty(int prop);
+  virtual int getIntProperty(int prop);
+  virtual double getDoubleProperty(int prop);
+  virtual xy getXyProperty(int prop);
+  virtual xyz getXyzProperty(int prop);
   virtual void writeXml(std::ofstream &ofile);
 };
 

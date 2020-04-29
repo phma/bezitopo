@@ -2414,12 +2414,18 @@ void testspiralarc()
 
 void testproperty()
 {
+  int iprop;
+  double dprop;
+  xy xyprop;
+  xyz xyzprop;
   xyz a(0,0,0),b(3,4,1);
   segment p(a,b);
   arc q(a,b);
   spiralarc r(a,b);
   tassert(p.hasProperty(PROP_LENGTH));
-  cout<<p.getDoubleProperty(PROP_LENGTH)<<endl;
+  dprop=p.getDoubleProperty(PROP_LENGTH);
+  cout<<"p's length is "<<dprop<<endl;
+  tassert(dprop==5);
 }
 
 void spiralmicroscope(segment *a,double aalong,segment *b,double balong,string fname,int scale=1)
