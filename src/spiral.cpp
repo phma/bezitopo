@@ -374,6 +374,14 @@ xyz spiralarc::station(double along) const
   return xyz(turn(relpos,midbear)+mid,elev(along));
 }
 
+xy spiralarc::center()
+/* The center of a spiralarc is the center of the circle that osculates its midpoint.
+ * Thus turning an arc into a spiralarc does not change its center.
+ */
+{
+  return mid+cossin(midbear+DEG90)/cur;
+}
+
 double spiralarc::sthrow()
 {
   Circle startCircle=osculatingCircle(0),endCircle=osculatingCircle(len);

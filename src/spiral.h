@@ -3,7 +3,7 @@
 /* spiral.h - Cornu or Euler spirals                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2019 Pierre Abbat.
+/* Copyright 2012,2014-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -106,6 +106,7 @@ public:
     return clo;
   }
   virtual xyz station(double along) const;
+  virtual xy center();
   virtual double sthrow();
   /* "throw" is a reserved word.
    * The throw is the minimum distance between the circles (one of which may be a line)
