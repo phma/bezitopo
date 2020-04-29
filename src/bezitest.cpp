@@ -2412,6 +2412,16 @@ void testspiralarc()
   tassert(!kmlarc.in(kmlpnt));
 }
 
+void testproperty()
+{
+  xyz a(0,0,0),b(3,4,1);
+  segment p(a,b);
+  arc q(a,b);
+  spiralarc r(a,b);
+  tassert(p.hasProperty(PROP_LENGTH));
+  cout<<p.getDoubleProperty(PROP_LENGTH)<<endl;
+}
+
 void spiralmicroscope(segment *a,double aalong,segment *b,double balong,string fname,int scale=1)
 {
   int i,alim,blim;
@@ -7930,6 +7940,8 @@ int main(int argc, char *argv[])
     testspiral();
   if (shoulddo("spiralarc"))
     testspiralarc(); // 10.5 s
+  if (shoulddo("property"))
+    testproperty();
   if (shoulddo("cogospiral"))
     testcogospiral();
   if (shoulddo("curly"))
