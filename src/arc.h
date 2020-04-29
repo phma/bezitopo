@@ -71,7 +71,7 @@ public:
   double length() const;
   virtual xyz station(double along) const;
   virtual int bearing(double along) const;
-  xy center();
+  virtual xy center();
   virtual bool isCurly();
   virtual bool isTooCurly();
   void split(double along,arc &a,arc &b);

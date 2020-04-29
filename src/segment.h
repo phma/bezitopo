@@ -125,7 +125,7 @@ public:
   {
     return 0;
   }
-  xy center();
+  virtual xy center();
   xyz midpoint() const;
   bcir boundCircle() const;
   Circle osculatingCircle(double along) const;
