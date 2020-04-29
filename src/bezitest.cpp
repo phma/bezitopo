@@ -2436,6 +2436,18 @@ void testproperty()
   dprop=r.getDoubleProperty(PROP_LENGTH);
   cout<<"r's length is "<<dprop<<endl;
   tassert(fabs(dprop-5.139)<1e-3);
+  tassert(p.hasProperty(PROP_CENTER));
+  xyprop=p.getXyProperty(PROP_CENTER);
+  cout<<"p's center is ("<<xyprop.getx()<<','<<xyprop.gety()<<")\n";
+  tassert(xyprop.isnan());
+  tassert(q.hasProperty(PROP_CENTER));
+  xyprop=q.getXyProperty(PROP_CENTER);
+  cout<<"q's center is ("<<xyprop.getx()<<','<<xyprop.gety()<<")\n";
+  //tassert(xyprop.isnan());
+  tassert(r.hasProperty(PROP_CENTER));
+  xyprop=r.getXyProperty(PROP_CENTER);
+  cout<<"r's center is ("<<xyprop.getx()<<','<<xyprop.gety()<<")\n";
+  tassert(xyprop.isnan());
 }
 
 void spiralmicroscope(segment *a,double aalong,segment *b,double balong,string fname,int scale=1)
