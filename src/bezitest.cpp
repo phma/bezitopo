@@ -2423,7 +2423,7 @@ void testproperty()
   arc q(a,b);
   spiralarc r(a,b);
   q.setdelta(DEG60,0);
-  r.setdelta(0,DEG60);
+  r.setdelta(DEG30,DEG60);
   tassert(p.hasProperty(PROP_LENGTH));
   dprop=p.getDoubleProperty(PROP_LENGTH);
   cout<<"p's length is "<<dprop<<endl;
@@ -2435,7 +2435,7 @@ void testproperty()
   tassert(r.hasProperty(PROP_LENGTH));
   dprop=r.getDoubleProperty(PROP_LENGTH);
   cout<<"r's length is "<<dprop<<endl;
-  tassert(fabs(dprop-5.139)<1e-3);
+  tassert(fabs(dprop-5.196)<1e-3);
   tassert(p.hasProperty(PROP_CENTER));
   xyprop=p.getXyProperty(PROP_CENTER);
   cout<<"p's center is ("<<xyprop.getx()<<','<<xyprop.gety()<<")\n";
