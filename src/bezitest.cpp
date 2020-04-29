@@ -2436,6 +2436,18 @@ void testproperty()
   dprop=r.getDoubleProperty(PROP_LENGTH);
   cout<<"r's length is "<<dprop<<endl;
   tassert(fabs(dprop-5.196)<1e-3);
+  tassert(p.hasProperty(PROP_RADIUS));
+  dprop=p.getDoubleProperty(PROP_RADIUS);
+  cout<<"p's radius is "<<dprop<<endl;
+  tassert(std::isnan(dprop));
+  tassert(q.hasProperty(PROP_RADIUS));
+  dprop=q.getDoubleProperty(PROP_RADIUS);
+  cout<<"q's radius is "<<dprop<<endl;
+  tassert(dprop==5);
+  tassert(r.hasProperty(PROP_RADIUS));
+  dprop=r.getDoubleProperty(PROP_RADIUS);
+  cout<<"r's radius is "<<dprop<<endl;
+  //tassert(std::isnan(dprop));
   tassert(p.hasProperty(PROP_CENTER));
   xyprop=p.getXyProperty(PROP_CENTER);
   cout<<"p's center is ("<<xyprop.getx()<<','<<xyprop.gety()<<")\n";
