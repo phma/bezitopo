@@ -2448,6 +2448,30 @@ void testproperty()
   xyprop=r.getXyProperty(PROP_CENTER);
   cout<<"r's center is ("<<xyprop.getx()<<','<<xyprop.gety()<<")\n";
   tassert(dist(xyprop,xy(-4.383,9.61))<1e-3);
+  tassert(p.hasProperty(PROP_DELTA));
+  iprop=p.getIntProperty(PROP_DELTA);
+  cout<<"p's delta is "<<bintodeg(iprop)<<endl;
+  tassert(iprop==0);
+  tassert(q.hasProperty(PROP_DELTA));
+  iprop=q.getIntProperty(PROP_DELTA);
+  cout<<"q's delta is "<<bintodeg(iprop)<<endl;
+  tassert(iprop==DEG60);
+  tassert(r.hasProperty(PROP_DELTA));
+  iprop=r.getIntProperty(PROP_DELTA);
+  cout<<"r's delta is "<<bintodeg(iprop)<<endl;
+  tassert(iprop==DEG30);
+  tassert(p.hasProperty(PROP_DELTA2));
+  iprop=p.getIntProperty(PROP_DELTA2);
+  cout<<"p's delta2 is "<<bintodeg(iprop)<<endl;
+  tassert(iprop==0);
+  tassert(q.hasProperty(PROP_DELTA2));
+  iprop=q.getIntProperty(PROP_DELTA2);
+  cout<<"q's delta2 is "<<bintodeg(iprop)<<endl;
+  tassert(iprop==0);
+  tassert(r.hasProperty(PROP_DELTA2));
+  iprop=r.getIntProperty(PROP_DELTA2);
+  cout<<"r's delta2 is "<<bintodeg(iprop)<<endl;
+  tassert(abs(iprop-DEG60)<3); // it's actually 0x15555553
 }
 
 void spiralmicroscope(segment *a,double aalong,segment *b,double balong,string fname,int scale=1)
