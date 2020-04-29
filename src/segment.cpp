@@ -561,6 +561,9 @@ double segment::getDoubleProperty(int prop)
     case PROP_LENGTH:
       ret=length();
       break;
+    case PROP_RADIUS:
+      ret=radius(length()/2);
+      break;
     case PROP_DELTA:
       ret=bintorad(getdelta()); // TODO for spiralarcs, there should be a real delta method
       break;

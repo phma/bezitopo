@@ -2439,15 +2439,15 @@ void testproperty()
   tassert(p.hasProperty(PROP_RADIUS));
   dprop=p.getDoubleProperty(PROP_RADIUS);
   cout<<"p's radius is "<<dprop<<endl;
-  tassert(std::isnan(dprop));
+  tassert(std::isinf(dprop));
   tassert(q.hasProperty(PROP_RADIUS));
   dprop=q.getDoubleProperty(PROP_RADIUS);
   cout<<"q's radius is "<<dprop<<endl;
-  tassert(dprop==5);
+  tassert(fabs(dprop-5)<1e-6); // roundoff error because 60° isn't exact
   tassert(r.hasProperty(PROP_RADIUS));
   dprop=r.getDoubleProperty(PROP_RADIUS);
   cout<<"r's radius is "<<dprop<<endl;
-  //tassert(std::isnan(dprop));
+  tassert(fabs(dprop-9.923)<1e-3);
   tassert(p.hasProperty(PROP_CENTER));
   xyprop=p.getXyProperty(PROP_CENTER);
   cout<<"p's center is ("<<xyprop.getx()<<','<<xyprop.gety()<<")\n";
