@@ -3,7 +3,7 @@
 /* angle.h - angles as binary fractions of rotation   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2019 Pierre Abbat.
+/* Copyright 2012,2014-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -104,6 +104,7 @@ double gontorad(double angle);
 #define FURMAN1 32768
 #define MIN1 99421
 #define DEG1 5965232
+#define DEG15 0x05555555
 #define AT0512 0x80ae90e
 // AT0512 is arctangent of 5/12, 22.619865°
 #define DEG30 0x0aaaaaab

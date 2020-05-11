@@ -573,6 +573,12 @@ double segment::getDoubleProperty(int prop)
     case PROP_DELTA2:
       ret=bintorad(getdelta2());
       break;
+    case PROP_START_TANGENT:
+      ret=tangentLength(START);
+      break;
+    case PROP_END_TANGENT:
+      ret=tangentLength(END);
+      break;
   }
   return ret;
 }

@@ -2496,6 +2496,30 @@ void testproperty()
   iprop=r.getIntProperty(PROP_DELTA2);
   cout<<"r's delta2 is "<<bintodeg(iprop)<<endl;
   tassert(abs(iprop-DEG60)<3); // it's actually 0x15555553
+  tassert(p.hasProperty(PROP_START_TANGENT));
+  dprop=p.getDoubleProperty(PROP_START_TANGENT);
+  cout<<"p's start tangent is "<<dprop<<endl;
+  tassert(dprop==2.5);
+  tassert(q.hasProperty(PROP_START_TANGENT));
+  dprop=q.getDoubleProperty(PROP_START_TANGENT);
+  cout<<"q's start tangent is "<<dprop<<endl;
+  tassert(fabs(dprop-5*M_SQRT_1_3)<1e-6);
+  tassert(r.hasProperty(PROP_START_TANGENT));
+  dprop=r.getDoubleProperty(PROP_START_TANGENT);
+  cout<<"r's start tangent is "<<dprop<<endl;
+  tassert(fabs(dprop-sqrt(50))<1e-6);
+  tassert(p.hasProperty(PROP_END_TANGENT));
+  dprop=p.getDoubleProperty(PROP_END_TANGENT);
+  cout<<"p's end tangent is "<<dprop<<endl;
+  tassert(dprop==2.5);
+  tassert(q.hasProperty(PROP_END_TANGENT));
+  dprop=q.getDoubleProperty(PROP_END_TANGENT);
+  cout<<"q's end tangent is "<<dprop<<endl;
+  tassert(fabs(dprop-5*M_SQRT_1_3)<1e-6);
+  tassert(r.hasProperty(PROP_END_TANGENT));
+  dprop=r.getDoubleProperty(PROP_END_TANGENT);
+  cout<<"r's end tangent is "<<dprop<<endl;
+  tassert(fabs(dprop+5*sin(DEG15)/sin(DEG30))<1e-6);
 }
 
 void spiralmicroscope(segment *a,double aalong,segment *b,double balong,string fname,int scale=1)
