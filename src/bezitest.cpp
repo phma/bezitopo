@@ -2520,6 +2520,18 @@ void testproperty()
   dprop=r.getDoubleProperty(PROP_END_TANGENT);
   cout<<"r's end tangent is "<<dprop<<endl;
   tassert(fabs(dprop+5*sin(DEG15)/sin(DEG30))<1e-6);
+  tassert(p.hasProperty(PROP_THROW));
+  dprop=p.getDoubleProperty(PROP_THROW);
+  cout<<"p's throw is "<<dprop<<endl;
+  tassert(dprop==0);
+  tassert(q.hasProperty(PROP_THROW));
+  dprop=q.getDoubleProperty(PROP_THROW);
+  cout<<"q's throw is "<<dprop<<endl;
+  tassert(dprop==0);
+  tassert(r.hasProperty(PROP_THROW));
+  dprop=r.getDoubleProperty(PROP_THROW);
+  cout<<"r's throw is "<<dprop<<endl;
+  tassert(fabs(dprop-1.124)<1e-3);
 }
 
 void spiralmicroscope(segment *a,double aalong,segment *b,double balong,string fname,int scale=1)

@@ -579,6 +579,9 @@ double segment::getDoubleProperty(int prop)
     case PROP_END_TANGENT:
       ret=tangentLength(END);
       break;
+    case PROP_THROW:
+      ret=sthrow();
+      break;
   }
   return ret;
 }
