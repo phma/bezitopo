@@ -59,6 +59,8 @@ public:
   int getCurrentLayer();
   int size();
   int insert(drawobj *obj);
+  void erase(drawobj *obj); // These do not check for references,
+  void erase(int handle);   // so they can leave dangling references.
   objrec operator[](int handle);
   int findHandle(drawobj *obj);
   std::vector<int> referrers(int handle);

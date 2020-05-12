@@ -110,6 +110,26 @@ int ObjectList::insert(drawobj *obj)
   }
 }
 
+void ObjectList::erase(drawobj *obj)
+{
+  if (reverse.count(obj))
+  {
+    int handle=reverse[obj];
+    reverse.erase(obj);
+    forward.erase(handle);
+  }
+}
+
+void ObjectList::erase(int handle)
+{
+  if (forward.count(handle))
+  {
+    objrec *rec=&forward[handle];
+    reverse.erase(rec->obj);
+    forward.erase(handle);
+  }
+}
+
 objrec ObjectList::operator[](int handle)
 /* forward[handle] would insert a new objrec into forward.
  * This returns an empty objrec, but does not insert it.
