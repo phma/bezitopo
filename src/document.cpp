@@ -3,7 +3,7 @@
 /* document.cpp - main document class                 */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2019 Pierre Abbat.
+/* Copyright 2015-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -94,13 +94,13 @@ int document::writepenzd(string fname)
 void document::addobject(drawobj *obj)
 // The drawobj must be created with new; it will be destroyed with delete.
 {
-  if (!layers.isLayer(objlist.getCurrentLayer()))
+  if (!layers.isLayer(modelSpace.getCurrentLayer()))
   {
-    objlist.setCurrentLayer(0);
+    modelSpace.setCurrentLayer(0);
     if (!layers.isLayer(0))
       layers.newLayer(0);
   }
-  objlist.insert(obj);
+  modelSpace.insert(obj);
 }
 
 void document::writeXml(ofstream &ofile)
@@ -122,7 +122,7 @@ void document::changeOffset (xyz newOffset)
   int i;
   for (i=0;i<pl.size();i++)
     pl[i].roscat(newOffset,0,1,offset); // FIXME: roscat takes xy;
-  for (i=0;i<objlist.size();i++)
-    objlist[i].obj->roscat(newOffset,0,1,offset); // the z has to be adjusted elsewise.
+  for (i=0;i<modelSpace.size();i++)
+    modelSpace[i].obj->roscat(newOffset,0,1,offset); // the z has to be adjusted elsewise.
   offset=newOffset;
 }
