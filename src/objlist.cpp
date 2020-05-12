@@ -3,7 +3,7 @@
 /* objlist.cpp - list of drawing objects              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2018 Pierre Abbat.
+/* Copyright 2015,2018,2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -149,6 +149,15 @@ int ObjectList::findHandle(drawobj *obj)
     return reverse[obj];
   else
     return -1;
+}
+
+vector<int> ObjectList::allHandles()
+{
+  vector<int> ret;
+  map<int,objrec>::iterator i;
+  for (i=forward.begin();i!=forward.end();++i)
+    ret.push_back(i->first);
+  return ret;
 }
 
 vector<int> ObjectList::referrers(int handle)

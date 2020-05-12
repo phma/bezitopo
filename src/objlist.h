@@ -62,6 +62,7 @@ public:
   void erase(drawobj *obj); // These do not check for references,
   void erase(int handle);   // so they can leave dangling references.
   objrec operator[](int handle);
+  std::vector<int> allHandles();
   int findHandle(drawobj *obj);
   std::vector<int> referrers(int handle);
 };
