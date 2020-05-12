@@ -41,6 +41,8 @@ public:
   drawobj *obj;
   unsigned short layr,ltype,colr,thik;
   std::vector<int> references; // handles of objects that this object refers to
+  objrec();
+  ~objrec();
   unsigned short getlinetype(document *doc);
   unsigned short getcolor(document *doc);
   unsigned short getthickness(document *doc);

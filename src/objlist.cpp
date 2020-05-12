@@ -31,6 +31,17 @@
 
 using namespace std;
 
+objrec::objrec()
+{
+  obj=nullptr;
+}
+
+objrec::~objrec()
+{
+  if (obj)
+    free(obj);
+}
+
 unsigned short objrec::getlinetype(document *doc)
 {
   if (ltype==SAMELINETYPE)
