@@ -2543,6 +2543,13 @@ void testobjlist()
   // Draw the four pipes that monument the boundary
   pCircle=new Circle(xy(335179.675,186270.869),1);
   swPipe=doc.modelSpace.insert(pCircle);
+  pCircle=new Circle(xy(335120.697,186336.186),1);
+  nwPipe=doc.modelSpace.insert(pCircle);
+  pCircle=new Circle(xy(335245.390677016,186372.836932806),1);
+  nePipe=doc.modelSpace.insert(pCircle);
+  pCircle=new Circle(xy(335296.37675115,186286.636995527),1);
+  sePipe=doc.modelSpace.insert(pCircle);
+  
 }
 
 void spiralmicroscope(segment *a,double aalong,segment *b,double balong,string fname,int scale=1)
