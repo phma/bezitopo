@@ -2422,6 +2422,7 @@ void testproperty()
   segment p(a,b);
   arc q(a,b);
   spiralarc r(a,b);
+  Circle cir(a,M_SQRT2),lin(b,AT34);
   q.setdelta(DEG60,0);
   r.setdelta(DEG30,DEG60);
   tassert(p.hasProperty(PROP_LENGTH));
@@ -2436,6 +2437,10 @@ void testproperty()
   dprop=r.getDoubleProperty(PROP_LENGTH);
   cout<<"r's length is "<<dprop<<endl;
   tassert(fabs(dprop-5.196)<1e-3);
+  tassert(cir.hasProperty(PROP_LENGTH));
+  dprop=cir.getDoubleProperty(PROP_LENGTH);
+  cout<<"cir's length is "<<dprop<<endl;
+  //tassert(fabs(dprop-5.196)<1e-3);
   tassert(p.hasProperty(PROP_RADIUS));
   dprop=p.getDoubleProperty(PROP_RADIUS);
   cout<<"p's radius is "<<dprop<<endl;
