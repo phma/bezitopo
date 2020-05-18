@@ -153,7 +153,7 @@ public:
   double closest(xy topoint,double closesofar=INFINITY,bool offends=false);
   double dirbound(int angle,double boundsofar=INFINITY);
   virtual void split(double along,segment &a,segment &b);
-  bezier3d approx3d(double precision);
+  virtual bezier3d approx3d(double precision);
   virtual std::vector<drawingElement> render3d(double precision,int layer,int color,int width,int linetype);
   friend xy intersection (segment seg1,segment seg2);
   friend inttype intersection_type(segment seg1,segment seg2);

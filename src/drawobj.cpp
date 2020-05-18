@@ -3,7 +3,7 @@
 /* drawobj.cpp - drawing object base class            */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2019 Pierre Abbat.
+/* Copyright 2015-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -132,6 +132,11 @@ unsigned drawobj::hash()
 double drawobj::dirbound(int angle,double boundsofar)
 {
   return INFINITY;
+}
+
+bezier3d drawobj::approx3d(double precision)
+{
+  return bezier3d();
 }
 
 vector<drawingElement> drawobj::render3d(double precision,int layer,int color,int width,int linetype)

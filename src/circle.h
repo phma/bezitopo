@@ -3,7 +3,7 @@
 /* circle.h - circles, including lines                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017-2019 Pierre Abbat.
+/* Copyright 2017-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -50,7 +50,7 @@ public:
   virtual void roscat(xy tfrom,int ro,double sca,xy tto); // rotate, scale, translate
   virtual unsigned hash();
   virtual double dirbound(int angle,double boundsofar=INFINITY);
-  bezier3d approx3d(double precision);
+  virtual bezier3d approx3d(double precision);
   virtual std::vector<drawingElement> render3d(double precision,int layer,int color,int width,int linetype);
   virtual bool hasProperty(int prop);
   virtual void writeXml(std::ofstream &ofile);
