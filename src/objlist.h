@@ -25,6 +25,7 @@
 #ifndef OBJLIST_H
 #define OBJLIST_H
 #include <map>
+#include <memory>
 #include <vector>
 #include "drawobj.h"
 
@@ -38,7 +39,7 @@ class objrec
  */
 {
 public:
-  drawobj *obj;
+  std::shared_ptr<drawobj> obj;
   unsigned short layr,ltype,colr,thik;
   std::vector<int> references; // handles of objects that this object refers to
   objrec();

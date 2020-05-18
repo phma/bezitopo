@@ -2561,7 +2561,7 @@ void testobjlist()
   ps.startpage();
   handles=doc.modelSpace.allHandles();
   for (i=0;i<handles.size();i++)
-    br.include(doc.modelSpace[handles[i]].obj);
+    br.include(doc.modelSpace[handles[i]].obj.get());
   ps.setscale(br);
   for (i=0;i<handles.size();i++)
     ps.spline(doc.modelSpace[handles[i]].obj->approx3d(0.001/ps.getscale()));

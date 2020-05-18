@@ -33,13 +33,13 @@ using namespace std;
 
 objrec::objrec()
 {
-  obj=nullptr;
+  //obj=nullptr;
 }
 
 objrec::~objrec()
 {
-  if (obj)
-    free(obj);
+  //if (obj)
+    //free(obj);
 }
 
 unsigned short objrec::getlinetype(document *doc)
@@ -98,7 +98,7 @@ int ObjectList::insert(drawobj *obj)
       newhandle=forward.rbegin()->first+1;
     else
       newhandle=0;
-    forward[newhandle].obj=obj;
+    forward[newhandle].obj=shared_ptr<drawobj>(obj);
     forward[newhandle].layr=curlayer;
     forward[newhandle].ltype=SAMELINETYPE;
     forward[newhandle].colr=SAMECOLOR;
@@ -123,7 +123,7 @@ void ObjectList::erase(int handle)
   if (forward.count(handle))
   {
     objrec *rec=&forward[handle];
-    reverse.erase(rec->obj);
+    reverse.erase(rec->obj.get());
     forward.erase(handle);
   }
 }
