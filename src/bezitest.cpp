@@ -2540,6 +2540,10 @@ void testobjlist()
   segment *psegment;
   arc *parc;
   int swPipe,nwPipe,nePipe,sePipe;
+  PostScript ps;
+  BoundRect br;
+  int i;
+  vector<int> handles;
   // Draw the four pipes that monument the boundary
   pCircle=new Circle(xy(335179.675,186270.869),1);
   swPipe=doc.modelSpace.insert(pCircle);
@@ -2549,7 +2553,19 @@ void testobjlist()
   nePipe=doc.modelSpace.insert(pCircle);
   pCircle=new Circle(xy(335296.37675115,186286.636995527),1);
   sePipe=doc.modelSpace.insert(pCircle);
-  
+  // Output the drawing
+  ps.open("objlist.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  ps.setDoc(doc);
+  ps.startpage();
+  handles=doc.modelSpace.allHandles();
+  for (i=0;i<handles.size();i++)
+    br.include(doc.modelSpace[handles[i]].obj);
+  ps.setscale(br);
+  for (i=0;i<handles.size();i++)
+    ps.spline(doc.modelSpace[handles[i]].obj->approx3d(0.001/ps.getscale()));
+  ps.endpage();
 }
 
 void spiralmicroscope(segment *a,double aalong,segment *b,double balong,string fname,int scale=1)
