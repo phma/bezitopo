@@ -93,18 +93,16 @@ int ObjectList::insert(drawobj *obj)
     return reverse[obj];
   else
   {
-    objrec newobjrec;
     int newhandle;
-    newobjrec.obj=obj;
-    newobjrec.layr=curlayer;
-    newobjrec.ltype=SAMELINETYPE;
-    newobjrec.colr=SAMECOLOR;
-    newobjrec.thik=SAMEWIDTH;
     if (reverse.size())
       newhandle=forward.rbegin()->first+1;
     else
       newhandle=0;
-    forward[newhandle]=newobjrec;
+    forward[newhandle].obj=obj;
+    forward[newhandle].layr=curlayer;
+    forward[newhandle].ltype=SAMELINETYPE;
+    forward[newhandle].colr=SAMECOLOR;
+    forward[newhandle].thik=SAMEWIDTH;
     reverse[obj]=newhandle;
     return newhandle;
   }
