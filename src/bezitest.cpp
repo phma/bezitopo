@@ -2441,6 +2441,10 @@ void testproperty()
   dprop=cir.getDoubleProperty(PROP_LENGTH);
   cout<<"cir's length is "<<dprop<<endl;
   tassert(fabs(dprop-M_SQRT2*2*M_PI)<1e-3);
+  tassert(lin.hasProperty(PROP_LENGTH));
+  dprop=lin.getDoubleProperty(PROP_LENGTH);
+  cout<<"lin's length is "<<dprop<<endl;
+  tassert(std::isinf(dprop));
   tassert(p.hasProperty(PROP_RADIUS));
   dprop=p.getDoubleProperty(PROP_RADIUS);
   cout<<"p's radius is "<<dprop<<endl;
