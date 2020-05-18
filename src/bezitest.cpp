@@ -2534,6 +2534,17 @@ void testproperty()
   tassert(fabs(dprop-1.124)<1e-3);
 }
 
+void testobjlist()
+{
+  Circle *pCircle;
+  segment *psegment;
+  arc *parc;
+  int swPipe,nwPipe,nePipe,sePipe;
+  // Draw the four pipes that monument the boundary
+  pCircle=new Circle(xy(335179.675,186270.869),1);
+  swPipe=doc.modelSpace.insert(pCircle);
+}
+
 void spiralmicroscope(segment *a,double aalong,segment *b,double balong,string fname,int scale=1)
 {
   int i,alim,blim;
@@ -8054,6 +8065,8 @@ int main(int argc, char *argv[])
     testspiralarc(); // 10.5 s
   if (shoulddo("property"))
     testproperty();
+  if (shoulddo("objlist"))
+    testobjlist();
   if (shoulddo("cogospiral"))
     testcogospiral();
   if (shoulddo("curly"))
