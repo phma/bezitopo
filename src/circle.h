@@ -53,6 +53,7 @@ public:
   virtual bezier3d approx3d(double precision);
   virtual std::vector<drawingElement> render3d(double precision,int layer,int color,int width,int linetype);
   virtual bool hasProperty(int prop);
+  virtual double getDoubleProperty(int prop);
   virtual void writeXml(std::ofstream &ofile);
 private:
   xy mid;

@@ -179,6 +179,24 @@ bool Circle::hasProperty(int prop)
          (prop>=PROP_CENTER && prop<=PROP_MIDPOINT_XY);
 }
 
+double Circle::getDoubleProperty(int prop)
+{
+  double ret=NAN;
+  switch (prop)
+  {
+    case PROP_LENGTH:
+      ret=length();
+      break;
+    case PROP_RADIUS:
+      ret=radius();
+      break;
+    case PROP_CURVATURE:
+      ret=curvature();
+      break;
+  }
+  return ret;
+}
+
 void Circle::writeXml(ofstream &ofile)
 {
   ofile<<"<circle bearing=\""<<bear<<"\" curvature=\""<<ldecimal(cur)<<"\">";
