@@ -197,6 +197,21 @@ double Circle::getDoubleProperty(int prop)
   return ret;
 }
 
+xy Circle::getXyProperty(int prop)
+{
+  xy ret=nanxy;
+  switch (prop)
+  {
+    case PROP_CENTER:
+      ret=center();
+      break;
+    case PROP_MIDPOINT_XY:
+      ret=mid;
+      break;
+  }
+  return ret;
+}
+
 void Circle::writeXml(ofstream &ofile)
 {
   ofile<<"<circle bearing=\""<<bear<<"\" curvature=\""<<ldecimal(cur)<<"\">";

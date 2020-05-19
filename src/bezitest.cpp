@@ -2484,7 +2484,7 @@ void testproperty()
   tassert(cir.hasProperty(PROP_CENTER));
   xyprop=cir.getXyProperty(PROP_CENTER);
   cout<<"cir's center is ("<<xyprop.getx()<<','<<xyprop.gety()<<")\n";
-  //tassert(dist(xyprop,xy(-4.383,9.61))<1e-3);
+  tassert(dist(xyprop,xy(0,0))<1e-3);
   tassert(p.hasProperty(PROP_DELTA));
   iprop=p.getIntProperty(PROP_DELTA);
   cout<<"p's delta is "<<bintodeg(iprop)<<endl;
