@@ -2557,6 +2557,7 @@ void testobjlist()
   segment *psegment;
   arc *parc;
   int swPipe,nwPipe,nePipe,sePipe;
+  int nBoundary,sBoundary,nCreek,sCreek,streetSegment,streetArc;
   PostScript ps;
   BoundRect br;
   int i;
@@ -2570,6 +2571,12 @@ void testobjlist()
   nePipe=doc.modelSpace.insert(pCircle);
   pCircle=new Circle(xy(335296.37675115,186286.636995527),1.);
   sePipe=doc.modelSpace.insert(pCircle);
+  psegment=new segment(xyz(doc.modelSpace[nwPipe].obj->getXyProperty(PROP_CENTER),270.295),
+		       xyz(doc.modelSpace[nePipe].obj->getXyProperty(PROP_CENTER),245.22541));
+  nBoundary=doc.modelSpace.insert(psegment);
+  psegment=new segment(xyz(doc.modelSpace[sePipe].obj->getXyProperty(PROP_CENTER),245.31991),
+		       xyz(doc.modelSpace[swPipe].obj->getXyProperty(PROP_CENTER),267.621));
+  sBoundary=doc.modelSpace.insert(psegment);
   // Output the drawing
   ps.open("objlist.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
