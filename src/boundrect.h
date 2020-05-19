@@ -24,6 +24,7 @@
 #ifndef BOUNDRECT_H
 #define BOUNDRECT_H
 class BoundRect;
+#include <memory>
 #include "pointlist.h"
 
 class BoundRect
@@ -40,6 +41,7 @@ public:
   int getOrientation();
   void include(xy obj);
   void include(drawobj *obj); // Expands the rectangle to include the object.
+  void include(std::shared_ptr<drawobj> obj);
 #ifdef POINTLIST
   void include(pointlist *obj);
 #endif

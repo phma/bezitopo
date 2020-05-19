@@ -22,6 +22,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include "boundrect.h"
+using namespace std;
 
 BoundRect::BoundRect()
 {
@@ -79,6 +80,12 @@ void BoundRect::include(drawobj *obj)
       bounds[i]=newbound;
   }
 }
+
+void BoundRect::include(shared_ptr<drawobj> obj)
+{
+  include(obj.get());
+}
+
 
 #ifdef POINTLIST
 void BoundRect::include(pointlist *obj)
