@@ -261,6 +261,29 @@ void segment::split(double along,segment &a,segment &b)
   vsplit(start.elev(),control1,control2,end.elev(),along/length(),a.control1,a.control2,dummy,b.control1,b.control2);
 }
 
+void segment::lengthen(int which,double along)
+/* Lengthens or shortens the segment, moving the specified end.
+ * Used for trimTwo and fillet (trimTwo is fillet with radius=0).
+ */
+{
+  double oldSlope,newSlope=slope(along);
+  xyz newEnd=station(along);
+  if (which==START)
+  {
+    oldSlope=endslope();
+    start=newEnd;
+    setslope(START,newSlope);
+    setslope(END,oldSlope);
+  }
+  if (which==END)
+  {
+    oldSlope=startslope();
+    end=newEnd;
+    setslope(END,newSlope);
+    setslope(START,oldSlope);
+  }
+}
+
 bezier3d segment::approx3d(double precision)
 /* Returns a chain of bezier3d splines which approximate the segment within precision.
  * Of course, for a segment, only one spline is needed and it is exact,
