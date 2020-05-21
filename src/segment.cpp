@@ -263,7 +263,7 @@ void segment::split(double along,segment &a,segment &b)
 
 void segment::lengthen(int which,double along)
 /* Lengthens or shortens the segment, moving the specified end.
- * Used for trimTwo and fillet (trimTwo is fillet with radius=0).
+ * Used for extend, trim, trimTwo, and fillet (trimTwo is fillet with radius=0).
  */
 {
   double oldSlope,newSlope=slope(along);

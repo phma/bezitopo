@@ -3,7 +3,7 @@
 /* arc.cpp - horizontal circular arcs                 */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2014,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012-2017,2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -171,6 +171,34 @@ void arc::split(double along,arc &a,arc &b)
   //printf("split: %f,%f\n",a.end.east(),a.end.north());
 }
 
+void arc::lengthen(int which,double along)
+/* Lengthens or shortens the arc, moving the specified end.
+ * Used for extend, trim, trimTwo, and fillet (trimTwo is fillet with radius=0).
+ */
+{
+  double oldSlope,newSlope=slope(along);
+  double oldLength=length();
+  double oldCurvature=curvature(0);
+  xyz newEnd=station(along);
+  if (which==START)
+  {
+    oldSlope=endslope();
+    start=newEnd;
+    delta=radtobin((oldLength-along)*oldCurvature);
+    setslope(START,newSlope);
+    setslope(END,oldSlope);
+  }
+  if (which==END)
+  {
+    oldSlope=startslope();
+    end=newEnd;
+    delta=radtobin(along*oldCurvature);
+    setslope(END,newSlope);
+    setslope(START,oldSlope);
+  }
+  rchordbearing=atan2(end.north()-start.north(),end.east()-start.east());
+}
+
 double arc::in(xy pnt)
 {
   int beardiff;
@@ -187,12 +215,6 @@ double arc::in(xy pnt)
     ret=(beardiff>0)+(beardiff>=0)-(beardiff>delta)-(beardiff>=delta);
   return ret;
 }
-
-/*xyz arc::midpoint()
-{
-  return xyz((xy(start)+xy(end))/2+turn90((xy(end)-xy(start))*2*tanquarter(delta)),
-             (start.elev()+end.elev()+3*(control1+control2))/8);
-}*/
 
 /* To find the nearest point on the arc to a point:
    If delta is less than 0x1000000 (2°48'45") in absolute value, use linear
