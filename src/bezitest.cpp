@@ -2558,6 +2558,7 @@ void testobjlist()
   arc *parc;
   int swPipe,nwPipe,nePipe,sePipe;
   int nBoundary,sBoundary,nCreek,sCreek,streetSegment,streetArc;
+  int temp0,temp1;
   PostScript ps;
   BoundRect br;
   int i;
@@ -2577,6 +2578,10 @@ void testobjlist()
   psegment=new segment(xyz(doc.modelSpace[sePipe].obj->getXyProperty(PROP_CENTER),245.31991),
 		       xyz(doc.modelSpace[swPipe].obj->getXyProperty(PROP_CENTER),267.621));
   sBoundary=doc.modelSpace.insert(psegment);
+  psegment=new segment(xyz(335255.626,186375.845,245.25),xyz(335283.721,186321.925,245.25));
+  nCreek=doc.modelSpace.insert(psegment);
+  psegment=new segment(xyz(335283.721,186321.925,245.25),xyz(335315.434,186275.696,245.25));
+  sCreek=doc.modelSpace.insert(psegment);
   // Output the drawing
   ps.open("objlist.ps");
   ps.setpaper(papersizes["A4 landscape"],0);
