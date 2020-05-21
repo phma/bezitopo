@@ -120,6 +120,7 @@ public:
   void _setcurvature(double startc,double endc);
   void _fixends(double p);
   void split(double along,spiralarc &a,spiralarc &b);
+  virtual void lengthen(int which,double along);
   void setdelta(int d,int s=0);
   virtual void setcurvature(double startc,double endc);
   bool valid()

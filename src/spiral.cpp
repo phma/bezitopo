@@ -528,6 +528,46 @@ void spiralarc::split(double along,spiralarc &a,spiralarc &b)
   //printf("split: %f,%f\n",a.end.east(),a.end.north());
 }
 
+void spiralarc::lengthen(int which,double along)
+/* Lengthens or shortens the spiralarc, moving the specified end.
+ * Used for extend, trim, trimTwo, and fillet (trimTwo is fillet with radius=0).
+ */
+{
+  double oldSlope,newSlope=slope(along);
+  xyz newEnd=station(along);
+  xy newMid;
+  double newCur;
+  int newMidbear;
+  if (which==START)
+  {
+    oldSlope=endslope();
+    newMid=station((along+len)/2);
+    newCur=curvature((along+len)/2);
+    newMidbear=bearing((along+len)/2);
+    len-=along;
+    mid=newMid;
+    cur=newCur;
+    midbear=newMidbear;
+    start=newEnd;
+    setslope(START,newSlope);
+    setslope(END,oldSlope);
+  }
+  if (which==END)
+  {
+    oldSlope=startslope();
+    newMid=station(along/2);
+    newCur=curvature(along/2);
+    newMidbear=bearing(along/2);
+    len=along;
+    mid=newMid;
+    cur=newCur;
+    midbear=newMidbear;
+    end=newEnd;
+    setslope(END,newSlope);
+    setslope(START,oldSlope);
+  }
+}
+
 void spiralarc::setdelta(int d,int s)
 /* Works as long as |d|<=300° and |s|<=253°.
  * For s outside that range, an arithmetic overflow of the expression
