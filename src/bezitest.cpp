@@ -260,6 +260,7 @@ void testddintersection(xy a,xy b,xy c)
 void testintersection()
 {
   xy a(1,0),b(-0.5,0.866),c(-0.5,-0.866),d(-0.5,0),e(0.25,-0.433),f(0.25,0.433),o(0,0);
+  xy g(4,0),h(0,3);
   int intype;
   test1intersection(a,b,d,e,o,NOINT);
   test1intersection(b,c,e,f,o,NOINT);
@@ -312,6 +313,7 @@ void testintersection()
   testddintersection(a,o,o); // This one it says is collinear,
   testddintersection(b,o,o); // but not these two, because
   testddintersection(c,o,o); // the bearing of o from o is 0.
+  testddintersection(o,g,h);
 }
 
 void test1in(xy p,xy a,xy b,xy c,double windnum)
