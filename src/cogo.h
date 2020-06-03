@@ -3,7 +3,7 @@
 /* cogo.h - coordinate geometry                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015,2017 Pierre Abbat.
+/* Copyright 2012,2015,2017,2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -42,6 +42,8 @@ xy intersection (xy a,xy c,xy b,xy d);
 //Intersection of lines ac and bd.
 xy intersection (xy a,int aBear,xy b,int bBear);
 //Bearing-bearing intersection.
+std::array<xy,2> intersection(xy a,double r,xy b,double s);
+//Distance-distance intersection.
 double missDistance (xy a,xy c,xy b,xy d);
 //Distance by which lines miss intersecting.
 inttype intersection_type(xy a,xy c,xy b,xy d);

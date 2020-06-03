@@ -148,6 +148,20 @@ xy intersection (xy a,int aBear,xy b,int bBear)
     return(xy(NAN,NAN));
 }
 
+array<xy,2> intersection(xy a,double r,xy b,double s)
+{
+  array<xy,2> ret;
+  double distab=dist(a,b);
+  int dirab=dir(a,b);
+  double offset=sqrt((distab+fabs(r+s))*(distab+fabs(r-s)))/2;
+  double aWeight=sqr(distab)+sqr(s)-sqr(r);
+  double bWeight=sqr(distab)+sqr(r)-sqr(s);
+  xy iMid=(a*aWeight+b*bWeight)/(aWeight+bWeight);
+  ret[0]=iMid+offset*cossin(dirab+DEG90);
+  ret[1]=iMid+offset*cossin(dirab-DEG90);
+  return ret;
+}
+
 #define setmaxabs(a,b) a=(fabs(b)>a)?fabs(b):a
 
 int intstype (xy a,xy c,xy b,xy d,double &maxarea,double &maxcoord)
