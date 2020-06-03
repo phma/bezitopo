@@ -235,6 +235,28 @@ void testbbintersection(xy a,xy b,xy c)
   }
 }
 
+void testddintersection(xy a,xy b,xy c)
+{
+  double aDist,bDist,len;
+  array<xy,2> inters;
+  aDist=dist(a,c);
+  bDist=dist(b,c);
+  len=dist(a,b);
+  inters=intersection(a,aDist,b,bDist);
+  if (aDist<bDist+len && bDist<aDist+len && len<aDist+bDist)
+  {
+    tassert(dist(c,inters[0])<1e-6 || dist(c,inters[1])<1e-6);
+    cout<<"c="<<ldecimal(c.getx())<<','<<ldecimal(c.gety());
+    cout<<" inters[0]="<<ldecimal(inters[0].getx())<<','<<ldecimal(inters[0].gety());
+    cout<<" inters[1]="<<ldecimal(inters[1].getx())<<','<<ldecimal(inters[1].gety())<<endl;
+  }
+  else
+  {
+    //tassert(inters.isnan());
+    cout<<"a, b, and c are collinear\n";
+  }
+}
+
 void testintersection()
 {
   xy a(1,0),b(-0.5,0.866),c(-0.5,-0.866),d(-0.5,0),e(0.25,-0.433),f(0.25,0.433),o(0,0);
@@ -275,6 +297,21 @@ void testintersection()
   testbbintersection(a,o,o); // This one it says is collinear,
   testbbintersection(b,o,o); // but not these two, because
   testbbintersection(c,o,o); // the bearing of o from o is 0.
+  testddintersection(a,b,c); // These are at 60° angles.
+  testddintersection(b,a,c);
+  testddintersection(b,c,a);
+  testddintersection(c,b,a);
+  testddintersection(c,a,b);
+  testddintersection(a,c,b);
+  testddintersection(a,o,d); // These are collinear.
+  testddintersection(a,d,o);
+  testddintersection(b,o,e);
+  testddintersection(b,e,o);
+  testddintersection(c,o,f);
+  testddintersection(c,f,o);
+  testddintersection(a,o,o); // This one it says is collinear,
+  testddintersection(b,o,o); // but not these two, because
+  testddintersection(c,o,o); // the bearing of o from o is 0.
 }
 
 void test1in(xy p,xy a,xy b,xy c,double windnum)
