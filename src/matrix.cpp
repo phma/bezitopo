@@ -3,7 +3,7 @@
 /* matrix.cpp - matrices                              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016-2019 Pierre Abbat.
+/* Copyright 2016-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -55,6 +55,15 @@ matrix::matrix(const matrix &b)
   columns=b.columns;
   entry=new double[rows*columns];
   memcpy(entry,b.entry,sizeof(double)*rows*columns);
+}
+
+matrix::matrix(matrix &&b)
+{
+  rows=b.rows;
+  columns=b.columns;
+  entry=b.entry;
+  b.rows=b.columns=0;
+  b.entry=nullptr;
 }
 
 matrix::~matrix()
@@ -119,6 +128,17 @@ matrix &matrix::operator=(const matrix &b)
     swap(rows,c.rows);
     swap(columns,c.columns);
     swap(entry,c.entry);
+  }
+  return *this;
+}
+
+matrix &matrix::operator=(matrix &&b)
+{
+  if (this!=&b)
+  {
+    swap(rows,b.rows);
+    swap(columns,b.columns);
+    swap(entry,b.entry);
   }
   return *this;
 }

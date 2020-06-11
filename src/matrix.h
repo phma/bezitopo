@@ -3,7 +3,7 @@
 /* matrix.h - matrices                                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016-2019 Pierre Abbat.
+/* Copyright 2016-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -51,6 +51,7 @@ public:
   matrix();
   matrix(unsigned r,unsigned c);
   matrix(const matrix &b);
+  matrix(matrix &&b);
   ~matrix();
   void resize(unsigned newrows,unsigned newcolumns);
   unsigned getrows()
@@ -65,6 +66,7 @@ public:
   void setidentity();
   void dump();
   matrix &operator=(const matrix &b);
+  matrix &operator=(matrix &&b);
   double *operator[](unsigned row);
   matrix operator+(matrix& b);
   matrix operator-(matrix& b);
