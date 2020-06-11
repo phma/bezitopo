@@ -3,7 +3,7 @@
 /* angle.cpp - angles as binary fractions of rotation */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2019 Pierre Abbat.
+/* Copyright 2012,2014-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -258,7 +258,7 @@ string radtoangle(double angle,int64_t unitp)
   double angmult,prec;
   string ret,unitsign;
   char digit[16];
-  int i,base,sign,dig;
+  int base,sign,dig;
   BasePrecision basep;
   if (!compatibleUnits(unitp,ANGLE))
     throw BeziExcept(badUnits);

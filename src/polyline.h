@@ -3,7 +3,7 @@
 /* polyline.h - polylines                             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2019 Pierre Abbat.
+/* Copyright 2012,2014-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -57,7 +57,7 @@ public:
   friend class polyarc;
   friend class polyspiral;
   polyline();
-  polyline(double e);
+  explicit polyline(double e);
   double getElevation()
   {
     return elevation;
@@ -96,7 +96,7 @@ protected:
 public:
   friend class polyspiral;
   polyarc();
-  polyarc(double e);
+  explicit polyarc(double e);
   polyarc(polyline &p);
   virtual unsigned hash();
   arc getarc(int i);
@@ -125,7 +125,7 @@ protected:
   bool curvy;
 public:
   polyspiral();
-  polyspiral(double e);
+  explicit polyspiral(double e);
   polyspiral(polyline &p);
   virtual unsigned hash();
   spiralarc getspiralarc(int i);

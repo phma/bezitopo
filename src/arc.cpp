@@ -267,7 +267,7 @@ double parseCurvature(string curString,Measure ms)
   bool isFoot;
   string hundredFeetString=ms.formatMeasurement(hundredFeet,LENGTH);
   int i;
-  double ret;
+  double ret=NAN;
   Measurement meas;
   meas.unit=0;
   for (i=0;i<hundredFeetString.length();i++)

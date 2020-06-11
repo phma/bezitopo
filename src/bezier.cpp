@@ -4,7 +4,7 @@
 /* For Bézier functions of one variable, see vcurve.cpp.*/
 /*                                                      */
 /********************************************************/
-/* Copyright 2012-2019 Pierre Abbat.
+/* Copyright 2012-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -64,9 +64,12 @@ triangle::triangle()
 {
   a=b=c=NULL;
   aneigh=bneigh=cneigh=NULL;
+  peri=sarea=0;
+  memset(gradmat,0,sizeof(gradmat));
 #ifndef FLATTRIANGLE
   memset(ctrl,0,sizeof(ctrl));
   nocubedir=INT_MAX;
+  totcritpointcount=0;
 #endif
 }
 
@@ -293,7 +296,6 @@ void triangle::setgradient(xy pnt,xy grad)
 // Sets the gradient at corner pnt to grad. If pnt is not a corner,
 // either sets the nearest corner or does nothing.
 {
-  int which;
   double crit;
   crit=1/(2.0*(1/dist(xy(*a),xy(*b))+1/dist(xy(*c),xy(*a))+1/dist(xy(*b),xy(*c))));
   grad/=3; // control points are 1/3 of the way along sides
@@ -561,8 +563,8 @@ int triangle::findnocubedir()
  * This uses Brent's root-finding algorithm.
  */
 {
-  int i,b,d,beg,mid,end;
-  double d3a45[4],begderiv,midderiv,endderiv,crit;
+  int i,b,d,beg,end;
+  double d3a45[4],begderiv,endderiv;
   brent br;
   //cout<<"findnocubedir ";
   for (i=0;i<4;i++)

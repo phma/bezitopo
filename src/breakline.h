@@ -3,7 +3,7 @@
 /* breakline.h - breaklines                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017 Pierre Abbat.
+/* Copyright 2017,2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -38,7 +38,7 @@ class Breakline0
 public:
   Breakline0();
   Breakline0(int a,int b);
-  Breakline0(std::vector<std::string> numbers); // can throw
+  explicit Breakline0(std::vector<std::string> numbers); // can throw
   bool isEmpty();
   bool isOpen();
   void normalize();

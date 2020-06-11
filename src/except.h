@@ -3,7 +3,7 @@
 /* except.h - exceptions                              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017-2018 Pierre Abbat.
+/* Copyright 2017-2018,2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -66,7 +66,7 @@ class BeziExcept: public QException
   Q_DECLARE_TR_FUNCTIONS(BeziExcept)
 public:
   BeziExcept(const BeziExcept &a);
-  BeziExcept(int num);
+  explicit BeziExcept(int num);
   int pointNumber[2];
   void raise() const
   {
