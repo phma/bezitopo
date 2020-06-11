@@ -37,7 +37,7 @@
 /* If true, outputs some extra drawing when approximating with five arcs
  * an east-west spiralarc with curvature from 0 to positive.
  */
-#define METHOD 3
+#define APX_METHOD 3
 /* Method 1: Adjust the length of each arc so that the sum of their displacements
  * equals the displacement of the spiralarc.
  * Method 2: Adjust the lengths of all but two of the arcs to minimize the squared
@@ -690,7 +690,7 @@ void showMethod12(spiralarc a,polyarc apx)
   //ps.spline(a.approx3d(0.01));
   for (i=0;i<apx.size();i++)
   {
-    if (METHOD==2 && (i==0 || i==apx.size()-1))
+    if (APX_METHOD==2 && (i==0 || i==apx.size()-1))
       ps.setcolor(0,0.7,0);
     else
       ps.setcolor(0,0,1);
@@ -735,14 +735,14 @@ polyarc manyArc(spiralarc a,int narcs)
   showThisMethod=SHOW_METHOD && narcs==5 && a.chordbearing()==0 && a.getdelta()>DEG30;
   if (showThisMethod)
     cout<<"This is the curve to show the method of\n";
-#if METHOD==1
+#if APX_METHOD==1
   polyarc ret;
   ret=manyArcUnadjusted(a,narcs);
   if (showThisMethod)
     showMethod12(a,ret);
   ret=adjustManyArc1(ret,a);
 #endif
-#if METHOD==2
+#if APX_METHOD==2
   polyarc ret;
   if (narcs>2)
   {
@@ -754,7 +754,7 @@ polyarc manyArc(spiralarc a,int narcs)
   else
     ret=twoArcs(a);
 #endif
-#if METHOD==3
+#if APX_METHOD==3
   polyarc ret;
   segment cubic=spiralToCubic(a);
   vector<segment> quads=manyQuad(cubic,narcs);
