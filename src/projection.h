@@ -140,7 +140,7 @@ class StereographicSphere: public Projection
 {
 public:
   StereographicSphere();
-  StereographicSphere(Quaternion Rotation);
+  explicit StereographicSphere(Quaternion Rotation);
   virtual latlong gridToLatlong(xy grid);
   virtual xyz gridToGeocentric(xy grid);
   virtual xy geocentricToGrid(xyz geoc);
@@ -178,7 +178,7 @@ class TransverseMercatorSphere: public Projection
 {
 public:
   TransverseMercatorSphere();
-  TransverseMercatorSphere(double Meridian,double Scale=1);
+  explicit TransverseMercatorSphere(double Meridian,double Scale=1);
   virtual latlong gridToLatlong(xy grid);
   virtual xyz gridToGeocentric(xy grid);
   virtual xy geocentricToGrid(xyz geoc);

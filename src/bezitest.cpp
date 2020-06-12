@@ -868,7 +868,7 @@ void testmaketin123()
   {
     doc.pl[1].maketin();
   }
-  catch(BeziExcept e)
+  catch(BeziExcept &e)
   {
     i=e.getNumber();
   }
@@ -880,7 +880,7 @@ void testmaketin123()
   {
     doc.pl[1].maketin();
   }
-  catch(BeziExcept e)
+  catch(BeziExcept &e)
   {
     i=e.getNumber();
   }
@@ -892,7 +892,7 @@ void testmaketin123()
   {
     doc.pl[1].maketin();
   }
-  catch(BeziExcept e)
+  catch(BeziExcept &e)
   {
     i=e.getNumber();
   }
@@ -914,7 +914,7 @@ void testmaketindouble()
   {
     doc.pl[1].maketin(psoutput?"double.ps":"",false);
   }
-  catch(BeziExcept e)
+  catch(BeziExcept &e)
   {
     i=e.getNumber();
   }
@@ -995,7 +995,7 @@ void testmaketinstraightrow()
   {
     doc.pl[1].maketin();
   }
-  catch(BeziExcept e)
+  catch(BeziExcept &e)
   {
     i=e.getNumber();
   }
@@ -1007,7 +1007,7 @@ void testmaketinstraightrow()
   {
     doc.pl[1].maketin();
   }
-  catch(BeziExcept e)
+  catch(BeziExcept &e)
   {
     i=e.getNumber();
   }
@@ -3066,7 +3066,7 @@ void testcurly()
   PostScript ps;
   array<int,3> times;
   ps.open("curly.ps");
-  times[0]=times[1]=times[3]=0;
+  times[0]=times[1]=times[2]=0;
   ps.setpaper(papersizes["A4 landscape"],0);
   ps.prolog();
   for (i=0;i<10;i++)
@@ -5990,18 +5990,18 @@ void testcontour()
   xyz offset;
   ContourInterval oneMeter(1,0,false),twoMeter(1,1,false),fiveMeter(1,2,false);
   ContourInterval oneFoot(0.3048,0,false),twoFoot(0.3048,1,false),fiveFoot(0.3048,2,false);
-  assert(oneMeter.mediumInterval()==1);
-  assert(twoMeter.mediumInterval()==2);
-  assert(fiveMeter.mediumInterval()==5);
-  assert(oneMeter.coarseInterval()==5);
-  assert(twoMeter.coarseInterval()==10);
-  assert(fiveMeter.coarseInterval()==20);
-  assert(oneFoot.mediumInterval()==0.3048);
-  assert(twoFoot.mediumInterval()==0.6096);
-  assert(fiveFoot.mediumInterval()==1.524);
-  assert(oneFoot.coarseInterval()==1.524);
-  assert(twoFoot.coarseInterval()==3.048);
-  assert(fiveFoot.coarseInterval()==6.096);
+  tassert(oneMeter.mediumInterval()==1);
+  tassert(twoMeter.mediumInterval()==2);
+  tassert(fiveMeter.mediumInterval()==5);
+  tassert(oneMeter.coarseInterval()==5);
+  tassert(twoMeter.coarseInterval()==10);
+  tassert(fiveMeter.coarseInterval()==20);
+  tassert(oneFoot.mediumInterval()==0.3048);
+  tassert(twoFoot.mediumInterval()==0.6096);
+  tassert(fiveFoot.mediumInterval()==1.524);
+  tassert(oneFoot.coarseInterval()==1.524);
+  tassert(twoFoot.coarseInterval()==3.048);
+  tassert(fiveFoot.coarseInterval()==6.096);
   offset=xyz(-1000000,-1500000,0); // This offset made a spike in contours[7].
   doc.makepointlist(1);
   doc.pl[1].clear();
@@ -8050,7 +8050,7 @@ void fuzz()
     {
       doc.readpnezd(args[2]);
     }
-    catch (BeziExcept e)
+    catch (BeziExcept &e)
     {
       cerr<<"Error "<<e.getNumber()<<endl;
     }
