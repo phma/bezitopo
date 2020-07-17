@@ -64,6 +64,7 @@ public:
   spiralarc(xyz kra,int sbear,double c1,double c2,double length,double famElev);
   spiralarc(xyz kra,xy mij,xyz fam,int mbear,double curvature,double clothance,double length);
   spiralarc(xyz pnt,double curvature,double clothance,int bear,double startLength,double endLength);
+  virtual int type();
   virtual double in(xy pnt);
   virtual xy pointOfIntersection();
   virtual double tangentLength(int which);

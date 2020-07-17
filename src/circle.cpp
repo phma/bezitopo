@@ -54,6 +54,11 @@ Circle::Circle(xy m,int b,double c)
   rbear=bintorad(bear);
 }
 
+int Circle::type()
+{
+  return OBJ_CIRCLE;
+}
+
 xy Circle::center() const
 {
   return mid+cossin(bear+DEG90)/cur;

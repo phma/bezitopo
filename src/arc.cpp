@@ -73,6 +73,11 @@ arc::arc(xyz kra,xyz fam,int d)
   rchordbearing=atan2(end.north()-start.north(),end.east()-start.east());
 }
 
+int arc::type()
+{
+  return OBJ_ARC;
+}
+
 void arc::setdelta(int d,int s) // s is for spirals and is ignored for circular arcs
 {
   delta=d;

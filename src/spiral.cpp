@@ -296,6 +296,11 @@ spiralarc::spiralarc(xyz pnt,double curvature,double clothance,int bear,double s
   control1=control2=pnt.elev();
 }
 
+int spiralarc::type()
+{
+  return OBJ_SPIRALARC;
+}
+
 spiralarc spiralarc::operator-() const
 {
   spiralarc ret(end,mid,start,midbear+DEG180,-cur,clo,len);

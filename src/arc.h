@@ -38,6 +38,7 @@ public:
   arc(xyz kra,xyz fam);
   arc(xyz kra,xyz mij,xyz fam);
   arc(xyz kra,xyz fam,int d);
+  virtual int type();
   virtual void setdelta(int d,int s=0);
   virtual void setcurvature(double startc,double endc);
   virtual double radius(double along) const

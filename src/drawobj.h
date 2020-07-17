@@ -63,6 +63,17 @@ unsigned memHash(void *mem,unsigned len,unsigned previous=0);
 #define PROP_ENDPOINT 0xc003
 #define PROP_STRINGVAL 0x2000
 
+#define OBJ_DRAWOBJ 0x0000
+#define OBJ_POINT 0x0100
+#define OBJ_SEGMENT 0x0200
+#define OBJ_ARC 0x0201
+#define OBJ_SPIRALARC 0x0202
+#define OBJ_POLYLINE 0x0300
+#define OBJ_POLYARC 0x0301
+#define OBJ_POLYSPIRAL 0x0302
+#define OBJ_ALIGNMENT 0x0400
+#define OBJ_CIRCLE 0x0500
+
 class bsph
 {
 public:
@@ -110,6 +121,7 @@ class drawobj
  */
 {
 public:
+  virtual int type();
   virtual bsph boundsphere();
   virtual bool hittest(hline hitline);
   virtual void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto)

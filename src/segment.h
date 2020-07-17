@@ -56,6 +56,7 @@ public:
   {
     return end;
   }
+  virtual int type();
   virtual bool operator==(const segment b) const;
   segment operator-() const;
   virtual double length() const;

@@ -58,6 +58,7 @@ public:
   friend class polyspiral;
   polyline();
   explicit polyline(double e);
+  virtual int type();
   double getElevation()
   {
     return elevation;
@@ -98,6 +99,7 @@ public:
   polyarc();
   explicit polyarc(double e);
   polyarc(polyline &p);
+  virtual int type();
   virtual unsigned hash();
   arc getarc(int i);
   virtual bezier3d approx3d(double precision);
@@ -127,6 +129,7 @@ public:
   polyspiral();
   explicit polyspiral(double e);
   polyspiral(polyline &p);
+  virtual int type();
   virtual unsigned hash();
   spiralarc getspiralarc(int i);
   virtual bezier3d approx3d(double precision);
@@ -179,6 +182,7 @@ protected:
   int zStationSegment(double along);
 public:
   alignment();
+  virtual int type();
   void clear();
   double startStation();
   double endStation();

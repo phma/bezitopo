@@ -101,6 +101,11 @@ unsigned memHash(void *mem,unsigned len,unsigned previous)
   return previous;
 }
 
+int drawobj::type()
+{
+  return OBJ_DRAWOBJ;
+}
+
 bsph drawobj::boundsphere()
 {
   bsph ret;

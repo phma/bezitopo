@@ -3,7 +3,7 @@
 /* polyline.cpp - polylines                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2019 Pierre Abbat.
+/* Copyright 2012,2014-2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -110,6 +110,21 @@ polyspiral::polyspiral(polyline &p)
     bearings[i]=midbearings[i];
   }
   curvy=false;
+}
+
+int polyline::type()
+{
+  return OBJ_POLYLINE;
+}
+
+int polyarc::type()
+{
+  return OBJ_POLYARC;
+}
+
+int polyspiral::type()
+{
+  return OBJ_POLYSPIRAL;
 }
 
 bool polyline::isopen()
@@ -1124,6 +1139,11 @@ void polyspiral::writeXml(ofstream &ofile)
     ofile<<delta2s[i];
   }
   ofile<<"</delta2s></polyspiral>"<<endl;
+}
+
+int alignment::type()
+{
+  return OBJ_ALIGNMENT;
 }
 
 void alignment::setVLength()
