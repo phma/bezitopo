@@ -3,7 +3,7 @@
 /* stl.cpp - stereolithography (3D printing) export   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2013,2015,2019 Pierre Abbat.
+/* Copyright 2013,2015,2019,2020 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -129,4 +129,6 @@ stltriangle::stltriangle(xyz A,xyz B,xyz C)
   a=A;
   b=B;
   c=C;
+  normal=cross(a-b,b-c);
+  normal.normalize();
 }
