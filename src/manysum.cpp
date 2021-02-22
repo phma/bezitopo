@@ -3,7 +3,7 @@
 /* manysum.cpp - add many numbers                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2019 Pierre Abbat.
+/* Copyright 2015,2016,2019,2021 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -28,14 +28,14 @@
 #include "manysum.h"
 using namespace std;
 
-int manysum::cnt=0;
+int manysum0::cnt=0;
 
-void manysum::clear()
+void manysum0::clear()
 {
   bucket.clear();
 }
 
-double manysum::total()
+double manysum0::total()
 {
   map<int,double>::iterator i;
   double t;
@@ -44,14 +44,14 @@ double manysum::total()
   return t;
 }
 
-void manysum::dump()
+void manysum0::dump()
 {
   map<int,double>::iterator i;
   for (i=bucket.begin();i!=bucket.end();i++)
     cout<<i->first<<' '<<i->second<<endl;
 }
 
-void manysum::prune()
+void manysum0::prune()
 {
   vector<int> delenda;
   int j;
@@ -63,7 +63,7 @@ void manysum::prune()
     bucket.erase(delenda[j]);
 }
 
-manysum& manysum::operator+=(double x)
+manysum0& manysum0::operator+=(double x)
 {
   int i=DBL_MAX_EXP+3,j=DBL_MAX_EXP+3;
   double d;
@@ -93,7 +93,7 @@ manysum& manysum::operator+=(double x)
   return *this;
 }
 
-manysum& manysum::operator-=(double x)
+manysum& manysum0::operator-=(double x)
 {
   int i=DBL_MAX_EXP+3,j=DBL_MAX_EXP+3;
   double d;

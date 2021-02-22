@@ -3,7 +3,7 @@
 /* manysum.h - add many numbers                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2018 Pierre Abbat.
+/* Copyright 2015,2016,2018,2021 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -42,7 +42,9 @@
  * See matrix.cpp and spiral.cpp for examples.
  */
 
-class manysum
+#define manysum manysum0
+
+class manysum0
 {
 private:
   std::map<int,double> bucket;
@@ -52,8 +54,8 @@ public:
   void prune();
   double total();
   void dump();
-  manysum& operator+=(double x);
-  manysum& operator-=(double x);
+  manysum0& operator+=(double x);
+  manysum0& operator-=(double x);
 };
 
 double pairwisesum(double *a,unsigned n);
