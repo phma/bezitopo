@@ -42,7 +42,7 @@
  * See matrix.cpp and spiral.cpp for examples.
  */
 
-#define manysum manysum0
+#define manysum manysum1
 
 class manysum0
 {
