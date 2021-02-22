@@ -29,97 +29,6 @@
 #include "manysum.h"
 using namespace std;
 
-int manysum0::cnt=0;
-
-void manysum0::clear()
-{
-  bucket.clear();
-}
-
-double manysum0::total()
-{
-  map<int,double>::iterator i;
-  double t;
-  for (t=0,i=bucket.begin();i!=bucket.end();i++)
-    t+=i->second;
-  return t;
-}
-
-void manysum0::dump()
-{
-  map<int,double>::iterator i;
-  for (i=bucket.begin();i!=bucket.end();i++)
-    cout<<i->first<<' '<<i->second<<endl;
-}
-
-void manysum0::prune()
-{
-  vector<int> delenda;
-  int j;
-  map<int,double>::iterator i;
-  for (i=bucket.begin();i!=bucket.end();i++)
-    if (i->second==0)
-      delenda.push_back(i->first);
-  for (j=0;j<delenda.size();j++)
-    bucket.erase(delenda[j]);
-}
-
-manysum0& manysum0::operator+=(double x)
-{
-  int i=DBL_MAX_EXP+3,j=DBL_MAX_EXP+3;
-  double d;
-  while (x!=0)
-  {
-    /* frexp(NAN) on Linux sets i to 0. On DragonFly BSD,
-     * it leaves i unchanged. This causes the program to hang
-     * if j>i. Setting it to DBL_MAX_EXP+5 insures that NAN
-     * uses a bucket separate from finite numbers.
-     */
-    if (std::isfinite(x))
-      frexp(x,&i);
-    else
-      i=DBL_MAX_EXP+5;
-    bucket[i]+=x;
-    frexp(d=bucket[i],&j);
-    if (j>i)
-    {
-      x=d;
-      bucket[i]=0;
-      if (((++cnt)&0xff)==0)
-	prune();
-    }
-    else
-      x=0;
-  }
-  return *this;
-}
-
-manysum0& manysum0::operator-=(double x)
-{
-  int i=DBL_MAX_EXP+3,j=DBL_MAX_EXP+3;
-  double d;
-  x=-x;
-  while (x!=0)
-  {
-    if (std::isfinite(x))
-      frexp(x,&i);
-    else
-      i=DBL_MAX_EXP+5;
-    bucket[i]+=x;
-    frexp(d=bucket[i],&j);
-    if (j>i)
-    {
-      x=d;
-      bucket[i]=0;
-      if (((++cnt)&0xff)==0)
-	prune();
-    }
-    else
-      x=0;
-  }
-  return *this;
-}
-
 double pairwisesum(double *a,unsigned n)
 {
   unsigned i,j,b;
@@ -208,12 +117,12 @@ long double pairwisesum(vector<long double> &a)
     return 0;
 }
 
-manysum1::manysum1()
+manysum::manysum()
 {
   clear();
 }
 
-void manysum1::clear()
+void manysum::clear()
 {
   count=0;
   memset(stage0,0,sizeof(stage0));
@@ -223,13 +132,13 @@ void manysum1::clear()
   memset(stage4,0,sizeof(stage4));
 }
 
-double manysum1::total()
+double manysum::total()
 {
   return pairwisesum(stage0,8192)+pairwisesum(stage1,8192)+pairwisesum(stage2,8192)+
 	 pairwisesum(stage3,8192)+pairwisesum(stage4,4096);
 }
 
-manysum1& manysum1::operator+=(double x)
+manysum& manysum::operator+=(double x)
 {
   stage0[count&8191]=x;
   if ((count&8191)==8191)
@@ -256,7 +165,7 @@ manysum1& manysum1::operator+=(double x)
   return *this;
 }
 
-manysum1& manysum1::operator-=(double x)
+manysum& manysum::operator-=(double x)
 {
   return operator+=(-x);
 }

@@ -42,39 +42,23 @@
  * See matrix.cpp and spiral.cpp for examples.
  */
 
-#define manysum manysum1
-
-class manysum0
-{
-private:
-  std::map<int,double> bucket;
-  static int cnt;
-public:
-  void clear();
-  void prune();
-  double total();
-  void dump();
-  manysum0& operator+=(double x);
-  manysum0& operator-=(double x);
-};
-
 double pairwisesum(double *a,unsigned n);
 double pairwisesum(std::vector<double> &a);
 long double pairwisesum(long double *a,unsigned n);
 long double pairwisesum(std::vector<long double> &a);
 
-class manysum1
+class manysum
 {
 private:
   size_t count;
   double stage0[8192],stage1[8192],stage2[8192],
          stage3[8192],stage4[4096];
 public:
-  manysum1();
+  manysum();
   void clear();
   double total();
-  manysum1& operator+=(double x);
-  manysum1& operator-=(double x);
+  manysum& operator+=(double x);
+  manysum& operator-=(double x);
 };
 
 #endif
