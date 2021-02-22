@@ -3,7 +3,7 @@
 /* bezitest.cpp - test program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2020 Pierre Abbat.
+/* Copyright 2012-2021 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -1928,7 +1928,6 @@ void testmanysum()
       summands.push_back(x);
     }
   }
-  ms.prune();
   forwardsum=ms.total();
   tassert(forwardsum==-negms.total());
   starttime.start();
@@ -1946,7 +1945,6 @@ void testmanysum()
       summands.push_back(x);
     }
   }
-  ms.prune();
   backwardsum=ms.total();
   starttime.start();
   pairbackwardsum=pairwisesum(summands);
@@ -1970,7 +1968,6 @@ void testmanysum()
     ms+=x;
     summands.push_back(x);
   }
-  ms.prune();
   forwardsum=ms.total();
   starttime.start();
   pairforwardsum=pairwisesum(summands);
@@ -1984,7 +1981,6 @@ void testmanysum()
     ms+=x;
     summands.push_back(x);
   }
-  ms.prune();
   backwardsum=ms.total();
   starttime.start();
   pairbackwardsum=pairwisesum(summands);

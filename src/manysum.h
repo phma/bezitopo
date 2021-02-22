@@ -72,9 +72,6 @@ private:
 public:
   manysum1();
   void clear();
-  void prune()
-  {
-  }
   double total();
   manysum1& operator+=(double x);
   manysum1& operator-=(double x);
