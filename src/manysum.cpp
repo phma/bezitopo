@@ -94,7 +94,7 @@ manysum0& manysum0::operator+=(double x)
   return *this;
 }
 
-manysum& manysum0::operator-=(double x)
+manysum0& manysum0::operator-=(double x)
 {
   int i=DBL_MAX_EXP+3,j=DBL_MAX_EXP+3;
   double d;
