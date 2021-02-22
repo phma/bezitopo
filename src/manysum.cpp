@@ -22,6 +22,7 @@
  * <http://www.gnu.org/licenses/>.
  */
 #include <cfloat>
+#include <cstring>
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -205,4 +206,57 @@ long double pairwisesum(vector<long double> &a)
     return pairwisesum(&a[0],a.size());
   else
     return 0;
+}
+
+manysum1::manysum1()
+{
+  clear();
+}
+
+void manysum1::clear()
+{
+  count=0;
+  memset(stage0,0,sizeof(stage0));
+  memset(stage1,0,sizeof(stage1));
+  memset(stage2,0,sizeof(stage2));
+  memset(stage3,0,sizeof(stage3));
+  memset(stage4,0,sizeof(stage4));
+}
+
+double manysum1::total()
+{
+  return pairwisesum(stage0,8192)+pairwisesum(stage1,8192)+pairwisesum(stage2,8192)+
+	 pairwisesum(stage3,8192)+pairwisesum(stage4,4096);
+}
+
+manysum1& manysum1::operator+=(double x)
+{
+  stage0[count&8191]=x;
+  if ((count&8191)==8191)
+  {
+    stage1[(count>>13)&8191]=pairwisesum(stage0,8192);
+    memset(stage0,0,sizeof(stage0));
+  }
+  if ((count&0x3ffffff)==0x3ffffff)
+  {
+    stage2[(count>>26)&8191]=pairwisesum(stage1,8192);
+    memset(stage1,0,sizeof(stage1));
+  }
+  if ((count&0x7fffffffff)==0x7fffffffff)
+  {
+    stage3[(count>>39)&8191]=pairwisesum(stage2,8192);
+    memset(stage2,0,sizeof(stage2));
+  }
+  if ((count&0xfffffffffffff)==0xfffffffffffff)
+  {
+    stage4[(count>>52)&8191]=pairwisesum(stage3,8192);
+    memset(stage3,0,sizeof(stage2));
+  }
+  count++;
+  return *this;
+}
+
+manysum1& manysum1::operator-=(double x)
+{
+  return operator+=(-x);
 }

@@ -62,4 +62,19 @@ double pairwisesum(double *a,unsigned n);
 double pairwisesum(std::vector<double> &a);
 long double pairwisesum(long double *a,unsigned n);
 long double pairwisesum(std::vector<long double> &a);
+
+class manysum1
+{
+private:
+  size_t count;
+  double stage0[8192],stage1[8192],stage2[8192],
+         stage3[8192],stage4[4096];
+public:
+  manysum1();
+  void clear();
+  double total();
+  manysum1& operator+=(double x);
+  manysum1& operator-=(double x);
+};
+
 #endif
