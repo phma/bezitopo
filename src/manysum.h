@@ -27,19 +27,10 @@
 #include <vector>
 #include <cmath>
 /* Adds together many numbers (like millions) accurately.
- * Each number is put in a bucket numbered by its exponent returned by frexp().
- * If the sum of the number and what's in the bucket is too big to fit
- * in the bucket, it is put into the next bucket up. If the sum is too small,
- * it is not put into the next bucket down, as it has insignificant bits
- * at the low end. This can happen only when adding numbers of opposite sign,
- * which does not happen when computing volumes, as positive and negative
- * volumes are added separately so that compaction of dirt can be computed.
- * 
- * manysum is suited to sums where the number of addends is large and not known
- * in advance and computing each one takes a long time. If the number of addends
- * is known, or a bound is known, in advance and the addends are calculated
- * quickly, it is better to allocate an array and use pairwise summation.
- * See matrix.cpp and spiral.cpp for examples.
+ * pairwisesum takes an array or vector with the numbers already computed.
+ * manysum stores numbers as they are computed in a buffer, then calls pairwisesum
+ * when the buffer is full, and stores the result in the next buffer.
+ * See matrix.cpp and spiral.cpp for examples of pairwisesum.
  */
 
 double pairwisesum(double *a,unsigned n);
