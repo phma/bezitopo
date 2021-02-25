@@ -3,7 +3,7 @@
 /* polyline.cpp - polylines                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2020 Pierre Abbat.
+/* Copyright 2012,2014-2021 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -197,7 +197,7 @@ spiralarc polyspiral::getspiralarc(int i)
 
 xyz polyline::getEndpoint(int i)
 {
-  i%=endpoints.size();
+  i%=(signed)endpoints.size();
   if (i<0)
     i+=endpoints.size();
   return xyz(endpoints[i],elevation);
