@@ -3,7 +3,7 @@
 /* spiral.h - Cornu or Euler spirals                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2020 Pierre Abbat.
+/* Copyright 2012,2014-2021 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -70,10 +70,11 @@ public:
   virtual double tangentLength(int which);
   virtual double diffarea();
   spiralarc operator-() const;
-  double length() const
+  virtual double length() const
   {
     return len;
   }
+  virtual double epsilon() const;
   virtual int bearing(double along) const
   {
     return midbear+ispiralbearing(along-len/2,cur,clo);

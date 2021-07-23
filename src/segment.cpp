@@ -95,6 +95,12 @@ double segment::length() const
   return dist(xy(start),xy(end));
 }
 
+double segment::epsilon() const
+{
+  return sqrt((sqr(start.getx())+sqr(start.gety())+
+	       sqr(end.getx())+sqr(end.gety()))/2)*DBL_EPSILON;
+}
+
 void segment::setslope(int which,double s)
 {
   switch(which)
@@ -471,7 +477,7 @@ double segment::closest(xy topoint,double closesofar,bool offends)
       closetime++;
 #endif
     }
-    if (lastclosedist>closedist)
+    if (lastclosedist>closedist+epsilon()/16)
       angtoler=1;
     else
       angtoler*=TOLERMULT;

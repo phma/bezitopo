@@ -3,7 +3,7 @@
 /* arc.cpp - horizontal circular arcs                 */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2017,2020 Pierre Abbat.
+/* Copyright 2012-2017,2020,2021 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -23,6 +23,7 @@
  */
 
 #include <cstdio>
+#include <cfloat>
 #include "point.h"
 #include "arc.h"
 #include "vcurve.h"
@@ -103,6 +104,13 @@ double arc::length() const
     return chordlength()*bintorad(delta)/sinhalf(delta)/2;
   else
     return chordlength();
+}
+
+double arc::epsilon() const
+{
+  return sqrt((sqr(start.getx())+sqr(start.gety())+
+	       sqr(end.getx())+sqr(end.gety()))/2)*DBL_EPSILON/
+	 cosquarter(delta);
 }
 
 xy arc::pointOfIntersection()

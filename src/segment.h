@@ -4,7 +4,7 @@
 /* base class of arc and spiral                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2020 Pierre Abbat.
+/* Copyright 2012,2014-2021 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -60,6 +60,7 @@ public:
   virtual bool operator==(const segment b) const;
   segment operator-() const;
   virtual double length() const;
+  virtual double epsilon() const;
   std::vector<double> vextrema(bool withends);
   void setslope(int which,double s);
   void setctrl(int which,double el);

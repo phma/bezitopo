@@ -3,7 +3,7 @@
 /* spiral.cpp - Cornu or Euler spirals                */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2020 Pierre Abbat.
+/* Copyright 2012-2021 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -307,6 +307,11 @@ spiralarc spiralarc::operator-() const
   ret.control1=control2;
   ret.control2=control1;
   return ret;
+}
+
+double spiralarc::epsilon() const
+{
+  return sqrt((sqr(mid.getx())+sqr(mid.gety())+sqr(len))/1.5)*DBL_EPSILON;
 }
 
 double spiralarc::in(xy pnt)
