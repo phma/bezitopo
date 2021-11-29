@@ -282,6 +282,16 @@ double LambertConicSphere::scaleFactor(latlong ll)
   return pow(coneradius/cenconeradius,exponent)*cenparradius/parradius*scale;
 }
 
+int LambertConicSphere::convergence(xy grid)
+{
+  return 0;
+}
+
+int LambertConicSphere::convergence(latlong ll)
+{
+  return 0;
+}
+
 void LambertConicEllipsoid::setParallel(double Parallel)
 {
   Parallel=ellip->conformalLatitude(Parallel);
@@ -453,6 +463,16 @@ double LambertConicEllipsoid::scaleFactor(latlong ll)
   cenparradius=(ellip->sphere->geoc(centralParallel,0.,0.)).getx()/ellip->sphere->geteqr();
   return pow(coneradius/cenconeradius,exponent)*
          cenparradius/parradius*scale/ellip->scaleFactor(ll.lat,sphll.lat);
+}
+
+int LambertConicEllipsoid::convergence(xy grid)
+{
+  return 0;
+}
+
+int LambertConicEllipsoid::convergence(latlong ll)
+{
+  return 0;
 }
 
 /* North Carolina state plane, original:
@@ -636,6 +656,16 @@ double StereographicSphere::scaleFactor(latlong ll)
   return scaleFactor(latlongToGrid(ll));
 }
 
+int StereographicSphere::convergence(xy grid)
+{
+  return 0;
+}
+
+int StereographicSphere::convergence(latlong ll)
+{
+  return 0;
+}
+
 StereographicSphere sphereStereoArabianSea(rotateStereographic);
 
 xy transMerc(xyz pnt)
@@ -709,6 +739,16 @@ double TransverseMercatorSphere::scaleFactor(latlong ll)
 {
   ll.lon-=centralMeridian;
   return transMercScale(ellip->geoc(ll,0))*scale;
+}
+
+int TransverseMercatorSphere::convergence(xy grid)
+{
+  return 0;
+}
+
+int TransverseMercatorSphere::convergence(latlong ll)
+{
+  return 0;
 }
 
 /* Counties of Georgia on the boundary between the zones:
@@ -805,6 +845,16 @@ double TransverseMercatorEllipsoid::scaleFactor(latlong ll)
   xy grid=transMerc(sphpnt);
   double krugerScale=ellip->krugerizeScale(grid);
   return scale/confScale*tmScale*krugerScale;
+}
+
+int TransverseMercatorEllipsoid::convergence(xy grid)
+{
+  return 0;
+}
+
+int TransverseMercatorEllipsoid::convergence(latlong ll)
+{
+  return 0;
 }
 
 TransverseMercatorEllipsoid *readTransverseMercator(istream &file)

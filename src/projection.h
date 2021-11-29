@@ -65,13 +65,20 @@ public:
    * on the ellipsoid. It is smallest at the center of the grid (central parallel
    * for Lambert conic, central meridian for transverse Mercator) and largest
    * at the periphery.
-   * 
+   *
+   * The convergence is the azimuth on the grid minus the azimuth on the
+   * ellipsoid. In publications, it's the geodetic azimuth minus the grid
+   * azimuth, but Bezitopo stores azimuths counterclockwise from east, not
+   * clockwise from north, so the sign ends up the same.
+   *
    * The scale factor of Lambert is easier to calculate from the latlong, but
    * that of the transverse Mercator may be easier to calculate from the
    * grid coordinates.
    */
   virtual double scaleFactor(xy grid)=0;
   virtual double scaleFactor(latlong ll)=0;
+  virtual int convergence(xy grid)=0;
+  virtual int convergence(latlong ll)=0;
   ellipsoid *ellip;
   void setBoundary(g1boundary boundary);
   g1boundary getBoundary();
@@ -100,6 +107,8 @@ public:
   virtual xy latlongToGrid(latlong ll);
   virtual double scaleFactor(xy grid);
   virtual double scaleFactor(latlong ll);
+  virtual int convergence(xy grid);
+  virtual int convergence(latlong ll);
 protected:
   double centralParallel;
   double centralMeridian;
@@ -122,6 +131,8 @@ public:
   virtual xy latlongToGrid(latlong ll);
   virtual double scaleFactor(xy grid);
   virtual double scaleFactor(latlong ll);
+  virtual int convergence(xy grid);
+  virtual int convergence(latlong ll);
 protected:
   double centralParallel;
   double centralMeridian;
@@ -147,6 +158,8 @@ public:
   virtual xy latlongToGrid(latlong ll);
   virtual double scaleFactor(xy grid);
   virtual double scaleFactor(latlong ll);
+  virtual int convergence(xy grid);
+  virtual int convergence(latlong ll);
 protected:
   Quaternion rotation;
 };
@@ -185,6 +198,8 @@ public:
   virtual xy latlongToGrid(latlong ll);
   virtual double scaleFactor(xy grid);
   virtual double scaleFactor(latlong ll);
+  virtual int convergence(xy grid);
+  virtual int convergence(latlong ll);
 protected:
   double centralMeridian;
   Quaternion rotation;
@@ -202,6 +217,8 @@ public:
   virtual xy latlongToGrid(latlong ll);
   virtual double scaleFactor(xy grid);
   virtual double scaleFactor(latlong ll);
+  virtual int convergence(xy grid);
+  virtual int convergence(latlong ll);
 protected:
   double centralMeridian;
   Quaternion rotation;
