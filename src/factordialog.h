@@ -3,7 +3,7 @@
 /* factordialog.h - scale factor dialog               */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018 Pierre Abbat.
+/* Copyright 2018,2021 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -87,6 +87,8 @@ private:
   QLineEdit *gridFactorOutput;
   QLabel *combFactorLabel;
   QLineEdit *combFactorOutput;
+  QLabel *convergenceLabel;
+  QLineEdit *convergenceOutput;
   QPushButton *okButton,*cancelButton;
   QGridLayout *gridLayout; // "grid" means a lattice arrangement of widgets
   LlValidator *validator;
@@ -131,6 +133,8 @@ private:
   QLineEdit *gridFactorOutput;
   QLabel *combFactorLabel;
   QLineEdit *combFactorOutput;
+  QLabel *convergenceLabel;
+  QLineEdit *convergenceOutput;
   QPushButton *okButton,*cancelButton;
   QGridLayout *gridLayout; // "grid" means a lattice arrangement of widgets
 };

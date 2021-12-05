@@ -3,7 +3,7 @@
 /* factordialog.cpp - scale factor dialog             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018,2019 Pierre Abbat.
+/* Copyright 2018,2019,2021 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -44,6 +44,8 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   gridFactorOutput=new QLineEdit(this);
   combFactorLabel=new QLabel(tr("Combined factor"),this);
   combFactorOutput=new QLineEdit(this);
+  convergenceLabel=new QLabel(tr("Convergence"),this);
+  convergenceOutput=new QLineEdit(this);
   okButton=new QPushButton(tr("OK"),this);
   cancelButton=new QPushButton(tr("Cancel"),this);
   gridLayout=new QGridLayout(this);
@@ -64,8 +66,10 @@ LatlongFactorDialog::LatlongFactorDialog(QWidget *parent):QDialog(parent)
   gridLayout->addWidget(gridFactorOutput,6,2,1,4);
   gridLayout->addWidget(combFactorLabel,7,0,1,2);
   gridLayout->addWidget(combFactorOutput,7,2,1,4);
-  gridLayout->addWidget(okButton,8,0,1,3);
-  gridLayout->addWidget(cancelButton,8,3,1,3);
+  gridLayout->addWidget(convergenceLabel,8,0,1,2);
+  gridLayout->addWidget(convergenceOutput,8,2,1,4);
+  gridLayout->addWidget(okButton,9,0,1,3);
+  gridLayout->addWidget(cancelButton,9,3,1,3);
   okButton->setEnabled(false);
   okButton->setDefault(true);
   plWidget->setProjectionList(allProjections);
@@ -247,6 +251,8 @@ GridFactorDialog::GridFactorDialog(QWidget *parent):QDialog(parent)
   gridFactorOutput=new QLineEdit(this);
   combFactorLabel=new QLabel(tr("Combined factor"),this);
   combFactorOutput=new QLineEdit(this);
+  convergenceLabel=new QLabel(tr("Convergence"),this);
+  convergenceOutput=new QLineEdit(this);
   okButton=new QPushButton(tr("OK"),this);
   cancelButton=new QPushButton(tr("Cancel"),this);
   gridLayout=new QGridLayout(this);
@@ -267,8 +273,10 @@ GridFactorDialog::GridFactorDialog(QWidget *parent):QDialog(parent)
   gridLayout->addWidget(gridFactorOutput,6,2,1,4);
   gridLayout->addWidget(combFactorLabel,7,0,1,2);
   gridLayout->addWidget(combFactorOutput,7,2,1,4);
-  gridLayout->addWidget(okButton,8,0,1,3);
-  gridLayout->addWidget(cancelButton,8,3,1,3);
+  gridLayout->addWidget(convergenceLabel,8,0,1,2);
+  gridLayout->addWidget(convergenceOutput,8,2,1,4);
+  gridLayout->addWidget(okButton,9,0,1,3);
+  gridLayout->addWidget(cancelButton,9,3,1,3);
   okButton->setEnabled(false);
   okButton->setDefault(true);
   plWidget->setProjectionList(allProjections);
