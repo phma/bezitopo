@@ -187,11 +187,13 @@ void LatlongFactorDialog::updateOutput()
     gridfactor=projection->scaleFactor(location);
     separation=cube.undulation(location);
     radius=projection->ellip->radiusAtLatitude(location,DEG45);
+    convergence=projection->convergence(location);
   }
   else
   {
     gridCoords=xy(NAN,NAN);
     separation=radius=gridfactor=NAN;
+    convergence=DEG360;
   }
   elevfactor=radius/(radius+elevation+separation);
   if (gridCoords.isfinite() && doc)
@@ -230,6 +232,13 @@ void LatlongFactorDialog::updateOutput()
   }
   else
     combFactorOutput->setText("");
+  if (convergence!=DEG360 && doc)
+  {
+    convergenceStr=doc->ms.formatMeasurementUnit(convergence,ANGLE_B);
+    convergenceOutput->setText(QString::fromStdString(convergenceStr));
+  }
+  else
+    convergenceOutput->setText("");
   okButton->setEnabled(projection && location.valid()==2 && !gridCoords.isnan()
 		       && std::isfinite(elevation) && std::isnormal(elevfactor*gridfactor));
 }
@@ -397,11 +406,13 @@ void GridFactorDialog::updateOutput()
     gridfactor=projection->scaleFactor(gridCoords);
     separation=cube.undulation(location);
     radius=projection->ellip->radiusAtLatitude(location,DEG45);
+    convergence=projection->convergence(location);
   }
   else
   {
     location=latlong(NAN,NAN);
     separation=radius=gridfactor=NAN;
+    convergence=DEG360;
   }
   elevfactor=radius/(radius+elevation+separation);
   if (location.valid()==2 && doc)
@@ -439,6 +450,13 @@ void GridFactorDialog::updateOutput()
   }
   else
     combFactorOutput->setText("");
+  if (convergence!=DEG360 && doc)
+  {
+    convergenceStr=doc->ms.formatMeasurementUnit(convergence,ANGLE_B);
+    convergenceOutput->setText(QString::fromStdString(convergenceStr));
+  }
+  else
+    convergenceOutput->setText("");
   okButton->setEnabled(projection && location.valid()==2 && !gridCoords.isnan()
 		       && isfinite(elevation) && isnormal(elevfactor*gridfactor));
 }

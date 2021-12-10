@@ -71,12 +71,14 @@ private:
   QLabel *elevationLabel;
   QLineEdit *elevationInput;
   ProjListWidget *plWidget;
-  std::string locationStr,elevationStr,separationStr,elevFactorStr,gridFactorStr,combFactorStr;
+  std::string locationStr,elevationStr,separationStr;
+  std::string elevFactorStr,gridFactorStr,combFactorStr,convergenceStr;
   document *doc;
   latlong location;
   Projection *projection;
   xy gridCoords;
   double separation,elevation,radius,elevfactor,gridfactor;
+  int convergence;
   QLabel *gridLabel;
   QLineEdit *gridOutput; // "grid" means a conformal coordinate system
   QLabel *separationLabel;
@@ -117,12 +119,14 @@ private:
   QLabel *elevationLabel;
   QLineEdit *elevationInput;
   ProjListWidget *plWidget;
-  std::string gridCoordsStr,elevationStr,separationStr,elevFactorStr,gridFactorStr,combFactorStr;
+  std::string gridCoordsStr,elevationStr,separationStr;
+  std::string elevFactorStr,gridFactorStr,combFactorStr,convergenceStr;
   document *doc;
   latlong location;
   Projection *projection;
   xy gridCoords;
   double separation,elevation,radius,elevfactor,gridfactor;
+  int convergence;
   QLabel *latlongLabel;
   QLineEdit *latlongOutput;
   QLabel *separationLabel;
