@@ -3,7 +3,7 @@
 /* icommon.cpp - common interactive routines          */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2019 Pierre Abbat.
+/* Copyright 2015-2019,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -70,7 +70,7 @@ void setlengthunit_i(string args)
     cout<<"I don't recognize that length unit"<<endl;
 }
 
-arangle parsearangle(string angstr,int unitp)
+arangle parsearangle(string angstr,int64_t unitp)
 /* 13, angle to the right, relative
  * -13, angle to the left, relative
  * d13, deflection angle, same as 193, relative

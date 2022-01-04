@@ -3,7 +3,7 @@
 /* bezitopo.cpp - main program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2015-2019 Pierre Abbat.
+/* Copyright 2012,2013,2015-2019,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -395,6 +395,17 @@ void save_i(string args)
     cout<<"No filename specified"<<endl;
 }
 
+void bdiff_i(string args)
+{
+  arangle bear1,bear2;
+  string arg1,arg2;
+  arg1=firstarg(args);
+  arg2=firstarg(args);
+  bear1=parsearangle(arg1,DEGREE);
+  bear2=parsearangle(arg2,DEGREE);
+  cout<<bintoangle(bear1.ang-bear2.ang,DEGREE+SEXAG2)<<endl;
+}
+
 void readgeoid_i(string args)
 // Attempting to read a non-geoid file leaves the geoid unchanged.
 {
@@ -448,6 +459,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("setfoot",setfoot_i,"Set foot unit: int'l, US, Indian"));
   commands.push_back(command("setlunit",setlengthunit_i,"Set length unit: m, ft, ch"));
   commands.push_back(command("cvtmeas",cvtmeas_i,"Convert measurements"));
+  commands.push_back(command("bdiff",bdiff_i,"Bearing difference: bearing bearing"));
   commands.push_back(command("geoid",readgeoid_i,"Read geoid file: filename"));
   commands.push_back(command("read",readpoints,"Read coordinate file: filename format"));
   commands.push_back(command("write",writepoints,"Write coordinate file: filename format"));

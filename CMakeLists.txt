@@ -1,6 +1,6 @@
 project(bezitopo)
 cmake_minimum_required(VERSION 3.1.0)
-# Copyright 2012-2020 Pierre Abbat.
+# Copyright 2012-2022 Pierre Abbat.
 # Copyright 2020 звездочёт.
 # This file is part of Bezitopo.
 #
@@ -359,7 +359,7 @@ set(BEZITOPO_MAJOR_VERSION 0)
 set(BEZITOPO_MINOR_VERSION 1)
 set(BEZITOPO_PATCH_VERSION 5)
 set(BEZITOPO_VERSION ${BEZITOPO_MAJOR_VERSION}.${BEZITOPO_MINOR_VERSION}.${BEZITOPO_PATCH_VERSION})
-set(COPY_YEAR 2019)
+set(COPY_YEAR 2022)
 
 if (MAKE_STATIC)
 set_target_properties(bezilib0 PROPERTIES OUTPUT_NAME "bezitopo" VERSION ${BEZITOPO_VERSION})
