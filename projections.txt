@@ -134,3 +134,295 @@ OriginXY:700000,0
 Boundary:83.1W 30.59N 82.93W 30.85N 83.03W 35.04N 85.66W 35.03N 85.09W 32.32N \
 85.38W 31.47N 84.9W 30.55N
 Foot: US
+
+Country:US
+State:TX
+Zone:N
+Version:NAD83
+Projection:CC
+Ellipsoid:GRS80
+Meridian:101°30'W
+Parallel:34°39'N
+Parallel:36°11N
+OriginLL:34°00'N 101°30'W
+OriginXY:200000.0,1000000.0
+Boundary:103.34W 36.67N 103.25W 34.49N 99.71W 34.38N 99.75W 36.65N 103.34W 36.67N
+Foot: US
+
+Country:US
+State:TX
+Zone:NC
+Version:NAD83
+Projection:CC
+Ellipsoid:GRS80
+Meridian:98°30'W
+Parallel:32°08'N
+Parallel:33°58N
+OriginLL:31°40'N 98°30'W
+OriginXY:600000.0,2000000.0
+Boundary:103.34W 34.88N 103.33W 31.81N 98.87W 31.62N 93.71W 31.85N 93.87W 33.97N \
+95.18W 34.18N 97.78W 34.22N 99.73W 34.78N 103.34W 34.88N
+Foot: US
+
+Country:US
+State:TX
+Zone:C
+Version:NAD83
+Projection:CC
+Ellipsoid:GRS80
+Meridian:100°20'W
+Parallel:30°07'N
+Parallel:31°53N
+OriginLL:29°40'N 100°20'W
+OriginXY:700000.0,3000000.0
+Boundary:107.09W 32.28N 104.89W 29.73N 100.50W 29.75N 93.47W 29.70N 93.21W 30.94N \
+93.39W 32.37N 103.31W 32.27N 107.09W 32.28
+Foot: US
+
+Country:US
+State:TX
+Zone:SC
+Version:NAD83
+Projection:CC
+Ellipsoid:GRS80
+Meridian:99°00'W
+Parallel:28°23'N
+Parallel:30°17N
+OriginLL:27°50'N 99°00'W
+OriginXY:600000.0,4000000.0
+Boundary:105.23W 30.52N 104.78W 29.57N 104.11W 28.93N 102.47W 28.74N 101.66W 29.07N \
+100.07W 27.57N 96.84W 27.55N 93.45W 29.52N 93.34W 30.42N 105.23W 30.52N
+Foot: US
+
+Country:US
+State:TX
+Zone:S
+Version:NAD83
+Projection:CC
+Ellipsoid:GRS80
+Meridian:98°30'W
+Parallel:26°10'N
+Parallel:27°50N
+OriginLL:25°40'N 98°30'W
+OriginXY:300000.0,5000000.0
+Boundary:100.43W 28.24N 99.40W 25.93N 96.78W 25.58N 96.88W 26.96N 96.64W 28.12N \
+100.43W 28.24N
+Foot: US
+
+Country:US
+State:OK
+Zone:N
+Version:NAD83
+Projection:CC
+Ellipsoid:GRS80
+Meridian:98°00'W
+Parallel:35°34'N
+Parallel:36°46N
+OriginLL:25°40'N 98°00'W
+OriginXY:600000.0,0.0
+Boundary:103.26W 37.23N 103.27W 36.18N 100.37W 36.17N 100.37W 35.01N 94.24W 35.03N \
+94.29W 37.19N 99.84W 37.21N 103.26W 37.23N
+Foot: US
+
+Country:US
+State:OK
+Zone:S
+Version:NAD83
+Projection:CC
+Ellipsoid:GRS80
+Meridian:98°00'W
+Parallel:33°56'N
+Parallel:35°14N
+OriginLL:33°20'N 98°00'W
+OriginXY:600000.0,0.0
+Boundary:100.36W 35.48N 100.35W 34.35N 98.42W 33.75N 96.25W 33.49N 94.24W 33.33N \
+94.24W 35.40N 100.36W 35.48N
+Foot: US
+
+Country:US
+State:NM
+Zone:E
+Version:NAD83
+Projection:TM
+Ellipsoid:GRS80
+Meridian:104°20'W
+Scale:0.9999
+OriginLL:31°00'N 104°20'W
+OriginXY:165000,0
+Boundary:105.43W 37.21N 105.96W 36.05N 105.91W 34.49N 105.34W 31.72N 102.79W 31.76N \
+102.78W 37.25N 105.43W 37.21N
+Foot: US
+
+Country:US
+State:NM
+Zone:C
+Version:NAD83
+Projection:TM
+Ellipsoid:GRS80
+Meridian:106°15'W
+Scale:0.9999
+OriginLL:31°00'N 106°15'W
+OriginXY:500000,0
+Boundary:108.08W 37.25N 108.02W 31.64N 105.10W 31.59N 104.60W 33.60N 104.61W 36.09N \
+104.99W 37.23N 108.08W 37.25N
+Foot: US
+
+Country:US
+State:NM
+Zone:W
+Version:NAD83
+Projection:TM
+Ellipsoid:GRS80
+Meridian:107°50'W
+Scale:0.9999
+OriginLL:31°00'N 107°50'W
+OriginXY:830000,0
+Boundary:109.38W 37.26N 109.32W 31.17N 108.02W 31.14N 106.97W 31.58N 106.94W 34.75N \
+106.91W 37.24N 109.38W 37.26N
+Foot: US
+
+Country:US
+State:TX
+Zone:N
+Version:NAD27
+Projection:CC
+Ellipsoid:Clarke
+Meridian:101°30'W
+Parallel:34°39'N
+Parallel:36°11N
+OriginLL:34°00'N 101°30'W
+OriginXY:609601.219,0
+Boundary:103.34W 36.67N 103.25W 34.49N 99.71W 34.38N 99.75W 36.65N 103.34W 36.67N
+Foot: US
+
+Country:US
+State:TX
+Zone:NC
+Version:NAD27
+Projection:CC
+Ellipsoid:Clarke
+Meridian:97°30'W
+Parallel:32°08'N
+Parallel:33°58N
+OriginLL:31°40'N 97°30'W
+OriginXY:609601.219,0
+Boundary:103.34W 34.88N 103.33W 31.81N 98.87W 31.62N 93.71W 31.85N 93.87W 33.97N \
+95.18W 34.18N 97.78W 34.22N 99.73W 34.78N 103.34W 34.88N
+Foot: US
+
+Country:US
+State:TX
+Zone:C
+Version:NAD27
+Projection:CC
+Ellipsoid:Clarke
+Meridian:100°20'W
+Parallel:30°07'N
+Parallel:31°53N
+OriginLL:29°40'N 100°20'W
+OriginXY:609601.219,0
+Boundary:107.09W 32.28N 104.89W 29.73N 100.50W 29.75N 93.47W 29.70N 93.21W 30.94N \
+93.39W 32.37N 103.31W 32.27N 107.09W 32.28
+Foot: US
+
+Country:US
+State:TX
+Zone:SC
+Version:NAD27
+Projection:CC
+Ellipsoid:Clarke
+Meridian:99°00'W
+Parallel:28°23'N
+Parallel:30°17N
+OriginLL:27°50'N 99°00'W
+OriginXY:609601.219,0
+Boundary:105.23W 30.52N 104.78W 29.57N 104.11W 28.93N 102.47W 28.74N 101.66W 29.07N \
+100.07W 27.57N 96.84W 27.55N 93.45W 29.52N 93.34W 30.42N 105.23W 30.52N
+Foot: US
+
+Country:US
+State:TX
+Zone:S
+Version:NAD27
+Projection:CC
+Ellipsoid:Clarke
+Meridian:98°30'W
+Parallel:26°10'N
+Parallel:27°50N
+OriginLL:25°40'N 98°30'W
+OriginXY:609601.219,0
+Boundary:100.43W 28.24N 99.40W 25.93N 96.78W 25.58N 96.88W 26.96N 96.64W 28.12N \
+100.43W 28.24N
+Foot: US
+
+Country:US
+State:OK
+Zone:N
+Version:NAD27
+Projection:CC
+Ellipsoid:Clarke
+Meridian:98°00'W
+Parallel:35°34'N
+Parallel:36°46N
+OriginLL:35°00'N 98°00'W
+OriginXY:609601.219,0
+Boundary:103.26W 37.23N 103.27W 36.18N 100.37W 36.17N 100.37W 35.01N 94.24W 35.03N \
+94.29W 37.19N 99.84W 37.21N 103.26W 37.23N
+Foot: US
+
+Country:US
+State:OK
+Zone:S
+Version:NAD27
+Projection:CC
+Ellipsoid:Clarke
+Meridian:98°00'W
+Parallel:33°56'N
+Parallel:35°14N
+OriginLL:33°20'N 98°00'W
+OriginXY:609601.219,0
+Boundary:100.36W 35.48N 100.35W 34.35N 98.42W 33.75N 96.25W 33.49N 94.24W 33.33N \
+94.24W 35.40N 100.36W 35.48N
+Foot: US
+
+Country:US
+State:NM
+Zone:E
+Version:NAD27
+Projection:TM
+Ellipsoid:Clarke
+Meridian:104°20'W
+Scale:0.9999
+OriginLL:31°00'N 104°20'W
+OriginXY:30480,0
+Boundary:105.43W 37.21N 105.96W 36.05N 105.91W 34.49N 105.34W 31.72N 102.79W 31.76N \
+102.78W 37.25N 105.43W 37.21N
+Foot: US
+
+Country:US
+State:NM
+Zone:C
+Version:NAD27
+Projection:TM
+Ellipsoid:Clarke
+Meridian:106°15'W
+Scale:0.9999
+OriginLL:31°00'N 106°15'W
+OriginXY:30480,0
+Boundary:108.08W 37.25N 108.02W 31.64N 105.10W 31.59N 104.60W 33.60N 104.61W 36.09N \
+104.99W 37.23N 108.08W 37.25N
+Foot: US
+
+Country:US
+State:NM
+Zone:W
+Version:NAD27
+Projection:TM
+Ellipsoid:Clarke
+Meridian:107°50'W
+Scale:0.9999
+OriginLL:31°00'N 107°50'W
+OriginXY:30480,0
+Boundary:109.38W 37.26N 109.32W 31.17N 108.02W 31.14N 106.97W 31.58N 106.94W 34.75N \
+106.91W 37.24N 109.38W 37.26N
+Foot: US
