@@ -481,6 +481,30 @@ void Measure::setCustomary()
   addUnit(POUND);
 }
 
+void Measure::setDegree60()
+{
+  clearUnits(ANGLE);
+  clearUnits(ANGLE_B);
+  addUnit(DEGREE+SEXAGESIMAL);
+  addUnit(DEGREE_B+SEXAGESIMAL);
+}
+
+void Measure::setDegree10()
+{
+  clearUnits(ANGLE);
+  clearUnits(ANGLE_B);
+  addUnit(DEGREE+DECYMAL);
+  addUnit(DEGREE_B+DECYMAL);
+}
+
+void Measure::setGon()
+{
+  clearUnits(ANGLE);
+  clearUnits(ANGLE_B);
+  addUnit(GON+DECYMAL);
+  addUnit(GON_B+DECYMAL);
+}
+
 void Measure::setDefaultUnit(int64_t quantity,double magnitude)
 {
   defaultUnit[quantity&0xffff00000000]=magnitude;

@@ -168,6 +168,9 @@ public:
   void localize(bool loc);
   void setMetric();
   void setCustomary();
+  void setDegree60();
+  void setDegree10();
+  void setGon();
   void setDefaultUnit(int64_t quantity,double magnitude);
   void setDefaultPrecision(int64_t quantity,double magnitude);
   int64_t findUnit(int64_t quantity,double magnitude=0);
