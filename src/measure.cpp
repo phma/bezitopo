@@ -3,7 +3,7 @@
 /* measure.cpp - measuring units                      */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2019 Pierre Abbat.
+/* Copyright 2012,2015-2019,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
