@@ -48,6 +48,7 @@ TopoCanvas::TopoCanvas(QWidget *parent):QWidget(parent)
   int i,j,rgb;
   doc.ms.setFoot(INTERNATIONAL);
   doc.ms.setMetric();
+  doc.ms.setDegree60();
   doc.ms.setDefaultUnit(LENGTH,0.552); // geometric mean of meter and foot
   doc.ms.setDefaultPrecision(LENGTH,1.746e-3); // g.m. of 1 mm and 0.01 ft
   doc.ms.setDefaultUnit(AREA,0.3048); // for acre/hectare, 6361.5
