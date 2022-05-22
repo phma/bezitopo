@@ -5530,9 +5530,10 @@ void testprojscale(string projName,Projection &proj)
   array<xy,2> xypair;
   xyz midxyz,invxyz;
   xy midxy;
-  int i,nbadscale,nbadinv;
+  int conv,backConv;
+  int i,nbadscale,nbadconv,nbadinv;
   double scale,backScale;
-  for (i=nbadscale=nbadinv=0;
+  for (i=nbadscale=nbadconv=nbadinv=0;
        i<16777216 && (nbadscale>=badLimit(i) || nbadinv>=badLimit(i));i++)
   {
     pointpair=randomPointPair();
@@ -5544,8 +5545,10 @@ void testprojscale(string projName,Projection &proj)
     inv=proj.gridToLatlong(proj.latlongToGrid(midpoint));
     invxyz=proj.ellip->geoc(inv,0);
     scale=proj.scaleFactor(midpoint);
+    conv=proj.convergence(midpoint);
     midxy=proj.latlongToGrid(midpoint);
     backScale=proj.scaleFactor(midxy);
+    backConv=proj.convergence(midxy);
     /* For other projections, one of the scaleFactor methods calls the other,
      * but for ellipsoidal transverse Mercator, they are computed separately.
      */
