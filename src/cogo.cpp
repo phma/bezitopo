@@ -3,7 +3,7 @@
 /* cogo.cpp - coordinate geometry                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2020 Pierre Abbat.
+/* Copyright 2012,2015-2020,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -338,7 +338,9 @@ double distanceInDirection(xy a,xy b,int dir)
 }
 
 /* p*p*p
- * ∫(0..1) ∫(0..1-x) x³ dy dx = 1/20
+ * ∫(0..1) ∫(0..1-x) x³ dy dx =
+ * ∫(0..1) x³(1-x) dx =
+ * ∫(0..1) x³-x⁴ dx = 1/4-1/5 = 1/20
  *
  * p*p*q
  * ∫(0..1) ∫(0..1-x) x²y dy dx =
@@ -352,6 +354,10 @@ double distanceInDirection(xy a,xy b,int dir)
  * ∫(0..1) (x/2-x²+x³/2-x²/2+x³-x⁴/2-x/3+x²-x³+x⁴/3) dx =
  * ∫(0..1) (-x⁴/6+x³/2-x²/2+x/6) dx =
  * -1/30+1/8-1/6+1/12 = (-4+15-20+10)/120 = 1/120
+ *
+ * In triangle::elevation, p*p*q is multiplied by 3 and p*q*r by 6.
+ * There are 3 control points of type p*p*p and 6 of type p*p*q.
+ * So the total is 3*1/20+6*3/60+1*6/120=1/2, the area of the triangle.
  *
  * 10x³
  * 30x²y
