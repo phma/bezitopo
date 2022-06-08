@@ -3,7 +3,7 @@
 /* pointlist.cpp - list of points                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2013,2015-2019 Pierre Abbat.
+/* Copyright 2012-2013,2015-2019,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -320,6 +320,12 @@ bool pointlist::checkFlower()
     }
   }
   return ret;
+}
+
+bool pointlist::shouldWrite(int n,int flags,bool contours)
+// Stub function. See PerfectTIN.
+{
+  return true;
 }
 
 void pointlist::logTriPoly(vector<point *> loop,int a,int b,int c)
