@@ -3742,7 +3742,7 @@ void testtriangle()
 void testmeasure()
 {
   Measure meas;
-  Measurement parsed;
+  Measurement parsed,ang555,ang50505;
   xy xy0,xy1,xy2;
   string measStr;
   double easting=443615.85705156205; // of point H, an EIR in Independence Park
@@ -3812,6 +3812,11 @@ void testmeasure()
   cout<<ldecimal(parsed.magnitude)<<" furmanlets\n";
   // There has to be a better name. The unit is 1/32768 furman.
   tassert(fabs(parsed.magnitude-radtobin(longitude))<1);
+  ang555=meas.parseMeasurement("5-5-5",ANGLE_B);
+  ang50505=meas.parseMeasurement("5-05-05",ANGLE_B);
+  cout<<ldecimal(ang555.magnitude)<<" furmanlets\n";
+  cout<<ldecimal(ang50505.magnitude)<<" furmanlets\n";
+  tassert(ang555.magnitude==ang50505.magnitude);
 }
 
 void testqindex()
