@@ -3,7 +3,7 @@
 /* tinwindow.cpp - window for viewing TIN             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017-2020 Pierre Abbat.
+/* Copyright 2017-2020,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -31,6 +31,7 @@
 #include "color.h"
 #include "penwidth.h"
 #include "dxf.h"
+#include "tintext.h"
 
 #define CACHEDRAW
 
@@ -312,6 +313,36 @@ void TinWindow::changeButtonBits()
 {
   buttonBitsChanged((curvyTriangleAction->isChecked()<<0)|
                     (curvyContourAction->isChecked()<<1));
+}
+
+void TinWindow::exportTinTxt()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  double unit;
+  //ThreadAction ta;
+  fileDialog=new QFileDialog(this);
+  fileDialog->setWindowTitle(tr("Export TIN as Text (AquaVeo)"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".tin"));
+  fileDialog->setNameFilter(tr("(*.tin)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    unit=canvas->getDoc()->ms.toCoherent(1,LENGTH);
+    writeTinText(fileName,canvas->getDoc()->pl[1],unit,0);
+    //ta.param1=lengthUnit;
+    //ta.filename=fileName;
+    //ta.flags=exportEmpty+2*onlyInBoundary;
+    //ta.opcode=ACT_WRITE_TIN;
+    //enqueueAction(ta);
+  }
+  delete fileDialog;
+  fileDialog=nullptr;
 }
 
 void TinWindow::gridToLatlong()
