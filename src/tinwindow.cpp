@@ -132,6 +132,7 @@ void TinWindow::makeActions()
   saveAsAction->setText(tr("Save As"));
   fileMenu->addAction(saveAsAction);
   connect(saveAsAction,SIGNAL(triggered(bool)),canvas,SLOT(saveAs()));
+  exportMenu=fileMenu->addMenu(tr("Export"));
   asterAction=new QAction(this);
   //asterAction->setIcon(QIcon(":/aster.png"));
   asterAction->setText(tr("Test pattern Aster"));
@@ -162,6 +163,11 @@ void TinWindow::makeActions()
   exitAction->setText(tr("Exit"));
   fileMenu->addAction(exitAction);
   connect(exitAction,SIGNAL(triggered(bool)),this,SLOT(close()));
+  // Export menu
+  exportTinTxtAction=new QAction(this);
+  exportTinTxtAction->setText(tr("TIN Text"));
+  exportMenu->addAction(exportTinTxtAction);
+  connect(exportTinTxtAction,SIGNAL(triggered(bool)),this,SLOT(exportTinTxt()));
   // Contour menu
   makeTinAction=new QAction(this);
   //makeTinAction->setIcon(QIcon(":/maketin.png"));
