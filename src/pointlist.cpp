@@ -411,28 +411,31 @@ int pointlist::readCriteria(string fname,Measure ms)
       words=parsecsvline(line);
       if (words.size()==6)
       {
+	crit1.clear();
 	minstr=words[0];
 	maxstr=words[1];
 	eminstr=words[2];
 	emaxstr=words[3];
 	d=words[4];
 	instr=words[5];
-	if (true)
+	try
 	{
-	  crit1.lo=stoi(minstr);
-	  crit1.hi=stoi(maxstr);
+	  if (minstr.length())
+            crit1.lo=stoi(minstr);
+	  if (maxstr.length())
+            crit1.hi=stoi(maxstr);
           if (eminstr.length())
             crit1.elo=ms.parseMeasurement(eminstr,LENGTH).magnitude;
-          else
-            crit1.elo=NAN;
           if (emaxstr.length())
             crit1.ehi=ms.parseMeasurement(emaxstr,LENGTH).magnitude;
-          else
-            crit1.ehi=NAN;
           crit1.str=d;
           crit1.istopo=atoi(instr.c_str())!=0;
           crit.push_back(crit1);
 	  ncrit++;
+	}
+	catch (...)
+	{
+	  cerr<<"Couldn't parse numbers in line: "<<line<<endl;
 	}
 	//puts(d.c_str());
       }
