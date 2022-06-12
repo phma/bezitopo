@@ -107,6 +107,8 @@ public:
   int addtriangle(int n=1);
   void clear();
   int size();
+  int lastPointNum();
+  bool pointExists(int n);
   void clearmarks();
   void clearTin();
   bool checkTinConsistency();

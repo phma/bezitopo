@@ -90,6 +90,19 @@ int pointlist::size()
   return points.size();
 }
 
+int pointlist::lastPointNum()
+{
+  if (size())
+    return points.rbegin()->first;
+  else
+    return 0;
+}
+
+bool pointlist::pointExists(int n)
+{
+  return points.count(n);
+}
+
 void pointlist::clearmarks()
 {
   map<int,edge>::iterator e;

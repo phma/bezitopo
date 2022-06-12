@@ -129,12 +129,17 @@ void writeTinText(string outputFile,pointlist &pl,double outUnit,int flags)
   int i;
   int nTrianglesToWrite=0;
   ofstream tinFile(outputFile,ofstream::trunc);
-  tinFile<<"TIN\nBEGT\nVERT "<<pl.points.size()<<endl;
-  for (i=1;i<=pl.points.size();i++)
+  tinFile<<"TIN\nBEGT\nVERT "<<pl.lastPointNum()<<endl;
+  for (i=1;i<=pl.lastPointNum();i++)
   {
-    tinFile<<ldecimal(pl.points[i].getx()/outUnit)<<' ';
-    tinFile<<ldecimal(pl.points[i].gety()/outUnit)<<' ';
-    tinFile<<ldecimal(pl.points[i].getz()/outUnit)<<" 0\n"; // The last number is the lock flag, whatever that means.
+    if (pl.pointExists(i))
+    {
+      tinFile<<ldecimal(pl.points[i].getx()/outUnit)<<' ';
+      tinFile<<ldecimal(pl.points[i].gety()/outUnit)<<' ';
+      tinFile<<ldecimal(pl.points[i].getz()/outUnit)<<" 0\n"; // The last number is the lock flag, whatever that means.
+    }
+    else
+      tinFile<<"0 0 0 0\n";
   }
   for (i=0;i<pl.triangles.size();i++)
     nTrianglesToWrite+=(pl.shouldWrite(i,flags,false));
