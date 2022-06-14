@@ -3,7 +3,7 @@
 /* pointlist.h - list of points                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2019 Pierre Abbat.
+/* Copyright 2012-2019,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -107,10 +107,13 @@ public:
   int addtriangle(int n=1);
   void clear();
   int size();
+  int lastPointNum();
+  bool pointExists(int n);
   void clearmarks();
   void clearTin();
   bool checkTinConsistency();
   bool checkFlower();
+  bool shouldWrite(int n,int flags,bool contours);
   void logTriPoly(std::vector<point *> loop,int a,int b,int c);
   int1loop toInt1loop(std::vector<point *> ptrLoop);
   std::vector<point *> fromInt1loop(int1loop intLoop);

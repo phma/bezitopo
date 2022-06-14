@@ -3,7 +3,7 @@
 /* tinwindow.h - window for viewing TIN               */
 /*                                                    */
 /******************************************************/
-/* Copyright 2017-2019 Pierre Abbat.
+/* Copyright 2017-2019,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -56,14 +56,17 @@ public slots:
   void prepareZoomSteps(int steps);
   void zoomSteps(bool checked);
   void changeButtonBits();
+  void exportTinTxt();
   void gridToLatlong();
   void latlongToGrid();
   void aboutProgram();
   void aboutQt();
 private:
   TopoCanvas *canvas;
+  std::string fileNames,saveFileName,lastFileName;
+  QFileDialog *fileDialog;
   QToolBar *toolbar;
-  QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu,*contourMenu,*coordMenu,*helpMenu;
+  QMenu *fileMenu,*editMenu,*viewMenu,*unitsMenu,*contourMenu,*coordMenu,*helpMenu,*exportMenu;
   int preZoomStep;
   std::vector<ZoomButton *> zoomButtons;
   std::vector<MeasureButton *> measureButtons;
@@ -72,6 +75,10 @@ private:
   QAction *sizeToFitAction;
   QAction *openAction,*saveAction,*saveAsAction,*exitAction;
   QAction *asterAction,*importPnezdAction,*importCriteriaAction;
+  QAction *exportDxfTxtAction,*exportDxfBinAction,*exportTinTxtAction;
+  QAction *exportCarlsonTinAction,*exportLandXmlAction;
+  QAction *exportPlyTxtAction,*exportPlyBinAction;
+  QAction *exportStlTxtAction,*exportStlBinAction;
   QAction *makeTinAction,*selectContourIntervalAction;
   QAction *roughContoursAction,*smoothContoursAction;
   QAction *importBreaklinesAction,*exportBreaklinesAction;

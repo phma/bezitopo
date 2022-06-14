@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* tintext.h - input TIN in AquaVeo text format       */
+/* tintext.h - I/O TIN in AquaVeo text format         */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -25,3 +25,4 @@
 #include "pointlist.h"
 
 bool readTinText(std::string inputFile,pointlist &pl,double unit);
+void writeTinText(std::string outputFile,pointlist &pl,double outUnit,int flags);

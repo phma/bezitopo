@@ -3,7 +3,7 @@
 /* pointlist.cpp - list of points                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2013,2015-2019 Pierre Abbat.
+/* Copyright 2012-2013,2015-2019,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -88,6 +88,19 @@ void pointlist::clearTin()
 int pointlist::size()
 {
   return points.size();
+}
+
+int pointlist::lastPointNum()
+{
+  if (size())
+    return points.rbegin()->first;
+  else
+    return 0;
+}
+
+bool pointlist::pointExists(int n)
+{
+  return points.count(n);
 }
 
 void pointlist::clearmarks()
@@ -322,6 +335,12 @@ bool pointlist::checkFlower()
   return ret;
 }
 
+bool pointlist::shouldWrite(int n,int flags,bool contours)
+// Stub function. See PerfectTIN.
+{
+  return true;
+}
+
 void pointlist::logTriPoly(vector<point *> loop,int a,int b,int c)
 {
   TriPolyLogEntry entry;
@@ -405,28 +424,31 @@ int pointlist::readCriteria(string fname,Measure ms)
       words=parsecsvline(line);
       if (words.size()==6)
       {
+	crit1.clear();
 	minstr=words[0];
 	maxstr=words[1];
 	eminstr=words[2];
 	emaxstr=words[3];
 	d=words[4];
 	instr=words[5];
-	if (true)
+	try
 	{
-	  crit1.lo=stoi(minstr);
-	  crit1.hi=stoi(maxstr);
+	  if (minstr.length())
+            crit1.lo=stoi(minstr);
+	  if (maxstr.length())
+            crit1.hi=stoi(maxstr);
           if (eminstr.length())
             crit1.elo=ms.parseMeasurement(eminstr,LENGTH).magnitude;
-          else
-            crit1.elo=NAN;
           if (emaxstr.length())
             crit1.ehi=ms.parseMeasurement(emaxstr,LENGTH).magnitude;
-          else
-            crit1.ehi=NAN;
           crit1.str=d;
           crit1.istopo=atoi(instr.c_str())!=0;
           crit.push_back(crit1);
 	  ncrit++;
+	}
+	catch (...)
+	{
+	  cerr<<"Couldn't parse numbers in line: "<<line<<endl;
 	}
 	//puts(d.c_str());
       }

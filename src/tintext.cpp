@@ -1,9 +1,9 @@
 /******************************************************/
 /*                                                    */
-/* tintext.cpp - input TIN in AquaVeo text format     */
+/* tintext.cpp - I/O TIN in AquaVeo text format       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2019 Pierre Abbat.
+/* Copyright 2019,2021-2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -122,4 +122,34 @@ bool readTinText(string inputFile,pointlist &pl,double unit)
       cont=false;
   }
   return good;
+}
+
+void writeTinText(string outputFile,pointlist &pl,double outUnit,int flags)
+{
+  int i;
+  int nTrianglesToWrite=0;
+  ofstream tinFile(outputFile,ofstream::trunc);
+  tinFile<<"TIN\nBEGT\nVERT "<<pl.lastPointNum()<<endl;
+  for (i=1;i<=pl.lastPointNum();i++)
+  {
+    if (pl.pointExists(i))
+    {
+      tinFile<<ldecimal(pl.points[i].getx()/outUnit)<<' ';
+      tinFile<<ldecimal(pl.points[i].gety()/outUnit)<<' ';
+      tinFile<<ldecimal(pl.points[i].getz()/outUnit)<<" 0\n"; // The last number is the lock flag, whatever that means.
+    }
+    else
+      tinFile<<"0 0 0 0\n";
+  }
+  for (i=0;i<pl.triangles.size();i++)
+    nTrianglesToWrite+=(pl.shouldWrite(i,flags,false));
+  tinFile<<"TRI "<<nTrianglesToWrite<<endl;
+  for (i=0;i<pl.triangles.size();i++)
+    if (pl.shouldWrite(i,flags,false))
+    {
+      tinFile<<pl.revpoints[pl.triangles[i].a]<<' ';
+      tinFile<<pl.revpoints[pl.triangles[i].b]<<' ';
+      tinFile<<pl.revpoints[pl.triangles[i].c]<<'\n';
+    }
+  tinFile<<"ENDT\n";
 }
