@@ -485,7 +485,7 @@ void TopoCanvas::importBreaklines()
     }
     else
       loadAnyway=true;
-    if (loadAnyway)
+    if (loadAnyway && plnum>=0)
     {
       files=fileDialog->selectedFiles();
       fileName=files[0].toStdString();
