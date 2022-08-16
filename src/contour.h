@@ -3,7 +3,7 @@
 /* contour.h - generates contours                     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2017 Pierre Abbat.
+/* Copyright 2012,2015-2017,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -52,24 +52,48 @@ class ContourInterval
 public:
   ContourInterval();
   ContourInterval(double unit,int icode,bool fine);
-  double fineInterval()
+  double fineInterval() const
   {
     return interval;
   };
-  double mediumInterval()
+  double mediumInterval() const
   {
     return interval*fineRatio;
   };
-  double coarseInterval()
+  double coarseInterval() const
   {
     return interval*fineRatio*coarseRatio;
   };
   std::string valueString(Measure meas,bool precise=false);
+  std::string valueToleranceString() const;
   int contourType(double elev);
+  friend bool operator<(const ContourInterval &l,const ContourInterval &r);
+  friend bool operator==(const ContourInterval &l,const ContourInterval &r);
+  friend bool operator!=(const ContourInterval &l,const ContourInterval &r);
   void writeXml(std::ostream &ofile);
 private:
-  double interval;
+  double interval,relativeTolerance;
   int fineRatio,coarseRatio;
+};
+
+struct ContourLayer
+/* These correspond to layers when exporting as DXF. Each ContourInterval
+ * has a set of 4 or 5 or 2 layers. E.g. if they are 1 m 1/2 contours, either
+ * 1 m 1/2 200: 0,5,10,15...
+ * 1 m 1/2 104: 1,6,11,16...
+ * 1 m 1/2 108: 2,7,12,17...
+ * 1 m 1/2 10c: 3,8,13,18...
+ * 1 m 1/2 110: 4,9,14,19...
+ * or
+ * 1 m 1/2 200: 0,5,10,15...
+ * 1 m 1/2 100: 1,2,3,4,6...
+ */
+{
+  ContourInterval ci;
+  int tp;
+  friend bool operator<(const ContourLayer &l,const ContourLayer &r);
+  friend bool operator==(const ContourLayer &l,const ContourLayer &r);
+  friend bool operator!=(const ContourLayer &l,const ContourLayer &r);
 };
 
 float splitpoint(double leftclamp,double rightclamp,double tolerance);

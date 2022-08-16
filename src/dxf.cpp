@@ -512,3 +512,16 @@ vector<array<xyz,3> > extractTriangles(vector<GroupCode> dxfData)
   }
   return ret;
 }
+
+void tableSection(vector<GroupCode> &dxfData,vector<DxfLayer> &layers)
+{
+  GroupCode sectag(0),secname(2);
+  sectag.str="SECTION";
+  secname.str="TABLES";
+  dxfData.push_back(sectag);
+  dxfData.push_back(secname);
+  linetypeTable(dxfData);
+  layerTable(dxfData,layers);
+  sectag.str="ENDSEC";
+  dxfData.push_back(sectag);
+}

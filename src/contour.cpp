@@ -3,7 +3,7 @@
 /* contour.cpp - generates contours                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015-2018 Pierre Abbat.
+/* Copyright 2012,2015-2018,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -54,6 +54,7 @@ ContourInterval::ContourInterval()
   interval=1;
   fineRatio=1;
   coarseRatio=5;
+  relativeTolerance=0.5;
 }
 
 ContourInterval::ContourInterval(double unit,int icode,bool fine)
@@ -111,6 +112,43 @@ string ContourInterval::valueString(Measure meas,bool precise)
   return meas.formatMeasurementUnit(mediumInterval(),LENGTH,0,mediumInterval()/M_SQRT_10/(precise?1e6:1));
 }
 
+string ContourInterval::valueToleranceString() const
+{
+  int i,num=1,denom=0;
+  int minLength=255,whichUnit;
+  string numStr,ret;
+  vector<int> cfrac;
+  double tol=relativeTolerance;
+  /*for (i=0;i<sizeof(conversionFactors)/sizeof(conversionFactors[0]);i++)
+  {
+    numStr=ldecimal(mediumInterval()/conversionFactors[i]);
+    if (numStr.length()<minLength)
+    {
+      ret=numStr;
+      minLength=numStr.length();
+      whichUnit=i;
+    }
+  }*/
+  if (ret[0]=='.')
+    ret="0"+ret;
+  //ret=ret+' '+unitSymbols[whichUnit]+' ';
+  while (true)
+  {
+    cfrac.push_back(floor(tol));
+    tol-=cfrac.back();
+    if (tol<1e-3)
+      break;
+    tol=1/tol;
+  }
+  for (i=cfrac.size()-1;i>=0;i--)
+  {
+    swap(num,denom);
+    num+=denom*cfrac[i];
+  }
+  ret=ret+to_string(num)+'/'+to_string(denom);
+  return ret;
+}
+
 int ContourInterval::contourType(double elev)
 /* Returns the sum of two numbers:
  * 0 for fine contours, 256 for medium contours, 512 for coarse (index) contours.
@@ -141,12 +179,50 @@ int ContourInterval::contourType(double elev)
   return ret;
 }
 
+bool operator<(const ContourInterval &l,const ContourInterval &r)
+// For a map from ContourInterval to collections of contours
+{
+  if (l.interval==r.interval)
+    return l.relativeTolerance<r.relativeTolerance;
+  else
+    return l.interval<r.interval;
+}
+
+bool operator==(const ContourInterval &l,const ContourInterval &r)
+{
+  return l.interval==r.interval && l.relativeTolerance==r.relativeTolerance;
+}
+
+bool operator!=(const ContourInterval &l,const ContourInterval &r)
+{
+  return l.interval!=r.interval || l.relativeTolerance!=r.relativeTolerance;
+}
+
 void ContourInterval::writeXml(ostream &ofile)
 {
   ofile<<"<ContourInterval interval=\""<<ldecimal(interval);
   ofile<<"\" fineRatio=\""<<fineRatio;
   ofile<<"\" coarseRatio=\""<<coarseRatio;
   ofile<<"\"/>"<<endl;
+}
+
+bool operator<(const ContourLayer &l,const ContourLayer &r)
+// For a map from ContourLayer to layer numbers
+{
+  if (l.ci==r.ci)
+    return l.tp<r.tp;
+  else
+    return l.ci<r.ci;
+}
+
+bool operator==(const ContourLayer &l,const ContourLayer &r)
+{
+  return l.ci==r.ci && l.tp==r.tp;
+}
+
+bool operator!=(const ContourLayer &l,const ContourLayer &r)
+{
+  return l.ci!=r.ci || l.tp!=r.tp;
 }
 
 float splitpoint(double leftclamp,double rightclamp,double tolerance)

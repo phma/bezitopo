@@ -3,7 +3,7 @@
 /* bezier.h - Bézier triangles                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2017,2019 Pierre Abbat.
+/* Copyright 2012-2017,2019,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -96,6 +96,7 @@ public:
   triangle *aneigh,*bneigh,*cneigh;
   double gradmat[2][3]; // to compute gradient from three partial gradients
   triangle();
+  bool ptValid();
   void setneighbor(triangle *neigh);
   void setnoneighbor(edge *neigh);
   double elevation(xy pnt);

@@ -111,6 +111,7 @@ public:
   bool pointExists(int n);
   void clearmarks();
   void clearTin();
+  std::map<ContourLayer,int> contourLayers();
   bool checkTinConsistency();
   bool checkFlower();
   bool shouldWrite(int n,int flags,bool contours);

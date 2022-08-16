@@ -233,6 +233,7 @@ add_executable(viewtin ${sourcelib}
                        src/cidialog.cpp
                        src/dxf.cpp
                        src/factordialog.cpp
+                       src/fileio.cpp
                        src/firstarg.cpp
                        src/kml.cpp
                        src/linetype.cpp

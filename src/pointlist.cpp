@@ -85,6 +85,26 @@ void pointlist::clearTin()
   edges.clear();
 }
 
+map<ContourLayer,int> pointlist::contourLayers()
+{
+  int j;
+  map<ContourLayer,int>::iterator k;
+  map<ContourLayer,int> ret;
+  ContourLayer cl;
+  cl.ci=contourInterval;
+  for (j=0;j<contours.size();j++)
+  {
+    cl.tp=cl.ci.contourType(contours[j].getElevation());
+    ret[cl]=0;
+  }
+  /* Start at layer 3. Layer 0 is reserved by the DXF format, layer 1 is for
+   * the TIN, and layer 2 is for the boundary.
+   */
+  for (k=ret.begin(),j=3;k!=ret.end();++k,++j)
+    k->second=j;
+  return ret;
+}
+
 int pointlist::size()
 {
   return points.size();

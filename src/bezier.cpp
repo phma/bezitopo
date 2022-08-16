@@ -4,7 +4,7 @@
 /* For Bézier functions of one variable, see vcurve.cpp.*/
 /*                                                      */
 /********************************************************/
-/* Copyright 2012-2020 Pierre Abbat.
+/* Copyright 2012-2020,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -71,6 +71,11 @@ triangle::triangle()
   nocubedir=INT_MAX;
   totcritpointcount=0;
 #endif
+}
+
+bool triangle::ptValid()
+{
+  return a&&b&&c;
 }
 
 double triangle::area()

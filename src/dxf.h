@@ -3,7 +3,7 @@
 /* dxf.h - Drawing Exchange Format                    */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018 Pierre Abbat.
+/* Copyright 2018,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -67,6 +67,14 @@ public:
   };
 };
 
+struct DxfLayer
+{
+  std::string name;
+  int number;
+  int color;
+};
+
+std::string hexEncodeInt(long long num);
 GroupCode readDxfText(std::istream &file);
 GroupCode readDxfBinary(std::istream &file);
 void writeDxfText(std::ostream &file,GroupCode code);
@@ -74,3 +82,4 @@ void writeDxfBinary(std::ostream &file,GroupCode code);
 std::vector<GroupCode> readDxfGroups(std::istream &file,bool mode);
 std::vector<GroupCode> readDxfGroups(std::string filename);
 std::vector<std::array<xyz,3> > extractTriangles(std::vector<GroupCode> dxfData);
+void tableSection(std::vector<GroupCode> &dxfData,std::vector<DxfLayer> &layers);
