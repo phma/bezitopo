@@ -3,7 +3,7 @@
 /* stl.cpp - stereolithography (3D printing) export   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2013,2015,2019,2020 Pierre Abbat.
+/* Copyright 2013,2015,2019,2020,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -119,12 +119,12 @@ array<int,3> adjustStlSplit(array<int,3> stlSplit,array<int,3> stlMin)
   return ret;
 }
 
-stltriangle::stltriangle()
+StlTriangle::StlTriangle()
 {
   normal=a=b=c=xyz(0,0,0);
 }
 
-stltriangle::stltriangle(xyz A,xyz B,xyz C)
+StlTriangle::StlTriangle(xyz A,xyz B,xyz C)
 {
   a=A;
   b=B;

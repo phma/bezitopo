@@ -56,39 +56,6 @@
 
 extern char hexdig[16];
 
-struct PtinHeader
-{
-  PtinHeader();
-  time_t conversionTime;
-  double tolerance; // NaN means file wasn't finished being written
-  double density;
-  int tolRatio; // negative means an error
-  int numPoints;
-  int numConvexHull;
-  int numTriangles;
-  int numGroups;
-  int flags;
-};
-
-class CoordCheck
-{
-private:
-  size_t count;
-  double stage0[14][8192],stage1[27][8192],stage2[40][8192],
-         stage3[53][8192],stage4[64][4096];
-public:
-  CoordCheck();
-  void clear();
-  void dump();
-  CoordCheck& operator<<(double val);
-  double operator[](int n);
-  double wrongCheck(int n);
-  size_t getCount()
-  {
-    return count;
-  }
-};
-
 std::string noExt(std::string fileName);
 std::string extension(std::string fileName);
 std::string baseName(std::string fileName);
@@ -98,9 +65,5 @@ void writeStl(std::string outputFile,pointlist &pl,bool asc,double outUnit,int f
 int readCloud(std::string &inputFile,double inUnit,int flags);
 void writePoint(std::ostream &file,xyz pnt);
 xyz readPoint(std::istream &file);
-void writePtin(std::string outputFile,int tolRatio,double tolerance,double density);
-PtinHeader readPtinHeader(std::istream &inputFile);
-PtinHeader readPtinHeader(std::string inputFile);
-PtinHeader readPtin(std::string inputFile);
 void dumpTriangles(std::string outputFile,std::vector<triangle *> tris);
 #endif

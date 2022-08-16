@@ -3,7 +3,7 @@
 /* bezitest.cpp - test program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2021 Pierre Abbat.
+/* Copyright 2012-2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -4441,7 +4441,7 @@ void test1adjstl(array<int,3> stlSplit,array<int,3> stlMin,array<int,3> stlAdj)
 
 void teststl()
 {
-  stltriangle stltri;
+  StlTriangle stltri;
   int i;
   ofstream stltablefile("stltable.txt");
   array<int,3> stlMin0={15,16,18}; // 25,27,32
@@ -4470,7 +4470,7 @@ void teststl()
   doc.pl[1].maketriangles();
   doc.pl[1].setgradient();
   doc.pl[1].makeqindex();
-  stltri=stltriangle(doc.pl[1].points[1],doc.pl[1].points[3],doc.pl[1].points[3]);
+  stltri=StlTriangle(doc.pl[1].points[1],doc.pl[1].points[3],doc.pl[1].points[3]);
   test1adjstl(stlSplit0,stlMin0,stlAdj00);
   test1adjstl(stlSplit0,stlMin1,stlAdj01);
   test1adjstl(stlSplit0,stlMin2,stlAdj02);

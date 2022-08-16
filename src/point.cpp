@@ -3,7 +3,7 @@
 /* point.cpp - classes for points and gradients       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2019 Pierre Abbat.
+/* Copyright 2012,2014-2019,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -277,6 +277,16 @@ bool xyz::isfinite() const
 bool xyz::isnan() const
 {
   return std::isnan(x) || std::isnan(y) || std::isnan(z);
+}
+
+double xyz::dirbound(int angle)
+/* angle=0x00000000: returns easting.
+ * angle=0x20000000: returns northing.
+ * angle=0x40000000: returns negative of easting.
+ */
+{
+  double s=sin(angle),c=cos(angle);
+  return x*c+y*s;
 }
 
 double xyz::getz() const

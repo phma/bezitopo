@@ -25,7 +25,9 @@
 #include <fstream>
 #include <vector>
 #include <array>
+#include "boundrect.h"
 #include "xyz.h"
+#include "bezier.h"
 
 struct TagRange
 {
@@ -79,7 +81,13 @@ GroupCode readDxfText(std::istream &file);
 GroupCode readDxfBinary(std::istream &file);
 void writeDxfText(std::ostream &file,GroupCode code);
 void writeDxfBinary(std::ostream &file,GroupCode code);
+void writeDxfGroups(std::ostream &file,std::vector<GroupCode> &codes,bool mode);
 std::vector<GroupCode> readDxfGroups(std::istream &file,bool mode);
 std::vector<GroupCode> readDxfGroups(std::string filename);
 std::vector<std::array<xyz,3> > extractTriangles(std::vector<GroupCode> dxfData);
 void tableSection(std::vector<GroupCode> &dxfData,std::vector<DxfLayer> &layers);
+void openEntitySection(std::vector<GroupCode> &dxfData);
+void closeEntitySection(std::vector<GroupCode> &dxfData);
+void dxfEnd(std::vector<GroupCode> &dxfData);
+void insertTriangle(std::vector<GroupCode> &dxfData,triangle &tri,double outUnit);
+void insertPolyline(std::vector<GroupCode> &dxfData,polyline &poly,DxfLayer &lay,double outUnit);

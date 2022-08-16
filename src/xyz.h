@@ -3,7 +3,7 @@
 /* xyz.h - classes for points and gradients           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015,2016,2018,2019 Pierre Abbat.
+/* Copyright 2015,2016,2018,2019,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -101,6 +101,7 @@ public:
   int loni();
   double length();
   void normalize();
+  double dirbound(int angle);
   void _roscat(xy tfrom,int ro,double sca,xy cis,xy tto);
   virtual void roscat(xy tfrom,int ro,double sca,xy tto);
   virtual void writeXml(std::ofstream &ofile);

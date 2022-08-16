@@ -513,6 +513,129 @@ vector<array<xyz,3> > extractTriangles(vector<GroupCode> dxfData)
   return ret;
 }
 
+void insertXy(vector<GroupCode> &dxfData,int xtag,xy pnt)
+// xtag is the tag of the x-coordinate
+{
+  GroupCode xCode(xtag),yCode(xtag+10);
+  xCode.real=pnt.getx();
+  yCode.real=pnt.gety();
+  dxfData.push_back(xCode);
+  dxfData.push_back(yCode);
+}
+
+void insertBulge(vector<GroupCode> &dxfData,int delta)
+/* Bulge is the displacement of the midpoint of the arc from the chord,
+ * divided by half the chord length.
+ */
+{
+  GroupCode bulgeCode(42);
+  bulgeCode.real=tanquarter(delta);
+  dxfData.push_back(bulgeCode);
+}
+
+void insertXyz(vector<GroupCode> &dxfData,int xtag,xyz pnt)
+// xtag is the tag of the x-coordinate
+{
+  GroupCode xCode(xtag),yCode(xtag+10),zCode(xtag+20);
+  xCode.real=pnt.getx();
+  yCode.real=pnt.gety();
+  zCode.real=pnt.getz();
+  dxfData.push_back(xCode);
+  dxfData.push_back(yCode);
+  dxfData.push_back(zCode);
+}
+
+void dxfHeader(vector<GroupCode> &dxfData,BoundRect br)
+{
+  GroupCode sectag(0),secname(2),paramtag(9),stringval(1);
+  sectag.str="SECTION";
+  secname.str="HEADER";
+  dxfData.push_back(sectag);
+  dxfData.push_back(secname);
+  paramtag.str="$ACADVER";
+  stringval.str="AC1006"; // ARES opens it with 1006 or 1009. Carlson opens it with 1027 but not 1006.
+  dxfData.push_back(paramtag);
+  dxfData.push_back(stringval);
+  paramtag.str="$INSBASE";
+  dxfData.push_back(paramtag);
+  insertXyz(dxfData,10,xyz(0,0,0));
+  paramtag.str="$EXTMIN";
+  dxfData.push_back(paramtag);
+  insertXyz(dxfData,10,xyz(br.left(),br.bottom(),br.low()));
+  paramtag.str="$EXTMAX";
+  dxfData.push_back(paramtag);
+  insertXyz(dxfData,10,xyz(br.right(),br.top(),br.high()));
+  sectag.str="ENDSEC";
+  dxfData.push_back(sectag);
+}
+
+void insertLinetype(vector<GroupCode> &dxfData,string name,int n1,string desc,int n2,int n3,double penWidth)
+// I have no idea what n1, n2, and n3 mean. I'm just copying code from http://paulbourke.net/dataformats/dxf/min3d.html .
+{
+  GroupCode ltypetag(0),ltypename(2),n1code(70),desccode(3);
+  GroupCode n2code(72),n3code(73),pencode(40);
+  ltypetag.str="LTYPE";
+  dxfData.push_back(ltypetag);
+  ltypename.str=name;
+  dxfData.push_back(ltypename);
+  n1code.integer=n1;
+  dxfData.push_back(n1code);
+  desccode.str=desc;
+  dxfData.push_back(desccode);
+  n2code.integer=n2;
+  dxfData.push_back(n2code);
+  n3code.integer=n3;
+  dxfData.push_back(n3code);
+  pencode.real=penWidth;
+  dxfData.push_back(pencode);
+}
+
+void linetypeTable(vector<GroupCode> &dxfData)
+{
+  GroupCode tabletag(0),tablename(2),nLinetypes(70);
+  tabletag.str="TABLE";
+  tablename.str="LTYPE";
+  dxfData.push_back(tabletag);
+  dxfData.push_back(tablename);
+  nLinetypes.integer=1;
+  dxfData.push_back(nLinetypes);
+  insertLinetype(dxfData,"CONTINUOUS",64,"Solid line",65,0,0);
+  tabletag.str="ENDTAB";
+  dxfData.push_back(tabletag);
+}
+
+void insertLayer(vector<GroupCode> &dxfData,string name,int n1,int color)
+{
+  GroupCode layertag(0),layername(2),n1code(70),colorcode(62);
+  GroupCode ltypecode(6),n3code(73),pencode(40);
+  layertag.str="LAYER";
+  dxfData.push_back(layertag);
+  layername.str=name;
+  dxfData.push_back(layername);
+  n1code.integer=n1;
+  dxfData.push_back(n1code);
+  colorcode.integer=color;
+  dxfData.push_back(colorcode);
+  ltypecode.str="CONTINUOUS";
+  dxfData.push_back(ltypecode);
+}
+
+void layerTable(vector<GroupCode> &dxfData,vector<DxfLayer> &layers)
+{
+  int i;
+  GroupCode tabletag(0),tablename(2),nLayers(70);
+  tabletag.str="TABLE";
+  tablename.str="LAYER";
+  dxfData.push_back(tabletag);
+  dxfData.push_back(tablename);
+  nLayers.integer=layers.size();
+  dxfData.push_back(nLayers);
+  for (i=0;i<layers.size();i++)
+    insertLayer(dxfData,layers[i].name,64,layers[i].color);
+  tabletag.str="ENDTAB";
+  dxfData.push_back(tabletag);
+}
+
 void tableSection(vector<GroupCode> &dxfData,vector<DxfLayer> &layers)
 {
   GroupCode sectag(0),secname(2);
@@ -524,4 +647,62 @@ void tableSection(vector<GroupCode> &dxfData,vector<DxfLayer> &layers)
   layerTable(dxfData,layers);
   sectag.str="ENDSEC";
   dxfData.push_back(sectag);
+}
+
+void openEntitySection(vector<GroupCode> &dxfData)
+{
+  GroupCode sectag(0),secname(2);
+  sectag.str="SECTION";
+  secname.str="ENTITIES";
+  dxfData.push_back(sectag);
+  dxfData.push_back(secname);
+}
+
+void closeEntitySection(vector<GroupCode> &dxfData)
+{
+  GroupCode sectag(0);
+  sectag.str="ENDSEC";
+  dxfData.push_back(sectag);
+}
+
+void dxfEnd(vector<GroupCode> &dxfData)
+{
+  GroupCode sectag(0);
+  sectag.str="EOF";
+  dxfData.push_back(sectag);
+}
+
+void insertTriangle(vector<GroupCode> &dxfData,triangle &tri,double outUnit)
+{
+  GroupCode entityType(0),layerName(8),colorNumber(62);
+  entityType.str="3DFACE";
+  layerName.str="TIN";
+  colorNumber.integer=0;
+  dxfData.push_back(entityType);
+  dxfData.push_back(layerName);
+  insertXyz(dxfData,10,*tri.a/outUnit);
+  insertXyz(dxfData,11,*tri.b/outUnit);
+  insertXyz(dxfData,12,*tri.c/outUnit); // A 3DFACE always has four corners. That it's a
+  insertXyz(dxfData,13,*tri.c/outUnit); // triangle is indicated by repeating a corner.
+}
+
+void insertPolyline(vector<GroupCode> &dxfData,polyline &poly,DxfLayer &lay,double outUnit)
+// Does not yet handle polyarcs or polyspirals.
+{
+  GroupCode entityType(0),layerName(8),colorNumber(62);
+  GroupCode nVertices(90),closedFlag(70),elev(38);
+  int i;
+  entityType.str="LWPOLYLINE";
+  layerName.str=lay.name;
+  colorNumber.integer=0;
+  closedFlag.integer=!poly.isopen();
+  nVertices.integer=poly.size()+poly.isopen();
+  elev.real=poly.getElevation()/outUnit;
+  dxfData.push_back(entityType);
+  dxfData.push_back(layerName);
+  dxfData.push_back(nVertices);
+  dxfData.push_back(closedFlag);
+  dxfData.push_back(elev);
+  for (i=0;i<nVertices.integer;i++)
+    insertXy(dxfData,10,poly.getEndpoint(i)/outUnit);
 }

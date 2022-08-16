@@ -3,7 +3,7 @@
 /* boundrect.h - bounding rectangles                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018,2020 Pierre Abbat.
+/* Copyright 2018,2020,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -31,15 +31,16 @@ class BoundRect
 {
 private:
   int orientation;
-  std::array<double,4> bounds;
-  // The four numbers are left, bottom, -right, and -top.
+  std::array<double,6> bounds;
+  // The six numbers are left, bottom, -right, -top, low, and -high.
 public:
   BoundRect();
-  BoundRect(int ori);
+  explicit BoundRect(int ori);
   void clear();
   void setOrientation(int ori);
   int getOrientation();
   void include(xy obj);
+  void include(xyz obj);
   void include(drawobj *obj); // Expands the rectangle to include the object.
   void include(std::shared_ptr<drawobj> obj);
 #ifdef POINTLIST
@@ -60,6 +61,14 @@ public:
   double top()
   {
     return -bounds[3];
+  }
+  double low()
+  {
+    return bounds[4];
+  }
+  double high()
+  {
+    return -bounds[5];
   }
 };
 #endif

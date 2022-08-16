@@ -3,7 +3,7 @@
 /* stl.h - stereolithography (3D printing) export     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2013,2017,2019 Pierre Abbat.
+/* Copyright 2013,2017,2019,2020,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -31,10 +31,18 @@ extern std::vector<int> stltable; // used in bezier.cpp
 void initStlTable();
 std::array<int,3> adjustStlSplit(std::array<int,3> stlSplit,std::array<int,3> stlMin);
 
-struct stltriangle
+struct StlTriangle
 {
   xyz normal,a,b,c;
   std::string attributes;
-  stltriangle();
-  stltriangle(xyz A,xyz B,xyz C);
+  StlTriangle();
+  StlTriangle(xyz A,xyz B,xyz C);
+};
+
+struct Printer3dSize
+{
+  int shape;
+  double x,y,z; // all in millimeters
+  unsigned scaleNum,scaleDenom;
+  double minBase;
 };
