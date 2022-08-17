@@ -165,6 +165,14 @@ void TinWindow::makeActions()
   fileMenu->addAction(exitAction);
   connect(exitAction,SIGNAL(triggered(bool)),this,SLOT(close()));
   // Export menu
+  exportDxfTxtAction=new QAction(this);
+  exportDxfTxtAction->setText(tr("DXF Text"));
+  exportMenu->addAction(exportDxfTxtAction);
+  connect(exportDxfTxtAction,SIGNAL(triggered(bool)),this,SLOT(exportDxfTxt()));
+  exportDxfBinAction=new QAction(this);
+  exportDxfBinAction->setText(tr("DXF Binary"));
+  exportMenu->addAction(exportDxfBinAction);
+  connect(exportDxfBinAction,SIGNAL(triggered(bool)),this,SLOT(exportDxfBin()));
   exportTinTxtAction=new QAction(this);
   exportTinTxtAction->setText(tr("TIN Text"));
   exportMenu->addAction(exportTinTxtAction);
