@@ -118,14 +118,15 @@ void BoundRect::include(pointlist *obj)
     if (newbound<bounds[i])
       bounds[i]=newbound;
   }
-  for (i=1;i<=obj->points.size();i++)
-  {
-    elev=obj->points[i].elev();
-    if (elev<bounds[4])
-      bounds[4]=elev;
-    if (-elev<bounds[5])
-      bounds[5]=-elev;
-  }
+  for (i=1;i<=obj->lastPointNum();i++)
+    if (obj->pointExists(i))
+    {
+      elev=obj->points[i].elev();
+      if (elev<bounds[4])
+	bounds[4]=elev;
+      if (-elev<bounds[5])
+	bounds[5]=-elev;
+    }
 }
 #endif
 
