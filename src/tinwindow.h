@@ -56,6 +56,8 @@ public slots:
   void prepareZoomSteps(int steps);
   void zoomSteps(bool checked);
   void changeButtonBits();
+  void exportDxfTxt();
+  void exportDxfBin();
   void exportTinTxt();
   void gridToLatlong();
   void latlongToGrid();

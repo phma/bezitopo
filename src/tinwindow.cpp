@@ -24,6 +24,7 @@
 #include <iostream>
 #include <cmath>
 #include "except.h"
+#include "fileio.h"
 #include "tinwindow.h"
 #include "zoom.h"
 #include "test.h"
@@ -319,6 +320,66 @@ void TinWindow::changeButtonBits()
 {
   buttonBitsChanged((curvyTriangleAction->isChecked()<<0)|
                     (curvyContourAction->isChecked()<<1));
+}
+
+void TinWindow::exportDxfTxt()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  double unit;
+  //ThreadAction ta;
+  fileDialog=new QFileDialog(this);
+  fileDialog->setWindowTitle(tr("Export TIN and Contours as DXF Text"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".dxf"));
+  fileDialog->setNameFilter(tr("(*.dxf)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    unit=canvas->getDoc()->ms.toCoherent(1,LENGTH);
+    writeDxf(fileName,canvas->getDoc()->pl[1],true,unit,0);
+    //ta.param1=lengthUnit;
+    //ta.filename=fileName;
+    //ta.flags=exportEmpty+2*onlyInBoundary;
+    //ta.opcode=ACT_WRITE_TIN;
+    //enqueueAction(ta);
+  }
+  delete fileDialog;
+  fileDialog=nullptr;
+}
+
+void TinWindow::exportDxfBin()
+{
+  int dialogResult;
+  QStringList files;
+  string fileName;
+  double unit;
+  //ThreadAction ta;
+  fileDialog=new QFileDialog(this);
+  fileDialog->setWindowTitle(tr("Export TIN and Contours as DXF Text"));
+  fileDialog->setFileMode(QFileDialog::AnyFile);
+  fileDialog->setAcceptMode(QFileDialog::AcceptSave);
+  fileDialog->selectFile(QString::fromStdString(saveFileName+".dxf"));
+  fileDialog->setNameFilter(tr("(*.dxf)"));
+  dialogResult=fileDialog->exec();
+  if (dialogResult)
+  {
+    files=fileDialog->selectedFiles();
+    fileName=files[0].toStdString();
+    unit=canvas->getDoc()->ms.toCoherent(1,LENGTH);
+    writeDxf(fileName,canvas->getDoc()->pl[1],false,unit,0);
+    //ta.param1=lengthUnit;
+    //ta.filename=fileName;
+    //ta.flags=exportEmpty+2*onlyInBoundary;
+    //ta.opcode=ACT_WRITE_TIN;
+    //enqueueAction(ta);
+  }
+  delete fileDialog;
+  fileDialog=nullptr;
 }
 
 void TinWindow::exportTinTxt()
