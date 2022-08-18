@@ -686,7 +686,7 @@ void insertTriangle(vector<GroupCode> &dxfData,triangle &tri,double outUnit)
   insertXyz(dxfData,13,*tri.c/outUnit); // triangle is indicated by repeating a corner.
 }
 
-void insertPolyline(vector<GroupCode> &dxfData,polyline &poly,DxfLayer &lay,double outUnit)
+void insertPolyline(vector<GroupCode> &dxfData,polyspiral &poly,DxfLayer &lay,double outUnit)
 // Does not yet handle polyarcs or polyspirals.
 {
   GroupCode entityType(0),layerName(8),colorNumber(62);
