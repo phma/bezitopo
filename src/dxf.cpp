@@ -3,7 +3,7 @@
 /* dxf.cpp - Drawing Exchange Format                  */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018 Pierre Abbat.
+/* Copyright 2018,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -212,7 +212,7 @@ string hexEncodeInt(long long num)
     if (nybble)
       nonzero=true;
     if (nonzero || !i)
-      ret+=(nybble>9)?(nybble+'0'):(nybble+'A'-10);
+      ret+=(nybble<=9)?(nybble+'0'):(nybble+'A'-10);
   }
   return ret;
 }
