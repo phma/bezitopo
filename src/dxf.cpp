@@ -687,7 +687,31 @@ void insertTriangle(vector<GroupCode> &dxfData,triangle &tri,double outUnit)
 }
 
 void insertPolyline(vector<GroupCode> &dxfData,polyspiral &poly,DxfLayer &lay,double outUnit)
-// Does not yet handle polyarcs or polyspirals.
+/* A closed polyarc with the last segment having nonzero curvature looks
+ * like this:
+ * 70	//closedFlag
+ * 1
+ * 10	//x
+ * 0
+ * 20	//y
+ * 0
+ * 10
+ * 1
+ * 20
+ * 0
+ * 42	//bulge of arc from (1,0) to (2,0)
+ * -0.268
+ * 10
+ * 2
+ * 20
+ * 0
+ * 10
+ * 3
+ * 20
+ * 0
+ * 42	//bulge of arc from (3,0) back to (0,0)
+ * -0.619
+ */
 {
   GroupCode entityType(0),layerName(8),colorNumber(62);
   GroupCode nVertices(90),closedFlag(70),elev(38);
