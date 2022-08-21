@@ -519,6 +519,8 @@ void insertXy(vector<GroupCode> &dxfData,int xtag,xy pnt)
   GroupCode xCode(xtag),yCode(xtag+10);
   xCode.real=pnt.getx();
   yCode.real=pnt.gety();
+  if (isnan(xCode.real) || isnan(yCode.real))
+    cout<<"insertXy: nan\n";
   dxfData.push_back(xCode);
   dxfData.push_back(yCode);
 }
@@ -715,18 +717,19 @@ void insertPolyline(vector<GroupCode> &dxfData,polyspiral &poly,DxfLayer &lay,do
 {
   GroupCode entityType(0),layerName(8),colorNumber(62);
   GroupCode nVertices(90),closedFlag(70),elev(38);
+  polyarc apx(poly,0.001);
   int i;
   entityType.str="LWPOLYLINE";
   layerName.str=lay.name;
   colorNumber.integer=0;
-  closedFlag.integer=!poly.isopen();
-  nVertices.integer=poly.size()+poly.isopen();
-  elev.real=poly.getElevation()/outUnit;
+  closedFlag.integer=!apx.isopen();
+  nVertices.integer=apx.size()+apx.isopen();
+  elev.real=apx.getElevation()/outUnit;
   dxfData.push_back(entityType);
   dxfData.push_back(layerName);
   dxfData.push_back(nVertices);
   dxfData.push_back(closedFlag);
   dxfData.push_back(elev);
   for (i=0;i<nVertices.integer;i++)
-    insertXy(dxfData,10,poly.getEndpoint(i)/outUnit);
+    insertXy(dxfData,10,apx.getEndpoint(i)/outUnit);
 }

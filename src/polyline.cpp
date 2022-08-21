@@ -130,9 +130,9 @@ polyarc::polyarc(polyspiral &r,double toler)
       piece=manyArc(r.getspiralarc(i),2);
       for (j=0;j<piece.size();j++)
       {
-	endpoints.push_back(piece.endpoints[i]);
-	lengths.push_back(piece.lengths[i]);
-	deltas.push_back(piece.deltas[i]);
+	endpoints.push_back(piece.endpoints[j]);
+	lengths.push_back(piece.lengths[j]);
+	deltas.push_back(piece.deltas[j]);
       }
     }
   if (r.isopen())
