@@ -3,7 +3,7 @@
 /* polyline.h - polylines                             */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2020 Pierre Abbat.
+/* Copyright 2012,2014-2020,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -45,6 +45,8 @@ extern int bendlimit;
  * always have complete spiral data.
  */
 int midarcdir(xy a,xy b,xy c);
+
+class polyspiral;
 
 class polyline: public drawobj
 {
@@ -99,6 +101,7 @@ public:
   polyarc();
   explicit polyarc(double e);
   polyarc(polyline &p);
+  polyarc(polyspiral &r,double toler);
   virtual int type();
   virtual unsigned hash();
   arc getarc(int i);
@@ -126,6 +129,7 @@ protected:
   std::vector<double> clothances,curvatures;
   bool curvy;
 public:
+  friend class polyarc;
   polyspiral();
   explicit polyspiral(double e);
   polyspiral(polyline &p);

@@ -3,7 +3,7 @@
 /* polyline.cpp - polylines                           */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2021 Pierre Abbat.
+/* Copyright 2012,2014-2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -36,6 +36,7 @@
 #include "manysum.h"
 #include "relprime.h"
 #include "ldecimal.h"
+#include "manyarc.h"
 using namespace std;
 int bendlimit=DEG180;
 
@@ -110,6 +111,35 @@ polyspiral::polyspiral(polyline &p)
     bearings[i]=midbearings[i];
   }
   curvy=false;
+}
+
+polyarc::polyarc(polyspiral &r,double toler)
+{
+  int i,j;
+  polyarc piece;
+  elevation=r.elevation;
+  for (i=0;i<r.size();i++)
+    if (r.delta2s[i]==0)
+    {
+      endpoints.push_back(r.endpoints[i]);
+      lengths.push_back(r.lengths[i]);
+      deltas.push_back(r.deltas[i]);
+    }
+    else
+    {
+      piece=manyArc(r.getspiralarc(i),2);
+      for (j=0;j<piece.size();j++)
+      {
+	endpoints.push_back(piece.endpoints[i]);
+	lengths.push_back(piece.lengths[i]);
+	deltas.push_back(piece.deltas[i]);
+      }
+    }
+  if (r.isopen())
+    endpoints.push_back(r.endpoints[i]);
+  cumLengths=lengths;
+  boundCircles.resize(lengths.size());
+  setlengths();
 }
 
 int polyline::type()
