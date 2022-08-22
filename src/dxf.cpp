@@ -718,6 +718,7 @@ void insertPolyline(vector<GroupCode> &dxfData,polyspiral &poly,DxfLayer &lay,do
   GroupCode entityType(0),layerName(8),colorNumber(62);
   GroupCode nVertices(90),closedFlag(70),elev(38);
   polyarc apx(poly,0.001);
+  int delta;
   int i;
   entityType.str="LWPOLYLINE";
   layerName.str=lay.name;
@@ -731,5 +732,13 @@ void insertPolyline(vector<GroupCode> &dxfData,polyspiral &poly,DxfLayer &lay,do
   dxfData.push_back(closedFlag);
   dxfData.push_back(elev);
   for (i=0;i<nVertices.integer;i++)
+  {
     insertXy(dxfData,10,apx.getEndpoint(i)/outUnit);
+    if (i<apx.size())
+    {
+      delta=apx.getarc(i).getdelta();
+      if (delta)
+	insertBulge(dxfData,delta);
+    }
+  }
 }
