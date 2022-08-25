@@ -63,6 +63,7 @@ set(header_files src/angle.h
                  src/color.h
                  src/contour.h
                  src/csv.h
+                 src/curvefit.h
                  src/document.h
                  src/drawobj.h
                  src/ellipsoid.h
@@ -134,6 +135,7 @@ set(sourcelib src/angle.cpp
               src/color.cpp
               src/contour.cpp
               src/csv.cpp
+              src/curvefit.cpp
               src/document.cpp
               src/drawobj.cpp
               src/ellipsoid.cpp

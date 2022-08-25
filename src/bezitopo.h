@@ -3,7 +3,7 @@
 /* bezitopo.h - include file for library              */
 /*                                                    */
 /******************************************************/
-/* Copyright 2018 Pierre Abbat.
+/* Copyright 2018,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -51,6 +51,7 @@
 #include <bezitopo/measure.h>
 #include <bezitopo/minquad.h>
 #include <bezitopo/polyline.h>
+#include <bezitopo/curvefit.h>
 #include <bezitopo/projection.h>
 #include <bezitopo/bezier.h>
 #include <bezitopo/color.h>
