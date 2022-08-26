@@ -21,3 +21,17 @@
  * and Lesser General Public License along with Bezitopo. If not, see
  * <http://www.gnu.org/licenses/>.
  */
+
+#include <vector>
+#include "circle.h"
+#include "polyline.h"
+#include "manyarc.h"
+
+/* Fits a polyarc to the points. The initial polyarc is formed by fitting
+ * a spiralarc to the midpoints of startLine and endLine perpendicular to both,
+ * then approximating it with two arcs. If there are hints, it starts with
+ * one more spiralarc than hints. The returned polyarc will start on startLine
+ * and end on endLine, but the endpoints on the hints will probably be moved
+ * off them.
+ */
+polyarc fitPolyarc(Circle startLine,std::vector<xy> points,Circle endLine,double toler,std::vector<Circle> hints=std::vector<Circle>());

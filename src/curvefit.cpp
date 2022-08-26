@@ -21,3 +21,11 @@
  * and Lesser General Public License along with Bezitopo. If not, see
  * <http://www.gnu.org/licenses/>.
  */
+
+#include <iostream>
+#include <cassert>
+#include "curvefit.h"
+#include "ps.h"
+#include "manysum.h"
+#include "ldecimal.h"
+#include "leastsquares.h"
