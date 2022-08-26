@@ -84,6 +84,7 @@ public:
   double getCumLength(int i);
   int stationSegment(double along);
   virtual xyz station(double along);
+  virtual int bearing(double along);
   virtual double closest(xy topoint,bool offends=false);
   virtual double area();
   virtual double dirbound(int angle,double boundsofar=INFINITY);
@@ -113,6 +114,7 @@ public:
   virtual void close();
   virtual double in(xy point);
   virtual xyz station(double along);
+  virtual int bearing(double along);
   virtual double closest(xy topoint,bool offends=false);
   virtual double area();
   virtual double dirbound(int angle,double boundsofar=INFINITY);
@@ -148,6 +150,7 @@ public:
   virtual void close();
   virtual double in(xy point);
   virtual xyz station(double along);
+  virtual int bearing(double along);
   virtual double closest(xy topoint,bool offends=false);
   virtual double area();
   virtual double dirbound(int angle,double boundsofar=INFINITY);

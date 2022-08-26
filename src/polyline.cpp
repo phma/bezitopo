@@ -656,6 +656,33 @@ xyz polyspiral::station(double along)
     return getspiralarc(seg).station(along-(cumLengths[seg]-lengths[seg]));
 }
 
+int polyline::bearing(double along)
+{
+  int seg=stationSegment(along);
+  if (seg<0 || seg>=lengths.size())
+    return DEG360;
+  else
+    return getsegment(seg).bearing(along-(cumLengths[seg]-lengths[seg]));
+}
+
+int polyarc::bearing(double along)
+{
+  int seg=stationSegment(along);
+  if (seg<0 || seg>=lengths.size())
+    return DEG360;
+  else
+    return getarc(seg).bearing(along-(cumLengths[seg]-lengths[seg]));
+}
+
+int polyspiral::bearing(double along)
+{
+  int seg=stationSegment(along);
+  if (seg<0 || seg>=lengths.size())
+    return DEG360;
+  else
+    return getspiralarc(seg).bearing(along-(cumLengths[seg]-lengths[seg]));
+}
+
 double polyline::closest(xy topoint,bool offends)
 /* offends is currently ignored. It has to be true when calling segment::closest
  * because of angle points.
