@@ -37,6 +37,13 @@ vector<double> curvefitResiduals(polyarc q,vector<xy> points)
  */
 {
   vector<double> ret;
-  int i;
+  int i,bear;
+  double along;
+  for (i=0;i<points.size();i++)
+  {
+    along=q.closest(points[i]);
+    bear=q.bearing(along);
+    ret.push_back(distanceInDirection(q.station(along),points[i],bear));
+  }
   return ret;
 }
