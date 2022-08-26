@@ -29,3 +29,14 @@
 #include "manysum.h"
 #include "ldecimal.h"
 #include "leastsquares.h"
+
+using namespace std;
+
+vector<double> curvefitResiduals(polyarc q,vector<xy> points)
+/* The points must not be off the ends of q.
+ */
+{
+  vector<double> ret;
+  int i;
+  return ret;
+}

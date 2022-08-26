@@ -27,6 +27,8 @@
 #include "polyline.h"
 #include "manyarc.h"
 
+std::vector<double> curvefitResiduals(polyarc q,std::vector<xy> points);
+
 /* Fits a polyarc to the points. The initial polyarc is formed by fitting
  * a spiralarc to the midpoints of startLine and endLine perpendicular to both,
  * then approximating it with two arcs. If there are hints, it starts with
