@@ -3,7 +3,7 @@
 /* angle.h - angles as binary fractions of rotation   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2014-2020 Pierre Abbat.
+/* Copyright 2012,2014-2020,2022 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -121,6 +121,7 @@ double gontorad(double angle);
 #define DEG270 0x60000000
 #define DEG360 0x80000000
 #define PHITURN 0xcf1bbcdd
+#define PHIQUARTER 0x33c6ef37
 std::string radtoangle(double angle,int64_t unitp);
 std::string radtoangle(double angle,int64_t unitp,Measure ms);
 std::string bintoangle(int angle,int64_t unitp);
