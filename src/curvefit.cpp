@@ -55,3 +55,26 @@ vector<double> curvefitResiduals(polyarc q,vector<xy> points)
   }
   return ret;
 }
+
+polyarc arcFitApprox(Circle startLine,double startOff,int startBear,std::vector<xy> points,Circle endLine,double endOff)
+{
+  polyarc ret;
+  int i,bear=startBear,lastbear;
+  xy startPoint=startLine.station(startOff);
+  xy endPoint=endLine.station(endOff);
+  ret.insert(startPoint);
+  for (i=0;i<points.size();i++)
+  {
+    lastbear=bear;
+    bear=twicedir(i?points[i-1]:startPoint,points[i])-bear;
+    ret.insert(points[i]);
+    ret.setdelta(i,bear-lastbear);
+  }
+  lastbear=bear;
+  bear=twicedir(i?points[i-1]:startPoint,endPoint);
+  ret.insert(endPoint);
+  ret.setdelta(i,bear-lastbear);
+  ret.open();
+  ret.setlengths();
+  return ret;
+}
