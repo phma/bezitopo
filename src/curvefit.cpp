@@ -78,3 +78,18 @@ polyarc arcFitApprox(Circle startLine,double startOff,int startBear,std::vector<
   ret.setlengths();
   return ret;
 }
+
+vector<int> adjustDirs(polyarc apx,int fitDir)
+{
+  int i,endbear;
+  vector<int> ret;
+  for (i=0;i<apx.size()-1;i++)
+  {
+    endbear=apx.getarc(i).endbearing();
+    if (isinsector(endbear-fitDir,0xc3c3c3c3))
+      ret.push_back(fitDir+DEG90);
+    else
+      ret.push_back(fitDir);
+  }
+  return ret;
+}
