@@ -32,6 +32,14 @@
 
 using namespace std;
 
+int fitDir=0;
+/* fitDir is rotated by PHIQUARTER (145.623°) and the endpoints, except the
+ * first and last which are moved along their lines, are moved along lines
+ * either parallel or perpendicular to fitDir, whichever is closest to
+ * sideways to the polyarc. This avoids moving an endpoint along the polyarc,
+ * which results in little change, and none if the curvatures are equal.
+ */
+
 vector<double> curvefitResiduals(polyarc q,vector<xy> points)
 /* The points must not be off the ends of q.
  */
