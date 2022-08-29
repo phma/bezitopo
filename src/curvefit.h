@@ -27,6 +27,15 @@
 #include "polyline.h"
 #include "manyarc.h"
 
+struct FitRec
+{
+  double startOff;
+  std::vector<xy> points;
+  double endOff;
+  double startCur; // used only when fitting a polyspiral
+  int startBear;
+};
+
 std::vector<double> curvefitResiduals(polyarc q,std::vector<xy> points);
 
 /* Fits a polyarc to the points. The initial polyarc is formed by fitting
