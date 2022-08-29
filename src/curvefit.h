@@ -30,10 +30,11 @@
 struct FitRec
 {
   double startOff;
-  std::vector<xy> points;
+  std::vector<xy> endpoints;
   double endOff;
   double startCur; // used only when fitting a polyspiral
   int startBear;
+  double shortDist(Circle startLine,Circle endLine) const;
 };
 
 std::vector<double> curvefitResiduals(polyarc q,std::vector<xy> points);

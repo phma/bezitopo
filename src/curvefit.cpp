@@ -40,6 +40,27 @@ int fitDir=0;
  * which results in little change, and none if the curvatures are equal.
  */
 
+double FitRec::shortDist(Circle startLine,Circle endLine) const
+/* Returns a distance less than (unless there're only two endpoints) the
+ * shortest distance between successive endpoints. This is used to convert
+ * length adjustments to angle adjustments. The distance is the inverse
+ * of the sum of the inverses of distances.
+ */
+{
+  int i;
+  vector<double> inv;
+  if (endpoints.size())
+  {
+    inv.push_back(1/dist(startLine.station(startOff),endpoints[0]));
+    for (i=0;i<endpoints.size()-1;i++)
+      inv.push_back(1/dist(endpoints[i],endpoints[i+1]));
+    inv.push_back(1/dist(endpoints.back(),endLine.station(endOff)));
+  }
+  else
+    inv.push_back(1/dist(startLine.station(startOff),endLine.station(endOff)));
+  return 1/pairwisesum(inv);
+}
+
 vector<double> curvefitResiduals(polyarc q,vector<xy> points)
 /* The points must not be off the ends of q.
  */
@@ -63,15 +84,15 @@ polyarc arcFitApprox(Circle startLine,FitRec fr,Circle endLine)
   xy startPoint=startLine.station(fr.startOff);
   xy endPoint=endLine.station(fr.endOff);
   ret.insert(startPoint);
-  for (i=0;i<fr.points.size();i++)
+  for (i=0;i<fr.endpoints.size();i++)
   {
     lastbear=bear;
-    bear=twicedir(i?fr.points[i-1]:startPoint,fr.points[i])-bear;
-    ret.insert(fr.points[i]);
+    bear=twicedir(i?fr.endpoints[i-1]:startPoint,fr.endpoints[i])-bear;
+    ret.insert(fr.endpoints[i]);
     ret.setdelta(i,bear-lastbear);
   }
   lastbear=bear;
-  bear=twicedir(i?fr.points[i-1]:startPoint,endPoint);
+  bear=twicedir(i?fr.endpoints[i-1]:startPoint,endPoint);
   ret.insert(endPoint);
   ret.setdelta(i,bear-lastbear);
   ret.open();
@@ -91,5 +112,68 @@ vector<int> adjustDirs(polyarc apx,int fitDir)
     else
       ret.push_back(fitDir);
   }
+  return ret;
+}
+
+FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
+{
+  int i,j,sz=fr.endpoints.size();
+  vector<double> adjustment;
+  vector<double> resid;
+  vector<double> plusresid,minusresid;
+  polyarc apx=arcFitApprox(startLine,fr,endLine);
+  vector<int> adjdirs=adjustDirs(apx,fitDir);
+  double shortDist=fr.shortDist(startLine,endLine);
+  double h=shortDist*bintorad(FURMAN1);
+  vector<xy> hxy;
+  FitRec plusoffsets,minusoffsets,ret;
+  matrix sidedefl(points.size(),sz+3);
+  for (i=0;i<sz;i++)
+    hxy.push_back(cossin(adjdirs[i])*h);
+  for (i=0;i<sz+3;i++)
+  {
+    plusoffsets.endpoints.clear();
+    minusoffsets.endpoints.clear();
+    if (i==0)
+    {
+      plusoffsets.startOff=fr.startOff+h;
+      minusoffsets.startOff=fr.startOff-h;
+    }
+    else
+      plusoffsets.startOff=minusoffsets.startOff=fr.startOff;
+    for (j=1;j<sz+1;j++)
+    {
+      if (j==i)
+      {
+	plusoffsets.endpoints.push_back(fr.endpoints[j-1]+hxy[j-1]);
+	minusoffsets.endpoints.push_back(fr.endpoints[j-1]-hxy[j-1]);
+      }
+      else
+      {
+	plusoffsets.endpoints.push_back(fr.endpoints[j-1]);
+	minusoffsets.endpoints.push_back(fr.endpoints[j-1]);
+      }
+    }
+    if (i==sz+1)
+    {
+      plusoffsets.endOff=fr.endOff+h;
+      minusoffsets.endOff=fr.endOff-h;
+    }
+    else
+      plusoffsets.endOff=minusoffsets.endOff=fr.endOff;
+    if (i==sz+2)
+    {
+      plusoffsets.startBear=fr.startBear+FURMAN1;
+      minusoffsets.startBear=fr.startBear-FURMAN1;
+    }
+    else
+      plusoffsets.startBear=minusoffsets.startBear=fr.startBear;
+    plusresid=curvefitResiduals(arcFitApprox(startLine,plusoffsets,endLine),points);
+    minusresid=curvefitResiduals(arcFitApprox(startLine,minusoffsets,endLine),points);
+    for (j=0;j<plusresid.size();j++)
+      sidedefl[j][i]=plusresid[j]-minusresid[j];
+  }
+  resid=curvefitResiduals(arcFitApprox(startLine,fr,endLine),points);
+  adjustment=linearLeastSquares(sidedefl,resid);
   return ret;
 }
