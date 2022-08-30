@@ -125,6 +125,7 @@ FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
   vector<int> adjdirs=adjustDirs(apx,fitDir);
   double shortDist=fr.shortDist(startLine,endLine);
   double h=shortDist*bintorad(FURMAN1);
+  double maxadj=0;
   vector<xy> hxy;
   FitRec plusoffsets,minusoffsets,ret;
   matrix sidedefl(points.size(),sz+3);
@@ -175,5 +176,16 @@ FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
   }
   resid=curvefitResiduals(arcFitApprox(startLine,fr,endLine),points);
   adjustment=linearLeastSquares(sidedefl,resid);
+  // Limit the adjustment to 256 furmans (1.40625°) to keep close to linear.
+  for (i=0;i<adjustment.size();i++)
+    if (fabs(adjustment[i])>maxadj)
+      maxadj=fabs(adjustment[i]);
+  for (i=0;maxadj>256 && i<adjustment.size();i++)
+    adjustment[i]*=256/maxadj;
+  ret.startOff=fr.startOff-h*adjustment[0];
+  ret.endOff=fr.endOff-h*adjustment[sz+1];
+  ret.startBear=fr.startBear-lrint(adjustment[sz+2]*FURMAN1);
+  for (i=0;i<sz;i++)
+    ret.endpoints.push_back(fr.endpoints[i]-hxy[i]*adjustment[i+1]);
   return ret;
 }
