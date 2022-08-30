@@ -3086,6 +3086,8 @@ void testcurvefit()
  */
 {
   criterion crit1;
+  Circle startLine(xy(329963.4877,192812.660),degtobin(24.6890));
+  Circle endLine(xy(329993.0940,193345.2798),degtobin(353.6056));
   doc.makepointlist(2);
   doc.pl[0].clear();
   doc.pl[1].crit.clear();
