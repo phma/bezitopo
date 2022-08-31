@@ -37,6 +37,8 @@ struct FitRec
   double shortDist(Circle startLine,Circle endLine) const;
 };
 
+double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine);
+
 std::vector<double> curvefitResiduals(polyarc q,std::vector<xy> points);
 
 /* Fits a polyarc to the points. The initial polyarc is formed by fitting

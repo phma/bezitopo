@@ -61,6 +61,25 @@ double FitRec::shortDist(Circle startLine,Circle endLine) const
   return 1/pairwisesum(inv);
 }
 
+double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine)
+/* Returns the root-sum-square of the distances between corresponding
+ * endpoints, plus the difference in start bearing converted to distances.
+ * a and b must have the same number of endpoints. Assumes that their
+ * start and end lines are the same.
+ */
+{
+  vector<double> sq;
+  int i;
+  sq.push_back(sqr(bintorad(foldangle(a.startBear-b.startBear))*a.shortDist(startLine,endLine)));
+  sq.push_back(sqr(bintorad(foldangle(a.startBear-b.startBear))*b.shortDist(startLine,endLine)));
+  assert(a.endpoints.size()==b.endpoints.size());
+  for (i=0;i<a.endpoints.size();i++)
+    sq.push_back(sqr(dist(a.endpoints[i],b.endpoints[i])));
+  sq.push_back(sqr(a.startOff-b.startOff));
+  sq.push_back(sqr(a.endOff-b.endOff));
+  return sqrt(pairwisesum(sq));
+}
+
 vector<double> curvefitResiduals(polyarc q,vector<xy> points)
 /* The points must not be off the ends of q.
  */
