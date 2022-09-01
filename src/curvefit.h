@@ -39,6 +39,13 @@ struct FitRec
 
 double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine);
 
+/* Makes the initial curve, given at least two lines. pieces is the number of
+ * arcs between lines, e.g. if lines has 5 lines and pieces is 3, you get
+ * 12 arcs. As you walk along the path from first to last, the lines are
+ * pointing to the right.
+ */
+FitRec initialCurve(std::vector<Circle> lines,int pieces);
+
 std::vector<double> curvefitResiduals(polyarc q,std::vector<xy> points);
 
 /* Fits a polyarc to the points. The initial polyarc is formed by fitting
