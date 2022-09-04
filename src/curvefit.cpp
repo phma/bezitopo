@@ -141,7 +141,7 @@ polyarc arcFitApprox(Circle startLine,FitRec fr,Circle endLine)
     ret.setdelta(i,bear-lastbear);
   }
   lastbear=bear;
-  bear=twicedir(i?fr.endpoints[i-1]:startPoint,endPoint);
+  bear=twicedir(i?fr.endpoints[i-1]:startPoint,endPoint)-bear;
   ret.insert(endPoint);
   ret.setdelta(i,bear-lastbear);
   ret.open();
