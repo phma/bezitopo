@@ -3097,17 +3097,20 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
   br.include(endLine.station(0));
   lines.push_back(startLine);
   lines.push_back(endLine);
-  fr=initialCurve(lines,2);
-  for (i=0;i<10;i++)
+  fr=initialCurve(lines,5);
+  for (i=0;i<1000;i++)
   {
     fr=adjust1step(points2d,startLine,fr,endLine);
     stepDir();
-    ps.startpage();
-    ps.setscale(br);
-    for (j=0;j<points2d.size();j++)
-      ps.circle(points2d[j],1);
-    ps.spline(arcFitApprox(startLine,fr,endLine).approx3d(0.001/ps.getscale()));
-    ps.endpage();
+    if (i%10==9)
+    {
+      ps.startpage();
+      ps.setscale(br);
+      for (j=0;j<points2d.size();j++)
+	ps.circle(points2d[j],1);
+      ps.spline(arcFitApprox(startLine,fr,endLine).approx3d(0.001/ps.getscale()));
+      ps.endpage();
+    }
   }
 }
 
