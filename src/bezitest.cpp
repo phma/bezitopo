@@ -3185,8 +3185,9 @@ void testcurvefit()
   doc.pl[0].addpoint(50,point(330041.18982,193184.11305,335.90922,"DR"));
   doc.copytopopoints(1,0); // centerline
   doc.copytopopoints(2,0); // driveways
-  for (i=1;i<=doc.pl[1].points.size();i++)
-    points.push_back(doc.pl[1].points[i]);
+  for (i=1;i<=doc.pl[1].lastPointNum();i++)
+    if (doc.pl[1].pointExists(i))
+      points.push_back(doc.pl[1].points[i]);
   test1curvefit(points,startLine,endLine,ps);
 }
 
