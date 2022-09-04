@@ -40,6 +40,11 @@ int fitDir=0;
  * which results in little change, and none if the curvatures are equal.
  */
 
+void stepDir()
+{
+  fitDir+=PHIQUARTER;
+}
+
 double FitRec::shortDist(Circle startLine,Circle endLine) const
 /* Returns a distance less than (unless there're only two endpoints) the
  * shortest distance between successive endpoints. This is used to convert

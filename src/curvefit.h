@@ -46,6 +46,7 @@ double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine);
  */
 FitRec initialCurve(std::vector<Circle> lines,int pieces);
 
+void stepDir();
 std::vector<double> curvefitResiduals(polyarc q,std::vector<xy> points);
 polyarc arcFitApprox(Circle startLine,FitRec fr,Circle endLine);
 FitRec adjust1step(std::vector<xy> points,Circle startLine,FitRec fr,Circle endLine);
