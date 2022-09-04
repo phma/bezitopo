@@ -47,6 +47,8 @@ double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine);
 FitRec initialCurve(std::vector<Circle> lines,int pieces);
 
 std::vector<double> curvefitResiduals(polyarc q,std::vector<xy> points);
+polyarc arcFitApprox(Circle startLine,FitRec fr,Circle endLine);
+FitRec adjust1step(std::vector<xy> points,Circle startLine,FitRec fr,Circle endLine);
 
 /* Fits a polyarc to the points. The initial polyarc is formed by fitting
  * a spiralarc to the midpoints of startLine and endLine perpendicular to both,

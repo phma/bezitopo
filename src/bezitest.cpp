@@ -81,6 +81,7 @@
 #include "sourcegeoid.h"
 #include "bicubic.h"
 #include "matrix.h"
+#include "curvefit.h"
 #include "quaternion.h"
 #include "kml.h"
 #include "zoom.h"
@@ -3080,15 +3081,44 @@ void testcurly()
   cout<<ldecimal(1e3*times[2]/times[0],0.01)<<" µs per too curly test\n";
 }
 
+void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript &ps)
+{
+  vector<xy> points2d;
+  vector<Circle> lines;
+  int i;
+  FitRec fr;
+  BoundRect br;
+  for (i=0;i<points.size();i++)
+  {
+    points2d.push_back(points[i]);
+    br.include(points[i]);
+  }
+  br.include(startLine.station(0));
+  br.include(endLine.station(0));
+  lines.push_back(startLine);
+  lines.push_back(endLine);
+  fr=initialCurve(lines,2);
+  ps.startpage();
+  ps.setscale(br);
+  ps.spline(arcFitApprox(startLine,fr,endLine).approx3d(0.001/ps.getscale()));
+  ps.endpage();
+}
+
 void testcurvefit()
 /* Test fitting a 3D curve to a sequence of points, which are somewhat evenly
  * spaced along the centerline of a rural road.
  */
 {
   criterion crit1;
+  PostScript ps;
+  vector<xyz> points;
   Circle startLine(xy(329963.4877,192812.660),degtobin(24.6890));
   Circle endLine(xy(329993.0940,193345.2798),degtobin(353.6056));
+  int i;
+  ps.open("curvefit.ps");
   doc.makepointlist(2);
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
   doc.pl[0].clear();
   doc.pl[1].crit.clear();
   doc.pl[2].crit.clear();
@@ -3155,6 +3185,9 @@ void testcurvefit()
   doc.pl[0].addpoint(50,point(330041.18982,193184.11305,335.90922,"DR"));
   doc.copytopopoints(1,0); // centerline
   doc.copytopopoints(2,0); // driveways
+  for (i=1;i<=doc.pl[1].points.size();i++)
+    points.push_back(doc.pl[1].points[i]);
+  test1curvefit(points,startLine,endLine,ps);
 }
 
 void test1manyarc(spiralarc s,PostScript &ps)
