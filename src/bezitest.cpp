@@ -3117,7 +3117,7 @@ void testcurvefit()
   int i;
   ps.open("curvefit.ps");
   doc.makepointlist(2);
-  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.setpaper(papersizes["A4 portrait"],0);
   ps.prolog();
   doc.pl[0].clear();
   doc.pl[1].crit.clear();
