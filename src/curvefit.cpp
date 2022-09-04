@@ -88,7 +88,6 @@ FitRec initialCurve(std::vector<Circle> lines,int pieces)
   spiralarc spi;
   polyarc apx;
   assert(lines.size()>1);
-  ret.endpoints.push_back(lines[0].station(0));
   if (pieces<2)
     pieces=2;
   for (i=0;i<lines.size()-1;i++)
@@ -106,6 +105,7 @@ FitRec initialCurve(std::vector<Circle> lines,int pieces)
       ret.startCur=apx.getarc(0).curvature(0);
     }
   }
+  ret.endpoints.pop_back();
   ret.startOff=ret.endOff=0;
   return ret;
 }
