@@ -3113,7 +3113,7 @@ void testcurvefit()
   PostScript ps;
   vector<xyz> points;
   Circle startLine(xy(329963.4877,192812.660),degtobin(24.6890));
-  Circle endLine(xy(329993.0940,193345.2798),degtobin(353.6056));
+  Circle endLine(xy(329993.0940,193345.2798),degtobin(-6.3944));
   int i;
   ps.open("curvefit.ps");
   doc.makepointlist(2);
