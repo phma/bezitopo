@@ -3085,7 +3085,7 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
 {
   vector<xy> points2d;
   vector<Circle> lines;
-  int i;
+  int i,j;
   FitRec fr;
   BoundRect br;
   for (i=0;i<points.size();i++)
@@ -3100,6 +3100,8 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
   fr=initialCurve(lines,2);
   ps.startpage();
   ps.setscale(br);
+  for (j=0;j<points2d.size();j++)
+    ps.circle(points2d[j],1);
   ps.spline(arcFitApprox(startLine,fr,endLine).approx3d(0.001/ps.getscale()));
   ps.endpage();
 }
