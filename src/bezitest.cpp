@@ -3086,8 +3086,10 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
   vector<xy> points2d;
   vector<Circle> lines;
   int i,j;
-  FitRec fr;
+  FitRec fr,lastfr;
+  double frdiff;
   BoundRect br;
+  polyarc apx;
   for (i=0;i<points.size();i++)
   {
     points2d.push_back(points[i]);
@@ -3100,7 +3102,9 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
   fr=initialCurve(lines,5);
   for (i=0;i<1000;i++)
   {
+    lastfr=fr;
     fr=adjust1step(points2d,startLine,fr,endLine);
+    frdiff=diff(lastfr,fr,startLine,endLine);
     stepDir();
     if (i%10==9)
     {
@@ -3108,8 +3112,10 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
       ps.setscale(br);
       for (j=0;j<points2d.size();j++)
 	ps.circle(points2d[j],1);
-      ps.spline(arcFitApprox(startLine,fr,endLine).approx3d(0.001/ps.getscale()));
+      apx=arcFitApprox(startLine,fr,endLine);
+      ps.spline(apx.approx3d(0.001/ps.getscale()));
       ps.endpage();
+      cout<<i<<' '<<frdiff<<' '<<curvefitSquareError(apx,points2d)<<endl;
     }
   }
 }

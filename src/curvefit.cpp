@@ -131,6 +131,15 @@ vector<double> curvefitResiduals(polyarc q,vector<xy> points)
   return ret;
 }
 
+double curvefitSquareError(polyarc q,vector<xy> points)
+{
+  vector<double> resid=curvefitResiduals(q,points);
+  int i;
+  for (i=0;i<resid.size();i++)
+    resid[i]*=resid[i];
+  return pairwisesum(resid);
+}
+
 polyarc arcFitApprox(Circle startLine,FitRec fr,Circle endLine)
 {
   polyarc ret;
