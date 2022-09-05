@@ -3099,7 +3099,7 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
   br.include(endLine.station(0));
   lines.push_back(startLine);
   lines.push_back(endLine);
-  fr=initialCurve(lines,5);
+  fr=initialCurve(lines,2);
   for (i=0;i<1000;i++)
   {
     lastfr=fr;
@@ -3131,6 +3131,10 @@ void testcurvefit()
   Circle startLine(xy(329963.4877,192812.660),degtobin(24.6890));
   Circle endLine(xy(329993.0940,193345.2798),degtobin(-6.3944));
   int i;
+  int delta;
+  double straightLength;
+  polyarc pa;
+  xy center;
   ps.open("curvefit.ps");
   doc.makepointlist(2);
   ps.setpaper(papersizes["A4 portrait"],0);
@@ -3204,6 +3208,25 @@ void testcurvefit()
   for (i=1;i<=doc.pl[1].lastPointNum();i++)
     if (doc.pl[1].pointExists(i))
       points.push_back(doc.pl[1].points[i]);
+  //test1curvefit(points,startLine,endLine,ps);
+  points.clear();
+  /* These points are on a known alignment, of length 768, with a change
+   * from straight to curved at a random length in (256,512).
+   */
+  straightLength=256.5+rng.ucrandom();
+  cout<<"straightLength="<<straightLength<<endl;
+  pa.insert(xy(0,0));
+  pa.insert(xy(straightLength*0.6,straightLength*0.8));
+  center=xy(straightLength*0.6-256*0.8,straightLength*0.8+256*0.6);
+  delta=radtobin((768-straightLength)/256);
+  pa.insert(center+256*cossin(delta-AT34));
+  pa.setdelta(1,delta);
+  startLine=Circle(xy(0,0),-AT34);
+  endLine=Circle(pa.getEndpoint(2),delta-AT34);
+  pa.open();
+  pa.setlengths();
+  for (i=1;i<48;i++)
+    points.push_back(pa.station(16*i));
   test1curvefit(points,startLine,endLine,ps);
 }
 
