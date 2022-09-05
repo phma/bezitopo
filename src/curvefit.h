@@ -35,6 +35,7 @@ struct FitRec
   double startCur; // used only when fitting a polyspiral
   int startBear;
   double shortDist(Circle startLine,Circle endLine) const;
+  bool isnan() const;
 };
 
 double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine);

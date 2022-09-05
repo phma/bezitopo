@@ -3104,6 +3104,8 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
   {
     lastfr=fr;
     fr=adjust1step(points2d,startLine,fr,endLine,true);
+    if (fr.isnan()) // singular matrix
+      fr=adjust1step(points2d,startLine,lastfr,endLine,false);
     frdiff=diff(lastfr,fr,startLine,endLine);
     stepDir();
     if (i%10==9)

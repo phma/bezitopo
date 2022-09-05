@@ -66,6 +66,15 @@ double FitRec::shortDist(Circle startLine,Circle endLine) const
   return 1/pairwisesum(inv);
 }
 
+bool FitRec::isnan() const
+{
+  bool ret=::isnan(startOff) || ::isnan(endOff);
+  int i;
+  for (i=0;i<endpoints.size() && !ret;i++)
+    ret=ret || endpoints[i].isnan();
+  return ret;
+}
+
 double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine)
 /* Returns the root-sum-square of the distances between corresponding
  * endpoints, plus the difference in start bearing converted to distances.
