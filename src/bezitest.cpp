@@ -3103,7 +3103,7 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
   for (i=0;i<1000;i++)
   {
     lastfr=fr;
-    fr=adjust1step(points2d,startLine,fr,endLine,false);
+    fr=adjust1step(points2d,startLine,fr,endLine,true);
     frdiff=diff(lastfr,fr,startLine,endLine);
     stepDir();
     if (i%10==9)

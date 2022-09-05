@@ -202,7 +202,7 @@ FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine,b
   double maxadj=0;
   vector<xy> hxy,hyx;
   FitRec plusoffsets,minusoffsets,ret;
-  matrix sidedefl(points.size(),sz+3);
+  matrix sidedefl(points.size(),sz*d+3);
   for (i=0;i<sz;i++)
   {
     hxy.push_back(cossin(adjdirs[i])*h);
