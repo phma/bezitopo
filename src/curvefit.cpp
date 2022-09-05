@@ -140,6 +140,17 @@ double curvefitSquareError(polyarc q,vector<xy> points)
   return pairwisesum(resid);
 }
 
+double curvefitMaxError(polyarc q,vector<xy> points)
+{
+  vector<double> resid=curvefitResiduals(q,points);
+  int i;
+  double maxerr=0;
+  for (i=0;i<resid.size();i++)
+    if (fabs(resid[i])>maxerr)
+      maxerr=fabs(resid[i]);
+  return maxerr;
+}
+
 polyarc arcFitApprox(Circle startLine,FitRec fr,Circle endLine)
 {
   polyarc ret;

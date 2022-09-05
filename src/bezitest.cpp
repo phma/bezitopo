@@ -3115,7 +3115,7 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
       apx=arcFitApprox(startLine,fr,endLine);
       ps.spline(apx.approx3d(0.001/ps.getscale()));
       ps.endpage();
-      cout<<i<<' '<<frdiff<<' '<<curvefitSquareError(apx,points2d)<<endl;
+      cout<<i<<' '<<frdiff<<' '<<curvefitMaxError(apx,points2d)<<endl;
     }
   }
 }

@@ -49,6 +49,7 @@ FitRec initialCurve(std::vector<Circle> lines,int pieces);
 void stepDir();
 std::vector<double> curvefitResiduals(polyarc q,std::vector<xy> points);
 double curvefitSquareError(polyarc q,std::vector<xy> points);
+double curvefitMaxError(polyarc q,std::vector<xy> points);
 polyarc arcFitApprox(Circle startLine,FitRec fr,Circle endLine);
 FitRec adjust1step(std::vector<xy> points,Circle startLine,FitRec fr,Circle endLine);
 
