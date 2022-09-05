@@ -189,7 +189,7 @@ vector<int> adjustDirs(polyarc apx,int fitDir)
   return ret;
 }
 
-FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
+FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine,bool twoD)
 {
   int i,j,sz=fr.endpoints.size();
   vector<double> adjustment;
@@ -200,11 +200,14 @@ FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
   double shortDist=fr.shortDist(startLine,endLine);
   double h=shortDist*bintorad(FURMAN1);
   double maxadj=0;
-  vector<xy> hxy;
+  vector<xy> hxy,hyx;
   FitRec plusoffsets,minusoffsets,ret;
   matrix sidedefl(points.size(),sz+3);
   for (i=0;i<sz;i++)
+  {
     hxy.push_back(cossin(adjdirs[i])*h);
+    hyx.push_back(cossin(adjdirs[i]+DEG90)*h);
+  }
   for (i=0;i<sz+3;i++)
   {
     plusoffsets.endpoints.clear();
