@@ -191,7 +191,7 @@ vector<int> adjustDirs(polyarc apx,int fitDir)
 
 FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine,bool twoD)
 {
-  int i,j,sz=fr.endpoints.size();
+  int i,j,sz=fr.endpoints.size(),d=twoD+1;
   vector<double> adjustment;
   vector<double> resid;
   vector<double> plusresid,minusresid;
@@ -208,7 +208,7 @@ FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine,b
     hxy.push_back(cossin(adjdirs[i])*h);
     hyx.push_back(cossin(adjdirs[i]+DEG90)*h);
   }
-  for (i=0;i<sz+3;i++)
+  for (i=0;i<sz*d+3;i++)
   {
     plusoffsets.endpoints.clear();
     minusoffsets.endpoints.clear();
@@ -219,27 +219,33 @@ FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine,b
     }
     else
       plusoffsets.startOff=minusoffsets.startOff=fr.startOff;
-    for (j=1;j<sz+1;j++)
+    for (j=1;j<sz*d+1;j++)
     {
       if (j==i)
-      {
-	plusoffsets.endpoints.push_back(fr.endpoints[j-1]+hxy[j-1]);
-	minusoffsets.endpoints.push_back(fr.endpoints[j-1]-hxy[j-1]);
-      }
+	if (j<sz+1)
+	{
+	  plusoffsets.endpoints.push_back(fr.endpoints[j-1]+hxy[j-1]);
+	  minusoffsets.endpoints.push_back(fr.endpoints[j-1]-hxy[j-1]);
+	}
+	else
+	{
+	  plusoffsets.endpoints.push_back(fr.endpoints[j-sz-1]+hyx[j-sz-1]);
+	  minusoffsets.endpoints.push_back(fr.endpoints[j-sz-1]-hyx[j-sz-1]);
+	}
       else
       {
 	plusoffsets.endpoints.push_back(fr.endpoints[j-1]);
 	minusoffsets.endpoints.push_back(fr.endpoints[j-1]);
       }
     }
-    if (i==sz+1)
+    if (i==sz*d+1)
     {
       plusoffsets.endOff=fr.endOff+h;
       minusoffsets.endOff=fr.endOff-h;
     }
     else
       plusoffsets.endOff=minusoffsets.endOff=fr.endOff;
-    if (i==sz+2)
+    if (i==sz*d+2)
     {
       plusoffsets.startBear=fr.startBear+FURMAN1;
       minusoffsets.startBear=fr.startBear-FURMAN1;
@@ -260,9 +266,12 @@ FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine,b
   for (i=0;maxadj>4096 && i<adjustment.size();i++)
     adjustment[i]*=4096/maxadj;
   ret.startOff=fr.startOff-h*adjustment[0];
-  ret.endOff=fr.endOff-h*adjustment[sz+1];
-  ret.startBear=fr.startBear-lrint(adjustment[sz+2]*FURMAN1);
+  ret.endOff=fr.endOff-h*adjustment[sz*d+1];
+  ret.startBear=fr.startBear-lrint(adjustment[sz*d+2]*FURMAN1);
   for (i=0;i<sz;i++)
-    ret.endpoints.push_back(fr.endpoints[i]-hxy[i]*adjustment[i+1]);
+    if (twoD)
+      ret.endpoints.push_back(fr.endpoints[i]-hxy[i]*adjustment[i+1]-hyx[i]*adjustment[i+sz+1]);
+    else
+      ret.endpoints.push_back(fr.endpoints[i]-hxy[i]*adjustment[i+1]);
   return ret;
 }
