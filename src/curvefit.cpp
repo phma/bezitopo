@@ -160,6 +160,35 @@ double curvefitMaxError(polyarc q,vector<xy> points)
   return maxerr;
 }
 
+set<int> breakWhich(polyarc q,std::vector<xy> points)
+/* Returns one or two indices of arc to break, those that have the points
+ * with the worst errors.
+ */
+{
+  set<int> ret;
+  vector<double> resid=curvefitResiduals(q,points);
+  int i,negWorst=-1,posWorst=-1;
+  double worstPos=-INFINITY,worstNeg=INFINITY;
+  for (i=0;i<resid.size();i++)
+  {
+    if (resid[i]>0 && resid[i]>worstPos)
+    {
+      worstPos=resid[i];
+      posWorst=i;
+    }
+    if (resid[i]<0 && resid[i]<worstNeg)
+    {
+      worstNeg=resid[i];
+      negWorst=i;
+    }
+  }
+  if (posWorst>=0)
+    ret.insert(posWorst);
+  if (negWorst>=0)
+    ret.insert(negWorst);
+  return ret;
+}
+
 polyarc arcFitApprox(Circle startLine,FitRec fr,Circle endLine)
 {
   polyarc ret;

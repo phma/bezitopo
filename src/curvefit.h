@@ -23,6 +23,7 @@
  */
 
 #include <vector>
+#include <set>
 #include "circle.h"
 #include "polyline.h"
 #include "manyarc.h"
@@ -51,6 +52,7 @@ void stepDir();
 std::vector<double> curvefitResiduals(polyarc q,std::vector<xy> points);
 double curvefitSquareError(polyarc q,std::vector<xy> points);
 double curvefitMaxError(polyarc q,std::vector<xy> points);
+std::set<int> breakWhich(polyarc q,std::vector<xy> points);
 polyarc arcFitApprox(Circle startLine,FitRec fr,Circle endLine);
 FitRec adjust1step(std::vector<xy> points,Circle startLine,FitRec fr,Circle endLine,bool twoD);
 FitRec adjustArcs(std::vector<xy> points,Circle startLine,FitRec fr,Circle endLine);
