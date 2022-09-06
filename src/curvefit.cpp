@@ -190,9 +190,9 @@ set<int> breakWhich(polyarc q,std::vector<xy> points)
     }
   }
   if (posWorst>=0)
-    ret.insert(posWorst);
+    ret.insert(q.stationSegment(q.closest(points[posWorst])));
   if (negWorst>=0)
-    ret.insert(negWorst);
+    ret.insert(q.stationSegment(q.closest(points[negWorst])));
   return ret;
 }
 
