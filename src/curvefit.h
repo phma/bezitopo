@@ -37,6 +37,7 @@ struct FitRec
   int startBear;
   double shortDist(Circle startLine,Circle endLine) const;
   bool isnan() const;
+  void breakArcs(std::set<int> which,polyarc apx);
 };
 
 double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine);

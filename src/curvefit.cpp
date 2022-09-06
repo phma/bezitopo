@@ -75,6 +75,13 @@ bool FitRec::isnan() const
   return ret;
 }
 
+void FitRec::breakArcs(set<int> which,polyarc apx)
+{
+  set<int>::reverse_iterator i;
+  for (i=which.rbegin();i!=which.rend();i++)
+    endpoints.insert(endpoints.begin()+*i,apx.getarc(*i).midpoint());
+}
+
 double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine)
 /* Returns the root-sum-square of the distances between corresponding
  * endpoints, plus the difference in start bearing converted to distances.
