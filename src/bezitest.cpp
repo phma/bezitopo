@@ -3100,7 +3100,7 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
   lines.push_back(startLine);
   lines.push_back(endLine);
   fr=initialCurve(lines,2);
-  for (i=0;i<1000;i++)
+  for (i=0;i<100;i++)
   {
     lastfr=fr;
     fr=adjust1step(points2d,startLine,fr,endLine,true);
@@ -3108,7 +3108,7 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
       fr=adjust1step(points2d,startLine,lastfr,endLine,false);
     frdiff=diff(lastfr,fr,startLine,endLine);
     stepDir();
-    if (i%10==9)
+    if (i%1==0)
     {
       ps.startpage();
       ps.setscale(br);
