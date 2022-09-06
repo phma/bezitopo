@@ -283,3 +283,27 @@ FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine,b
       ret.endpoints.push_back(fr.endpoints[i]-hxy[i]*adjustment[i+1]);
   return ret;
 }
+
+FitRec adjustArcs(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
+/* Adjusts the polyarc defined by startLine, fr, and endLine until the maximum
+ * error stops getting better.
+ */
+{
+  double lastError=INFINITY,thisError=1e100;
+  FitRec lastfr;
+  polyarc apx;
+  while (thisError<lastError)
+  {
+    lastfr=fr;
+    fr=adjust1step(points,startLine,fr,endLine,true);
+    if (fr.isnan()) // singular matrix
+      fr=adjust1step(points,startLine,lastfr,endLine,false);
+    stepDir();
+    apx=arcFitApprox(startLine,fr,endLine);
+    lastError=thisError;
+    thisError=curvefitMaxError(apx,points);
+  }
+  if (thisError>lastError)
+    fr=lastfr;
+  return fr;
+}

@@ -3100,14 +3100,11 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,PostScript
   lines.push_back(startLine);
   lines.push_back(endLine);
   fr=initialCurve(lines,2);
-  for (i=0;i<100;i++)
+  for (i=0;i<1;i++)
   {
     lastfr=fr;
-    fr=adjust1step(points2d,startLine,fr,endLine,true);
-    if (fr.isnan()) // singular matrix
-      fr=adjust1step(points2d,startLine,lastfr,endLine,false);
+    fr=adjustArcs(points2d,startLine,fr,endLine);
     frdiff=diff(lastfr,fr,startLine,endLine);
-    stepDir();
     if (i%1==0)
     {
       ps.startpage();

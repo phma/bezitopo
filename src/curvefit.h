@@ -53,6 +53,7 @@ double curvefitSquareError(polyarc q,std::vector<xy> points);
 double curvefitMaxError(polyarc q,std::vector<xy> points);
 polyarc arcFitApprox(Circle startLine,FitRec fr,Circle endLine);
 FitRec adjust1step(std::vector<xy> points,Circle startLine,FitRec fr,Circle endLine,bool twoD);
+FitRec adjustArcs(std::vector<xy> points,Circle startLine,FitRec fr,Circle endLine);
 
 /* Fits a polyarc to the points. The initial polyarc is formed by fitting
  * a spiralarc to the midpoints of startLine and endLine perpendicular to both,
