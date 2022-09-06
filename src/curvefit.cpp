@@ -228,19 +228,18 @@ FitRec adjust1step(vector<xy> points,Circle startLine,FitRec fr,Circle endLine,b
     }
     else
       plusoffsets.startOff=minusoffsets.startOff=fr.startOff;
-    for (j=1;j<sz*d+1;j++)
+    for (j=1;j<sz+1;j++)
     {
       if (j==i)
-	if (j<sz+1)
-	{
-	  plusoffsets.endpoints.push_back(fr.endpoints[j-1]+hxy[j-1]);
-	  minusoffsets.endpoints.push_back(fr.endpoints[j-1]-hxy[j-1]);
-	}
-	else
-	{
-	  plusoffsets.endpoints.push_back(fr.endpoints[j-sz-1]+hyx[j-sz-1]);
-	  minusoffsets.endpoints.push_back(fr.endpoints[j-sz-1]-hyx[j-sz-1]);
-	}
+      {
+	plusoffsets.endpoints.push_back(fr.endpoints[j-1]+hxy[j-1]);
+	minusoffsets.endpoints.push_back(fr.endpoints[j-1]-hxy[j-1]);
+      }
+      else if (twoD && j+sz==i)
+      {
+	plusoffsets.endpoints.push_back(fr.endpoints[j-1]+hyx[j-1]);
+	minusoffsets.endpoints.push_back(fr.endpoints[j-1]-hyx[j-1]);
+      }
       else
       {
 	plusoffsets.endpoints.push_back(fr.endpoints[j-1]);
