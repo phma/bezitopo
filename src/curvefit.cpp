@@ -328,7 +328,8 @@ FitRec adjustArcs(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
   double lastError=INFINITY,thisError=1e100;
   FitRec lastfr;
   polyarc apx;
-  while (thisError<lastError)
+  int i=0;
+  while (thisError<lastError || i<5)
   {
     lastfr=fr;
     fr=adjust1step(points,startLine,fr,endLine,true);
@@ -338,6 +339,7 @@ FitRec adjustArcs(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
     apx=arcFitApprox(startLine,fr,endLine);
     lastError=thisError;
     thisError=curvefitMaxError(apx,points);
+    i++;
   }
   if (thisError>lastError)
     fr=lastfr;
