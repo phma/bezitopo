@@ -332,7 +332,11 @@ FitRec adjustArcs(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
   while (thisError<lastError || i<5)
   {
     lastfr=fr;
-    fr=adjust1step(points,startLine,fr,endLine,true);
+    /* When i=0, there is often a just-split arc, where moving the new
+     * endpoint along the arc produces no effect, so the matrix is singular,
+     * so do a one-dimensional adjustment first.
+     */
+    fr=adjust1step(points,startLine,fr,endLine,i>0);
     if (fr.isnan()) // singular matrix
       fr=adjust1step(points,startLine,lastfr,endLine,false);
     stepDir();
