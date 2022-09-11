@@ -3198,7 +3198,7 @@ void testcurvefit()
   for (i=1;i<=doc.pl[1].lastPointNum();i++)
     if (doc.pl[1].pointExists(i))
       points.push_back(doc.pl[1].points[i]);
-  test1curvefit(points,startLine,endLine,0.1,ps);
+  test1curvefit(points,startLine,endLine,0.3,ps);
   points.clear();
   /* These points are on a known alignment, of length 768, with a change
    * from straight to curved at a random length in (256,512).
