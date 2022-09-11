@@ -101,7 +101,7 @@ double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine)
   return sqrt(pairwisesum(sq));
 }
 
-FitRec initialCurve(std::vector<Circle> lines,int pieces)
+FitRec initialCurve(std::deque<Circle> lines,int pieces)
 {
   int i,j;
   int bear0,bear1;
@@ -348,4 +348,35 @@ FitRec adjustArcs(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
   if (thisError>lastError)
     fr=lastfr;
   return fr;
+}
+
+polyarc fitPolyarc(Circle startLine,vector<xy> points,Circle endLine,double toler,deque<Circle> hints,int pieces)
+{
+  int i,j;
+  double maxerr=INFINITY;
+  FitRec fr,lastfr;
+  polyarc apx;
+  set<int> breaks;
+  hints.push_front(startLine);
+  hints.push_back(endLine);
+  fr=initialCurve(hints,pieces);
+  /* The number of degrees of freedom is twice the number of endpoints plus 3.
+   * The number of points cannot be less than this.
+   */
+  for (i=0;maxerr>toler;i++)
+  {
+    lastfr=fr;
+    fr=adjustArcs(points,startLine,fr,endLine);
+    apx=arcFitApprox(startLine,fr,endLine);
+    maxerr=curvefitMaxError(apx,points);
+    if (maxerr>toler)
+    {
+      breaks=breakWhich(apx,points);
+      if (2*(fr.endpoints.size()+breaks.size())+3>points.size())
+	break;
+      else
+	fr.breakArcs(breaks,apx);
+    }
+  }
+  return apx;
 }

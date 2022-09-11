@@ -3084,7 +3084,7 @@ void testcurly()
 void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,double toler,PostScript &ps)
 {
   vector<xy> points2d;
-  vector<Circle> lines;
+  deque<Circle> lines;
   int i,j;
   FitRec fr,lastfr;
   double frdiff;
@@ -3100,25 +3100,14 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,double tol
   lines.push_back(startLine);
   lines.push_back(endLine);
   fr=initialCurve(lines,2);
-  for (i=0;i<10;i++)
-  {
-    lastfr=fr;
-    fr=adjustArcs(points2d,startLine,fr,endLine);
-    frdiff=diff(lastfr,fr,startLine,endLine);
-    if (i%1==0)
-    {
-      ps.startpage();
-      ps.setscale(br);
-      for (j=0;j<points2d.size();j++)
-	ps.circle(points2d[j],1);
-      apx=arcFitApprox(startLine,fr,endLine);
-      ps.spline(apx.approx3d(0.001/ps.getscale()));
-      ps.endpage();
-      cout<<i<<' '<<frdiff<<' '<<curvefitMaxError(apx,points2d)<<endl;
-    }
-    if (curvefitMaxError(apx,points2d)>toler)
-      fr.breakArcs(breakWhich(apx,points2d),apx);
-  }
+  apx=fitPolyarc(startLine,points2d,endLine,toler);
+  ps.startpage();
+  ps.setscale(br);
+  for (j=0;j<points2d.size();j++)
+    ps.circle(points2d[j],1);
+  ps.spline(apx.approx3d(0.001/ps.getscale()));
+  ps.endpage();
+  cout<<apx.size()<<" arcs, error "<<curvefitMaxError(apx,points2d)<<endl;
 }
 
 void testcurvefit()
