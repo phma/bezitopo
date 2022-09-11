@@ -67,3 +67,4 @@ FitRec adjustArcs(std::vector<xy> points,Circle startLine,FitRec fr,Circle endLi
  * off them.
  */
 polyarc fitPolyarc(Circle startLine,std::vector<xy> points,Circle endLine,double toler,std::deque<Circle> hints=std::deque<Circle>(),int pieces=2);
+void curvefit_i(std::string args);
