@@ -454,7 +454,7 @@ void curvefit_i(std::string args)
   polyarc fitCurve;
   string line,nstr,estr,bearstr;
   arc oneArc;
-  int i,npoints,bear;
+  int i,npoints,bear,lastbear=0;
   infile.open(filename);
   npoints=-(!infile.is_open());
   if (infile.is_open())
@@ -480,7 +480,9 @@ void curvefit_i(std::string args)
 	  e=doc.ms.parseMeasurement(words[0],LENGTH).magnitude;
 	  n=doc.ms.parseMeasurement(words[1],LENGTH).magnitude;
 	  bear=parsearangle(words[2],DEGREE).ang;
+	  bear=lastbear+foldangle(bear-lastbear);
 	  lines.push_back(Circle(xy(e,n),bear));
+	  lastbear=bear;
 	  break;
 	default:
 	  if (infile.good())
