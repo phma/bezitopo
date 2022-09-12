@@ -446,10 +446,12 @@ void curvefit_i(std::string args)
   string filename;
   filename=trim(firstarg(args));
   ifstream infile;
-  double n,e,toler;
+  double n,e,toler=0;
   vector<string> words;
   vector<xy> points;
   deque<Circle> lines;
+  Circle startLine,endLine;
+  polyarc fitCurve;
   string line,nstr,estr,bearstr;
   int npoints,bear;
   infile.open(filename);
@@ -486,6 +488,23 @@ void curvefit_i(std::string args)
     } while (infile.good());
     cout<<npoints<<" points\n";
     infile.close();
+  }
+  if (toler>0)
+    cout<<"Tolerance "<<doc.ms.formatMeasurementUnit(toler,LENGTH)<<endl;
+  else if (npoints>=0)
+    cout<<"Place tolerance in file on a line by itself\n";
+  if (lines.size()<2 && npoints>=0)
+    cout<<"Place at least two lines in file (order matters) e.g.\n"
+    <<"314.159,271.828,N36°52'12\"E\n"
+    <<"The initial curve proceeds N53°07'48\"W from/through/to this point.\n";
+  if (toler>0 && lines.size()>1 && npoints>0)
+  {
+    startLine=lines.front();
+    endLine=lines.back();
+    lines.pop_back();
+    lines.pop_front();
+    cout<<"Fitting curve...\n";
+    fitCurve=fitPolyarc(startLine,points,endLine,toler,lines,2);
   }
 }
 

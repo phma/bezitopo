@@ -369,6 +369,7 @@ polyarc fitPolyarc(Circle startLine,vector<xy> points,Circle endLine,double tole
     lastfr=fr;
     fr=adjustArcs(points,startLine,fr,endLine);
     apx=arcFitApprox(startLine,fr,endLine);
+    cout<<apx.size()<<" arcs\n";
     maxerr=curvefitMaxError(apx,points);
     if (maxerr>toler)
     {
