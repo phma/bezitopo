@@ -520,6 +520,7 @@ int main(int argc, char *argv[])
   commands.push_back(command("save",save_i,"Write scene file: filename.bez"));
   commands.push_back(command("maketin",maketin_i,"Make triangulated irregular network"));
   commands.push_back(command("drawtin",drawtin_i,"Draw TIN: filename.ps"));
+  commands.push_back(command("curvefit",curvefit_i,"Fit curve: filename.csv"));
   commands.push_back(command("raster",rasterdraw_i,"Draw raster topo: filename.ppm"));
   commands.push_back(command("contour",contourdraw_i,"Draw contour topo: interval filename.ps"));
   commands.push_back(command("factorll",scalefactorll_i,"Compute map scale factor from latitude and longitude"));
