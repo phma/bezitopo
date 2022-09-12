@@ -453,7 +453,8 @@ void curvefit_i(std::string args)
   Circle startLine,endLine;
   polyarc fitCurve;
   string line,nstr,estr,bearstr;
-  int npoints,bear;
+  arc oneArc;
+  int i,npoints,bear;
   infile.open(filename);
   npoints=-(!infile.is_open());
   if (infile.is_open())
@@ -505,6 +506,13 @@ void curvefit_i(std::string args)
     lines.pop_front();
     cout<<"Fitting curve...\n";
     fitCurve=fitPolyarc(startLine,points,endLine,toler,lines,2);
+    for (i=0;i<fitCurve.size();i++)
+    {
+      oneArc=fitCurve.getarc(i);
+      cout<<ldecimal(oneArc.getstart().getx())<<','<<ldecimal(oneArc.getstart().gety())<<",end\n";
+      cout<<ldecimal(oneArc.midpoint().getx())<<','<<ldecimal(oneArc.midpoint().gety())<<",mid\n";
+    }
+    cout<<ldecimal(oneArc.getend().getx())<<','<<ldecimal(oneArc.getend().gety())<<",end\n";
   }
 }
 
