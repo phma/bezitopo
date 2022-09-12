@@ -30,9 +30,6 @@
 #include "csv.h"
 #include "ldecimal.h"
 #include "leastsquares.h"
-#include "icommon.h"
-#include "firstarg.h"
-#include "globals.h"
 
 using namespace std;
 
@@ -383,56 +380,4 @@ polyarc fitPolyarc(Circle startLine,vector<xy> points,Circle endLine,double tole
     }
   }
   return apx;
-}
-
-void curvefit_i(std::string args)
-/* Reads the named file as CSV. The line with one column is the tolerance,
- * lines with two columns are points, and lines with three columns are the
- * starting and ending lines and any hints between them, in order. Lines are
- * specified by x, y, and bearing.
- */
-{
-  string filename;
-  filename=trim(firstarg(args));
-  ifstream infile;
-  double n,e,toler;
-  vector<string> words;
-  vector<xy> points;
-  deque<Circle> lines;
-  string line,nstr,estr,bearstr;
-  int npoints,bear;
-  infile.open(filename);
-  npoints=-(!infile.is_open());
-  if (infile.is_open())
-  {
-    do
-    {
-      getline(infile,line);
-      while (line.length() && (line.back()=='\n' || line.back()=='\r'))
-	line.pop_back();
-      words=parsecsvline(line);
-      switch(words.size())
-      {
-	case 1:
-	  toler=doc.ms.parseMeasurement(words[0],LENGTH).magnitude;
-	  break;
-	case 2:
-	  e=doc.ms.parseMeasurement(words[0],LENGTH).magnitude;
-	  n=doc.ms.parseMeasurement(words[1],LENGTH).magnitude;
-	  points.push_back(xy(e,n));
-	  npoints++;
-	  break;
-	case 3:
-	  e=doc.ms.parseMeasurement(words[0],LENGTH).magnitude;
-	  n=doc.ms.parseMeasurement(words[1],LENGTH).magnitude;
-	  bear=parsearangle(words[2],DEGREE).ang;
-	  lines.push_back(Circle(xy(e,n),bear));
-	  break;
-	default:
-	  cerr<<"Ignored line: "<<line<<endl;
-      }
-    } while (infile.good());
-    cout<<npoints<<"points\n";
-    infile.close();
-  }
 }
