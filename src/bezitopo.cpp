@@ -480,10 +480,11 @@ void curvefit_i(std::string args)
 	  lines.push_back(Circle(xy(e,n),bear));
 	  break;
 	default:
-	  cerr<<"Ignored line: "<<line<<endl;
+	  if (infile.good())
+	    cerr<<"Ignored line: "<<line<<endl;
       }
     } while (infile.good());
-    cout<<npoints<<"points\n";
+    cout<<npoints<<" points\n";
     infile.close();
   }
 }
