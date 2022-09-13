@@ -25,7 +25,6 @@
 #include <iostream>
 #include <cassert>
 #include "curvefit.h"
-#include "ps.h"
 #include "manysum.h"
 #include "csv.h"
 #include "ldecimal.h"
@@ -102,7 +101,7 @@ double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine)
   return sqrt(pairwisesum(sq));
 }
 
-FitRec initialCurve(std::deque<Circle> lines,int pieces)
+FitRec initialCurve(deque<Circle> lines,int pieces,PostScript &ps,BoundRect &br)
 {
   int i,j;
   int bear0,bear1;
@@ -112,6 +111,11 @@ FitRec initialCurve(std::deque<Circle> lines,int pieces)
   assert(lines.size()>1);
   if (pieces<2)
     pieces=2;
+  if (ps.isOpen())
+  {
+    ps.startpage();
+    ps.setscale(br);
+  }
   for (i=0;i<lines.size()-1;i++)
   {
     spi=spiralarc(lines[i].station(0),lines[i+1].station(0));
@@ -119,6 +123,13 @@ FitRec initialCurve(std::deque<Circle> lines,int pieces)
     bear1=lines[i+1].bearing(0)+DEG90;
     spi.setdelta(bear1-bear0,bear1+bear0-2*spi.chordbearing());
     apx=manyArc(spi,pieces);
+    if (ps.isOpen())
+    {
+      ps.setcolor(0,0,1);
+      ps.spline(spi.approx3d(0.001/ps.getscale()));
+      ps.setcolor(0,0,0);
+      ps.spline(apx.approx3d(0.001/ps.getscale()));
+    }
     for (j=0;j<pieces;j++)
       ret.endpoints.push_back(apx.getEndpoint(j+1));
     if (i==0)
@@ -127,6 +138,8 @@ FitRec initialCurve(std::deque<Circle> lines,int pieces)
       ret.startCur=apx.getarc(0).curvature(0);
     }
   }
+  if (ps.isOpen())
+    ps.endpage();
   ret.endpoints.pop_back();
   ret.startOff=ret.endOff=0;
   return ret;
@@ -361,11 +374,18 @@ polyarc fitPolyarc(Circle startLine,vector<xy> points,Circle endLine,double tole
   int i,j;
   double maxerr=INFINITY;
   FitRec fr,lastfr;
+  PostScript ps;
+  BoundRect br;
   polyarc apx;
   set<int> breaks;
   hints.push_front(startLine);
   hints.push_back(endLine);
-  fr=initialCurve(hints,pieces);
+  ps.open("fitPolyarc.ps");
+  ps.setpaper(papersizes["A4 landscape"],0);
+  ps.prolog();
+  for (i=0;i<points.size();i++)
+    br.include(points[i]);
+  fr=initialCurve(hints,pieces,ps,br);
   /* The number of degrees of freedom is twice the number of endpoints plus 3.
    * The number of points cannot be less than this.
    */

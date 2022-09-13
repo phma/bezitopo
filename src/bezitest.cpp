@@ -3099,7 +3099,7 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,double tol
   br.include(endLine.station(0));
   lines.push_back(startLine);
   lines.push_back(endLine);
-  fr=initialCurve(lines,2);
+  fr=initialCurve(lines,2,ps,br);
   apx=fitPolyarc(startLine,points2d,endLine,toler);
   ps.startpage();
   ps.setscale(br);

@@ -25,6 +25,7 @@
 #include <vector>
 #include <set>
 #include <deque>
+#include "ps.h"
 #include "circle.h"
 #include "polyline.h"
 #include "manyarc.h"
@@ -48,7 +49,7 @@ double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine);
  * 12 arcs. As you walk along the path from first to last, the lines are
  * pointing to the right.
  */
-FitRec initialCurve(std::deque<Circle> lines,int pieces);
+FitRec initialCurve(std::deque<Circle> lines,int pieces,PostScript &ps,BoundRect &br);
 
 void stepDir();
 std::vector<double> curvefitResiduals(polyarc q,std::vector<xy> points);
