@@ -381,8 +381,11 @@ polyarc fitPolyarc(Circle startLine,vector<xy> points,Circle endLine,double tole
   hints.push_front(startLine);
   hints.push_back(endLine);
   ps.open("fitPolyarc.ps");
-  ps.setpaper(papersizes["A4 landscape"],0);
-  ps.prolog();
+  if (ps.isOpen())
+  {
+    ps.setpaper(papersizes["A4 landscape"],0);
+    ps.prolog();
+  }
   for (i=0;i<points.size();i++)
     br.include(points[i]);
   fr=initialCurve(hints,pieces,ps,br);
@@ -394,6 +397,19 @@ polyarc fitPolyarc(Circle startLine,vector<xy> points,Circle endLine,double tole
     lastfr=fr;
     fr=adjustArcs(points,startLine,fr,endLine);
     apx=arcFitApprox(startLine,fr,endLine);
+    if (ps.isOpen())
+    {
+      ps.startpage();
+      ps.setscale(br);
+      ps.setcolor(0,0,0);
+      for (j=0;j<points.size();j++)
+	ps.circle(points[j],0.5/ps.getscale());
+      ps.setcolor(0,0,1);
+      ps.spline(apx.approx3d(0.001/ps.getscale()));
+      for (j=0;j<fr.endpoints.size();j++)
+	ps.circle(fr.endpoints[j],0.5/ps.getscale());
+      ps.endpage();
+    }
     cout<<apx.size()<<" arcs\n";
     maxerr=curvefitMaxError(apx,points);
     if (maxerr>toler)
