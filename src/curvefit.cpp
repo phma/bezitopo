@@ -340,6 +340,11 @@ FitRec adjustArcs(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
     fr=adjust1step(points,startLine,fr,endLine,i>0);
     if (fr.isnan()) // singular matrix
       fr=adjust1step(points,startLine,lastfr,endLine,false);
+    if (fr.isnan()) // something went wrong
+    {
+      cerr<<"Adjustment is NaN\n";
+      fr=lastfr;
+    }
     stepDir();
     apx=arcFitApprox(startLine,fr,endLine);
     lastError=thisError;
