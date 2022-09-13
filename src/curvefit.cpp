@@ -337,7 +337,7 @@ FitRec adjustArcs(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
      * endpoint along the arc produces no effect, so the matrix is singular,
      * so do a one-dimensional adjustment first.
      */
-    fr=adjust1step(points,startLine,fr,endLine,i>0);
+    fr=adjust1step(points,startLine,fr,endLine,(i&255)>0);
     if (fr.isnan()) // singular matrix
       fr=adjust1step(points,startLine,lastfr,endLine,false);
     if (fr.isnan()) // something went wrong
