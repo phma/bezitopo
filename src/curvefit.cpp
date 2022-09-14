@@ -199,16 +199,19 @@ set<int> breakWhich(polyarc q,vector<xy> points)
   set<int> ret;
   vector<double> resid=curvefitResiduals(q,points);
   vector<int> cp=closestPieces(q,points);
+  map<int,int> cpCount;
   int i,negWorst=-1,posWorst=-1;
   double worstPos=-INFINITY,worstNeg=INFINITY;
+  for (i=0;i<cp.size();i++)
+    cpCount[cp[i]]++;
   for (i=0;i<resid.size();i++)
   {
-    if (resid[i]>0 && resid[i]>worstPos)
+    if (resid[i]>0 && resid[i]>worstPos && cpCount[cp[i]]>1)
     {
       worstPos=resid[i];
       posWorst=i;
     }
-    if (resid[i]<0 && resid[i]<worstNeg)
+    if (resid[i]<0 && resid[i]<worstNeg && cpCount[cp[i]]>1)
     {
       worstNeg=resid[i];
       negWorst=i;
