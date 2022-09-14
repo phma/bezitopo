@@ -181,13 +181,24 @@ double curvefitMaxError(polyarc q,vector<xy> points)
   return maxerr;
 }
 
-set<int> breakWhich(polyarc q,std::vector<xy> points)
+vector<int> closestPieces(polyline &p,vector<xy> points)
+{
+  vector<int> ret;
+  int i;
+  ret.resize(points.size());
+  for (i=0;i<points.size();i++)
+    ret[i]=p.stationSegment(p.closest(points[i]));
+  return ret;
+}
+
+set<int> breakWhich(polyarc q,vector<xy> points)
 /* Returns one or two indices of arc to break, those that have the points
  * with the worst errors.
  */
 {
   set<int> ret;
   vector<double> resid=curvefitResiduals(q,points);
+  vector<int> cp=closestPieces(q,points);
   int i,negWorst=-1,posWorst=-1;
   double worstPos=-INFINITY,worstNeg=INFINITY;
   for (i=0;i<resid.size();i++)
@@ -204,9 +215,9 @@ set<int> breakWhich(polyarc q,std::vector<xy> points)
     }
   }
   if (posWorst>=0)
-    ret.insert(q.stationSegment(q.closest(points[posWorst])));
+    ret.insert(cp[posWorst]);
   if (negWorst>=0)
-    ret.insert(q.stationSegment(q.closest(points[negWorst])));
+    ret.insert(cp[negWorst]);
   return ret;
 }
 
