@@ -33,7 +33,7 @@
 
 class PostScript;
 
-#if defined(_WIN32) || defined(__CYGWIN__)
+#if defined(_WIN32) || defined(__CYGWIN__) || defined(__APPLE__)
 double significand(double x);
 #endif
 
