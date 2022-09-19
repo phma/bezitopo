@@ -8231,7 +8231,7 @@ int main(int argc, char *argv[])
   if (shoulddo("curly"))
     testcurly();
   if (shoulddo("curvefit"))
-    testcurvefit();
+    testcurvefit(); // 12.3 s
   if (shoulddo("manyarc"))
     testmanyarc(); // 3 s
   if (shoulddo("closest"))
