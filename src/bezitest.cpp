@@ -3081,7 +3081,7 @@ void testcurly()
   cout<<ldecimal(1e3*times[2]/times[0],0.01)<<" µs per too curly test\n";
 }
 
-void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,double toler,PostScript &ps)
+void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,double toler,double firstlength,PostScript &ps)
 {
   vector<xy> points2d;
   deque<Circle> lines;
@@ -3106,7 +3106,10 @@ void test1curvefit(vector<xyz> points,Circle startLine,Circle endLine,double tol
     ps.circle(points2d[j],1);
   ps.spline(apx.approx3d(0.001/ps.getscale()));
   ps.endpage();
+  cout<<"First length "<<ldecimal(apx.getarc(0).length())<<endl;
+  tassert(isnan(firstlength) || fabs(apx.getarc(0).length()-firstlength)<1e-6);
   cout<<apx.size()<<" arcs, error "<<curvefitMaxError(apx,points2d)<<endl;
+  tassert(curvefitMaxError(apx,points2d)<toler);
 }
 
 void testcurvefit()
@@ -3197,7 +3200,7 @@ void testcurvefit()
   for (i=1;i<=doc.pl[1].lastPointNum();i++)
     if (doc.pl[1].pointExists(i))
       points.push_back(doc.pl[1].points[i]);
-  test1curvefit(points,startLine,endLine,0.3,ps);
+  test1curvefit(points,startLine,endLine,0.3,NAN,ps);
   points.clear();
   /* These points are on a known alignment, of length 768, with a change
    * from straight to curved at a random length in (256,512).
@@ -3216,7 +3219,7 @@ void testcurvefit()
   pa.setlengths();
   for (i=1;i<48;i++)
     points.push_back(pa.station(16*i));
-  test1curvefit(points,startLine,endLine,0.0001,ps);
+  test1curvefit(points,startLine,endLine,0.0001,straightLength,ps);
 }
 
 void test1manyarc(spiralarc s,PostScript &ps)
