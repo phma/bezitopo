@@ -656,7 +656,7 @@ void testquaternion()
   Quaternion qprod(-0.5,0,-M_1PHI/2,M_1PHI/2+0.5);
   Quaternion qrste(-1/14.,5/14.,7/14.,11/14.);
   xyz vec0(0,0.6,0.8),vec2,vec3,vec5;
-  xyz vec0m(0,0.0006,0.0008);
+  xyz vec0m(0,0.0006,0.0008),vec016k(0,9600,12800);
   xyz vec2r(0,-0.6,-0.8),vec3r(0.8,0,0.6),vec5r(0.3*M_1PHI+0.4,0.3-0.4/M_1PHI,0.3/M_1PHI+0.4*M_1PHI);
   xyz vecste(0,0,-192);
   vball v;
@@ -709,6 +709,8 @@ void testquaternion()
   tassert((op0*op1-res).norm()<1e-9);
   op0=versor(vec0m);
   tassert((op0-res).norm()<1e-9);
+  op0=versor(vec016k);
+  tassert((op0*res+1).norm()<1e-9);
   op0=versor(xyz(4,0,0));
   tassert(op0==qr2);
   op0=versor(xyz(4/3.,4/3.,4/3.));
