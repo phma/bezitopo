@@ -3,7 +3,7 @@
 /* bezitest.cpp - test program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012-2022 Pierre Abbat.
+/* Copyright 2012-2023 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -707,6 +707,8 @@ void testquaternion()
   op1=versor(vec0,0.0007);
   res=versor(vec0,0.001);
   tassert((op0*op1-res).norm()<1e-9);
+  op0=versor(vec0m);
+  tassert((op0-res).norm()<1e-9);
 }
 
 void testcopytopopoints()

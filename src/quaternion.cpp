@@ -3,7 +3,7 @@
 /* quaternion.cpp - quaternions                       */
 /*                                                    */
 /******************************************************/
-/* Copyright 2016,2018,2019 Pierre Abbat.
+/* Copyright 2016,2018,2019,2023 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -236,7 +236,7 @@ Quaternion versor(xyz vec)
   ret.x=vec.x;
   ret.y=vec.y;
   ret.z=vec.z;
-  ret/=ret.normsq()/4;
+  ret/=ret.normsq()/16;
   ret-=2;
   return ret/2;
 }
