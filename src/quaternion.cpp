@@ -223,8 +223,9 @@ Quaternion& Quaternion::operator/=(double r)
  * a rotation around vec by angle. versor(vec) is used in least-squares and
  * returns a rotation as follows:
  * If vec has length ε, it rotates by ε radians.
+ * If vec has length 4/√3, it rotates by 120°.
  * If vec has length 4, it rotates by 180°.
- * If vec has length 16/ε, it rotates by π-ε radians.
+ * If vec has length 16/ε, it rotates by 2π-ε radians.
  * Rotating by 360°, considered as a path through rotation space, is NOT the
  * same as not rotating, but rotating by 720° IS. That's another reason why
  * 2**32 stands for 720°.

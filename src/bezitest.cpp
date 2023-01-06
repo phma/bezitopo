@@ -709,6 +709,10 @@ void testquaternion()
   tassert((op0*op1-res).norm()<1e-9);
   op0=versor(vec0m);
   tassert((op0-res).norm()<1e-9);
+  op0=versor(xyz(4,0,0));
+  tassert(op0==qr2);
+  op0=versor(xyz(4/3.,4/3.,4/3.));
+  tassert((op0-qr3).norm()<1e-9);
 }
 
 void testcopytopopoints()
