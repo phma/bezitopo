@@ -656,6 +656,7 @@ void testquaternion()
   Quaternion qprod(-0.5,0,-M_1PHI/2,M_1PHI/2+0.5);
   Quaternion qrste(-1/14.,5/14.,7/14.,11/14.);
   xyz vec0(0,0.6,0.8),vec2,vec3,vec5;
+  xyz vec0m(0,0.0006,0.0008);
   xyz vec2r(0,-0.6,-0.8),vec3r(0.8,0,0.6),vec5r(0.3*M_1PHI+0.4,0.3-0.4/M_1PHI,0.3/M_1PHI+0.4*M_1PHI);
   xyz vecste(0,0,-192);
   vball v;
@@ -666,7 +667,7 @@ void testquaternion()
    * 1/2φ    1/2      -1/2φ-1/2        0.309017  0.500000 -0.809017
    * -1/2    1/2φ+1/2 1/2-1/2φ²       -0.500000  0.809017  0.309017
    */
-  Quaternion res;
+  Quaternion op0,op1,res;
   int i,j;
   res=q1+qr3;
   tassert(res==qsum);
@@ -698,6 +699,14 @@ void testquaternion()
   v=encodedir(vec2);
   cout<<v.face<<' '<<v.x<<' '<<v.y<<endl;
   cout<<ldecimal(radtodeg(vec2.lat()))<<' '<<ldecimal(radtodeg(vec2.lon()))<<endl;
+  op0=versor(vec0,radtobin(0.0003));
+  op1=versor(vec0,radtobin(0.0007));
+  res=versor(vec0,radtobin(0.001));
+  tassert((op0*op1-res).norm()<1e-9);
+  op0=versor(vec0,0.0003);
+  op1=versor(vec0,0.0007);
+  res=versor(vec0,0.001);
+  tassert((op0*op1-res).norm()<1e-9);
 }
 
 void testcopytopopoints()
