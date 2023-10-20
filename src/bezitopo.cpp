@@ -512,7 +512,8 @@ void curvefit_i(std::string args)
     {
       oneArc=fitCurve.getarc(i);
       cout<<ldecimal(oneArc.getstart().getx())<<','<<ldecimal(oneArc.getstart().gety())<<",end\n";
-      cout<<ldecimal(oneArc.midpoint().getx())<<','<<ldecimal(oneArc.midpoint().gety())<<",mid\n";
+      cout<<ldecimal(oneArc.midpoint().getx())<<','<<ldecimal(oneArc.midpoint().gety())<<",mid ";
+      cout<<doc.ms.formatMeasurementUnit(oneArc.getdelta(),ANGLE_B)<<'\n';
     }
     cout<<ldecimal(oneArc.getend().getx())<<','<<ldecimal(oneArc.getend().gety())<<",end\n";
   }
@@ -565,6 +566,10 @@ int main(int argc, char *argv[])
   doc.ms.setDefaultPrecision(LENGTH,1.746e-3); // g.m. of 1 mm and 0.01 ft
   doc.ms.setDefaultUnit(AREA,0.3048); // for acre/hectare, 6361.5
   doc.ms.setDefaultPrecision(AREA,0.1);
+  doc.ms.setDefaultPrecision(ANGLE_B,SEC1);
+  doc.ms.setDefaultPrecision(ANGLE,degtorad(1/36e2));
+  doc.ms.addUnit(ARCSECOND+DECYMAL+FIXLARGER);
+  doc.ms.addUnit(ARCSECOND_B+DECYMAL+FIXLARGER);
   readTmCoefficients();
   readAllProjections();
   cout<<"Bezitopo version "<<VERSION<<" © "<<COPY_YEAR<<" Pierre Abbat\n"
