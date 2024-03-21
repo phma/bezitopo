@@ -3,7 +3,7 @@
 /* curvefit.cpp - fit polyarc/alignment to points     */
 /*                                                    */
 /******************************************************/
-/* Copyright 2022 Pierre Abbat.
+/* Copyright 2022-2024 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -206,7 +206,7 @@ set<int> breakWhich(polyarc q,vector<xy> points)
     cpCount[cp[i]]++;
   for (i=0;i<resid.size();i++)
   {
-    if (resid[i]>0 && resid[i]>worstPos && cpCount[cp[i]]>1)
+    if (resid[i]>0 && resid[i]>worstPos && cpCount[cp[i]]>2)
     {
       worstPos=resid[i];
       posWorst=i;
@@ -431,7 +431,7 @@ polyarc fitPolyarc(Circle startLine,vector<xy> points,Circle endLine,double tole
     if (maxerr>toler)
     {
       breaks=breakWhich(apx,points);
-      if (2*(fr.endpoints.size()+breaks.size())+3>points.size())
+      if (fr.endpoints.size()+breaks.size()+3>points.size())
 	break;
       else
 	fr.breakArcs(breaks,apx);
