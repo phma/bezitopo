@@ -82,6 +82,22 @@ void FitRec::breakArcs(set<int> which,polyarc apx)
     endpoints.insert(endpoints.begin()+*i,apx.getarc(*i).midpoint());
 }
 
+void FitRec::deleteArc(int which,polyarc apx)
+/* Quick-and-dirtily delete an arc.
+ * which must not be 0 or the last arc.
+ * This *should* replace the two points deleted with a point such that
+ * the deltas of other arcs are unaffected.
+ */
+{
+  int i;
+  assert(which>0);
+  assert(which<apx.size()-1);
+  cout<<"Deleting arc "<<which<<endl;
+  for (i=which;i<endpoints.size();i++)
+    endpoints[i-1]=endpoints[i];
+  endpoints.pop_back();
+}
+
 double diff(const FitRec &a,const FitRec &b,Circle startLine,Circle endLine)
 /* Returns the root-sum-square of the distances between corresponding
  * endpoints, plus the difference in start bearing converted to distances.
@@ -413,7 +429,7 @@ FitRec adjustArcs(vector<xy> points,Circle startLine,FitRec fr,Circle endLine)
 
 polyarc fitPolyarc(Circle startLine,vector<xy> points,Circle endLine,double toler,deque<Circle> hints,int pieces)
 {
-  int i,j;
+  int i,j,del;
   double maxerr=INFINITY;
   FitRec fr,lastfr;
   PostScript ps;
@@ -457,10 +473,14 @@ polyarc fitPolyarc(Circle startLine,vector<xy> points,Circle endLine,double tole
     if (maxerr>toler)
     {
       breaks=breakWhich(apx,points);
-      if (fr.endpoints.size()+breaks.size()+3>points.size())
-	break;
+      del=deleteWhich(apx,points);
+      if (del>0)
+	fr.deleteArc(del,apx);
       else
-	fr.breakArcs(breaks,apx);
+	if (fr.endpoints.size()+breaks.size()+3>points.size())
+	  break;
+	else
+	  fr.breakArcs(breaks,apx);
     }
   }
   return apx;
