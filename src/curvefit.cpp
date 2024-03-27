@@ -211,7 +211,7 @@ set<int> breakWhich(polyarc q,vector<xy> points)
       worstPos=resid[i];
       posWorst=i;
     }
-    if (resid[i]<0 && resid[i]<worstNeg && cpCount[cp[i]]>1)
+    if (resid[i]<0 && resid[i]<worstNeg && cpCount[cp[i]]>2)
     {
       worstNeg=resid[i];
       negWorst=i;
@@ -221,6 +221,32 @@ set<int> breakWhich(polyarc q,vector<xy> points)
     ret.insert(cp[posWorst]);
   if (negWorst>=0)
     ret.insert(cp[negWorst]);
+  return ret;
+}
+
+int deleteWhich(polyarc q,vector<xy> points)
+/* Returns the index of the shortest arc which is not closest to any point,
+ * or -1 if there isn't any.
+ */
+{
+  int ret=-1;
+  int i;
+  vector<int> cp=closestPieces(q,points);
+  map<int,int> cpCount;
+  double shortest=INFINITY;
+  double len;
+  for (i=0;i<cp.size();i++)
+    cpCount[cp[i]]++;
+  for (i=0;i<q.size();i++)
+    if (cpCount[i]==0)
+    {
+      len=q.getarc(i).length();
+      if (len<shortest)
+      {
+	shortest=len;
+	ret=i;
+      }
+    }
   return ret;
 }
 
