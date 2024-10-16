@@ -3,7 +3,7 @@
 /* document.h - main document class                   */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2017,2019,2020 Pierre Abbat.
+/* Copyright 2015-2017,2019,2020,2024 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -60,6 +60,8 @@ public:
   int writepnezd(std::string fname);
   int readpenzd(std::string fname,bool overwrite=false);
   int writepenzd(std::string fname);
+  int readzoom(std::string fname,bool overwrite=false);
+  int writezoom(std::string fname);
   void addobject(drawobj *obj); // obj must be created with new
   virtual void writeXml(std::ofstream &ofile);
   void changeOffset (xyz newOffset);

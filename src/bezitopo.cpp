@@ -3,7 +3,7 @@
 /* bezitopo.cpp - main program                        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2013,2015-2019,2022 Pierre Abbat.
+/* Copyright 2012,2013,2015-2019,2022,2024 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -201,8 +201,10 @@ void readpoints(string args)
     doc.readpnezd(filename,false);
   else if (format=="penzd")
     doc.readpenzd(filename,false);
+  else if (format=="zoom")
+    doc.readzoom(filename,false);
   else
-    cout<<"Formats: pnezd (default), penzd"<<endl;
+    cout<<"Formats: pnezd (default), penzd, zoom"<<endl;
 }
 
 void writepoints(string args)
@@ -214,8 +216,10 @@ void writepoints(string args)
     doc.writepnezd(filename);
   else if (format=="penzd")
     doc.writepenzd(filename);
+  else if (format=="zoom")
+    doc.writezoom(filename);
   else
-    cout<<"Formats: pnezd (default), penzd"<<endl;
+    cout<<"Formats: pnezd (default), penzd, zoom"<<endl;
 }
 
 void maketin_i(string args)

@@ -4,7 +4,7 @@
 /* point-northing-easting-z-description format        */
 /*                                                    */
 /******************************************************/
-/* Copyright 2012,2015,2016,2017 Pierre Abbat.
+/* Copyright 2012,2015-2017,2024 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -33,3 +33,5 @@ int readpnezd(document *doc,std::string fname,Measure ms,bool overwrite=false);
 int writepnezd(document *doc,std::string fname,Measure ms);
 int readpenzd(document *doc,std::string fname,Measure ms,bool overwrite=false);
 int writepenzd(document *doc,std::string fname,Measure ms);
+int readzoom(document *doc,std::string fname,Measure ms,bool overwrite=false);
+int writezoom(document *doc,std::string fname,Measure ms);

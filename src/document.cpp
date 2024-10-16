@@ -3,7 +3,7 @@
 /* document.cpp - main document class                 */
 /*                                                    */
 /******************************************************/
-/* Copyright 2015-2020 Pierre Abbat.
+/* Copyright 2015-2020,2024 Pierre Abbat.
  * This file is part of Bezitopo.
  *
  * Bezitopo is free software: you can redistribute it and/or modify
@@ -89,6 +89,21 @@ int document::writepenzd(string fname)
   Measure mscopy=ms;
   mscopy.localize(false);
   return ::writepenzd(this,fname,mscopy);
+}
+
+int document::readzoom(string fname,bool overwrite)
+{
+  Measure mscopy=ms;
+  mscopy.localize(false);
+  makepointlist(0);
+  return ::readzoom(this,fname,mscopy,overwrite);
+}
+
+int document::writezoom(string fname)
+{
+  Measure mscopy=ms;
+  mscopy.localize(false);
+  return ::writezoom(this,fname,mscopy);
 }
 
 void document::addobject(drawobj *obj)
