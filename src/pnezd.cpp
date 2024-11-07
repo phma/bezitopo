@@ -221,8 +221,7 @@ int writepenzd(document *doc,string fname,Measure ms)
   return npoints;
 }
 
-// Zoom10 CSV format is PENZD but with an extra empty column.
-// I don't know what the extra column is for.
+// Zoom10 CSV format is PDENZ but with an extra empty column.
 
 int readzoom(document *doc,string fname,Measure ms,bool overwrite)
 {
@@ -246,13 +245,10 @@ int readzoom(document *doc,string fname,Measure ms,bool overwrite)
       if (words.size()>=5)
       {
 	pstr=words[0];
+	d=words[1];
 	estr=words[2];
 	nstr=words[3];
 	zstr=words[4];
-	if (words.size()>5)
-	  d=words[4];
-	else
-	  d="";
 	if (zstr!="z" && zstr!="Elevation")
 	{
 	  p=atoi(pstr.c_str());
@@ -301,11 +297,10 @@ int writezoom(document *doc,string fname,Measure ms)
       zstr=ldecimal(ms.fromCoherent(z,LENGTH));
       words.clear();
       words.push_back(pstr);
-      words.push_back("");
+      words.push_back(d);
       words.push_back(estr);
       words.push_back(nstr);
       words.push_back(zstr);
-      words.push_back(d);
       line=makecsvline(words);
       outfile<<line<<endl;
       if (outfile.good())
