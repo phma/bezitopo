@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.5.0)
 project(bezitopo)
 
 # Copyright 2012-2022,2024 Pierre Abbat.
