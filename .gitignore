@@ -1,3 +1,6 @@
 #Ignore backup files
 *~
 *.backup
+
+# Ignore User's Visual Studio Code Configuration Files
+.vscode/
