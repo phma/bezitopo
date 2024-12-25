@@ -43,6 +43,17 @@ set(FUZZ none)
 #Setting FUZZ to boldatni disables reading all geoid formats except boldatni
 #in convertgeoid and disables the boldatni magic string check.
 
+# To build with Address Sanitizer: cmake -DSANITIZE=ON <...>
+# The build products are slower and bigger, but run faster than using Valgrind.
+# See: https://clang.llvm.org/docs/AddressSanitizer.html
+#
+option(SANITIZE "Enable AddressSanitizer" OFF)
+if (SANITIZE)
+  message(STATUS "AddressSanitizer enabled")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+  set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address")
+endif()
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
 find_package(FFTW)
