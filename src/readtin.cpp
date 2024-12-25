@@ -82,7 +82,7 @@ int readTinFile(pointlist &pl,string fileName,double unit)
         ptinHeader.tolRatio!=PT_NOT_PTIN_FILE &&
         ptinHeader.tolRatio!=PT_COUNT_MISMATCH)
       anytin=true;
-    if (!ptinHeader.tolerance>0)
+    if (!(ptinHeader.tolerance>0))
       status=0;
   }
   if (status==1)
