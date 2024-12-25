@@ -159,7 +159,7 @@ private:
   /* If true, tooltip shows xyz while cursor is in TIN.
    * If false, shows point numbers.
    */
-  QTime lastPaintTime;
+  QElapsedTimer lastPaintTime;
   int lastPaintDuration;
 };
 #endif

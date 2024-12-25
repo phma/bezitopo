@@ -993,7 +993,7 @@ void TopoCanvas::paintEvent(QPaintEvent *event)
   ptlist::iterator j;
   set<edge *>::iterator e;
   RenderItem ri;
-  QTime paintTime,subTime;
+  QElapsedTimer paintTime,subTime;
   QPen itemPen;
   QPainter painter(this);
   QPainterPath path;
