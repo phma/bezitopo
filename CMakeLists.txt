@@ -1,5 +1,6 @@
-project(bezitopo)
 cmake_minimum_required(VERSION 3.1.0)
+project(bezitopo)
+
 # Copyright 2012-2022,2024 Pierre Abbat.
 # Copyright 2020 звездочёт.
 # This file is part of Bezitopo.
@@ -130,7 +131,7 @@ set(sourcelib src/angle.cpp
               src/boundrect.cpp
               src/breakline.cpp
               src/circle.cpp
-              src/cogo.cpp 
+              src/cogo.cpp
               src/cogospiral.cpp
               src/color.cpp
               src/contour.cpp
