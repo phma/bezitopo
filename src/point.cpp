@@ -490,11 +490,8 @@ point::point(xyz pnt,string desc)
   note=desc;
 }
 
-point::point(const point &rhs)
+point::point(const point &rhs) : xyz(rhs)
 {
-  x=rhs.x;
-  y=rhs.y;
-  z=rhs.z;
   line=rhs.line;
   note=rhs.note;
 }
