@@ -35,7 +35,7 @@
 #include "rootfind.h"
 using namespace std;
 
-const char ctrlpttab[16]=
+const unsigned char ctrlpttab[16]=
 {
   3, 3, 3, 3,
   3, 3, 2, 4,
