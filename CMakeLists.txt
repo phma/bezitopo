@@ -54,6 +54,36 @@ if (SANITIZE)
   set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address")
 endif()
 
+# To enable rigorous compilation settings: cmake -DRIGOROUS=ON <...>
+# This converts all warnings to errors and raises the compiler warning levels.
+# Some useful warnings are disabled pending review of stylistic choices
+#
+option(RIGOROUS "Enable rigorous compilation settings" OFF)
+if (RIGOROUS)
+  message(STATUS "Rigorous compilation settings enabled")
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -pedantic")
+    set(DISABLED_WARNINGS
+      -Wno-sign-compare
+      -Wno-unused-parameter
+      -Wno-unused-variable
+      -Wno-unused-but-set-variable
+      -Wno-overloaded-virtual
+      -Wno-parentheses
+      -Wno-empty-body
+      -Wno-implicit-fallthrough
+      -Wno-maybe-uninitialized  # a bad one to disable!
+      -Wno-unused-result  # also not good to turn off
+    )
+    foreach(WARNING ${DISABLED_WARNINGS})
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${WARNING}")
+    endforeach()
+  elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX")
+    # TBD: MSVC warning disablements to get RIGOROUS working
+  endif ()
+endif()
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
 find_package(FFTW)
