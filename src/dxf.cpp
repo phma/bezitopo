@@ -409,7 +409,7 @@ bool readDxfMagic(istream &file)
       break;
     buf[0]=buf[1];
     buf[1]=buf[2];
-    buf[2]=static_cast<unsigned char>(file.get());
+    buf[2]=static_cast<unsigned char>(ch);
   }
   if (!strcmp(reinterpret_cast<char*>(buf),"DXF"))
     file.read(reinterpret_cast<char*>(buf),4);
