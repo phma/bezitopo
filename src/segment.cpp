@@ -473,7 +473,7 @@ double segment::closest(xy topoint,double closesofar,bool offends)
 	delenda.insert(k1->first);
       if (!stdist.count(vertex) && vertex>=0 && vertex<=len)
 	inserenda.insert(vertex);
-#ifndef DEBUG
+#ifndef NDEBUG
       closetime++;
 #endif
     }

@@ -414,7 +414,7 @@ void TopoCanvas::importPnezd()
     {
       doc.readpnezd(fileName);
     }
-    catch (BeziExcept e)
+    catch (BeziExcept &e)
     {
       err=e.getNumber();
       errMsg=e.message();
@@ -504,7 +504,7 @@ void TopoCanvas::importBreaklines()
         tinValid=surfaceValid=roughContoursValid=smoothContoursValid=false;
         doc.pl[plnum].whichBreak0Valid=1;
       }
-      catch (BeziExcept e)
+      catch (BeziExcept &e)
       {
         err=e.getNumber();
         errMsg=e.message();
@@ -597,7 +597,7 @@ void TopoCanvas::makeTin()
     {
       doc.pl[plnum].splitBreaklines();
     }
-    catch (BeziExcept e)
+    catch (BeziExcept &e)
     {
       tinerror=e.getNumber();
     }
@@ -642,7 +642,7 @@ void TopoCanvas::tryStartPoint()
         progressDialog->setLabelText(tr("Flipping edges..."));
       }
     }
-    catch (BeziExcept e)
+    catch (BeziExcept &e)
     {
       tinerror=e.getNumber();
     }
@@ -679,7 +679,7 @@ void TopoCanvas::flipPass()
         tinValid=true;
       }
     }
-    catch (BeziExcept e)
+    catch (BeziExcept &e)
     {
       tinerror=e.getNumber();
     }
@@ -735,7 +735,7 @@ void TopoCanvas::findCriticalPoints()
         connect(timer,SIGNAL(timeout()),this,SLOT(makeTinFinish()));
       }
     }
-    catch (BeziExcept e)
+    catch (BeziExcept &e)
     {
       tinerror=e.getNumber();
     }
@@ -951,7 +951,7 @@ void TopoCanvas::loadGeoid()
 	cube.readBinary(geofile);
 	cout<<"read "<<fileName<<endl;
       }
-      catch(BeziExcept e)
+      catch(BeziExcept& e)
       {
         err=e.getNumber();
         errMsg=e.message();
@@ -993,7 +993,7 @@ void TopoCanvas::paintEvent(QPaintEvent *event)
   ptlist::iterator j;
   set<edge *>::iterator e;
   RenderItem ri;
-  QTime paintTime,subTime;
+  QElapsedTimer paintTime,subTime;
   QPen itemPen;
   QPainter painter(this);
   QPainterPath path;

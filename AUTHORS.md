@@ -5,6 +5,8 @@
 -- Organize code into src/
 - Tom Kacvinsky <tkacvins@gmail.com>
 -- Apple Silicon testing
+- Brian Dickens <brian@hostilefork.com>
+-- Continuous integration and warning fixes
 
 # Projections
 - Pierre Abbat <phma@bezitopo.org>

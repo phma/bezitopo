@@ -75,9 +75,9 @@ double Quaternion::getcomp(int n)
       return x;
     case 2:
       return y;
-    case 3:
-      return z;
-  } // Ignore warning "control reaches end". n&3 cannot be anything else.
+    default:  // actually `case 3:` (`n&3` can't be anything else)...
+      return z;  // ...but using `default:` avoids a compiler warning
+  }
 }
 
 double Quaternion::getreal()
@@ -127,7 +127,7 @@ xyz Quaternion::rotate(xyz vec)
   qvec=*this*qvec*conj();
   return qvec.getimag();
 }
-  
+
 bool operator!=(const Quaternion &l,const Quaternion &r)
 {
   return l.w!=r.w || l.x!=r.x || l.y!=r.y || l.z!=r.z;

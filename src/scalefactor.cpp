@@ -125,7 +125,7 @@ void scalefactorll_i(string args)
               elevfactor=radius/(radius+elevation+separation);
               cout<<"Elevation factor is "<<ldecimal(elevfactor)<<endl;
             }
-            catch (BeziExcept e)
+            catch (BeziExcept &e)
             {
               cerr<<"Elevation should be a length"<<endl;
             }
@@ -212,7 +212,7 @@ void scalefactorxy_i(string args)
               elevfactor=radius/(radius+elevation+separation);
               cout<<"Elevation factor is "<<ldecimal(elevfactor)<<endl;
             }
-            catch (BeziExcept e)
+            catch (BeziExcept &e)
             {
               cerr<<"Elevation should be a length"<<endl;
             }

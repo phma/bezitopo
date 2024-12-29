@@ -120,7 +120,7 @@ private:
   QPen normalEdgePen,breakEdgePen,flipEdgePen;
   QPen circlePen[3],contourPen[3][20];
   unsigned short contourColor[20];
-  short contourLineType[3];
+  unsigned short contourLineType[3];
   unsigned short contourThickness[3];
   QBrush brush;
   QErrorMessage *errorMessage;
@@ -159,7 +159,7 @@ private:
   /* If true, tooltip shows xyz while cursor is in TIN.
    * If false, shows point numbers.
    */
-  QTime lastPaintTime;
+  QElapsedTimer lastPaintTime;
   int lastPaintDuration;
 };
 #endif

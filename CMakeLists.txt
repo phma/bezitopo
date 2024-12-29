@@ -1,5 +1,6 @@
+cmake_minimum_required(VERSION 3.5.0)
 project(bezitopo)
-cmake_minimum_required(VERSION 3.1.0)
+
 # Copyright 2012-2022,2024 Pierre Abbat.
 # Copyright 2020 звездочёт.
 # This file is part of Bezitopo.
@@ -41,6 +42,47 @@ endif ()
 set(FUZZ none)
 #Setting FUZZ to boldatni disables reading all geoid formats except boldatni
 #in convertgeoid and disables the boldatni magic string check.
+
+# To build with Address Sanitizer: cmake -DSANITIZE=ON <...>
+# The build products are slower and bigger, but run faster than using Valgrind.
+# See: https://clang.llvm.org/docs/AddressSanitizer.html
+#
+option(SANITIZE "Enable AddressSanitizer" OFF)
+if (SANITIZE)
+  message(STATUS "AddressSanitizer enabled")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+  set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address")
+endif()
+
+# To enable rigorous compilation settings: cmake -DRIGOROUS=ON <...>
+# This converts all warnings to errors and raises the compiler warning levels.
+# Some useful warnings are disabled pending review of stylistic choices
+#
+option(RIGOROUS "Enable rigorous compilation settings" OFF)
+if (RIGOROUS)
+  message(STATUS "Rigorous compilation settings enabled")
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -pedantic")
+    set(DISABLED_WARNINGS
+      -Wno-sign-compare
+      -Wno-unused-parameter
+      -Wno-unused-variable
+      -Wno-unused-but-set-variable
+      -Wno-overloaded-virtual
+      -Wno-parentheses
+      -Wno-empty-body
+      -Wno-implicit-fallthrough
+      -Wno-maybe-uninitialized  # a bad one to disable!
+      -Wno-unused-result  # also not good to turn off
+    )
+    foreach(WARNING ${DISABLED_WARNINGS})
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${WARNING}")
+    endforeach()
+  elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX")
+    # TBD: MSVC warning disablements to get RIGOROUS working
+  endif ()
+endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(Qt5 COMPONENTS Core Widgets Gui LinguistTools REQUIRED)
@@ -130,7 +172,7 @@ set(sourcelib src/angle.cpp
               src/boundrect.cpp
               src/breakline.cpp
               src/circle.cpp
-              src/cogo.cpp 
+              src/cogo.cpp
               src/cogospiral.cpp
               src/color.cpp
               src/contour.cpp

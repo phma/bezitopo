@@ -237,7 +237,7 @@ void maketin_i(string args)
   {
     doc.pl[1].maketin("maketin.ps");
   }
-  catch(BeziExcept e)
+  catch(BeziExcept &e)
   {
     error=e.getNumber();
   }
@@ -324,7 +324,7 @@ void contourdraw_i(string args)
   {
     conterval=doc.ms.parseMeasurement(contervalstr,LENGTH).magnitude;
   }
-  catch (BeziExcept e)
+  catch (BeziExcept &e)
   {
     cerr<<"\""<<contervalstr<<"\": ";
     if (e.getNumber()==badunits)
@@ -431,7 +431,7 @@ void readgeoid_i(string args)
       //ofstream geodump("readgeoid.dump");
       //cube.dump(geodump);
     }
-    catch(BeziExcept e)
+    catch(BeziExcept &e)
     {
       cout<<"didn't read "<<geoidfilename<<" for reason "<<e.message().toStdString()<<endl;
     }
