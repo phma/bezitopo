@@ -401,16 +401,19 @@ bool readDxfMagic(istream &file)
  * DXF, returns false.
  */
 {
-  char buf[4]={"   "};
-  while (!(buf[0]=='D' && buf[1]=='X' && buf[2]=='F') && buf[2]>=' ' && buf[2]<128 && file.good())
+  unsigned char buf[4]={"   "};
+  while (!(buf[0]=='D' && buf[1]=='X' && buf[2]=='F') && buf[2]>=' ' && buf[2]<128)
   {
+    int ch = file.get();
+    if (!file.good())
+      break;
     buf[0]=buf[1];
     buf[1]=buf[2];
-    buf[2]=file.get();
+    buf[2]=static_cast<unsigned char>(ch);
   }
-  if (!strcmp(buf,"DXF"))
-    file.read(buf,4);
-  return (file.good() && !strcmp(buf,"\r\n\032"));
+  if (!strcmp(reinterpret_cast<char*>(buf),"DXF"))
+    file.read(reinterpret_cast<char*>(buf),4);
+  return (file.good() && !strcmp(reinterpret_cast<char*>(buf),"\r\n\032"));
 }
 
 void writeDxfMagic(ostream &file)

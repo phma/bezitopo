@@ -313,12 +313,13 @@ string radtoangle(double angle,int64_t unitp)
       dig=angmult-base*trunc(angmult/base);
       angmult=trunc(angmult/base);
       sprintf(digit,(base>10)?"%02d":"%01d",dig);
-      if (base>10)
-	if (ret.substr(0,1)==".")
-	  ret+=(prec>60)?"″":"′";
-	else
-	  strcat(digit,(prec>60)?"″":"′");
-      ret=digit+ret;
+      if (base>10) {
+        if (ret.substr(0,1)==".")
+          ret+=(prec>60)?"″":"′";
+        else
+          strcat(digit,(prec>60)?"″":"′");
+        ret=digit+ret;
+      }
     }
     if (base>10)
       ret=unitsign+ret;

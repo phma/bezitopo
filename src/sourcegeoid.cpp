@@ -530,7 +530,7 @@ int readusngatxt(geolattice &geo,string filename)
     {
       readusngatxtheader(hdr,file);
     }
-    catch (BeziExcept e)
+    catch (BeziExcept &e)
     {
       ret=-e.getNumber();
     }
@@ -737,7 +737,7 @@ int readcarlsongsf(geolattice &geo,string filename)
     {
       readcarlsongsfheader(hdr,file);
     }
-    catch (BeziExcept e)
+    catch (BeziExcept &e)
     {
       ret=-e.getNumber();
     }

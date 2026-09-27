@@ -129,7 +129,7 @@ xy edge::midpoint()
 }
 
 void edge::dump(pointlist *topopoints)
-{printf("addr=%p a=%d b=%d nexta=%p nextb=%p\n",this,topopoints->revpoints[a],topopoints->revpoints[b],nexta,nextb);
+{printf("addr=%p a=%d b=%d nexta=%p nextb=%p\n",static_cast<void*>(this),topopoints->revpoints[a],topopoints->revpoints[b],static_cast<void*>(nexta),static_cast<void*>(nextb));
  }
 
 void edge::flip(pointlist *topopoints)
@@ -277,7 +277,7 @@ void dumphull()
 {multimap<double,point*>::iterator i;
  printf("dump convex hull:\n");
  for (i=convexhull.begin();i!=convexhull.end();i++)
-     printf("az=%f pt=%p\n",i->first,i->second);
+     printf("az=%f pt=%p\n",i->first,static_cast<void*>(i->second));
  //printf("begin=%p end=%p rbegin=%p rend=%p\n",convexhull.begin(),convexhull.end(),convexhull.rbegin(),convexhull.rend());
  printf("end dump\n");
  }
@@ -1067,7 +1067,7 @@ void pointlist::makegrad(double corr)
 	printf("sumxz %f sumxx %f sumyz %f sumyy %f\n",sumxz,sumxx,sumyz,sumyy);*/
       }
       else
-	fprintf(stderr,"Warning: point at address %p has no edges that don't cross breaklines\n",&i->second);
+	fprintf(stderr,"Warning: point at address %p has no edges that don't cross breaklines\n",static_cast<void*>(&i->second));
     }
     for (i=points.begin();i!=points.end();i++)
     {

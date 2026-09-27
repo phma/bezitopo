@@ -170,6 +170,7 @@ public:
   virtual xy getXyProperty(int prop);
   virtual xyz getXyzProperty(int prop);
   virtual void writeXml(std::ofstream &ofile);
+  virtual ~segment() {}
 };
 
 #endif

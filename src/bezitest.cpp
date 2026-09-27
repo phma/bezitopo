@@ -30,7 +30,7 @@
 #include <csignal>
 #include <cfloat>
 #include <cstring>
-#include <QTime>
+#include <QElapsedTimer>
 #include "config.h"
 #include "point.h"
 #include "cogo.h"
@@ -1923,7 +1923,7 @@ void testmanysum()
   double odd[32];
   long double oddl[32];
   int pairtime=0;
-  QTime starttime;
+  QElapsedTimer starttime;
   cout<<"manysum"<<endl;
   for (i=0;i<32;i++)
     oddl[i]=odd[i]=2*i+1;
@@ -2953,7 +2953,7 @@ void test1curly(double curvature,double clothance,PostScript &ps,array<int,3> &t
   double curlyLength,tooCurlyLength,maxLength;
   spiralarc s;
   int i;
-  QTime starttime;
+  QElapsedTimer starttime;
   const int niter=1000;
   double lo=0,hi=1,mid;
   BoundRect br;

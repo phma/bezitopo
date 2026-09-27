@@ -28,12 +28,20 @@
 #include "hnum.h"
 using namespace std;
 
+// This should be (std::numeric_limits<int>::digits10 + 1) for the sign
+// However that is only a compile-time constant in C++11 or higher, so would
+// need to commit to building as C++11.
+//
+// Hardcode as 11 for now, which is the maximum for 32-bit integers
+//
+#define MAX_CHARS_FOR_INT_IN_PRINTF 11
+
 char prefixes[]="yzafpnum kMGTPEZY"; // u should be µ but that's two bytes
 string hnum(double x)
 {
   int exponent=0,subexp,mantissa,sign=1,i;
   string expstr,mantstr;
-  char expbuf[8];
+  char expbuf[MAX_CHARS_FOR_INT_IN_PRINTF + 1 + 1]; // +1 for terminator, +1 for e
   if (x<0)
   {
     x=-x;

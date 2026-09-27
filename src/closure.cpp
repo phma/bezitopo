@@ -125,7 +125,7 @@ void closure_i(string args)
       {
 	bearing=parsebearing(bearingstr,DEGREE);
       }
-      catch(BeziExcept e)
+      catch(BeziExcept &e)
       {
 	validbearing=false;
       }

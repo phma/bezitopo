@@ -1,0 +1,242 @@
+#
+# File: %linux-gcc-build.yml
+#
+#=============================================================================#
+#
+# This does Linux builds on GitHub's Ubuntu container, using gcc.
+#
+
+name: Linux GCC
+
+
+# When To Trigger Builds
+#
+on:
+  push:
+    branches: [
+      master,  # for now do a linux build on every push to master
+      linux,  # pushing to a branch called "linux" builds this
+      github-workflow  # specifically pushing github-workflow branch 
+    ]
+  pull_request:
+    branches: [
+      master
+    ]
+  workflow_dispatch:  # Allows running this workflow manually from Actions tab
+
+
+# Standardize to use bash on all platforms.
+#
+defaults:
+  run:
+    shell: bash
+
+
+# Each "Job" runs in its own VM, and a workflow run is made up of one or more
+# jobs that can run sequentially or in parallel.
+#
+jobs:
+  linux-gcc-build:  # Name of this workflow's only job
+
+    # https://github.com/actions/virtual-environments#available-environments
+    #
+    # Building on older available Ubuntus means the GLIBC used by the EXE will
+    # run on newer Ubuntus.  The reverse is not true.
+    #
+    runs-on: ubuntu-20.04
+
+
+    # Build Matrix (add as many permutations as desired)
+    #
+    strategy:
+      matrix:
+       include:
+         - rigorous: ON
+           build_type: Debug
+           sanitize: ON
+
+         - rigorous: ON
+           build_type: Release
+           sanitize: OFF
+
+
+    # Environment Variables
+    #
+    # (Proxy build matrix variables to environment variables so that behavior
+    # in script code used here doesn't need GitHub-Workflow-specific syntax) 
+    #
+    env:
+      RIGOROUS: ${{ matrix.rigorous }}
+      BUILD_TYPE: ${{ matrix.build_type }}
+      SANITIZE: ${{ matrix.sanitize }}
+
+
+    # Steps are a sequence of tasks that will be executed within a single VM
+    # as part of the job.
+    #
+    steps:  # (no indentatation needed below; so indent the minimum!)
+
+
+  #====# CHECKOUT STEPS #=====================================================#
+
+
+    # Checkout Action
+    #
+    # https://github.com/actions/checkout
+    #
+    - uses: actions/checkout@v4
+      with:
+        path: "bezitopo/"
+
+
+    # Portably Capture Git Hashes
+    #
+    - name: Grab Git Hash and Short Hash Into Environment Variables
+      run: |
+        cd bezitopo
+        git_commit="$(git show --format="%H" --no-patch)"
+        git_commit_short="$(git show --format="%h" --no-patch)"
+        echo "GIT_COMMIT=$git_commit" >> $GITHUB_ENV
+        echo "GIT_COMMIT_SHORT=$git_commit_short" >> $GITHUB_ENV
+
+
+  #====# TOOLCHAIN INSTALLATION STEPS #=======================================#
+
+
+    # Install Qt Libraries
+    #
+    # https://github.com/jurplel/install-qt-action
+    #
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        aqtversion: '==3.1.*'
+        version: '5.15.2'
+        host: 'linux'
+        target: 'desktop'
+        arch: 'gcc_64'
+        cache: 'true'
+        cache-key-prefix: 'install-qt-action'
+
+
+    # Install OpenGL Dependencies
+    #
+    # Mesa is an open-source implementation of the OpenGL specification for 3D
+    # graphics.  GLU is the OpenGL Utility library, which includes higher-level
+    # drawing routines and support for NURBS (Non-Uniform Rational B-Splines)
+    #
+    - name: Install Mesa Common and GLU Libraries
+      run: |
+        sudo apt install mesa-common-dev libglu1-mesa-dev
+
+
+    # Show a little bit of sanity check information.
+    #
+    - name: Output System Information
+      run: |
+        echo "GCC version check:"
+        gcc -v
+
+
+  #====# BUILD STEPS #========================================================#
+
+
+    # Generate Makefile 
+    #
+    # Note: Should not have to set -DCMAKE_PREFIX_PATH=<...> as the GitHub
+    # Action that installed Qt is supposed to set the enviornment correctly.
+    #
+    - name: Use CMake to Generate a makefile
+      run: |
+        mkdir build
+        cd build
+
+        cmake \
+            -DRIGOROUS=$RIGOROUS \
+            -DSANITIZE=$SANITIZE \
+            -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
+            ../bezitopo/  # directory containing CMakeLists.txt
+
+
+    # Run Make
+    #
+    # At time of writing, 2 jobs is the most the GitHub Workflow runners do.
+    #
+    - name: Run Make
+      working-directory: build/
+      run: |
+        make -j 2
+
+
+    # https://github.com/actions/upload-artifact
+    #
+    - name: Optional Download of Build Files Before Tests
+      if: false  # Change this to true to download a file
+      uses: actions/upload-artifact@v4
+      with:
+        name: downloaded-file-name.ext
+        path: build/some-file.ext
+
+
+  #====# TESTING STEPS #======================================================#
+
+    - name: Basic Smoke Test (Run Bezitopo and Exit)
+      working-directory: build/
+      run: |
+        echo "exit" | ./bezitopo
+
+
+    - name: Fetch Independence Park File From Website
+      working-directory: build/
+      run: |    
+        curl -o topo0.asc http://bezitopo.org/topo0.asc
+
+
+    - name: Test Independence Park Processing Command
+      working-directory: build/
+      run: |
+        (echo "indpark"; echo "exit") | ./bezitopo
+
+
+    - name: Run Bezitest
+      if: false  # !!! At time of writing, bezitest segfaults
+      working-directory: build/
+      run: |
+        ./bezitest
+
+
+  #====# DEPLOY STEPS (TBD) #==================================================#
+
+    # !!! This is how you would do deployments of the build products to AWS if
+    # that were something you wanted to do.
+
+
+    # Configure AWS Credentials
+    #
+    # https://github.com/aws-actions/configure-aws-credentials
+    #
+    # This is disabled with `if: false`, but would be something along the
+    # lines of `if: github.ref = 'refs/heads/master`
+    #
+    - name: Configure AWS Credentials
+      if: false  # disabled
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.YOUR_GITHUB_AWS_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.YOUR_GITHUB_AWS_SECRET_KEY }}
+        aws-region: us-east-1
+
+
+    # Upload Files to AWS
+    #
+    - name: Upload Files to AWS 
+      if: false  # disabled
+      run: |
+        cd build
+        NEW_NAME="bezitopo-${GIT_COMMIT_SHORT}${VARIATION}"
+        MIME_TYPE=""  # e.g. "--content-type application/wasm"
+
+        local=bezitopo
+        lastpart=ci-builds/${NEW_NAME}
+        remote=s3://${AWS_S3_BUCKET_NAME}/$lastpart
+        aws s3 cp $local $remote $MIME_TYPE
